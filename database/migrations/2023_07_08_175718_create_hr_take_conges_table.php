@@ -1,0 +1,66 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateHrTakeCongesTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('hr_take_conges', function (Blueprint $table) {
+            $table->id();
+            $table->string('date_heure_debut')->nullable(true);
+            $table->string('date_heure_fin')->nullable(true);
+            $table->string('nbre_jours_conge_pris')->nullable(true);
+            $table->string('nbre_heures_conge_pris')->nullable(true);
+            $table->string('etat')->nullable(true);
+            $table->string('valide_par')->nullable(true);
+            $table->string('confirme_par')->nullable(true);
+            $table->string('approuve_par')->nullable(true);
+            $table->string('auteur')->nullable(true);
+            $table->bigInteger('employe_id')->unsigned()->nullable(true);
+            $table->bigInteger('stagiaire_id')->unsigned()->nullable(true);
+            $table->bigInteger('type_conge_id')->unsigned()->nullable(true);
+            $table->foreign('employe_id')
+                    ->references('id')
+                    ->on('hr_employes')
+                    ->onUpdate('cascade')
+                    ->onDelete('cascade');
+            $table->foreign('stagiaire_id')
+                    ->references('id')
+                    ->on('hr_stagiaires')
+                    ->onUpdate('cascade')
+                    ->onDelete('cascade');
+            $table->foreign('type_conge_id')
+                    ->references('id')
+                    ->on('hr_type_conges')
+                    ->onUpdate('cascade')
+                    ->onDelete('cascade');
+            $table->bigInteger('company_id')->unsigned()->nullable(true);
+            $table->foreign('company_id')
+                    ->references('id')
+                    ->on('hr_companies')
+                    ->onUpdate('cascade')
+                    ->onDelete('cascade');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
+        Schema::dropIfExists('hr_take_conges');
+        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
+    }
+}
