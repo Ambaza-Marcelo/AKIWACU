@@ -30,6 +30,7 @@ class CreateDrinkRequisitions extends Migration
             $table->string('rejected_by')->nullable(true);
             $table->string('reseted_by')->nullable(true);
             $table->string('status')->default('1');
+            $table->text('rej_motif')->nullable(true);
             $table->timestamps();
         });
     }

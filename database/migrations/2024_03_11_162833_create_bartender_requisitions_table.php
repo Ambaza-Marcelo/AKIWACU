@@ -15,6 +15,22 @@ class CreateBartenderRequisitionsTable extends Migration
     {
         Schema::create('bartender_requisitions', function (Blueprint $table) {
             $table->id();
+            $table->date('date');
+            $table->string('requisition_no');
+            $table->string('requisition_signature')->nullable(true);
+            $table->text('description')->nullable(true);
+            $table->text('rejected_motif')->nullable(true);
+            $table->string('type_store')->nullable(true);
+            $table->string('code_store')->nullable(true);
+            $table->string('created_by')->nullable(true);
+            $table->string('updated_by')->nullable(true);
+            $table->string('validated_by')->nullable(true);
+            $table->string('confirmed_by')->nullable(true);
+            $table->string('approuved_by')->nullable(true);
+            $table->string('rejected_by')->nullable(true);
+            $table->string('reseted_by')->nullable(true);
+            $table->string('status')->default('1');
+            $table->text('rej_motif')->nullable(true);
             $table->timestamps();
         });
     }

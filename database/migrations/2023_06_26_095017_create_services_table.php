@@ -21,6 +21,8 @@ class CreateServicesTable extends Migration
             $table->string('vat')->nullable(true);
             $table->string('item_ct')->nullable(true);
             $table->string('item_tl')->nullable(true);
+            $table->string('cump')->nullable(true);
+            $table->string('taux_marge')->nullable(true);
             $table->string('selling_price')->nullable(true);
             $table->string('quantity')->nullable(true);
             $table->string('threshold_quantity')->nullable(true);
