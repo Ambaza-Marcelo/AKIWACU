@@ -68,6 +68,12 @@ class CreateBookingDetailsTable extends Migration
                     ->on('booking_clients')
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
+            $table->bigInteger('client_id')->unsigned()->nullable(true);
+            $table->foreign('client_id')
+                    ->references('id')
+                    ->on('clients')
+                    ->onUpdate('cascade')
+                    ->onDelete('cascade');
             $table->timestamps();
         });
     }
