@@ -40,6 +40,9 @@ class CreateBookingsTable extends Migration
             $table->string('reseted_by')->nullable(true);
             $table->string('status')->default('0');
             $table->boolean('flag')->default(0);
+            $table->text('rej_motif')->nullable(true);
+            $table->text('cn_motif')->nullable(true);
+            $table->string('type_space')->nullable(true);
             $table->bigInteger('booking_client_id')->unsigned()->nullable(true);
             $table->foreign('booking_client_id')
                     ->references('id')

@@ -44,6 +44,17 @@ class CreateBookingDetailsTable extends Migration
             $table->string('reseted_by')->nullable(true);
             $table->boolean('flag')->default(0);
             $table->string('status')->default('0');
+            $table->text('rej_motif')->nullable(true);
+            $table->text('cn_motif')->nullable(true);
+            $table->string('type_space')->nullable(true);
+            $table->string('taux_majoration')->nullable(true);
+            $table->string('montant_majoration')->nullable(true);
+            $table->string('montant_total_majoration')->nullable(true);
+            $table->string('taux_reduction')->nullable(true);
+            $table->string('montant_reduction')->nullable(true);
+            $table->string('montant_total_reduction')->nullable(true);
+            $table->text('note_reduction')->nullable(true);
+            $table->text('reglement')->nullable(true);
             $table->bigInteger('technique_id')->unsigned()->nullable(true);
             $table->foreign('technique_id')
                     ->references('id')

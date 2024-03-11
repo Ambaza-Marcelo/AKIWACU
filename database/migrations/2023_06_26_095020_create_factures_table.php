@@ -72,6 +72,7 @@ class CreateFacturesTable extends Migration
             $table->text('note_reduction')->nullable(true);
             $table->text('note_credit')->nullable(true);
             $table->text('note_recouvrement')->nullable(true);
+            $table->string('type_space')->nullable(true);
             $table->text('description')->nullable(true);
             $table->string('etat')->default('0');
             $table->string('paid_either')->nullable(true);

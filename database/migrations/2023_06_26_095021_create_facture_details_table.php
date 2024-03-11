@@ -82,6 +82,7 @@ class CreateFactureDetailsTable extends Migration
             $table->string('bordereau_no')->nullable(true);
             $table->string('date_recouvrement')->nullable(true);
             $table->string('nom_recouvrement')->nullable(true);
+            $table->string('taux_reduction')->nullable(true);
             $table->string('montant_reduction')->nullable(true);
             $table->string('montant_total_reduction')->nullable(true);
             $table->text('note_reduction')->nullable(true);
@@ -90,6 +91,11 @@ class CreateFactureDetailsTable extends Migration
             $table->text('description')->nullable(true);
             $table->string('cump')->nullable(true);
             $table->string('total_cump_value')->nullable(true);
+            $table->text('invoice_identifier')->nullable(true);
+            $table->string('type_space')->nullable(true);
+            $table->string('taux_majoration')->nullable(true);
+            $table->string('montant_majoration')->nullable(true);
+            $table->string('montant_total_majoration')->nullable(true);
             $table->bigInteger('employe_id')->unsigned()->nullable(true);
             $table->foreign('employe_id')
                     ->references('id')

@@ -33,6 +33,12 @@ class CreateOrderDrinkDetailsTable extends Migration
             $table->string('rejected_by')->nullable(true);
             $table->string('reseted_by')->nullable(true);
             $table->text('description')->nullable(true);
+            $table->text('rej_motif')->nullable(true);
+            $table->text('cn_motif')->nullable(true);
+            $table->string('type_space')->nullable(true);
+            $table->string('taux_majoration')->nullable(true);
+            $table->string('montant_majoration')->nullable(true);
+            $table->string('montant_total_majoration')->nullable(true);
             $table->foreign('employe_id')
                     ->references('id')
                     ->on('employes')
