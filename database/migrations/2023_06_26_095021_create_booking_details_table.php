@@ -79,10 +79,10 @@ class CreateBookingDetailsTable extends Migration
                     ->on('kidness_spaces')
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
-            $table->bigInteger('swimming_pool_id')->unsigned()->nullable(true);
-            $table->foreign('swimming_pool_id')
+            $table->bigInteger('swiming_pool_id')->unsigned()->nullable(true);
+            $table->foreign('swiming_pool_id')
                     ->references('id')
-                    ->on('swimming_pools')
+                    ->on('swiming_pools')
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
             $table->bigInteger('breakfast_id')->unsigned()->nullable(true);
