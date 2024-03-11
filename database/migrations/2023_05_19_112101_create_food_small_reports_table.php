@@ -63,6 +63,8 @@ class CreateFoodSmallReportsTable extends Migration
             $table->string('approuved_by')->nullable(true);
             $table->string('rejected_by')->nullable(true);
             $table->string('description')->nullable(true);
+            $table->string('type_transaction')->nullable(true);
+            $table->string('document_no')->nullable(true);
             $table->string('quantity_stock_initial_portion')->nullable(true);
             $table->string('value_stock_initial_portion')->nullable(true);
             $table->string('quantity_stock_final_portion')->nullable(true);
