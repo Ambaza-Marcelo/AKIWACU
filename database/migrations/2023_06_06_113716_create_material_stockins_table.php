@@ -17,6 +17,7 @@ class CreateMaterialStockinsTable extends Migration
             $table->id();
             $table->date('date');
             $table->string('stockin_no');
+            $table->unique('stockin_no');
             $table->string('stockin_signature')->nullable(true);
             $table->string('store_type')->nullable(true);
             $table->string('receptionist')->nullable(true);

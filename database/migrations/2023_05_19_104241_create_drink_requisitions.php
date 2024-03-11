@@ -17,6 +17,7 @@ class CreateDrinkRequisitions extends Migration
             $table->id();
             $table->date('date');
             $table->string('requisition_no');
+            $table->unique('requisition_no');
             $table->string('requisition_signature')->nullable(true);
             $table->text('description')->nullable(true);
             $table->text('rejected_motif')->nullable(true);

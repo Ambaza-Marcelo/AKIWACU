@@ -17,6 +17,7 @@ class CreateFoodReceptions extends Migration
             $table->id();
             $table->date('date');
             $table->string('reception_no');
+            $table->unique('reception_no');
             $table->string('reception_signature')->nullable(true);
             $table->string('invoice_no')->nullable(true);
             $table->string('order_no')->nullable(true);

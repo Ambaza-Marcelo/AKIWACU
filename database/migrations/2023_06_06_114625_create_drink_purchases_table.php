@@ -17,6 +17,7 @@ class CreateDrinkPurchasesTable extends Migration
             $table->id();
             $table->date('date');
             $table->string('purchase_no');
+            $table->unique('purchase_no');
             $table->string('purchase_signature')->nullable(true);
             $table->text('description')->nullable(true);
             $table->string('type_store')->nullable(true);

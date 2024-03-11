@@ -17,6 +17,7 @@ class CreateBookingsTable extends Migration
             $table->id();
             $table->date('date');
             $table->string('booking_no');
+            $table->unique('booking_no');
             $table->string('booking_signature')->nullable(true);
             $table->text('description')->nullable(true);
             $table->text('rejected_motif')->nullable(true);

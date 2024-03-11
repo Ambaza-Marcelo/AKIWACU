@@ -17,6 +17,7 @@ class CreateBartenderOrdersTable extends Migration
             $table->id();
             $table->date('date');
             $table->string('order_no');
+            $table->unique('order_no');
             $table->string('order_signature')->nullable(true);
             $table->text('description')->nullable(true);
             $table->text('rejected_motif')->nullable(true);

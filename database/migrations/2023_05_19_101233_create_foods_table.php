@@ -17,6 +17,8 @@ class CreateFoodsTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('code');
+            $table->unique('name');
+            $table->unique('code');
             $table->string('specification')->nullable(true);
             $table->string('code_store')->nullable(true);
             $table->string('quantity')->nullable(true);

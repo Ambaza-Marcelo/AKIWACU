@@ -17,6 +17,8 @@ class CreateDrinksTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('code');
+            $table->unique('name');
+            $table->unique('code');
             $table->string('specification')->nullable(true);
             $table->string('vat')->nullable(true);
             $table->string('item_ct')->nullable(true);

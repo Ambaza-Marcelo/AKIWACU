@@ -16,6 +16,7 @@ class CreateSwimingPoolsTable extends Migration
         Schema::create('swiming_pools', function (Blueprint $table) {
             $table->id();
             $table->string('name')->nullable(true);
+            $table->unique('name');
             $table->string('code')->nullable(true);
             $table->string('specification')->nullable(true);
             $table->string('vat')->nullable(true);

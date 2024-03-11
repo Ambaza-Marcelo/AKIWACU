@@ -16,6 +16,7 @@ class CreateDrinkBigStoreInventoriesTable extends Migration
         Schema::create('drink_big_store_inventories', function (Blueprint $table) {
             $table->id();
             $table->string('inventory_no')->nullable(true);
+            $table->unique('inventory_no');
             $table->string('code_store')->nullable();
             $table->string('inventory_signature')->nullable(true);
             $table->string('date');

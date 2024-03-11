@@ -18,6 +18,7 @@ class CreateBartenderTransfersTable extends Migration
             $table->date('date');
             $table->string('transfer_no');
             $table->string('requisition_no');
+            $table->unique('transfer_no');
             $table->string('transfer_signature')->nullable(true);
             $table->text('description')->nullable(true);
             $table->string('type_transaction')->nullable(true);

@@ -18,6 +18,7 @@ class CreateBarristTransfersTable extends Migration
             $table->date('date');
             $table->string('transfer_no');
             $table->string('requisition_no');
+            $table->unique('transfer_no');
             $table->string('transfer_signature')->nullable(true);
             $table->text('description')->nullable(true);
             $table->text('rejected_motif')->nullable(true);

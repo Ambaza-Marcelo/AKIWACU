@@ -17,6 +17,7 @@ class CreateMaterialStockoutsTable extends Migration
             $table->id();
             $table->date('date');
             $table->string('stockout_no');
+            $table->unique('stockout_no');
             $table->string('stockout_signature')->nullable(true);
             $table->string('requisition_no')->nullable(true);
             $table->string('asker')->nullable(true);
