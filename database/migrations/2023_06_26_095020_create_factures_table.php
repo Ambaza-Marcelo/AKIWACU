@@ -63,6 +63,16 @@ class CreateFacturesTable extends Migration
             $table->string('invoice_registered_date')->nullable(true);
             $table->timestamp('invoice_signature_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->string('invoice_signature')->nullable(true);
+            $table->string('invoice_identifier')->nullable(true);
+            $table->string('bank_name')->nullable(true);
+            $table->string('cheque_no')->nullable(true);
+            $table->string('bordereau_no')->nullable(true);
+            $table->string('date_recouvrement')->nullable(true);
+            $table->string('nom_recouvrement')->nullable(true);
+            $table->text('note_reduction')->nullable(true);
+            $table->text('note_credit')->nullable(true);
+            $table->text('note_recouvrement')->nullable(true);
+            $table->text('description')->nullable(true);
             $table->string('etat')->default('0');
             $table->string('paid_either')->nullable(true);
             $table->string('statut')->nullable(true);

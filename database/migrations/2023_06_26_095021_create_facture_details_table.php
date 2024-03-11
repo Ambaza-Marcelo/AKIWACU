@@ -65,6 +65,7 @@ class CreateFactureDetailsTable extends Migration
             $table->string('vat')->nullable(true);
             $table->string('item_price_wvat')->nullable(true);
             $table->string('item_total_amount')->nullable(true);
+            $table->string('auteur')->nullable(true);
             $table->string('validated_by')->nullable(true);
             $table->string('confirmed_by')->nullable(true);
             $table->string('approuved_by')->nullable(true);
@@ -76,6 +77,19 @@ class CreateFactureDetailsTable extends Migration
             $table->string('statut')->nullable(true);
             $table->string('statut_paied')->nullable(true);
             $table->string('reste_credit')->nullable(true);
+            $table->string('bank_name')->nullable(true);
+            $table->string('cheque_no')->nullable(true);
+            $table->string('bordereau_no')->nullable(true);
+            $table->string('date_recouvrement')->nullable(true);
+            $table->string('nom_recouvrement')->nullable(true);
+            $table->string('montant_reduction')->nullable(true);
+            $table->string('montant_total_reduction')->nullable(true);
+            $table->text('note_reduction')->nullable(true);
+            $table->text('note_credit')->nullable(true);
+            $table->text('note_recouvrement')->nullable(true);
+            $table->text('description')->nullable(true);
+            $table->string('cump')->nullable(true);
+            $table->string('total_cump_value')->nullable(true);
             $table->bigInteger('employe_id')->unsigned()->nullable(true);
             $table->foreign('employe_id')
                     ->references('id')
