@@ -481,6 +481,24 @@ class RolePermissionSeeder extends Seeder
                 ]
             ],
             [
+                'group_name' => 'bartender_transfer',
+                'permissions' => [
+                    // bartender_transfer Permissions
+                    'bartender_transfer.create',
+                    'bartender_transfer.view',
+                    'bartender_transfer.edit',
+                    'bartender_transfer.show',
+                    'bartender_transfer.delete',
+                    'bartender_transfer.validate',
+                    'bartender_transfer.confirm',
+                    'bartender_transfer.approuve',
+                    'bartender_transfer.reset',
+                    'bartender_transfer.reject',
+                    'bartender_transfer.validatePortion',
+                    'bartender_transfer.portion',
+                ]
+            ],
+            [
                 'group_name' => 'material_transfer',
                 'permissions' => [
                     // material_transfer Permissions
@@ -645,6 +663,38 @@ class RolePermissionSeeder extends Seeder
                 ]
             ],
             [
+                'group_name' => 'barrist_stockin',
+                'permissions' => [
+                    // barrist_stockin Permissions
+                    'barrist_stockin.create',
+                    'barrist_stockin.view',
+                    'barrist_stockin.edit',
+                    'barrist_stockin.show',
+                    'barrist_stockin.delete',
+                    'barrist_stockin.validate',
+                    'barrist_stockin.confirm',
+                    'barrist_stockin.approuve',
+                    'barrist_stockin.reset',
+                    'barrist_stockin.reject',
+                ]
+            ],
+            [
+                'group_name' => 'bartender_stockin',
+                'permissions' => [
+                    // bartender_stockin Permissions
+                    'bartender_stockin.create',
+                    'bartender_stockin.view',
+                    'bartender_stockin.edit',
+                    'bartender_stockin.show',
+                    'bartender_stockin.delete',
+                    'bartender_stockin.validate',
+                    'bartender_stockin.confirm',
+                    'bartender_stockin.approuve',
+                    'bartender_stockin.reset',
+                    'bartender_stockin.reject',
+                ]
+            ],
+            [
                 'group_name' => 'material_stockin',
                 'permissions' => [
                     // material_stockin Permissions
@@ -706,6 +756,38 @@ class RolePermissionSeeder extends Seeder
                     'food_stockout.approuve',
                     'food_stockout.reset',
                     'food_stockout.reject'
+                ]
+            ],
+            [
+                'group_name' => 'barrist_stockout',
+                'permissions' => [
+                    // barrist_stockout Permissions
+                    'barrist_stockout.create',
+                    'barrist_stockout.view',
+                    'barrist_stockout.edit',
+                    'barrist_stockout.show',
+                    'barrist_stockout.delete',
+                    'barrist_stockout.validate',
+                    'barrist_stockout.confirm',
+                    'barrist_stockout.approuve',
+                    'barrist_stockout.reset',
+                    'barrist_stockout.reject'
+                ]
+            ],
+            [
+                'group_name' => 'bartender_stockout',
+                'permissions' => [
+                    // bartender_stockout Permissions
+                    'bartender_stockout.create',
+                    'bartender_stockout.view',
+                    'bartender_stockout.edit',
+                    'bartender_stockout.show',
+                    'bartender_stockout.delete',
+                    'bartender_stockout.validate',
+                    'bartender_stockout.confirm',
+                    'bartender_stockout.approuve',
+                    'bartender_stockout.reset',
+                    'bartender_stockout.reject'
                 ]
             ],
 
@@ -906,6 +988,34 @@ class RolePermissionSeeder extends Seeder
                 ]
             ],
             [
+                'group_name' => 'barrist_inventory',
+                'permissions' => [
+                    // barrist_inventory Permissions
+                    'barrist_inventory.view',
+                    'barrist_inventory.create',
+                    'barrist_inventory.edit',
+                    'barrist_inventory.show',
+                    'barrist_inventory.delete',
+                    'barrist_inventory.validate',
+                    'barrist_inventory.reset',
+                    'barrist_inventory.reject',
+                ]
+            ],
+            [
+                'group_name' => 'bartender_inventory',
+                'permissions' => [
+                    // bartender_inventory Permissions
+                    'bartender_inventory.view',
+                    'bartender_inventory.create',
+                    'bartender_inventory.edit',
+                    'bartender_inventory.show',
+                    'bartender_inventory.delete',
+                    'bartender_inventory.validate',
+                    'bartender_inventory.reset',
+                    'bartender_inventory.reject',
+                ]
+            ],
+            [
                 'group_name' => 'material_extra_big_inventory',
                 'permissions' => [
                     // material_extra_big_inventory Permissions
@@ -973,6 +1083,76 @@ class RolePermissionSeeder extends Seeder
                     'invoice_kitchen.validate',
                     'invoice_kitchen.reset',
                     'invoice_kitchen.reject',
+                ]
+            ],
+            [
+                'group_name' => 'invoice_barrist',
+                'permissions' => [
+                    // invoice_barrist Permissions
+                    'invoice_barrist.view',
+                    'invoice_barrist.create',
+                    'invoice_barrist.edit',
+                    'invoice_barrist.show',
+                    'invoice_barrist.delete',
+                    'invoice_barrist.validate',
+                    'invoice_barrist.reset',
+                    'invoice_barrist.reject',
+                ]
+            ],
+            [
+                'group_name' => 'invoice_bartender',
+                'permissions' => [
+                    // invoice_bartender Permissions
+                    'invoice_bartender.view',
+                    'invoice_bartender.create',
+                    'invoice_bartender.edit',
+                    'invoice_bartender.show',
+                    'invoice_bartender.delete',
+                    'invoice_bartender.validate',
+                    'invoice_bartender.reset',
+                    'invoice_bartender.reject',
+                ]
+            ],
+            [
+                'group_name' => 'invoice_kidness_space',
+                'permissions' => [
+                    // invoice_kidness_space Permissions
+                    'invoice_kidness_space.view',
+                    'invoice_kidness_space.create',
+                    'invoice_kidness_space.edit',
+                    'invoice_kidness_space.show',
+                    'invoice_kidness_space.delete',
+                    'invoice_kidness_space.validate',
+                    'invoice_kidness_space.reset',
+                    'invoice_kidness_space.reject',
+                ]
+            ],
+            [
+                'group_name' => 'invoice_swiming_pool',
+                'permissions' => [
+                    // invoice_swiming_pool Permissions
+                    'invoice_swiming_pool.view',
+                    'invoice_swiming_pool.create',
+                    'invoice_swiming_pool.edit',
+                    'invoice_swiming_pool.show',
+                    'invoice_swiming_pool.delete',
+                    'invoice_swiming_pool.validate',
+                    'invoice_swiming_pool.reset',
+                    'invoice_swiming_pool.reject',
+                ]
+            ],
+            [
+                'group_name' => 'invoice_breakfast',
+                'permissions' => [
+                    // invoice_breakfast Permissions
+                    'invoice_breakfast.view',
+                    'invoice_breakfast.create',
+                    'invoice_breakfast.edit',
+                    'invoice_breakfast.show',
+                    'invoice_breakfast.delete',
+                    'invoice_breakfast.validate',
+                    'invoice_breakfast.reset',
+                    'invoice_breakfast.reject',
                 ]
             ],
             [
@@ -1363,6 +1543,39 @@ class RolePermissionSeeder extends Seeder
                     'booking_salle.show',
                     'booking_salle.edit',
                     'booking_salle.delete',
+                ]
+            ],
+            [
+                'group_name' => 'booking_breakfast',
+                'permissions' => [
+                    // booking_breakfast Permissions
+                    'booking_breakfast.create',
+                    'booking_breakfast.view',
+                    'booking_breakfast.show',
+                    'booking_breakfast.edit',
+                    'booking_breakfast.delete',
+                ]
+            ],
+            [
+                'group_name' => 'booking_kidness_space',
+                'permissions' => [
+                    // booking_kidness_space Permissions
+                    'booking_kidness_space.create',
+                    'booking_kidness_space.view',
+                    'booking_kidness_space.show',
+                    'booking_kidness_space.edit',
+                    'booking_kidness_space.delete',
+                ]
+            ],
+            [
+                'group_name' => 'swiming_pool',
+                'permissions' => [
+                    // swiming_pool Permissions
+                    'swiming_pool.create',
+                    'swiming_pool.view',
+                    'swiming_pool.show',
+                    'swiming_pool.edit',
+                    'swiming_pool.delete',
                 ]
             ],
             [
