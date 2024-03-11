@@ -276,7 +276,7 @@
                         <div class="col-md-2 pull-right">
                             <input type="text" class="form-control" value="{{ number_format($total_amount,0,',',' ')}}" readonly>
                         </div>
-                        @if (Auth::guard('admin')->user()->can('invoice_drink.create'))
+                        @if (Auth::guard('admin')->user()->can('invoice_drink.delete'))
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="{{ route('admin.facture-brouillon.imprimer',$facture->invoice_number) }}"><img src="{{ asset('img/ISSh.gif') }}" width="60" title="Télécharger d'abord le document et puis imprimer"></a> 
                         @endif
                     </form>

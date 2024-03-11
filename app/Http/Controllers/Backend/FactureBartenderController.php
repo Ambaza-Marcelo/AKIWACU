@@ -47,7 +47,7 @@ class FactureBartenderController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any invoice !');
         }
 
-        $factures = Facture::where('bartender_order_no','!=','')->take(200)->orderBy('id','desc')->get();
+        $factures = Facture::where('bartender_order_no','!=','')->take(100)->orderBy('id','desc')->get();
         return view('backend.pages.invoice_bartender.index',compact('factures'));
     }
 

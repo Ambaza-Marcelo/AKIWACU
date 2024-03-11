@@ -83,8 +83,8 @@
                                     @endif
                                     <td>{{ $drink_big_store->unit }}</td>
                                     <td>{{ $drink_big_store->threshold_quantity }}</td>
-                                    <td>{{ number_format($drink_big_store->purchase_price,0,',',' ') }}</td>
-                                    <td>{{ number_format($drink_big_store->total_purchase_value,0,',',' ') }}</td>
+                                    <td>{{ number_format($drink_big_store->drink->cump,0,',',' ') }}</td>
+                                    <td>{{ number_format(($drink_big_store->drink->cump * $drink_big_store->quantity_bottle),0,',',' ') }}</td>
                                     <!--
                                     <td>{{ number_format($drink_big_store->selling_price,0,',',' ') }}</td>
                                     <td>{{ number_format($drink_big_store->total_selling_value,0,',',' ') }}</td>

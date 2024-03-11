@@ -56,7 +56,7 @@ class BartenderProductionStoreController extends Controller
 
     public function create()
     {
-        if (is_null($this->user) || !$this->user->can('bartender_item.create')) {
+        if (is_null($this->user) || !$this->user->can('bartender_production_store.view')) {
             abort(403, 'Sorry !! You are Unauthorized to create any item !');
         }
         $bartender_items = BartenderItem::orderBy('name','asc')->get();
@@ -72,13 +72,12 @@ class BartenderProductionStoreController extends Controller
      */
     public function store(Request $request)
     {
-        if (is_null($this->user) || !$this->user->can('bartender_item.create')) {
+        if (is_null($this->user) || !$this->user->can('bartender_production_store.view')) {
             abort(403, 'Sorry !! You are Unauthorized to create any item !');
         }
 
         $rules = array(
                 'quantity.*'  => 'required',
-                //'selling_price.*'  => 'required',
                 'unit.*'  => 'required',
                 'bartender_item_id.*'  => 'required',
                 'description'  => 'required'

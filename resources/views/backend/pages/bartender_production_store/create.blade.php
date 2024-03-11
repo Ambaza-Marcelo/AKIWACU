@@ -57,7 +57,6 @@
                                 <th>@lang('messages.item')</th>
                                 <th>@lang('messages.quantity')</th>
                                 <th>@lang('messages.unit')</th>
-                                <th>@lang('messages.price')</th>
                                 <!--
                                 <th>@lang('Food Quantity')</th>
                                 <th>@lang('Food Unit')</th>
@@ -79,7 +78,6 @@
                                         <option value="verres" class="form-control">Verre</option>
                                         <option value="godets" class="form-control">Godet</option>
                                 </select></td>
-                                <td><input type="number" name="selling_price[]" placeholder="Enter Price" class="form-control" min="0" /></td>
                                 <!-- 
                                 <td><input type="number" name="quantity_food[]" placeholder="Enter Quantity" class="form-control" min="0" /></td> 
                                 <td><select class="form-control" name="unit[]" id="unit">
@@ -143,9 +141,6 @@
                                 "<option value='verres' class='form-control'>Verre</option>"+
                                 "<option value='godets' class='form-control'>Godet</option>"+
                             "</select>"+
-                        "</td>"+
-                        "<td>"+
-                          "<input type='number' name='selling_price[]' placeholder='Enter Price' class='form-control' min='0' />"+
                         "</td>"+
                         /*
                         "<td>"+

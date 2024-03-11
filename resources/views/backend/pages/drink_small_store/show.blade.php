@@ -81,10 +81,10 @@
                                     @endif
                                     <td>{{ $drink_small_store->unit }}</td>
                                     <td>{{ $drink_small_store->threshold_quantity }}</td>
-                                    <td>{{ number_format($drink_small_store->purchase_price,0,',',' ') }}</td>
-                                    <td>{{ number_format($drink_small_store->total_purchase_value,0,',',' ') }}</td>
-                                    <td>{{ number_format($drink_small_store->selling_price,0,',',' ') }}</td>
-                                    <td>{{ number_format($drink_small_store->total_selling_value,0,',',' ') }}</td>
+                                    <td>{{ number_format($drink_small_store->drink->cump,0,',',' ') }}</td>
+                                    <td>{{ number_format(($drink_small_store->drink->cump * $drink_small_store->quantity_bottle),0,',',' ') }}</td>
+                                    <td>{{ number_format($drink_small_store->drink->selling_price,0,',',' ') }}</td>
+                                    <td>{{ number_format(($drink_small_store->drink->selling_price * $drink_small_store->quantity_bottle),0,',',' ') }}</td>
                                     <td>
 
                                         @if (Auth::guard('admin')->user()->can('drink_small_store.delete'))

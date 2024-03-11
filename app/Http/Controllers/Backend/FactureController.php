@@ -2198,13 +2198,11 @@ class FactureController extends Controller
              
             $email1 = 'ambazamarcellin2001@gmail.com';
             //$email2 = 'frankirakoze77@gmail.com';
-            //$email3 = 'frangiye@gmail.com';
+            //$email3 = 'khaembamartin@gmail.com';
             $email4 = 'munyembari_mp@yahoo.fr';
             $auteur = $this->user->name;
             $mailData = [
                     'title' => 'Système de facturation électronique, edenSoft',
-                    'email1' => $email1,
-                    'email2' => $email2,
                     'invoice_number' => $invoice_number,
                     'auteur' => $auteur,
                     'cn_motif' => $cn_motif,
@@ -2227,14 +2225,12 @@ class FactureController extends Controller
                
             $email1 = 'ambazamarcellin2001@gmail.com';
             //$email2 = 'frankirakoze77@gmail.com';
-            //$email3 = 'frangiye@gmail.com';
+            //$email3 = 'khaembamartin@gmail.com';
             $email4 = 'munyembari_mp@yahoo.fr';
             //$email5 = 'balowayangfistonfiston@gmail.com';
             $auteur = $this->user->name;
             $mailData = [
                     'title' => 'Système de facturation électronique, edenSoft',
-                    'email1' => $email1,
-                    'email2' => $email2,
                     'invoice_number' => $invoice_number,
                     'auteur' => $auteur,
                     'cn_motif' => $cn_motif,

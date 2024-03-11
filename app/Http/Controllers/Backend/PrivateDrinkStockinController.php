@@ -320,7 +320,7 @@ class PrivateDrinkStockinController extends Controller
 
             $email1 = 'ambazamarcellin2001@gmail.com';
             //$email2 = 'balowayangfistonfiston@gmail.com';
-           // $email3 = 'frangiye@gmail.com';
+            //$email3 = 'khaembamartin@gmail.com';
             $email4 = 'munyembari_mp@yahoo.fr';
             $auteur = $this->user->name;
             $mailData = [
