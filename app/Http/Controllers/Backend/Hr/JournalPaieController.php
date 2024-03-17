@@ -104,13 +104,39 @@ class JournalPaieController extends Controller
         $journal_paie_detail->code = $code;
         $journal_paie_detail->save();
 
-        $paiement = new HrPaiement();
-        $paiement->date_debut = $request->date_debut;
-        //$paiement->title = $request->title;
-        $paiement->date_fin = $request->date_fin;
-        $paiement->etat = 0;
-        $paiement->code = $code;
-        $paiement->save();
+        if($latest){
+        $datas = HrPaiement::where('code',$latest->code)->get();
+        foreach ($datas as $data) {
+            $paiement = new HrPaiement();
+            $paiement->employe_id = $data->employe_id;
+            $paiement->code = $code;
+            $paiement->date_debut = $request->date_debut;
+            $paiement->date_fin = $request->date_fin;
+            $paiement->etat = 0;
+            $paiement->somme_salaire_base = $data->somme_salaire_base;
+            $paiement->somme_salaire_brut_imposable = $data->somme_salaire_brut_imposable;
+            $paiement->somme_salaire_brut_non_imposable = $data->somme_salaire_brut_non_imposable;
+            $paiement->somme_salaire_net_imposable = $data->somme_salaire_net_imposable;
+            $paiement->somme_salaire_net_non_imposable = $data->somme_salaire_net_non_imposable;
+            $paiement->nbre_jours_ouvrables = $data->nbre_jours_ouvrables;
+            $paiement->code_banque = $data->code_banque;
+            $paiement->code_departement = $data->code_departement;
+            $paiement->code_service = $data->code_service;
+            $paiement->numero_compte = $data->numero_compte;
+            $paiement->somme_impot = $data->somme_impot;
+            $paiement->somme_cotisation_inss = $data->somme_cotisation_inss;
+            $paiement->inss_employeur = $data->inss_employeur;
+            $paiement->assurance_maladie_employe = $data->assurance_maladie_employe;
+            $paiement->assurance_maladie_employeur = $data->assurance_maladie_employeur;
+            $paiement->indemnite_deplacement = $data->indemnite_deplacement;
+            $paiement->indemnite_logement = $data->indemnite_logement;
+            $paiement->allocation_familiale = $data->allocation_familiale;
+            $paiement->prime_fonction = $data->prime_fonction;
+            $paiement->company_id = $data->company_id;
+            $paiement->created_by = $this->user->name;
+            $paiement->save();
+        }
+    }
      
     
         session()->flash('success', 'Journal Paie est créé !!');
