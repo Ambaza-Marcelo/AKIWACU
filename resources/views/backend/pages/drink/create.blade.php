@@ -50,13 +50,13 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="name">@lang('messages.item')<strong style="color: red;">*</strong></label>
-                                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name">
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="unit">@lang('messages.unit')<strong style="color: red;">*</strong></label>
-                                    <select class="form-control" name="unit" id="unit">
+                                    <select class="form-control" name="unit" id="unit" required>
                                         <option disabled="disabled" selected="selected">Merci de choisir</option>
                                         <option value="bouteilles" class="form-control">Bouteilles</option>
                                         <option value="mesurettes" class="form-control">Mesurettes</option>
@@ -71,7 +71,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="quantity_bottle">@lang('messages.quantity')</label>
-                                    <input type="number" class="form-control" id="quantity_bottle" name="quantity_bottle" placeholder="Enter Quantity" min="0">
+                                    <input type="number" class="form-control" id="quantity_bottle" name="quantity_bottle" placeholder="Enter Quantity" min="0" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -110,7 +110,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="store_type">@lang('Store Type')<strong style="color: red;">*</strong></label>
-                                    <select class="form-control" name="store_type" id="store_type">
+                                    <select class="form-control" name="store_type" id="store_type" required>
                                         <option disabled="disabled" selected="selected">Merci de choisir</option>
                                         <option value="0" class="form-control">Drink Big Store</option>
                                         <option value="1" class="form-control">Drink Medium Store</option>
@@ -216,7 +216,7 @@
     if ($(this).val() === '0'){
 
         var extra_big_store = "<div class='form-group'>"+
-                            "<label for='code_store'>Drink Extra Big Store<strong style='color: red;'>*</strong></label>"+
+                            "<label for='code_store'>Drink Big Store<strong style='color: red;'>*</strong></label>"+
                             "<select name='code_store' class='form-control'>"+
                                 "<option selected disabled>merci de choisir</option>"+
                                 "@foreach($drink_extra_big_stores as $drink_extra_big_store)"+
@@ -231,7 +231,7 @@
     if ($(this).val() === '1'){
 
         var big_store = "<div class='form-group'>"+
-                            "<label for='code_store'>Drink Big Store<strong style='color: red;'>*</strong></label>"+
+                            "<label for='code_store'>Drink Medium Store<strong style='color: red;'>*</strong></label>"+
                             "<select name='code_store' class='form-control'>"+
                                 "<option selected disabled>merci de choisir</option>"+
                                 "@foreach($drink_big_stores as $drink_big_store)"+
