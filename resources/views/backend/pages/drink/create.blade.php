@@ -112,8 +112,8 @@
                                     <label for="store_type">@lang('Store Type')<strong style="color: red;">*</strong></label>
                                     <select class="form-control" name="store_type" id="store_type">
                                         <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                        <option value="0" class="form-control">Drink Extra Big Store</option>
-                                        <option value="1" class="form-control">Drink Big Store</option>
+                                        <option value="0" class="form-control">Drink Big Store</option>
+                                        <option value="1" class="form-control">Drink Medium Store</option>
                                         <option value="2" class="form-control">Drink Small Store</option>
                                     </select>
                                 </div>
@@ -139,6 +139,41 @@
                             </div>
                             <div class="col-md-4" id="dynamic_big_store">
                                 
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="taux_majoration">@lang('Taux Majoration')</label>
+                                    <select class="form-control" name="taux_majoration" id="taux_majoration" required>
+                                        <option disabled="disabled" selected="selected">Merci de choisir</option>
+                                        <option value="0" class="form-control">0%</option>
+                                        <option value="25" class="form-control">25%</option>
+                                        <option value="50" class="form-control">50%</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="taux_reduction">@lang('Taux Reduction')</label>
+                                    <select class="form-control" name="taux_reduction" id="taux_reduction" required>
+                                        <option disabled="disabled" selected="selected">Merci de choisir</option>
+                                        <option value="0" class="form-control">0%</option>
+                                        <option value="10" class="form-control">10%</option>
+                                        <option value="25" class="form-control">25%</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="taux_marge">@lang('Taux Marge')</label>
+                                    <select class="form-control" name="taux_marge" id="taux_marge" required>
+                                        <option disabled="disabled" selected="selected">Merci de choisir</option>
+                                        <option value="0" class="form-control">0%</option>
+                                        <option value="30" class="form-control">30%</option>
+                                        <option value="50" class="form-control">50%</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
