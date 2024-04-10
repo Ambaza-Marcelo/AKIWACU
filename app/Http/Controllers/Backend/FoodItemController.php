@@ -136,6 +136,9 @@ class FoodItemController extends Controller
         $food_item->purchase_price = $purchase_price;
         $food_item->selling_price = $selling_price;
         $food_item->vat = $request->vat;
+        $food_item->taux_marge = $request->taux_marge;
+        $food_item->taux_majoration = $request->taux_majoration;
+        $food_item->taux_reduction = $request->taux_reduction;
         $food_item->threshold_quantity = 0;
         $food_item->created_by = $this->user->name;
         $food_item->save();
@@ -321,6 +324,9 @@ class FoodItemController extends Controller
         $food_item->purchase_price = $purchase_price;
         $food_item->selling_price = $selling_price;
         $food_item->vat = $request->vat;
+        $food_item->taux_marge = $request->taux_marge;
+        $food_item->taux_majoration = $request->taux_majoration;
+        $food_item->taux_reduction = $request->taux_reduction;
         $food_item->threshold_quantity = 0;
         $food_item->created_by = $this->user->name;
         $food_item->save();

@@ -114,6 +114,10 @@ class DrinkController extends Controller
         $drink->item_ct = $request->item_ct;
         $drink->item_tl = $request->item_tl;
         $drink->brarudi_price = $request->brarudi_price;
+
+        $drink->taux_marge = $request->taux_marge;
+        $drink->taux_majoration = $request->taux_majoration;
+        $drink->taux_reduction = $request->taux_reduction;
         
         $drink->specification = $request->specification;
         $drink->selling_price = $request->selling_price;
@@ -348,6 +352,11 @@ class DrinkController extends Controller
         $drink->item_ct = $request->item_ct;
         $drink->item_tl = $request->item_tl;
         $drink->brarudi_price = $request->brarudi_price;
+
+        $drink->taux_marge = $request->taux_marge;
+        $drink->taux_majoration = $request->taux_majoration;
+        $drink->taux_reduction = $request->taux_reduction;
+        
         
         $drink->specification = $request->specification;
         $drink->selling_price = $request->selling_price;
