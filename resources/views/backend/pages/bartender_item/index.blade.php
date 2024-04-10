@@ -59,7 +59,10 @@
                                     <th width="10%">@lang('messages.quantity')</th>
                                     <th width="10%">@lang('messages.unit')</th>
                                     <th width="10%">@lang('Min Store')</th>
-                                    <th width="10%">@lang('TVA')</th>
+                                    <th width="10%">@lang('Taux TVA')</th>
+                                    <th width="10%">@lang('Taux marge')</th>
+                                    <th width="10%">@lang('Taux majoration')</th>
+                                    <th width="10%">@lang('Taux Reduction')</th>
                                     <th width="10%">@lang('messages.selling_price')</th>
                                     <th width="15%">Action</th>
                                 </tr>
@@ -74,6 +77,9 @@
                                     <td>{{ $bartender_item->unit }}</td>
                                     <td>{{ $bartender_item->threshold_quantity }}</td>
                                     <td>{{ $bartender_item->vat }}%</td>
+                                    <td>{{ $bartender_item->taux_marge }}%</td>
+                                    <td>{{ $bartender_item->taux_majoration }}%</td>
+                                    <td>{{ $bartender_item->taux_reduction }}%</td>
                                     <td>{{ number_format($bartender_item->selling_price,0,',',' ') }}</td>
                                     <td>
                                         @if (Auth::guard('admin')->user()->can('bartender_item.edit'))
