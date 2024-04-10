@@ -56,7 +56,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="unit">@lang('messages.unit')<strong style="color: red;">*</strong></label>
-                                    <select class="form-control" name="unit" id="unit">
+                                    <select class="form-control" name="unit" id="unit" required>
                                         <option disabled="disabled" selected="selected">Merci de choisir</option>
                                         <option value="verres" class="form-control">Verre</option>
                                         <option value="godets" class="form-control">Godet</option>
@@ -82,13 +82,13 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="purchase_price">@lang('messages.purchase_price')<strong style="color: red;">*</strong></label>
-                                    <input type="number" class="form-control" id="purchase_price" name="purchase_price" placeholder="Enter purchase Price" min="0">
+                                    <input type="number" class="form-control" id="purchase_price" name="purchase_price" placeholder="Enter purchase Price" min="0" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="selling_price">@lang('messages.selling_price')<strong style="color: red;">*</strong></label>
-                                    <input type="number" class="form-control" id="selling_price" name="selling_price" placeholder="Enter selling price" min="0">
+                                    <input type="number" class="form-control" id="selling_price" name="selling_price" placeholder="Enter selling price" min="0" required>
                                 </div>
                             </div>
                         </div>
@@ -101,6 +101,41 @@
                                         <option value="0" class="form-control">0%</option>
                                         <option value="10" class="form-control">10%</option>
                                         <option value="18" class="form-control">18%</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="taux_majoration">@lang('Taux Majoration')</label>
+                                    <select class="form-control" name="taux_majoration" id="taux_majoration" required>
+                                        <option disabled="disabled" selected="selected">Merci de choisir</option>
+                                        <option value="0" class="form-control">0%</option>
+                                        <option value="25" class="form-control">25%</option>
+                                        <option value="50" class="form-control">50%</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="taux_reduction">@lang('Taux Reduction')</label>
+                                    <select class="form-control" name="taux_reduction" id="taux_reduction" required>
+                                        <option disabled="disabled" selected="selected">Merci de choisir</option>
+                                        <option value="0" class="form-control">0%</option>
+                                        <option value="10" class="form-control">10%</option>
+                                        <option value="25" class="form-control">25%</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="taux_marge">@lang('Taux Marge')</label>
+                                    <select class="form-control" name="taux_marge" id="taux_marge" required>
+                                        <option disabled="disabled" selected="selected">Merci de choisir</option>
+                                        <option value="0" class="form-control">0%</option>
+                                        <option value="30" class="form-control">30%</option>
+                                        <option value="50" class="form-control">50%</option>
                                     </select>
                                 </div>
                             </div>
