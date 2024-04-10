@@ -73,9 +73,44 @@
                                     <label for="vat">@lang('Taux TVA')</label>
                                     <select class="form-control" name="vat" id="vat" required>
                                         <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                        <option value="0" class="form-control">0%</option>
-                                        <option value="10" class="form-control">10%</option>
-                                        <option value="18" class="form-control">18%</option>
+                                        <option value="0" {{ $swiming_pool->vat == 0 ? 'selected' : '' }} class="form-control">0%</option>
+                                        <option value="10" {{ $swiming_pool->vat == 10 ? 'selected' : '' }} class="form-control">10%</option>
+                                        <option value="18" {{ $swiming_pool->vat == 18 ? 'selected' : '' }} class="form-control">18%</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="taux_majoration">@lang('Taux Majoration')</label>
+                                    <select class="form-control" name="taux_majoration" id="taux_majoration" required>
+                                        <option disabled="disabled" selected="selected">Merci de choisir</option>
+                                        <option value="0" {{ $swiming_pool->taux_majoration == 0 ? 'selected' : '' }} class="form-control">0%</option>
+                                        <option value="25" {{ $swiming_pool->taux_majoration == 25 ? 'selected' : '' }} class="form-control">25%</option>
+                                        <option value="50" {{ $swiming_pool->taux_majoration == 50 ? 'selected' : '' }} class="form-control">50%</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="taux_reduction">@lang('Taux Reduction')</label>
+                                    <select class="form-control" name="taux_reduction" id="taux_reduction" required>
+                                        <option disabled="disabled" selected="selected">Merci de choisir</option>
+                                        <option value="0" {{ $swiming_pool->taux_reduction == 0 ? 'selected' : '' }} class="form-control">0%</option>
+                                        <option value="10" {{ $swiming_pool->taux_reduction == 10 ? 'selected' : '' }} class="form-control">10%</option>
+                                        <option value="25" {{ $swiming_pool->taux_reduction == 25 ? 'selected' : '' }} class="form-control">25%</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="taux_marge">@lang('Taux Marge')</label>
+                                    <select class="form-control" name="taux_marge" id="taux_marge" required>
+                                        <option disabled="disabled" selected="selected">Merci de choisir</option>
+                                        <option value="0" {{ $swiming_pool->taux_marge == 0 ? 'selected' : '' }} class="form-control">0%</option>
+                                        <option value="30" {{ $swiming_pool->taux_marge == 30 ? 'selected' : '' }} class="form-control">30%</option>
+                                        <option value="50" {{ $swiming_pool->taux_marge == 50 ? 'selected' : '' }} class="form-control">50%</option>
                                     </select>
                                 </div>
                             </div>
