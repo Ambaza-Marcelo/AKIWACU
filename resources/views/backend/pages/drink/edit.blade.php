@@ -148,9 +148,9 @@
                                     <label for="taux_majoration">@lang('Taux Majoration')</label>
                                     <select class="form-control" name="taux_majoration" id="taux_majoration" required>
                                         <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                        <option value="0" {{ $drink->vat == 0 ? 'selected' : '' }} class="form-control">0%</option>
-                                        <option value="25" {{ $drink->vat == 25 ? 'selected' : '' }} class="form-control">25%</option>
-                                        <option value="50" {{ $drink->vat == 50 ? 'selected' : '' }} class="form-control">50%</option>
+                                        <option value="0" {{ $drink->taux_majoration == 0 ? 'selected' : '' }} class="form-control">0%</option>
+                                        <option value="25" {{ $drink->taux_majoration == 25 ? 'selected' : '' }} class="form-control">25%</option>
+                                        <option value="50" {{ $drink->taux_majoration == 50 ? 'selected' : '' }} class="form-control">50%</option>
                                     </select>
                                 </div>
                             </div>
@@ -159,9 +159,9 @@
                                     <label for="taux_reduction">@lang('Taux Reduction')</label>
                                     <select class="form-control" name="taux_reduction" id="taux_reduction" required>
                                         <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                        <option value="0" {{ $drink->vat == 0 ? 'selected' : '' }} class="form-control">0%</option>
-                                        <option value="10" {{ $drink->vat == 10 ? 'selected' : '' }} class="form-control">10%</option>
-                                        <option value="25" {{ $drink->vat == 25 ? 'selected' : '' }} class="form-control">25%</option>
+                                        <option value="0" {{ $drink->taux_reduction == 0 ? 'selected' : '' }} class="form-control">0%</option>
+                                        <option value="10" {{ $drink->taux_reduction == 10 ? 'selected' : '' }} class="form-control">10%</option>
+                                        <option value="25" {{ $drink->taux_reduction == 25 ? 'selected' : '' }} class="form-control">25%</option>
                                     </select>
                                 </div>
                             </div>
@@ -170,9 +170,9 @@
                                     <label for="taux_marge">@lang('Taux Marge')</label>
                                     <select class="form-control" name="taux_marge" id="taux_marge" required>
                                         <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                        <option value="0" {{ $drink->vat == 0 ? 'selected' : '' }} class="form-control">0%</option>
-                                        <option value="30" {{ $drink->vat == 30 ? 'selected' : '' }} class="form-control">30%</option>
-                                        <option value="50" {{ $drink->vat == 50 ? 'selected' : '' }} class="form-control">50%</option>
+                                        <option value="0" {{ $drink->taux_marge == 0 ? 'selected' : '' }} class="form-control">0%</option>
+                                        <option value="30" {{ $drink->taux_marge == 30 ? 'selected' : '' }} class="form-control">30%</option>
+                                        <option value="50" {{ $drink->taux_marge == 50 ? 'selected' : '' }} class="form-control">50%</option>
                                     </select>
                                 </div>
                             </div>
