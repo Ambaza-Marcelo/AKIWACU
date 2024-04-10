@@ -22,11 +22,11 @@ class WelcomeController extends Controller
 
         if ($request->ajax()) {
             return FoodItem::select("name as value", "id")
-                    ->where('name', 'LIKE', '%'. $request->get('search'). '%')
+                    ->where('name', 'LIKE', '%'. $request->get('search'). '%')->where('name','NOT LIKE','%STAFF%')->where('selling_price','>',0)
                     ->get();
         }
         
-    	$restaurations = FoodItem::orderBy('name')->get();
+    	$restaurations = FoodItem::where('name','NOT LIKE','%STAFF%')->where('selling_price','>',0)->orderBy('name')->get();
 
     	return view('food',compact('restaurations'));
     }
@@ -35,11 +35,11 @@ class WelcomeController extends Controller
 
         if ($request->ajax()) {
             return Drink::select("name as value", "id")
-                    ->where('name', 'LIKE', '%'. $request->get('search'). '%')
+                    ->where('name', 'LIKE', '%'. $request->get('search'). '%')->where('name','NOT LIKE','%STAFF%')->where('selling_price','>',0)
                     ->get();
         }
 
-    	$drinks = Drink::orderBy('name')->get();
+    	$drinks = Drink::where('name','NOT LIKE','%STAFF%')->where('selling_price','>',0)->orderBy('name')->get();
 
     	return view('drink',compact('drinks'));
     }
@@ -50,7 +50,7 @@ class WelcomeController extends Controller
         $type = $request->query('type');
 
         if ($type == "DRINK") {
-            $drinks = Drink::where('name', 'LIKE', '%'. $key. '%')
+            $drinks = Drink::where('name', 'LIKE', '%'. $key. '%')->where('name','NOT LIKE','%STAFF%')->where('selling_price','>',0)
                     ->get();
             return view('drink',compact('drinks'));
         }elseif ($type == "BARRISTA") {
@@ -58,7 +58,7 @@ class WelcomeController extends Controller
                     ->get();
             return view('barrista',compact('barrists'));
         }elseif ($type == 'FOOD') {
-            $restaurations = FoodItem::where('name', 'LIKE', '%'. $key. '%')
+            $restaurations = FoodItem::where('name', 'LIKE', '%'. $key. '%')->where('name','NOT LIKE','%STAFF%')->where('selling_price','>',0)
                     ->get();
             return view('food',compact('restaurations'));
         }elseif ($type == "SERVICE") {

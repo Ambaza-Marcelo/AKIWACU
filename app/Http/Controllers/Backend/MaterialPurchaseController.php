@@ -13,9 +13,11 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Material;
 use App\Models\MaterialPurchase;
 use App\Models\MaterialPurchaseDetail;
+use App\Exports\MaterialPurchaseExport;
 use Validator;
 use PDF;
 use Mail;
+use Excel;
 use Carbon\Carbon;
 
 class MaterialPurchaseController extends Controller
@@ -289,6 +291,11 @@ class MaterialPurchaseController extends Controller
             return back();
         }
         
+    }
+
+    public function exportToExcel(Request $request)
+    {
+        return Excel::download(new MaterialPurchaseExport, 'RAPPORT_DEMANDE_ACHAT.xlsx');
     }
 
     /**

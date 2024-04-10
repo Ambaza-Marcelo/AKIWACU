@@ -41,6 +41,21 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="header-title float-left">Material supplier orders List</h4>
+                    <form action="{{ route('admin.material-supplier-orders.export-to-excel')}}" method="GET">
+                        <p class="float-right mb-2">
+                            <button type="submit" value="pdf" class="btn btn-success">Exporter En Excel</button>
+                        </p>
+                        <p class="float-right mb-2">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input type="date" name="start_date" class="form-control">
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="date" name="end_date" class="form-control">
+                                </div>
+                            </div>
+                        </p>
+                    </form><br>
                     <div class="clearfix"></div>
                     <div class="data-tables">
                         @include('backend.layouts.partials.messages')
@@ -133,7 +148,7 @@
                                                 @csrf
                                             </form>
                                         @endif
-                                        @if (Auth::guard('admin')->user()->can('material_supplier_order.create'))
+                                        @if (Auth::guard('admin')->user()->can('material_reception.create'))
                                         @if($order->status == 4)
                                         <a href="{{ route('admin.material-receptions.create',$order->order_no)}}" class="btn btn-primary">Receptionner</a>
                                         @endif

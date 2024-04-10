@@ -24,6 +24,7 @@ use App\Models\MaterialPurchaseDetail;
 use App\Models\MaterialBigReport;
 use App\Models\MaterialExtraBigReport;
 use App\Models\Supplier;
+use App\Exports\MaterialReceptionExport;
 use Carbon\Carbon;
 use PDF;
 use Validator;
@@ -694,9 +695,9 @@ class MaterialReceptionController extends Controller
 
     }
 
-    public function get_reception_data()
+    public function exportToExcel(Request $request)
     {
-        return Excel::download(new ReceptionExport, 'receptions.xlsx');
+        return Excel::download(new MaterialReceptionExport, 'RAPPORT_ACHAT_RECEPTION.xlsx');
     }
 
 

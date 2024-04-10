@@ -317,7 +317,7 @@
                                 @endif
 
                                 @if ($usr->can('invoice_booking.view'))
-                                <li class=""><a href="{{ route('admin.booking-invoices.index') }}"><i class="fa fa-first-order"></i>&nbsp;@lang('Reservations')</a></li>
+                                <li class=""><a href="{{ route('admin.booking-invoices.choose') }}"><i class="fa fa-first-order"></i>&nbsp;@lang('Reservations')</a></li>
                                 @endif
                         </ul>
                     </li>
@@ -403,6 +403,15 @@
                             @endif
                             @if ($usr->can('booking_service.view'))
                                 <li class=""><a href="{{ route('admin.services.index') }}"><i class="fa fa-user"></i>&nbsp;@lang('Services')</a></li>
+                            @endif
+                            @if ($usr->can('booking.view'))
+                                <li class=""><a href="{{ route('admin.kidness-spaces.index') }}"><i class="fa fa-user"></i>&nbsp;@lang('Kidness Space')</a></li>
+                            @endif
+                            @if ($usr->can('booking.view'))
+                                <li class=""><a href="{{ route('admin.break-fasts.index') }}"><i class="fa fa-user"></i>&nbsp;@lang('Break Fast')</a></li>
+                            @endif
+                            @if ($usr->can('booking.view'))
+                                <li class=""><a href="{{ route('admin.swiming-pools.index') }}"><i class="fa fa-user"></i>&nbsp;@lang('Swiming Pool')</a></li>
                             @endif
                             @if ($usr->can('booking_salle.view'))
                                 <li class=""><a href="{{ route('admin.booking-clients.index') }}"><i class="fa fa-user"></i>&nbsp;@lang('Clients')</a></li>

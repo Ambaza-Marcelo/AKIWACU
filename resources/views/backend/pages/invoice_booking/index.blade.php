@@ -43,19 +43,26 @@
                 <div class="card-body">
                     <h4 class="header-title float-left">Liste des factures(RESERVATIONS)</h4>
                 <form action="{{ route('admin.facture-rapport.reservation')}}" method="GET">
-                        <p class="float-right mb-2">
-                            <button type="submit" value="pdf" class="btn btn-info">Exporter En PDF</button>
-                        </p>
-                        <p class="float-right mb-2">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <input type="date" name="start_date" class="form-control">
-                                </div>
-                                <div class="col-md-6">
-                                    <input type="date" name="end_date" class="form-control">
-                                </div>
-                            </div>
-                        </p>
+                        <table>
+                            <tr>
+                                <th>Date Debut</th>
+                                <th>Date Fin</th>
+                                <th>Type</th>
+                                <th>Action</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input type="date" name="start_date" class="form-control" id="start_date">
+                                </td>
+                                <td>
+                                    <input type="date" name="end_date" class="form-control" id="end_date">
+                                </td>
+                                
+                                <td>
+                                    <button type="submit" value="pdf" class="btn btn-info" title="Cliquer pour exporter en PDF">Exporter En PDF</button>
+                                </td>
+                            </tr>
+                        </table>
                     </form><br>
                     <div class="clearfix"></div>
                     <div class="data-tables">
@@ -99,7 +106,7 @@
                                     <td>{{ $facture->tp_address_avenue }}</td>
                                     <td>{{ $facture->tp_address_rue }}</td>
                                 -->
-                                    <td>@if($facture->booking_client_id){{ $facture->bookingClient->customer_name }} @else {{ $facture->customer_name }} @endif</td>
+                                    <td>@if($facture->booking_client_id){{ $facture->bookingClient->customer_name }} @elseif($facture->client_id){{ $facture->client->customer_name }} @else {{ $facture->customer_name }} @endif</td>
                                     <td>{{ $facture->customer_TIN }}</td>
                                     <td>{{ $facture->customer_address }}</td>
                                     <td>{{ $facture->auteur }}</td>

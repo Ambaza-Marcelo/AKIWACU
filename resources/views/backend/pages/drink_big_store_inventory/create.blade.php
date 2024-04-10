@@ -63,6 +63,7 @@
 
                          <table class="table table-bordered" id="dynamicTable">  
                             <tr class="bg-secondary">
+                                <th>#</th>
                                 <th>@lang('messages.item')</th>
                                 <th>@lang('messages.quantity')</th>
                                 <th>@lang('messages.unit')</th>
@@ -75,7 +76,8 @@
                                 <th>Action</th>
                             </tr>
                             @foreach($datas as $data)
-                            <tr class="">  
+                            <tr class=""> 
+                                <td>{{ $loop->index+1 }}</td> 
                                 <td> <select class="form-control" name="drink_id[]" id="drink_id">
                                 <option value="{{ $data->drink_id }}" selected="selected" class="form-control">{{ $data->drink->name }}/{{ $data->drink->code }}</option>
                                 </select></td>  

@@ -262,7 +262,7 @@
                             </tr>
                             @foreach($factureDetails as $factureDetail)
                             <tr>  
-                                <td><input type="text" value="@if($factureDetail->salle_id){{ $factureDetail->salle->name }} @elseif($factureDetail->service_id){{ $factureDetail->service->name }} @else{{ $factureDetail->table->name }} @endif" class="form-control" readonly></td>  
+                                <td><input type="text" value="@if($factureDetail->salle_id){{ $factureDetail->salle->name }} @elseif($factureDetail->service_id){{ $factureDetail->service->name }} @elseif($factureDetail->breakfast_id) {{ $factureDetail->breakFast->name }} @elseif($factureDetail->swiming_pool_id) {{ $factureDetail->swimingPool->name }} @elseif($factureDetail->kidness_space_id) {{ $factureDetail->kidnessSpace->name }} @else{{ $factureDetail->table->name }} @endif" class="form-control" readonly></td>  
                                 <td><input type="text" value="{{ $factureDetail->item_quantity }}" class="form-control" readonly /></td>  
                                 <td><input type="text" value="{{ $factureDetail->item_price }}" class="form-control" readonly /></td>
                                 <td><input type="text" value="{{ $factureDetail->item_ct }}" class="form-control" readonly /></td>   
@@ -276,7 +276,7 @@
                         <div class="col-md-2 pull-right">
                             <input type="text" class="form-control" value="{{ number_format($total_amount,0,',',' ')}}" readonly>
                         </div>
-                        @if (Auth::guard('admin')->user()->can('invoice_drink.delete'))
+                        @if (Auth::guard('admin')->user()->can('invoice_drink.reset'))
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="{{ route('admin.facture-brouillon.imprimer',$facture->invoice_number) }}"><img src="{{ asset('img/ISSh.gif') }}" width="60" title="Télécharger d'abord le document et puis imprimer"></a> 
                         @endif 
                     </form>

@@ -49,7 +49,12 @@
                     </p>
                     <p class="float-right mb-2">
                         @if (Auth::guard('admin')->user()->can('food_item.view'))
-                            <a class="btn btn-success text-white" href="{{ route('admin.food-items.fiche-technique') }}">@lang('Exporter en PDF')</a>
+                            <a class="btn btn-info text-white" href="{{ route('admin.food-items.fiche-technique') }}">@lang('Exporter en PDF')</a>
+                        @endif
+                    </p>&nbsp;&nbsp;
+                    <p class="float-right mb-2">
+                        @if (Auth::guard('admin')->user()->can('food_item.view'))
+                            <a class="btn btn-success text-white" href="{{ route('admin.food-item-export-to-excel.fiche-technique') }}">@lang('Exporter en Excel')</a>
                         @endif
                     </p>
                     <div class="clearfix"></div>

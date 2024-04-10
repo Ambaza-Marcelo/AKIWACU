@@ -76,7 +76,10 @@ class CreateFactureDetailsTable extends Migration
             $table->string('paid_either')->nullable(true);
             $table->string('statut')->nullable(true);
             $table->string('statut_paied')->nullable(true);
+            $table->string('montant_total_credit')->nullable(true);
+            $table->string('montant_recouvre')->nullable(true);
             $table->string('reste_credit')->nullable(true);
+            $table->string('etat_recouvrement')->nullable(true);
             $table->string('bank_name')->nullable(true);
             $table->string('cheque_no')->nullable(true);
             $table->string('bordereau_no')->nullable(true);
@@ -142,6 +145,24 @@ class CreateFactureDetailsTable extends Migration
             $table->foreign('service_id')
                     ->references('id')
                     ->on('services')
+                    ->onUpdate('cascade')
+                    ->onDelete('cascade');
+            $table->bigInteger('kidness_space_id')->unsigned()->nullable(true);
+            $table->foreign('kidness_space_id')
+                    ->references('id')
+                    ->on('kidness_spaces')
+                    ->onUpdate('cascade')
+                    ->onDelete('cascade');
+            $table->bigInteger('swiming_pool_id')->unsigned()->nullable(true);
+            $table->foreign('swiming_pool_id')
+                    ->references('id')
+                    ->on('swiming_pools')
+                    ->onUpdate('cascade')
+                    ->onDelete('cascade');
+            $table->bigInteger('breakfast_id')->unsigned()->nullable(true);
+            $table->foreign('breakfast_id')
+                    ->references('id')
+                    ->on('breakfasts')
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
             $table->bigInteger('booking_client_id')->unsigned()->nullable(true);

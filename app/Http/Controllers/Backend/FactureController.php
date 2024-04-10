@@ -54,6 +54,9 @@ use App\Models\BookingService;
 use App\Models\BookingClient;
 use App\Models\Client;
 use App\Models\BookingTable;
+use App\Models\KidnessSpace;
+use App\Models\BreakFast;
+use App\Models\SwimingPool;
 use App\Mail\DeleteFactureMail;
 use App\Mail\InvoiceResetedMail;
 use App\Mail\ReportDrinkMail;
@@ -185,12 +188,19 @@ class FactureController extends Controller
 
                 if (!empty($brarudi_price) || $brarudi_price != 0) {
                     $d_prix_tva = $item_price[$count] - $brarudi_price;
-                    $item_total_amount = ($item_price[$count]*$item_quantity[$count]);
-                    $item_total_amount_brarudi = ($d_prix_tva*$item_quantity[$count]);
-                    $item_price_nvat2 = ($item_total_amount_brarudi * 100)/110;
-                    $item_price_nvat = ($item_total_amount * 100)/110;
-                    $vat = ($item_price_nvat2 * $taux_tva)/100;
-                    $item_price_wvat = ($item_price_nvat + $vat); 
+                    if ($d_prix_tva <= 0) {
+                        $item_total_amount = ($item_price[$count]*$item_quantity[$count]);
+                        $vat = 0;
+                        $item_price_nvat = ($item_total_amount - $vat);
+                        $item_price_wvat = ($item_price_nvat + $vat);
+                    }else{
+                        $item_total_amount = ($item_price[$count]*$item_quantity[$count]);
+                        $item_total_amount_brarudi = ($d_prix_tva*$item_quantity[$count]);
+                        $item_price_nvat2 = ($item_total_amount_brarudi * 100)/110;
+                        $vat = ($item_price_nvat2 * $taux_tva)/100;
+                        $item_price_nvat = ($item_total_amount - $vat);
+                        $item_price_wvat = ($item_price_nvat + $vat);
+                    } 
                 }else{
 
                     $item_total_amount = ($item_price[$count]*$item_quantity[$count]);
@@ -237,6 +247,7 @@ class FactureController extends Controller
             'invoice_currency'=>$request->invoice_currency,
             'invoice_ref'=>$request->invoice_ref,
             'code_store'=>$request->code_store,
+            'auteur' => $this->user->name,
             'invoice_signature_date'=> Carbon::now(),
             'drink_id'=>$drink_id[$count],
             'item_quantity'=>$item_quantity[$count],
@@ -404,6 +415,7 @@ class FactureController extends Controller
             'cancelled_invoice'=>$request->cancelled_invoice,
             'invoice_currency'=>$request->invoice_currency,
             'invoice_ref'=>$request->invoice_ref,
+            'auteur' => $this->user->name,
             'invoice_signature_date'=> Carbon::now(),
             'barrist_item_id'=>$barrist_item_id[$count],
             'item_quantity'=>$item_quantity[$count],
@@ -569,6 +581,7 @@ class FactureController extends Controller
             'cancelled_invoice_ref'=>$request->cancelled_invoice_ref,
             'cancelled_invoice'=>$request->cancelled_invoice,
             'invoice_currency'=>$request->invoice_currency,
+            'auteur' => $this->user->name,
             'invoice_ref'=>$request->invoice_ref,
             'invoice_signature_date'=> Carbon::now(),
             'food_item_id'=>$food_item_id[$count],
@@ -736,6 +749,7 @@ class FactureController extends Controller
             'cancelled_invoice'=>$request->cancelled_invoice,
             'invoice_currency'=>$request->invoice_currency,
             'invoice_ref'=>$request->invoice_ref,
+            'auteur' => $this->user->name,
             'invoice_signature_date'=> Carbon::now(),
             'bartender_item_id'=>$bartender_item_id[$count],
             'item_quantity'=>$item_quantity[$count],
@@ -837,6 +851,9 @@ class FactureController extends Controller
             $salle_id = $request->salle_id;
             $service_id = $request->service_id;
             $table_id = $request->table_id;
+            $breakfast_id = $request->breakfast_id;
+            $swiming_pool_id = $request->swiming_pool_id;
+            $kidness_space_id = $request->kidness_space_id;
             $item_quantity = $request->item_quantity;
             $item_price = $request->item_price;
             $item_ct = $request->item_ct;
@@ -905,6 +922,7 @@ class FactureController extends Controller
             'cancelled_invoice'=>$request->cancelled_invoice,
             'invoice_currency'=>$request->invoice_currency,
             'invoice_ref'=>$request->invoice_ref,
+            'auteur' => $this->user->name,
             'invoice_signature_date'=> Carbon::now(),
             'salle_id'=>$salle_id[$count],
             'item_quantity'=>$item_quantity[$count],
@@ -958,7 +976,7 @@ class FactureController extends Controller
             $facture->invoice_signature_date = Carbon::now();
             $facture->save();
 
-        }elseif($service_id){
+        }elseif(!empty($service_id)){
             for( $count = 0; $count < count($service_id); $count++ )
         {
             $taux_tva = BookingService::where('id', $service_id[$count])->value('vat');
@@ -1004,6 +1022,7 @@ class FactureController extends Controller
             'cancelled_invoice_ref'=>$request->cancelled_invoice_ref,
             'cancelled_invoice'=>$request->cancelled_invoice,
             'invoice_currency'=>$request->invoice_currency,
+            'auteur' => $this->user->name,
             'invoice_ref'=>$request->invoice_ref,
             'invoice_signature_date'=> Carbon::now(),
             'service_id'=>$service_id[$count],
@@ -1058,7 +1077,310 @@ class FactureController extends Controller
             $facture->invoice_signature_date = Carbon::now();
             $facture->save();
 
-        }else{
+        }elseif(!empty($kidness_space_id)){
+            for( $count = 0; $count < count($kidness_space_id); $count++ )
+        {
+            $taux_tva = KidnessSpace::where('id', $kidness_space_id[$count])->value('vat');
+
+            if($request->vat_taxpayer == 1){
+                $item_total_amount = ($item_price[$count]*$item_quantity[$count]);
+                $item_price_nvat = ($item_total_amount * 100)/110;
+                $vat = ($item_price_nvat * $taux_tva)/100;
+                $item_price_wvat = ($item_price_nvat + $vat);
+
+            }else{
+                $item_price_nvat = ($item_price[$count]*$item_quantity[$count])+$item_ct[$count];
+                $vat = 0;
+                $item_price_wvat = ($item_price_nvat + $vat);
+                $item_total_amount = $item_price_wvat + $item_tl[$count];
+            }
+
+          $data = array(
+            'invoice_number'=>$invoice_number,
+            'invoice_date'=> $request->invoice_date,
+            'tp_type'=>$request->tp_type,
+            'tp_name'=>$request->tp_name,
+            'tp_TIN'=>$request->tp_TIN,
+            'tp_trade_number'=>$request->tp_trade_number,
+            'tp_phone_number'=>$request->tp_phone_number,
+            'tp_address_province'=>$request->tp_address_province,
+            'tp_address_commune'=>$request->tp_address_commune,
+            'tp_address_quartier'=>$request->tp_address_quartier,
+            'tp_address_avenue'=>$request->tp_address_avenue,
+            'tp_address_rue'=>$request->tp_address_rue,
+            'vat_taxpayer'=>$request->vat_taxpayer,
+            'ct_taxpayer'=>$request->ct_taxpayer,
+            'tl_taxpayer'=>$request->tl_taxpayer,
+            'tp_fiscal_center'=>$request->tp_fiscal_center,
+            'tp_activity_sector'=>$request->tp_activity_sector,
+            'tp_legal_form'=>$request->tp_legal_form,
+            'payment_type'=>$request->payment_type,
+            'client_id'=>$request->client_id,
+            'customer_TIN'=>$request->customer_TIN,
+            'customer_address'=>$request->customer_address,
+            'invoice_signature'=> $invoice_signature,
+            'booking_no'=>$request->booking_no,
+            'cancelled_invoice_ref'=>$request->cancelled_invoice_ref,
+            'cancelled_invoice'=>$request->cancelled_invoice,
+            'invoice_currency'=>$request->invoice_currency,
+            'auteur' => $this->user->name,
+            'invoice_ref'=>$request->invoice_ref,
+            'invoice_signature_date'=> Carbon::now(),
+            'kidness_space_id'=>$kidness_space_id[$count],
+            'item_quantity'=>$item_quantity[$count],
+            'item_price'=>$item_price[$count],
+            'item_ct'=>$item_ct[$count],
+            'item_tl'=>$item_tl[$count],
+            'item_price_nvat'=>$item_price_nvat,
+            'vat'=>$vat,
+            'item_price_wvat'=>$item_price_wvat,
+            'item_total_amount'=>$item_total_amount,
+            'employe_id'=> $employe_id,
+        );
+          $data1[] = $data;
+      }
+
+
+        FactureDetail::insert($data1);
+
+
+            //create facture
+            $facture = new Facture();
+            $facture->invoice_date = $request->invoice_date;
+            $facture->invoice_number = $invoice_number;
+            $facture->invoice_date =  $request->invoice_date;
+            $facture->tp_type = $request->tp_type;
+            $facture->tp_name = $request->tp_name;
+            $facture->tp_TIN = $request->tp_TIN;
+            $facture->tp_trade_number = $request->tp_trade_number;
+            $facture->tp_phone_number = $request->tp_phone_number;
+            $facture->tp_address_province = $request->tp_address_province;
+            $facture->tp_address_commune = $request->tp_address_commune;
+            $facture->tp_address_quartier = $request->tp_address_quartier;
+            $facture->booking_no = $request->booking_no;
+            $facture->vat_taxpayer = $request->vat_taxpayer;
+            $facture->ct_taxpayer = $request->ct_taxpayer;
+            $facture->tl_taxpayer = $request->tl_taxpayer;
+            $facture->tp_fiscal_center = $request->tp_fiscal_center;
+            $facture->tp_activity_sector = $request->tp_activity_sector;
+            $facture->tp_legal_form = $request->tp_legal_form;
+            $facture->invoice_currency = $request->invoice_currency;
+            $facture->payment_type = $request->payment_type;
+            $facture->client_id = $request->client_id;
+            $facture->customer_TIN = $request->customer_TIN;
+            $facture->customer_address = $request->customer_address;
+            $facture->invoice_signature = $invoice_signature;
+            $facture->cancelled_invoice_ref = $request->cancelled_invoice_ref;
+            $facture->cancelled_invoice = $request->cancelled_invoice;
+            $facture->invoice_ref = $request->invoice_ref;
+            $facture->employe_id = $employe_id;
+            $facture->auteur = $this->user->name;
+            $facture->invoice_signature_date = Carbon::now();
+            $facture->save();
+
+        }elseif(!empty($swiming_pool_id)){
+            for( $count = 0; $count < count($swiming_pool_id); $count++ )
+        {
+            $taux_tva = SwimingPool::where('id', $swiming_pool_id[$count])->value('vat');
+
+            if($request->vat_taxpayer == 1){
+                $item_total_amount = ($item_price[$count]*$item_quantity[$count]);
+                $item_price_nvat = ($item_total_amount * 100)/110;
+                $vat = ($item_price_nvat * $taux_tva)/100;
+                $item_price_wvat = ($item_price_nvat + $vat);
+
+            }else{
+                $item_price_nvat = ($item_price[$count]*$item_quantity[$count])+$item_ct[$count];
+                $vat = 0;
+                $item_price_wvat = ($item_price_nvat + $vat);
+                $item_total_amount = $item_price_wvat + $item_tl[$count];
+            }
+
+          $data = array(
+            'invoice_number'=>$invoice_number,
+            'invoice_date'=> $request->invoice_date,
+            'tp_type'=>$request->tp_type,
+            'tp_name'=>$request->tp_name,
+            'tp_TIN'=>$request->tp_TIN,
+            'tp_trade_number'=>$request->tp_trade_number,
+            'tp_phone_number'=>$request->tp_phone_number,
+            'tp_address_province'=>$request->tp_address_province,
+            'tp_address_commune'=>$request->tp_address_commune,
+            'tp_address_quartier'=>$request->tp_address_quartier,
+            'tp_address_avenue'=>$request->tp_address_avenue,
+            'tp_address_rue'=>$request->tp_address_rue,
+            'vat_taxpayer'=>$request->vat_taxpayer,
+            'ct_taxpayer'=>$request->ct_taxpayer,
+            'tl_taxpayer'=>$request->tl_taxpayer,
+            'tp_fiscal_center'=>$request->tp_fiscal_center,
+            'tp_activity_sector'=>$request->tp_activity_sector,
+            'tp_legal_form'=>$request->tp_legal_form,
+            'payment_type'=>$request->payment_type,
+            'client_id'=>$request->client_id,
+            'customer_TIN'=>$request->customer_TIN,
+            'customer_address'=>$request->customer_address,
+            'invoice_signature'=> $invoice_signature,
+            'booking_no'=>$request->booking_no,
+            'cancelled_invoice_ref'=>$request->cancelled_invoice_ref,
+            'cancelled_invoice'=>$request->cancelled_invoice,
+            'invoice_currency'=>$request->invoice_currency,
+            'auteur' => $this->user->name,
+            'invoice_ref'=>$request->invoice_ref,
+            'invoice_signature_date'=> Carbon::now(),
+            'swiming_pool_id'=>$swiming_pool_id[$count],
+            'item_quantity'=>$item_quantity[$count],
+            'item_price'=>$item_price[$count],
+            'item_ct'=>$item_ct[$count],
+            'item_tl'=>$item_tl[$count],
+            'item_price_nvat'=>$item_price_nvat,
+            'vat'=>$vat,
+            'item_price_wvat'=>$item_price_wvat,
+            'item_total_amount'=>$item_total_amount,
+            'employe_id'=> $employe_id,
+        );
+          $data1[] = $data;
+      }
+
+
+        FactureDetail::insert($data1);
+
+
+            //create facture
+            $facture = new Facture();
+            $facture->invoice_date = $request->invoice_date;
+            $facture->invoice_number = $invoice_number;
+            $facture->invoice_date =  $request->invoice_date;
+            $facture->tp_type = $request->tp_type;
+            $facture->tp_name = $request->tp_name;
+            $facture->tp_TIN = $request->tp_TIN;
+            $facture->tp_trade_number = $request->tp_trade_number;
+            $facture->tp_phone_number = $request->tp_phone_number;
+            $facture->tp_address_province = $request->tp_address_province;
+            $facture->tp_address_commune = $request->tp_address_commune;
+            $facture->tp_address_quartier = $request->tp_address_quartier;
+            $facture->booking_no = $request->booking_no;
+            $facture->vat_taxpayer = $request->vat_taxpayer;
+            $facture->ct_taxpayer = $request->ct_taxpayer;
+            $facture->tl_taxpayer = $request->tl_taxpayer;
+            $facture->tp_fiscal_center = $request->tp_fiscal_center;
+            $facture->tp_activity_sector = $request->tp_activity_sector;
+            $facture->tp_legal_form = $request->tp_legal_form;
+            $facture->invoice_currency = $request->invoice_currency;
+            $facture->payment_type = $request->payment_type;
+            $facture->client_id = $request->client_id;
+            $facture->customer_TIN = $request->customer_TIN;
+            $facture->customer_address = $request->customer_address;
+            $facture->invoice_signature = $invoice_signature;
+            $facture->cancelled_invoice_ref = $request->cancelled_invoice_ref;
+            $facture->cancelled_invoice = $request->cancelled_invoice;
+            $facture->invoice_ref = $request->invoice_ref;
+            $facture->employe_id = $employe_id;
+            $facture->auteur = $this->user->name;
+            $facture->invoice_signature_date = Carbon::now();
+            $facture->save();
+
+        }elseif(!empty($breakfast_id)){
+            for( $count = 0; $count < count($breakfast_id); $count++ )
+        {
+            $taux_tva = BreakFast::where('id', $breakfast_id[$count])->value('vat');
+
+            if($request->vat_taxpayer == 1){
+                $item_total_amount = ($item_price[$count]*$item_quantity[$count]);
+                $item_price_nvat = ($item_total_amount * 100)/110;
+                $vat = ($item_price_nvat * $taux_tva)/100;
+                $item_price_wvat = ($item_price_nvat + $vat);
+
+            }else{
+                $item_price_nvat = ($item_price[$count]*$item_quantity[$count])+$item_ct[$count];
+                $vat = 0;
+                $item_price_wvat = ($item_price_nvat + $vat);
+                $item_total_amount = $item_price_wvat + $item_tl[$count];
+            }
+
+          $data = array(
+            'invoice_number'=>$invoice_number,
+            'invoice_date'=> $request->invoice_date,
+            'tp_type'=>$request->tp_type,
+            'tp_name'=>$request->tp_name,
+            'tp_TIN'=>$request->tp_TIN,
+            'tp_trade_number'=>$request->tp_trade_number,
+            'tp_phone_number'=>$request->tp_phone_number,
+            'tp_address_province'=>$request->tp_address_province,
+            'tp_address_commune'=>$request->tp_address_commune,
+            'tp_address_quartier'=>$request->tp_address_quartier,
+            'tp_address_avenue'=>$request->tp_address_avenue,
+            'tp_address_rue'=>$request->tp_address_rue,
+            'vat_taxpayer'=>$request->vat_taxpayer,
+            'ct_taxpayer'=>$request->ct_taxpayer,
+            'tl_taxpayer'=>$request->tl_taxpayer,
+            'tp_fiscal_center'=>$request->tp_fiscal_center,
+            'tp_activity_sector'=>$request->tp_activity_sector,
+            'tp_legal_form'=>$request->tp_legal_form,
+            'payment_type'=>$request->payment_type,
+            'client_id'=>$request->client_id,
+            'customer_TIN'=>$request->customer_TIN,
+            'customer_address'=>$request->customer_address,
+            'invoice_signature'=> $invoice_signature,
+            'booking_no'=>$request->booking_no,
+            'cancelled_invoice_ref'=>$request->cancelled_invoice_ref,
+            'cancelled_invoice'=>$request->cancelled_invoice,
+            'invoice_currency'=>$request->invoice_currency,
+            'auteur' => $this->user->name,
+            'invoice_ref'=>$request->invoice_ref,
+            'invoice_signature_date'=> Carbon::now(),
+            'breakfast_id'=>$breakfast_id[$count],
+            'item_quantity'=>$item_quantity[$count],
+            'item_price'=>$item_price[$count],
+            'item_ct'=>$item_ct[$count],
+            'item_tl'=>$item_tl[$count],
+            'item_price_nvat'=>$item_price_nvat,
+            'vat'=>$vat,
+            'item_price_wvat'=>$item_price_wvat,
+            'item_total_amount'=>$item_total_amount,
+            'employe_id'=> $employe_id,
+        );
+          $data1[] = $data;
+      }
+
+
+        FactureDetail::insert($data1);
+
+
+            //create facture
+            $facture = new Facture();
+            $facture->invoice_date = $request->invoice_date;
+            $facture->invoice_number = $invoice_number;
+            $facture->invoice_date =  $request->invoice_date;
+            $facture->tp_type = $request->tp_type;
+            $facture->tp_name = $request->tp_name;
+            $facture->tp_TIN = $request->tp_TIN;
+            $facture->tp_trade_number = $request->tp_trade_number;
+            $facture->tp_phone_number = $request->tp_phone_number;
+            $facture->tp_address_province = $request->tp_address_province;
+            $facture->tp_address_commune = $request->tp_address_commune;
+            $facture->tp_address_quartier = $request->tp_address_quartier;
+            $facture->booking_no = $request->booking_no;
+            $facture->vat_taxpayer = $request->vat_taxpayer;
+            $facture->ct_taxpayer = $request->ct_taxpayer;
+            $facture->tl_taxpayer = $request->tl_taxpayer;
+            $facture->tp_fiscal_center = $request->tp_fiscal_center;
+            $facture->tp_activity_sector = $request->tp_activity_sector;
+            $facture->tp_legal_form = $request->tp_legal_form;
+            $facture->invoice_currency = $request->invoice_currency;
+            $facture->payment_type = $request->payment_type;
+            $facture->client_id = $request->client_id;
+            $facture->customer_TIN = $request->customer_TIN;
+            $facture->customer_address = $request->customer_address;
+            $facture->invoice_signature = $invoice_signature;
+            $facture->cancelled_invoice_ref = $request->cancelled_invoice_ref;
+            $facture->cancelled_invoice = $request->cancelled_invoice;
+            $facture->invoice_ref = $request->invoice_ref;
+            $facture->employe_id = $employe_id;
+            $facture->auteur = $this->user->name;
+            $facture->invoice_signature_date = Carbon::now();
+            $facture->save();
+
+        }elseif(!empty($table_id)){
             for( $count = 0; $count < count($table_id); $count++ )
         {
             $taux_tva = BookingTable::where('id', $table_id[$count])->value('vat');
@@ -1106,6 +1428,7 @@ class FactureController extends Controller
             'cancelled_invoice'=>$request->cancelled_invoice,
             'invoice_currency'=>$request->invoice_currency,
             'invoice_ref'=>$request->invoice_ref,
+            'auteur' => $this->user->name,
             'invoice_signature_date'=> Carbon::now(),
             'table_id'=>$table_id[$count],
             'item_quantity'=>$item_quantity[$count],
@@ -1162,7 +1485,7 @@ class FactureController extends Controller
         }
 
             session()->flash('success', 'Le vente est fait avec succés!!');
-            return redirect()->route('admin.booking-invoices.index');
+            return redirect()->route('admin.booking-invoices.choose');
     }
 
     public function validerFactureBoisson($invoice_number)
@@ -1176,7 +1499,7 @@ class FactureController extends Controller
         foreach($datas as $data){
             $valeurStockInitial = DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id', $data->drink_id)->value('total_cump_value');
             $quantityStockInitial = DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id', $data->drink_id)->value('quantity_bottle');
-            $cump = DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id', $data->drink_id)->value('cump');
+            $cump = Drink::where('id', $data->drink_id)->value('cump');
 
             $quantityRestant = $quantityStockInitial - $data->item_quantity;
                       
@@ -1184,7 +1507,7 @@ class FactureController extends Controller
                     'drink_id' => $data->drink_id,
                     'quantity_stock_initial' => $quantityStockInitial,
                     'value_stock_initial' => $valeurStockInitial,
-                    'code_store_origin' => $data->code_store,
+                    'code_store' => $data->code_store,
                     'quantity_sold' => $data->item_quantity,
                     'value_sold' => $data->item_quantity * $data->item_price,
                     'quantity_stock_final' => $quantityRestant,
@@ -1192,6 +1515,9 @@ class FactureController extends Controller
                     'invoice_no' => $data->invoice_number,
                     'date' => $data->invoice_date,
                     'commande_boisson_no' => $data->drink_order_no,
+                    'type_transaction' => 'VENTE',
+                    'document_no' => $data->invoice_number,
+                    'cump' => $cump,
                     'created_by' => $this->user->name,
                     'employe_id' => $data->employe_id,
                     'origine_facture' => 'BOISSON',
@@ -1248,8 +1574,8 @@ class FactureController extends Controller
 
                         foreach ($datas as $data) {
                             $valeurStockInitial = DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id', $data->drink_id)->value('total_cump_value');
-                            $quantityStockInitial = DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id', $data->drink_id)->value('quantity_bottle');
-                            $cump = DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id', $data->drink_id)->value('cump');
+                            $quantityStockInitial = DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id', $data->drink_id)->where('verified',true)->value('quantity_bottle');
+                            $cump = Drink::where('id', $data->drink_id)->value('cump');
 
                             $quantityTotal = $quantityStockInitial + $data->item_quantity;
                       
@@ -1264,12 +1590,10 @@ class FactureController extends Controller
 
                             $status = DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id', $data->drink_id)->value('verified');
                     
-                            if ($status == true) {
                         
-                                DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id',$data->drink_id)
+                                DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id',$data->drink_id)->where('verified',true)
                                 ->update($returnData);
                                 $flag = 1;
-                            }
                         }
 
                         DrinkSmallStoreDetail::where('drink_id','!=','')->update(['verified' => false]);
@@ -1314,7 +1638,7 @@ class FactureController extends Controller
         foreach($datas as $data){
             $valeurStockInitial = DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id', $data->drink_id)->value('total_cump_value');
             $quantityStockInitial = DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id', $data->drink_id)->value('quantity_bottle');
-            $cump = DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id', $data->drink_id)->value('cump');
+            $cump = Drink::where('id', $data->drink_id)->value('cump');
 
             $quantityRestant = $quantityStockInitial - $data->item_quantity;
                       
@@ -1322,7 +1646,7 @@ class FactureController extends Controller
                     'drink_id' => $data->drink_id,
                     'quantity_stock_initial' => $quantityStockInitial,
                     'value_stock_initial' => $valeurStockInitial,
-                    'code_store_origin' => $data->code_store,
+                    'code_store' => $data->code_store,
                     'quantity_sold' => $data->item_quantity,
                     'value_sold' => $data->item_quantity * $data->item_price,
                     'quantity_stock_final' => $quantityRestant,
@@ -1330,6 +1654,9 @@ class FactureController extends Controller
                     'invoice_no' => $data->invoice_number,
                     'date' => $data->invoice_date,
                     'commande_boisson_no' => $data->drink_order_no,
+                    'type_transaction' => 'VENTE',
+                    'document_no' => $data->invoice_number,
+                    'cump' => $cump,
                     'created_by' => $this->user->name,
                     'employe_id' => $data->employe_id,
                     'origine_facture' => 'BOISSON',
@@ -1386,8 +1713,8 @@ class FactureController extends Controller
 
                         foreach ($datas as $data) {
                             $valeurStockInitial = DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id', $data->drink_id)->value('total_cump_value');
-                            $quantityStockInitial = DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id', $data->drink_id)->value('quantity_bottle');
-                            $cump = DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id', $data->drink_id)->value('cump');
+                            $quantityStockInitial = DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id', $data->drink_id)->where('verified',true)->value('quantity_bottle');
+                            $cump = Drink::where('id', $data->drink_id)->value('cump');
 
                             $quantityTotal = $quantityStockInitial + $data->item_quantity;
                       
@@ -1402,12 +1729,12 @@ class FactureController extends Controller
 
                             $status = DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id', $data->drink_id)->value('verified');
                     
-                            if ($status == true) {
+
                         
-                                DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id',$data->drink_id)
+                                DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id',$data->drink_id)->where('verified',true)
                                 ->update($returnData);
                                 $flag = 1;
-                            }
+                            
                         }
 
                         DrinkSmallStoreDetail::where('drink_id','!=','')->update(['verified' => false]);
@@ -1538,6 +1865,8 @@ class FactureController extends Controller
                     'value_stock_final' => $quantityRestant * $data->item_price,
                     'invoice_no' => $data->invoice_number,
                     'commande_boisson_no' => $data->barrist_order_no,
+                    'type_transaction' => 'VENTE',
+                    'document_no' => $data->invoice_number,
                     'created_by' => $this->user->name,
                     'employe_id' => $data->employe_id,
                     'origine_facture' => 'BOISSON',
@@ -1609,6 +1938,8 @@ class FactureController extends Controller
                     'invoice_no' => $data->invoice_number,
                     'date' => $data->invoice_date,
                     'commande_boisson_no' => $data->bartender_order_no,
+                    'type_transaction' => 'VENTE',
+                    'document_no' => $data->invoice_number,
                     'created_by' => $this->user->name,
                     'employe_id' => $data->employe_id,
                     'origine_facture' => 'BOISSON',
@@ -1714,6 +2045,8 @@ class FactureController extends Controller
                     'invoice_no' => $data->invoice_number,
                     'date' => $data->invoice_date,
                     'commande_boisson_no' => $data->bartender_order_no,
+                    'type_transaction' => 'VENTE',
+                    'document_no' => $data->invoice_number,
                     'created_by' => $this->user->name,
                     'employe_id' => $data->employe_id,
                     'origine_facture' => 'BOISSON',
@@ -1863,6 +2196,8 @@ class FactureController extends Controller
                     'quantity_stock_final' => $quantityRestant,
                     'value_stock_final' => $quantityRestant * $data->item_price,
                     'commande_cuisine_no' => $data->food_order_no,
+                    'type_transaction' => 'VENTE',
+                    'document_no' => $data->invoice_number,
                     'created_by' => $this->user->name,
                     'employe_id' => $data->employe_id,
                     'origine_facture' => 'CUISINE',
@@ -2001,6 +2336,8 @@ class FactureController extends Controller
                     'quantity_stock_final' => $quantityRestant,
                     'value_stock_final' => $quantityRestant * $data->item_price,
                     'commande_cuisine_no' => $data->food_order_no,
+                    'type_transaction' => 'VENTE',
+                    'document_no' => $data->invoice_number,
                     'created_by' => $this->user->name,
                     'employe_id' => $data->employe_id,
                     'origine_facture' => 'CUISINE',
@@ -2669,7 +3006,7 @@ class FactureController extends Controller
 
     public function factureBrouillon($invoice_number)
     {
-        if (is_null($this->user) || !$this->user->can('invoice_drink.create')) {
+        if (is_null($this->user) || !$this->user->can('invoice_drink.reset')) {
             abort(403, 'Sorry !! You are Unauthorized to print invoice !more information you have to contact Marcellin');
         }
 

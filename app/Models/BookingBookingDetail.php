@@ -51,6 +51,18 @@ class BookingBookingDetail extends Model
         return $this->belongsTo('App\Models\BookingSalle');
     }
 
+    public function swimingPool(){
+        return $this->belongsTo('App\Models\SwimingPool');
+    }
+
+    public function breakFast(){
+        return $this->belongsTo('App\Models\BreakFast');
+    }
+
+    public function kidnessSpace(){
+        return $this->belongsTo('App\Models\KidnessSpace');
+    }
+
     public function client(){
         return $this->belongsTo('App\Models\BookingClient');
     }

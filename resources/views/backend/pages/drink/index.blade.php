@@ -61,6 +61,7 @@
                                     <th width="10%">@lang('messages.unit')</th>
                                     <th width="10%">@lang('Min Store')</th>
                                     <th width="10%">@lang('messages.purchase_price')</th>
+                                     <th width="10%">@lang('P. BRARUDI')</th>
                                     <th width="10%">@lang('TVA')</th>
                                     <th width="10%">@lang('messages.selling_price')</th>
                                     <th width="15%">Action</th>
@@ -77,6 +78,7 @@
                                     <td>{{ $drink->unit }}</td>
                                     <td>{{ $drink->threshold_quantity }}</td>
                                     <td>{{ number_format($drink->purchase_price,0,',',' ') }}</td>
+                                    <td>{{ number_format($drink->brarudi_price,0,',',' ') }}</td>
                                     <td>{{ $drink->vat }}%</td>
                                     <td>{{ number_format($drink->selling_price,0,',',' ') }}</td>
                                     <td>

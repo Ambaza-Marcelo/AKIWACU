@@ -56,7 +56,7 @@ class DrinkTransferController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any transfer !');
         }
 
-        $transfers = DrinkTransfer::all();
+        $transfers = DrinkTransfer::take(20)->orderBy('id','desc')->get();
         return view('backend.pages.drink_transfer.index', compact('transfers'));
     }
 
@@ -298,11 +298,16 @@ class DrinkTransferController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to reject any transfer !');
         }
 
+        $data = DrinkTransfer::where('transfer_no',$transfer_no)->first();
         DrinkTransfer::where('transfer_no', '=', $transfer_no)
                 ->update(['status' => -1,'rejected_by' => $this->user->name]);
         DrinkTransferDetail::where('transfer_no', '=', $transfer_no)
                 ->update(['status' => -1,'rejected_by' => $this->user->name]);
 
+        DrinkRequisition::where('requisition_no', '=', $data->requisition_no)
+                        ->update(['status' => -1]);
+        DrinkRequisitionDetail::where('requisition_no', '=', $data->requisition_no)
+                        ->update(['status' => -1]);
         session()->flash('success', 'Transfer has been rejected !!');
         return back();
     }
@@ -360,17 +365,17 @@ class DrinkTransferController extends Controller
                 $quantityStockInitialDestination = DrinkSmallStoreDetail::where('code',$code_store_destination)->where('drink_id','!=', '')->where('drink_id', $data->drink_id)->value('quantity_bottle');
                 $quantityRestantSmallStore = $quantityStockInitialDestination + $data->quantity_transfered;
 
+                $cump = DrinkBigStoreDetail::where('code',$code_store_origin)->where('drink_id','!=', '')->where('drink_id', $data->drink_id)->value('cump');
 
                 $valeurAcquisition = $data->quantity_transfered * $data->price;
 
                 $valeurTotalUnite = $data->quantity_transfered + $quantityStockInitialDestination;
-                $cump = ($valeurStockInitialDestination + $valeurAcquisition) / $valeurTotalUnite;
 
                 $reportBigStore = array(
                     'drink_id' => $data->drink_id,
                     'quantity_stock_initial' => $quantityStockInitialOrigine,
                     'value_stock_initial' => $valeurStockInitialOrigine,
-                    'code_store' => $code_store_destination,
+                    'code_store' => $code_store_origin,
                     'code_store_origin' => $code_store_origin,
                     'code_store_destination' => $code_store_destination,
                     'transfer_no' => $data->transfer_no,
@@ -379,6 +384,9 @@ class DrinkTransferController extends Controller
                     'value_transfer' => $data->total_value_transfered,
                     'quantity_stock_final' => $quantityStockInitialOrigine - $data->quantity_transfered,
                     'value_stock_final' => $valeurStockInitialOrigine - $data->total_value_transfered,
+                    'type_transaction' => 'SORTIE TRANSFERT',
+                    'cump' => $cump,
+                    'document_no' => $data->transfer_no,
                     'created_by' => $this->user->name,
                     'description' => $data->description,
                     'created_at' => \Carbon\Carbon::now()
@@ -399,6 +407,9 @@ class DrinkTransferController extends Controller
                     'value_transfer' => $data->total_value_transfered,
                     'quantity_stock_final' => $quantityStockInitialDestination + $data->quantity_transfered,
                     'value_stock_final' => $valeurStockInitialDestination + $data->total_value_transfered,
+                    'type_transaction' => 'ENTREE TRANSFERT',
+                    'cump' => $cump,
+                    'document_no' => $data->transfer_no,
                     'created_by' => $this->user->name,
                     'description' => $data->description,
                     'created_at' => \Carbon\Carbon::now()
@@ -517,11 +528,12 @@ class DrinkTransferController extends Controller
                             $quantityStockInitialDestination = DrinkSmallStoreDetail::where('code',$code_store_destination)->where('drink_id','!=', '')->where('drink_id', $data->drink_id)->value('quantity_bottle');
                             $quantityRestantSmallStore = $quantityStockInitialDestination - $data->quantity_transfered;
 
+                            $cump = DrinkBigStoreDetail::where('code',$code_store_origin)->where('drink_id','!=', '')->where('drink_id', $data->drink_id)->value('cump');
 
                             $valeurAcquisition = $data->quantity_transfered * $data->price;
 
                             $valeurTotalUnite = $data->quantity_transfered + $quantityStockInitialDestination;
-                            $cump = ($valeurStockInitialDestination + $valeurAcquisition) / $valeurTotalUnite;
+                            
                       
                 
                             $returnDataBigStore = array(
@@ -529,7 +541,7 @@ class DrinkTransferController extends Controller
                                 'quantity_bottle' => $quantityTotalBigStore,
                                 'total_selling_value' => $quantityTotalBigStore * $data->price,
                                 'total_purchase_value' => $quantityTotalBigStore * $data->price,
-                                'total_cump_value' => $quantityTotalBigStore * $data->price,
+                                'total_cump_value' => $quantityTotalBigStore * $cump,
                                 'created_by' => $this->user->name,
                                 'verified' => false,
                                 'created_at' => \Carbon\Carbon::now()
@@ -584,17 +596,17 @@ class DrinkTransferController extends Controller
                 $quantityStockInitialDestination = DrinkBigStoreDetail::where('code',$code_store_destination)->where('drink_id','!=', '')->where('drink_id', $data->drink_id)->value('quantity_bottle');
                 $quantityRestantSmallStore = $quantityStockInitialDestination - $data->quantity_transfered;
 
+                $cump = DrinkBigStoreDetail::where('code',$code_store_origin)->where('drink_id','!=', '')->where('drink_id', $data->drink_id)->value('cump');
 
                 $valeurAcquisition = $data->quantity_transfered * $data->price;
 
                 $valeurTotalUnite = $data->quantity_transfered + $quantityStockInitialDestination;
-                $cump = ($valeurStockInitialDestination + $valeurAcquisition) / $valeurTotalUnite;
 
                 $reportBigStore = array(
                     'drink_id' => $data->drink_id,
                     'quantity_stock_initial' => $quantityStockInitialOrigine,
                     'value_stock_initial' => $valeurStockInitialOrigine,
-                    'code_store' => $code_store_destination,
+                    'code_store' => $code_store_origin,
                     'code_store_origin' => $code_store_origin,
                     'code_store_destination' => $code_store_destination,
                     'transfer_no' => $data->transfer_no,
@@ -603,6 +615,9 @@ class DrinkTransferController extends Controller
                     'value_transfer' => $data->total_value_transfered,
                     'quantity_stock_final' => $quantityStockInitialOrigine - $data->quantity_transfered,
                     'value_stock_final' => $valeurStockInitialOrigine - $data->total_value_transfered,
+                    'type_transaction' => 'SORTIE TRANSFERT',
+                    'cump' => $cump,
+                    'document_no' => $data->transfer_no,
                     'created_by' => $this->user->name,
                     'description' => $data->description,
                     'created_at' => \Carbon\Carbon::now()
@@ -623,6 +638,9 @@ class DrinkTransferController extends Controller
                     'value_transfer' => $data->total_value_transfered,
                     'quantity_stock_final' => $quantityStockInitialDestination + $data->quantity_transfered,
                     'value_stock_final' => $valeurStockInitialDestination + $data->total_value_transfered,
+                    'type_transaction' => 'ENTREE TRANSFERT',
+                    'cump' => $cump,
+                    'document_no' => $data->transfer_no,
                     'created_by' => $this->user->name,
                     'description' => $data->description,
                     'created_at' => \Carbon\Carbon::now()
@@ -634,7 +652,7 @@ class DrinkTransferController extends Controller
                         'quantity' => $quantityRestantBigStore,
                         'total_selling_value' => $quantityRestantBigStore * $data->price,
                         'total_purchase_value' => $quantityRestantBigStore * $data->price,
-                        'total_cump_value' => $quantityRestantBigStore * $data->price,
+                        'total_cump_value' => $quantityRestantBigStore * $cump,
                         'created_by' => $this->user->name,
                         'verified' => false,
                         'created_at' => \Carbon\Carbon::now()

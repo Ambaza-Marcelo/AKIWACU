@@ -38,6 +38,6 @@ class DrinkBgStoreTask extends Command
      */
     public function handle()
     {
-        DB::insert("insert into virtual_drink_bg_stores(drink_id,quantity_bottle,unit,purchase_price,cump,selling_price) select drink_id,quantity_bottle,unit,purchase_price,cump,selling_price from drink_big_store_details where drink_id != '' ");
+        DB::insert("insert into virtual_drink_bg_stores(date,code,manager,emplacement,store_signature,drink_id,quantity_bottle,unit,purchase_price,cump,selling_price) select updated_at,code,manager,emplacement,store_signature,drink_id,quantity_bottle,unit,purchase_price,cump,selling_price from drink_extra_big_store_details where drink_id != '' ");
     }
 }

@@ -341,6 +341,10 @@ class DrinkStockinController extends Controller
                     'value_stockin' => $data->total_amount_purchase,
                     'quantity_stock_final' => $quantityStockInitialDestination + $data->quantity,
                     'value_stock_final' => $valeurStockInitialDestination + $data->total_amount_purchase,
+                    'type_transaction' => $data->item_movement_type,
+                    'cump' => $cump,
+                    'purchase_price' => $data->purchase_price,
+                    'document_no' => $data->stockin_no,
                     'created_by' => $this->user->name,
                     'description' => $data->description,
                     'created_at' => \Carbon\Carbon::now()

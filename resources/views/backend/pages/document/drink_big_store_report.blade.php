@@ -6,6 +6,7 @@
         tr,th,td{
              border: 1px solid black;
              text-align: center;
+             font-size: 12px;
         }
 
     </style>
@@ -38,7 +39,7 @@
                     <br><br><br><br><br>
                     <br><br><br>
                     <div>
-                        <h2 style="text-align: center;text-decoration: underline;">RAPPORT DU STOCK DES BOISSONS (GRAND STOCK)</h2>
+                        <h2 style="text-align: center;text-decoration: underline;">FICHE DU STOCK INTERMEDIAIRE DES BOISSONS</h2>
                     </div>
                     <div>
                         <table style="border: 1px solid black;border-collapse: collapse;">
@@ -56,6 +57,9 @@
                                     <th width="10%">V. Sortie</th>
                                     <th width="10%">Q. S. Final</th>
                                     <th width="10%">V. S. Final</th>
+                                    <th width="10%">Auteur</th>
+                                    <th width="10%">Type Mouvement</th>
+                                    <th width="10%">No Document</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -87,6 +91,9 @@
                                     @endphp
 
                                     <td>{{ number_format(($quantite_finale * $data->drink->cump),0,',',' ') }} </td>
+                                    <td>{{ $data->created_by }} </td>
+                                    <td>{{ $data->type_transaction }} </td>
+                                    <td>{{ $data->document_no }} </td>
                                 </tr>
                                 @endforeach
                             </tbody>

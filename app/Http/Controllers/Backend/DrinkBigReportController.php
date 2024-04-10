@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\DrinkBigStoreDetail;
 use App\Models\DrinkBigStore;
 use App\Models\DrinkBigReport;
+use App\Models\Drink;
 use App\Exports\DrinkMdStoreReportExport;
 use Carbon\Carbon;
 use PDF;
@@ -42,8 +43,9 @@ class DrinkBigReportController extends Controller
                         DB::raw('created_at,drink_id,quantity_stock_initial,value_stock_initial,quantity_stockin,value_stockin,quantity_reception,value_reception,quantity_transfer,value_transfer,quantity_stockout,value_stockout,quantity_stock_final,value_stock_final'))->groupBy('created_at','drink_id','quantity_stock_initial','value_stock_initial','quantity_stockin','value_stockin','quantity_reception','value_reception','quantity_transfer','value_transfer','quantity_stockout','value_stockout','quantity_stock_final','value_stock_final')->get();
 
             $stores = DrinkBigStore::all();
+            $drinks = Drink::all();
 
-        return view('backend.pages.drink_big_store_report.index',compact('datas','stores'));
+        return view('backend.pages.drink_big_store_report.index',compact('datas','stores','drinks'));
        
     }
 
@@ -56,6 +58,7 @@ class DrinkBigReportController extends Controller
         $d1 = $request->query('start_date');
         $d2 = $request->query('end_date');
         $code_store = $request->query('code_store');
+        $drink_id = $request->query('drink_id');
         $store_signature = DrinkBigStore::where('code',$code_store)->value('store_signature');
 
         $startDate = \Carbon\Carbon::parse($d1)->format('Y-m-d');
@@ -65,7 +68,7 @@ class DrinkBigReportController extends Controller
         $end_date = $endDate.' 23:59:59';
 
         $datas = DrinkBigReport::select(
-                        DB::raw('created_at,drink_id,quantity_stock_initial,value_stock_initial,quantity_stockin,value_stockin,quantity_reception,value_reception,quantity_transfer,value_transfer,quantity_stockout,value_stockout,quantity_stock_final,value_stock_final'))->whereBetween('created_at',[$start_date,$end_date])/*->where('code_store',$code_store)*/->groupBy('created_at','drink_id','quantity_stock_initial','value_stock_initial','quantity_stockin','value_stockin','quantity_reception','value_reception','quantity_transfer','value_transfer','quantity_stockout','value_stockout','quantity_stock_final','value_stock_final')->orderBy('created_at','desc')->get();
+                        DB::raw('id,created_at,drink_id,type_transaction,document_no,created_by,quantity_stock_initial,value_stock_initial,quantity_stockin,value_stockin,quantity_reception,value_reception,quantity_transfer,value_transfer,quantity_stockout,value_stockout,quantity_stock_final,value_stock_final'))->whereBetween('date',[$start_date,$end_date])->where('code_store',$code_store)->where('drink_id',$drink_id)->groupBy('id','created_at','drink_id','type_transaction','document_no','created_by','quantity_stock_initial','value_stock_initial','quantity_stockin','value_stockin','quantity_reception','value_reception','quantity_transfer','value_transfer','quantity_stockout','value_stockout','quantity_stock_final','value_stock_final')->orderBy('id','asc')->get();
 
         $setting = DB::table('settings')->orderBy('created_at','desc')->first();
         $currentTime = Carbon::now();
@@ -85,7 +88,10 @@ class DrinkBigReportController extends Controller
 
     public function exportToExcel(Request $request)
     {
-        return Excel::download(new DrinkMdStoreReportExport, 'RAPPORT_STOCK_INTERMEDIAIRE_DES_BOISSONS.xlsx');
+        $d1 = $request->query('start_date');
+        $d2 = $request->query('end_date');
+        
+        return Excel::download(new DrinkMdStoreReportExport, 'RAPPORT_STOCK_INTERMEDIAIRE_DES_BOISSONSDU '.$d1.' AU '.$d2.'.xlsx');
     }
 
 }

@@ -18,7 +18,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
 
-        $schedule->command('drinkbgstore:task')->everySecond();
+        $schedule->command('drinkmdstore:task')->dailyAt('8:00');
         
 
     }

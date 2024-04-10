@@ -6,6 +6,7 @@
         tr,th,td{
              border: 1px solid black;
              text-align: center;
+             font-size: 12px;
         }
 
     </style>
@@ -38,7 +39,7 @@
                     <br><br><br><br><br>
                     <br><br><br>
                     <div>
-                        <h2 style="text-align: center;text-decoration: underline;">RAPPORT DU STOCK DES BOISSONS (PETIT STOCK)</h2>
+                        <h2 style="text-align: center;text-decoration: underline;">FICHE DU PETIT STOCK DES BOISSONS</h2>
                     </div>
                     <div>
                         <table style="border: 1px solid black;border-collapse: collapse;">
@@ -50,12 +51,15 @@
                                     <th width="10%">@lang('messages.code')</th>
                                     <th width="10%">Q. S. Initial</th>
                                     <th width="10%">V. S. Initial</th>
-                                    <th width="10%">Q. Entree/Reception</th>
-                                    <th width="10%">V. Entree/Reception</th>
+                                    <th width="10%">Q. Entree</th>
+                                    <th width="10%">V. Entree</th>
                                     <th width="10%">Q. Sortie</th>
                                     <th width="10%">V. Sortie</th>
                                     <th width="10%">Q. S. Final</th>
                                     <th width="10%">V. S. Final</th>
+                                    <th width="10%">Auteur</th>
+                                    <th width="10%">Type Mouvement</th>
+                                    <th width="10%">No Document</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -85,6 +89,9 @@
                                     <td>@if($data->value_stockout){{ number_format($value_stockout,0,',',' ') }} @elseif($data->value_sold){{ number_format($value_sold,0,',',' ') }} @endif </td>
                                     <td>{{ ($data->quantity_stock_initial + $data->quantity_stockin + $data->quantity_reception + $data->quantity_transfer) - ($data->quantity_stockout + $data->quantity_sold) }} </td>
                                     <td>{{ number_format((($data->quantity_stock_initial + $data->quantity_stockin + $data->quantity_reception + $data->quantity_transfer) - ($data->quantity_stockout + $data->quantity_sold))*$data->drink->cump,0,',',' ') }}</td>
+                                    <td>{{ $data->created_by }} </td>
+                                    <td>{{ $data->type_transaction }} </td>
+                                    <td>{{ $data->document_no }} </td>
                                 </tr>
                                 @endforeach
                             </tbody>

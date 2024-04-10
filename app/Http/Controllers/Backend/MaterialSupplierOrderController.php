@@ -16,9 +16,11 @@ use App\Models\MaterialPurchaseDetail;
 use App\Models\MaterialSupplierOrder;
 use App\Models\MaterialSupplierOrderDetail;
 use App\Models\Supplier;
+use App\Exports\MaterialSupplierOrderExport;
 use Validator;
 use PDF;
 use Mail;
+use Excel;
 use Carbon\Carbon;
 
 class MaterialSupplierOrderController extends Controller
@@ -323,6 +325,11 @@ class MaterialSupplierOrderController extends Controller
             return back();
         }
         
+    }
+
+    public function exportToExcel(Request $request)
+    {
+        return Excel::download(new MaterialSupplierOrderExport, 'RAPPORT_ACHAT_COMMANDE.xlsx');
     }
 
     /**

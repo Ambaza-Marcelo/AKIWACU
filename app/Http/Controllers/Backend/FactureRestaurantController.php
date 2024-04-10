@@ -112,7 +112,7 @@ class FactureRestaurantController extends Controller
 
     public function exporterChiffreAffaire(Request $request)
     {
-        if (is_null($this->user) || !$this->user->can('invoice_drink.delete')) {
+        if (is_null($this->user) || !$this->user->can('invoice_drink.view')) {
             abort(403, 'Sorry !! You are Unauthorized to export this ! more information you have to contact Marcellin');
         }
 
@@ -146,7 +146,7 @@ class FactureRestaurantController extends Controller
 
     public function chiffreAffaire()
     {
-        if (is_null($this->user) || !$this->user->can('invoice_booking.edit')) {
+        if (is_null($this->user) || !$this->user->can('invoice_drink.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view this ! more information,contact Marcellin');
         }
 
@@ -654,37 +654,53 @@ class FactureRestaurantController extends Controller
 
     public function exporterChiffreAffaireEnExcel(Request $request)
     {
-        return Excel::download(new ChiffreAffaireExport, 'RAPPORT_CHIFFRE_AFFAIRE.xlsx');
+        $d1 = $request->query('start_date');
+        $d2 = $request->query('end_date');
+
+        return Excel::download(new ChiffreAffaireExport, 'RAPPORT_CHIFFRE_AFFAIRE DU '.$d1.' AU '.$d2.'.xlsx');
     }
 
     public function creditExportToExcel(Request $request)
     {
-        return Excel::download(new FactureArecouvreExport, 'RAPPORT_FACTURE_CREDIT.xlsx');
+        $d1 = $request->query('start_date');
+        $d2 = $request->query('end_date');
+
+        return Excel::download(new FactureArecouvreExport, 'RAPPORT_FACTURE_CREDIT DU '.$d1.' AU '.$d2.'.xlsx');
     }
 
     public function recouvrementExportToExcel(Request $request)
     {
-        return Excel::download(new FactureRecouvreExport, 'RAPPORT_FACTURE_RECOUVRE.xlsx');
+        $d1 = $request->query('start_date');
+        $d2 = $request->query('end_date');
+        return Excel::download(new FactureRecouvreExport, 'RAPPORT_FACTURE_RECOUVRE DU '.$d1.' AU '.$d2.'.xlsx');
     }
 
     public function exporterCreditEnExcel(Request $request)
     {
-        return Excel::download(new FactureCreditExport, 'RAPPORT_FACTURE_CREDIT.xlsx');
+        $d1 = $request->query('start_date');
+        $d2 = $request->query('end_date');
+        return Excel::download(new FactureCreditExport, 'RAPPORT_FACTURE_CREDIT DU '.$d1.' AU '.$d2.'.xlsx');
     }
 
     public function exporterCashEnExcel(Request $request)
     {
-        return Excel::download(new FacturePayeExport, 'RAPPORT_FACTURE_PAYE.xlsx');
+        $d1 = $request->query('start_date');
+        $d2 = $request->query('end_date');
+        return Excel::download(new FacturePayeExport, 'RAPPORT_FACTURE_PAYE DU '.$d1.' AU '.$d2.'.xlsx');
     }
 
     public function exporterFactureAnnule(Request $request)
     {
-        return Excel::download(new FactureAnnuleExport, 'RAPPORT_FACTURE_ANNULE.xlsx');
+        $d1 = $request->query('start_date');
+        $d2 = $request->query('end_date');
+        return Excel::download(new FactureAnnuleExport, 'RAPPORT_FACTURE_ANNULE DU '.$d1.' AU '.$d2.'.xlsx');
     }
 
     public function exporterFactureEncours(Request $request)
     {
-        return Excel::download(new FactureEncoursExport, 'RAPPORT_FACTURE_ENCOURS.xlsx');
+        $d1 = $request->query('start_date');
+        $d2 = $request->query('end_date');
+        return Excel::download(new FactureEncoursExport, 'RAPPORT_FACTURE_ENCOURS DU '.$d1.' AU '.$d2.'.xlsx');
     }
 
     

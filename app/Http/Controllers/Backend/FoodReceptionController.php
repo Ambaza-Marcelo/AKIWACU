@@ -531,6 +531,8 @@ class FoodReceptionController extends Controller
                     'value_reception' => $data->total_amount_received,
                     'quantity_stock_final' => $quantityStockInitialDestination - $data->quantity_received,
                     'value_stock_final' => $valeurStockInitialDestination - $data->total_amount_received,
+                    'type_transaction' => 'ACHAT',
+                    'document_no' => $data->reception_no,
                     'created_by' => $this->user->name,
                     'description' => $data->description,
                     'created_at' => \Carbon\Carbon::now()

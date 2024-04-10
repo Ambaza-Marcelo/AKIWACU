@@ -28,7 +28,7 @@ class ChiffreAffaireExport implements FromCollection, WithMapping, WithHeadings
         $end_date = $endDate.' 23:59:59';
 
         return FactureDetail::select(
-                        DB::raw('id,food_item_id,drink_id,barrist_item_id,bartender_item_id,salle_id,service_id,invoice_number,invoice_date,item_quantity,customer_name,client_id,drink_order_no,food_order_no,bartender_order_no,barrist_order_no,booking_no,item_total_amount,vat,item_price_nvat,etat,reseted_by,cn_motif'))/*->where('etat','!=','0')->where('etat','!=','-1')*/->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','drink_id','food_item_id','bartender_item_id','barrist_item_id','salle_id','service_id','invoice_date','invoice_number','item_quantity','etat','reseted_by','cn_motif','drink_order_no','food_order_no','bartender_order_no','barrist_order_no','booking_no','customer_name','client_id','item_total_amount','vat','item_price_nvat')->orderBy('customer_name','asc')->get();
+                        DB::raw('id,food_item_id,updated_at,drink_id,barrist_item_id,bartender_item_id,salle_id,service_id,invoice_number,invoice_date,item_quantity,customer_name,client_id,drink_order_no,food_order_no,bartender_order_no,barrist_order_no,booking_no,item_total_amount,vat,item_price_nvat,etat,reseted_by,cn_motif,auteur,validated_by'))/*->where('etat','!=','0')->where('etat','!=','-1')*/->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','drink_id','food_item_id','bartender_item_id','barrist_item_id','salle_id','service_id','invoice_date','updated_at','invoice_number','item_quantity','etat','reseted_by','cn_motif','drink_order_no','food_order_no','bartender_order_no','barrist_order_no','booking_no','customer_name','client_id','item_total_amount','vat','item_price_nvat','auteur','validated_by')->orderBy('customer_name','asc')->get();
     }
 
     public function map($data) : array {
@@ -105,7 +105,8 @@ class ChiffreAffaireExport implements FromCollection, WithMapping, WithHeadings
 
         return [
             $data->id,
-            Carbon::parse($data->invoice_date)->format('d-m-Y'),
+            $data->updated_at,
+            Carbon::parse($data->invoice_date)->format('d/m/Y'),
 			$data->invoice_number,
 			$order_no,
             $customer_name,
@@ -119,6 +120,8 @@ class ChiffreAffaireExport implements FromCollection, WithMapping, WithHeadings
 			$data->vat,
 			$data->item_total_amount,
             $etat,
+            $data->auteur,
+            $data->validated_by,
             $auteur,
             $motif
         ] ;
@@ -129,7 +132,8 @@ class ChiffreAffaireExport implements FromCollection, WithMapping, WithHeadings
     public function headings() : array {
         return [
             '#',
-            'Date',
+            'updated at ',
+            'Date de facturation',
             'No Facture',
             'No Commande',
             'Nom du Client',
@@ -144,6 +148,8 @@ class ChiffreAffaireExport implements FromCollection, WithMapping, WithHeadings
             'TTC',
             'ETAT',
             'Auteur',
+            'Valide Par',
+            'ANNULE PAR',
             'Motif'
         ] ;
     }

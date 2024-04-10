@@ -42,6 +42,34 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="header-title float-left">@lang('Drink Small Store')</h4>
+                    <form action="{{ route('admin.virtual-drink-small-store.exportToExcel')}}" method="GET">
+                        <p class="float-right mb-2">
+                            <button type="submit" value="search" title="Cliquer pour exporter en Excel" class="btn btn-primary">Exporter En Excel</button>
+                        </p>
+                        <p class="float-right mb-2">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="start_date">@lang('Date Debut')</label>
+                                    <input type="date" name="start_date" class="form-control" id="start_date">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="end_date">@lang('Date Fin')</label>
+                                    <input type="date" name="end_date" class="form-control" id="end_date">
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label for="code_store">@lang('Stock')</label>
+                                        <select class="form-control" name="code_store" id="code_store">
+                                        <option disabled="disabled" selected="selected">Merci de choisir</option>
+                                        @foreach($drink_small_stores as $store)
+                                            <option value="{{$store->code}}">{{$store->name}}</option>
+                                        @endforeach
+                                    </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </p>
+                    </form> 
                     <p class="float-right mb-2">
                         @if (Auth::guard('admin')->user()->can('drink_small_store.create'))
                             <a class="btn btn-primary text-white" href="{{ route('admin.drink-small-store.create') }}">@lang('messages.new')</a>

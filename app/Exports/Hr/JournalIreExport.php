@@ -31,12 +31,6 @@ class JournalIreExport implements FromCollection, WithMapping, WithHeadings
     public function map($data) : array {
 
         $remuneration_brute = $data->somme_salaire_base + $data->allocation_familiale + $data->indemnite_logement + $data->indemnite_deplacement + $data->prime_fonction;
-        $total_deductions = floor(floor($data->somme_cotisation_inss) + floor($data->assurance_maladie_employe) + floor($data->somme_impot) + floor($data->retenue_pret) + floor($data->soins_medicaux) + floor($data->autre_retenue));
-        $net_a_payer = floor($remuneration_brute) - floor($total_deductions);
-
-        
-
-
 
         if ($remuneration_brute < 450000 ) {
             $inss_pension = ($remuneration_brute * 6)/100;
@@ -57,16 +51,21 @@ class JournalIreExport implements FromCollection, WithMapping, WithHeadings
                 $inss_employeur = (450000 * 6)/100;
         }
 
-        if ($remuneration_brute < 250000) {
+            $net = $remuneration_brute - $data->somme_cotisation_inss - $data->somme_impot;
+
+            if ($net < 250000) {
                 $assurance_maladie_employe = 0;
                 $assurance_maladie_employeur = 15000;
-        }else{
+            }else{
                 $assurance_maladie_employe = 6000;
                 $assurance_maladie_employeur = 9000;
-        }
+            }
+
+        $total_deductions = $data->somme_cotisation_inss + $assurance_maladie_employe + $data->somme_impot + $data->retenue_pret + $data->soins_medicaux + $data->autre_retenue;
+        $net_a_payer = $remuneration_brute - $total_deductions;
 
 
-        $base_imposable = round($remuneration_brute - $data->indemnite_logement - $data->indemnite_deplacement - $inss - $assurance_maladie_employe - $data->allocation_familiale);
+        $base_imposable = ($remuneration_brute - $data->indemnite_logement - $data->indemnite_deplacement - $inss - $assurance_maladie_employe - $data->allocation_familiale);
 
         if ($base_imposable >= 0 && $base_imposable <= 150000) {
                 $somme_impot = 0;
@@ -83,7 +82,7 @@ class JournalIreExport implements FromCollection, WithMapping, WithHeadings
                 $ipr_a_payer = 0;
 
         }elseif ($base_imposable > 150000 && $base_imposable <= 300000) {
-                $somme_impot = floor((($base_imposable - 150000) * 20)/100);
+                $somme_impot = ((($base_imposable - 150000) * 20)/100);
                 $pourecentage = 20;
                 $rabattement = 150000;
 
@@ -96,7 +95,7 @@ class JournalIreExport implements FromCollection, WithMapping, WithHeadings
 
                 $ipr_a_payer = $ipr0 + $ipr20 + $ipr30;
         }elseif ($base_imposable > 300000) {
-                $somme_impot = floor(30000 + (($base_imposable - 300000) * 30)/100);  
+                $somme_impot = (30000 + (($base_imposable - 300000) * 30)/100);  
                 $pourecentage = 30; 
                 $rabattement = 150000; 
 
@@ -110,7 +109,6 @@ class JournalIreExport implements FromCollection, WithMapping, WithHeadings
                 $ipr_a_payer = $ipr0 + $ipr20 + $ipr30;
         }
 
-
         return [
             $data->id,
             Carbon::parse($data->created_at)->format('m/Y'),
@@ -118,21 +116,21 @@ class JournalIreExport implements FromCollection, WithMapping, WithHeadings
             $data->employe->firstname, 
             $data->employe->lastname,
             $data->somme_salaire_base,
-            floor($data->allocation_familiale),
-            floor($data->indemnite_logement),
-            floor($data->indemnite_deplacement),
-            floor($data->prime_fonction),
-            floor($remuneration_brute),
-            floor($data->somme_cotisation_inss),
-            floor($data->assurance_maladie_employe),
-            round($base_imposable),
-            floor($rabattement),
-            round($fourchette20),
-            round($fourchette30),
-            floor($ipr0),
-            round($ipr20),
-            round($ipr30),
-            round($ipr_a_payer,1),
+            ($data->allocation_familiale),
+            ($data->indemnite_logement),
+            ($data->indemnite_deplacement),
+            ($data->prime_fonction),
+            ($remuneration_brute),
+            ($data->somme_cotisation_inss),
+            ($data->assurance_maladie_employe),
+            $base_imposable,
+            ($rabattement),
+            ($fourchette20),
+            ($fourchette30),
+            ($ipr0),
+            ($ipr20),
+            ($ipr30),
+            ($ipr_a_payer),
         ] ;
  
  

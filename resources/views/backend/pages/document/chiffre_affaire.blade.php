@@ -33,7 +33,7 @@
                     <br><br><br>
                     <br>
                     <div>
-                        <h2 style="text-align: center;text-decoration: underline;">TVA DU {{ \Carbon\Carbon::parse($start_date)->format('d/m/Y') }} AU {{ \Carbon\Carbon::parse($end_date)->format('d/m/Y') }} </h2>
+                        <h2 style="text-align: center;text-decoration: underline;">CA DU {{ \Carbon\Carbon::parse($start_date)->format('d/m/Y') }} AU {{ \Carbon\Carbon::parse($end_date)->format('d/m/Y') }} </h2>
                     </div>
                     <br>
                     <div>
@@ -53,7 +53,7 @@
                                     <td>{{ $loop->index + 1 }}</td>
                                    <td>{{ number_format($data->item_price_nvat,3,',',' ') }}</td>
                                     <td>{{ number_format($data->vat,3,',',' ') }}</td>
-                                   <td>{{ number_format($data->item_total_amount,3,',',' ') }}</td>
+                                   <td>{{ number_format($data->item_total_amount,0,',',' ') }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>

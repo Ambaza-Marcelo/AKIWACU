@@ -26,7 +26,9 @@
 </div>
 <!-- page title area end -->
 
-@if (Auth::guard('admin')->user()->can('food_order_client.view') || Auth::guard('admin')->user()->can('drink_order_client.view') || Auth::guard('admin')->user()->can('material.view') || Auth::guard('admin')->user()->can('drink.view') || Auth::guard('admin')->user()->can('food.view') || Auth::guard('admin')->user()->can('invoice_drink.view'))
+@if (Auth::guard('admin')->user()->can('food_order_client.view') || Auth::guard('admin')->user()->can('drink_order_client.view') || Auth::guard('admin')->user()->can('material_big_store.view') || Auth::guard('admin')->user()->can('drink_big_store.view') ||
+Auth::guard('admin')->user()->can('drink_small_store.view') || 
+Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')->user()->can('invoice_drink.view'))
 <div class="main-content-inner">
   <div class="row">
     <div class="col-md-2" id="side-navbar">
@@ -100,6 +102,38 @@
                             </div>
                         </a>
                     </div>
+                </div><br>
+                <div class="card">
+                    <div class="seo-fact sbg4">
+                        <!--
+                        <a href="{{ route('admin.booking-kidness-space.index') }}">
+                        -->
+                            <div class="p-4 d-flex justify-content-between align-items-center">
+                                <div class="seofct-icon">
+                                    <img src="{{ asset('img/undraw_toy_car_-7-umw.svg') }}" width="100">
+
+                                    @lang('Reservation Kidness Space')</div>
+                                <h2>
+                                </h2>
+                            </div>
+                        </a>
+                    </div>
+                </div><br>
+                <div class="card">
+                    <div class="seo-fact sbg4">
+                        <!--
+                        <a href="{{ route('admin.booking-swiming-pool.index') }}">
+                        -->
+                            <div class="p-4 d-flex justify-content-between align-items-center">
+                                <div class="seofct-icon">
+                                    <img src="{{ asset('img/piscine1.jpg') }}" width="100">
+
+                                    @lang('Reservation Piscine')</div>
+                                <h2>
+                                </h2>
+                            </div>
+                        </a>
+                    </div>
                 </div>
             </div>
             <div class="col-md-6 mb-3 mb-lg-0">
@@ -160,11 +194,39 @@
                     </div>
                 </div><br>
                 <div class="card">
+                    <div class="seo-fact sbg4">
+                        <a href="{{ route('admin.booking-breakfast.index') }}">
+                            <div class="p-4 d-flex justify-content-between align-items-center">
+                                <div class="seofct-icon">
+                                    <img src="{{ asset('img/undraw_special_event-001.svg') }}" width="100">
+
+                                    @lang('RESERVATION BREAKFAST')</div>
+                                <h2>
+                                </h2>
+                            </div>
+                        </a>
+                    </div>
+                </div><br>
+                <div class="card">
+                    <div class="seo-fact sbg4">
+                        <a href="{{ route('admin.booking-invoices.choose') }}">
+                            <div class="p-4 d-flex justify-content-between align-items-center">
+                                <div class="seofct-icon">
+                                    <img src="{{ asset('img/undraw_polaroid_re_481f.svg') }}" width="100">
+
+                                    @lang('Vente Reservation')</div>
+                                <h2>
+                                </h2>
+                            </div>
+                        </a>
+                    </div>
+                </div><br>
+                <div class="card">
                     <div class="seo-fact sbg3">
                         <a href="{{ route('admin.drink-requisitions.index') }}">
                             <div class="p-4 d-flex justify-content-between align-items-center">
                                 <div class="seofct-icon">
-                                    <img src="{{ asset('img/undraw_beer-006.svg') }}" width="200">
+                                    <img src="{{ asset('img/undraw_beer-006.svg') }}" width="100">
 
                                     @lang('Requisition Boissons')</div>
                                 <h2>
@@ -174,7 +236,7 @@
                     </div>
                 </div><br>
             </div>
-    </div>
+    </div><br>
     @if (Auth::guard('admin')->user()->can('invoice_booking.edit'))
         <div class="row">
             <div class="col-md-4">
@@ -238,7 +300,7 @@
                                 <div class="seofct-icon">
                                     <img src="{{ asset('img/undraw_raining_re_4b55.svg') }}" width="100">
 
-                                    {{$loop->index + 1}}.{{ $employe->employe->name }}</div>
+                                    {{$loop->index + 1}}.@if($employe->employe_id){{ $employe->employe->name }} @endif</div>
                                 <h2>
                                     {{ $employe->invoice_number }}
                                 </h2>

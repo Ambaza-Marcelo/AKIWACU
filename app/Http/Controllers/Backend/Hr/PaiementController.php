@@ -75,7 +75,7 @@ class PaiementController extends Controller
         $journal_paie = HrJournalPaie::where('etat', 0)->first();
 
         $employes = HrEmploye::where('company_id',$company_id)->whereNotIn('id', function($q){
-        $q->select('employe_id')->where('code','0002')->where('employe_id','!=','')->from('hr_paiements');
+        $q->select('employe_id')->where('code','0003')->where('employe_id','!=','')->from('hr_paiements');
         })->orderBy('firstname')->get();
         
 
@@ -142,7 +142,6 @@ class PaiementController extends Controller
         $created_by = $this->user->name;
             
 
-
       $indemnite_deplacement = HrEmploye::where('id',$employe_id)->value('indemnite_deplacement');
       $indemnite_logement = HrEmploye::where('id',$employe_id)->value('indemnite_logement');
       $prime_fonction = HrEmploye::where('id',$employe_id)->value('prime_fonction');
@@ -159,14 +158,6 @@ class PaiementController extends Controller
                 $inss = (450000 * 4)/100;
                 $somme_cotisation_inss = ($plafond_cotisation * 4)/100;
                 $inss_employeur = ($plafond_cotisation * 6)/100;
-            }
-
-            if ($salaire_brut < 250000) {
-                $assurance_maladie_employe = 0;
-                $assurance_maladie_employeur = 15000;
-            }else{
-                $assurance_maladie_employe = 6000;
-                $assurance_maladie_employeur = 9000;
             }
 
 
@@ -186,6 +177,16 @@ class PaiementController extends Controller
     $somme_salaire_brut_non_imposable = $salaire_brut;
     $somme_salaire_net_imposable = $salaire_brut - $somme_cotisation_inss - $somme_impot;
     $somme_salaire_net_non_imposable = $salaire_brut - $somme_cotisation_inss - $somme_impot;
+
+        $net = $salaire_brut - $somme_impot - $inss;
+
+            if ($net < 250000) {
+                $assurance_maladie_employe = 0;
+                $assurance_maladie_employeur = 15000;
+            }else{
+                $assurance_maladie_employe = 6000;
+                $assurance_maladie_employeur = 9000;
+            }
 
         $paiement = new HrPaiement();
         $paiement->employe_id = $employe_id;

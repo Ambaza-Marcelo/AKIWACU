@@ -15,6 +15,7 @@ use App\Models\DrinkCategory;
 use App\Models\DrinkSmallStore;
 use App\Models\DrinkSmallStoreDetail;
 use App\Exports\DrinkSmallStoreExport;
+use App\Exports\VirtualDrinkSmStoreExport;
 use Carbon\Carbon;
 use Excel;
 use PDF;
@@ -203,7 +204,20 @@ class DrinkSmallStoreController extends Controller
 
     public function exportToExcel(Request $request,$code)
     {
-        return Excel::download(new DrinkSmallStoreExport($code), 'etat_du_stock_petit_boisson.xlsx');
+        $currentTime = Carbon::now();
+        $dateT =  $currentTime->toDateTimeString();
+        $dateTime = str_replace([' ',':'], '_', $dateT);
+
+        return Excel::download(new DrinkSmallStoreExport($code), 'etat_du_petit_stock_boissons_'.$dateTime.'.xlsx');
+    }
+
+    public function virtualExportToExcel(Request $request)
+    {
+        $currentTime = Carbon::now();
+        $dateT =  $currentTime->toDateTimeString();
+        $dateTime = str_replace([' ',':'], '_', $dateT);
+
+        return Excel::download(new VirtualDrinkSmStoreExport(), 'etat_du_petit_stock_boissons_'.$dateTime.'.xlsx');
     }
 
     /**

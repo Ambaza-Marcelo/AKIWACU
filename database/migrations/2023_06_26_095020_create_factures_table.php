@@ -79,6 +79,7 @@ class CreateFacturesTable extends Migration
             $table->string('statut')->nullable(true);
             $table->string('statut_paied')->nullable(true);
             $table->string('reste_credit')->nullable(true);
+            $table->string('etat_recouvrement')->nullable(true);
             $table->bigInteger('employe_id')->unsigned()->nullable(true);
             $table->foreign('employe_id')
                     ->references('id')

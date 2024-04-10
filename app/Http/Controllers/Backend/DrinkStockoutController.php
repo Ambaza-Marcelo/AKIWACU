@@ -347,6 +347,7 @@ class DrinkStockoutController extends Controller
                 $valeurStockInitial = DrinkBigStoreDetail::where('code',$code_store_origin)->where('drink_id','!=', '')->where('drink_id', $data->drink_id)->value('total_cump_value');
                 $quantityStockInitial = DrinkBigStoreDetail::where('code',$code_store_origin)->where('drink_id','!=', '')->where('drink_id', $data->drink_id)->value('quantity_bottle');
                 $quantityRestantBigStore = $quantityStockInitial - $data->quantity;
+                $cump = DrinkBigStoreDetail::where('code',$code_store_origin)->where('drink_id','!=', '')->where('drink_id', $data->drink_id)->value('cump');
 
                 $reportBigStore = array(
                     'drink_id' => $data->drink_id,
@@ -360,6 +361,9 @@ class DrinkStockoutController extends Controller
                     'value_stockout' => $data->value_stockout,
                     'quantity_stock_final' => $quantityStockInitial - $data->quantity,
                     'value_stock_final' => $valeurStockInitial - $data->total_purchase_value,
+                    'type_transaction' => $data->item_movement_type,
+                    'cump' => $cump,
+                    'document_no' => $data->stockout_no,
                     'created_by' => $this->user->name,
                     'description' => $data->description,
                     'created_at' => \Carbon\Carbon::now()
@@ -371,7 +375,7 @@ class DrinkStockoutController extends Controller
                         'quantity_bottle' => $quantityRestantBigStore,
                         'total_selling_value' => $quantityRestantBigStore * $data->price,
                         'total_purchase_value' => $quantityRestantBigStore * $data->price,
-                        'total_cump_value' => $quantityRestantBigStore * $data->price,
+                        'total_cump_value' => $quantityRestantBigStore * $cump,
                         'created_by' => $this->user->name,
                         'verified' => true,
                         'created_at' => \Carbon\Carbon::now()
@@ -427,12 +431,14 @@ class DrinkStockoutController extends Controller
                             $quantityStockInitial = DrinkBigStoreDetail::where('code',$code_store_origin)->where('drink_id','!=', '')->where('drink_id', $data->drink_id)->value('quantity_bottle');
                             $quantityTotalBigStore = $quantityStockInitial + $data->quantity;
 
+                            $cump = DrinkBigStoreDetail::where('code',$code_store_origin)->where('drink_id','!=', '')->where('drink_id', $data->drink_id)->value('cump');
+
                             $returnDataBigStore = array(
                                 'drink_id' => $data->drink_id,
                                 'quantity_bottle' => $quantityTotalBigStore,
                                 'total_selling_value' => $quantityTotalBigStore * $data->price,
                                 'total_purchase_value' => $quantityTotalBigStore * $data->price,
-                                'total_cump_value' => $quantityTotalBigStore * $data->price,
+                                'total_cump_value' => $quantityTotalBigStore * $cump,
                                 'created_by' => $this->user->name,
                                 'verified' => false,
                                 'created_at' => \Carbon\Carbon::now()
@@ -461,6 +467,9 @@ class DrinkStockoutController extends Controller
 
                 $valeurStockInitial = DrinkSmallStoreDetail::where('code',$code_store_origin)->where('drink_id','!=', '')->where('drink_id', $data->drink_id)->value('total_cump_value');
                 $quantityStockInitial = DrinkSmallStoreDetail::where('code',$code_store_origin)->where('drink_id','!=', '')->where('drink_id', $data->drink_id)->value('quantity_bottle');
+
+                $cump = DrinkSmallStoreDetail::where('code',$code_store_origin)->where('drink_id','!=', '')->where('drink_id', $data->drink_id)->value('cump');
+
                 $quantityRestantSmallStore = $quantityStockInitial - $data->quantity;
 
                 $reportSmallStore = array(
@@ -475,6 +484,9 @@ class DrinkStockoutController extends Controller
                     'value_stockout' => $data->value_stockout,
                     'quantity_stock_final' => $quantityStockInitial - $data->quantity,
                     'value_stock_final' => $valeurStockInitial - $data->total_purchase_value,
+                    'type_transaction' => $data->item_movement_type,
+                    'cump' => $cump,
+                    'document_no' => $data->stockout_no,
                     'created_by' => $this->user->name,
                     'description' => $data->description,
                     'created_at' => \Carbon\Carbon::now()
@@ -578,6 +590,8 @@ class DrinkStockoutController extends Controller
                 $quantityStockInitial = DrinkExtraBigStoreDetail::where('code',$code_store_origin)->where('drink_id','!=', '')->where('drink_id', $data->drink_id)->value('quantity');
                 $quantityRestantSmallStore = $quantityStockInitial - $data->quantity;
 
+                $cump = DrinkExtraBigStoreDetail::where('code',$code_store_origin)->where('drink_id','!=', '')->where('drink_id', $data->drink_id)->value('cump');
+
                 $reportSmallStore = array(
                     'drink_id' => $data->drink_id,
                     'quantity_stock_initial' => $quantityStockInitial,
@@ -590,6 +604,9 @@ class DrinkStockoutController extends Controller
                     'value_stockout' => $data->value_stockout,
                     'quantity_stock_final' => $quantityStockInitial - $data->quantity,
                     'value_stock_final' => $valeurStockInitial - $data->total_selling_value,
+                    'type_transaction' => $data->item_movement_type,
+                    'cump' => $cump,
+                    'document_no' => $data->stockout_no,
                     'created_by' => $this->user->name,
                     'description' => $data->description,
                     'created_at' => \Carbon\Carbon::now()

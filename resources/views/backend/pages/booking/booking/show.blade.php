@@ -122,7 +122,7 @@
                             </tr>
                             @foreach($datas as $data)
                             <tr>  
-                                <td> <input type="text" class="form-control" name="" value="@if($data->salle_id){{ $data->salle->name }} @elseif($data->service_id) {{ $data->service->name }} @else {{ $data->table->name }}  @endif"> </td>  
+                                <td> <input type="text" class="form-control" name="" value="@if($data->salle_id){{ $data->salle->name }} @elseif($data->service_id) {{ $data->service->name }} @elseif($data->breakfast_id) {{ $data->breakFast->name }} @elseif($data->swiming_pool_id) {{ $data->swimingPool->name }} @elseif($data->kidness_space_id) {{ $data->kidnessSpace->name }} @else {{ $data->table->name }}  @endif"> </td>  
                                 <td><input type="number" name="quantity[]" value="{{ $data->quantity }}" class="form-control" /></td>
                                 <td>
                                     <ol>

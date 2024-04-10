@@ -46,6 +46,14 @@ class Drink extends Model
         return $this->hasMany('App\Models\DrinkStockinDetail','drink_id');
     }
 
+    public function virtualDrinkMdStore(){
+        return $this->hasMany('App\Models\VirtualDrinkMdStore','drink_id');
+    }
+
+    public function virtualDrinkSmStore(){
+        return $this->hasMany('App\Models\VirtualDrinkSmStore','drink_id');
+    }
+
     public function drinkStockoutDetail(){
         return $this->hasMany('App\Models\DrinkStockoutDetail','drink_id');
     }

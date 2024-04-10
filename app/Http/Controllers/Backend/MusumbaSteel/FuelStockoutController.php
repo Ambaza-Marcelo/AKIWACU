@@ -53,7 +53,7 @@ class FuelStockoutController extends Controller
         $fuel_stockouts = MsFuelStockout::orderBy('stockout_no','desc')->get();
 
         $cars = MsFuelStockoutDetail::select(
-                        DB::raw('car_id,sum(quantity) as qtite'))->groupBy('car_id')->orderBy('qtite','desc')->get();
+                        DB::raw('car_id,sum(quantity) as qtite'))->where('status',4)->groupBy('car_id')->orderBy('qtite','desc')->get();
 
         return view('backend.pages.musumba_steel.fuel.stockout.index', compact('fuel_stockouts','cars'));
     }

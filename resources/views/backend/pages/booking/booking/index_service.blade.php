@@ -58,9 +58,11 @@
                                     <th width="10%">@lang('messages.date')</th>
                                     <th width="30%">@lang('Nom du client')</th>
                                     <th width="30%">@lang('Nom referent')</th>
+                                    <!--
                                     <th width="30%">@lang('Telephone referent')</th>
                                     <th width="30%">@lang('Courriel referent')</th>
                                     <th width="30%">@lang('Type evenement')</th>
+                                -->
                                     <th width="30%">@lang('Nbre Personnes')</th>
                                     <th width="30%">@lang('Date Debut')</th>
                                     <th width="30%">@lang('Date Fin')</th>
@@ -78,9 +80,11 @@
                                     <td>{{ Carbon\Carbon::parse($booking->date)->format('d/m/Y') }}</td>
                                     <td>{{ $booking->booking_client_id }}</td>
                                     <td>{{ $booking->nom_referent }}</td>
+                                    <!--
                                     <td>{{ $booking->telephone_referent }}</td>
                                     <td>{{ $booking->courriel_referent }}</td>
                                     <td>{{ $booking->type_evenement }}</td>
+                                -->
                                     <td>{{ $booking->nombre_personnes }}</td>
                                     <td>{{ $booking->date_debut }}</td>
                                     <td>{{ $booking->date_fin }}</td>

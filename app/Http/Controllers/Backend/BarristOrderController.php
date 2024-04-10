@@ -244,9 +244,9 @@ class BarristOrderController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to reject any order !');
         }
 
-        BarristOrder::where(['order_no', '=', $order_no,'rejected_by' => $this->user->name])
+        BarristOrder::where('order_no', '=', $order_no)
                 ->update(['status' => -1]);
-        BarristOrderDetail::where(['order_no', '=', $order_no,'rejected_by' => $this->user->name])
+        BarristOrderDetail::where('order_no', '=', $order_no)
                 ->update(['status' => -1]);
 
         session()->flash('success', 'Order has been rejected !!');

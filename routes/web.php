@@ -239,6 +239,30 @@ Route::group(['prefix' => 'admin'], function () {
     Route::put('EBMS/salles/update/{id}', 'Backend\Booking\SalleController@update')->name('admin.salles.update');
     Route::delete('EBMS/salles/destroy/{id}', 'Backend\Booking\SalleController@destroy')->name('admin.salles.destroy');
 
+    //swiming-pools routes
+    Route::get('EBMS/swiming-pools/index', 'Backend\Booking\SwimingPoolController@index')->name('admin.swiming-pools.index');
+    Route::get('EBMS/swiming-pools/create', 'Backend\Booking\SwimingPoolController@create')->name('admin.swiming-pools.create');
+    Route::post('EBMS/swiming-pools/store', 'Backend\Booking\SwimingPoolController@store')->name('admin.swiming-pools.store');
+    Route::get('EBMS/swiming-pools/edit/{id}', 'Backend\Booking\SwimingPoolController@edit')->name('admin.swiming-pools.edit');
+    Route::put('EBMS/swiming-pools/update/{id}', 'Backend\Booking\SwimingPoolController@update')->name('admin.swiming-pools.update');
+    Route::delete('EBMS/swiming-pools/destroy/{id}', 'Backend\Booking\SwimingPoolController@destroy')->name('admin.swiming-pools.destroy');
+
+    //kidness-spaces routes
+    Route::get('EBMS/kidness-spaces/index', 'Backend\Booking\KidnessSpaceController@index')->name('admin.kidness-spaces.index');
+    Route::get('EBMS/kidness-spaces/create', 'Backend\Booking\KidnessSpaceController@create')->name('admin.kidness-spaces.create');
+    Route::post('EBMS/kidness-spaces/store', 'Backend\Booking\KidnessSpaceController@store')->name('admin.kidness-spaces.store');
+    Route::get('EBMS/kidness-spaces/edit/{id}', 'Backend\Booking\KidnessSpaceController@edit')->name('admin.kidness-spaces.edit');
+    Route::put('EBMS/kidness-spaces/update/{id}', 'Backend\Booking\KidnessSpaceController@update')->name('admin.kidness-spaces.update');
+    Route::delete('EBMS/kidness-spaces/destroy/{id}', 'Backend\Booking\KidnessSpaceController@destroy')->name('admin.kidness-spaces.destroy');
+
+    //break-fasts routes
+    Route::get('EBMS/break-fasts/index', 'Backend\Booking\BreakFastController@index')->name('admin.break-fasts.index');
+    Route::get('EBMS/break-fasts/create', 'Backend\Booking\BreakFastController@create')->name('admin.break-fasts.create');
+    Route::post('EBMS/break-fasts/store', 'Backend\Booking\BreakFastController@store')->name('admin.break-fasts.store');
+    Route::get('EBMS/break-fasts/edit/{id}', 'Backend\Booking\BreakFastController@edit')->name('admin.break-fasts.edit');
+    Route::put('EBMS/break-fasts/update/{id}', 'Backend\Booking\BreakFastController@update')->name('admin.break-fasts.update');
+    Route::delete('EBMS/break-fasts/destroy/{id}', 'Backend\Booking\BreakFastController@destroy')->name('admin.break-fasts.destroy');
+
     //techniques routes
     Route::get('EBMS/techniques/index', 'Backend\Booking\TechniqueController@index')->name('admin.techniques.index');
     Route::get('EBMS/techniques/create', 'Backend\Booking\TechniqueController@create')->name('admin.techniques.create');
@@ -271,6 +295,20 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('EBMS/booking-services/index', 'Backend\Booking\BookingController@indexService')->name('admin.booking-services.index');
     Route::get('EBMS/booking-services/create', 'Backend\Booking\BookingController@createService')->name('admin.booking-services.create');
     Route::post('EBMS/booking-services/store', 'Backend\Booking\BookingController@storeService')->name('admin.booking-services.store');
+
+    Route::get('EBMS/booking-breakfast/index', 'Backend\Booking\BookingController@indexBreakFast')->name('admin.booking-breakfast.index');
+    Route::get('EBMS/booking-breakfast/create', 'Backend\Booking\BookingController@createBreakFast')->name('admin.booking-breakfast.create');
+    Route::post('EBMS/booking-breakfast/store', 'Backend\Booking\BookingController@storeBreakFast')->name('admin.booking-breakfast.store');
+
+    Route::get('EBMS/booking-swiming-pool/index', 'Backend\Booking\BookingController@indexSwimingPool')->name('admin.booking-swiming-pool.index');
+    Route::get('EBMS/booking-swiming-pool/create', 'Backend\Booking\BookingController@createSwimingPool')->name('admin.booking-swiming-pool.create');
+    Route::post('EBMS/booking-swiming-pool/store', 'Backend\Booking\BookingController@storeSwimingPool')->name('admin.booking-swiming-pool.store');
+
+    Route::get('EBMS/booking-kidness-space/index', 'Backend\Booking\BookingController@indexKidnessSpace')->name('admin.booking-kidness-space.index');
+    Route::get('EBMS/booking-kidness-space/create', 'Backend\Booking\BookingController@createKidnessSpace')->name('admin.booking-kidness-space.create');
+    Route::post('EBMS/booking-kidness-space/store', 'Backend\Booking\BookingController@storeKidnessSpace')->name('admin.booking-kidness-space.store');
+
+
 
     Route::get('EBMS/booking-tables/index', 'Backend\Booking\BookingController@indexTable')->name('admin.booking-tables.index');
     Route::get('EBMS/booking-tables/create', 'Backend\Booking\BookingController@createTable')->name('admin.booking-tables.create');
@@ -324,6 +362,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::put('EBMS/food-items/update/{code}', 'Backend\FoodItemController@update')->name('admin.food-items.update');
     Route::delete('EBMS/food-items/destroy/{code}', 'Backend\FoodItemController@destroy')->name('admin.food-items.destroy');
     Route::get('EBMS/food-items/fiche-technique', 'Backend\FoodItemController@ficheTechnique')->name('admin.food-items.fiche-technique');
+    Route::get('EBMS/food-item-export-to-excel/fiche-technique', 'Backend\FoodItemController@exportToExcel')->name('admin.food-item-export-to-excel.fiche-technique');
 
     //materials routes
     Route::get('EBMS/materials/index', 'Backend\MaterialController@index')->name('admin.materials.index');
@@ -403,6 +442,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('EBMS/drink-big-store/store-status/{code}', 'Backend\DrinkBigStoreController@storeStatus')->name('admin.drink-big-store.storeStatus');
     Route::get('EBMS/drink-big-store/export-to-excel/{code}', 'Backend\DrinkBigStoreController@exportToExcel')->name('admin.drink-big-store.exportToExcel');
 
+    Route::get('EBMS/virtual-drink-big-store/export-to-excel', 'Backend\DrinkBigStoreController@VirtualExportToExcel')->name('admin.virtual-drink-big-store.exportToExcel');
+
     //Petit Stock des boissons
     Route::get('EBMS/drink-small-store/index', 'Backend\DrinkSmallStoreController@index')->name('admin.drink-small-store.index');
     Route::get('EBMS/drink-small-store/create', 'Backend\DrinkSmallStoreController@create')->name('admin.drink-small-store.create');
@@ -414,6 +455,8 @@ Route::group(['prefix' => 'admin'], function () {
 
     Route::get('EBMS/drink-small-store/store-status/{code}', 'Backend\DrinkSmallStoreController@storeStatus')->name('admin.drink-small-store.storeStatus');
     Route::get('EBMS/drink-small-store-status/export-to-excel/{code}', 'Backend\DrinkSmallStoreController@ExportToExcel')->name('admin.drink-small-store.exportToExcel');
+
+    Route::get('EBMS/virtual-drink-small-store-status/export-to-excel', 'Backend\DrinkSmallStoreController@virtualExportToExcel')->name('admin.virtual-drink-small-store.exportToExcel');
 
     //Extra Grand Stock des nourritures
     Route::get('EBMS/food-extra-big-store/index', 'Backend\FoodExtraBigStoreController@index')->name('admin.food-extra-big-store.index');
@@ -507,6 +550,12 @@ Route::group(['prefix' => 'admin'], function () {
 
     //invoice booking routes
     Route::get('EBMS/booking-invoices/index', 'Backend\FactureBookingController@index')->name('admin.booking-invoices.index');
+    Route::get('EBMS/booking-salle-invoices/index', 'Backend\FactureBookingController@indexSalle')->name('admin.booking-salle-invoices.index');
+    Route::get('EBMS/booking-breakfast-invoices/index', 'Backend\FactureBookingController@indexBreakFast')->name('admin.booking-breakfast-invoices.index');
+    Route::get('EBMS/booking-service-invoices/index', 'Backend\FactureBookingController@indexService')->name('admin.booking-service-invoices.index');
+    Route::get('EBMS/booking-swiming-pool-invoices/index', 'Backend\FactureBookingController@indexSwimingPool')->name('admin.booking-swiming-pool-invoices.index');
+    Route::get('EBMS/booking-kidness-space-invoices/index', 'Backend\FactureBookingController@indexKidnessSpace')->name('admin.booking-kidness-space-invoices.index');
+    Route::get('EBMS/booking-invoices/choose', 'Backend\FactureBookingController@choose')->name('admin.booking-invoices.choose');
     Route::get('EBMS/booking-invoices/create/{order_no}', 'Backend\FactureBookingController@create')->name('admin.booking-invoices.create');
     Route::get('EBMS/booking-invoices/edit/{invoice_number}', 'Backend\FactureBookingController@edit')->name('admin.booking-invoices.edit');
     Route::delete('EBMS/booking-invoices/destroy/{invoice_number}', 'Backend\FactureBookingController@destroy')->name('admin.booking-invoices.destroy');
@@ -948,6 +997,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::put('EBMS/material-purchases/confirm/{purchase_no}','Backend\MaterialPurchaseController@confirm')->name('admin.material-purchases.confirm');
     Route::put('EBMS/material-purchases/approuve/{purchase_no}','Backend\MaterialPurchaseController@approuve')->name('admin.material-purchases.approuve');
 
+    Route::get('EBMS/material-purchases/export-to-excel','Backend\MaterialPurchaseController@exportToExcel')->name('admin.material-purchases.export-to-excel');
+
     //drink purchases routes
     Route::get('EBMS/drink-purchases/index', 'Backend\DrinkPurchaseController@index')->name('admin.drink-purchases.index');
     Route::get('EBMS/drink-purchases/create/', 'Backend\DrinkPurchaseController@create')->name('admin.drink-purchases.create');
@@ -995,6 +1046,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::put('EBMS/material-supplier-orders/reset/{order_no}','Backend\MaterialSupplierOrderController@reset')->name('admin.material-supplier-orders.reset');
     Route::put('EBMS/material-supplier-orders/confirm/{order_no}','Backend\MaterialSupplierOrderController@confirm')->name('admin.material-supplier-orders.confirm');
     Route::put('EBMS/material-supplier-orders/approuve/{order_no}','Backend\MaterialSupplierOrderController@approuve')->name('admin.material-supplier-orders.approuve');
+
+    Route::get('EBMS/material-supplier-orders/export-to-excel','Backend\MaterialSupplierOrderController@exportToExcel')->name('admin.material-supplier-orders.export-to-excel');
 
     //drink supplier-orders routes
     Route::get('EBMS/drink-supplier-orders/index', 'Backend\DrinkSupplierOrderController@index')->name('admin.drink-supplier-orders.index');
@@ -1045,6 +1098,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::put('EBMS/material-receptions/reset/{reception_no}','Backend\MaterialReceptionController@reset')->name('admin.material-receptions.reset');
     Route::put('EBMS/material-receptions/confirm/{reception_no}','Backend\MaterialReceptionController@confirm')->name('admin.material-receptions.confirm');
     Route::put('EBMS/material-receptions/approuve/{reception_no}','Backend\MaterialReceptionController@approuve')->name('admin.material-receptions.approuve');
+
+    Route::get('EBMS/material-receptions/export-to-excel','Backend\MaterialReceptionController@exportToExcel')->name('admin.material-receptions.export-to-excel');
 
     //drink receptions routes
     Route::get('EBMS/drink-receptions/index', 'Backend\DrinkReceptionController@index')->name('admin.drink-receptions.index');

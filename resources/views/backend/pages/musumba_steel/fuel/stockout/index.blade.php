@@ -181,7 +181,8 @@
                     <div class="card">
                     <div class="seo-fact sbg3">
                             <div class="p-4 d-flex justify-content-between align-items-center">
-                                <div class="seofct-icon"><img src="{{ asset('img/vehicule.svg') }}" width="100"> {{$car->immatriculation}}</div>
+                                <div class="seofct-icon"><img src="{{ asset('img/vehicule.svg') }}" width="100"> {{$car->car->immatriculation}}</div>
+                                <small>{{$car->car->marque}}</small>
                                 <h2>{!! QrCode::size(100)->backgroundColor(255,255,255)->generate("Ce véhicule a consomé ".$car->qtite.' litres, Designed by ICT Ambaza Marcellin' ) !!}
                                 </h2>
                             </div>

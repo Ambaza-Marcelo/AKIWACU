@@ -42,6 +42,21 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="header-title float-left">material reception List</h4>
+                    <form action="{{ route('admin.material-receptions.export-to-excel')}}" method="GET">
+                        <p class="float-right mb-2">
+                            <button type="submit" value="pdf" class="btn btn-success">Exporter En Excel</button>
+                        </p>
+                        <p class="float-right mb-2">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input type="date" name="start_date" class="form-control">
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="date" name="end_date" class="form-control">
+                                </div>
+                            </div>
+                        </p>
+                    </form><br>
                     <div class="clearfix"></div>
                     <div class="data-tables">
                         @include('backend.layouts.partials.messages')

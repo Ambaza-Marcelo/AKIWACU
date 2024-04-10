@@ -30,7 +30,7 @@ class DrinkSmStoreReportExport implements FromCollection, WithMapping, WithHeadi
         $end_date = $endDate.' 23:59:59';
 
         return DrinkSmallReport::select(
-                        DB::raw('id,date,created_at,drink_id,quantity_stock_initial,value_stock_initial,quantity_stockin,value_stockin,quantity_transfer,value_reception,quantity_sold,value_transfer,quantity_stockout,value_stockout,quantity_stock_final,value_stock_final,description'))->whereBetween('created_at',[$start_date,$end_date])/*->where('code_store',$code_store)*/->groupBy('id','date','created_at','drink_id','quantity_stock_initial','value_stock_initial','quantity_stockin','value_stockin','quantity_transfer','value_reception','quantity_sold','value_transfer','quantity_stockout','value_stockout','quantity_stock_final','value_stock_final','description')->orderBy('created_at','desc')->get();
+                        DB::raw('id,date,created_at,created_by,cump,type_transaction,document_no,drink_id,quantity_stock_initial,value_stock_initial,quantity_stockin,value_stockin,quantity_transfer,value_reception,quantity_sold,value_transfer,quantity_stockout,value_stockout,quantity_stock_final,value_stock_final,description'))->whereBetween('date',[$start_date,$end_date])/*->where('code_store',$code_store)*/->groupBy('id','date','created_by','type_transaction','cump','document_no','created_at','drink_id','quantity_stock_initial','value_stock_initial','quantity_stockin','value_stockin','quantity_transfer','value_reception','quantity_sold','value_transfer','quantity_stockout','value_stockout','quantity_stock_final','value_stock_final','description')->orderBy('id','asc')->get();
     }
 
     public function map($data) : array {
@@ -47,20 +47,41 @@ class DrinkSmStoreReportExport implements FromCollection, WithMapping, WithHeadi
         }else{
             $value_stockin = 0;
         }
+
+        if (!empty($data->quantity_stockout)) {
+            $sortie = $data->quantity_stockout;
+        }elseif (!empty($data->quantity_sold)) {
+            $sortie = $data->quantity_sold;
+        }else{
+            $sortie = 0;
+        }
+
+        if (!empty($data->quantity_stockin)) {
+            $entree = $data->quantity_stockin;
+        }elseif (!empty($data->quantity_transfer)) {
+            $entree = $data->quantity_transfer;
+        }else{
+            $entree = 0;
+        }
+
         return [
             $data->id,
-            Carbon::parse($data->created_at)->format('d-m-Y'),
-            Carbon::parse($data->date)->format('d-m-Y'),
+            Carbon::parse($data->created_at)->format('d/m/Y'),
+            Carbon::parse($data->date)->format('d/m/Y'),
             $data->drink->name,
             $data->drink->code,
             $data->quantity_stock_initial,
+            $data->drink->cump,
             ($data->quantity_stock_initial * $data->drink->cump),
-            $data->quantity_stockin + $data->quantity_transfer,
-            $value_stockin,
-            $data->quantity_stockout + $data->quantity_sold,
-            (($data->quantity_stockout * $data->drink->cump) + ($data->quantity_sold * $data->drink->cump)),
-            ($data->quantity_stock_initial + $data->quantity_stockin + $data->quantity_transfer) - ($data->quantity_stockout + $data->quantity_sold),
-            ((($data->quantity_stock_initial + $data->quantity_stockin + $data->quantity_transfer) - ($data->quantity_stockout + $data->quantity_sold)) * $data->drink->cump),
+            $entree,
+            $entree * $data->drink->cump,
+            $sortie,
+            ($sortie * $data->drink->cump),
+            ($data->quantity_stock_initial + $entree) - $sortie,
+            ((($data->quantity_stock_initial + $entree) - $sortie) * $data->drink->cump),
+            $data->created_by,
+            $data->type_transaction,
+            $data->document_no,
             $data->description
         ] ;
  
@@ -75,6 +96,7 @@ class DrinkSmStoreReportExport implements FromCollection, WithMapping, WithHeadi
             'Article',
             'Code',
             'Quantite Stock Initial',
+            'CUMP',
             'Valeur Stock Initial',
             'Quantite Entree',
             'Valeur Entree',
@@ -82,6 +104,9 @@ class DrinkSmStoreReportExport implements FromCollection, WithMapping, WithHeadi
             'Valeur Sortie',
             'Quantite Stock Final',
             'Valeur Stock Final',
+            'Auteur',
+            'Type de Mouvement',
+            'Document_no',
             'Description'
         ] ;
     }

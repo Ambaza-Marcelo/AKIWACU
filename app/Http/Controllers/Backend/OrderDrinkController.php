@@ -58,7 +58,7 @@ class OrderDrinkController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to create any order !');
         }
 
-        $articles  = Drink::orderBy('name','asc')->get();
+        $articles  = Drink::where('selling_price','>',0)->orderBy('name','asc')->get();
         $employes  = Employe::orderBy('name','asc')->get();
         return view('backend.pages.order_drink.create', compact('articles','employes'));
     }

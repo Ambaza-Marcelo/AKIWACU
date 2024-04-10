@@ -15,6 +15,7 @@ use App\Models\BarristStore;
 use App\Models\FoodStore;
 use App\Models\FoodCategory;
 use App\Models\Food;
+use App\Exports\FicheTechniqueNourritureExport;
 use Validator;
 use Carbon\Carbon;
 use Excel;
@@ -210,6 +211,15 @@ class FoodItemController extends Controller
     {
         Excel::import(new ArticlesImport, $request->file('file')->store('temp'));
         return redirect()->back();
+    }
+
+    public function exportToExcel(Request $request)
+    {
+        $currentTime = Carbon::now();
+        $dateT =  $currentTime->toDateTimeString();
+        $dateTime = str_replace([' ',':'], '_', $dateT);
+
+        return Excel::download(new FicheTechniqueNourritureExport(), 'fiche_technique_stock_nourriture'.$dateTime.'.xlsx');
     }
 
 

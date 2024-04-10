@@ -33,7 +33,7 @@
                     <br><br><br>
                     <br>
                     <div>
-                        <h2 style="text-align: center;text-decoration: underline;">JOURNAL DE VENTES(RESERVATION & SERVICES) DU {{ \Carbon\Carbon::parse($start_date)->format('d/m/Y') }} AU {{ \Carbon\Carbon::parse($end_date)->format('d/m/Y') }} </h2>
+                        <h2 style="text-align: center;text-decoration: underline;">JOURNAL DE VENTES AU {{ $type }} DU {{ \Carbon\Carbon::parse($start_date)->format('d/m/Y') }} AU {{ \Carbon\Carbon::parse($end_date)->format('d/m/Y') }} </h2>
                     </div>
                     <br>
                     <div>
@@ -63,7 +63,7 @@
                                     <td>{{ $data->item_quantity }}</td>
                                     <td>{{ number_format($data->item_price_nvat,3,',',' ') }}</td>
                                     <td>{{ number_format($data->vat,3,',',' ') }}</td>
-                                    <td>{{ number_format($data->item_total_amount,3,',',' ') }}</td>
+                                    <td>{{ number_format($data->item_total_amount,0,',',' ') }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -72,7 +72,7 @@
                                     <th colspan="6">Total</th>
                                     <th>{{ number_format($total_item_price_nvat,3,',',' ') }}</th>
                                     <th>{{ number_format($total_vat,3,',',' ') }}</th>
-                                    <th>{{ number_format($total_amount,3,',',' ') }}</th>
+                                    <th>{{ number_format($total_amount,0,',',' ') }}</th>
                                 </tr>
                             </tfoot>
                         </table>
@@ -105,7 +105,7 @@
                                     <td>{{ $data->item_quantity }}</td>
                                     <td>{{ number_format($data->item_price_nvat,3,',',' ') }}</td>
                                     <td>{{ number_format($data->vat,3,',',' ') }}</td>
-                                    <td>{{ number_format($data->item_total_amount,3,',',' ') }}</td>
+                                    <td>{{ number_format($data->item_total_amount,0,',',' ') }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -114,7 +114,7 @@
                                     <th colspan="6">Total Credit</th>
                                     <th>{{ number_format($total_item_price_nvat_credit,3,',',' ') }}</th>
                                     <th>{{ number_format($total_vat_credit,3,',',' ') }}</th>
-                                    <th>{{ number_format($total_amount_credit,3,',',' ') }}</th>
+                                    <th>{{ number_format($total_amount_credit,0,',',' ') }}</th>
                                 </tr>
                             </tfoot>
                         </table>

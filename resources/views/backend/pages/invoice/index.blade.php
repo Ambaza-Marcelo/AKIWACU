@@ -134,7 +134,7 @@
                                         @endif
                                     
                                         @if (Auth::guard('admin')->user()->can('invoice_drink.reset'))
-                                        @if($facture->etat != 1 || $facture->etat != 2)
+                                        @if($facture->etat == 0)
                                          <a href="{{ route('admin.voir-facture.reset', $facture->invoice_number) }}" class="btn btn-success">Annuler</a>
                                         @endif
                                         @endif 
@@ -152,6 +152,7 @@
                                         @endif
                                         @endif
                                         @if (Auth::guard('admin')->user()->can('invoice_drink.delete'))
+                                        @if($facture->etat == 0)
                                          <a class="btn btn-danger text-white" href="{{ route('ebms_api.destroy',$facture->invoice_number) }}"
                                             onclick="event.preventDefault(); document.getElementById('delete-form-{{ $facture->invoice_number }}').submit();">
                                                 Supprimer
@@ -161,7 +162,7 @@
                                                 @method('DELETE')
                                                 @csrf
                                             </form>
-
+                                        @endif
                                         @endif
                                     </td>
                                 </tr>

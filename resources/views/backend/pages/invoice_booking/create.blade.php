@@ -272,7 +272,40 @@
                                 <td><input type="number" step='any' min='0' name="item_tl[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_drink.edit')) @else readonly @endif/></td>
                                 <td><button type='button' class='btn btn-danger remove-tr'><i class='fa fa-trash-o' title='Supprimer la ligne' aria-hidden='false'></i></button></td> 
                             </tr>
-                            @else
+                            @elseif($booking->kidness_space_id)
+                            <tr>  
+                                <td><select class="form-control" name="kidness_space_id[]" id="kidness_space_id">
+                                <option value="{{ $booking->kidness_space_id }}" class="form-control">{{ $booking->kidnessSpace->name }}</option>
+                                </select></td>  
+                                <td><input type="number" step='any' min='0' value="{{ $booking->quantity }}" name="item_quantity[]" placeholder="Quantite" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_drink.edit')) @else readonly @endif/></td>  
+                                <td><input type="number" step='any' min='0' value="{{ $booking->selling_price }}" name="item_price[]" placeholder="Prix" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_drink.edit')) @else readonly @endif/></td>
+                                <td><input type="number" step='any' min='0' name="item_ct[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_drink.edit')) @else readonly @endif/></td>   
+                                <td><input type="number" step='any' min='0' name="item_tl[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_drink.edit')) @else readonly @endif/></td>
+                                <td><button type='button' class='btn btn-danger remove-tr'><i class='fa fa-trash-o' title='Supprimer la ligne' aria-hidden='false'></i></button></td> 
+                            </tr>
+                            @elseif($booking->breakfast_id)
+                            <tr>  
+                                <td><select class="form-control" name="breakfast_id[]" id="breakfast_id">
+                                <option value="{{ $booking->breakfast_id }}" class="form-control">{{ $booking->breakFast->name }}</option>
+                                </select></td>  
+                                <td><input type="number" step='any' min='0' value="{{ $booking->quantity }}" name="item_quantity[]" placeholder="Quantite" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_drink.edit')) @else readonly @endif/></td>  
+                                <td><input type="number" step='any' min='0' value="{{ $booking->selling_price }}" name="item_price[]" placeholder="Prix" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_drink.edit')) @else readonly @endif/></td>
+                                <td><input type="number" step='any' min='0' name="item_ct[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_drink.edit')) @else readonly @endif/></td>   
+                                <td><input type="number" step='any' min='0' name="item_tl[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_drink.edit')) @else readonly @endif/></td>
+                                <td><button type='button' class='btn btn-danger remove-tr'><i class='fa fa-trash-o' title='Supprimer la ligne' aria-hidden='false'></i></button></td> 
+                            </tr>
+                            @elseif($booking->swiming_pool_id)
+                            <tr>  
+                                <td><select class="form-control" name="swiming_pool_id[]" id="swiming_pool_id">
+                                <option value="{{ $booking->swiming_pool_id }}" class="form-control">{{ $booking->swimingPool->name }}</option>
+                                </select></td>  
+                                <td><input type="number" step='any' min='0' value="{{ $booking->quantity }}" name="item_quantity[]" placeholder="Quantite" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_drink.edit')) @else readonly @endif/></td>  
+                                <td><input type="number" step='any' min='0' value="{{ $booking->selling_price }}" name="item_price[]" placeholder="Prix" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_drink.edit')) @else readonly @endif/></td>
+                                <td><input type="number" step='any' min='0' name="item_ct[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_drink.edit')) @else readonly @endif/></td>   
+                                <td><input type="number" step='any' min='0' name="item_tl[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_drink.edit')) @else readonly @endif/></td>
+                                <td><button type='button' class='btn btn-danger remove-tr'><i class='fa fa-trash-o' title='Supprimer la ligne' aria-hidden='false'></i></button></td> 
+                            </tr>
+                            @elseif($booking->table_id)
                             <tr>  
                                 <td><select class="form-control" name="table_id[]" id="table_id">
                                 <option value="{{ $booking->table_id }}" class="form-control">{{ $booking->table->name }}</option>

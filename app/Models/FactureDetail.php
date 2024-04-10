@@ -85,4 +85,16 @@ class FactureDetail extends Model
     public function table(){
         return $this->belongsTo('App\Models\BookingTable');
     }
+
+    public function swimingPool(){
+        return $this->belongsTo('App\Models\SwimingPool');
+    }
+
+    public function breakFast(){
+        return $this->belongsTo('App\Models\BreakFast');
+    }
+
+    public function kidnessSpace(){
+        return $this->belongsTo('App\Models\KidnessSpace');
+    }
 }

@@ -63,6 +63,7 @@
 
                          <table class="table table-bordered" id="dynamicTable">  
                             <tr class="bg-secondary">
+                                <th>#</th>
                                 <th>@lang('messages.item')</th>
                                 <th>@lang('messages.quantity')</th>
                                 <th>@lang('messages.purchase_price')</th>
@@ -76,7 +77,7 @@
                             <tr class="">
                                 <input type="hidden" name="unit[]" value="{{ $data->unit }}"> 
                                 <input type="hidden" name="new_unit[]" value="{{ $data->unit }}"> 
-                                <input type="hidden" name="selling_price_ml[]" value="0"> 
+                                <input type="hidden" name="selling_price_ml[]" value="0"> <td>{{ $loop->index+1 }}</td>
                                 <td> <select class="form-control" name="drink_id[]" id="drink_id">
                                 <option value="{{ $data->drink_id }}" selected="selected" class="form-control">{{ $data->drink->name }}/{{ $data->drink->code }}</option>
                                 </select></td>  

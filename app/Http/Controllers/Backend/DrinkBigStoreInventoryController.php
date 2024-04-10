@@ -268,11 +268,24 @@ class DrinkBigStoreInventoryController extends Controller
         $totalValueActuelle = DB::table('drink_big_store_inventory_details')
             ->where('inventory_no', '=', $inventory_no)
             ->sum('total_purchase_value');
+        $total_quantity = DB::table('drink_big_store_inventory_details')
+            ->where('inventory_no', '=', $inventory_no)
+            ->sum('quantity');
+
          $totalValueNew = DB::table('drink_big_store_inventory_details')
             ->where('inventory_no', '=', $inventory_no)
             ->sum('new_total_purchase_value');
+
+        $new_total_quantity = DB::table('drink_big_store_inventory_details')
+            ->where('inventory_no', '=', $inventory_no)
+            ->sum('new_quantity');
+
+        $total_relicat = DB::table('drink_big_store_inventory_details')
+            ->where('inventory_no', '=', $inventory_no)
+            ->sum('relicat');
+
         $gestionnaire = DrinkBigStoreInventory::where('inventory_no', $inventory_no)->value('created_by');
-        $pdf = PDF::loadView('backend.pages.document.drink_big_store_inventory',compact('datas','inventory_no','totalValueActuelle','totalValueNew','gestionnaire','setting','title','description','date','inventory_signature'));//->setPaper('a4', 'landscape');
+        $pdf = PDF::loadView('backend.pages.document.drink_big_store_inventory',compact('datas','inventory_no','totalValueActuelle','totalValueNew','gestionnaire','setting','title','description','date','inventory_signature','total_quantity','new_total_quantity','total_relicat'));//->setPaper('a4', 'landscape');
 
         Storage::put('public/pdf/drink_big_store_inventory/'.'BON_INVENTAIRE_'.$inventory_no.'.pdf', $pdf->output());
 
