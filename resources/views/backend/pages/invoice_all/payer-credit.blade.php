@@ -76,12 +76,22 @@
                                 <input type="text" value="{{ $facture->tp_phone_number }}" name="tp_phone_number" class="form-control" readonly>
                             </div>
                             <div class="col-sm-4">
-                                <label for="tp_address_province">Province</label>
-                                <input type="text" value="{{ $facture->tp_address_province }}" name="tp_address_province" class="form-control" readonly>
+                                <label for="">Province</label>
+                                <input type="text" value="{{ $facture->tp_address_province }}" name="" class="form-control" readonly>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
+                                <label for="">Date debut</label>
+                                <input type="text" value="{{ $start_date }}" name="" class="form-control" readonly>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="">Date Fin</label>
+                                <input type="text" value="{{ $end_date }}" name="" class="form-control" readonly>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                 <label for="client_id">@lang('Nom du Client')</label>
                                 <select class="form-control" name="client_id">
@@ -92,10 +102,20 @@
                                 </select>
                             </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
-                                <label for="statut_paied">@lang('Type de Paiement')</label>
-                                <select class="form-control" name="statut_paied">
+                                <label for="etat_recouvrement">@lang('Type de Paiement')</label>
+                                <select class="form-control" name="etat_recouvrement" id="etat_recouvrement" required>
+                                <option disabled="disabled" selected="selected">Merci de choisir client</option>
+                                <option value="1" class="form-control">Paiement partiel</option>
+                                <option value="2" class="form-control">Paiement Total</option>
+                                </select>
+                            </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                <label for="statut_paied">@lang('Mode de Paiement')</label>
+                                <select class="form-control" name="statut_paied" id="statut_paied" required>
                                 <option disabled="disabled" selected="selected">Merci de choisir client</option>
                                 <option value="1" class="form-control">CASH</option>
                                 <option value="2" class="form-control">Banque</option>
@@ -105,17 +125,30 @@
                             </div>
                             </div>
                         </div>
-                        <br>
-                        <div class="row">
+                        <div class="row" id="mode_paiement">
                             
                         </div>
+                        <div class="row" id="type_paiement">
+                            
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="date_recouvrement">Date de Recouvrement</label>
+                                <input type="date" name="date_recouvrement" class="form-control" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="nom_recouvrement">Nom Charge de recouvrement</label>
+                                <input type="text" name="nom_recouvrement" placeholder="Saisir Nom Charge de recouvrement" class="form-control" required>
+                            </div>
+                        </div>
+                        <br>
                          <table class="table table-bordered" id="dynamicTable">  
                             <tr>
+                                <th>Date facture</th>
+                                <th>No Facture</th>
                                 <th>Article</th>
                                 <th>Quantite</th>
                                 <th>Prix Unitaire</th>
-                                <th>TC</th>
-                                <th>PFL</th>
                                 <th>Prix HTVA </th>
                                 <th>Montant TVA </th>
                                 <th>P.V TVAC </th>
@@ -123,12 +156,12 @@
                                <!-- <th>Action</th> -->
                             </tr>
                             @foreach($datas as $data)
-                            <tr>  
+                            <tr>
+                                <td><input type="text" value="{{ \Carbon\Carbon::parse($data->invoice_date)->format('d/m/Y') }}" class="form-control" readonly/></td>   
+                                <td><input type="text" value="{{ $data->invoice_number }}" class="form-control" readonly/></td>  
                                 <td><input type="text" name="item_designation[]" value="@if($data->drink_id) {{ $data->drink->name }} @elseif($data->food_item_id) {{ $data->foodItem->name }} @elseif($data->barrist_item_id) {{ $data->barristItem->name }} @elseif($data->bartender_id) {{ $data->bartenderItem->name }} @elseif($data->salle_id) {{ $data->salle->name }} @elseif($data->service_id) {{ $data->service->name }} @elseif($data->table_id) {{ $data->table->name }} @endif" class="form-control" readonly /></td>  
                                 <td><input type="text" step='any' min='0' name="item_quantity[]" value="{{ $data->item_quantity }}" class="form-control" readonly /></td>  
                                 <td><input type="text" step='any' min='0' name="item_price[]" value="{{ $data->item_price }}" class="form-control" readonly /></td>
-                                <td><input type="text" step='any' min='0' name="item_ct[]" value="{{ $data->item_ct }}" class="form-control" readonly/></td>   
-                                <td><input type="text" step='any' min='0' name="item_tl[]" value="{{ $data->item_tl }}" class="form-control" readonly/></td>
                                 <td><input type="text" step='any' min='0' name="item_price_nvat[]" value="{{ $data->item_price_nvat }}" class="form-control" readonly/></td>
                                 <td><input type="text" step='any' min='0' name="vat[]" value="{{ $data->vat }}" class="form-control" readonly/></td>
                                 <td><input type="text" step='any' min='0' name="item_price_wvat[]" value="{{ $data->item_price_wvat }}" class="form-control" readonly/></td>
@@ -137,12 +170,12 @@
                             </tr> 
                             @endforeach
                         </table> 
-                        <div class="col-md-2 pull-right">
-                            <input type="text" class="form-control" value="{{ number_format($total_amount,0,',',' ')}}" readonly>
+                        <div>
+                            <label for="note_recouvrement"></label>
+                            <textarea name="note_recouvrement" id="note_recouvrement" class="form-control">
+                                
+                            </textarea>
                         </div>
-                        @if (Auth::guard('admin')->user()->can('invoice_drink.view'))
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="{{ route('admin.facture-brouillon.imprimer',$facture->invoice_number) }}"><img src="{{ asset('img/ISSh.gif') }}" width="60" title="Télécharger d'abord le document et puis imprimer"></a> 
-                        @endif
                         <button type="submit" class="btn btn-primary mt-4 pr-4 pl-4">VALIDER CREDIT</button>
                     </form>
                 </div>
@@ -156,40 +189,64 @@
     <script type="text/javascript">
 
 
-    var group_=(el,callback)=>{
-        el.forEach((checkbox)=>{
-        callback(checkbox)
-        })
+    $('#statut_paied').change(function () { 
+    if ($(this).val() === '2'){
+
+        var banque = "<div class='col-md-6'>"+
+                            "<label for='bank_name'>merci de choisir<strong style='color: red;'>*</strong></label>"+
+                            "<select name='bank_name' class='form-control'>"+
+                                "<option selected disabled>merci de choisir</option>"+
+                                "<option value='BCB'>BCB</option>"+
+                                "<option value='BANCOBU'>BANCOBU</option>"+
+                                "<option value='COOPEC'>COOPEC</option>"+
+                                "<option value='CORILAC'>CORILAC</option>"+
+                                "<option value='ECOBANK'>ECOBANK</option>"+
+                                "<option value='KCB'>KCB</option>"+
+                                "<option value='INTERBANK'>INTERBANK</option>"+
+                            +
+                        "</div>";
+        var cheque_no = "<div class='col-md-6'>"+
+                            "<label for='cheque_no'>No Cheque<strong style='color: red;'>*</strong></label>"+
+                                "<input type='text' name='cheque_no' placeholder='Saisir no cheque ou no bordereau' class='form-control'/>"+
+                        "</div>";
+        
+        $("#mode_paiement").append([banque,cheque_no]);
     }
 
-    group_(document.getElementsByName('statut_paied'),(item)=>{
-    item.onclick=(e)=>{
-    group_(document.getElementsByName('statut_paied'),(item)=>{
-    item.checked=false;
     })
-    e.target.checked=true;
+    .trigger( "change" );
 
+    $('#etat_recouvrement').change(function () { 
+    if ($(this).val() === '2'){
+
+        var montant_total_credit = "<div class='col-md-6'>"+
+                            "<label for='montant_total_credit'>Montant Total a payer<strong style='color: red;'>*</strong></label>"+
+                                "<input type='text' name='montant_total_credit' value='{{ $total_amount }}' class='form-control' readonly/>"+
+                        "</div>";
+        var montant_recouvre = "<div class='col-md-6'>"+
+                            "<label for='montant_recouvre'>Montant paye<strong style='color: red;'>*</strong></label>"+
+                                "<input type='text' name='montant_recouvre' value='{{ $total_amount }}' class='form-control' readonly required/>"+
+                        "</div>";
+        
+        $("#type_paiement").append([montant_total_credit,montant_recouvre]);
     }
-    })
 
-    //one checked box in checkbox group of cancelled_invoice
+    if ($(this).val() === '1'){
 
-    var group_=(el,callback)=>{
-        el.forEach((checkbox)=>{
-        callback(checkbox)
-        })
+        var montant_total_credit = "<div class='col-md-6'>"+
+                            "<label for='montant_total_credit'>Montant Total a payer<strong style='color: red;'>*</strong></label>"+
+                                "<input type='text' name='montant_total_credit' value='{{ $total_amount }}' class='form-control' readonly/>"+
+                        "</div>";
+        var montant_recouvre = "<div class='col-md-6'>"+
+                            "<label for='montant_recouvre'>Montant paye<strong style='color: red;'>*</strong></label>"+
+                                "<input type='text' name='montant_recouvre' placeholder='Saisir le montant paye' class='form-control' required/>"+
+                        "</div>";
+        
+        $("#type_paiement").append([montant_total_credit,montant_recouvre]);
     }
 
-    group_(document.getElementsByName('cancelled_invoice'),(item)=>{
-    item.onclick=(e)=>{
-    group_(document.getElementsByName('cancelled_invoice'),(item)=>{
-    item.checked=false;
     })
-    e.target.checked=true;
-
-    }
-    })
-
+    .trigger( "change" );
 
 </script>
 @endsection
