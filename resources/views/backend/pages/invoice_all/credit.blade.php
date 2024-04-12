@@ -57,20 +57,34 @@
                             </div>
                         </p>
                     </form><br>
-                    <form action="{{ route('admin.rapport-facture-credit')}}" method="GET">
-                        <p class="float-right mb-2">
-                            <button type="submit" value="pdf" class="btn btn-info">Exporter En PDF</button>
-                        </p>
-                        <p class="float-right mb-2">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <input type="date" name="start_date" class="form-control">
-                                </div>
-                                <div class="col-md-6">
-                                    <input type="date" name="end_date" class="form-control">
-                                </div>
-                            </div>
-                        </p>
+                    <form action="{{ route('admin.payer-facture.credit') }}" method="GET">
+                            <table>
+                                <tr>
+                                    <th>Date Debut</th>
+                                    <th>Date Fin</th>
+                                    <th>Nom du Client</th>
+                                    <th>Action</th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input type="date" name="start_date" class="form-control">
+                                    </td>
+                                    <td>
+                                        <input type="date" name="end_date" class="form-control">
+                                    </td>
+                                    <td>
+                                        <select class="form-control" name="client_id" id="client_id">
+                                        <option disabled="disabled" selected="selected">Merci de choisir</option>
+                                        @foreach($clients as $client)
+                                            <option value="{{$client->id}}">{{$client->customer_name}}</option>
+                                        @endforeach
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <button type="submit" value="submit" class="btn btn-success">Payer Credit</button>
+                                    </td>
+                                </tr>
+                            </table>
                     </form><br>
                     <div class="clearfix"></div>
                     <div class="data-tables">

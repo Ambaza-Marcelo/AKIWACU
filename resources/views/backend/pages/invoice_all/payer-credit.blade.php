@@ -96,23 +96,22 @@
                                 </select>
                             </div>
                             </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                <label for="statut_paied">@lang('Type de Paiement')</label>
+                                <select class="form-control" name="statut_paied">
+                                <option disabled="disabled" selected="selected">Merci de choisir client</option>
+                                <option value="1" class="form-control">CASH</option>
+                                <option value="2" class="form-control">Banque</option>
+                                <option value="3" class="form-control">Lumicash</option>
+                                <option value="4" class="form-control">Autres</option>
+                                </select>
+                            </div>
+                            </div>
                         </div>
                         <br>
                         <div class="row">
-                            <div class="col-sm-6">
-                                <label for="statut_paied">Type de Paiement</label>
-                                <div class="form-group">
-                                    <label class="text">CASH
-                                    <input type="checkbox" name="statut_paied" value="1" checked="checked" class="form-control">
-                                    </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <label class="text">Banque
-                                    <input type="checkbox" name="statut_paied" value="2" class="form-control">
-                                    </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <label class="text">Autres
-                                    <input type="checkbox" name="statut_paied" value="4" class="form-control">
-                                    </label>
-                                </div>
-                            </div>
+                            
                         </div>
                          <table class="table table-bordered" id="dynamicTable">  
                             <tr>

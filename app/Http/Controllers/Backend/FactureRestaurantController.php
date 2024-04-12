@@ -57,19 +57,28 @@ class FactureRestaurantController extends Controller
         return view('backend.pages.invoice_kitchen.index',compact('factures'));
     }
 
-    public function voirFacturePayercredit($invoice_number)
+    public function voirFacturePayercredit(Request $request)
     {
         if (is_null($this->user) || !$this->user->can('invoice_booking.edit')) {
             abort(403, 'Sorry !! You are Unauthorized to view this ! more information,contact Marcellin');
         }
 
-        $facture = Facture::where('invoice_number',$invoice_number)->first();
+        $d1 = $request->query('start_date');
+        $d2 = $request->query('end_date');
+        $client_id = $request->query('client_id');
+
+        $startDate = \Carbon\Carbon::parse($d1)->format('Y-m-d');
+        $endDate = \Carbon\Carbon::parse($d2)->format('Y-m-d');
+
+        $start_date = $startDate.' 00:00:00';
+        $end_date = $endDate.' 23:59:59';
+
+        $facture = Facture::whereBetween('invoice_date',[$start_date,$end_date])->where('client_id',$client_id)->where('etat','01')->first();
         $clients =  Client::orderBy('customer_name','asc')->get();
-        $datas = FactureDetail::where('invoice_number',$invoice_number)->get();
+        $datas = FactureDetail::whereBetween('invoice_date',[$start_date,$end_date])->where('client_id',$client_id)->where('etat','01')->get();
         $total_amount = DB::table('facture_details')
-            ->where('invoice_number', '=', $invoice_number)
-            ->sum('item_total_amount');
-        return view('backend.pages.invoice_all.payer-credit',compact('datas','facture','total_amount','clients'));
+            ->whereBetween('invoice_date',[$start_date,$end_date])->where('client_id',$client_id)->where('etat','01')->sum('item_total_amount');
+        return view('backend.pages.invoice_all.payer-credit',compact('datas','facture','total_amount','clients','start_date','end_date'));
     }
 
     public function voirFactureAcredit()
