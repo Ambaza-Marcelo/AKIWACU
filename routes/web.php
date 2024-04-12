@@ -131,8 +131,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('EBMS/exporter-facture-annule','Backend\FactureRestaurantController@exporterFactureAnnule')->name('admin.exporter-facture-annule');
     Route::get('EBMS/exporter-facture-encours','Backend\FactureRestaurantController@exporterFactureEncours')->name('admin.exporter-facture-encours');
 
-    Route::put('eBms/payer-facture-a-credit/{invoice_number}','Backend\FactureController@payerCredit')->name('admin.facture-credit.payer');
-    Route::put('eBms/valider-facture-paye/{invoice_number}','Backend\FactureRestaurantController@validerPaye')->name('admin.valider-facture-paye');
+    Route::put('eBms/payer-facture-a-credit','Backend\FactureController@payerCredit')->name('admin.facture-credit.payer');
+    Route::put('eBms/valider-facture-paye','Backend\FactureRestaurantController@validerPaye')->name('admin.valider-facture-paye');
 
 
     Route::get('EBMS/voir-facture-a-annuler/{invoice_number}','Backend\FactureController@voirFactureAnnuler')->name('admin.voir-facture.reset');

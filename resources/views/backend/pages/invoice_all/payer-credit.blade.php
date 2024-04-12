@@ -40,10 +40,10 @@
         <div class="col-12 mt-5">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="header-title">Validation Credit Facture : {{$facture->invoice_number}}</h4>
+                    <h4 class="header-title">Validation paiement Facture</h4>
                     @include('backend.layouts.partials.messages')
                     
-                    <form action="{{ route('admin.facture-credit.payer', $facture->invoice_number) }}" method="POST">
+                    <form action="{{ route('admin.facture-credit.payer') }}" method="POST">
                         @csrf
                         @method('PUT')
                         @if($facture->employe_id)
@@ -56,15 +56,11 @@
                         </div>
                         @endif
                         <div class="row">
-                            <div class="col-sm-4">
-                                <label for="invoice_number">Numero Facture</label>
-                                <input type="text" value="{{ $facture->invoice_number }}" name="invoice_number" class="form-control" readonly>
-                            </div>
-                            <div class="col-sm-4">
+                            <div class="col-sm-5">
                                 <label for="tp_name">Nom et Prenom</label>
                                 <input type="text" value="{{ $facture->tp_name }}" name="tp_name" class="form-control" readonly>
                             </div>
-                            <div class="col-sm-4">
+                            <div class="col-sm-5">
                                 <label for="tp_TIN">NIF Contribuable</label>
                                 <input type="text" value="{{ $facture->tp_TIN }}" name="tp_TIN" class="form-control" readonly>
                             </div>
