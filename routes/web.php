@@ -114,7 +114,7 @@ Route::group(['prefix' => 'admin'], function () {
 
 
     Route::get('EBMS/voir-facture-a-credit','Backend\FactureRestaurantController@voirFactureAcredit')->name('admin.credit-invoices.list');
-    Route::get('EBMS/payer-facture-a-credit/{invoice_number}','Backend\FactureRestaurantController@voirFacturePayercredit')->name('admin.payer-facture.credit');
+    Route::get('EBMS/payer-facture-a-credit','Backend\FactureRestaurantController@voirFacturePayercredit')->name('admin.payer-facture.credit');
 
     Route::get('EBMS/voir-facture-credit-payes','Backend\FactureRestaurantController@creditPayes')->name('admin.credit-payes.list');
 
