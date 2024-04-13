@@ -163,10 +163,9 @@ class FactureController extends Controller
             $item_price = $request->item_price;
             $item_ct = $request->item_ct;
             $item_tl =$request->item_tl; 
-
             $employe_id = $request->employe_id;
             
-            $latest = Facture::latest()->first();
+            $latest = Facture::orderBy('id','desc')->first();
             if ($latest) {
                $invoice_number = 'FA' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{
@@ -355,7 +354,7 @@ class FactureController extends Controller
 
             $employe_id = $request->employe_id;
             
-            $latest = Facture::latest()->first();
+            $latest = Facture::orderBy('id','desc')->first();
             if ($latest) {
                $invoice_number = 'FA' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{
@@ -522,7 +521,7 @@ class FactureController extends Controller
 
             $employe_id = $request->employe_id;
             
-            $latest = Facture::latest()->first();
+            $latest = Facture::orderBy('id','desc')->first();
             if ($latest) {
                $invoice_number = 'FA' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{
@@ -689,7 +688,7 @@ class FactureController extends Controller
 
             $employe_id = $request->employe_id;
             
-            $latest = Facture::latest()->first();
+            $latest = Facture::orderBy('id','desc')->first();
             if ($latest) {
                $invoice_number = 'FA' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{
@@ -861,7 +860,7 @@ class FactureController extends Controller
 
             $employe_id = $request->employe_id;
             
-            $latest = Facture::latest()->first();
+            $latest = Facture::orderBy('id','desc')->first();
             if ($latest) {
                $invoice_number = 'FA' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{
