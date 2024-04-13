@@ -101,7 +101,7 @@ class OrderKitchenController extends Controller
             $created_by = $this->user->name;
             $accompagnement_id = $request->accompagnement_id;
 
-            $latest = OrderKitchen::latest()->first();
+            $latest = OrderKitchen::orderBy('id','desc')->first();
             if ($latest) {
                $order_no = 'BC' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{

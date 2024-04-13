@@ -96,7 +96,7 @@ class BartenderOrderController extends Controller
             $status = 0; 
             $created_by = $this->user->name;
 
-            $latest = BartenderOrder::latest()->first();
+            $latest = BartenderOrder::orderBy('id','desc')->first();
             if ($latest) {
                $order_no = 'BC' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{
