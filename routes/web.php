@@ -114,7 +114,7 @@ Route::group(['prefix' => 'admin'], function () {
 
 
     Route::get('EBMS/voir-facture-a-credit','Backend\FactureRestaurantController@voirFactureAcredit')->name('admin.credit-invoices.list');
-    Route::get('EBMS/payer-facture-a-credit','Backend\FactureRestaurantController@voirFacturePayercredit')->name('admin.payer-facture.credit');
+    Route::get('EBMS/payer-facture-a-credit/{invoice_number}','Backend\FactureRestaurantController@voirFacturePayercredit')->name('admin.payer-facture.credit');
 
     Route::get('EBMS/voir-facture-credit-payes','Backend\FactureRestaurantController@creditPayes')->name('admin.credit-payes.list');
 
@@ -131,7 +131,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('EBMS/exporter-facture-annule','Backend\FactureRestaurantController@exporterFactureAnnule')->name('admin.exporter-facture-annule');
     Route::get('EBMS/exporter-facture-encours','Backend\FactureRestaurantController@exporterFactureEncours')->name('admin.exporter-facture-encours');
 
-    Route::put('eBms/payer-facture-a-credit','Backend\FactureController@payerCredit')->name('admin.facture-credit.payer');
+    Route::put('eBms/payer-facture-a-credit/{invoice_number}','Backend\FactureController@payerCredit')->name('admin.facture-credit.payer');
     Route::put('eBms/valider-facture-paye','Backend\FactureRestaurantController@validerPaye')->name('admin.valider-facture-paye');
 
 
@@ -1178,6 +1178,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::put('EBMS/drink-stockins/confirm/{stockin_no}','Backend\DrinkStockinController@confirm')->name('admin.drink-stockins.confirm');
     Route::put('EBMS/drink-stockins/approuve/{stockin_no}','Backend\DrinkStockinController@approuve')->name('admin.drink-stockins.approuve');
 
+    Route::get('EBMS/drink-stockins/export-to-excel','Backend\DrinkStockinController@exportToExcel')->name('admin.drink-stockins.export-to-excel');
+
     //private drink stockins routes
     Route::get('PDG/private-drink-stockins/index', 'Backend\PrivateDrinkStockinController@index')->name('admin.private-drink-stockins.index');
     Route::get('PDG/private-drink-stockins/create', 'Backend\PrivateDrinkStockinController@create')->name('admin.private-drink-stockins.create');
@@ -1191,6 +1193,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::put('PDG/private-drink-stockins/reset/{stockin_no}','Backend\PrivateDrinkStockinController@reset')->name('admin.private-drink-stockins.reset');
     Route::put('PDG/private-drink-stockins/confirm/{stockin_no}','Backend\PrivateDrinkStockinController@confirm')->name('admin.private-drink-stockins.confirm');
     Route::put('PDG/private-drink-stockins/approuve/{stockin_no}','Backend\PrivateDrinkStockinController@approuve')->name('admin.private-drink-stockins.approuve');
+
+    Route::get('PDG/private-drink-stockins/export-to-excel','Backend\PrivateDrinkStockinController@exportToExcel')->name('admin.private-drink-stockins.export-to-excel');
 
     //food stockins routes
     Route::get('EBMS/food-stockins/index', 'Backend\FoodStockinController@index')->name('admin.food-stockins.index');
@@ -1244,6 +1248,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::put('EBMS/drink-stockouts/reset/{stockout_no}','Backend\DrinkStockoutController@reset')->name('admin.drink-stockouts.reset');
     Route::put('EBMS/drink-stockouts/confirm/{stockout_no}','Backend\DrinkStockoutController@confirm')->name('admin.drink-stockouts.confirm');
     Route::put('EBMS/drink-stockouts/approuve/{stockout_no}','Backend\DrinkStockoutController@approuve')->name('admin.drink-stockouts.approuve');
+    Route::get('EBMS/drink-stockouts/export-to-excel','Backend\DrinkStockoutController@exportToExcel')->name('admin.drink-stockouts.export-to-excel');
 
 
     //private-drink stockouts routes
@@ -1259,6 +1264,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::put('PDG/private-drink-stockouts/reset/{stockout_no}','Backend\PrivateDrinkStockoutController@reset')->name('admin.private-drink-stockouts.reset');
     Route::put('PDG/private-drink-stockouts/confirm/{stockout_no}','Backend\PrivateDrinkStockoutController@confirm')->name('admin.private-drink-stockouts.confirm');
     Route::put('PDG/private-drink-stockouts/approuve/{stockout_no}','Backend\PrivateDrinkStockoutController@approuve')->name('admin.private-drink-stockouts.approuve');
+
+    Route::get('PDG/private-drink-stockouts/export-to-excel','Backend\PrivateDrinkStockoutController@exportToExcel')->name('admin.private-drink-stockouts.export-to-excel');
 
     //food stockouts routes
     Route::get('EBMS/food-stockouts/index', 'Backend\FoodStockoutController@index')->name('admin.food-stockouts.index');

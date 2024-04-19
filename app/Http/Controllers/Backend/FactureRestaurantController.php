@@ -57,28 +57,24 @@ class FactureRestaurantController extends Controller
         return view('backend.pages.invoice_kitchen.index',compact('factures'));
     }
 
-    public function voirFacturePayercredit(Request $request)
+    public function voirFacturePayercredit(Request $request,$invoice_number)
     {
         if (is_null($this->user) || !$this->user->can('invoice_booking.edit')) {
             abort(403, 'Sorry !! You are Unauthorized to view this ! more information,contact Marcellin');
         }
 
-        $d1 = $request->query('start_date');
-        $d2 = $request->query('end_date');
-        $client_id = $request->query('client_id');
 
-        $startDate = \Carbon\Carbon::parse($d1)->format('Y-m-d');
-        $endDate = \Carbon\Carbon::parse($d2)->format('Y-m-d');
-
-        $start_date = $startDate.' 00:00:00';
-        $end_date = $endDate.' 23:59:59';
-
-        $facture = Facture::whereBetween('invoice_date',[$start_date,$end_date])->where('client_id',$client_id)->where('etat','01')->first();
+        $facture = Facture::where('invoice_number',$invoice_number)->where('etat','01')->first();
         $clients =  Client::orderBy('customer_name','asc')->get();
-        $datas = FactureDetail::whereBetween('invoice_date',[$start_date,$end_date])->where('client_id',$client_id)->where('etat','01')->get();
+        $datas = FactureDetail::where('invoice_number',$invoice_number)->where('etat','01')->get();
         $total_amount = DB::table('facture_details')
-            ->whereBetween('invoice_date',[$start_date,$end_date])->where('client_id',$client_id)->where('etat','01')->sum('item_total_amount');
-        return view('backend.pages.invoice_all.payer-credit',compact('datas','facture','total_amount','clients','start_date','end_date'));
+            ->where('invoice_number',$invoice_number)->where('etat','01')->sum('item_total_amount');
+        $reste_credit = DB::table('factures')
+            ->where('invoice_number',$invoice_number)->where('etat','01')->sum('reste_credit');
+        $montant_recouvre = DB::table('factures')
+            ->where('invoice_number',$invoice_number)->where('etat','01')->sum('montant_recouvre');
+
+        return view('backend.pages.invoice_all.payer-credit',compact('datas','facture','total_amount','clients','reste_credit','montant_recouvre'));
     }
 
     public function voirFactureAcredit()
@@ -88,7 +84,7 @@ class FactureRestaurantController extends Controller
         }
 
 
-        $factures = Facture::where('etat','01')->where('statut_paied','0')->orderBy('id','desc')->get();
+        $factures = Facture::where('etat','01')->orderBy('id','desc')->get();
         $clients =  Client::orderBy('customer_name','asc')->get();
         return view('backend.pages.invoice_all.credit',compact('factures','clients'));
     }

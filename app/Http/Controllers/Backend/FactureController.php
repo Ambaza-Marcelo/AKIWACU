@@ -1750,9 +1750,9 @@ class FactureController extends Controller
         DrinkSmallStoreDetail::where('drink_id','!=','')->update(['verified' => false]);
 
         Facture::where('invoice_number', '=', $invoice_number)
-            ->update(['etat' => '01','statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
+            ->update(['etat' => '01','etat_recouvrement' => '0','statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
         FactureDetail::where('invoice_number', '=', $invoice_number)
-            ->update(['etat' => '01','statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
+            ->update(['etat' => '01','etat_recouvrement' => '0','statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
         OrderDrink::where('order_no', '=', $data->drink_order_no)
             ->update(['status' => 3,'confirmed_by' => $this->user->name]);
         OrderDrinkDetail::where('order_no', '=', $data->drink_order_no)
@@ -1897,9 +1897,9 @@ class FactureController extends Controller
         }
 
         Facture::where('invoice_number', '=', $invoice_number)
-                ->update(['etat' => '01','statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
+                ->update(['etat' => '01','etat_recouvrement' => '0','statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
         FactureDetail::where('invoice_number', '=', $invoice_number)
-                ->update(['etat' => '01','statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
+                ->update(['etat' => '01','etat_recouvrement' => '0','statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
         BarristOrder::where('order_no', '=', $data->barrist_order_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
             BarristOrderDetail::where('order_no', '=', $data->barrist_order_no)
@@ -2107,9 +2107,9 @@ class FactureController extends Controller
         BartenderSmallReport::insert($report);
 
         Facture::where('invoice_number', '=', $invoice_number)
-            ->update(['etat' => '01','statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
+            ->update(['etat' => '01','etat_recouvrement' => '0','statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
         FactureDetail::where('invoice_number', '=', $invoice_number)
-            ->update(['etat' => '01','statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
+            ->update(['etat' => '01','etat_recouvrement' => '0','statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
         BartenderOrder::where('order_no', '=', $data->bartender_order_no)
             ->update(['status' => 3,'confirmed_by' => $this->user->name]);
         BartenderOrderDetail::where('order_no', '=', $data->bartender_order_no)
@@ -2156,9 +2156,9 @@ class FactureController extends Controller
         $data = Facture::where('invoice_number',$invoice_number)->first();
 
         Facture::where('invoice_number', '=', $invoice_number)
-                ->update(['etat' => '01','statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
+                ->update(['etat' => '01','etat_recouvrement' => '0','statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
         FactureDetail::where('invoice_number', '=', $invoice_number)
-                ->update(['etat' => '01','statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
+                ->update(['etat' => '01','etat_recouvrement' => '0','statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
         BookingBooking::where('booking_no', '=', $data->booking_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
         BookingBookingDetail::where('booking_no', '=', $data->booking_no)
@@ -2429,9 +2429,9 @@ class FactureController extends Controller
         FoodBigStoreDetail::where('food_id','!=','')->update(['verified' => false]);
         
         Facture::where('invoice_number', '=', $invoice_number)
-                ->update(['etat' => '01','statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
+                ->update(['etat' => '01','etat_recouvrement' => '0','statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
         FactureDetail::where('invoice_number', '=', $invoice_number)
-                ->update(['etat' => '01','statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
+                ->update(['etat' => '01','etat_recouvrement' => '0','statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
         OrderKitchen::where('order_no', '=', $data->food_order_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
         OrderKitchenDetail::where('order_no', '=', $data->food_order_no)
@@ -3133,20 +3133,121 @@ class FactureController extends Controller
         $request->validate([
             'client_id' => 'required',
             'statut_paied' => 'required',
+            'etat_recouvrement' => 'required',
+            'date_recouvrement' => 'required',
+            'nom_recouvrement' => 'required',
+            'note_recouvrement' => 'required',
+            'montant_total_credit' => 'required',
+            'montant_recouvre' => 'required',
         ]);
+
 
         $client_id = $request->client_id;
         $statut_paied = $request->statut_paied;
         $customer_address = $request->customer_address;
         $customer_TIN = $request->customer_TIN;
+        $etat_recouvrement = $request->etat_recouvrement;
+        $date_recouvrement = $request->date_recouvrement;
+        $nom_recouvrement = $request->nom_recouvrement;
+        $note_recouvrement = $request->note_recouvrement;
+        $bank_name = $request->bank_name;
+        $cheque_no = $request->cheque_no;
+        $montant_total_credit = $request->montant_total_credit;
+        $montant_recouvre_input = $request->montant_recouvre;
 
-        Facture::where('invoice_number', '=', $invoice_number)
-                ->update(['client_id' => $client_id,'statut_paied' => $statut_paied,'customer_address' => $customer_address,'customer_TIN' => $customer_TIN,'confirmed_by' => $this->user->name]);
-        FactureDetail::where('invoice_number', '=', $invoice_number)
-                ->update(['client_id' => $client_id,'statut_paied' => $statut_paied,'customer_address' => $customer_address,'customer_TIN' => $customer_TIN,'confirmed_by' => $this->user->name]);
+        $montant_recouvre = DB::table('factures')
+            ->where('invoice_number',$invoice_number)->where('etat','01')->sum('montant_recouvre');
 
-        session()->flash('success', 'Le credit  est payé avec succés');
-        return back();
+        if ($montant_total_credit >= $montant_recouvre_input) {
+
+            $montant_total_recouvre = $montant_recouvre_input + $montant_recouvre;
+            $reste_credit = $montant_total_credit - $montant_total_recouvre;
+
+            if ($reste_credit <= 0) {
+                $etat_recouvrement = 2;
+                Facture::where('invoice_number', '=', $invoice_number)
+                    ->update([
+                        'client_id' => $client_id,
+                        'statut_paied' => $statut_paied,
+                        'customer_address' => $customer_address,
+                        'customer_TIN' => $customer_TIN,
+                        'etat_recouvrement' => $etat_recouvrement,
+                        'date_recouvrement' => $date_recouvrement,
+                        'nom_recouvrement' => $nom_recouvrement,
+                        'note_recouvrement' => $note_recouvrement,
+                        'bank_name' => $bank_name,
+                        'cheque_no' => $cheque_no,
+                        'montant_total_credit' => $montant_total_credit,
+                        'montant_recouvre' => $montant_total_recouvre,
+                        'reste_credit' => $reste_credit,
+                        'confirmed_by' => $this->user->name
+                    ]);
+                FactureDetail::where('invoice_number', '=', $invoice_number)
+                    ->update([
+                        'client_id' => $client_id,
+                        'statut_paied' => $statut_paied,
+                        'customer_address' => $customer_address,
+                        'customer_TIN' => $customer_TIN,
+                        'etat_recouvrement' => $etat_recouvrement,
+                        'date_recouvrement' => $date_recouvrement,
+                        'nom_recouvrement' => $nom_recouvrement,
+                        'note_recouvrement' => $note_recouvrement,
+                        'bank_name' => $bank_name,
+                        'cheque_no' => $cheque_no,
+                        'montant_total_credit' => $montant_total_credit,
+                        'montant_recouvre' => $montant_total_recouvre,
+                        'reste_credit' => $reste_credit,
+                        'confirmed_by' => $this->user->name
+                    ]);
+
+                session()->flash('success', 'Le credit  est payé avec succés');
+                return back();
+            }else{
+                $etat_recouvrement = 1;
+                Facture::where('invoice_number', '=', $invoice_number)
+                    ->update([
+                        'client_id' => $client_id,
+                        'statut_paied' => $statut_paied,
+                        'customer_address' => $customer_address,
+                        'customer_TIN' => $customer_TIN,
+                        'etat_recouvrement' => $etat_recouvrement,
+                        'date_recouvrement' => $date_recouvrement,
+                        'nom_recouvrement' => $nom_recouvrement,
+                        'note_recouvrement' => $note_recouvrement,
+                        'bank_name' => $bank_name,
+                        'cheque_no' => $cheque_no,
+                        'montant_total_credit' => $montant_total_credit,
+                        'montant_recouvre' => $montant_total_recouvre,
+                        'reste_credit' => $reste_credit,
+                        'confirmed_by' => $this->user->name
+                    ]);
+                FactureDetail::where('invoice_number', '=', $invoice_number)
+                    ->update([
+                        'client_id' => $client_id,
+                        'statut_paied' => $statut_paied,
+                        'customer_address' => $customer_address,
+                        'customer_TIN' => $customer_TIN,
+                        'etat_recouvrement' => $etat_recouvrement,
+                        'date_recouvrement' => $date_recouvrement,
+                        'nom_recouvrement' => $nom_recouvrement,
+                        'note_recouvrement' => $note_recouvrement,
+                        'bank_name' => $bank_name,
+                        'cheque_no' => $cheque_no,
+                        'montant_total_credit' => $montant_total_credit,
+                        'montant_recouvre' => $montant_total_recouvre,
+                        'reste_credit' => $reste_credit,
+                        'confirmed_by' => $this->user->name
+                    ]);
+
+                session()->flash('success', 'Le credit  est payé avec succés');
+                return back();
+            }
+        }else{
+            session()->flash('error', 'Le montant saisi doit etre inferieur ou egal au montant total de la facture');
+            return back();
+        }
+
+        
     }
 
     /**

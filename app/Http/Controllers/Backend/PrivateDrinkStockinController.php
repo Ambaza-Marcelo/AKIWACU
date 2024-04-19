@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Http;
 use App\Models\PrivateStoreItem;
 use App\Models\PrivateDrinkStockin;
 use App\Models\PrivateDrinkStockinDetail;
+use App\Exports\PrivateStore\PrivateDrinkStockinExport;
 use Carbon\Carbon;
 use App\Mail\PrivateStockinMail;
 use PDF;
@@ -339,6 +340,11 @@ class PrivateDrinkStockinController extends Controller
 
         session()->flash('success', 'Stockin has been done successfuly !');
         return back();
+    }
+
+    public function exportToExcel(Request $request)
+    {
+        return Excel::download(new PrivateDrinkStockinExport, 'RAPPORT_ENTEES.xlsx');
     }
 
 

@@ -18,6 +18,7 @@ use App\Models\DrinkStockinDetail;
 use App\Models\DrinkBigStoreDetail;
 use App\Models\DrinkBigStore;
 use App\Models\DrinkBigReport;
+use App\Exports\DrinkStockinExport;
 use Carbon\Carbon;
 use PDF;
 use Validator;
@@ -424,10 +425,11 @@ class DrinkStockinController extends Controller
         return back();
     }
 
-    public function get_reception_data()
+    public function exportToExcel(Request $request)
     {
-        return Excel::download(new ReceptionExport, 'stockins.xlsx');
+        return Excel::download(new DrinkStockinExport, 'RAPPORT_ENTEES.xlsx');
     }
+
 
 
     /**

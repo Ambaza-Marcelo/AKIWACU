@@ -24,6 +24,7 @@ use App\Models\DrinkExtraBigStore;
 use App\Models\DrinkBigReport;
 use App\Models\DrinkSmallReport;
 use App\Models\DrinkExtraBigReport;
+use App\Exports\DrinkStockoutExport;
 use Carbon\Carbon;
 use PDF;
 use Validator;
@@ -731,9 +732,9 @@ class DrinkStockoutController extends Controller
 
     }
 
-    public function get_reception_data()
+    public function exportToExcel(Request $request)
     {
-        return Excel::download(new ReceptionExport, 'stockouts.xlsx');
+        return Excel::download(new DrinkStockoutExport, 'RAPPORT_SORTIES.xlsx');
     }
 
 

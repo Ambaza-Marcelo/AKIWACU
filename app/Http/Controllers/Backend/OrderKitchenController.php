@@ -42,7 +42,7 @@ class OrderKitchenController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any order !');
         }
 
-        $orders = OrderKitchen::take(200)->orderBy('order_no','desc')->get();
+        $orders = OrderKitchen::take(200)->orderBy('id','desc')->get();
         return view('backend.pages.order_kitchen.index', compact('orders'));
     }
 

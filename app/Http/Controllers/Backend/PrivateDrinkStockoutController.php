@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Http;
 use App\Models\PrivateStoreItem;
 use App\Models\PrivateDrinkStockout;
 use App\Models\PrivateDrinkStockoutDetail;
+use App\Exports\PrivateStore\PrivateDrinkStockoutExport;
 use Carbon\Carbon;
 use App\Mail\PrivateStockoutMail;
 use PDF;
@@ -381,9 +382,9 @@ class PrivateDrinkStockoutController extends Controller
 
     }
 
-    public function get_reception_data()
+    public function exportToExcel(Request $request)
     {
-        return Excel::download(new ReceptionExport, 'stockouts.xlsx');
+        return Excel::download(new PrivateDrinkStockoutExport, 'RAPPORT_SORTIES.xlsx');
     }
 
 

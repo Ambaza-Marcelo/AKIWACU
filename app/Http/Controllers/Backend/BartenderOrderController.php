@@ -39,7 +39,7 @@ class BartenderOrderController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any order !');
         }
 
-        $orders = BartenderOrder::take(200)->orderBy('order_no','desc')->get();
+        $orders = BartenderOrder::take(200)->orderBy('id','desc')->get();
         return view('backend.pages.order_bartender.index', compact('orders'));
     }
 

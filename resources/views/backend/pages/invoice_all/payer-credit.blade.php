@@ -43,7 +43,7 @@
                     <h4 class="header-title">Validation paiement Facture</h4>
                     @include('backend.layouts.partials.messages')
                     
-                    <form action="{{ route('admin.facture-credit.payer') }}" method="POST">
+                    <form action="{{ route('admin.facture-credit.payer',$facture->invoice_number) }}" method="POST">
                         @csrf
                         @method('PUT')
                         @if($facture->employe_id)
@@ -78,16 +78,6 @@
                             <div class="col-sm-4">
                                 <label for="">Province</label>
                                 <input type="text" value="{{ $facture->tp_address_province }}" name="" class="form-control" readonly>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label for="">Date debut</label>
-                                <input type="text" value="{{ $start_date }}" name="" class="form-control" readonly>
-                            </div>
-                            <div class="col-md-4">
-                                <label for="">Date Fin</label>
-                                <input type="text" value="{{ $end_date }}" name="" class="form-control" readonly>
                             </div>
                         </div>
                         <div class="row">
@@ -129,7 +119,10 @@
                             
                         </div>
                         <div class="row" id="type_paiement">
-                            
+                            <div class="col-md-4">
+                                <label for="reste_credit">Reste Credit</label>
+                                <input type="number" name="reste_credit" min="0"value="{{ $reste_credit }}" class="form-control" readonly required>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
@@ -138,7 +131,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="nom_recouvrement">Nom Charge de recouvrement</label>
-                                <input type="text" name="nom_recouvrement" placeholder="Saisir Nom Charge de recouvrement" class="form-control" required>
+                                <input type="text" name="nom_recouvrement" value="NIYONCUTI RAISSA" class="form-control" required>
                             </div>
                         </div>
                         <br>
@@ -172,7 +165,7 @@
                         </table> 
                         <div>
                             <label for="note_recouvrement"></label>
-                            <textarea name="note_recouvrement" id="note_recouvrement" class="form-control">
+                            <textarea name="note_recouvrement" id="note_recouvrement" class="form-control" required>
                                 
                             </textarea>
                         </div>
@@ -219,13 +212,13 @@
     $('#etat_recouvrement').change(function () { 
     if ($(this).val() === '2'){
 
-        var montant_total_credit = "<div class='col-md-6'>"+
+        var montant_total_credit = "<div class='col-md-4'>"+
                             "<label for='montant_total_credit'>Montant Total a payer<strong style='color: red;'>*</strong></label>"+
-                                "<input type='text' name='montant_total_credit' value='{{ $total_amount }}' class='form-control' readonly/>"+
+                                "<input type='number' name='montant_total_credit' value='{{ $total_amount }}' class='form-control' readonly/>"+
                         "</div>";
-        var montant_recouvre = "<div class='col-md-6'>"+
+        var montant_recouvre = "<div class='col-md-4'>"+
                             "<label for='montant_recouvre'>Montant paye<strong style='color: red;'>*</strong></label>"+
-                                "<input type='text' name='montant_recouvre' value='{{ $total_amount }}' class='form-control' readonly required/>"+
+                                "<input type='number' name='montant_recouvre' value='{{ $total_amount }}' class='form-control' min='0' max='{{ $reste_credit }}' required/>"+
                         "</div>";
         
         $("#type_paiement").append([montant_total_credit,montant_recouvre]);
@@ -233,13 +226,13 @@
 
     if ($(this).val() === '1'){
 
-        var montant_total_credit = "<div class='col-md-6'>"+
+        var montant_total_credit = "<div class='col-md-4'>"+
                             "<label for='montant_total_credit'>Montant Total a payer<strong style='color: red;'>*</strong></label>"+
-                                "<input type='text' name='montant_total_credit' value='{{ $total_amount }}' class='form-control' readonly/>"+
+                                "<input type='number' name='montant_total_credit' value='{{ $total_amount }}' class='form-control' readonly/>"+
                         "</div>";
-        var montant_recouvre = "<div class='col-md-6'>"+
+        var montant_recouvre = "<div class='col-md-4'>"+
                             "<label for='montant_recouvre'>Montant paye<strong style='color: red;'>*</strong></label>"+
-                                "<input type='text' name='montant_recouvre' placeholder='Saisir le montant paye' class='form-control' required/>"+
+                                "<input type='number' name='montant_recouvre' placeholder='Saisir le montant paye' min='0' max='{{ $reste_credit }}' class='form-control' required/>"+
                         "</div>";
         
         $("#type_paiement").append([montant_total_credit,montant_recouvre]);
