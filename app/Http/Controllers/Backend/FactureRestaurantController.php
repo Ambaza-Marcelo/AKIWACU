@@ -69,8 +69,14 @@ class FactureRestaurantController extends Controller
         $datas = FactureDetail::where('invoice_number',$invoice_number)->where('etat','01')->get();
         $total_amount = DB::table('facture_details')
             ->where('invoice_number',$invoice_number)->where('etat','01')->sum('item_total_amount');
-        $reste_credit = DB::table('factures')
+        $r_credit = DB::table('factures')
             ->where('invoice_number',$invoice_number)->where('etat','01')->sum('reste_credit');
+        if (!empty($r_credit)) {
+            $reste_credit = $r_credit;
+        }else{
+            $reste_credit = $total_amount;
+        }
+
         $montant_recouvre = DB::table('factures')
             ->where('invoice_number',$invoice_number)->where('etat','01')->sum('montant_recouvre');
 
