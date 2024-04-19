@@ -1750,9 +1750,9 @@ class FactureController extends Controller
         DrinkSmallStoreDetail::where('drink_id','!=','')->update(['verified' => false]);
 
         Facture::where('invoice_number', '=', $invoice_number)
-            ->update(['etat' => '01','etat_recouvrement' => '0','statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
+            ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
         FactureDetail::where('invoice_number', '=', $invoice_number)
-            ->update(['etat' => '01','etat_recouvrement' => '0','statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
+            ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
         OrderDrink::where('order_no', '=', $data->drink_order_no)
             ->update(['status' => 3,'confirmed_by' => $this->user->name]);
         OrderDrinkDetail::where('order_no', '=', $data->drink_order_no)
@@ -1897,9 +1897,9 @@ class FactureController extends Controller
         }
 
         Facture::where('invoice_number', '=', $invoice_number)
-                ->update(['etat' => '01','etat_recouvrement' => '0','statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
+                ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
         FactureDetail::where('invoice_number', '=', $invoice_number)
-                ->update(['etat' => '01','etat_recouvrement' => '0','statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
+                ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
         BarristOrder::where('order_no', '=', $data->barrist_order_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
             BarristOrderDetail::where('order_no', '=', $data->barrist_order_no)
@@ -2107,9 +2107,9 @@ class FactureController extends Controller
         BartenderSmallReport::insert($report);
 
         Facture::where('invoice_number', '=', $invoice_number)
-            ->update(['etat' => '01','etat_recouvrement' => '0','statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
+            ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
         FactureDetail::where('invoice_number', '=', $invoice_number)
-            ->update(['etat' => '01','etat_recouvrement' => '0','statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
+            ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
         BartenderOrder::where('order_no', '=', $data->bartender_order_no)
             ->update(['status' => 3,'confirmed_by' => $this->user->name]);
         BartenderOrderDetail::where('order_no', '=', $data->bartender_order_no)
@@ -2156,9 +2156,9 @@ class FactureController extends Controller
         $data = Facture::where('invoice_number',$invoice_number)->first();
 
         Facture::where('invoice_number', '=', $invoice_number)
-                ->update(['etat' => '01','etat_recouvrement' => '0','statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
+                ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
         FactureDetail::where('invoice_number', '=', $invoice_number)
-                ->update(['etat' => '01','etat_recouvrement' => '0','statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
+                ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
         BookingBooking::where('booking_no', '=', $data->booking_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
         BookingBookingDetail::where('booking_no', '=', $data->booking_no)
@@ -2427,11 +2427,15 @@ class FactureController extends Controller
         }
         
         FoodBigStoreDetail::where('food_id','!=','')->update(['verified' => false]);
+
+        $item_total_amount = DB::table('facture_details')
+            ->where('invoice_number', '=', $invoice_number)
+            ->sum('item_total_amount');
         
         Facture::where('invoice_number', '=', $invoice_number)
-                ->update(['etat' => '01','etat_recouvrement' => '0','statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
+                ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
         FactureDetail::where('invoice_number', '=', $invoice_number)
-                ->update(['etat' => '01','etat_recouvrement' => '0','statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
+                ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
         OrderKitchen::where('order_no', '=', $data->food_order_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
         OrderKitchenDetail::where('order_no', '=', $data->food_order_no)
