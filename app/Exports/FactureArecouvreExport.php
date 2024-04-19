@@ -3,7 +3,7 @@
 namespace App\Exports;
 
 use Carbon\Carbon;
-use App\Models\FactureDetail;
+use App\Models\Facture;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -27,8 +27,8 @@ class FactureArecouvreExport implements FromCollection, WithMapping, WithHeading
         $start_date = $startDate.' 00:00:00';
         $end_date = $endDate.' 23:59:59';
 
-        return FactureDetail::select(
-                        DB::raw('id,food_item_id,drink_id,barrist_item_id,bartender_item_id,salle_id,service_id,invoice_number,invoice_date,item_quantity,customer_name,client_id,drink_order_no,food_order_no,bartender_order_no,barrist_order_no,booking_no,item_total_amount,vat,item_price_nvat'))->where('etat','01')->where('statut_paied','0')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','drink_id','food_item_id','bartender_item_id','barrist_item_id','salle_id','service_id','invoice_date','invoice_number','item_quantity','drink_order_no','food_order_no','bartender_order_no','barrist_order_no','booking_no','customer_name','client_id','item_total_amount','vat','item_price_nvat')->orderBy('client_id','asc')->get();
+        return Facture::select(
+                        DB::raw('id,invoice_number,statut_paied,etat_recouvrement,montant_total_credit,montant_recouvre,reste_credit,bank_name,cheque_no,date_recouvrement,nom_recouvrement,note_recouvrement,invoice_date,customer_name,client_id,drink_order_no,food_order_no,bartender_order_no,barrist_order_no,booking_no'))->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','statut_paied','etat_recouvrement','montant_total_credit','montant_recouvre','reste_credit','bank_name','cheque_no','date_recouvrement','nom_recouvrement','note_recouvrement','invoice_date','invoice_number','drink_order_no','food_order_no','bartender_order_no','barrist_order_no','booking_no','customer_name','client_id')->orderBy('client_id','asc')->get();
     }
 
     public function map($data) : array {
@@ -49,23 +49,47 @@ class FactureArecouvreExport implements FromCollection, WithMapping, WithHeading
 
     	if (!empty($data->client_id)) {
     		$customer_name = $data->client->customer_name;
+            $customer_telephone = $data->client->telephone;
     	}else{
     		$customer_name = $data->customer_name;
+            $customer_telephone = $data->client->telephone;
     	}
 
-    	if (!empty($data->drink_id)) {
+    	if (!empty($data->drink_order_no)) {
     		$order_no = $data->drink_order_no;
-    	}elseif (!empty($data->food_item_id)) {
+    	}elseif (!empty($data->food_order_no)) {
     		$order_no = $data->food_order_no;
-    	}elseif (!empty($data->barrist_item_id)) {
+    	}elseif (!empty($data->barrist_order_no)) {
     		$order_no = $data->barrist_order_no;
-    	}elseif (!empty($data->bartender_item_id)) {
+    	}elseif (!empty($data->bartender_order_no)) {
     		$order_no = $data->bartender_order_no;
-    	}elseif (!empty($data->salle_id)) {
+    	}elseif (!empty($data->booking_no)) {
     		$order_no = $data->booking_no;
-    	}elseif (!empty($data->service_id)) {
+    	}elseif (!empty($data->booking_no)) {
     		$order_no = $data->booking_no;
     	}
+
+        if ($data->statut_paied == '1') {
+            $mode_paiement = "CASH";
+        }elseif ($data->statut_paied == '2') {
+            $mode_paiement = "BANQUE";
+        }elseif ($data->statut_paied == '3') {
+            $mode_paiement = "LUMICASH";
+        }elseif ($data->statut_paied == '4') {
+            $mode_paiement = "AUTRES";
+        }else{
+            $mode_paiement = "";
+        }
+
+        if ($data->etat_recouvrement == '1') {
+            $type_paiement = "PAIEMENT PARTIEL";
+        }elseif ($data->etat_recouvrement == '2') {
+            $type_paiement = "PAIEMENT TOTAL";
+        }else{
+            $type_paiement = "";
+        }
+
+
 
         return [
             $data->id,
@@ -73,11 +97,17 @@ class FactureArecouvreExport implements FromCollection, WithMapping, WithHeading
 			$data->invoice_number,
 			$order_no,
             $customer_name,
-            $libelle,
-            $data->item_quantity,
-			$data->item_price_nvat,
-			$data->vat,
-			$data->item_total_amount,
+            $customer_telephone,
+            $data->montant_total_credit,
+            $data->montant_recouvre,
+            $data->reste_credit,
+            $type_paiement,
+            $mode_paiement,
+            $data->bank_name,
+            $data->cheque_no,
+            Carbon::parse($data->date_recouvrement)->format('d/m/Y'),
+            $data->nom_recouvrement,
+            $data->note_recouvrement
         ] ;
  
  
@@ -86,15 +116,21 @@ class FactureArecouvreExport implements FromCollection, WithMapping, WithHeading
     public function headings() : array {
         return [
             '#',
-            'Date',
+            'Date de facturation',
             'No Facture',
             'No Commande',
             'Nom du Client',
-            'Libellé',
-            'Quantité',
-            'PV HTVA',
-            'TVA',
-            'TTC',
+            'Telephone du Client',
+            'Montant Total Crédit',
+            'Montant Total Recouvré',
+            'Solde',
+            'Type de Paiement',
+            'Mode de paiement',
+            'Banque',
+            'Cheque No',
+            'Date Recouvrement',
+            'Nom chargé de Recouvrement',
+            'Note de recouvrement'
         ] ;
     }
 }
