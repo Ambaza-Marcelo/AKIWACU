@@ -1749,6 +1749,10 @@ class FactureController extends Controller
 
         DrinkSmallStoreDetail::where('drink_id','!=','')->update(['verified' => false]);
 
+        $item_total_amount = DB::table('facture_details')
+            ->where('invoice_number', '=', $invoice_number)
+            ->sum('item_total_amount');
+
         Facture::where('invoice_number', '=', $invoice_number)
             ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
         FactureDetail::where('invoice_number', '=', $invoice_number)
@@ -1895,6 +1899,10 @@ class FactureController extends Controller
                     }
                     */
         }
+
+        $item_total_amount = DB::table('facture_details')
+            ->where('invoice_number', '=', $invoice_number)
+            ->sum('item_total_amount');
 
         Facture::where('invoice_number', '=', $invoice_number)
                 ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
@@ -2106,6 +2114,10 @@ class FactureController extends Controller
 
         BartenderSmallReport::insert($report);
 
+        $item_total_amount = DB::table('facture_details')
+            ->where('invoice_number', '=', $invoice_number)
+            ->sum('item_total_amount');
+
         Facture::where('invoice_number', '=', $invoice_number)
             ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
         FactureDetail::where('invoice_number', '=', $invoice_number)
@@ -2154,6 +2166,10 @@ class FactureController extends Controller
         $client_id = $request->client_id;
 
         $data = Facture::where('invoice_number',$invoice_number)->first();
+
+        $item_total_amount = DB::table('facture_details')
+            ->where('invoice_number', '=', $invoice_number)
+            ->sum('item_total_amount');
 
         Facture::where('invoice_number', '=', $invoice_number)
                 ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
