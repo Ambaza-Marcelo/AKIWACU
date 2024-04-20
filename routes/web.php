@@ -999,6 +999,60 @@ Route::group(['prefix' => 'admin'], function () {
 
     Route::get('EBMS/material-purchases/export-to-excel','Backend\MaterialPurchaseController@exportToExcel')->name('admin.material-purchases.export-to-excel');
 
+    //plan-purchase-materials routes
+    Route::get('EBMS/plan-purchase-materials/index', 'Backend\PlanPurchaseMaterialController@index')->name('admin.plan-purchase-materials.index');
+    Route::get('EBMS/plan-purchase-materials/create', 'Backend\PlanPurchaseMaterialController@create')->name('admin.plan-purchase-materials.create');
+    Route::post('EBMS/plan-purchase-materials/store', 'Backend\PlanPurchaseMaterialController@store')->name('admin.plan-purchase-materials.store');
+    Route::get('EBMS/plan-purchase-materials/edit/{plan_no}', 'Backend\PlanPurchaseMaterialController@edit')->name('admin.plan-purchase-materials.edit');
+    Route::put('EBMS/plan-purchase-materials/update/{plan_no}', 'Backend\PlanPurchaseMaterialController@update')->name('admin.plan-purchase-materials.update');
+    Route::delete('EBMS/plan-purchase-materials/destroy/{plan_no}', 'Backend\PlanPurchaseMaterialController@destroy')->name('admin.plan-purchase-materials.destroy');
+    Route::get('EBMS/plan-purchase-materials/show/{plan_no}','Backend\PlanPurchaseMaterialController@show')->name('admin.plan-purchase-materials.show');
+
+    Route::get('EBMS/plan-purchase-materials/fichePlan/{plan_no}','Backend\PlanPurchaseMaterialController@fichePlan')->name('admin.plan-purchase-materials.fichePlan');
+    Route::put('EBMS/plan-purchase-materials/validate/{plan_no}', 'Backend\PlanPurchaseMaterialController@validatePlan')->name('admin.plan-purchase-materials.validate');
+    Route::put('EBMS/plan-purchase-materials/reject/{plan_no}','Backend\PlanPurchaseMaterialController@reject')->name('admin.plan-purchase-materials.reject');
+    Route::put('EBMS/plan-purchase-materials/reset/{plan_no}','Backend\PlanPurchaseMaterialController@reset')->name('admin.plan-purchase-materials.reset');
+    Route::put('EBMS/plan-purchase-materials/confirm/{plan_no}','Backend\PlanPurchaseMaterialController@confirm')->name('admin.plan-purchase-materials.confirm');
+    Route::put('EBMS/plan-purchase-materials/approuve/{plan_no}','Backend\PlanPurchaseMaterialController@approuve')->name('admin.plan-purchase-materials.approuve');
+
+    Route::get('EBMS/plan-purchase-materials/export-to-excel','Backend\PlanPurchaseMaterialController@exportToExcel')->name('admin.plan-purchase-materials.export-to-excel');
+
+    //plan-purchase-drinks routes
+    Route::get('EBMS/plan-purchase-drinks/index', 'Backend\PlanPurchaseDrinkController@index')->name('admin.plan-purchase-drinks.index');
+    Route::get('EBMS/plan-purchase-drinks/create', 'Backend\PlanPurchaseDrinkController@create')->name('admin.plan-purchase-drinks.create');
+    Route::post('EBMS/plan-purchase-drinks/store', 'Backend\PlanPurchaseDrinkController@store')->name('admin.plan-purchase-drinks.store');
+    Route::get('EBMS/plan-purchase-drinks/edit/{plan_no}', 'Backend\PlanPurchaseDrinkController@edit')->name('admin.plan-purchase-drinks.edit');
+    Route::put('EBMS/plan-purchase-drinks/update/{plan_no}', 'Backend\PlanPurchaseDrinkController@update')->name('admin.plan-purchase-drinks.update');
+    Route::delete('EBMS/plan-purchase-drinks/destroy/{plan_no}', 'Backend\PlanPurchaseDrinkController@destroy')->name('admin.plan-purchase-drinks.destroy');
+    Route::get('EBMS/plan-purchase-drinks/show/{plan_no}','Backend\PlanPurchaseDrinkController@show')->name('admin.plan-purchase-drinks.show');
+
+    Route::get('EBMS/plan-purchase-drinks/fichePlan/{plan_no}','Backend\PlanPurchaseDrinkController@fichePlan')->name('admin.plan-purchase-drinks.fichePlan');
+    Route::put('EBMS/plan-purchase-drinks/validate/{plan_no}', 'Backend\PlanPurchaseDrinkController@validatePlan')->name('admin.plan-purchase-drinks.validate');
+    Route::put('EBMS/plan-purchase-drinks/reject/{plan_no}','Backend\PlanPurchaseDrinkController@reject')->name('admin.plan-purchase-drinks.reject');
+    Route::put('EBMS/plan-purchase-drinks/reset/{plan_no}','Backend\PlanPurchaseDrinkController@reset')->name('admin.plan-purchase-drinks.reset');
+    Route::put('EBMS/plan-purchase-drinks/confirm/{plan_no}','Backend\PlanPurchaseDrinkController@confirm')->name('admin.plan-purchase-drinks.confirm');
+    Route::put('EBMS/plan-purchase-drinks/approuve/{plan_no}','Backend\PlanPurchaseDrinkController@approuve')->name('admin.plan-purchase-drinks.approuve');
+
+    Route::get('EBMS/plan-purchase-drinks/export-to-excel','Backend\PlanPurchaseDrinkController@exportToExcel')->name('admin.plan-purchase-drinks.export-to-excel');
+
+    //plan-purchase-foods routes
+    Route::get('EBMS/plan-purchase-foods/index', 'Backend\PlanPurchaseFoodController@index')->name('admin.plan-purchase-foods.index');
+    Route::get('EBMS/plan-purchase-foods/create', 'Backend\PlanPurchaseFoodController@create')->name('admin.plan-purchase-foods.create');
+    Route::post('EBMS/plan-purchase-foods/store', 'Backend\PlanPurchaseFoodController@store')->name('admin.plan-purchase-foods.store');
+    Route::get('EBMS/plan-purchase-foods/edit/{plan_no}', 'Backend\PlanPurchaseFoodController@edit')->name('admin.plan-purchase-foods.edit');
+    Route::put('EBMS/plan-purchase-foods/update/{plan_no}', 'Backend\PlanPurchaseFoodController@update')->name('admin.plan-purchase-foods.update');
+    Route::delete('EBMS/plan-purchase-foods/destroy/{plan_no}', 'Backend\PlanPurchaseFoodController@destroy')->name('admin.plan-purchase-foods.destroy');
+    Route::get('EBMS/plan-purchase-foods/show/{plan_no}','Backend\PlanPurchaseFoodController@show')->name('admin.plan-purchase-foods.show');
+
+    Route::get('EBMS/plan-purchase-foods/fichePlan/{plan_no}','Backend\PlanPurchaseFoodController@fichePlan')->name('admin.plan-purchase-foods.fichePlan');
+    Route::put('EBMS/plan-purchase-foods/validate/{plan_no}', 'Backend\PlanPurchaseFoodController@validatePlan')->name('admin.plan-purchase-foods.validate');
+    Route::put('EBMS/plan-purchase-foods/reject/{plan_no}','Backend\PlanPurchaseFoodController@reject')->name('admin.plan-purchase-foods.reject');
+    Route::put('EBMS/plan-purchase-foods/reset/{plan_no}','Backend\PlanPurchaseFoodController@reset')->name('admin.plan-purchase-foods.reset');
+    Route::put('EBMS/plan-purchase-foods/confirm/{plan_no}','Backend\PlanPurchaseFoodController@confirm')->name('admin.plan-purchase-foods.confirm');
+    Route::put('EBMS/plan-purchase-foods/approuve/{plan_no}','Backend\PlanPurchaseFoodController@approuve')->name('admin.plan-purchase-foods.approuve');
+
+    Route::get('EBMS/plan-purchase-foods/export-to-excel','Backend\PlanPurchaseFoodController@exportToExcel')->name('admin.plan-purchase-foods.export-to-excel');
+
     //drink purchases routes
     Route::get('EBMS/drink-purchases/index', 'Backend\DrinkPurchaseController@index')->name('admin.drink-purchases.index');
     Route::get('EBMS/drink-purchases/create/', 'Backend\DrinkPurchaseController@create')->name('admin.drink-purchases.create');
