@@ -42,8 +42,8 @@ class PlanPurchaseDrinkController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any purchase !');
         }
 
-        $purchases = PlanPurchaseDrink::all();
-        return view('backend.pages.plan_purchase_drink.index', compact('purchases'));
+        $plans = PlanPurchaseDrink::all();
+        return view('backend.pages.plan_purchase_drink.index', compact('plans'));
     }
 
     /**
@@ -138,7 +138,7 @@ class PlanPurchaseDrinkController extends Controller
             PlanPurchaseDrinkDetail::insert($insert_data);
 
         session()->flash('success', 'Purchase has been created !!');
-        return redirect()->route('admin.drink-purchases.index');
+        return redirect()->route('admin.plan-purchase-drinks.index');
     }
 
     /**
@@ -151,8 +151,8 @@ class PlanPurchaseDrinkController extends Controller
     {
         //
          $code = PlanPurchaseDrink::where('plan_no', $plan_no)->value('plan_no');
-         $purchases = PlanPurchaseDrinkDetail::where('plan_no', $plan_no)->get();
-         return view('backend.pages.plan_purchase_drink.show', compact('purchases','code'));
+         $plans = PlanPurchaseDrinkDetail::where('plan_no', $plan_no)->get();
+         return view('backend.pages.plan_purchase_drink.show', compact('plans','code'));
     }
 
     /**
@@ -195,7 +195,7 @@ class PlanPurchaseDrinkController extends Controller
             PlanPurchaseDrinkDetail::where('plan_no', '=', $plan_no)
                 ->update(['status' => 2,'validated_by' => $this->user->name]);
 
-        session()->flash('success', 'purchase has been validated !!');
+        session()->flash('success', 'Plan has been validated !!');
         return back();
     }
 
@@ -210,7 +210,7 @@ class PlanPurchaseDrinkController extends Controller
             PlanPurchaseDrinkDetail::where('plan_no', '=', $plan_no)
                 ->update(['status' => -1,'rejected_by' => $this->user->name]);
 
-        session()->flash('success', 'Purchase has been rejected !!');
+        session()->flash('success', 'Plan has been rejected !!');
         return back();
     }
 
@@ -225,7 +225,7 @@ class PlanPurchaseDrinkController extends Controller
             PlanPurchaseDrinkDetail::where('plan_no', '=', $plan_no)
                 ->update(['status' => 1,'reseted_by' => $this->user->name]);
 
-        session()->flash('success', 'DrinkPurchase has been reseted !!');
+        session()->flash('success', 'Plan has been reseted !!');
         return back();
     }
 
@@ -240,7 +240,7 @@ class PlanPurchaseDrinkController extends Controller
             PlanPurchaseDrinkDetail::where('plan_no', '=', $plan_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
 
-        session()->flash('success', 'Purchase has been confirmed !!');
+        session()->flash('success', 'Plan has been confirmed !!');
         return back();
     }
 
@@ -255,7 +255,7 @@ class PlanPurchaseDrinkController extends Controller
             PlanPurchaseDrinkDetail::where('plan_no', '=', $plan_no)
                 ->update(['status' => 4,'approuved_by' => $this->user->name]);
 
-        session()->flash('success', 'Purchase has been confirmed !!');
+        session()->flash('success', 'Plan has been confirmed !!');
         return back();
     }
 
@@ -305,7 +305,7 @@ class PlanPurchaseDrinkController extends Controller
             PlanPurchaseDrinkDetail::where('plan_no',$plan_no)->delete();
         }
 
-        session()->flash('success', 'Purchase has been deleted !!');
+        session()->flash('success', 'Plan has been deleted !!');
         return back();
     }
 }

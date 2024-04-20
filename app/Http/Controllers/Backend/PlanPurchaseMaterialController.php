@@ -39,11 +39,11 @@ class PlanPurchaseMaterialController extends Controller
     public function index()
     {
         if (is_null($this->user) || !$this->user->can('material_purchase.view')) {
-            abort(403, 'Sorry !! You are Unauthorized to view any purchase !');
+            abort(403, 'Sorry !! You are Unauthorized to view any plan !');
         }
 
-        $purchases = PlanPurchaseMaterial::all();
-        return view('backend.pages.plan_purchase_material.index', compact('purchases'));
+        $plans = PlanPurchaseMaterial::all();
+        return view('backend.pages.plan_purchase_material.index', compact('plans'));
     }
 
     /**
@@ -54,11 +54,11 @@ class PlanPurchaseMaterialController extends Controller
     public function create()
     {
         if (is_null($this->user) || !$this->user->can('material_purchase.create')) {
-            abort(403, 'Sorry !! You are Unauthorized to create any purchase !');
+            abort(403, 'Sorry !! You are Unauthorized to create any plan !');
         }
 
-        $drinks  = Material::orderBy('name','asc')->get();
-        return view('backend.pages.plan_purchase_material.create', compact('drinks'));
+        $materials  = Material::orderBy('name','asc')->get();
+        return view('backend.pages.plan_purchase_material.create', compact('materials'));
     }
 
     /**
@@ -70,7 +70,7 @@ class PlanPurchaseMaterialController extends Controller
     public function store(Request $request)
     {
         if (is_null($this->user) || !$this->user->can('material_purchase.create')) {
-            abort(403, 'Sorry !! You are Unauthorized to create any purchase !');
+            abort(403, 'Sorry !! You are Unauthorized to create any plan !');
         }
 
         $rules = array(
@@ -106,15 +106,15 @@ class PlanPurchaseMaterialController extends Controller
             $plan_signature = "4001711615".Carbon::parse(Carbon::now())->format('YmdHis')."/".$plan_no;
             $created_by = $this->user->name;
 
-            //create purchase
-            $purchase = new PlanPurchaseMaterial();
-            $purchase->start_date = $start_date;
-            $purchase->plan_signature = $plan_signature;
-            $purchase->plan_no = $plan_no;
-            $purchase->created_by = $created_by;
-            $purchase->description = $description;
-            $purchase->save();
-            //insert details of purchase No.
+            //create plan
+            $plan = new PlanPurchaseMaterial();
+            $plan->start_date = $start_date;
+            $plan->plan_signature = $plan_signature;
+            $plan->plan_no = $plan_no;
+            $plan->created_by = $created_by;
+            $plan->description = $description;
+            $plan->save();
+            //insert details of plan No.
             for( $count = 0; $count < count($material_id); $count++ ){
 
                 $purchase_price = Material::where('id', $material_id[$count])->value('purchase_price');
@@ -137,8 +137,8 @@ class PlanPurchaseMaterialController extends Controller
 
             PlanPurchaseMaterialDetail::insert($insert_data);
 
-        session()->flash('success', 'Purchase has been created !!');
-        return redirect()->route('admin.drink-purchases.index');
+        session()->flash('success', 'plan has been created !!');
+        return redirect()->route('admin.plan-purchase-materials.index');
     }
 
     /**
@@ -151,8 +151,8 @@ class PlanPurchaseMaterialController extends Controller
     {
         //
          $code = PlanPurchaseMaterial::where('plan_no', $plan_no)->value('plan_no');
-         $purchases = PlanPurchaseMaterialDetail::where('plan_no', $plan_no)->get();
-         return view('backend.pages.plan_purchase_material.show', compact('purchases','code'));
+         $plans = PlanPurchaseMaterialDetail::where('plan_no', $plan_no)->get();
+         return view('backend.pages.plan_purchase_material.show', compact('plans','code'));
     }
 
     /**
@@ -164,7 +164,7 @@ class PlanPurchaseMaterialController extends Controller
     public function edit($plan_no)
     {
         if (is_null($this->user) || !$this->user->can('material_purchase.edit')) {
-            abort(403, 'Sorry !! You are Unauthorized to edit any purchase !');
+            abort(403, 'Sorry !! You are Unauthorized to edit any plan !');
         }
 
     }
@@ -179,7 +179,7 @@ class PlanPurchaseMaterialController extends Controller
     public function update(Request $request, $plan_no)
     {
         if (is_null($this->user) || !$this->user->can('material_purchase.edit')) {
-            abort(403, 'Sorry !! You are Unauthorized to edit any purchase !');
+            abort(403, 'Sorry !! You are Unauthorized to edit any plan !');
         }
 
         
@@ -188,21 +188,21 @@ class PlanPurchaseMaterialController extends Controller
     public function validatePlan($plan_no)
     {
        if (is_null($this->user) || !$this->user->can('material_purchase.validate')) {
-            abort(403, 'Sorry !! You are Unauthorized to validate any purchase !');
+            abort(403, 'Sorry !! You are Unauthorized to validate any plan !');
         }
             PlanPurchaseMaterial::where('plan_no', '=', $plan_no)
                 ->update(['status' => 2,'validated_by' => $this->user->name]);
             PlanPurchaseMaterialDetail::where('plan_no', '=', $plan_no)
                 ->update(['status' => 2,'validated_by' => $this->user->name]);
 
-        session()->flash('success', 'purchase has been validated !!');
+        session()->flash('success', 'Plan has been validated !!');
         return back();
     }
 
     public function reject($plan_no)
     {
        if (is_null($this->user) || !$this->user->can('material_purchase.reject')) {
-            abort(403, 'Sorry !! You are Unauthorized to reject any purchase !');
+            abort(403, 'Sorry !! You are Unauthorized to reject any plan !');
         }
 
         PlanPurchaseMaterial::where('plan_no', '=', $plan_no)
@@ -210,14 +210,14 @@ class PlanPurchaseMaterialController extends Controller
             PlanPurchaseMaterialDetail::where('plan_no', '=', $plan_no)
                 ->update(['status' => -1,'rejected_by' => $this->user->name]);
 
-        session()->flash('success', 'Purchase has been rejected !!');
+        session()->flash('success', 'Plan has been rejected !!');
         return back();
     }
 
     public function reset($plan_no)
     {
        if (is_null($this->user) || !$this->user->can('material_purchase.reset')) {
-            abort(403, 'Sorry !! You are Unauthorized to reset any purchase !');
+            abort(403, 'Sorry !! You are Unauthorized to reset any plan !');
         }
 
         PlanPurchaseMaterial::where('plan_no', '=', $plan_no)
@@ -225,14 +225,14 @@ class PlanPurchaseMaterialController extends Controller
             PlanPurchaseMaterialDetail::where('plan_no', '=', $plan_no)
                 ->update(['status' => 1,'reseted_by' => $this->user->name]);
 
-        session()->flash('success', 'DrinkPurchase has been reseted !!');
+        session()->flash('success', 'Plan has been reseted !!');
         return back();
     }
 
     public function confirm($plan_no)
     {
        if (is_null($this->user) || !$this->user->can('material_purchase.confirm')) {
-            abort(403, 'Sorry !! You are Unauthorized to confirm any purchase !');
+            abort(403, 'Sorry !! You are Unauthorized to confirm any plan !');
         }
 
         PlanPurchaseMaterial::where('plan_no', '=', $plan_no)
@@ -240,14 +240,14 @@ class PlanPurchaseMaterialController extends Controller
             PlanPurchaseMaterialDetail::where('plan_no', '=', $plan_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
 
-        session()->flash('success', 'Purchase has been confirmed !!');
+        session()->flash('success', 'Plan has been confirmed !!');
         return back();
     }
 
     public function approuve($plan_no)
     {
        if (is_null($this->user) || !$this->user->can('material_purchase.approuve')) {
-            abort(403, 'Sorry !! You are Unauthorized to confirm any purchase !');
+            abort(403, 'Sorry !! You are Unauthorized to confirm any plan !');
         }
 
         PlanPurchaseMaterial::where('plan_no', '=', $plan_no)
@@ -255,7 +255,7 @@ class PlanPurchaseMaterialController extends Controller
             PlanPurchaseMaterialDetail::where('plan_no', '=', $plan_no)
                 ->update(['status' => 4,'approuved_by' => $this->user->name]);
 
-        session()->flash('success', 'Purchase has been confirmed !!');
+        session()->flash('success', 'Plan has been confirmed !!');
         return back();
     }
 
@@ -296,16 +296,16 @@ class PlanPurchaseMaterialController extends Controller
     public function destroy($plan_no)
     {
         if (is_null($this->user) || !$this->user->can('material_purchase.delete')) {
-            abort(403, 'Sorry !! You are Unauthorized to delete any purchase !');
+            abort(403, 'Sorry !! You are Unauthorized to delete any plan !');
         }
 
-        $purchase = PlanPurchaseMaterial::where('plan_no',$plan_no)->first();
-        if (!is_null($purchase)) {
-            $purchase->delete();
+        $plan = PlanPurchaseMaterial::where('plan_no',$plan_no)->first();
+        if (!is_null($plan)) {
+            $plan->delete();
             PlanPurchaseMaterialDetail::where('plan_no',$plan_no)->delete();
         }
 
-        session()->flash('success', 'Purchase has been deleted !!');
+        session()->flash('success', 'Plan has been deleted !!');
         return back();
     }
 }
