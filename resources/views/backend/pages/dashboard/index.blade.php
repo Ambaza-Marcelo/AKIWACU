@@ -248,7 +248,7 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
                                     <img src="{{ asset('img/undraw_empty_cart_co35.svg') }}" width="100">
                                 </div>
                                 <h2>
-                                    Credits 
+                                    LES PLANNINGS D'APPROVISIONNEMENT 
                                 </h2>
                             </div>
                         </a>
