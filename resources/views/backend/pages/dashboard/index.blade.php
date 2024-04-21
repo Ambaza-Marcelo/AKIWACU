@@ -237,6 +237,26 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
                 </div><br>
             </div>
     </div><br>
+    @if (Auth::guard('admin')->user()->can('drink_purchase.view'))
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="seo-fact sbg3">
+                        <a href="{{ route('admin.plan-purchase.choice') }}">
+                            <div class="p-4 d-flex justify-content-between align-items-center">
+                                <div class="seofct-icon">
+                                    <img src="{{ asset('img/undraw_empty_cart_co35.svg') }}" width="100">
+                                </div>
+                                <h2>
+                                    Credits 
+                                </h2>
+                            </div>
+                        </a>
+                    </div>
+                </div><br>
+            </div>
+        </div>
+        @endif
     @if (Auth::guard('admin')->user()->can('invoice_booking.edit'))
         <div class="row">
             <div class="col-md-4">

@@ -36,6 +36,15 @@ class PlanPurchaseDrinkController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function choice()
+    {
+        if (is_null($this->user) || !$this->user->can('drink_purchase.view')) {
+            abort(403, 'Sorry !! You are Unauthorized to choose any planning !');
+        }
+
+        return view('backend.pages.plan_purchase_drink.choice');
+    }
+
     public function index()
     {
         if (is_null($this->user) || !$this->user->can('drink_purchase.view')) {

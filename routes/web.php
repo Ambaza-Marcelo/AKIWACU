@@ -1000,6 +1000,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('EBMS/material-purchases/export-to-excel','Backend\MaterialPurchaseController@exportToExcel')->name('admin.material-purchases.export-to-excel');
 
     //plan-purchase-materials routes
+    Route::get('EBMS/plan-purchase-choice', 'Backend\PlanPurchaseDrinkController@choice')->name('admin.plan-purchase.choice');
+
     Route::get('EBMS/plan-purchase-materials/index', 'Backend\PlanPurchaseMaterialController@index')->name('admin.plan-purchase-materials.index');
     Route::get('EBMS/plan-purchase-materials/create', 'Backend\PlanPurchaseMaterialController@create')->name('admin.plan-purchase-materials.create');
     Route::post('EBMS/plan-purchase-materials/store', 'Backend\PlanPurchaseMaterialController@store')->name('admin.plan-purchase-materials.store');
