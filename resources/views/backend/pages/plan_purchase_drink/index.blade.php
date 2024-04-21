@@ -71,7 +71,7 @@
                                     <td>{{ $plan->start_date }}</td>
                                     <td>{{ $plan->end_date }}</td>
                                     <td><a href="{{ route('admin.plan-purchase-drinks.show',$plan->plan_no) }}">{{ $plan->plan_no }}</a></td>
-                                    <td>{{ $plan->purchase_signature }}</td>
+                                    <td>{{ $plan->plan_signature }}</td>
                                     @if($plan->status == 2)
                                     <td><span  class="badge badge-success">Validé</span></td>
                                     @elseif($plan->status == -1)
@@ -89,7 +89,7 @@
                                     <td>{{ $plan->created_by }}</td>
                                     <td>
                                         @if (Auth::guard('admin')->user()->can('drink_purchase.create'))
-                                        <a href="{{ route('admin.plan-purchase-drinks.fiche_plan',$plan->plan_no) }}"><img src="{{ asset('img/ISSh.gif') }}" width="60" title="Télécharger d'abord le document et puis imprimer"></a>
+                                        <a href="{{ route('admin.plan-purchase-drinks.fichePlan',$plan->plan_no) }}"><img src="{{ asset('img/ISSh.gif') }}" width="60" title="Télécharger d'abord le document et puis imprimer"></a>
                                         @endif
                                         @if (Auth::guard('admin')->user()->can('drink_purchase.validate'))
                                         @if($plan->status == 1 || $plan->status == -1)
@@ -105,7 +105,7 @@
                                         @endif
                                         @endif
                                         @if (Auth::guard('admin')->user()->can('drink_purchase.confirm'))
-                                        @if($purchase->status == 2)
+                                        @if($plan->status == 2)
                                             <a class="btn btn-primary text-white" href="{{ route('admin.plan-purchase-drinks.confirm', $plan->plan_no) }}"
                                             onclick="event.preventDefault(); document.getElementById('confirm-form-{{ $plan->plan_no }}').submit();">
                                                 Confirmer

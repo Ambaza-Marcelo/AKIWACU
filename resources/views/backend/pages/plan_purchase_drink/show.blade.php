@@ -64,20 +64,20 @@
                                 </tr>
                             </thead>
                             <tbody>
-                               @foreach ($purchases as $purchase)
+                               @foreach ($plans as $plan)
                                <tr>
                                     <td>{{ $loop->index+1 }}</td>
-                                    <td>{{ $purchase->start_date }}</td>
-                                    <td>{{ $purchase->end_date }}</td>
-                                    <td>{{ $purchase->purchase_no }}</td>
-                                    <td>{{ $purchase->drink->name }}</td>
-                                    <td>{{ $purchase->drink->code }}</td>
-                                    <td>{{ $purchase->quantity }}</td>
-                                    <td>{{ $purchase->unit }}</td>
-                                    <td>{{ $purchase->purchase_price }}</td>
-                                    <td>{{ number_format($purchase->total_purchase_amount,0,',',' ') }}</td>
-                                    <td>{{ $purchase->description }}</td>
-                                    <td>{{ $purchase->created_by }}</td>
+                                    <td>{{ $plan->start_date }}</td>
+                                    <td>{{ $plan->end_date }}</td>
+                                    <td>{{ $plan->plan_no }}</td>
+                                    <td>{{ $plan->drink->name }}</td>
+                                    <td>{{ $plan->drink->code }}</td>
+                                    <td>{{ $plan->quantity }}</td>
+                                    <td>{{ $plan->unit }}</td>
+                                    <td>{{ $plan->purchase_price }}</td>
+                                    <td>{{ number_format($plan->total_purchase_amount,0,',',' ') }}</td>
+                                    <td>{{ $plan->description }}</td>
+                                    <td>{{ $plan->created_by }}</td>
                                     <td>
                                         
                                     </td>
