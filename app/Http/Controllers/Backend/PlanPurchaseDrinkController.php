@@ -118,6 +118,7 @@ class PlanPurchaseDrinkController extends Controller
             //create purchase
             $purchase = new PlanPurchaseDrink();
             $purchase->start_date = $start_date;
+            $purchase->end_date = $end_date;
             $purchase->plan_signature = $plan_signature;
             $purchase->plan_no = $plan_no;
             $purchase->created_by = $created_by;
