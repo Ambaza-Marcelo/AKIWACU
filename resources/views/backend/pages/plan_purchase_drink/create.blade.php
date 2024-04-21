@@ -131,7 +131,7 @@
                             "</select>"+
                         "</td>"+
                         "<td>"+
-                          "<input type='number' name='price[]' placeholder='Enter purchase Price' class='form-control' min='0' required/>"+
+                          "<input type='number' name='purchase_price[]' placeholder='Enter purchase Price' class='form-control' min='0' required/>"+
                         "</td>"+
                         "<td>"+
                           "<button type='button' class='btn btn-danger remove-tr'>@lang('messages.delete')</button>"+

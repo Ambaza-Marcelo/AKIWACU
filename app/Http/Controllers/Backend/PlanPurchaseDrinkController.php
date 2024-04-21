@@ -48,7 +48,7 @@ class PlanPurchaseDrinkController extends Controller
     public function index()
     {
         if (is_null($this->user) || !$this->user->can('drink_purchase.view')) {
-            abort(403, 'Sorry !! You are Unauthorized to view any purchase !');
+            abort(403, 'Sorry !! You are Unauthorized to view any plan !');
         }
 
         $plans = PlanPurchaseDrink::all();
@@ -63,7 +63,7 @@ class PlanPurchaseDrinkController extends Controller
     public function create()
     {
         if (is_null($this->user) || !$this->user->can('drink_purchase.create')) {
-            abort(403, 'Sorry !! You are Unauthorized to create any purchase !');
+            abort(403, 'Sorry !! You are Unauthorized to create any plan !');
         }
 
         $drinks  = Drink::orderBy('name','asc')->get();
@@ -79,7 +79,7 @@ class PlanPurchaseDrinkController extends Controller
     public function store(Request $request)
     {
         if (is_null($this->user) || !$this->user->can('drink_purchase.create')) {
-            abort(403, 'Sorry !! You are Unauthorized to create any purchase !');
+            abort(403, 'Sorry !! You are Unauthorized to create any plan !');
         }
 
         $rules = array(
@@ -87,6 +87,7 @@ class PlanPurchaseDrinkController extends Controller
                 'start_date'  => 'required',
                 'end_date'  => 'required',
                 'quantity.*'  => 'required',
+                'purchase_price.*'  => 'required',
                 'unit.*'  => 'required',
                 'description'  => 'required'
             );
@@ -103,6 +104,7 @@ class PlanPurchaseDrinkController extends Controller
             $start_date = $request->start_date;
             $end_date = $request->end_date;
             $quantity = $request->quantity;
+            $purchase_price = $request->purchase_price;
             $unit = $request->unit;
             $description =$request->description; 
             $latest = PlanPurchaseDrink::latest()->first();
@@ -115,27 +117,27 @@ class PlanPurchaseDrinkController extends Controller
             $plan_signature = "4001711615".Carbon::parse(Carbon::now())->format('YmdHis')."/".$plan_no;
             $created_by = $this->user->name;
 
-            //create purchase
-            $purchase = new PlanPurchaseDrink();
-            $purchase->start_date = $start_date;
-            $purchase->end_date = $end_date;
-            $purchase->plan_signature = $plan_signature;
-            $purchase->plan_no = $plan_no;
-            $purchase->created_by = $created_by;
-            $purchase->description = $description;
-            $purchase->save();
-            //insert details of purchase No.
+            //create plan
+            $plan = new PlanPurchaseDrink();
+            $plan->start_date = $start_date;
+            $plan->end_date = $end_date;
+            $plan->plan_signature = $plan_signature;
+            $plan->plan_no = $plan_no;
+            $plan->created_by = $created_by;
+            $plan->description = $description;
+            $plan->save();
+            //insert details of plan No.
             for( $count = 0; $count < count($drink_id); $count++ ){
 
-                $purchase_price = Drink::where('id', $drink_id[$count])->value('purchase_price');
-                $total_purchase_amount = $quantity[$count] * $purchase_price;
+                //$purchase_price = Drink::where('id', $drink_id[$count])->value('purchase_price');
+                $total_purchase_amount = $quantity[$count] * $purchase_price[$count];
                 $data = array(
                     'drink_id' => $drink_id[$count],
                     'start_date' => $start_date,
                     'end_date' => $end_date,
                     'quantity' => $quantity[$count],
                     'unit' => $unit[$count],
-                    'purchase_price' => $purchase_price,
+                    'purchase_price' => $purchase_price[$count],
                     'description' => $description,
                     'total_purchase_amount' => $total_purchase_amount,
                     'created_by' => $created_by,
@@ -147,7 +149,7 @@ class PlanPurchaseDrinkController extends Controller
 
             PlanPurchaseDrinkDetail::insert($insert_data);
 
-        session()->flash('success', 'Purchase has been created !!');
+        session()->flash('success', 'Plan has been sent successfuly !!');
         return redirect()->route('admin.plan-purchase-drinks.index');
     }
 
@@ -174,8 +176,15 @@ class PlanPurchaseDrinkController extends Controller
     public function edit($plan_no)
     {
         if (is_null($this->user) || !$this->user->can('drink_purchase.edit')) {
-            abort(403, 'Sorry !! You are Unauthorized to edit any purchase !');
+            abort(403, 'Sorry !! You are Unauthorized to edit any plan !');
         }
+
+        $drinks  = Drink::orderBy('name','asc')->get();
+
+        $plan = PlanPurchaseDrink::where('plan_no', $plan_no)->first();
+        $plans = PlanPurchaseDrinkDetail::where('plan_no', $plan_no)->get();
+
+        return view('backend.pages.plan_purchase_drink.edit', compact('plans','plan','drinks'));
 
     }
 
@@ -189,36 +198,104 @@ class PlanPurchaseDrinkController extends Controller
     public function update(Request $request, $plan_no)
     {
         if (is_null($this->user) || !$this->user->can('drink_purchase.edit')) {
-            abort(403, 'Sorry !! You are Unauthorized to edit any purchase !');
+            abort(403, 'Sorry !! You are Unauthorized to edit any plan !');
         }
 
-        
+       $rules = array(
+                'drink_id.*'  => 'required',
+                'start_date'  => 'required',
+                'end_date'  => 'required',
+                'quantity.*'  => 'required',
+                'purchase_price.*'  => 'required',
+                'unit.*'  => 'required',
+                'description'  => 'required'
+            );
+
+            $error = Validator::make($request->all(),$rules);
+
+            if($error->fails()){
+                return response()->json([
+                    'error' => $error->errors()->all(),
+                ]);
+            }
+
+            $drink_id = $request->drink_id;
+            $start_date = $request->start_date;
+            $end_date = $request->end_date;
+            $quantity = $request->quantity;
+            $purchase_price = $request->purchase_price;
+            $unit = $request->unit;
+            $description =$request->description; 
+
+            $plan = PlanPurchaseDrink::where('plan_no',$plan_no)->first();
+            $plan->start_date = $start_date;
+            $plan->end_date = $end_date;
+            $plan->description = $description;
+            $plan->save();
+            //insert details of plan No.
+            for( $count = 0; $count < count($drink_id); $count++ ){
+
+            	$created_by = $this->user->name;
+            	$plan_signature = PlanPurchaseDrink::where('plan_no',$plan_no)->value('plan_signature');
+                //$purchase_price = Drink::where('id', $drink_id[$count])->value('purchase_price');
+                $total_purchase_amount = $quantity[$count] * $purchase_price[$count];
+                $data = array(
+                    'drink_id' => $drink_id[$count],
+                    'start_date' => $start_date,
+                    'end_date' => $end_date,
+                    'quantity' => $quantity[$count],
+                    'unit' => $unit[$count],
+                    'purchase_price' => $purchase_price[$count],
+                    'description' => $description,
+                    'total_purchase_amount' => $total_purchase_amount,
+                    'created_by' => $created_by,
+                    'plan_no' => $plan_no,
+                    'plan_signature' => $plan_signature,
+                );
+                $insert_data[] = $data;
+            }
+
+            PlanPurchaseDrinkDetail::where('plan_no',$plan_no)->delete();
+
+            PlanPurchaseDrinkDetail::insert($insert_data);
+
+        session()->flash('success', 'Plan has been updated successfuly !!');
+        return redirect()->route('admin.plan-purchase-drinks.index');
+
     }
 
     public function validatePlan($plan_no)
     {
        if (is_null($this->user) || !$this->user->can('drink_purchase.validate')) {
-            abort(403, 'Sorry !! You are Unauthorized to validate any purchase !');
+            abort(403, 'Sorry !! You are Unauthorized to validate any plan !');
         }
             PlanPurchaseDrink::where('plan_no', '=', $plan_no)
-                ->update(['status' => 2,'validated_by' => $this->user->name]);
+                ->update(['status' => 1,'validated_by' => $this->user->name]);
             PlanPurchaseDrinkDetail::where('plan_no', '=', $plan_no)
-                ->update(['status' => 2,'validated_by' => $this->user->name]);
+                ->update(['status' => 1,'validated_by' => $this->user->name]);
 
         session()->flash('success', 'Plan has been validated !!');
         return back();
     }
 
-    public function reject($plan_no)
+    public function reject(Request $request,$plan_no)
     {
        if (is_null($this->user) || !$this->user->can('drink_purchase.reject')) {
-            abort(403, 'Sorry !! You are Unauthorized to reject any purchase !');
+            abort(403, 'Sorry !! You are Unauthorized to reject any plan !');
         }
 
+        $request->validate([
+            'plan_no' => 'required',
+            'rejected_motif' => 'required'
+
+        ]);
+
+        $rejected_motif = $request->rejected_motif;
+
         PlanPurchaseDrink::where('plan_no', '=', $plan_no)
-                ->update(['status' => -1,'rejected_by' => $this->user->name]);
+                ->update(['status' => -1,'rejected_motif' => $rejected_motif,'rejected_by' => $this->user->name]);
             PlanPurchaseDrinkDetail::where('plan_no', '=', $plan_no)
-                ->update(['status' => -1,'rejected_by' => $this->user->name]);
+                ->update(['status' => -1,'rejected_motif' => $rejected_motif,'rejected_by' => $this->user->name]);
 
         session()->flash('success', 'Plan has been rejected !!');
         return back();
@@ -227,13 +304,13 @@ class PlanPurchaseDrinkController extends Controller
     public function reset($plan_no)
     {
        if (is_null($this->user) || !$this->user->can('drink_purchase.reset')) {
-            abort(403, 'Sorry !! You are Unauthorized to reset any purchase !');
+            abort(403, 'Sorry !! You are Unauthorized to reset any plan !');
         }
 
         PlanPurchaseDrink::where('plan_no', '=', $plan_no)
-                ->update(['status' => 1,'reseted_by' => $this->user->name]);
+                ->update(['status' => 0,'reseted_by' => $this->user->name]);
             PlanPurchaseDrinkDetail::where('plan_no', '=', $plan_no)
-                ->update(['status' => 1,'reseted_by' => $this->user->name]);
+                ->update(['status' => 0,'reseted_by' => $this->user->name]);
 
         session()->flash('success', 'Plan has been reseted !!');
         return back();
@@ -242,13 +319,13 @@ class PlanPurchaseDrinkController extends Controller
     public function confirm($plan_no)
     {
        if (is_null($this->user) || !$this->user->can('drink_purchase.confirm')) {
-            abort(403, 'Sorry !! You are Unauthorized to confirm any purchase !');
+            abort(403, 'Sorry !! You are Unauthorized to confirm any plan !');
         }
 
         PlanPurchaseDrink::where('plan_no', '=', $plan_no)
-                ->update(['status' => 3,'confirmed_by' => $this->user->name]);
+                ->update(['status' => 2,'confirmed_by' => $this->user->name]);
             PlanPurchaseDrinkDetail::where('plan_no', '=', $plan_no)
-                ->update(['status' => 3,'confirmed_by' => $this->user->name]);
+                ->update(['status' => 2,'confirmed_by' => $this->user->name]);
 
         session()->flash('success', 'Plan has been confirmed !!');
         return back();
@@ -257,13 +334,13 @@ class PlanPurchaseDrinkController extends Controller
     public function approuve($plan_no)
     {
        if (is_null($this->user) || !$this->user->can('drink_purchase.approuve')) {
-            abort(403, 'Sorry !! You are Unauthorized to confirm any purchase !');
+            abort(403, 'Sorry !! You are Unauthorized to confirm any plan !');
         }
 
         PlanPurchaseDrink::where('plan_no', '=', $plan_no)
-                ->update(['status' => 4,'approuved_by' => $this->user->name]);
+                ->update(['status' => 3,'approuved_by' => $this->user->name]);
             PlanPurchaseDrinkDetail::where('plan_no', '=', $plan_no)
-                ->update(['status' => 4,'approuved_by' => $this->user->name]);
+                ->update(['status' => 3,'approuved_by' => $this->user->name]);
 
         session()->flash('success', 'Plan has been confirmed !!');
         return back();
@@ -306,12 +383,12 @@ class PlanPurchaseDrinkController extends Controller
     public function destroy($plan_no)
     {
         if (is_null($this->user) || !$this->user->can('drink_purchase.delete')) {
-            abort(403, 'Sorry !! You are Unauthorized to delete any purchase !');
+            abort(403, 'Sorry !! You are Unauthorized to delete any plan !');
         }
 
-        $purchase = PlanPurchaseDrink::where('plan_no',$plan_no)->first();
-        if (!is_null($purchase)) {
-            $purchase->delete();
+        $plan = PlanPurchaseDrink::where('plan_no',$plan_no)->first();
+        if (!is_null($plan)) {
+            $plan->delete();
             PlanPurchaseDrinkDetail::where('plan_no',$plan_no)->delete();
         }
 
