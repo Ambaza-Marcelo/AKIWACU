@@ -169,7 +169,7 @@ class PaiementController extends Controller
             }
 
 
-        $base_imposable = $salaire_brut - $indemnite_logement - $indemnite_deplacement - $inss - $assurance_maladie_employe - $allocation_familiale;
+        $base_imposable = $salaire_brut - $indemnite_logement - $indemnite_deplacement - $inss - $assurance_maladie_employe;
       //les impots
 
             if ($base_imposable >= 0 && $base_imposable <= 150000) {
@@ -377,7 +377,7 @@ class PaiementController extends Controller
             }
 
 
-        $base_imposable = $salaire_brut - $indemnite_logement - $indemnite_deplacement - $inss - $assurance_maladie_employe - $allocation_familiale;
+        $base_imposable = $salaire_brut - $indemnite_logement - $indemnite_deplacement - $inss - $assurance_maladie_employe;
       //les impots
 
             if ($base_imposable >= 0 && $base_imposable <= 150000) {
