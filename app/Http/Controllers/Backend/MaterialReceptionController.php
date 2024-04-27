@@ -575,12 +575,13 @@ class MaterialReceptionController extends Controller
                         $material = MaterialBigStoreDetail::where('code',$code_store_destination)->where("material_id",$data->material_id)->value('material_id');
 
                         if (!empty($material)) {
-                            MaterialBigReport::insert($reportBigStoreData);
                             MaterialBigStoreDetail::where('code',$code_store_destination)->where('material_id',$data->material_id)
                         ->update($bigStore);
+                        $flag_md = 1;
                         }else{
-                            MaterialBigReport::insert($reportBigStoreData);
-                            MaterialBigStoreDetail::insert($bigStoreData);
+                            $flag_md = 0;
+                            session()->flash('error', 'this item is not saved in the stock');
+                            return back();
                         }
 
 
@@ -656,12 +657,13 @@ class MaterialReceptionController extends Controller
                         $material = MaterialExtraBigStoreDetail::where('code',$code_store_destination)->where("material_id",$data->material_id)->value('material_id');
 
                         if (!empty($material)) {
-                            MaterialExtraBigReport::insert($reportBigStoreData);
                             MaterialExtraBigStoreDetail::where('code',$code_store_destination)->where('material_id',$data->material_id)
                         ->update($bigStore);
+                        $flag_bg = 1;
                         }else{
-                            MaterialExtraBigReport::insert($reportBigStoreData);
-                            MaterialExtraBigStoreDetail::insert($bigStoreData);
+                            $flag_bg = 0;
+                            session()->flash('error', 'this item is not saved in the stock');
+                            return back();
                         }
 
 
@@ -684,6 +686,16 @@ class MaterialReceptionController extends Controller
                 }
   
         }
+
+
+        if ($flag_md != 0) {
+            MaterialBigReport::insert($reportBigStoreData);
+        }
+
+        if ($flag_bg != 0) {
+            MaterialExtraBigReport::insert($reportBigStoreData);
+        }
+
 
                     MaterialReception::where('reception_no', '=', $reception_no)
                             ->update(['status' => 4,'approuved_by' => $this->user->name]);

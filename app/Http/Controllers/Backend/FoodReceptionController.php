@@ -567,8 +567,11 @@ class FoodReceptionController extends Controller
                         if (!empty($food)) {
                             FoodBigStoreDetail::where('code',$code_store_destination)->where('food_id',$data->food_id)
                         ->update($bigStore);
+                        $flag = 1;
                         }else{
-                            FoodBigStoreDetail::insert($bigStoreData);
+                            $flag = 0;
+                            session()->flash('error', 'this item is not saved in the stock');
+                            return back();
                         }
 
 
@@ -579,7 +582,9 @@ class FoodReceptionController extends Controller
   
         }
 
-            FoodBigReport::insert($reportBigStoreData);
+            if ($flag != 0) {
+                FoodBigReport::insert($reportBigStoreData);
+            }
 
             FoodReception::where('reception_no', '=', $reception_no)
                 ->update(['status' => 4,'approuved_by' => $this->user->name]);

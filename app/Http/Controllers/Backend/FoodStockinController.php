@@ -372,13 +372,18 @@ class FoodStockinController extends Controller
                         if (!empty($food)) {
                             FoodBigStoreDetail::where('code',$code_store_destination)->where('food_id',$data->food_id)
                         ->update($bigStore);
+                        $flag = 1;
                         }else{
-                            FoodBigStoreDetail::insert($bigStoreData);
+                            $flag = 0;
+                            session()->flash('error', 'this item is not saved in the stock');
+                            return back();
                         }
   
         }
 
-            FoodBigReport::insert($reportBigStoreData);
+            if ($flag != 0) {
+                FoodBigReport::insert($reportBigStoreData);
+            }
             FoodStockin::where('stockin_no', '=', $stockin_no)
                 ->update(['status' => 4,'approuved_by' => $this->user->name]);
             FoodStockinDetail::where('stockin_no', '=', $stockin_no)
@@ -386,11 +391,6 @@ class FoodStockinController extends Controller
 
         session()->flash('success', 'Stockin has been done successfuly !, to '.$code_store_destination);
         return back();
-    }
-
-    public function get_reception_data()
-    {
-        return Excel::download(new ReceptionExport, 'stockins.xlsx');
     }
 
 

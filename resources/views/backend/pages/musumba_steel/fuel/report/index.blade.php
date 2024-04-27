@@ -104,7 +104,7 @@
                                @foreach($fuelMovements as $fuelMovement)
                                <tr>
                                     <td>{{ $loop->index+1 }}</td>
-                                    <td>{{ $fuelMovement->date }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($fuelMovement->date)->format('d/m/Y') }}</td>
                                     <td>{{ $fuelMovement->pump->name }}</td>
                                     <td>{{ $fuelMovement->pump->fuel->name }}</td>
                                     <td>{{ $fuelMovement->quantity_stock_initial }}</td>
@@ -122,37 +122,6 @@
                                @endforeach
                             </tbody>
                         </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- data table end -->
-        
-    </div>
-</div>
-
-
-<div class="main-content-inner">
-    <div class="row">
-        <!-- data table start -->
-        <div class="col-12 mt-5">
-            <div class="card">
-                <div class="card-body">
-                    <h4 class="header-title float-left">Les Vehicules et Leurs Consommations par Ordre Croissant,Il faut Scanner Le QrCode Pour Voir La Consommation de chaque Vehicule</h4>
-                    <div class="row">
-                    @foreach($cars as $car)
-                    <div class="col-md-6 mt-5 mb-3">
-                    <div class="card">
-                    <div class="seo-fact sbg3">
-                            <div class="p-4 d-flex justify-content-between align-items-center">
-                                <div class="seofct-icon"><img src="{{ asset('img/vehicule.svg') }}" width="100"> {{$car->car->immatriculation}}</div>
-                                <h2>{!! QrCode::size(100)->backgroundColor(255,255,255)->generate("Ce véhicule a consomé ".$car->qtite.' litres, Designed by ICT MUSUMBA STEEL' ) !!}
-                                </h2>
-                            </div>
-                    </div>
-                    </div>
-                    </div>
-                    @endforeach
                     </div>
                 </div>
             </div>

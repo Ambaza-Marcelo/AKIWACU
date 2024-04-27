@@ -534,7 +534,8 @@ class MaterialReceptionController extends Controller
                     'cump' => $data->new_purchase_price,
                     'created_by' => $this->user->name,
                     'description' => $data->description,
-                    'date' => $data->date,
+                    'type_transaction' => "ACHATS",
+                    'document_no' => $reception_no,
                     'created_at' => \Carbon\Carbon::now()
                 );
                 $reportStoreData[] = $reportStore;
@@ -557,18 +558,19 @@ class MaterialReceptionController extends Controller
                         'cump' => $cump
                     );
 
-                    MsMaterial::where('id',$data->material_id)
-                        ->update($materialData);
 
                         $material = MsMaterialStoreDetail::where('code',$code_store_destination)->where("material_id",$data->material_id)->value('material_id');
 
                         if (!empty($material)) {
-                            MsMaterialReport::insert($reportStoreData);
+                            $flag = 1;
+                            MsMaterial::where('id',$data->material_id)
+                            ->update($materialData);
                             MsMaterialStoreDetail::where('code',$code_store_destination)->where('material_id',$data->material_id)
                         ->update($mdStore);
                         }else{
-                            MsMaterialReport::insert($reportStoreData);
-                            MsMaterialStoreDetail::insert($storeData);
+                            $flag = 0;
+                            session()->flash('error', 'this item is not saved in the stock');
+                            return back();
                         }
 
 
@@ -587,6 +589,10 @@ class MaterialReceptionController extends Controller
 
                         
                 }
+
+            if ($flag != 0) {
+                MsMaterialReport::insert($reportStoreData);
+            }
             MsMaterialReception::where('reception_no', '=', $reception_no)
                             ->update(['status' => 4,'approuved_by' => $this->user->name]);
             MsMaterialReceptionDetail::where('reception_no', '=', $reception_no)
@@ -596,13 +602,6 @@ class MaterialReceptionController extends Controller
             return back();
 
     }
-
-    public function get_reception_data()
-    {
-        return Excel::download(new ReceptionExport, 'receptions.xlsx');
-    }
-
-
     /**
      * Remove the specified resource from storage.
      *

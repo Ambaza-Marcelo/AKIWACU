@@ -380,8 +380,11 @@ class DrinkStockinController extends Controller
                         if (!empty($drink)) {
                             DrinkBigStoreDetail::where('code',$code_store_destination)->where('drink_id',$data->drink_id)
                         ->update($bigStore);
+                        $flag = 1;
                         }else{
-                            DrinkBigStoreDetail::insert($bigStoreData);
+                            $flag = 0;
+                            session()->flash('error', 'this item is not saved in the stock');
+                            return back();
                         }
                         /*
                         $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
@@ -415,7 +418,9 @@ class DrinkStockinController extends Controller
                         */
         }
 
-            DrinkBigReport::insert($reportBigStoreData);
+            if ($flag != 0) {
+                DrinkBigReport::insert($reportBigStoreData);
+            }
             DrinkStockin::where('stockin_no', '=', $stockin_no)
                 ->update(['status' => 4,'approuved_by' => $this->user->name]);
             DrinkStockinDetail::where('stockin_no', '=', $stockin_no)

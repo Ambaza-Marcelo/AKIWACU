@@ -525,6 +525,8 @@ class FuelReceptionController extends Controller
                     'created_by' => $this->user->name,
                     'description' => $data->description,
                     'date' => $data->date,
+                    'type_transaction' => "ACHATS",
+                    'document_no' => $reception_no,
                     'created_at' => \Carbon\Carbon::now()
                 );
                 $reportStoreData[] = $reportStore;
@@ -546,18 +548,18 @@ class FuelReceptionController extends Controller
                         'cump' => $cump
                     );
 
-                    MsFuel::where('id',$data->fuel_id)
-                        ->update($fuelData);
-
                         $fuel = MsFuelPump::where("id",$data->pump_id)->value('fuel_id');
 
                         if (!empty($fuel)) {
-                            MsFuelReport::insert($reportStoreData);
+                            $flag = 1;
                             MsFuelPump::where('fuel_id',$data->fuel_id)
                         ->update($pumpStore);
+                        MsFuel::where('id',$data->fuel_id)
+                        ->update($fuelData);
                         }else{
-                            MsFuelReport::insert($reportStoreData);
-                            MsFuelPump::insert($pumpStoreData);
+                            $flag = 0;
+                            session()->flash('error', 'this type of fuel is not linkded to the pump');
+                            return back();
                         }
 
 
@@ -574,6 +576,10 @@ class FuelReceptionController extends Controller
                             ->update(['status' => 5]);
                         }
 
+            }
+
+            if ($flag != 0) {
+                MsFuelReport::insert($reportStoreData);
             }
 
             MsFuelReception::where('reception_no', '=', $reception_no)

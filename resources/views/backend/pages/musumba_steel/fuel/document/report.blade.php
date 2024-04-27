@@ -7,6 +7,7 @@
              border: 1px solid black;
              text-align: center;
              width: auto;
+             font-size: 12px;
         }
 
     </style>
@@ -48,25 +49,27 @@
                                     <th width="10%">Chauffeur</th>
                                     <th width="10%">Stock Final</th>
                                     <th width="10%">Auteur</th> 
-                                    <th>Description</th>
+                                    <th>Type Mouv.</th>
+                                    <th>Document No</th>
                                 </tr>
                             </thead>
                             <tbody>
                                @foreach($datas as $data)
                                <tr>
                                     <td>{{ $loop->index+1 }}</td>
-                                    <td>{{ $data->date }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($data->date)->format('d/m/Y') }}</td>
                                     <td>{{ $data->pump->name }}</td>
                                     <td>{{ $data->pump->fuel->name }}</td>
                                     <td>{{ $data->quantity_stock_initial }}</td>
-                                    <td>@if($data->quantity_inventory){{ $data->quantity_inventory }} @else {{ $data->quantity_stockin }} @endif</td>
-                                    <td>@if($data->quantity_inventory){{ $data->quantity_inventory }} @else {{ $data->quantity_stock_initial + $data->quantity_stockin }} @endif</td>
+                                    <td>@if($data->quantity_reception){{ $data->quantity_reception }} @elseif($data->quantity_stockin) {{ $data->quantity_stockin }} @endif</td>
+                                    <td>@if($data->quantity_stockin){{ $data->quantity_stock_initial + $data->quantity_stockin }} @elseif($data->quantity_reception) {{ $data->quantity_stock_initial + $data->quantity_reception }} @endif</td>
                                     <td>{{ $data->quantity_stockout }}</td>
                                     <td>@if($data->car_id){{ $data->car->immatriculation }}@endif</td>
                                     <td>@if($data->driver_id){{ $data->driver->firstname }}&nbsp;{{ $data->driver->lastname }}@endif</td>
-                                    <td>@if($data->quantity_inventory){{ $data->quantity_inventory }} @else ($data->quantity_stock_initial + $data->quantity_stockin) - ($data->quantity_stockout) @endif</td>
+                                    <td>{{ ($data->quantity_stock_initial + $data->quantity_stockin + $data->quantity_reception) - ($data->quantity_stockout) }}</td>
                                     <td>{{ $data->created_by }}</td>
-                                    <td>{{ $data->description }}</td>
+                                    <td>{{ $data->type_transaction }}</td>
+                                    <td>{{ $data->document_no }}</td>
                                 </tr>
                                @endforeach
                             </tbody>
