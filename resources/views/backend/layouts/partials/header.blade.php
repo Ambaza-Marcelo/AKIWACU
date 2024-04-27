@@ -15,7 +15,7 @@
 
                         <option value="ki" {{ session()->get('locale') == 'ki' ? 'selected' : '' }}>@lang('messages.kirundi')</option>
 
-                        <option value="fr" selected>@lang('messages.french')</option>
+                        <option value="fr" {{ session()->get('locale') == 'fr' ? 'selected' : '' }}>@lang('messages.french')</option>
                 </select>
                 </li>
                 <li class="dropdown">

@@ -53,7 +53,7 @@ class DrinkReceptionController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any reception !');
         }
 
-        $receptions = DrinkReception::all();
+        $receptions = DrinkReception::orderBy('id','desc')->take(200)->get();
         return view('backend.pages.drink_reception.index', compact('receptions'));
     }
 

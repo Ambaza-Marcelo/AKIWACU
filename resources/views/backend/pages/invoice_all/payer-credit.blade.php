@@ -24,7 +24,7 @@
                 <h4 class="page-title pull-left">@lang('Validation Credit de facture')</h4>
                 <ul class="breadcrumbs pull-left">
                     <li><a href="{{ route('admin.dashboard') }}">@lang('messages.dashboard')</a></li>
-                    <li><a href="{{ route('ebms_api.invoices.index') }}">@lang('messages.list')</a></li>
+                    <li><a href="{{ route('admin.credit-invoices.list') }}">@lang('messages.list')</a></li>
                     <li><span>@lang('Validation Credit de facture')</span></li>
                 </ul>
             </div>
@@ -166,7 +166,7 @@
                         <div>
                             <label for="note_recouvrement"></label>
                             <textarea name="note_recouvrement" id="note_recouvrement" class="form-control" required>
-                                
+                                PAIEMENT
                             </textarea>
                         </div>
                         <button type="submit" class="btn btn-primary mt-4 pr-4 pl-4">VALIDER CREDIT</button>
@@ -191,6 +191,8 @@
                                 "<option selected disabled>merci de choisir</option>"+
                                 "<option value='BCB'>BCB</option>"+
                                 "<option value='BANCOBU'>BANCOBU</option>"+
+                                "<option value='BBCI'>BBCI</option>"+
+                                "<option value='CRDB'>CRDB</option>"+
                                 "<option value='COOPEC'>COOPEC</option>"+
                                 "<option value='CORILAC'>CORILAC</option>"+
                                 "<option value='ECOBANK'>ECOBANK</option>"+
@@ -218,7 +220,7 @@
                         "</div>";
         var montant_recouvre = "<div class='col-md-4'>"+
                             "<label for='montant_recouvre'>Montant paye<strong style='color: red;'>*</strong></label>"+
-                                "<input type='number' name='montant_recouvre' value='{{ $total_amount }}' class='form-control' min='0' max='{{ $reste_credit }}' required/>"+
+                                "<input type='number' name='montant_recouvre' value='{{ $total_amount }}' class='form-control' min='0' max='{{ $total_amount }}' required/>"+
                         "</div>";
         
         $("#type_paiement").append([montant_total_credit,montant_recouvre]);
@@ -232,7 +234,7 @@
                         "</div>";
         var montant_recouvre = "<div class='col-md-4'>"+
                             "<label for='montant_recouvre'>Montant paye<strong style='color: red;'>*</strong></label>"+
-                                "<input type='number' name='montant_recouvre' placeholder='Saisir le montant paye' min='0' max='{{ $reste_credit }}' class='form-control' required/>"+
+                                "<input type='number' name='montant_recouvre' value='{{ $reste_credit }}' min='0' max='{{ $reste_credit }}' class='form-control' required/>"+
                         "</div>";
         
         $("#type_paiement").append([montant_total_credit,montant_recouvre]);

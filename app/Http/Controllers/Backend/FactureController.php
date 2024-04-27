@@ -3183,7 +3183,7 @@ class FactureController extends Controller
             $montant_total_recouvre = $montant_recouvre_input + $montant_recouvre;
             $reste_credit = $montant_total_credit - $montant_total_recouvre;
 
-            if ($reste_credit <= 0) {
+            if ($reste_credit == 0) {
                 $etat_recouvrement = 2;
                 Facture::where('invoice_number', '=', $invoice_number)
                     ->update([
@@ -3222,7 +3222,11 @@ class FactureController extends Controller
 
                 session()->flash('success', 'Le credit  est payé avec succés');
                 return back();
-            }else{
+            }elseif ($reste_credit < 0) {
+                session()->flash('error', $this->user->name.' ,je vous prie de bien vouloir saisir les donnees exactes s\'il te plait! plus d\'info contacte IT Musumba Holding Marcellin ');
+                return back();
+            }
+            else{
                 $etat_recouvrement = 1;
                 Facture::where('invoice_number', '=', $invoice_number)
                     ->update([
@@ -3260,11 +3264,11 @@ class FactureController extends Controller
                     ]);
 
                 session()->flash('success', 'Le credit  est payé avec succés');
-                return back();
+                return redirect()->route('admin.credit-invoices.list');
             }
         }else{
             session()->flash('error', 'Le montant saisi doit etre inferieur ou egal au montant total de la facture');
-            return back();
+            return redirect()->route('admin.credit-invoices.list');
         }
 
         

@@ -51,7 +51,7 @@ class FoodReceptionController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any reception !');
         }
 
-        $receptions = FoodReception::all();
+        $receptions = FoodReception::orderBy('id','desc')->take(200)->get();
         return view('backend.pages.food_reception.index', compact('receptions'));
     }
 

@@ -52,7 +52,7 @@ class MaterialStockinController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any stockin !');
         }
 
-        $stockins = MaterialStockin::all();
+        $stockins = MaterialStockin::orderBy('id','desc')->take(200)->get();
         return view('backend.pages.material_stockin.index', compact('stockins'));
     }
 

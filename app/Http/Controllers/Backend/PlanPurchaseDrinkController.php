@@ -38,9 +38,6 @@ class PlanPurchaseDrinkController extends Controller
      */
     public function choice()
     {
-        if (is_null($this->user) || !$this->user->can('drink_purchase.view')) {
-            abort(403, 'Sorry !! You are Unauthorized to choose any planning !');
-        }
 
         return view('backend.pages.plan_purchase_drink.choice');
     }
@@ -356,7 +353,7 @@ class PlanPurchaseDrinkController extends Controller
         $stat = PlanPurchaseDrink::where('plan_no', $plan_no)->value('status');
         $description = PlanPurchaseDrink::where('plan_no', $plan_no)->value('description');
         $start_date = PlanPurchaseDrink::where('plan_no', $plan_no)->value('start_date');
-
+        $end_date = PlanPurchaseDrink::where('plan_no', $plan_no)->value('end_date');
            $plan_no = PlanPurchaseDrink::where('plan_no', $plan_no)->value('plan_no');
            $plan_signature = PlanPurchaseDrink::where('plan_no', $plan_no)->value('plan_signature');
            $totalValue = DB::table('plan_purchase_drink_details')
@@ -364,7 +361,7 @@ class PlanPurchaseDrinkController extends Controller
             ->sum('total_purchase_amount');
 
            $datas = PlanPurchaseDrinkDetail::where('plan_no', $plan_no)->get();
-           $pdf = PDF::loadView('backend.pages.document.plan_purchase_drink',compact('datas','plan_no','setting','description','start_date','plan_signature','totalValue'));
+           $pdf = PDF::loadView('backend.pages.document.plan_purchase_drink',compact('datas','plan_no','setting','description','start_date','end_date','plan_signature','totalValue'));
 
            Storage::put('public/pdf/plan_purchase_drink/'.'PLAN_APPROVISIONNEMENT'.$plan_no.'.pdf', $pdf->output());
 

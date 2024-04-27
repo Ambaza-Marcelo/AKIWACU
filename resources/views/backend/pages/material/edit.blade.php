@@ -60,7 +60,12 @@
                                     <select class="form-control" name="unit" id="unit">
                                         <option disabled="disabled" selected="selected">Merci de choisir</option>
                                         <option value="pcs" {{ $material->unit == 'pcs' ? 'selected' : '' }} class="form-control">Pieces</option>
-                                        <option value="paire" {{ $material->unit == 'paire' ? 'selected' : '' }} class="form-control">PAIRE</option>
+                                        <option value="paire" {{ $material->unit == 'paire' ? 'selected' : '' }} 
+                                            class="form-control">PAIRE</option>
+                                        <option value="boites" {{ $material->unit == 'boites' ? 'selected' : '' }} 
+                                            class="form-control">Boites</option>
+                                        <option value="kg" {{ $material->unit == 'kg' ? 'selected' : '' }} 
+                                            class="form-control">KG</option>
                                         <option value="litres" {{ $material->unit == 'litres' ? 'selected' : '' }} class="form-control">Litres</option>
                                     </select>
                                 </div>

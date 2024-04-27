@@ -56,7 +56,7 @@ class DrinkTransferController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any transfer !');
         }
 
-        $transfers = DrinkTransfer::take(20)->orderBy('id','desc')->get();
+        $transfers = DrinkTransfer::orderBy('id','desc')->take(200)->get();
         return view('backend.pages.drink_transfer.index', compact('transfers'));
     }
 

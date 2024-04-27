@@ -46,7 +46,7 @@ class FoodStockinController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any stockin !');
         }
 
-        $stockins = FoodStockin::all();
+        $stockins = FoodStockin::orderBy('id','desc')->take(200)->get();
         return view('backend.pages.food_stockin.index', compact('stockins'));
     }
 

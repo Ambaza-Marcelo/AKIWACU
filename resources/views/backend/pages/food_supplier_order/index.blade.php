@@ -63,7 +63,7 @@
                                @foreach ($orders as $order)
                                <tr>
                                     <td>{{ $loop->index+1 }}</td>
-                                    <td>{{ $order->date }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($order->date)->format('d/m/Y') }}</td>
                                     <td><a href="{{ route('admin.food-supplier-orders.show',$order->order_no)}}">{{ $order->order_no }}</a></td>
                                     <td>{{ $order->order_signature }}</td>
                                     <td><a href="@if($order->purchase_no){{ route('admin.food-purchases.show',$order->purchase_no)}}@endif">{{ $order->purchase_no }}</a></td>

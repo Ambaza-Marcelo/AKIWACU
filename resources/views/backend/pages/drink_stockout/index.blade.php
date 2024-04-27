@@ -70,7 +70,7 @@
                                @foreach ($stockouts as $stockout)
                                <tr>
                                     <td>{{ $loop->index+1 }}</td>
-                                    <td>{{ $stockout->date }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($stockout->date)->format('d/m/Y') }}</td>
                                     <td><a href="{{ route('admin.drink-stockouts.show',$stockout->stockout_no)}}">{{ $stockout->stockout_no }}</a></td>
                                     <td>{{ $stockout->stockout_signature }}</td>
                                     <td>@if($stockout->status == 1)<img src="{{ asset('img/warning3.gif')}}" width="35">@elseif($stockout->status == 1)<span class="badge badge-info">Encours</span> @elseif($stockout->status == 2)<span class="badge badge-info">Validé</span> @elseif($stockout->status == 3)<span class="badge badge-info">Confirmé</span> @elseif($stockout->status == 4)<span class="badge badge-info">Approuvé</span> @elseif($stockout->status == -1)<span class="badge badge-danger">Rejeté</span>@endif</td>

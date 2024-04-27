@@ -47,6 +47,21 @@
                             <a class="btn btn-primary text-white" href="{{ route('admin.private-drink-stockins.create') }}">@lang('messages.new')</a>
                         @endif
                     </p>
+                    <form action="{{ route('admin.private-drink-stockins.export-to-excel')}}" method="GET">
+                        <p class="float-right mb-2">
+                            <button type="submit" value="pdf" class="btn btn-success">Exporter En Excel</button>
+                        </p>
+                        <p class="float-right mb-2">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input type="date" name="start_date" class="form-control">
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="date" name="end_date" class="form-control">
+                                </div>
+                            </div>
+                        </p>
+                    </form><br>
                     <div class="clearfix"></div>
                     <div class="data-tables">
                         @include('backend.layouts.partials.messages')

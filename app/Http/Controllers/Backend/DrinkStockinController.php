@@ -49,7 +49,7 @@ class DrinkStockinController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any stockin !');
         }
 
-        $stockins = DrinkStockin::all();
+        $stockins = DrinkStockin::orderBy('id','desc')->take(200)->get();
         return view('backend.pages.drink_stockin.index', compact('stockins'));
     }
 

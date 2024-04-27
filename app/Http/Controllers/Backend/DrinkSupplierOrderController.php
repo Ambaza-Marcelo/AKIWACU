@@ -45,7 +45,7 @@ class DrinkSupplierOrderController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any order !');
         }
 
-        $orders = DrinkSupplierOrder::all();
+        $orders = DrinkSupplierOrder::orderBy('id','desc')->take(200)->get();
         return view('backend.pages.drink_supplier_order.index', compact('orders'));
     }
 

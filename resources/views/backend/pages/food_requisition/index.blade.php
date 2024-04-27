@@ -67,7 +67,7 @@
                                @foreach ($requisitions as $requisition)
                                <tr>
                                     <td>{{ $loop->index+1 }}</td>
-                                    <td>{{ $requisition->date }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($requisition->date)->format('d/m/Y') }}</td>
                                     <td><a href="{{ route('admin.food-requisitions.show',$requisition->requisition_no) }}">{{ $requisition->requisition_no }}</a></td>
                                     <td>{{ $requisition->requisition_signature }}</td>
                                     @if($requisition->status == 2)

@@ -80,7 +80,7 @@
                                @foreach ($transfers as $transfer)
                                <tr>
                                     <td>{{ $loop->index+1 }}</td>
-                                    <td>{{ $transfer->date }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($transfer->date)->format('d/m/Y') }}</td>
                                     <td><a href="{{ route('admin.drink-transfers.show',$transfer->transfer_no)}}">{{ $transfer->transfer_no }}</a></td>
                                     <td>{{ $transfer->transfer_signature }}</td>
                                     <td><a href="@if($transfer->requisition_no){{ route('admin.drink-requisitions.show',$transfer->requisition_no)}}@endif">{{ $transfer->requisition_no }}</a></td>

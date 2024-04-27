@@ -21,6 +21,10 @@ use App\Models\Facture;
 use App\Models\FactureDetail;
 use App\Models\OrderKitchenDetail;
 use App\Models\OrderKitchen;
+use App\Models\DrinkSmallStore;
+use App\Models\DrinkBigStore;
+use App\Models\FoodBigStore;
+use App\Models\MaterialBigStore;
 use App\Models\FoodItem;
 use App\Models\Employe;
 use App\Models\Client;
@@ -59,8 +63,8 @@ class FactureRestaurantController extends Controller
 
     public function voirFacturePayercredit(Request $request,$invoice_number)
     {
-        if (is_null($this->user) || !$this->user->can('invoice_booking.edit')) {
-            abort(403, 'Sorry !! You are Unauthorized to view this ! more information,contact Marcellin');
+        if (is_null($this->user) || !$this->user->can('invoice_booking.approuve')) {
+            abort(403, 'Sorry !! You are Unauthorized to do this ! more information,contact IT Msumba Holding Marcellin');
         }
 
 
@@ -85,7 +89,7 @@ class FactureRestaurantController extends Controller
 
     public function voirFactureAcredit()
     {
-        if (is_null($this->user) || !$this->user->can('invoice_booking.edit')) {
+        if (is_null($this->user) || !$this->user->can('invoice_booking.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view this ! more information,contact Marcellin');
         }
 
@@ -171,8 +175,12 @@ class FactureRestaurantController extends Controller
 
         $datas = FactureDetail::select(
                         DB::raw('id,drink_id,food_item_id,barrist_item_id,bartender_item_id,service_id,salle_id,sum(item_total_amount) as item_total_amount'))->where('etat','1')->groupBy('id','drink_id','food_item_id','barrist_item_id','bartender_item_id','service_id','salle_id')->orderBy('item_total_amount','desc')->take(10)->get();
+        $drinksmstores = DrinkSmallStore::all();
+        $drinkbgstores = DrinkBigStore::all();
+        $foodbgstores = FoodBigStore::all();
+        $materialbgstores = MaterialBigStore::all();
 
-        return view('backend.pages.invoice.chiffre_affaire',compact('item_total_amount','total_vat','total_item_price_nvat','item_total_amount_credit','total_vat_credit','total_item_price_nvat_credit','datas'));
+        return view('backend.pages.invoice.chiffre_affaire',compact('item_total_amount','total_vat','total_item_price_nvat','item_total_amount_credit','total_vat_credit','total_item_price_nvat_credit','datas','drinksmstores','foodbgstores','materialbgstores','drinkbgstores'));
     }
 
 

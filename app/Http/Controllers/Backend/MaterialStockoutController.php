@@ -52,7 +52,7 @@ class MaterialStockoutController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any stockout !');
         }
 
-        $stockouts = MaterialStockout::all();
+        $stockouts = MaterialStockout::orderBy('id','desc')->take(200)->get();
         return view('backend.pages.material_stockout.index', compact('stockouts'));
     }
 

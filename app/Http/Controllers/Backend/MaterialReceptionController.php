@@ -55,7 +55,7 @@ class MaterialReceptionController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any reception !');
         }
 
-        $receptions = MaterialReception::all();
+        $receptions = MaterialReception::orderBy('id','desc')->take(200)->get();
         return view('backend.pages.material_reception.index', compact('receptions'));
     }
 

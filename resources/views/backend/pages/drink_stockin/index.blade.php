@@ -69,7 +69,7 @@
                                @foreach ($stockins as $stockin)
                                <tr>
                                     <td>{{ $loop->index+1 }}</td>
-                                    <td>{{ $stockin->date }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($stockin->date)->format('d/m/Y') }}</td>
                                     <td><a href="{{ route('admin.drink-stockins.show',$stockin->stockin_no)}}">{{ $stockin->stockin_no }}</a></td>
                                     <td>{{ $stockin->stockin_signature }}</td>
                                     <td>@if($stockin->status == 1)<img src="{{ asset('img/warning3.gif')}}" width="35">@elseif($stockin->status == 1)<span class="badge badge-info">Encours</span> @elseif($stockin->status == 2)<span class="badge badge-info">Validé</span> @elseif($stockin->status == 3)<span class="badge badge-info">Confirmé</span> @elseif($stockin->status == 4)<span class="badge badge-info">Approuvé</span>@elseif($stockin->status == -1)<span class="badge badge-danger">Rejeté</span>@endif</td>

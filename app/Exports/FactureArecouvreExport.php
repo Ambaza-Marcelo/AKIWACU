@@ -28,7 +28,7 @@ class FactureArecouvreExport implements FromCollection, WithMapping, WithHeading
         $end_date = $endDate.' 23:59:59';
 
         return Facture::select(
-                        DB::raw('id,invoice_number,statut_paied,etat_recouvrement,montant_total_credit,montant_recouvre,reste_credit,bank_name,cheque_no,date_recouvrement,nom_recouvrement,note_recouvrement,invoice_date,customer_name,client_id,drink_order_no,food_order_no,bartender_order_no,barrist_order_no,booking_no'))->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','statut_paied','etat_recouvrement','montant_total_credit','montant_recouvre','reste_credit','bank_name','cheque_no','date_recouvrement','nom_recouvrement','note_recouvrement','invoice_date','invoice_number','drink_order_no','food_order_no','bartender_order_no','barrist_order_no','booking_no','customer_name','client_id')->orderBy('client_id','asc')->get();
+                        DB::raw('id,invoice_number,statut_paied,etat_recouvrement,montant_total_credit,montant_recouvre,reste_credit,bank_name,cheque_no,date_recouvrement,nom_recouvrement,note_recouvrement,invoice_date,customer_name,client_id,drink_order_no,food_order_no,bartender_order_no,barrist_order_no,booking_no,updated_at'))->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','statut_paied','etat_recouvrement','montant_total_credit','montant_recouvre','reste_credit','bank_name','cheque_no','date_recouvrement','nom_recouvrement','note_recouvrement','invoice_date','invoice_number','drink_order_no','food_order_no','bartender_order_no','barrist_order_no','booking_no','customer_name','client_id','updated_at')->orderBy('id','asc')->get();
     }
 
     public function map($data) : array {
@@ -52,7 +52,7 @@ class FactureArecouvreExport implements FromCollection, WithMapping, WithHeading
             $customer_telephone = $data->client->telephone;
     	}else{
     		$customer_name = $data->customer_name;
-            $customer_telephone = $data->client->telephone;
+            $customer_telephone = "";
     	}
 
     	if (!empty($data->drink_order_no)) {
@@ -83,10 +83,16 @@ class FactureArecouvreExport implements FromCollection, WithMapping, WithHeading
 
         if ($data->etat_recouvrement == '1') {
             $type_paiement = "PAIEMENT PARTIEL";
+            $date_recouvrement = Carbon::parse($data->date_recouvrement)->format('d/m/Y');
+            $updated_at = Carbon::parse($data->updated_at)->format('d/m/Y');
         }elseif ($data->etat_recouvrement == '2') {
             $type_paiement = "PAIEMENT TOTAL";
+            $date_recouvrement = Carbon::parse($data->date_recouvrement)->format('d/m/Y');
+            $updated_at = Carbon::parse($data->updated_at)->format('d/m/Y');
         }else{
-            $type_paiement = "";
+            $type_paiement = "ENCOURS";
+            $date_recouvrement = "";
+            $updated_at = "";
         }
 
 
@@ -105,7 +111,8 @@ class FactureArecouvreExport implements FromCollection, WithMapping, WithHeading
             $mode_paiement,
             $data->bank_name,
             $data->cheque_no,
-            Carbon::parse($data->date_recouvrement)->format('d/m/Y'),
+            $date_recouvrement,
+            $updated_at,
             $data->nom_recouvrement,
             $data->note_recouvrement
         ] ;
@@ -129,6 +136,7 @@ class FactureArecouvreExport implements FromCollection, WithMapping, WithHeading
             'Banque',
             'Cheque No',
             'Date Recouvrement',
+            'Date de saisie',
             'Nom chargé de Recouvrement',
             'Note de recouvrement'
         ] ;

@@ -109,6 +109,7 @@ class PlanPurchaseFoodController extends Controller
             //create plan
             $plan = new PlanPurchaseFood();
             $plan->start_date = $start_date;
+            $plan->end_date = $end_date;
             $plan->plan_signature = $plan_signature;
             $plan->plan_no = $plan_no;
             $plan->created_by = $created_by;
@@ -138,7 +139,7 @@ class PlanPurchaseFoodController extends Controller
             PlanPurchaseFoodDetail::insert($insert_data);
 
         session()->flash('success', 'Plan has been created !!');
-        return redirect()->route('admin.plan-plan-foods.index');
+        return redirect()->route('admin.plan-purchase-foods.index');
     }
 
     /**
@@ -167,6 +168,13 @@ class PlanPurchaseFoodController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to edit any plan !');
         }
 
+        $foods  = Food::orderBy('name','asc')->get();
+
+        $plan = PlanPurchaseFood::where('plan_no', $plan_no)->first();
+        $plans = PlanPurchaseFoodDetail::where('plan_no', $plan_no)->get();
+
+        return view('backend.pages.plan_purchase_food.edit', compact('plans','plan','foods'));
+
     }
 
     /**
@@ -182,7 +190,67 @@ class PlanPurchaseFoodController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to edit any plan !');
         }
 
-        
+       $rules = array(
+                'food_id.*'  => 'required',
+                'start_date'  => 'required',
+                'end_date'  => 'required',
+                'quantity.*'  => 'required',
+                'purchase_price.*'  => 'required',
+                'unit.*'  => 'required',
+                'description'  => 'required'
+            );
+
+            $error = Validator::make($request->all(),$rules);
+
+            if($error->fails()){
+                return response()->json([
+                    'error' => $error->errors()->all(),
+                ]);
+            }
+
+            $food_id = $request->food_id;
+            $start_date = $request->start_date;
+            $end_date = $request->end_date;
+            $quantity = $request->quantity;
+            $purchase_price = $request->purchase_price;
+            $unit = $request->unit;
+            $description =$request->description; 
+
+            $plan = PlanPurchaseFood::where('plan_no',$plan_no)->first();
+            $plan->start_date = $start_date;
+            $plan->end_date = $end_date;
+            $plan->description = $description;
+            $plan->save();
+            //insert details of plan No.
+            for( $count = 0; $count < count($food_id); $count++ ){
+
+                $created_by = $this->user->name;
+                $plan_signature = PlanPurchaseFood::where('plan_no',$plan_no)->value('plan_signature');
+                //$purchase_price = Food::where('id', $food_id[$count])->value('purchase_price');
+                $total_purchase_amount = $quantity[$count] * $purchase_price[$count];
+                $data = array(
+                    'food_id' => $food_id[$count],
+                    'start_date' => $start_date,
+                    'end_date' => $end_date,
+                    'quantity' => $quantity[$count],
+                    'unit' => $unit[$count],
+                    'purchase_price' => $purchase_price[$count],
+                    'description' => $description,
+                    'total_purchase_amount' => $total_purchase_amount,
+                    'created_by' => $created_by,
+                    'plan_no' => $plan_no,
+                    'plan_signature' => $plan_signature,
+                );
+                $insert_data[] = $data;
+            }
+
+            PlanPurchaseFoodDetail::where('plan_no',$plan_no)->delete();
+
+            PlanPurchaseFoodDetail::insert($insert_data);
+
+        session()->flash('success', 'Plan has been updated successfuly !!');
+        return redirect()->route('admin.plan-purchase-foods.index');
+
     }
 
     public function validatePlan($plan_no)
@@ -191,24 +259,32 @@ class PlanPurchaseFoodController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to validate any plan !');
         }
             PlanPurchaseFood::where('plan_no', '=', $plan_no)
-                ->update(['status' => 2,'validated_by' => $this->user->name]);
+                ->update(['status' => 1,'validated_by' => $this->user->name]);
             PlanPurchaseFoodDetail::where('plan_no', '=', $plan_no)
-                ->update(['status' => 2,'validated_by' => $this->user->name]);
+                ->update(['status' => 1,'validated_by' => $this->user->name]);
 
         session()->flash('success', 'Plan has been validated !!');
         return back();
     }
 
-    public function reject($plan_no)
+    public function reject(Request $request,$plan_no)
     {
        if (is_null($this->user) || !$this->user->can('food_purchase.reject')) {
             abort(403, 'Sorry !! You are Unauthorized to reject any plan !');
         }
 
+        $request->validate([
+            'plan_no' => 'required',
+            'rejected_motif' => 'required'
+
+        ]);
+
+        $rejected_motif = $request->rejected_motif;
+
         PlanPurchaseFood::where('plan_no', '=', $plan_no)
-                ->update(['status' => -1,'rejected_by' => $this->user->name]);
+                ->update(['status' => -1,'rejected_motif' => $rejected_motif,'rejected_by' => $this->user->name]);
             PlanPurchaseFoodDetail::where('plan_no', '=', $plan_no)
-                ->update(['status' => -1,'rejected_by' => $this->user->name]);
+                ->update(['status' => -1,'rejected_motif' => $rejected_motif,'rejected_by' => $this->user->name]);
 
         session()->flash('success', 'Plan has been rejected !!');
         return back();
@@ -221,9 +297,9 @@ class PlanPurchaseFoodController extends Controller
         }
 
         PlanPurchaseFood::where('plan_no', '=', $plan_no)
-                ->update(['status' => 1,'reseted_by' => $this->user->name]);
+                ->update(['status' => 0,'reseted_by' => $this->user->name]);
             PlanPurchaseFoodDetail::where('plan_no', '=', $plan_no)
-                ->update(['status' => 1,'reseted_by' => $this->user->name]);
+                ->update(['status' => 0,'reseted_by' => $this->user->name]);
 
         session()->flash('success', 'Plan has been reseted !!');
         return back();
@@ -236,9 +312,9 @@ class PlanPurchaseFoodController extends Controller
         }
 
         PlanPurchaseFood::where('plan_no', '=', $plan_no)
-                ->update(['status' => 3,'confirmed_by' => $this->user->name]);
+                ->update(['status' => 2,'confirmed_by' => $this->user->name]);
             PlanPurchaseFoodDetail::where('plan_no', '=', $plan_no)
-                ->update(['status' => 3,'confirmed_by' => $this->user->name]);
+                ->update(['status' => 2,'confirmed_by' => $this->user->name]);
 
         session()->flash('success', 'Plan has been confirmed !!');
         return back();
@@ -251,9 +327,9 @@ class PlanPurchaseFoodController extends Controller
         }
 
         PlanPurchaseFood::where('plan_no', '=', $plan_no)
-                ->update(['status' => 4,'approuved_by' => $this->user->name]);
+                ->update(['status' => 3,'approuved_by' => $this->user->name]);
             PlanPurchaseFoodDetail::where('plan_no', '=', $plan_no)
-                ->update(['status' => 4,'approuved_by' => $this->user->name]);
+                ->update(['status' => 3,'approuved_by' => $this->user->name]);
 
         session()->flash('success', 'Plan has been confirmed !!');
         return back();
@@ -269,7 +345,7 @@ class PlanPurchaseFoodController extends Controller
         $stat = PlanPurchaseFood::where('plan_no', $plan_no)->value('status');
         $description = PlanPurchaseFood::where('plan_no', $plan_no)->value('description');
         $start_date = PlanPurchaseFood::where('plan_no', $plan_no)->value('start_date');
-
+        $end_date = PlanPurchaseFood::where('plan_no', $plan_no)->value('end_date');
            $plan_no = PlanPurchaseFood::where('plan_no', $plan_no)->value('plan_no');
            $plan_signature = PlanPurchaseFood::where('plan_no', $plan_no)->value('plan_signature');
            $totalValue = DB::table('plan_purchase_food_details')
@@ -277,7 +353,7 @@ class PlanPurchaseFoodController extends Controller
             ->sum('total_purchase_amount');
 
            $datas = PlanPurchaseFoodDetail::where('plan_no', $plan_no)->get();
-           $pdf = PDF::loadView('backend.pages.document.plan_purchase_food',compact('datas','plan_no','setting','description','start_date','plan_signature','totalValue'));
+           $pdf = PDF::loadView('backend.pages.document.plan_purchase_food',compact('datas','plan_no','setting','description','start_date','plan_signature','totalValue','end_date'));
 
            Storage::put('public/pdf/plan_purchase_food/'.'PLAN_APPROVISIONNEMENT'.$plan_no.'.pdf', $pdf->output());
 
@@ -308,5 +384,4 @@ class PlanPurchaseFoodController extends Controller
         session()->flash('success', 'Plan has been deleted !!');
         return back();
     }
-}
 }

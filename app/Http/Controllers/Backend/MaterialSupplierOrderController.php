@@ -47,7 +47,7 @@ class MaterialSupplierOrderController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any order !');
         }
 
-        $orders = MaterialSupplierOrder::all();
+        $orders = MaterialSupplierOrder::orderBy('id','desc')->take(200)->get();
         return view('backend.pages.material_supplier_order.index', compact('orders'));
     }
 

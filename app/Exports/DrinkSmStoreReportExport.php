@@ -64,6 +64,12 @@ class DrinkSmStoreReportExport implements FromCollection, WithMapping, WithHeadi
             $entree = 0;
         }
 
+        if(!empty($data->cump)){
+            $cump = $data->cump;
+        }else{
+            $cump = $data->drink->cump;
+        }
+
         return [
             $data->id,
             Carbon::parse($data->created_at)->format('d/m/Y'),
@@ -71,14 +77,14 @@ class DrinkSmStoreReportExport implements FromCollection, WithMapping, WithHeadi
             $data->drink->name,
             $data->drink->code,
             $data->quantity_stock_initial,
-            $data->drink->cump,
-            ($data->quantity_stock_initial * $data->drink->cump),
+            $cump,
+            ($data->quantity_stock_initial * $cump),
             $entree,
-            $entree * $data->drink->cump,
+            $entree * $cump,
             $sortie,
-            ($sortie * $data->drink->cump),
+            ($sortie * $cump),
             ($data->quantity_stock_initial + $entree) - $sortie,
-            ((($data->quantity_stock_initial + $entree) - $sortie) * $data->drink->cump),
+            ((($data->quantity_stock_initial + $entree) - $sortie) * $cump),
             $data->created_by,
             $data->type_transaction,
             $data->document_no,

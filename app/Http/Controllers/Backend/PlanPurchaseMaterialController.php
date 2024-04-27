@@ -94,6 +94,7 @@ class PlanPurchaseMaterialController extends Controller
             $start_date = $request->start_date;
             $end_date = $request->end_date;
             $quantity = $request->quantity;
+            $purchase_price = $request->purchase_price;
             $unit = $request->unit;
             $description =$request->description; 
             $latest = PlanPurchaseMaterial::latest()->first();
@@ -109,6 +110,7 @@ class PlanPurchaseMaterialController extends Controller
             //create plan
             $plan = new PlanPurchaseMaterial();
             $plan->start_date = $start_date;
+            $plan->end_date = $end_date;
             $plan->plan_signature = $plan_signature;
             $plan->plan_no = $plan_no;
             $plan->created_by = $created_by;
@@ -117,15 +119,15 @@ class PlanPurchaseMaterialController extends Controller
             //insert details of plan No.
             for( $count = 0; $count < count($material_id); $count++ ){
 
-                $purchase_price = Material::where('id', $material_id[$count])->value('purchase_price');
-                $total_purchase_amount = $quantity[$count] * $purchase_price;
+                //$purchase_price = Material::where('id', $material_id[$count])->value('purchase_price');
+                $total_purchase_amount = $quantity[$count] * $purchase_price[$count];
                 $data = array(
                     'material_id' => $material_id[$count],
                     'start_date' => $start_date,
                     'end_date' => $end_date,
                     'quantity' => $quantity[$count],
                     'unit' => $unit[$count],
-                    'purchase_price' => $purchase_price,
+                    'purchase_price' => $purchase_price[$count],
                     'description' => $description,
                     'total_purchase_amount' => $total_purchase_amount,
                     'created_by' => $created_by,
@@ -167,6 +169,13 @@ class PlanPurchaseMaterialController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to edit any plan !');
         }
 
+        $materials  = Material::orderBy('name','asc')->get();
+
+        $plan = PlanPurchaseMaterial::where('plan_no', $plan_no)->first();
+        $plans = PlanPurchaseMaterialDetail::where('plan_no', $plan_no)->get();
+
+        return view('backend.pages.plan_purchase_material.edit', compact('plans','plan','materials'));
+
     }
 
     /**
@@ -182,7 +191,67 @@ class PlanPurchaseMaterialController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to edit any plan !');
         }
 
-        
+       $rules = array(
+                'material_id.*'  => 'required',
+                'start_date'  => 'required',
+                'end_date'  => 'required',
+                'quantity.*'  => 'required',
+                'purchase_price.*'  => 'required',
+                'unit.*'  => 'required',
+                'description'  => 'required'
+            );
+
+            $error = Validator::make($request->all(),$rules);
+
+            if($error->fails()){
+                return response()->json([
+                    'error' => $error->errors()->all(),
+                ]);
+            }
+
+            $material_id = $request->material_id;
+            $start_date = $request->start_date;
+            $end_date = $request->end_date;
+            $quantity = $request->quantity;
+            $purchase_price = $request->purchase_price;
+            $unit = $request->unit;
+            $description =$request->description; 
+
+            $plan = PlanPurchaseMaterial::where('plan_no',$plan_no)->first();
+            $plan->start_date = $start_date;
+            $plan->end_date = $end_date;
+            $plan->description = $description;
+            $plan->save();
+            //insert details of plan No.
+            for( $count = 0; $count < count($material_id); $count++ ){
+
+                $created_by = $this->user->name;
+                $plan_signature = PlanPurchaseMaterial::where('plan_no',$plan_no)->value('plan_signature');
+                //$purchase_price = Material::where('id', $material_id[$count])->value('purchase_price');
+                $total_purchase_amount = $quantity[$count] * $purchase_price[$count];
+                $data = array(
+                    'material_id' => $material_id[$count],
+                    'start_date' => $start_date,
+                    'end_date' => $end_date,
+                    'quantity' => $quantity[$count],
+                    'unit' => $unit[$count],
+                    'purchase_price' => $purchase_price[$count],
+                    'description' => $description,
+                    'total_purchase_amount' => $total_purchase_amount,
+                    'created_by' => $created_by,
+                    'plan_no' => $plan_no,
+                    'plan_signature' => $plan_signature,
+                );
+                $insert_data[] = $data;
+            }
+
+            PlanPurchaseMaterialDetail::where('plan_no',$plan_no)->delete();
+
+            PlanPurchaseMaterialDetail::insert($insert_data);
+
+        session()->flash('success', 'Plan has been updated successfuly !!');
+        return redirect()->route('admin.plan-purchase-materials.index');
+
     }
 
     public function validatePlan($plan_no)
@@ -191,24 +260,32 @@ class PlanPurchaseMaterialController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to validate any plan !');
         }
             PlanPurchaseMaterial::where('plan_no', '=', $plan_no)
-                ->update(['status' => 2,'validated_by' => $this->user->name]);
+                ->update(['status' => 1,'validated_by' => $this->user->name]);
             PlanPurchaseMaterialDetail::where('plan_no', '=', $plan_no)
-                ->update(['status' => 2,'validated_by' => $this->user->name]);
+                ->update(['status' => 1,'validated_by' => $this->user->name]);
 
         session()->flash('success', 'Plan has been validated !!');
         return back();
     }
 
-    public function reject($plan_no)
+    public function reject(Request $request,$plan_no)
     {
        if (is_null($this->user) || !$this->user->can('material_purchase.reject')) {
             abort(403, 'Sorry !! You are Unauthorized to reject any plan !');
         }
 
+        $request->validate([
+            'plan_no' => 'required',
+            'rejected_motif' => 'required'
+
+        ]);
+
+        $rejected_motif = $request->rejected_motif;
+
         PlanPurchaseMaterial::where('plan_no', '=', $plan_no)
-                ->update(['status' => -1,'rejected_by' => $this->user->name]);
+                ->update(['status' => -1,'rejected_motif' => $rejected_motif,'rejected_by' => $this->user->name]);
             PlanPurchaseMaterialDetail::where('plan_no', '=', $plan_no)
-                ->update(['status' => -1,'rejected_by' => $this->user->name]);
+                ->update(['status' => -1,'rejected_motif' => $rejected_motif,'rejected_by' => $this->user->name]);
 
         session()->flash('success', 'Plan has been rejected !!');
         return back();
@@ -221,9 +298,9 @@ class PlanPurchaseMaterialController extends Controller
         }
 
         PlanPurchaseMaterial::where('plan_no', '=', $plan_no)
-                ->update(['status' => 1,'reseted_by' => $this->user->name]);
+                ->update(['status' => 0,'reseted_by' => $this->user->name]);
             PlanPurchaseMaterialDetail::where('plan_no', '=', $plan_no)
-                ->update(['status' => 1,'reseted_by' => $this->user->name]);
+                ->update(['status' => 0,'reseted_by' => $this->user->name]);
 
         session()->flash('success', 'Plan has been reseted !!');
         return back();
@@ -236,9 +313,9 @@ class PlanPurchaseMaterialController extends Controller
         }
 
         PlanPurchaseMaterial::where('plan_no', '=', $plan_no)
-                ->update(['status' => 3,'confirmed_by' => $this->user->name]);
+                ->update(['status' => 2,'confirmed_by' => $this->user->name]);
             PlanPurchaseMaterialDetail::where('plan_no', '=', $plan_no)
-                ->update(['status' => 3,'confirmed_by' => $this->user->name]);
+                ->update(['status' => 2,'confirmed_by' => $this->user->name]);
 
         session()->flash('success', 'Plan has been confirmed !!');
         return back();
@@ -251,9 +328,9 @@ class PlanPurchaseMaterialController extends Controller
         }
 
         PlanPurchaseMaterial::where('plan_no', '=', $plan_no)
-                ->update(['status' => 4,'approuved_by' => $this->user->name]);
+                ->update(['status' => 3,'approuved_by' => $this->user->name]);
             PlanPurchaseMaterialDetail::where('plan_no', '=', $plan_no)
-                ->update(['status' => 4,'approuved_by' => $this->user->name]);
+                ->update(['status' => 3,'approuved_by' => $this->user->name]);
 
         session()->flash('success', 'Plan has been confirmed !!');
         return back();
@@ -269,6 +346,7 @@ class PlanPurchaseMaterialController extends Controller
         $stat = PlanPurchaseMaterial::where('plan_no', $plan_no)->value('status');
         $description = PlanPurchaseMaterial::where('plan_no', $plan_no)->value('description');
         $start_date = PlanPurchaseMaterial::where('plan_no', $plan_no)->value('start_date');
+        $end_date = PlanPurchaseMaterial::where('plan_no', $plan_no)->value('end_date');
 
            $plan_no = PlanPurchaseMaterial::where('plan_no', $plan_no)->value('plan_no');
            $plan_signature = PlanPurchaseMaterial::where('plan_no', $plan_no)->value('plan_signature');
@@ -277,7 +355,7 @@ class PlanPurchaseMaterialController extends Controller
             ->sum('total_purchase_amount');
 
            $datas = PlanPurchaseMaterialDetail::where('plan_no', $plan_no)->get();
-           $pdf = PDF::loadView('backend.pages.document.plan_purchase_material',compact('datas','plan_no','setting','description','start_date','plan_signature','totalValue'));
+           $pdf = PDF::loadView('backend.pages.document.plan_purchase_material',compact('datas','plan_no','setting','description','start_date','end_date','plan_signature','totalValue'));
 
            Storage::put('public/pdf/plan_purchase_material/'.'PLAN_APPROVISIONNEMENT'.$plan_no.'.pdf', $pdf->output());
 

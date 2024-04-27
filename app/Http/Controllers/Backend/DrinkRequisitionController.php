@@ -45,7 +45,7 @@ class DrinkRequisitionController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any requisition !');
         }
 
-        $requisitions = DrinkRequisition::take(20)->orderBy('id','desc')->get();
+        $requisitions = DrinkRequisition::orderBy('id','desc')->take(200)->get();
         return view('backend.pages.drink_requisition.index', compact('requisitions'));
     }
 
