@@ -105,9 +105,9 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
                 </div><br>
                 <div class="card">
                     <div class="seo-fact sbg4">
-                        <!--
+                        
                         <a href="{{ route('admin.booking-kidness-space.index') }}">
-                        -->
+                        
                             <div class="p-4 d-flex justify-content-between align-items-center">
                                 <div class="seofct-icon">
                                     <img src="{{ asset('img/undraw_toy_car_-7-umw.svg') }}" width="100">
@@ -121,9 +121,9 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
                 </div><br>
                 <div class="card">
                     <div class="seo-fact sbg4">
-                        <!--
+                        
                         <a href="{{ route('admin.booking-swiming-pool.index') }}">
-                        -->
+                        
                             <div class="p-4 d-flex justify-content-between align-items-center">
                                 <div class="seofct-icon">
                                     <img src="{{ asset('img/piscine1.jpg') }}" width="100">

@@ -22,7 +22,7 @@ class BookingSalle extends Model
     ];
 
     public function booking(){
-        return $this->hasMany('App\Models\BookingBooking','salle_id');
+        return $this->hasMany('App\Models\BookingBookingDetail','salle_id');
     }
 
     public function factureDetail(){

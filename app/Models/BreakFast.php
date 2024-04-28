@@ -21,11 +21,11 @@ class BreakFast extends Model
         'auteur',
     ];
 
-    public function booking(){
-        return $this->hasMany('App\Models\BookingBooking','break_fast_id');
+    public function bookingDetail(){
+        return $this->hasMany('App\Models\BookingBookingDetail','breakfast_id');
     }
 
     public function factureDetail(){
-        return $this->hasMany('App\Models\factureDetail','break_fast_id');
+        return $this->hasMany('App\Models\factureDetail','breakfast_id');
     }
 }

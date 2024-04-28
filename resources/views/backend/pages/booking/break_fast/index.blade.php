@@ -61,6 +61,7 @@
                                     <th width="10%">@lang('Taux marge')</th>
                                     <th width="10%">@lang('Taux majoration')</th>
                                     <th width="10%">@lang('Taux Reduction')</th>
+                                    <th width="10%">@lang('P.V')</th>
                                     <th width="15%">Action</th>
                                 </tr>
                             </thead>

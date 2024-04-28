@@ -70,7 +70,7 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th colspan="6">Total</th>
+                                    <th colspan="6">Total Cash</th>
                                     <th>{{ number_format($total_item_price_nvat,3,',',' ') }}</th>
                                     <th>{{ number_format($total_vat,3,',',' ') }}</th>
                                     <th>{{ number_format($total_amount,0,',',' ') }}</th>

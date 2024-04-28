@@ -60,9 +60,7 @@
                                 <td>
                                     <select class="form-control" name="breakfast_id" id="breakfast_id">
                                         <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                        @foreach($items as $item)
-                                            <option value="{{$item->id}}">{{$item->name}}</option>
-                                        @endforeach
+                                            <option value="BREAKFAST">BREAKFAST</option>
                                     </select>
                                 </td>
                                 <td>
@@ -115,7 +113,7 @@
                                     <td>{{ $facture->tp_address_rue }}</td>
                                 -->
                                     <td>@if($facture->booking_client_id){{ $facture->bookingClient->customer_name }} @elseif($facture->client_id){{ $facture->client->customer_name }} @else {{ $facture->customer_name }} @endif</td>
-                                    <td><span class="badge badge-success">{{ $facture->breakFast->name }}</span></td>
+                                    <td><span class="badge badge-success">BREAKFAST</span></td>
                                     <td>{{ $facture->item_quantity }}</td>
                                     <td>{{ number_format($facture->item_price,0,',',' ') }}</td>
                                     <td>{{ number_format($facture->item_total_amount ,0,',',' ')}}</td>

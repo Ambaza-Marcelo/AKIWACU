@@ -60,7 +60,7 @@
                                     <td>{{ \Carbon\Carbon::parse($data->invoice_date)->format('d/m/Y') }}</td>
                                     <td>{{ $data->invoice_number }}</td>
                                     <td>@if($data->client_id){{ $data->client->customer_name }} @elseif($data->booking_client_id) {{ $data->bookingClient->customer_name }} @else {{ $data->customer_name }} @endif</td>
-                                    <td>@if($data->salle_id){{ $data->salle->name }} @elseif($data->service){{ $data->service->name }} @elseif($data->table_id){{ $data->table->name }} @endif</td>
+                                    <td>@if($data->salle_id){{ $data->salle->name }} @elseif($data->service){{ $data->service->name }} @elseif($data->table_id){{ $data->table->name }} @elseif($data->kidness_space_id){{ $data->kidnessSpace->name }} @elseif($data->swiming_pool_id){{ $data->swimingPool->name }} @elseif($data->breakfast_id)BREAKFAST @endif</td>
                                     <td>{{ $data->item_quantity }}</td>
                                     <td>{{ number_format($data->item_price_nvat,3,',',' ') }}</td>
                                     <td>{{ number_format($data->vat,3,',',' ') }}</td>
@@ -70,7 +70,7 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th colspan="6">Total</th>
+                                    <th colspan="6">Total Cash</th>
                                     <th>{{ number_format($total_item_price_nvat,3,',',' ') }}</th>
                                     <th>{{ number_format($total_vat,3,',',' ') }}</th>
                                     <th>{{ number_format($total_amount,0,',',' ') }}</th>
@@ -102,7 +102,7 @@
                                     <td>{{ \Carbon\Carbon::parse($data->invoice_date)->format('d/m/Y') }}</td>
                                     <td>{{ $data->invoice_number }}</td>
                                     <td>@if($data->client_id){{ $data->client->customer_name }} @elseif($data->booking_client_id) {{ $data->bookingClient->customer_name }} @else {{ $data->customer_name }} @endif</td>
-                                    <td>@if($data->salle_id){{ $data->salle->name }} @elseif($data->service){{ $data->service->name }} @elseif($data->table_id){{ $data->table->name }} @endif</td>
+                                    <td>@if($data->salle_id){{ $data->salle->name }} @elseif($data->service){{ $data->service->name }} @elseif($data->table_id){{ $data->table->name }} @elseif($data->kidness_space_id){{ $data->kidnessSpace->name }} @elseif($data->swiming_pool_id){{ $data->swimingPool->name }} @elseif($data->breakfast_id)BREAKFAST @endif</td>
                                     <td>{{ $data->item_quantity }}</td>
                                     <td>{{ number_format($data->item_price_nvat,3,',',' ') }}</td>
                                     <td>{{ number_format($data->vat,3,',',' ') }}</td>

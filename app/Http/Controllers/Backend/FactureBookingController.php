@@ -88,7 +88,7 @@ class FactureBookingController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any invoice !');
         }
 
-        $factures = FactureDetail::where('break_fast_id','!=','')->take(100)->orderBy('id','desc')->get();
+        $factures = FactureDetail::where('breakfast_id','!=','')->take(100)->orderBy('id','desc')->get();
         return view('backend.pages.invoice_booking.breakfast',compact('factures'));
     }
 
@@ -231,7 +231,7 @@ class FactureBookingController extends Controller
 
         
 
-        $pdf = PDF::loadView('backend.pages.document.rapport_facture_reservation',compact('datas','dateTime','setting','end_date','start_date','total_amount','total_vat','total_item_price_nvat','total_amount_credit','credits','total_vat_credit','total_item_price_nvat_credit','type'))->setPaper('a4', 'landscape');
+        $pdf = PDF::loadView('backend.pages.document.rapport_facture_reservation',compact('datas','dateTime','setting','end_date','start_date','total_amount','total_vat','total_item_price_nvat','total_amount_credit','credits','total_vat_credit','total_item_price_nvat_credit','type'))->setPaper('a4', 'portrait');
 
         Storage::put('public/rapport_facture_booking_/'.$d1.'_'.$d2.'.pdf', $pdf->output());
 
