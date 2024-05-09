@@ -57,7 +57,7 @@
                                 <th>@lang('messages.item')</th>
                                 <th>@lang('messages.quantity')</th>
                                 <th>@lang('messages.unit')</th>
-                                <th>@lang('P.A')</th>
+                                <th>@lang('messages.price')</th>
                                 <th>Action</th>
                             </tr>
                             <tr class="">  
@@ -67,7 +67,7 @@
                                 <option value="{{ $drink->id }}" class="form-control">{{$drink->name}}/{{ $drink->code }}</option>
                                 @endforeach
                                 </select></td>  
-                                <td><input type="number" name="quantity[]" placeholder="Enter quantity" class="form-control" min="0" required /></td> 
+                                <td><input type="number" name="quantity[]" placeholder="Enter quantity" class="form-control" min="0" /></td> 
                                 <td><select class="form-control" name="unit[]" id="unit">
                                     <option disabled="disabled" selected="selected">Merci de choisir</option>
                                         <option value="bouteilles" class="form-control">Bouteilles</option>
@@ -75,7 +75,7 @@
                                         <option value="cartons" class="form-control">Cartons</option>
                                         <option value="millilitres" class="form-control">Millilitres</option>
                                 </select></td>
-                                <td><input type="number" name="price[]" placeholder="Enter Price" class="form-control" step="any" required min="0" /></td> 
+                                <td><input type="number" name="price[]" placeholder="Enter Price" class="form-control" min="0" /></td> 
                                 <td><button type="button" name="add" id="add" class="btn btn-success">@lang('messages.addmore')</button></td>     
                             </tr>
                         </table> 
@@ -125,7 +125,7 @@
                             "</select>"+
                         "</td>"+
                         "<td>"+
-                          "<input type='number' name='price[]' placeholder='Enter Price' class='form-control' step='any' min='0' />"+
+                          "<input type='number' name='price[]' placeholder='Enter Price' class='form-control' min='0' />"+
                         "</td>"+
                         "<td>"+
                           "<button type='button' class='btn btn-danger remove-tr'>@lang('messages.delete')</button>"+

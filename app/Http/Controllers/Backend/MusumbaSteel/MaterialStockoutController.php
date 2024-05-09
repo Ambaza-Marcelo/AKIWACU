@@ -338,8 +338,6 @@ class MaterialStockoutController extends Controller
                     'created_by' => $this->user->name,
                     'description' => $data->description,
                     'date' => $data->date,
-                    'type_transaction' => $data->item_movement_type,
-                    'document_no' => $stockout_no,
                     'created_at' => \Carbon\Carbon::now()
                 );
                 $reportStoreData[] = $reportStore;
@@ -350,63 +348,25 @@ class MaterialStockoutController extends Controller
                         'total_purchase_value' => $quantityRestantStore * $data->purchase_price,
                         'total_cump_value' => $quantityRestantStore * $data->purchase_price,
                         'created_by' => $this->user->name,
-                        'verified' => true,
+                        'verified' => false,
                         'created_at' => \Carbon\Carbon::now()
                     );
 
 
                     if ($data->quantity <= $quantityStockInitial) {
+
+                        MsMaterialReport::insert($reportStoreData);
                         
                         MsMaterialStoreDetail::where('code',$code_store_origin)->where('material_id',$data->material_id)
                         ->update($mdStore);
 
-                        $flag = 0;
-
                         
                     }else{
-
-                            foreach ($datas as $data) {
-                            $cump = MsMaterialStoreDetail::where('material_id', $data->material_id)->value('cump');
-
-                            $code_store_origin = MsMaterialStore::where('id',$data->origin_store_id)->value('code');
-
-                            $valeurStockInitial = MsMaterialStoreDetail::where('code',$code_store_origin)->where('material_id','!=', '')->where('material_id', $data->material_id)->value('total_cump_value');
-                            $quantityStockInitial = MsMaterialStoreDetail::where('code',$code_store_origin)->where('material_id','!=', '')->where('material_id', $data->material_id)->where('verified',true)->value('quantity');
-
-                            $quantityTotal = $quantityStockInitial + $data->quantity;
-                      
-                
-                            $returnData = array(
-                                'material_id' => $data->material_id,
-                                'quantity' => $quantityTotal,
-                                'total_purchase_value' => $quantityTotal * $cump,
-                                'total_cump_value' => $quantityTotal * $cump,
-                                'verified' => false,
-                            );
-
-                            $status = MsMaterialStoreDetail::where('code',$code_store_origin)->where('material_id','!=', '')->where('material_id', $data->material_id)->value('verified');
-                    
-
-                        
-                                MsMaterialStoreDetail::where('code',$code_store_origin)->where('material_id','!=', '')->where('material_id', $data->material_id)->where('verified',true)
-                                ->update($returnData);
-                                $flag = 1;
-                            
-                        }
-
-                        MsMaterialStoreDetail::where('material_id','!=','')->update(['verified' => false]);
-
                         session()->flash('error', 'Why do you want to stockout quantity you do not have in your store?please rewrite a valid quantity!');
                         return redirect()->back();
                     }
                 
             }
-
-            if ($flag != 1) {
-                MsMaterialReport::insert($reportStoreData);
-            }
-
-            MsMaterialStoreDetail::where('material_id','!=','')->update(['verified' => false]);
 
                 MsMaterialStockout::where('stockout_no', '=', $stockout_no)
                     ->update(['status' => 4,'approuved_by' => $this->user->name]);
@@ -415,7 +375,11 @@ class MaterialStockoutController extends Controller
 
                 session()->flash('success', 'Stockout has been done successfuly !, from '.$code_store_origin);
                 return back();
+    }
 
+    public function get_reception_data()
+    {
+        return Excel::download(new ReceptionExport, 'stockouts.xlsx');
     }
 
 

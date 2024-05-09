@@ -50,13 +50,13 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="name">@lang('messages.item')<strong style="color: red;">*</strong></label>
-                                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name" required>
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter Name">
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="unit">@lang('messages.unit')<strong style="color: red;">*</strong></label>
-                                    <select class="form-control" name="unit" id="unit" required>
+                                    <select class="form-control" name="unit" id="unit">
                                         <option disabled="disabled">Merci de choisir</option>
                                         <option value="pieces" selected="selected" class="form-control">Pieces</option>
                                         <option value="portions" class="form-control">Portions</option>
@@ -85,7 +85,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="selling_price">@lang('messages.selling_price')<strong style="color: red;">*</strong></label>
-                                    <input type="number" class="form-control" id="selling_price" name="selling_price" placeholder="Enter selling price" min="0" required>
+                                    <input type="number" class="form-control" id="selling_price" name="selling_price" placeholder="Enter selling price" min="0">
                                 </div>
                             </div>
                         </div>
@@ -119,41 +119,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="taux_majoration">@lang('Taux Majoration')</label>
-                                    <select class="form-control" name="taux_majoration" id="taux_majoration" required>
-                                        <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                        <option value="0" class="form-control">0%</option>
-                                        <option value="25" class="form-control">25%</option>
-                                        <option value="50" class="form-control">50%</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="taux_reduction">@lang('Taux Reduction')</label>
-                                    <select class="form-control" name="taux_reduction" id="taux_reduction" required>
-                                        <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                        <option value="0" class="form-control">0%</option>
-                                        <option value="10" class="form-control">10%</option>
-                                        <option value="25" class="form-control">25%</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="taux_marge">@lang('Taux Marge')</label>
-                                    <select class="form-control" name="taux_marge" id="taux_marge" required>
-                                        <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                        <option value="0" class="form-control">0%</option>
-                                        <option value="30" class="form-control">30%</option>
-                                        <option value="50" class="form-control">50%</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
                         <table class="table table-bordered" id="dynamicTable">  
                             <tr>
                                 <th>@lang('messages.item')</th>
@@ -161,7 +126,7 @@
                                 <th>Action</th>
                             </tr>
                             <tr>  
-                                <td> <select class="form-control" name="food_id[]" id="food_id" required>
+                                <td> <select class="form-control" name="food_id[]" id="food_id">
                                 <option disabled="disabled" selected="selected">merci de choisir</option>
                                 @foreach ($foods as $food)
                                 <option value="{{ $food->id }}" class="form-control">{{ $food->name }}</option>
@@ -169,7 +134,7 @@
                                 </select>
                                 </td>  
                                 <td>
-                                    <input type='number' name='quantity[]' step='any' min='0' step='any' placeholder='Enter Quantity' class='form-control' required />
+                                    <input type='number' name='quantity[]' step='any' min='0' step='any' placeholder='Enter Quantity' class='form-control' />
                                 </td> 
                                 <td><button type="button" name="add" id="add" class="btn btn-success">@lang('messages.addmore')</button></td>  
                             </tr>  

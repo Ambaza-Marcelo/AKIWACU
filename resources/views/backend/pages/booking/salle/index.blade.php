@@ -57,10 +57,7 @@
                                     <th width="10%">@lang('messages.item')</th>
                                     <th width="10%">@lang('messages.code')</th>
                                     <th width="10%">@lang('messages.quantity')</th>
-                                    <th width="10%">@lang('Taux TVA')</th>
-                                    <th width="10%">@lang('Taux marge')</th>
-                                    <th width="10%">@lang('Taux majoration')</th>
-                                    <th width="10%">@lang('Taux Reduction')</th>
+                                    <th width="10%">@lang('TVA')</th>
                                     <th width="10%">@lang('messages.selling_price')</th>
                                     <th width="10%">@lang('ETAT')</th>
                                     <th width="15%">Action</th>
@@ -74,9 +71,6 @@
                                     <td>{{ $salle->code }}</td>
                                     <td>{{ $salle->quantity }}</td>
                                     <td>{{ $salle->vat }}%</td>
-                                    <td>{{ $salle->taux_marge }}%</td>
-                                    <td>{{ $salle->taux_majoration }}%</td>
-                                    <td>{{ $salle->taux_reduction }}%</td>
                                     <td>{{ number_format($salle->selling_price,0,',',' ') }}</td>
                                     @if($salle->status == 1)
                                     <td><span  class="badge badge-success">Reservée</span></td>

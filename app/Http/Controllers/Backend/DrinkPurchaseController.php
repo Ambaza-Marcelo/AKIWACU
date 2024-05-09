@@ -42,7 +42,7 @@ class DrinkPurchaseController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any purchase !');
         }
 
-        $purchases = DrinkPurchase::orderBy('id','desc')->take(200)->get();
+        $purchases = DrinkPurchase::all();
         return view('backend.pages.drink_purchase.index', compact('purchases'));
     }
 
@@ -77,7 +77,6 @@ class DrinkPurchaseController extends Controller
                 'drink_id.*'  => 'required',
                 'date'  => 'required',
                 'quantity.*'  => 'required',
-                'price.*'  => 'required',
                 'unit.*'  => 'required',
                 'description'  => 'required'
             );
@@ -93,7 +92,6 @@ class DrinkPurchaseController extends Controller
             $drink_id = $request->drink_id;
             $date = $request->date;
             $quantity = $request->quantity;
-            $price = $request->price;
             $unit = $request->unit;
             $description =$request->description; 
             $latest = DrinkPurchase::latest()->first();
@@ -117,14 +115,14 @@ class DrinkPurchaseController extends Controller
             //insert details of purchase No.
             for( $count = 0; $count < count($drink_id); $count++ ){
 
-                ///$price = Drink::where('id', $drink_id[$count])->value('purchase_price');
-                $total_value = $quantity[$count] * $price[$count];
+                $price = Drink::where('id', $drink_id[$count])->value('purchase_price');
+                $total_value = $quantity[$count] * $price;
                 $data = array(
                     'drink_id' => $drink_id[$count],
                     'date' => $date,
                     'quantity' => $quantity[$count],
                     'unit' => $unit[$count],
-                    'price' => $price[$count],
+                    'price' => $price,
                     'description' => $description,
                     'total_value' => $total_value,
                     'created_by' => $created_by,
@@ -179,13 +177,6 @@ class DrinkPurchaseController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to edit any purchase !');
         }
 
-        $drinks  = Drink::orderBy('name','asc')->get();
-
-        $data = DrinkPurchase::where('purchase_no', $purchase_no)->first();
-        $datas = DrinkPurchaseDetail::where('purchase_no', $purchase_no)->get();
-
-        return view('backend.pages.drink_purchase.edit', compact('datas','data','drinks'));
-
     }
 
     /**
@@ -201,63 +192,7 @@ class DrinkPurchaseController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to edit any purchase !');
         }
 
-       $rules = array(
-                'drink_id.*'  => 'required',
-                'date'  => 'required',
-                'quantity.*'  => 'required',
-                'price.*'  => 'required',
-                'unit.*'  => 'required',
-                'description'  => 'required'
-            );
-
-            $error = Validator::make($request->all(),$rules);
-
-            if($error->fails()){
-                return response()->json([
-                    'error' => $error->errors()->all(),
-                ]);
-            }
-
-            $drink_id = $request->drink_id;
-            $date = $request->date;
-            $quantity = $request->quantity;
-            $price = $request->price;
-            $unit = $request->unit;
-            $description =$request->description; 
-
-            $purchase = DrinkPurchase::where('purchase_no',$purchase_no)->first();
-            $purchase->date = $date;
-            $purchase->description = $description;
-            $purchase->save();
-            //insert details of purchase No.
-            for( $count = 0; $count < count($drink_id); $count++ ){
-
-                $created_by = $this->user->name;
-                $purchase_signature = DrinkPurchase::where('purchase_no',$purchase_no)->value('purchase_signature');
-                //$price = Drink::where('id', $drink_id[$count])->value('price');
-                $total_value = $quantity[$count] * $price[$count];
-                $data = array(
-                    'drink_id' => $drink_id[$count],
-                    'date' => $date,
-                    'quantity' => $quantity[$count],
-                    'unit' => $unit[$count],
-                    'price' => $price[$count],
-                    'description' => $description,
-                    'total_value' => $total_value,
-                    'created_by' => $created_by,
-                    'purchase_no' => $purchase_no,
-                    'purchase_signature' => $purchase_signature,
-                );
-                $insert_data[] = $data;
-            }
-
-            DrinkPurchaseDetail::where('purchase_no',$purchase_no)->delete();
-
-            DrinkPurchaseDetail::insert($insert_data);
-
-        session()->flash('success', 'Plan has been updated successfuly !!');
-        return redirect()->route('admin.drink-purchases.index');
-
+        
     }
 
     public function validatePurchase($purchase_no)

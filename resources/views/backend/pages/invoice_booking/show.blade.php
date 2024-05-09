@@ -262,7 +262,7 @@
                             </tr>
                             @foreach($factureDetails as $factureDetail)
                             <tr>  
-                                <td><input type="text" value="@if($factureDetail->salle_id){{ $factureDetail->salle->name }} @elseif($factureDetail->service_id){{ $factureDetail->service->name }} @elseif($factureDetail->breakfast_id) BREAKFAST @elseif($factureDetail->swiming_pool_id) {{ $factureDetail->swimingPool->name }} @elseif($factureDetail->kidness_space_id) {{ $factureDetail->kidnessSpace->name }} @else{{ $factureDetail->table->name }} @endif" class="form-control" readonly></td>  
+                                <td><input type="text" value="@if($factureDetail->salle_id){{ $factureDetail->salle->name }} @elseif($factureDetail->service_id){{ $factureDetail->service->name }} @elseif($factureDetail->breakfast_id) {{ $factureDetail->breakFast->name }} @elseif($factureDetail->swiming_pool_id) {{ $factureDetail->swimingPool->name }} @elseif($factureDetail->kidness_space_id) {{ $factureDetail->kidnessSpace->name }} @else{{ $factureDetail->table->name }} @endif" class="form-control" readonly></td>  
                                 <td><input type="text" value="{{ $factureDetail->item_quantity }}" class="form-control" readonly /></td>  
                                 <td><input type="text" value="{{ $factureDetail->item_price }}" class="form-control" readonly /></td>
                                 <td><input type="text" value="{{ $factureDetail->item_ct }}" class="form-control" readonly /></td>   

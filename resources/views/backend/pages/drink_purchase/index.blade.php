@@ -67,7 +67,7 @@
                                @foreach ($purchases as $purchase)
                                <tr>
                                     <td>{{ $loop->index+1 }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($purchase->date)->format('d/m/Y') }}</td>
+                                    <td>{{ $purchase->date }}</td>
                                     <td><a href="{{ route('admin.drink-purchases.show',$purchase->purchase_no) }}">{{ $purchase->purchase_no }}</a></td>
                                     <td>{{ $purchase->purchase_signature }}</td>
                                     @if($purchase->status == 2)
@@ -164,7 +164,7 @@
                                         <a href="{{ route('admin.drink-reception-without-order.create',$purchase->purchase_no)}}" class="btn btn-success">Receptionner Sans Bon de Commande</a>
                                         @endif
                                         @endif
-                                        @if($purchase->status == 1 || $purchase->status == 0 || $purchase->status == 2 || $purchase->status == 3 || $purchase->status == 4)
+                                        @if($purchase->status == 1)
                                         @if (Auth::guard('admin')->user()->can('drink_purchase.edit'))
                                             <a class="btn btn-success text-white" href="{{ route('admin.drink-purchases.edit', $purchase->purchase_no) }}">@lang('messages.edit')</a>
                                         @endif

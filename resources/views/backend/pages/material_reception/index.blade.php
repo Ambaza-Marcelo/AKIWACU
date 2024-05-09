@@ -83,7 +83,7 @@
                                @foreach ($receptions as $reception)
                                <tr>
                                     <td>{{ $loop->index+1 }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($reception->date)->format('d/m/Y') }}</td>
+                                    <td>{{ $reception->date }}</td>
                                     <td><a href="{{ route('admin.material-receptions.show',$reception->reception_no)}}">{{ $reception->reception_no }}</a></td>
                                     <td><a href="@if($reception->order_no){{ route('admin.material-supplier-orders.show',$reception->order_no)}} @else {{ route('admin.material-requisitions.show',$reception->purchase_no)}} @endif">@if($reception->order_no){{ $reception->order_no }} @else {{ $reception->purchase_no }} @endif</a></td>
                                     <td>@if($reception->status == 1)<img src="{{ asset('img/warning3.gif')}}" width="35">@elseif($reception->status == 1)<span class="badge badge-info">Encours</span> @elseif($reception->status == 2)<span class="badge badge-info">Validé</span> @elseif($reception->status == 3)<span class="badge badge-info">Confirmé</span> @elseif($reception->status == 4)<span class="badge badge-info">Approuvé</span> @elseif($reception->status == -1)<span class="badge badge-danger">Rejeté</span>@endif</td>

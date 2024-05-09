@@ -80,9 +80,6 @@ class ServiceController extends Controller
         $service->quantity = $request->quantity;
         $service->specification = $request->specification;
         $service->vat = $request->vat;
-        $service->taux_marge = $request->taux_marge;
-        $service->taux_majoration = $request->taux_majoration;
-        $service->taux_reduction = $request->taux_reduction;
         $service->auteur = $this->user->name;
         $service->save();
 
@@ -154,9 +151,6 @@ class ServiceController extends Controller
         $service->quantity = $request->quantity;
         $service->specification = $request->specification;
         $service->vat = $request->vat;
-        $service->taux_marge = $request->taux_marge;
-        $service->taux_majoration = $request->taux_majoration;
-        $service->taux_reduction = $request->taux_reduction;
         $service->auteur = $this->user->name;
         $service->save();
 

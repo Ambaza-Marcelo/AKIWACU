@@ -46,7 +46,7 @@ class FoodStockinController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any stockin !');
         }
 
-        $stockins = FoodStockin::orderBy('id','desc')->take(200)->get();
+        $stockins = FoodStockin::all();
         return view('backend.pages.food_stockin.index', compact('stockins'));
     }
 
@@ -372,18 +372,13 @@ class FoodStockinController extends Controller
                         if (!empty($food)) {
                             FoodBigStoreDetail::where('code',$code_store_destination)->where('food_id',$data->food_id)
                         ->update($bigStore);
-                        $flag = 1;
                         }else{
-                            $flag = 0;
-                            session()->flash('error', 'this item is not saved in the stock');
-                            return back();
+                            FoodBigStoreDetail::insert($bigStoreData);
                         }
   
         }
 
-            if ($flag != 0) {
-                FoodBigReport::insert($reportBigStoreData);
-            }
+            FoodBigReport::insert($reportBigStoreData);
             FoodStockin::where('stockin_no', '=', $stockin_no)
                 ->update(['status' => 4,'approuved_by' => $this->user->name]);
             FoodStockinDetail::where('stockin_no', '=', $stockin_no)
@@ -391,6 +386,11 @@ class FoodStockinController extends Controller
 
         session()->flash('success', 'Stockin has been done successfuly !, to '.$code_store_destination);
         return back();
+    }
+
+    public function get_reception_data()
+    {
+        return Excel::download(new ReceptionExport, 'stockins.xlsx');
     }
 
 

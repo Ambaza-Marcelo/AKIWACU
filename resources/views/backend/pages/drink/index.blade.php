@@ -62,10 +62,7 @@
                                     <th width="10%">@lang('Min Store')</th>
                                     <th width="10%">@lang('messages.purchase_price')</th>
                                      <th width="10%">@lang('P. BRARUDI')</th>
-                                    <th width="10%">@lang('Taux TVA')</th>
-                                    <th width="10%">@lang('Taux marge')</th>
-                                    <th width="10%">@lang('Taux majoration')</th>
-                                    <th width="10%">@lang('Taux Reduction')</th>
+                                    <th width="10%">@lang('TVA')</th>
                                     <th width="10%">@lang('messages.selling_price')</th>
                                     <th width="15%">Action</th>
                                 </tr>
@@ -83,9 +80,6 @@
                                     <td>{{ number_format($drink->purchase_price,0,',',' ') }}</td>
                                     <td>{{ number_format($drink->brarudi_price,0,',',' ') }}</td>
                                     <td>{{ $drink->vat }}%</td>
-                                    <td>{{ $drink->taux_marge }}%</td>
-                                    <td>{{ $drink->taux_majoration }}%</td>
-                                    <td>{{ $drink->taux_reduction }}%</td>
                                     <td>{{ number_format($drink->selling_price,0,',',' ') }}</td>
                                     <td>
                                         @if (Auth::guard('admin')->user()->can('drink.edit'))

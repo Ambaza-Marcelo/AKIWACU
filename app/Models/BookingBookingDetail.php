@@ -36,9 +36,6 @@ class BookingBookingDetail extends Model
         'technique_id',
         'salle_id',
         'service_id',
-        'swiming_pool_id',
-        'breakfast_id',
-        'kidness_space_id',
         'booking_client_id'
     ];
 

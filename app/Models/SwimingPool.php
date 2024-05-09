@@ -22,7 +22,7 @@ class SwimingPool extends Model
     ];
 
     public function booking(){
-        return $this->hasMany('App\Models\BookingBookingDetail','swiming_pool_id');
+        return $this->hasMany('App\Models\BookingBooking','swiming_pool_id');
     }
 
     public function factureDetail(){

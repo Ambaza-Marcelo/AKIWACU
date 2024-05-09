@@ -105,9 +105,9 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
                 </div><br>
                 <div class="card">
                     <div class="seo-fact sbg4">
-                        
+                        <!--
                         <a href="{{ route('admin.booking-kidness-space.index') }}">
-                        
+                        -->
                             <div class="p-4 d-flex justify-content-between align-items-center">
                                 <div class="seofct-icon">
                                     <img src="{{ asset('img/undraw_toy_car_-7-umw.svg') }}" width="100">
@@ -121,9 +121,9 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
                 </div><br>
                 <div class="card">
                     <div class="seo-fact sbg4">
-                        
+                        <!--
                         <a href="{{ route('admin.booking-swiming-pool.index') }}">
-                        
+                        -->
                             <div class="p-4 d-flex justify-content-between align-items-center">
                                 <div class="seofct-icon">
                                     <img src="{{ asset('img/piscine1.jpg') }}" width="100">
@@ -237,29 +237,9 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
                 </div><br>
             </div>
     </div><br>
-    @if (Auth::guard('admin')->user()->can('drink_purchase.view') || Auth::guard('admin')->user()->can('food_purchase.view') || Auth::guard('admin')->user()->can('material_purchase.view'))
+    @if (Auth::guard('admin')->user()->can('invoice_booking.edit'))
         <div class="row">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="seo-fact sbg3">
-                        <a href="{{ route('admin.plan-purchase.choice') }}">
-                            <div class="p-4 d-flex justify-content-between align-items-center">
-                                <div class="seofct-icon">
-                                    <img src="{{ asset('img/undraw_empty_cart_co35.svg') }}" width="100">
-                                </div>
-                                <h2>
-                                    LES PLANNINGS D'APPROVISIONNEMENT 
-                                </h2>
-                            </div>
-                        </a>
-                    </div>
-                </div><br>
-            </div>
-        </div>
-        @endif
-    @if (Auth::guard('admin')->user()->can('invoice_booking.view'))
-        <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="card">
                     <div class="seo-fact sbg3">
                         <a href="{{ route('admin.credit-invoices.list') }}">
@@ -275,7 +255,6 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
                     </div>
                 </div><br>
             </div>
-            <!--
             <div class="col-md-4">
                 <div class="card">
                     <div class="seo-fact sbg3">
@@ -292,17 +271,16 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
                     </div>
                 </div><br>
             </div>
-        -->
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="card">
                     <div class="seo-fact sbg3">
                         <a href="{{ route('admin.voir-chiffre-affaires') }}">
                             <div class="p-4 d-flex justify-content-between align-items-center">
                                 <div class="seofct-icon">
-                                    <img src="{{ asset('img/undraw_resume_folder_re_e0bi.svg') }}" width="100">
+                                    <img src="{{ asset('img/undraw_special_event-001.svg') }}" width="100">
                                 </div>
                                 <h2>
-                                    DOSSIER DES RAPPORTS
+                                    Chiffre d'affaires
                                 </h2>
                             </div>
                         </a>
@@ -356,7 +334,7 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
         {
             label: 'GRAND STOCK(BOISSONS)',
             backgroundColor: "red",
-            data: 0
+            data: drink_extra_big_store
         },
         {
             label: 'STOCK INTERMEDIAIRE(BOISSONS)',
@@ -376,17 +354,17 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
         {
             label: 'STOCK INTERMEDIAIRE(NOURRITURES)',
             backgroundColor: "#077D92",
-            data: 0
+            data: food_big_store
         },
         {
             label: 'PETIT STOCK(NOURRITURES',
             backgroundColor: "pink",
-            data: 0
+            data: food_small_store
         },
         {
             label: 'GRAND STOCK(MATERIELS)',
             backgroundColor: "red",
-            data: 0
+            data: material_extra_big_store
         },
         {
             label: 'STOCK INTERMEDIAIRE(MATERIELS)',

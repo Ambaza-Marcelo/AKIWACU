@@ -80,9 +80,6 @@ class KidnessSpaceController extends Controller
         $kidness_space->quantity = $request->quantity;
         $kidness_space->specification = $request->specification;
         $kidness_space->vat = $request->vat;
-        $kidness_space->taux_marge = $request->taux_marge;
-        $kidness_space->taux_majoration = $request->taux_majoration;
-        $kidness_space->taux_reduction = $request->taux_reduction;
         $kidness_space->auteur = $this->user->name;
         $kidness_space->save();
 
@@ -147,9 +144,6 @@ class KidnessSpaceController extends Controller
         $kidness_space->quantity = $request->quantity;
         $kidness_space->specification = $request->specification;
         $kidness_space->vat = $request->vat;
-        $kidness_space->taux_marge = $request->taux_marge;
-        $kidness_space->taux_majoration = $request->taux_majoration;
-        $kidness_space->taux_reduction = $request->taux_reduction;
         $kidness_space->auteur = $this->user->name;
         $kidness_space->save();
 

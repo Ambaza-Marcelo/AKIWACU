@@ -32,15 +32,15 @@ class FoodOrderClientExport implements FromCollection, WithMapping, WithHeadings
 
     public function map($data) : array {
 
-        if ($data->status == 0) {
+        if ($data->status == '0') {
             $status = "ENCOURS....";
-        }elseif ($data->status == -1) {
+        }elseif ($data->status === '-1') {
             $status = "REJETE";
-        }elseif ($data->status == 1) {
+        }elseif ($data->status === '1') {
             $status = "VALIDE";
-        }elseif ($data->status == 2) {
+        }elseif ($data->status === '2') {
             $status = "FACTURE ENCOURS";
-        }elseif ($data->status == 3) {
+        }elseif ($data->status == '3') {
         	$status = "FACTURE VALIDE";
         }else{
             $status = "";
@@ -48,7 +48,7 @@ class FoodOrderClientExport implements FromCollection, WithMapping, WithHeadings
 
         return [
             $data->id,
-            Carbon::parse($data->date)->format('d/m/Y'),
+            Carbon::parse($data->date)->format('Y-m-d'),
 			$data->order_no,
             $data->employe->name,
             $data->foodItem->name,

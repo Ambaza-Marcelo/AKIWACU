@@ -51,7 +51,7 @@ class FoodReceptionController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any reception !');
         }
 
-        $receptions = FoodReception::orderBy('id','desc')->take(200)->get();
+        $receptions = FoodReception::all();
         return view('backend.pages.food_reception.index', compact('receptions'));
     }
 
@@ -567,11 +567,8 @@ class FoodReceptionController extends Controller
                         if (!empty($food)) {
                             FoodBigStoreDetail::where('code',$code_store_destination)->where('food_id',$data->food_id)
                         ->update($bigStore);
-                        $flag = 1;
                         }else{
-                            $flag = 0;
-                            session()->flash('error', 'this item is not saved in the stock');
-                            return back();
+                            FoodBigStoreDetail::insert($bigStoreData);
                         }
 
 
@@ -582,9 +579,7 @@ class FoodReceptionController extends Controller
   
         }
 
-            if ($flag != 0) {
-                FoodBigReport::insert($reportBigStoreData);
-            }
+            FoodBigReport::insert($reportBigStoreData);
 
             FoodReception::where('reception_no', '=', $reception_no)
                 ->update(['status' => 4,'approuved_by' => $this->user->name]);

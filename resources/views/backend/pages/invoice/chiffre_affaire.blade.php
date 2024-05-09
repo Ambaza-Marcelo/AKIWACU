@@ -2,7 +2,7 @@
 @extends('backend.layouts.master')
 
 @section('title')
-@lang('DOSSIER DES RAPPORTS') - @lang('messages.admin_panel')
+@lang('Chiffre d\'affaires') - @lang('messages.admin_panel')
 @endsection
 
 @section('styles')
@@ -21,10 +21,10 @@
     <div class="row align-items-center">
         <div class="col-sm-6">
             <div class="breadcrumbs-area clearfix">
-                <h4 class="page-title pull-left">@lang('DOSSIER DES RAPPORTS')</h4>
+                <h4 class="page-title pull-left">@lang('Chiffre d\'affaires')</h4>
                 <ul class="breadcrumbs pull-left">
                     <li><a href="{{ route('admin.dashboard') }}">@lang('messages.dashboard')</a></li>
-                    <li><span>@lang('DOSSIER DES RAPPORTS')</span></li>
+                    <li><span>@lang('Chiffre d\'affaires')</span></li>
                 </ul>
             </div>
         </div>
@@ -37,10 +37,9 @@
 
 <div class="main-content-inner">
     <br>
-                <h2>RAPPORT CHIFFRE D'AFFAIRES</h2>
                     <form action="{{ route('admin.exporter-en-excel-chiffre-affaire')}}" method="GET">
                         <p class="float-right mb-2">
-                            <button type="submit" value="pdf" class="btn btn-info">Chiffre Affaire En Excel</button>
+                            <button type="submit" value="pdf" class="btn btn-primary">Chiffre Affaire En Excel</button>
                         </p>
                         <p class="float-right mb-2">
                             <div class="row">
@@ -70,7 +69,7 @@
                     </form><br>
                     <form action="{{ route('admin.exporter-en-excel-cash')}}" method="GET">
                         <p class="float-right mb-2">
-                            <button type="submit" value="pdf" class="btn btn-success">Cash En Excel</button>
+                            <button type="submit" value="pdf" class="btn btn-primary">Cash En Excel</button>
                         </p>
                         <p class="float-right mb-2">
                             <div class="row">
@@ -85,7 +84,7 @@
                     </form><br>
                     <form action="{{ route('admin.exporter-facture-encours')}}" method="GET">
                         <p class="float-right mb-2">
-                            <button type="submit" value="pdf" class="btn btn-warning">Exporter Facture Encours</button>
+                            <button type="submit" value="pdf" class="btn btn-primary">Exporter Facture Encours</button>
                         </p>
                         <p class="float-right mb-2">
                             <div class="row">
@@ -100,7 +99,7 @@
                     </form><br>
                     <form action="{{ route('admin.exporter-facture-annule')}}" method="GET">
                         <p class="float-right mb-2">
-                            <button type="submit" value="pdf" class="btn btn-danger">Exporter Facture Annule</button>
+                            <button type="submit" value="pdf" class="btn btn-primary">Exporter Facture Annule</button>
                         </p>
                         <p class="float-right mb-2">
                             <div class="row">
@@ -115,7 +114,7 @@
                     </form><br>
                     <form action="{{ route('admin.exporter-chiffre-affaire')}}" method="GET">
                         <p class="float-right mb-2">
-                            <button type="submit" value="pdf" class="btn btn-warning">Exporter Synthese C.A CREDIT/CASH</button>
+                            <button type="submit" value="pdf" class="btn btn-info">Exporter En PDF</button>
                         </p>
                         <p class="float-right mb-2">
                             <div class="row">
@@ -128,215 +127,102 @@
                             </div>
                         </p>
                     </form><br>
-                    <form action="{{ route('admin.exporter-en-excel-credits')}}" method="GET">
-                        <p class="float-right mb-2">
-                            <button type="submit" value="pdf" class="btn btn-warning">Exporter R. Recouvrement</button>
-                        </p>
-                        <p class="float-right mb-2">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <input type="date" name="start_date" class="form-control">
-                                </div>
-                                <div class="col-md-6">
-                                    <input type="date" name="end_date" class="form-control">
-                                </div>
+    <br>
+    <!--
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="seo-fact sbg3">
+                            <div class="p-4 d-flex justify-content-between align-items-center">
+                                CASH PV HTVA
+                                <h2>
+                                    {{ number_format($total_item_price_nvat,3,',',' ')}}
+                                </h2>
                             </div>
-                        </p>
-                    </form><br>
-                    <h2>RAPPORT DES STOCKS</h2>
-                    <form action="{{ route('admin.drink-small-store-report.export-to-excel')}}" method="GET">
-                        <table>
-                            <tr>
-                                <th>Date Debut</th>
-                                <th>Date Fin</th>
-                                <th>Stock</th>
-                                <th>Action</th>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input type="date" name="start_date" class="form-control" id="start_date">
-                                </td>
-                                <td>
-                                    <input type="date" name="end_date" class="form-control" id="end_date">
-                                </td>
-                                <td>
-                                    <select class="form-control" name="code_store" id="code_store">
-                                        <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                        @foreach($drinksmstores as $store)
-                                            <option value="{{$store->code}}">{{$store->code}}/{{$store->name}}</option>
-                                        @endforeach
-                                    </select>
-                                </td>
-                                <td>
-                                    <button type="submit" value="pdf" class="btn btn-success" title="Cliquer pour exporter en PDF">Exporter R. Petit Stock Boissons</button>
-                                </td>
-                            </tr>
-                        </table>
-                    </form><br>
-                    <form action="{{ route('admin.drink-big-store-report.export-to-excel')}}" method="GET">
-                        <table>
-                            <tr>
-                                <th>Date Debut</th>
-                                <th>Date Fin</th>
-                                <th>Stock</th>
-                                <th>Action</th>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input type="date" name="start_date" class="form-control" id="start_date">
-                                </td>
-                                <td>
-                                    <input type="date" name="end_date" class="form-control" id="end_date">
-                                </td>
-                                <td>
-                                    <select class="form-control" name="code_store" id="code_store">
-                                        <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                        @foreach($drinkbgstores as $store)
-                                            <option value="{{$store->code}}">{{$store->code}}/{{$store->name}}</option>
-                                        @endforeach
-                                    </select>
-                                </td>
-                                <td>
-                                    <button type="submit" value="pdf" class="btn btn-success" title="Cliquer pour exporter en PDF">Exporter R. Stock Intermediaire Boissons</button>
-                                </td>
-                            </tr>
-                        </table>
-                    </form>
-                    <form action="{{ route('admin.food-big-store-report.export-to-excel')}}" method="GET">
-                        <table>
-                            <tr>
-                                <th>Date Debut</th>
-                                <th>Date Fin</th>
-                                <th>Stock</th>
-                                <th>Action</th>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input type="date" name="start_date" class="form-control" id="start_date">
-                                </td>
-                                <td>
-                                    <input type="date" name="end_date" class="form-control" id="end_date">
-                                </td>
-                                <td>
-                                    <select class="form-control" name="code_store" id="code_store">
-                                        <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                        @foreach($foodbgstores as $store)
-                                            <option value="{{$store->code}}">{{$store->code}}/{{$store->name}}</option>
-                                        @endforeach
-                                    </select>
-                                </td>
-                                <td>
-                                    <button type="submit" value="pdf" class="btn btn-success" title="Cliquer pour exporter en PDF">Exporter R. Stock Nourritures</button>
-                                </td>
-                            </tr>
-                        </table>
-                    </form><br>
-                    <form action="{{ route('admin.material-big-store-report.export-to-excel')}}" method="GET">
-                        <table>
-                            <tr>
-                                <th>Date Debut</th>
-                                <th>Date Fin</th>
-                                <th>Stock</th>
-                                <th>Action</th>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <input type="date" name="start_date" class="form-control" id="start_date">
-                                </td>
-                                <td>
-                                    <input type="date" name="end_date" class="form-control" id="end_date">
-                                </td>
-                                <td>
-                                    <select class="form-control" name="code_store" id="code_store">
-                                        <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                        @foreach($materialbgstores as $store)
-                                            <option value="{{$store->code}}">{{$store->code}}/{{$store->name}}</option>
-                                        @endforeach
-                                    </select>
-                                </td>
-                                <td>
-                                    <button type="submit" value="pdf" class="btn btn-success" title="Cliquer pour exporter en PDF">Exporter R. Stock Materiel</button>
-                                </td>
-                            </tr>
-                        </table>
-                    </form><br>
-                    <h2>RAPPORT DES ACHATS</h2>
-                    <form action="{{ route('admin.drink-receptions.export-to-excel')}}" method="GET">
-                        <p class="float-right mb-2">
-                            <button type="submit" value="pdf" class="btn btn-success">Exporter R. Boissons</button>
-                        </p>
-                        <p class="float-right mb-2">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <input type="date" name="start_date" class="form-control">
-                                </div>
-                                <div class="col-md-6">
-                                    <input type="date" name="end_date" class="form-control">
-                                </div>
+                    </div>
+                </div><br>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="seo-fact sbg3">
+                            <div class="p-4 d-flex justify-content-between align-items-center">
+                                CASH TVA
+                                <h2>
+                                    {{ number_format($total_vat,3,',',' ')}} 
+                                </h2>
                             </div>
-                        </p>
-                    </form><br>
-                    <form action="{{ route('admin.food-receptions.export-to-excel')}}" method="GET">
-                        <p class="float-right mb-2">
-                            <button type="submit" value="pdf" class="btn btn-success">Exporter R. Nourritures</button>
-                        </p>
-                        <p class="float-right mb-2">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <input type="date" name="start_date" class="form-control">
-                                </div>
-                                <div class="col-md-6">
-                                    <input type="date" name="end_date" class="form-control">
-                                </div>
+                    </div>
+                </div><br>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="seo-fact sbg3">
+                            <div class="p-4 d-flex justify-content-between align-items-center">
+                                CASH TTC
+                                <h2>
+                                    {{ number_format($item_total_amount,3,',',' ')}}
+                                </h2>
                             </div>
-                        </p>
-                    </form><br>
-                    <form action="{{ route('admin.material-receptions.export-to-excel')}}" method="GET">
-                        <p class="float-right mb-2">
-                            <button type="submit" value="pdf" class="btn btn-success">Exporter R. Materiels</button>
-                        </p>
-                        <p class="float-right mb-2">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <input type="date" name="start_date" class="form-control">
-                                </div>
-                                <div class="col-md-6">
-                                    <input type="date" name="end_date" class="form-control">
-                                </div>
+                    </div>
+                </div><br>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="seo-fact sbg3">
+                            <div class="p-4 d-flex justify-content-between align-items-center">
+                                CREDIT PV HTVA
+                                <h2>
+                                    {{ number_format($total_item_price_nvat_credit,3,',',' ')}}
+                                </h2>
                             </div>
-                        </p>
-                    </form><br>
-                    <h2>RAPPORT STOCK PDG</h2>
-                    <form action="{{ route('admin.private-drink-stockouts.export-to-excel')}}" method="GET">
-                        <p class="float-right mb-2">
-                            <button type="submit" value="pdf" class="btn btn-success">Exporter R. SORTIES</button>
-                        </p>
-                        <p class="float-right mb-2">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <input type="date" name="start_date" class="form-control">
-                                </div>
-                                <div class="col-md-6">
-                                    <input type="date" name="end_date" class="form-control">
-                                </div>
+                    </div>
+                </div><br>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="seo-fact sbg3">
+                            <div class="p-4 d-flex justify-content-between align-items-center">
+                                CREDIT TVA
+                                <h2>
+                                    {{ number_format($total_vat_credit,3,',',' ')}} 
+                                </h2>
                             </div>
-                        </p>
-                    </form><br>
-                    <form action="{{ route('admin.private-drink-stockins.export-to-excel')}}" method="GET">
-                        <p class="float-right mb-2">
-                            <button type="submit" value="pdf" class="btn btn-success">Exporter R. ENTREES</button>
-                        </p>
-                        <p class="float-right mb-2">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <input type="date" name="start_date" class="form-control">
-                                </div>
-                                <div class="col-md-6">
-                                    <input type="date" name="end_date" class="form-control">
-                                </div>
+                    </div>
+                </div><br>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="seo-fact sbg3">
+                            <div class="p-4 d-flex justify-content-between align-items-center">
+                                CREDIT TTC
+                                <h2>
+                                    {{ number_format($item_total_amount_credit,3,',',' ')}}
+                                </h2>
                             </div>
-                        </p>
-                    </form><br>
-
+                    </div>
+                </div><br>
+            </div>
+        </div>
+        <h3>TOP 10 DES PRODUITS LES PLUS VENDUS</h3>
+        <div class="row">
+            @foreach($datas as $data)
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="seo-fact sbg3">
+                            <div class="p-4 d-flex justify-content-between align-items-center">
+                               {{ $loop->index +1 }}. @if($data->drink_id){{ $data->drink->name }} @elseif($data->food_item_id){{ $data->foodItem->name }} @elseif($data->bartender_item_id){{ $data->bartenderItem->name }} @elseif($data->barrist_item_id) {{ $data->barristItem->name }} @elseif($data->salle_id) {{ $data->salle->name }} @elseif($data->service_id) {{ $data->service->name }} @endif
+                                <h2>
+                                    {{ number_format($data->item_total_amount,0,',',' ')}}
+                                </h2>
+                            </div>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    -->
 </div>
 @endsection

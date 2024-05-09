@@ -7,7 +7,6 @@
              border: 1px solid black;
              width: auto;
              text-align: center;
-             font-size: 12px;
         }
         .signature{
             display: flex;
@@ -70,7 +69,7 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th colspan="6">Total Cash</th>
+                                    <th colspan="6">Total</th>
                                     <th>{{ number_format($total_item_price_nvat,3,',',' ') }}</th>
                                     <th>{{ number_format($total_vat,3,',',' ') }}</th>
                                     <th>{{ number_format($total_amount,3,',',' ') }}</th>

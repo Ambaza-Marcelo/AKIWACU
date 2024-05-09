@@ -63,6 +63,45 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="col-md-4" id="dynamicDiv">
+                        <div class="form-group">
+                            <label for="nom_referent">@lang('nom referent')</label>
+                            <input type="text" class="form-control" id="nom_referent" name="nom_referent" placeholder="Saisir le nom referent">
+                        </div>
+                        </div>
+                        <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="telephone_referent">@lang('telephone referent')</label>
+                            <input type="tel" class="form-control" placeholder="Saisir telephone referent" id="telephone_referent" name="telephone_referent">
+                        </div>
+                        </div>
+                        <div class="col-md-4">
+                        <div class="form-group">
+                            <label for="courriel_referent">@lang('courriel referent')</label>
+                            <input type="tel" class="form-control" placeholder="Saisir courriel referent" id="courriel_referent" name="courriel_referent">
+                        </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="type_evenement">@lang('Type Evenement')</label>
+                            <select class="form-control" name="type_evenement">
+                                <option disabled="disabled" selected="selected">Merci de choisir client</option>
+                                <option value="1">CONFERENCES</option>
+                                <option value="2">REUNIONS</option>
+                                <option value="3">AUTRES</option>
+                            </select>
+                        </div>
+                        </div>
+                        <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="nombre_personnes">@lang('Nombre de Personnes')</label>
+                            <input type="number" class="form-control" placeholder="Saisir nombre de personnes" id="nombre_personnes" min="0" name="nombre_personnes">
+                        </div>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-md-6" id="dynamicDiv">
                         <div class="form-group">
                             <label for="date_debut">@lang('Date de debut')</label>
@@ -96,7 +135,7 @@
                         <div class="col-lg-12">
                             <label for="description">@lang('messages.description')</label>
                             <textarea class="form-control" name="description" id="description" placeholder="Enter Description">
-                                RESERVATION DE PISCINE
+                                RESERVATION DE SERVICE
                             </textarea>
                         </div>
                         <div style="margin-top: 15px;margin-left: 15px;">

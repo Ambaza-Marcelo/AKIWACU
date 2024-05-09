@@ -49,7 +49,7 @@ class DrinkStockinController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any stockin !');
         }
 
-        $stockins = DrinkStockin::orderBy('id','desc')->take(200)->get();
+        $stockins = DrinkStockin::all();
         return view('backend.pages.drink_stockin.index', compact('stockins'));
     }
 
@@ -380,11 +380,8 @@ class DrinkStockinController extends Controller
                         if (!empty($drink)) {
                             DrinkBigStoreDetail::where('code',$code_store_destination)->where('drink_id',$data->drink_id)
                         ->update($bigStore);
-                        $flag = 1;
                         }else{
-                            $flag = 0;
-                            session()->flash('error', 'this item is not saved in the stock');
-                            return back();
+                            DrinkBigStoreDetail::insert($bigStoreData);
                         }
                         /*
                         $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
@@ -418,9 +415,7 @@ class DrinkStockinController extends Controller
                         */
         }
 
-            if ($flag != 0) {
-                DrinkBigReport::insert($reportBigStoreData);
-            }
+            DrinkBigReport::insert($reportBigStoreData);
             DrinkStockin::where('stockin_no', '=', $stockin_no)
                 ->update(['status' => 4,'approuved_by' => $this->user->name]);
             DrinkStockinDetail::where('stockin_no', '=', $stockin_no)

@@ -277,9 +277,9 @@ class FuelStockoutController extends Controller
         }
 
         MsFuelStockout::where('stockout_no', '=', $stockout_no)
-                ->update(['status' => 0,'reseted_by' => $this->user->name]);
+                ->update(['status' => 1,'reseted_by' => $this->user->name]);
         MsFuelStockoutDetail::where('stockout_no', '=', $stockout_no)
-                ->update(['status' => 0,'reseted_by' => $this->user->name]);
+                ->update(['status' => 1,'reseted_by' => $this->user->name]);
 
         session()->flash('success', 'Stockout has been reseted !!');
         return back();
@@ -331,8 +331,7 @@ class FuelStockoutController extends Controller
                     'quantity_stock_final' => $quantityRestant,
                     'value_stock_final' => $quantityRestant * $data->purchase_price,
                     'date' => $data->date,
-                    'type_transaction' => "SORTIE",
-                    'document_no' => $stockout_no,
+                    'transaction' => "SORTIE",
                     'description' => $data->description,
                     'created_at' => \Carbon\Carbon::now()
                 );
@@ -342,7 +341,7 @@ class FuelStockoutController extends Controller
                         'id' => $data->pump_id,
                         'quantity' => $quantityRestant,
                         'total_cost_value' => $quantityRestant * $data->cost_price,
-                        'verified' => true
+                        'verified' => false
                     );
                     
                     if ($data->quantity <= $quantityStockInitial) {
@@ -373,12 +372,9 @@ class FuelStockoutController extends Controller
                             $fuelReport->date = \Carbon\Carbon::now();
                             $fuelReport->save();
 
-                            $drapeau_index = 1;
-
                             MsFuelPump::where('id',$data->pump_id)
                             ->update($donnees);
-                            $flag = 0;
-
+                            MsFuelReport::insert($reportData);
 
                         }else{
                            session()->flash('error', $this->user->name.' , please begin to write start index pump!');
@@ -388,47 +384,12 @@ class FuelStockoutController extends Controller
 
                         
                     }else{
-
-                        foreach ($datas as $data) {
-                                $valeurStockInitial = MsFuelPump::where('id',$data->pump_id)->value('total_cost_value');
-                                $quantityStockInitial = MsFuelPump::where('id',$data->pump_id)->where('verified',true)->value('quantity');
-
-                                $quantityTotal = $quantityStockInitial + $data->quantity;
-
-                                $returnData = array(
-                                    'id' => $data->pump_id,
-                                    'quantity' => $quantityTotal,
-                                    'total_cost_value' => $quantityTotal * $data->cost_price,
-                                    'verified' => false
-                                );
-
-                                MsFuelPump::where('id',$data->pump_id)->where('verified',true)
-                            ->update($returnData);
-                            MsFuelPump::where('id','!=','')->update(['verified' => false]);
-                                $flag = 1;
-                            }
-
-
-                            if ($flag == 1 && $drapeau_index == 1) {
-                                $pump_lastest = MsFuelIndexPump::orderBy('id','desc')->first();
-                                $report_latest = MsFuelReport::orderBy('id','desc')->first();
-
-                                MsFuelIndexPump::where('id',$pump_lastest->id)->delete();
-                                MsFuelReport::where('id',$report_latest->id)->delete();
-                            }
-
                         session()->flash('error', $this->user->name.' ,Why do you want to stockout a quantity you do not have in your store? please rewrite a valid quantity!');
                         return redirect()->back();
                     }
                 
   
         }
-
-        if ($flag != 1) {
-           MsFuelReport::insert($reportData);
-        }
-
-        MsFuelPump::where('id','!=','')->update(['verified' => false]);
 
         MsFuelStockout::where('stockout_no', '=', $stockout_no)
                             ->update(['status' => 4,'approuved_by' => $this->user->name]);

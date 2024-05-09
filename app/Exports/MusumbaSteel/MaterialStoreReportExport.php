@@ -26,7 +26,7 @@ class MaterialStoreReportExport implements FromCollection, WithMapping, WithHead
         $end_date = $endDate.' 23:59:59';
 
         return MsMaterialReport::select(
-                        DB::raw('id,date,type_transaction,document_no,created_at,material_id,quantity_stock_initial,value_stock_initial,quantity_stockin,value_stockin,quantity_reception,value_reception,quantity_transfer,value_transfer,quantity_stockout,value_stockout,quantity_stock_final,value_stock_final,created_by,description'))->whereBetween('created_at',[$start_date,$end_date])/*->where('code_store',$code_store)*/->groupBy('id','date','type_transaction','document_no','created_at','material_id','quantity_stock_initial','value_stock_initial','quantity_stockin','value_stockin','quantity_reception','value_reception','quantity_transfer','value_transfer','quantity_stockout','value_stockout','quantity_stock_final','value_stock_final','description','created_by')->orderBy('id','asc')->get();
+                        DB::raw('id,created_at,material_id,quantity_stock_initial,value_stock_initial,quantity_stockin,value_stockin,quantity_reception,value_reception,quantity_transfer,value_transfer,quantity_stockout,value_stockout,quantity_stock_final,value_stock_final,description'))->whereBetween('created_at',[$start_date,$end_date])/*->where('code_store',$code_store)*/->groupBy('id','created_at','material_id','quantity_stock_initial','value_stock_initial','quantity_stockin','value_stockin','quantity_reception','value_reception','quantity_transfer','value_transfer','quantity_stockout','value_stockout','quantity_stock_final','value_stock_final','description')->orderBy('id','asc')->get();
     }
 
     public function map($data) : array {
@@ -43,9 +43,6 @@ class MaterialStoreReportExport implements FromCollection, WithMapping, WithHead
             (($data->quantity_stockout * $data->material->cump) + ($data->quantity_transfer * $data->material->cump)),
             ($data->quantity_stock_initial + $data->quantity_stockin + $data->quantity_reception) - ($data->quantity_stockout + $data->quantity_transfer),
             ((($data->quantity_stock_initial + $data->quantity_stockin + $data->quantity_reception) - ($data->quantity_stockout + $data->quantity_transfer)) * $data->material->cump),
-            $data->type_transaction,
-            $data->document_no,
-            $data->created_by,
             $data->description,
         ] ;
  
@@ -66,9 +63,6 @@ class MaterialStoreReportExport implements FromCollection, WithMapping, WithHead
             'Valeur Sortie',
             'Quantite Stock Final',
             'Valeur Stock Final',
-            'Type de Mouvement',
-            'Document No',
-            'Auteur',
             'Description'
         ] ;
     }

@@ -6,8 +6,6 @@
         tr,th,td{
              border: 1px solid black;
              text-align: center;
-             font-size: 12px;
-             width: auto;
         }
 
     </style>
@@ -45,12 +43,13 @@
                                     <th width="10%">@lang('messages.item')</th>
                                     <th width="10%">@lang('messages.code')</th>
                                     <th width="10%">Q. S. Initial</th>
+                                    <th width="10%">V. S. Initial</th>
                                     <th width="10%">Q. Entree/Reception</th>
+                                    <th width="10%">V. Entree/Reception</th>
                                     <th width="10%">Q. Sortie</th>
+                                    <th width="10%">V. Sortie</th>
                                     <th width="10%">Q. S. Final</th>
-                                    <th width="10%">Type Mouvement</th>
-                                    <th width="10%">Document No</th>
-                                    <th width="10%">Auteur</th>
+                                    <th width="10%">V. S. Final</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -61,13 +60,27 @@
                                     <td>{{ $data->material->name }} </td>
                                     <td>{{ $data->material->code }} </td>
                                     <td>{{ $data->quantity_stock_initial }} </td>
+                                    @php 
+                                        $value_stock_initial = $data->quantity_stock_initial * $data->material->cump;
+                                    @endphp
+                                    <td>{{ number_format($value_stock_initial,0,',',' ') }} </td>
                                     <td>@if($data->quantity_stockin){{ $data->quantity_stockin }} @elseif($data->quantity_reception) {{ $data->quantity_reception }} @endif </td>
+                                    <td>@if($data->value_stockin){{ number_format($data->value_stockin,0,',',' ') }} @elseif($data->value_reception) {{ number_format($data->value_reception,0,',',' ') }} @endif </td>
                                     <td>@if($data->quantity_stockout){{ $data->quantity_stockout }} @elseif($data->quantity_transfer) {{ $data->quantity_transfer }} @endif </td>
-                                    <td>{{ ($data->quantity_stock_initial + $data->quantity_stockin + $data->quantity_reception) - ($data->quantity_stockout + $data->quantity_transfer) }} </td>
+                                    @php
+                                        $value_stockout = $data->quantity_stockout * $data->material->cump;
 
-                                    <td>{{ $data->type_transaction }} </td>
-                                    <td>{{ $data->document_no }} </td>
-                                    <td>{{ $data->created_by }} </td>
+                                        $value_transfer = $data->quantity_transfer * $data->material->cump;
+                                    @endphp
+                                    <td>@if($data->value_stockout){{ number_format($value_stockout,0,',',' ') }} @elseif($data->value_transfer) {{ number_format($value_transfer,0,',',' ') }} @endif </td>
+                                    <td>{{ ($data->quantity_stock_initial + $data->quantity_stockin + $data->quantity_reception) - ($data->quantity_stockout + $data->quantity_transfer) }} </td>
+                                    @php
+                                        $quantite_finale = ($data->quantity_stock_initial + $data->quantity_stockin + $data->quantity_reception) - ($data->quantity_stockout + $data->quantity_transfer);
+
+                                        $quantity_stock_initial = $data->quantity_stock_initial;
+                                    @endphp
+
+                                    <td>{{ number_format(($quantite_finale * $data->material->cump),0,',',' ') }} </td>
                                 </tr>
                                 @endforeach
                             </tbody>

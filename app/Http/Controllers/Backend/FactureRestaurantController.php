@@ -21,10 +21,6 @@ use App\Models\Facture;
 use App\Models\FactureDetail;
 use App\Models\OrderKitchenDetail;
 use App\Models\OrderKitchen;
-use App\Models\DrinkSmallStore;
-use App\Models\DrinkBigStore;
-use App\Models\FoodBigStore;
-use App\Models\MaterialBigStore;
 use App\Models\FoodItem;
 use App\Models\Employe;
 use App\Models\Client;
@@ -61,40 +57,29 @@ class FactureRestaurantController extends Controller
         return view('backend.pages.invoice_kitchen.index',compact('factures'));
     }
 
-    public function voirFacturePayercredit(Request $request,$invoice_number)
+    public function voirFacturePayercredit($invoice_number)
     {
-        if (is_null($this->user) || !$this->user->can('invoice_booking.approuve')) {
-            abort(403, 'Sorry !! You are Unauthorized to do this ! more information,contact IT Msumba Holding Marcellin');
+        if (is_null($this->user) || !$this->user->can('invoice_booking.edit')) {
+            abort(403, 'Sorry !! You are Unauthorized to view this ! more information,contact Marcellin');
         }
 
-
-        $facture = Facture::where('invoice_number',$invoice_number)->where('etat','01')->first();
+        $facture = Facture::where('invoice_number',$invoice_number)->first();
         $clients =  Client::orderBy('customer_name','asc')->get();
-        $datas = FactureDetail::where('invoice_number',$invoice_number)->where('etat','01')->get();
+        $datas = FactureDetail::where('invoice_number',$invoice_number)->get();
         $total_amount = DB::table('facture_details')
-            ->where('invoice_number',$invoice_number)->where('etat','01')->sum('item_total_amount');
-        $r_credit = DB::table('factures')
-            ->where('invoice_number',$invoice_number)->where('etat','01')->sum('reste_credit');
-        if (!empty($r_credit)) {
-            $reste_credit = $r_credit;
-        }else{
-            $reste_credit = $total_amount;
-        }
-
-        $montant_recouvre = DB::table('factures')
-            ->where('invoice_number',$invoice_number)->where('etat','01')->sum('montant_recouvre');
-
-        return view('backend.pages.invoice_all.payer-credit',compact('datas','facture','total_amount','clients','reste_credit','montant_recouvre'));
+            ->where('invoice_number', '=', $invoice_number)
+            ->sum('item_total_amount');
+        return view('backend.pages.invoice_all.payer-credit',compact('datas','facture','total_amount','clients'));
     }
 
     public function voirFactureAcredit()
     {
-        if (is_null($this->user) || !$this->user->can('invoice_booking.view')) {
+        if (is_null($this->user) || !$this->user->can('invoice_booking.edit')) {
             abort(403, 'Sorry !! You are Unauthorized to view this ! more information,contact Marcellin');
         }
 
 
-        $factures = Facture::where('etat','01')->orderBy('id','desc')->get();
+        $factures = Facture::where('etat','01')->where('statut_paied','0')->orderBy('id','desc')->get();
         $clients =  Client::orderBy('customer_name','asc')->get();
         return view('backend.pages.invoice_all.credit',compact('factures','clients'));
     }
@@ -175,12 +160,8 @@ class FactureRestaurantController extends Controller
 
         $datas = FactureDetail::select(
                         DB::raw('id,drink_id,food_item_id,barrist_item_id,bartender_item_id,service_id,salle_id,sum(item_total_amount) as item_total_amount'))->where('etat','1')->groupBy('id','drink_id','food_item_id','barrist_item_id','bartender_item_id','service_id','salle_id')->orderBy('item_total_amount','desc')->take(10)->get();
-        $drinksmstores = DrinkSmallStore::all();
-        $drinkbgstores = DrinkBigStore::all();
-        $foodbgstores = FoodBigStore::all();
-        $materialbgstores = MaterialBigStore::all();
 
-        return view('backend.pages.invoice.chiffre_affaire',compact('item_total_amount','total_vat','total_item_price_nvat','item_total_amount_credit','total_vat_credit','total_item_price_nvat_credit','datas','drinksmstores','foodbgstores','materialbgstores','drinkbgstores'));
+        return view('backend.pages.invoice.chiffre_affaire',compact('item_total_amount','total_vat','total_item_price_nvat','item_total_amount_credit','total_vat_credit','total_item_price_nvat_credit','datas'));
     }
 
 
@@ -395,7 +376,7 @@ class FactureRestaurantController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any invoice !');
         }
 
-        $factures = FactureDetail::orderBy('id','desc')->take(2000)->get();
+        $factures = FactureDetail::orderBy('id','desc')->take(10000)->get();
         $clients = Client::orderBy('customer_name')->get();
         return view('backend.pages.invoice.report',compact('factures','clients'));
     }

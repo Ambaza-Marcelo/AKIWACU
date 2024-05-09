@@ -44,7 +44,7 @@ class BookingController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any booking !');
         }
 
-        $bookings = BookingBookingDetail::where('salle_id','!=','')->take(200)->orderBy('id','desc')->get();
+        $bookings = BookingBooking::take(200)->orderBy('id','desc')->get();
         return view('backend.pages.booking.booking.index_salle', compact('bookings'));
     }
 
@@ -54,7 +54,7 @@ class BookingController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any booking !');
         }
 
-        $bookings = BookingBookingDetail::where('service_id','!=','')->take(200)->orderBy('booking_no','desc')->get();
+        $bookings = BookingBooking::take(200)->orderBy('booking_no','desc')->get();
         return view('backend.pages.booking.booking.index_service', compact('bookings'));
     }
 
@@ -64,7 +64,7 @@ class BookingController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any booking !');
         }
 
-        $bookings = BookingBookingDetail::where('table_id','!=','')->take(200)->orderBy('id','desc')->get();
+        $bookings = BookingBooking::take(200)->orderBy('id','desc')->get();
         return view('backend.pages.booking.booking.index_table', compact('bookings'));
     }
 
@@ -74,7 +74,7 @@ class BookingController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any booking !');
         }
 
-        $bookings = BookingBookingDetail::where('kidness_space_id','!=','')->take(200)->orderBy('id','desc')->get();
+        $bookings = BookingBooking::take(200)->orderBy('id','desc')->get();
         return view('backend.pages.booking.booking.index_kidness_space', compact('bookings'));
     }
 
@@ -84,7 +84,7 @@ class BookingController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any booking !');
         }
 
-        $bookings = BookingBookingDetail::where('swiming_pool_id','!=','')->take(200)->orderBy('id','desc')->get();
+        $bookings = BookingBooking::take(200)->orderBy('id','desc')->get();
         return view('backend.pages.booking.booking.index_swiming_pool', compact('bookings'));
     }
 
@@ -94,7 +94,7 @@ class BookingController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any booking !');
         }
 
-        $bookings = BookingBookingDetail::where('breakfast_id','!=','')->take(200)->orderBy('id','desc')->get();
+        $bookings = BookingBooking::take(200)->orderBy('id','desc')->get();
         return view('backend.pages.booking.booking.index_breakfast', compact('bookings'));
     }
 
@@ -233,11 +233,11 @@ class BookingController extends Controller
             $created_by = $this->user->name;
 
 
-            $latest = BookingBooking::orderBy('id','desc')->first();
+            $latest = BookingBooking::latest()->first();
             if ($latest) {
-               $booking_no = 'SAL' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
+               $booking_no = 'RES' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{
-               $booking_no = 'SAL' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
+               $booking_no = 'RES' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
             }
 
             $order_signature = "4001711615".Carbon::parse(Carbon::now())->format('YmdHis')."/".$booking_no;
@@ -358,11 +358,11 @@ class BookingController extends Controller
             $created_by = $this->user->name;
 
 
-            $latest = BookingBooking::orderBy('id','desc')->first();
+            $latest = BookingBooking::latest()->first();
             if ($latest) {
-               $booking_no = 'SER' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
+               $booking_no = 'RES' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{
-               $booking_no = 'SER' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
+               $booking_no = 'RES' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
             }
 
             $order_signature = "4001711615".Carbon::parse(Carbon::now())->format('YmdHis')."/".$booking_no;
@@ -471,11 +471,11 @@ class BookingController extends Controller
             $created_by = $this->user->name;
 
 
-            $latest = BookingBooking::orderBy('id','desc')->first();
+            $latest = BookingBooking::latest()->first();
             if ($latest) {
-               $booking_no = 'TAB' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
+               $booking_no = 'RES' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{
-               $booking_no = 'TAB' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
+               $booking_no = 'RES' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
             }
 
             $order_signature = "4001711615".Carbon::parse(Carbon::now())->format('YmdHis')."/".$booking_no;
@@ -575,11 +575,11 @@ class BookingController extends Controller
             $created_by = $this->user->name;
 
 
-            $latest = BookingBooking::orderBy('id','desc')->first();
+            $latest = BookingBooking::latest()->first();
             if ($latest) {
-               $booking_no = 'KID' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
+               $booking_no = 'RES' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{
-               $booking_no = 'KID' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
+               $booking_no = 'RES' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
             }
 
             $order_signature = "4001711615".Carbon::parse(Carbon::now())->format('YmdHis')."/".$booking_no;
@@ -686,9 +686,9 @@ class BookingController extends Controller
 
             $latest = BookingBooking::latest()->first();
             if ($latest) {
-               $booking_no = 'PIS' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
+               $booking_no = 'RES' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{
-               $booking_no = 'PIS' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
+               $booking_no = 'RES' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
             }
 
             $order_signature = "4001711615".Carbon::parse(Carbon::now())->format('YmdHis')."/".$booking_no;
@@ -715,7 +715,7 @@ class BookingController extends Controller
             //insert details of booking No.
             for( $count = 0; $count < count($swiming_pool_id); $count++ ){
 
-                $selling_price = SwimingPool::where('id', $swiming_pool_id[$count])->value('selling_price');
+                $selling_price = BookingService::where('id', $swiming_pool_id[$count])->value('selling_price');
                 $total_amount_selling = $quantity[$count] * $selling_price;
                 $data = array(
                     'swiming_pool_id' => $swiming_pool_id[$count],
@@ -793,11 +793,11 @@ class BookingController extends Controller
             $created_by = $this->user->name;
 
 
-            $latest = BookingBooking::orderBy('id','desc')->first();
+            $latest = BookingBooking::latest()->first();
             if ($latest) {
-               $booking_no = 'BRE' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
+               $booking_no = 'RES' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{
-               $booking_no = 'BRE' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
+               $booking_no = 'RES' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
             }
 
             $order_signature = "4001711615".Carbon::parse(Carbon::now())->format('YmdHis')."/".$booking_no;
@@ -824,7 +824,7 @@ class BookingController extends Controller
             //insert details of booking No.
             for( $count = 0; $count < count($breakfast_id); $count++ ){
 
-                $selling_price = BreakFast::where('id', $breakfast_id[$count])->value('selling_price');
+                $selling_price = BookingService::where('id', $breakfast_id[$count])->value('selling_price');
                 $total_amount_selling = $quantity[$count] * $selling_price;
                 $data = array(
                     'breakfast_id' => $breakfast_id[$count],

@@ -47,6 +47,21 @@
                             <a class="btn btn-primary text-white" href="{{ route('admin.drink-stockins.create') }}">@lang('messages.new')</a>
                         @endif
                     </p>
+                    <form action="{{ route('admin.drink-stockins.export-to-excel')}}" method="GET">
+                        <p class="float-right mb-2">
+                            <button type="submit" value="pdf" class="btn btn-success">Exporter En Excel</button>
+                        </p>
+                        <p class="float-right mb-2">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input type="date" name="start_date" class="form-control">
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="date" name="end_date" class="form-control">
+                                </div>
+                            </div>
+                        </p>
+                    </form><br>
                     <div class="clearfix"></div>
                     <div class="data-tables">
                         @include('backend.layouts.partials.messages')
@@ -69,7 +84,7 @@
                                @foreach ($stockins as $stockin)
                                <tr>
                                     <td>{{ $loop->index+1 }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($stockin->date)->format('d/m/Y') }}</td>
+                                    <td>{{ $stockin->date }}</td>
                                     <td><a href="{{ route('admin.drink-stockins.show',$stockin->stockin_no)}}">{{ $stockin->stockin_no }}</a></td>
                                     <td>{{ $stockin->stockin_signature }}</td>
                                     <td>@if($stockin->status == 1)<img src="{{ asset('img/warning3.gif')}}" width="35">@elseif($stockin->status == 1)<span class="badge badge-info">Encours</span> @elseif($stockin->status == 2)<span class="badge badge-info">Validé</span> @elseif($stockin->status == 3)<span class="badge badge-info">Confirmé</span> @elseif($stockin->status == 4)<span class="badge badge-info">Approuvé</span>@elseif($stockin->status == -1)<span class="badge badge-danger">Rejeté</span>@endif</td>

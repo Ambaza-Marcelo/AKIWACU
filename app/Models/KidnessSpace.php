@@ -22,7 +22,7 @@ class KidnessSpace extends Model
     ];
 
     public function booking(){
-        return $this->hasMany('App\Models\BookingBookingDetail','kidness_space_id');
+        return $this->hasMany('App\Models\BookingBooking','kidness_space_id');
     }
 
     public function factureDetail(){

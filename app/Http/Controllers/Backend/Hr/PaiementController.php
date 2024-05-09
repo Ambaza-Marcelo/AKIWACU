@@ -146,11 +146,11 @@ class PaiementController extends Controller
       $indemnite_logement = HrEmploye::where('id',$employe_id)->value('indemnite_logement');
       $prime_fonction = HrEmploye::where('id',$employe_id)->value('prime_fonction');
 
-      $salaire_brut = $somme_salaire_base + $allocation_familiale + 
-       $indemnite_logement + $indemnite_deplacement + $prime_fonction;
+      $salaire_brut = $somme_salaire_base + $indemnite_deplacement + $indemnite_logement + $prime_fonction + $allocation_familiale;
 
+      //les cotisations
 
-        if ($salaire_brut < 450000) {
+            if ($salaire_brut < 450000) {
                 $inss = ($salaire_brut * 4)/100;
                 $somme_cotisation_inss = ($salaire_brut * 4)/100;
                 $inss_employeur = ($salaire_brut * 4)/100;
@@ -160,16 +160,8 @@ class PaiementController extends Controller
                 $inss_employeur = ($plafond_cotisation * 6)/100;
             }
 
-            if ($salaire_brut < 250000) {
-                $assurance_maladie_employe = 0;
-                $assurance_maladie_employeur = 15000;
-            }else{
-                $assurance_maladie_employe = 6000;
-                $assurance_maladie_employeur = 9000;
-            }
 
-
-        $base_imposable = $salaire_brut - $indemnite_logement - $indemnite_deplacement - $inss - $assurance_maladie_employe;
+        $base_imposable = $salaire_brut - $indemnite_logement - $indemnite_deplacement - $inss - $assurance_maladie_employe - $allocation_familiale;
       //les impots
 
             if ($base_imposable >= 0 && $base_imposable <= 150000) {
@@ -180,10 +172,21 @@ class PaiementController extends Controller
                 $somme_impot = 30000 + (($base_imposable - 300000) * 30)/100;    
             }
 
-        $somme_salaire_brut_imposable = $salaire_brut;
-        $somme_salaire_brut_non_imposable = $salaire_brut;
-        $somme_salaire_net_imposable = $salaire_brut - $somme_cotisation_inss - $somme_impot;
-        $somme_salaire_net_non_imposable = $salaire_brut - $somme_cotisation_inss - $somme_impot;
+
+    $somme_salaire_brut_imposable = $salaire_brut;
+    $somme_salaire_brut_non_imposable = $salaire_brut;
+    $somme_salaire_net_imposable = $salaire_brut - $somme_cotisation_inss - $somme_impot;
+    $somme_salaire_net_non_imposable = $salaire_brut - $somme_cotisation_inss - $somme_impot;
+
+        $net = $salaire_brut - $somme_impot - $inss;
+
+            if ($net < 250000) {
+                $assurance_maladie_employe = 0;
+                $assurance_maladie_employeur = 15000;
+            }else{
+                $assurance_maladie_employe = 6000;
+                $assurance_maladie_employeur = 9000;
+            }
 
         $paiement = new HrPaiement();
         $paiement->employe_id = $employe_id;
@@ -377,7 +380,7 @@ class PaiementController extends Controller
             }
 
 
-        $base_imposable = $salaire_brut - $indemnite_logement - $indemnite_deplacement - $inss - $assurance_maladie_employe;
+        $base_imposable = $salaire_brut - $indemnite_logement - $indemnite_deplacement - $inss - $assurance_maladie_employe - $allocation_familiale;
       //les impots
 
             if ($base_imposable >= 0 && $base_imposable <= 150000) {

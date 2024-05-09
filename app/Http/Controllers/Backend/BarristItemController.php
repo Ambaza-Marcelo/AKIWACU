@@ -81,16 +81,12 @@ class BarristItemController extends Controller
         $barrist_item->name = $request->name;
         $artCode = strtoupper(substr($request->name, 0, 3));
         $barrist_item->code = $artCode.date("y").substr(number_format(time() * mt_rand(), 0, '', ''), 0, 6);
-        
         $barrist_item->unit = $request->unit;
         $barrist_item->purchase_price = $request->purchase_price;
         $barrist_item->selling_price = $request->selling_price;
         $barrist_item->quantity = $request->quantity;
         $barrist_item->specification = $request->specification;
         $barrist_item->vat = $request->vat;
-        $barrist_item->taux_marge = $request->taux_marge;
-        $barrist_item->taux_majoration = $request->taux_majoration;
-        $barrist_item->taux_reduction = $request->taux_reduction;
         $barrist_item->expiration_date = $request->expiration_date;
         $barrist_item->threshold_quantity = $request->threshold_quantity;
         $barrist_item->created_by = $this->user->name;
@@ -192,9 +188,6 @@ class BarristItemController extends Controller
         $barrist_item->quantity = $request->quantity;
         $barrist_item->specification = $request->specification;
         $barrist_item->vat = $request->vat;
-        //$barrist_item->taux_marge = $request->taux_marge;
-        //$barrist_item->taux_majoration = $request->taux_majoration;
-        //$barrist_item->taux_reduction = $request->taux_reduction;
         $barrist_item->expiration_date = $request->expiration_date;
         $barrist_item->threshold_quantity = $request->threshold_quantity;
         $barrist_item->created_by = $this->user->name;

@@ -57,11 +57,8 @@
                                     <th width="10%">@lang('messages.item')</th>
                                     <th width="10%">@lang('messages.code')</th>
                                     <th width="10%">@lang('messages.quantity')</th>
-                                    <th width="10%">@lang('Taux TVA')</th>
-                                    <th width="10%">@lang('Taux marge')</th>
-                                    <th width="10%">@lang('Taux majoration')</th>
-                                    <th width="10%">@lang('Taux Reduction')</th>
-                                    <th width="10%">@lang('P.V')</th>
+                                    <th width="10%">@lang('TVA')</th>
+                                    <th width="10%">@lang('messages.selling_price')</th>
                                     <th width="15%">Action</th>
                                 </tr>
                             </thead>
@@ -73,9 +70,6 @@
                                     <td>{{ $service->code }}</td>
                                     <td>{{ $service->quantity }}</td>
                                     <td>{{ $service->vat }}%</td>
-                                    <td>{{ $service->taux_marge }}%</td>
-                                    <td>{{ $service->taux_majoration }}%</td>
-                                    <td>{{ $service->taux_reduction }}%</td>
                                     <td>{{ number_format($service->selling_price,0,',',' ') }}</td>
                                     <td>
                                         @if (Auth::guard('admin')->user()->can('booking_service.edit'))

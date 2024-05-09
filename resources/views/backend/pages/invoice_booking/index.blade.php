@@ -57,7 +57,14 @@
                                 <td>
                                     <input type="date" name="end_date" class="form-control" id="end_date">
                                 </td>
-                                
+                                <td>
+                                    <select class="form-control" name="id" id="id">
+                                        <option disabled="disabled" selected="selected">Merci de choisir</option>
+                                        @foreach($datas as $data)
+                                            <option value="{{$data->id}}">{{$data->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </td>
                                 <td>
                                     <button type="submit" value="pdf" class="btn btn-info" title="Cliquer pour exporter en PDF">Exporter En PDF</button>
                                 </td>

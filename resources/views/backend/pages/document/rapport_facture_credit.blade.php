@@ -7,7 +7,6 @@
              border: 1px solid black;
              width: auto;
              text-align: center;
-             font-size: 12px;
         }
         .signature{
             display: flex;

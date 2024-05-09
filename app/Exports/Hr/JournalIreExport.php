@@ -65,7 +65,7 @@ class JournalIreExport implements FromCollection, WithMapping, WithHeadings
         $net_a_payer = $remuneration_brute - $total_deductions;
 
 
-        $base_imposable = ($remuneration_brute - $data->indemnite_logement - $data->indemnite_deplacement - $inss - $assurance_maladie_employe);
+        $base_imposable = ($remuneration_brute - $data->indemnite_logement - $data->indemnite_deplacement - $inss - $assurance_maladie_employe - $data->allocation_familiale);
 
         if ($base_imposable >= 0 && $base_imposable <= 150000) {
                 $somme_impot = 0;

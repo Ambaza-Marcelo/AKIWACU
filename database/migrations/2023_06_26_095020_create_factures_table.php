@@ -64,9 +64,6 @@ class CreateFacturesTable extends Migration
             $table->timestamp('invoice_signature_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->string('invoice_signature')->nullable(true);
             $table->string('invoice_identifier')->nullable(true);
-            $table->string('montant_total_credit')->nullable(true);
-            $table->string('montant_recouvre')->nullable(true);
-            $table->string('reste_credit')->nullable(true);
             $table->string('bank_name')->nullable(true);
             $table->string('cheque_no')->nullable(true);
             $table->string('bordereau_no')->nullable(true);
@@ -81,6 +78,7 @@ class CreateFacturesTable extends Migration
             $table->string('paid_either')->nullable(true);
             $table->string('statut')->nullable(true);
             $table->string('statut_paied')->nullable(true);
+            $table->string('reste_credit')->nullable(true);
             $table->string('etat_recouvrement')->nullable(true);
             $table->bigInteger('employe_id')->unsigned()->nullable(true);
             $table->foreign('employe_id')

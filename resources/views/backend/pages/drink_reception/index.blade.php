@@ -99,7 +99,7 @@
                                @foreach ($receptions as $reception)
                                <tr>
                                     <td>{{ $loop->index+1 }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($reception->date)->format('d/m/Y') }}</td>
+                                    <td>{{ $reception->date }}</td>
                                     <td><a href="{{ route('admin.drink-receptions.show',$reception->reception_no)}}">{{ $reception->reception_no }}</a></td>
                                     <td>{{ $reception->reception_signature }}</td>
                                     <td><a href="@if($reception->order_no){{ route('admin.drink-supplier-orders.show',$reception->order_no)}}@endif">{{ $reception->order_no }}</a></td>

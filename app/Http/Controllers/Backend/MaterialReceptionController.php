@@ -55,7 +55,7 @@ class MaterialReceptionController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any reception !');
         }
 
-        $receptions = MaterialReception::orderBy('id','desc')->take(200)->get();
+        $receptions = MaterialReception::all();
         return view('backend.pages.material_reception.index', compact('receptions'));
     }
 
@@ -575,13 +575,12 @@ class MaterialReceptionController extends Controller
                         $material = MaterialBigStoreDetail::where('code',$code_store_destination)->where("material_id",$data->material_id)->value('material_id');
 
                         if (!empty($material)) {
+                            MaterialBigReport::insert($reportBigStoreData);
                             MaterialBigStoreDetail::where('code',$code_store_destination)->where('material_id',$data->material_id)
                         ->update($bigStore);
-                        $flag_md = 1;
                         }else{
-                            $flag_md = 0;
-                            session()->flash('error', 'this item is not saved in the stock');
-                            return back();
+                            MaterialBigReport::insert($reportBigStoreData);
+                            MaterialBigStoreDetail::insert($bigStoreData);
                         }
 
 
@@ -657,13 +656,12 @@ class MaterialReceptionController extends Controller
                         $material = MaterialExtraBigStoreDetail::where('code',$code_store_destination)->where("material_id",$data->material_id)->value('material_id');
 
                         if (!empty($material)) {
+                            MaterialExtraBigReport::insert($reportBigStoreData);
                             MaterialExtraBigStoreDetail::where('code',$code_store_destination)->where('material_id',$data->material_id)
                         ->update($bigStore);
-                        $flag_bg = 1;
                         }else{
-                            $flag_bg = 0;
-                            session()->flash('error', 'this item is not saved in the stock');
-                            return back();
+                            MaterialExtraBigReport::insert($reportBigStoreData);
+                            MaterialExtraBigStoreDetail::insert($bigStoreData);
                         }
 
 
@@ -686,16 +684,6 @@ class MaterialReceptionController extends Controller
                 }
   
         }
-
-
-        if ($flag_md != 0) {
-            MaterialBigReport::insert($reportBigStoreData);
-        }
-
-        if ($flag_bg != 0) {
-            MaterialExtraBigReport::insert($reportBigStoreData);
-        }
-
 
                     MaterialReception::where('reception_no', '=', $reception_no)
                             ->update(['status' => 4,'approuved_by' => $this->user->name]);

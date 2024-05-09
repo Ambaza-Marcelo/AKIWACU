@@ -22,7 +22,7 @@
                 <h4 class="page-title pull-left">@lang('Formulaire de reservation Breakfast')</h4>
                 <ul class="breadcrumbs pull-left">
                     <li><a href="{{ route('admin.dashboard') }}">@lang('messages.dashboard')</a></li>
-                    <li><a href="{{ route('admin.booking-breakfast.index') }}">@lang('messages.list')</a></li>
+                    <li><a href="{{ route('admin.booking-break-fast.index') }}">@lang('messages.list')</a></li>
                     <li><span>@lang('Formulaire de reservation Breakfast')</span></li>
                 </ul>
             </div>
@@ -41,7 +41,7 @@
                     <h4 class="header-title">Formulaire de reservation Breakfast</h4>
                     @include('backend.layouts.partials.messages')
                     
-                    <form action="{{ route('admin.booking-breakfast.store') }}" method="post" id="dynamic_form">
+                    <form action="{{ route('admin.booking-break-fast.store') }}" method="post" id="dynamic_form">
                         @csrf
                     <div class="row">
                         <div class="col-md-6" id="dynamicDiv">
@@ -122,7 +122,7 @@
                                 <th>Action</th>
                             </tr>
                             <tr>  
-                                <td><select class="form-control" name="breakfast_id[]" id="breakfast_id">
+                                <td><select class="form-control" name="break_fast_id[]" id="break_fast_id">
                                 <option disabled="disabled" selected="selected">merci de choisir</option>
                                 @foreach($articles as $article)
                                 <option value="{{ $article->id }}" class="form-control">{{ $article->name }}</option>
@@ -135,7 +135,7 @@
                         <div class="col-lg-12">
                             <label for="description">@lang('messages.description')</label>
                             <textarea class="form-control" name="description" id="description" placeholder="Enter Description">
-                                RESERVATION DE BREAKFAST
+                                RESERVATION DE SERVICE
                             </textarea>
                         </div>
                         <div style="margin-top: 15px;margin-left: 15px;">

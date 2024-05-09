@@ -338,8 +338,6 @@ class FuelStockinController extends Controller
                     'transaction' => "ENTREE",
                     'description' => $data->description,
                     'date' => $data->date,
-                    'type_transaction' => $data->item_movement_type,
-                    'document_no' => $stockin_no,
                     'created_at' => \Carbon\Carbon::now()
                 );
                 $reportFuelData[] = $reportData;
@@ -354,31 +352,26 @@ class FuelStockinController extends Controller
 
                     $pumpData[] = $pump;
 
-                    $fuelData = array(
+                    $fuel = array(
                         'id' => $data->fuel_id,
                         'quantity' => $quantityTotalPump,
                         'cump' => $cump
                     );
 
+                    MsFuel::where('id',$data->fuel_id)
+                        ->update($fuel);
 
                         $fuel = MsFuelPump::where("fuel_id",$data->fuel_id)->value('fuel_id');
 
                         if (!empty($fuel)) {
-                            $flag = 1;
+                            MsFuelReport::insert($reportFuelData);
                             MsFuelPump::where('id',$data->pump_id)
                         ->update($pump);
-                        MsFuel::where('id',$data->fuel_id)
-                        ->update($fuelData);
                         }else{
-                            $flag = 0;
-                            session()->flash('error', 'this type of fuel is not linkded to the pump');
-                            return back();
+                            MsFuelReport::insert($reportFuelData);
+                            MsFuelPump::insert($pumpData);
                         }
   
-        }
-
-        if ($flag != 0) {
-            MsFuelReport::insert($reportFuelData);
         }
 
         MsFuelStockin::where('stockin_no', '=', $stockin_no)

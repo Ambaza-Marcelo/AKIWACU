@@ -53,7 +53,7 @@ class DrinkReceptionController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any reception !');
         }
 
-        $receptions = DrinkReception::orderBy('id','desc')->take(200)->get();
+        $receptions = DrinkReception::all();
         return view('backend.pages.drink_reception.index', compact('receptions'));
     }
 
@@ -581,11 +581,8 @@ class DrinkReceptionController extends Controller
                         if (!empty($drink)) {
                             DrinkBigStoreDetail::where('code',$code_store_destination)->where('drink_id',$data->drink_id)
                         ->update($bigStore);
-                        $flag = 1;
                         }else{
-                            $flag = 0;
-                            session()->flash('error', 'this item is not saved in the stock');
-                            return back();
+                            DrinkBigStoreDetail::insert($bigStoreData);
                         }
 
 
@@ -628,9 +625,7 @@ class DrinkReceptionController extends Controller
   
         }
 
-        if ($flag != 0) {
-            DrinkBigReport::insert($reportBigStoreData);
-        }
+        DrinkBigReport::insert($reportBigStoreData);
 
         DrinkReception::where('reception_no', '=', $reception_no)
             ->update(['status' => 4,'approuved_by' => $this->user->name]);

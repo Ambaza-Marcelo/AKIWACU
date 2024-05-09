@@ -113,8 +113,8 @@
                                     <label for="store_type">@lang('Store Type')<strong style="color: red;">*</strong></label>
                                     <select class="form-control" name="store_type" id="store_type">
                                         <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                        <option value="0" {{ $drink->store_type == '0' ? 'selected' : '' }} class="form-control">Drink Big Store</option>
-                                        <option value="1" {{ $drink->store_type == '1' ? 'selected' : '' }} class="form-control">Drink Medium Store</option>
+                                        <option value="0" {{ $drink->store_type == '0' ? 'selected' : '' }} class="form-control">Drink Extra Big Store</option>
+                                        <option value="1" {{ $drink->store_type == '1' ? 'selected' : '' }} class="form-control">Drink Big Store</option>
                                         <option value="2" {{ $drink->store_type == '2' ? 'selected' : '' }} class="form-control">Drink Small Store</option>
                                     </select>
                                 </div>
@@ -124,7 +124,7 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="brarudi_price">@lang('Prix BRARUDI')</label>
-                                    <input type="number" class="form-control" id="brarudi_price" name="brarudi_price" value="{{ $drink->brarudi_price }}" min="0">
+                                    <input type="number" class="form-control" id="brarudi_price" name="brarudi_price" placeholder="Entrer le prix Brarudi">
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -132,49 +132,14 @@
                                     <label for="vat">@lang('Taux TVA')</label>
                                     <select class="form-control" name="vat" id="vat" required>
                                         <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                        <option value="0" {{ $drink->vat == 0 ? 'selected' : '' }} class="form-control">0%</option>
-                                        <option value="10" {{ $drink->vat == 10 ? 'selected' : '' }} class="form-control">10%</option>
-                                        <option value="18" {{ $drink->vat == 18 ? 'selected' : '' }} class="form-control">18%</option>
+                                        <option value="0" class="form-control">0%</option>
+                                        <option value="10" class="form-control">10%</option>
+                                        <option value="18" class="form-control">18%</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-md-4" id="dynamic_big_store">
                                 
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="taux_majoration">@lang('Taux Majoration')</label>
-                                    <select class="form-control" name="taux_majoration" id="taux_majoration" required>
-                                        <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                        <option value="0" {{ $drink->taux_majoration == 0 ? 'selected' : '' }} class="form-control">0%</option>
-                                        <option value="25" {{ $drink->taux_majoration == 25 ? 'selected' : '' }} class="form-control">25%</option>
-                                        <option value="50" {{ $drink->taux_majoration == 50 ? 'selected' : '' }} class="form-control">50%</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="taux_reduction">@lang('Taux Reduction')</label>
-                                    <select class="form-control" name="taux_reduction" id="taux_reduction" required>
-                                        <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                        <option value="0" {{ $drink->taux_reduction == 0 ? 'selected' : '' }} class="form-control">0%</option>
-                                        <option value="10" {{ $drink->taux_reduction == 10 ? 'selected' : '' }} class="form-control">10%</option>
-                                        <option value="25" {{ $drink->taux_reduction == 25 ? 'selected' : '' }} class="form-control">25%</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label for="taux_marge">@lang('Taux Marge')</label>
-                                    <select class="form-control" name="taux_marge" id="taux_marge" required>
-                                        <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                        <option value="0" {{ $drink->taux_marge == 0 ? 'selected' : '' }} class="form-control">0%</option>
-                                        <option value="30" {{ $drink->taux_marge == 30 ? 'selected' : '' }} class="form-control">30%</option>
-                                        <option value="50" {{ $drink->taux_marge == 50 ? 'selected' : '' }} class="form-control">50%</option>
-                                    </select>
-                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -217,7 +182,7 @@
     if ($(this).val() === '0'){
 
         var extra_big_store = "<div class='form-group'>"+
-                            "<label for='code_store'>Drink Big Store<strong style='color: red;'>*</strong></label>"+
+                            "<label for='code_store'>Drink Extra Big Store<strong style='color: red;'>*</strong></label>"+
                             "<select name='code_store' class='form-control'>"+
                                 "<option selected disabled>merci de choisir</option>"+
                                 "@foreach($drink_extra_big_stores as $drink_extra_big_store)"+
@@ -231,7 +196,7 @@
     if ($(this).val() === '1'){
 
         var big_store = "<div class='form-group'>"+
-                            "<label for='code_store'>Drink Medium Store<strong style='color: red;'>*</strong></label>"+
+                            "<label for='code_store'>Drink Big Store<strong style='color: red;'>*</strong></label>"+
                             "<select name='code_store' class='form-control'>"+
                                 "<option selected disabled>merci de choisir</option>"+
                                 "@foreach($drink_big_stores as $drink_big_store)"+

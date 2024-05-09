@@ -52,8 +52,7 @@
                                     <th>Specification</th>
                                     <th>Quantite Demandee</th>
                                     <th>Unité</th>
-                                    <th>P.A SYS.</th>
-                                    <th>P.A Saisie</th>
+                                    <th>Prix Unitaire</th>
                                     <th>Prix Total</th>
                                 </tr>
                             </thead>
@@ -66,17 +65,16 @@
                                     <td>{{ $data->material->specification }}</td>
                                     <td>{{ $data->quantity }}</td>
                                     <td>{{ $data->unit }}</td>
-                                    <td>{{ number_format($data->material->price,0,',',' ') }}</td>
-                                    <td>{{ number_format($data->price,0,',',' ') }}</td>
-                                    <td>{{ number_format($data->total_value,0,',',' ') }}</td>
+                                    <td></td>
+                                    <td></td>
                                 </tr>
                                 @endforeach
                             </tbody>
                             <tfoot>
                                 <tr>
                                     <th>Total</th>
-                                    <th style="background-color: rgb(150,150,150);" colspan="7"></th>
-                                    <th>{{ number_format($totalValue,0,',',' ') }}</th>
+                                    <th style="background-color: rgb(150,150,150);" colspan="6"></th>
+                                    <th></th>
                                 </tr>
                             </tfoot>
                         </table>
