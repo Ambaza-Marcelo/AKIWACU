@@ -81,10 +81,10 @@
                                 <td><select class="form-control" name="food_item_id[]" id="food_item_id">
                                 <option disabled="disabled" selected="selected">merci de choisir</option>
                                 @foreach($articles as $article)
-                                <option value="{{ $article->id }}" {{ $data->food_item_id == $article->id ? 'selected' : '' }} @if (Auth::guard('admin')->user()->can('food_order_client.delete')) @else disabled @endif class="form-control">{{ $article->name }}</option>
+                                <option value="{{ $article->id }}" {{ $data->food_item_id == $article->id ? 'selected' : '' }} @if (Auth::guard('admin')->user()->can('food_order_client.edit')) @else disabled @endif class="form-control">{{ $article->name }}</option>
                                 @endforeach
                                 </select></td>  
-                                <td><input type="number" name="quantity[]" value="{{ $data->quantity }}" @if (Auth::guard('admin')->user()->can('food_order_client.delete')) @else readonly @endif class="form-control" /></td>
+                                <td><input type="number" name="quantity[]" value="{{ $data->quantity }}" @if (Auth::guard('admin')->user()->can('food_order_client.edit')) @else readonly @endif class="form-control" /></td>
                                 <td>
 
                                         @foreach ($accompagnements as $accompagnement)

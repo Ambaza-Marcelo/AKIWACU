@@ -52,6 +52,8 @@ class CreateMsMaterialReportsTable extends Migration
             $table->string('approuved_by')->nullable(true);
             $table->string('rejected_by')->nullable(true);
             $table->string('description')->nullable(true);
+            $table->string('type_transaction')->nullable(true);
+            $table->string('document_no')->nullable(true);
             $table->string('cump')->nullable();
             $table->string('purchase_price')->nullable();
             $table->bigInteger('store_id')->unsigned()->nullable(true);

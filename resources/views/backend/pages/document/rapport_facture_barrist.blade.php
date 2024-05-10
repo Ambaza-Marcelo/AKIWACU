@@ -7,6 +7,7 @@
              border: 1px solid black;
              width: auto;
              text-align: center;
+             font-size: 12px;
         }
         .signature{
             display: flex;
@@ -42,6 +43,7 @@
                                 <tr>
                                     <th width="5%">No</th>
                                     <th width="10%">Date</th>
+                                    <th width="10%">Commande No</th>
                                     <th width="10%">No Facture</th>
                                     <th width="10%">Nom du Client</th>
                                     <th width="10%">Libellé</th>
@@ -51,12 +53,12 @@
                                     <th width="20%">TTC</th>
                                 </tr>
                             </thead>
-
                             <tbody>
                                 @foreach($datas as $data)
                                <tr>
                                     <td>{{ $loop->index + 1 }}</td>
                                     <td>{{ \Carbon\Carbon::parse($data->invoice_date)->format('d/m/Y') }}</td>
+                                    <td>{{ $data->barrist_order_no }}</td>
                                     <td>{{ $data->invoice_number }}</td>
                                     <td>@if($data->client_id){{ $data->client->customer_name }} @else {{ $data->customer_name }} @endif</td>
                                     <td>{{ $data->barristItem->name }}</td>
@@ -69,7 +71,7 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th colspan="6">Total</th>
+                                    <th colspan="7">Total Cash</th>
                                     <th>{{ number_format($total_item_price_nvat,3,',',' ') }}</th>
                                     <th>{{ number_format($total_vat,3,',',' ') }}</th>
                                     <th>{{ number_format($total_amount,0,',',' ') }}</th>
@@ -84,6 +86,7 @@
                                 <tr>
                                     <th width="5%">No</th>
                                     <th width="10%">Date</th>
+                                    <th width="10%">No Commande</th>
                                     <th width="10%">No Facture</th>
                                     <th width="10%">Nom du Client</th>
                                     <th width="10%">Libellé</th>
@@ -99,6 +102,7 @@
                                <tr>
                                     <td>{{ $loop->index + 1 }}</td>
                                     <td>{{ \Carbon\Carbon::parse($data->invoice_date)->format('d/m/Y') }}</td>
+                                    <td>{{ $data->barrist_order_no }}</td>
                                     <td>{{ $data->invoice_number }}</td>
                                     <td>@if($data->client_id){{ $data->client->customer_name }} @else {{ $data->customer_name }} @endif</td>
                                     <td>{{ $data->barristItem->name }}</td>
@@ -111,7 +115,7 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th colspan="6">Total Credit</th>
+                                    <th colspan="7">Total Credit</th>
                                     <th>{{ number_format($total_item_price_nvat_credit,3,',',' ') }}</th>
                                     <th>{{ number_format($total_vat_credit,3,',',' ') }}</th>
                                     <th>{{ number_format($total_amount_credit,0,',',' ') }}</th>

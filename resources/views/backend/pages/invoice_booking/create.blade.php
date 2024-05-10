@@ -286,7 +286,7 @@
                             @elseif($booking->breakfast_id)
                             <tr>  
                                 <td><select class="form-control" name="breakfast_id[]" id="breakfast_id">
-                                <option value="{{ $booking->breakfast_id }}" class="form-control">{{ $booking->breakFast->name }}</option>
+                                <option value="{{ $booking->breakfast_id }}" class="form-control">BREAKFAST</option>
                                 </select></td>  
                                 <td><input type="number" step='any' min='0' value="{{ $booking->quantity }}" name="item_quantity[]" placeholder="Quantite" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_drink.edit')) @else readonly @endif/></td>  
                                 <td><input type="number" step='any' min='0' value="{{ $booking->selling_price }}" name="item_price[]" placeholder="Prix" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_drink.edit')) @else readonly @endif/></td>

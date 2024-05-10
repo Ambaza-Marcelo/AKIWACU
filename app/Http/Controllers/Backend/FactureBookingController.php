@@ -88,7 +88,7 @@ class FactureBookingController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any invoice !');
         }
 
-        $factures = FactureDetail::where('break_fast_id','!=','')->take(100)->orderBy('id','desc')->get();
+        $factures = FactureDetail::where('breakfast_id','!=','')->take(100)->orderBy('id','desc')->get();
         return view('backend.pages.invoice_booking.breakfast',compact('factures'));
     }
 
@@ -158,42 +158,42 @@ class FactureBookingController extends Controller
         if (!empty($request->query('salle_id'))) {
             $type = $request->query('salle_id');
             $datas = FactureDetail::select(
-                        DB::raw('id,salle_id,client_id,booking_client_id,invoice_number,invoice_date,item_quantity,item_price,vat,item_price_nvat,customer_name,item_total_amount'))->where('salle_id','!=','')->where('etat','1')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','salle_id','invoice_date','invoice_number','item_quantity','item_price','vat','item_price_nvat','customer_name','client_id','booking_client_id','item_total_amount')->orderBy('id','asc')->get();
+                        DB::raw('id,salle_id,client_id,booking_client_id,invoice_number,invoice_date,item_quantity,item_price,vat,item_price_nvat,customer_name,booking_no,item_total_amount'))->where('salle_id','!=','')->where('etat','1')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','salle_id','invoice_date','invoice_number','item_quantity','item_price','vat','item_price_nvat','customer_name','booking_no','client_id','booking_client_id','item_total_amount')->orderBy('id','asc')->get();
             $total_amount = DB::table('facture_details')->where('salle_id','!=','')->where('etat','1')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
             $total_vat = DB::table('facture_details')->where('salle_id','!=','')->where('etat','1')->whereBetween('invoice_date',[$start_date,$end_date])->sum('vat');
             $total_item_price_nvat = DB::table('facture_details')->where('salle_id','!=','')->where('etat','1')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_price_nvat');
 
 
             $credits = FactureDetail::select(
-                        DB::raw('id,client_id,booking_client_id,salle_id,invoice_number,invoice_date,item_quantity,item_price,vat,item_price_nvat,customer_name,item_total_amount'))->where('salle_id','!=','')->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','salle_id','invoice_date','invoice_number','item_quantity','item_price','vat','item_price_nvat','customer_name','client_id','booking_client_id','item_total_amount')->orderBy('id','asc')->get();
+                        DB::raw('id,client_id,booking_client_id,salle_id,invoice_number,invoice_date,item_quantity,item_price,vat,item_price_nvat,customer_name,booking_no,item_total_amount'))->where('salle_id','!=','')->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','salle_id','invoice_date','invoice_number','item_quantity','item_price','vat','item_price_nvat','customer_name','booking_no','client_id','booking_client_id','item_total_amount')->orderBy('id','asc')->get();
             $total_amount_credit = DB::table('facture_details')->where('salle_id','!=','')->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
             $total_vat_credit = DB::table('facture_details')->where('salle_id','!=','')->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->sum('vat');
             $total_item_price_nvat_credit = DB::table('facture_details')->where('salle_id','!=','')->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_price_nvat');
         }elseif (!empty($request->query('service_id'))) {
             $type = $request->query('service_id');
             $datas = FactureDetail::select(
-                        DB::raw('id,client_id,booking_client_id,service_id,invoice_number,invoice_date,item_quantity,item_price,vat,item_price_nvat,customer_name,item_total_amount'))->where('service_id','!=','')->where('etat','1')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','service_id','invoice_date','invoice_number','item_quantity','item_price','vat','item_price_nvat','customer_name','client_id','booking_client_id','item_total_amount')->orderBy('id','asc')->get();
+                        DB::raw('id,client_id,booking_client_id,service_id,invoice_number,invoice_date,item_quantity,item_price,vat,item_price_nvat,booking_no,customer_name,item_total_amount'))->where('service_id','!=','')->where('etat','1')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','service_id','invoice_date','invoice_number','item_quantity','item_price','vat','item_price_nvat','customer_name','booking_no','client_id','booking_client_id','item_total_amount')->orderBy('id','asc')->get();
             $total_amount = DB::table('facture_details')->where('service_id','!=','')->where('etat','1')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
             $total_vat = DB::table('facture_details')->where('service_id','!=','')->where('etat','1')->whereBetween('invoice_date',[$start_date,$end_date])->sum('vat');
             $total_item_price_nvat = DB::table('facture_details')->where('service_id','!=','')->where('etat','1')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_price_nvat');
 
 
             $credits = FactureDetail::select(
-                        DB::raw('id,client_id,booking_client_id,service_id,invoice_number,invoice_date,item_quantity,item_price,vat,item_price_nvat,customer_name,item_total_amount'))->where('service_id','!=','')->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','service_id','invoice_date','invoice_number','item_quantity','item_price','vat','item_price_nvat','customer_name','client_id','booking_client_id','item_total_amount')->orderBy('id','asc')->get();
+                        DB::raw('id,client_id,booking_client_id,service_id,invoice_number,invoice_date,item_quantity,item_price,vat,item_price_nvat,booking_no,customer_name,item_total_amount'))->where('service_id','!=','')->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','service_id','invoice_date','invoice_number','item_quantity','item_price','vat','item_price_nvat','customer_name','booking_no','client_id','booking_client_id','item_total_amount')->orderBy('id','asc')->get();
             $total_amount_credit = DB::table('facture_details')->where('service_id','!=','')->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
             $total_vat_credit = DB::table('facture_details')->where('service_id','!=','')->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->sum('vat');
             $total_item_price_nvat_credit = DB::table('facture_details')->where('service_id','!=','')->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_price_nvat');
         }elseif (!empty($request->query('breakfast_id'))) {
             $type = $request->query('breakfast_idk');
             $datas = FactureDetail::select(
-                        DB::raw('id,client_id,booking_client_id,breakfast_id,invoice_number,invoice_date,item_quantity,item_price,vat,item_price_nvat,customer_name,item_total_amount'))->where('breakfast_id','!=','')->where('etat','1')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','breakfast_id','invoice_date','invoice_number','item_quantity','item_price','vat','item_price_nvat','customer_name','client_id','booking_client_id','item_total_amount')->orderBy('id','asc')->get();
+                        DB::raw('id,client_id,booking_client_id,breakfast_id,invoice_number,invoice_date,item_quantity,item_price,vat,item_price_nvat,booking_no,customer_name,item_total_amount'))->where('breakfast_id','!=','')->where('etat','1')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','breakfast_id','invoice_date','invoice_number','item_quantity','item_price','vat','item_price_nvat','customer_name','booking_no','client_id','booking_client_id','item_total_amount')->orderBy('id','asc')->get();
             $total_amount = DB::table('facture_details')->where('breakfast_id','!=','')->where('etat','1')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
             $total_vat = DB::table('facture_details')->where('breakfast_id','!=','')->where('etat','1')->whereBetween('invoice_date',[$start_date,$end_date])->sum('vat');
             $total_item_price_nvat = DB::table('facture_details')->where('breakfast_id','!=','')->where('etat','1')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_price_nvat');
 
 
             $credits = FactureDetail::select(
-                        DB::raw('id,client_id,booking_client_id,breakfast_id,invoice_number,invoice_date,item_quantity,item_price,vat,item_price_nvat,customer_name,item_total_amount'))->where('breakfast_id','!=','')->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','breakfast_id','invoice_date','invoice_number','item_quantity','item_price','vat','item_price_nvat','customer_name','client_id','booking_client_id','item_total_amount')->orderBy('id','asc')->get();
+                        DB::raw('id,client_id,booking_client_id,breakfast_id,invoice_number,invoice_date,item_quantity,item_price,vat,item_price_nvat,customer_name,booking_no,item_total_amount'))->where('breakfast_id','!=','')->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','breakfast_id','invoice_date','invoice_number','item_quantity','item_price','vat','item_price_nvat','customer_name','booking_no','client_id','booking_client_id','item_total_amount')->orderBy('id','asc')->get();
             $total_amount_credit = DB::table('facture_details')->where('breakfast_id','!=','')->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
             $total_vat_credit = DB::table('facture_details')->where('breakfast_id','!=','')->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->sum('vat');
             $total_item_price_nvat_credit = DB::table('facture_details')->where('breakfast_id','!=','')->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_price_nvat');
@@ -231,7 +231,7 @@ class FactureBookingController extends Controller
 
         
 
-        $pdf = PDF::loadView('backend.pages.document.rapport_facture_reservation',compact('datas','dateTime','setting','end_date','start_date','total_amount','total_vat','total_item_price_nvat','total_amount_credit','credits','total_vat_credit','total_item_price_nvat_credit','type'))->setPaper('a4', 'landscape');
+        $pdf = PDF::loadView('backend.pages.document.rapport_facture_reservation',compact('datas','dateTime','setting','end_date','start_date','total_amount','total_vat','total_item_price_nvat','total_amount_credit','credits','total_vat_credit','total_item_price_nvat_credit','type'))->setPaper('a4', 'portrait');
 
         Storage::put('public/rapport_facture_booking_/'.$d1.'_'.$d2.'.pdf', $pdf->output());
 

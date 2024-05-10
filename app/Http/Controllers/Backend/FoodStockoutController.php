@@ -52,7 +52,7 @@ class FoodStockoutController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any stockout !');
         }
 
-        $stockouts = FoodStockout::all();
+        $stockouts = FoodStockout::orderBy('id','desc')->take(200)->get();
         return view('backend.pages.food_stockout.index', compact('stockouts'));
     }
 

@@ -42,7 +42,7 @@ class OrderKitchenController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any order !');
         }
 
-        $orders = OrderKitchen::take(200)->orderBy('order_no','desc')->get();
+        $orders = OrderKitchen::take(200)->orderBy('id','desc')->get();
         return view('backend.pages.order_kitchen.index', compact('orders'));
     }
 
@@ -294,6 +294,8 @@ class OrderKitchenController extends Controller
         }
             OrderKitchen::where('order_no', '=', $order_no)
                 ->update(['status' => 1]);
+            OrderKitchenDetail::where('order_no', '=', $order_no)
+                ->update(['status' => 1]);
 
         session()->flash('success', 'order has been validated !!');
         return back();
@@ -307,6 +309,8 @@ class OrderKitchenController extends Controller
 
         OrderKitchen::where('order_no', '=', $order_no)
                 ->update(['status' => -1]);
+        OrderKitchenDetail::where('order_no', '=', $order_no)
+                ->update(['status' => -1]);
 
         session()->flash('success', 'Order has been rejected !!');
         return back();
@@ -319,7 +323,9 @@ class OrderKitchenController extends Controller
         }
 
         OrderKitchen::where('order_no', '=', $order_no)
-                ->update(['status' => -2]);
+                ->update(['status' => 0]);
+        OrderKitchenDetail::where('order_no', '=', $order_no)
+                ->update(['status' => 0]);
 
         session()->flash('success', 'Order has been reseted !!');
         return back();

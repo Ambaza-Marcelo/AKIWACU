@@ -42,7 +42,7 @@ class FoodPurchaseController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any purchase !');
         }
 
-        $purchases = FoodPurchase::all();
+        $purchases = FoodPurchase::orderBy('id','desc')->take(200)->get();
         return view('backend.pages.food_purchase.index', compact('purchases'));
     }
 
@@ -77,6 +77,7 @@ class FoodPurchaseController extends Controller
                 'food_id.*'  => 'required',
                 'date'  => 'required',
                 'quantity.*'  => 'required',
+                'price.*'  => 'required',
                 'unit.*'  => 'required',
                 'description'  => 'required'
             );
@@ -92,6 +93,7 @@ class FoodPurchaseController extends Controller
             $food_id = $request->food_id;
             $date = $request->date;
             $quantity = $request->quantity;
+            $price = $request->price;
             $unit = $request->unit;
             $description =$request->description; 
             $latest = FoodPurchase::latest()->first();
@@ -115,14 +117,14 @@ class FoodPurchaseController extends Controller
             //insert details of purchase No.
             for( $count = 0; $count < count($food_id); $count++ ){
 
-                $price = Food::where('id', $food_id[$count])->value('purchase_price');
-                $total_value = $quantity[$count] * $price;
+                //$price = Food::where('id', $food_id[$count])->value('purchase_price');
+                $total_value = $quantity[$count] * $price[$count];
                 $data = array(
                     'food_id' => $food_id[$count],
                     'date' => $date,
                     'quantity' => $quantity[$count],
                     'unit' => $unit[$count],
-                    'price' => $price,
+                    'price' => $price[$count],
                     'description' => $description,
                     'total_value' => $total_value,
                     'created_by' => $created_by,
@@ -177,6 +179,13 @@ class FoodPurchaseController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to edit any purchase !');
         }
 
+        $foods  = Food::orderBy('name','asc')->get();
+
+        $data = FoodPurchase::where('purchase_no', $purchase_no)->first();
+        $datas = FoodPurchaseDetail::where('purchase_no', $purchase_no)->get();
+
+        return view('backend.pages.food_purchase.edit', compact('datas','data','foods'));
+
     }
 
     /**
@@ -192,7 +201,63 @@ class FoodPurchaseController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to edit any purchase !');
         }
 
-        
+       $rules = array(
+                'food_id.*'  => 'required',
+                'date'  => 'required',
+                'quantity.*'  => 'required',
+                'price.*'  => 'required',
+                'unit.*'  => 'required',
+                'description'  => 'required'
+            );
+
+            $error = Validator::make($request->all(),$rules);
+
+            if($error->fails()){
+                return response()->json([
+                    'error' => $error->errors()->all(),
+                ]);
+            }
+
+            $food_id = $request->food_id;
+            $date = $request->date;
+            $quantity = $request->quantity;
+            $price = $request->price;
+            $unit = $request->unit;
+            $description =$request->description; 
+
+            $purchase = FoodPurchase::where('purchase_no',$purchase_no)->first();
+            $purchase->date = $date;
+            $purchase->description = $description;
+            $purchase->save();
+            //insert details of purchase No.
+            for( $count = 0; $count < count($food_id); $count++ ){
+
+                $created_by = $this->user->name;
+                $purchase_signature = FoodPurchase::where('purchase_no',$purchase_no)->value('purchase_signature');
+                //$price = Food::where('id', $food_id[$count])->value('price');
+                $total_value = $quantity[$count] * $price[$count];
+                $data = array(
+                    'food_id' => $food_id[$count],
+                    'date' => $date,
+                    'quantity' => $quantity[$count],
+                    'unit' => $unit[$count],
+                    'price' => $price[$count],
+                    'description' => $description,
+                    'total_value' => $total_value,
+                    'created_by' => $created_by,
+                    'purchase_no' => $purchase_no,
+                    'purchase_signature' => $purchase_signature,
+                );
+                $insert_data[] = $data;
+            }
+
+            FoodPurchaseDetail::where('purchase_no',$purchase_no)->delete();
+
+            FoodPurchaseDetail::insert($insert_data);
+
+        session()->flash('success', 'Purchase has been updated successfuly !!');
+        return redirect()->route('admin.food-purchases.index');
+
     }
 
     public function validatePurchase($purchase_no)

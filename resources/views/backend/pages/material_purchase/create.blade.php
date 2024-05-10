@@ -57,6 +57,7 @@
                                 <th>@lang('messages.item')</th>
                                 <th>@lang('messages.quantity')</th>
                                 <th>@lang('messages.unit')</th>
+                                <th>@lang('P.A')</th>
                                 <th>Action</th>
                             </tr>
                             <tr class="">  
@@ -66,13 +67,16 @@
                                 <option value="{{ $material->id }}" class="form-control">{{$material->name}}/{{ $material->code }}</option>
                                 @endforeach
                                 </select></td>  
-                                <td><input type="number" name="quantity[]" placeholder="Enter quantity" class="form-control" min="0" /></td> 
+                                <td><input type="number" name="quantity[]" placeholder="Enter quantity" class="form-control" required min="0" /></td> 
                                 <td><select class="form-control" name="unit[]" id="unit">
                                     <option disabled="disabled" selected="selected">Merci de choisir</option>
                                         <option value="pcs" class="form-control">Pieces</option>
+                                        <option value="boites" class="form-control">Boites</option>
+                                        <option value="kg" class="form-control">KG</option>
                                         <option value="paire" class="form-control">PAIRE</option>
                                         <option value="litres" class="form-control">Litres</option>
                                 </select></td>
+                                <td><input type="number" name="price[]" placeholder="Entrer P.A" required class="form-control"  step="any" min="0" /></td>
                                 <td><button type="button" name="add" id="add" class="btn btn-success">@lang('messages.addmore')</button></td>     
                             </tr>
                         </table> 
@@ -116,8 +120,14 @@
                           "<select class='form-control' name='unit[]' id='unit'>"+
                                 "<option disabled='disabled' selected='selected'>Merci de choisir</option>"+
                                 "<option value='pcs' class='form-control'>Pieces</option>"+
-                                "<option value='cartons' class='form-control'>Cartons</option>"+
+                                "<option value='boites' class='form-control'>Boites</option>"+
+                                "<option value='kg' class='form-control'>KG</option>"+
+                                "<option value='paire' class='form-control'>PAIRE</option>"+
+                                "<option value='litres' class='form-control'>Litres</option>"+
                             "</select>"+
+                        "</td>"+
+                        "<td>"+
+                          "<input type='number' name='price[]' placeholder='Enter Price' class='form-control' step='any' min='0' />"+
                         "</td>"+
                         "<td>"+
                           "<button type='button' class='btn btn-danger remove-tr'>@lang('messages.delete')</button>"+

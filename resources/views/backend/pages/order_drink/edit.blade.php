@@ -80,10 +80,10 @@
                                 <td><select class="form-control" name="drink_id[]" id="drink_id">
                                 <option disabled="disabled" selected="selected">merci de choisir</option>
                                 @foreach($articles as $article)
-                                <option value="{{ $article->id }}" {{ $data->drink_id == $article->id ? 'selected' : '' }} class="form-control" @if(Auth::guard('admin')->user()->can('drink_order_client.delete')) @else disabled @endif>{{ $article->name }}/{{$article->code }}</option>
+                                <option value="{{ $article->id }}" {{ $data->drink_id == $article->id ? 'selected' : '' }} class="form-control" @if(Auth::guard('admin')->user()->can('drink_order_client.edit')) @else disabled @endif>{{ $article->name }}/{{$article->code }}</option>
                                 @endforeach
                                 </select></td>  
-                                <td><input type="number" name="quantity[]" value="{{ $data->quantity }}" @if(Auth::guard('admin')->user()->can('drink_order_client.delete')) @else readonly @endif class="form-control" /></td>
+                                <td><input type="number" name="quantity[]" value="{{ $data->quantity }}" @if(Auth::guard('admin')->user()->can('drink_order_client.edit')) @else readonly @endif class="form-control" /></td>
                                 <td>@if(Auth::guard('admin')->user()->can('drink_order_client.delete'))
                                     <button type='button' class='btn btn-danger remove-tr'><i class='fa fa-trash-o' title='Supprimer la ligne' aria-hidden='false'></i></button>
                                     @endif

@@ -80,6 +80,9 @@ class BreakFastController extends Controller
         $break_fast->quantity = $request->quantity;
         $break_fast->specification = $request->specification;
         $break_fast->vat = $request->vat;
+        $break_fast->taux_marge = $request->taux_marge;
+        $break_fast->taux_majoration = $request->taux_majoration;
+        $break_fast->taux_reduction = $request->taux_reduction;
         $break_fast->auteur = $this->user->name;
         $break_fast->save();
 
@@ -151,6 +154,9 @@ class BreakFastController extends Controller
         $break_fast->quantity = $request->quantity;
         $break_fast->specification = $request->specification;
         $break_fast->vat = $request->vat;
+        $break_fast->taux_marge = $request->taux_marge;
+        $break_fast->taux_majoration = $request->taux_majoration;
+        $break_fast->taux_reduction = $request->taux_reduction;
         $break_fast->auteur = $this->user->name;
         $break_fast->save();
 

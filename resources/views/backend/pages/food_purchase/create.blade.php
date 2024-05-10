@@ -57,9 +57,8 @@
                                 <th>@lang('messages.item')</th>
                                 <th>@lang('messages.quantity')</th>
                                 <th>@lang('messages.unit')</th>
-                                <!--
-                                <th>@lang('messages.price')</th>
-                            -->
+                                
+                                <th>@lang('P.A')</th>
                                 <th>Action</th>
                             </tr>
                             <tr class="">  
@@ -69,7 +68,7 @@
                                 <option value="{{ $food->id }}" class="form-control">{{$food->name}}/{{ $food->code }}</option>
                                 @endforeach
                                 </select></td>  
-                                <td><input type="number" name="quantity[]" placeholder="Enter quantity" class="form-control"  step="any" min="0" /></td> 
+                                <td><input type="number" name="quantity[]" placeholder="Enter quantity" class="form-control" required step="any" min="0" /></td> 
                                 <td><select class="form-control" name="unit[]" id="unit">
                                     <option disabled="disabled" selected="selected">Merci de choisir</option>
                                         <option value="pieces" class="form-control">Pieces</option>
@@ -86,9 +85,9 @@
                                         <option value="sachets" class="form-control">Sachets</option>
                                         <option value="boites" class="form-control">Boites</option>
                                 </select></td>
-                                <!--
-                                <td><input type="number" name="price[]" placeholder="Enter Price" class="form-control"  step="any" min="0" /></td>
-                                --> 
+                                
+                                <td><input type="number" name="price[]" placeholder="Enter Price" required class="form-control"  step="any" min="0" /></td>
+                                 
                                 <td><button type="button" name="add" id="add" class="btn btn-success">@lang('messages.addmore')</button></td>     
                             </tr>
                         </table> 
@@ -145,6 +144,9 @@
                                 "<option value='sachets' class='form-control'>Sachets</option>"+
                                 "<option value='boites' class='form-control'>Boites</option>"+
                             "</select>"+
+                        "</td>"+
+                        "<td>"+
+                          "<input type='number' name='price[]' placeholder='Enter Price' class='form-control' step='any' required min='0' />"+
                         "</td>"+
                         "<td>"+
                           "<button type='button' class='btn btn-danger remove-tr'>@lang('messages.delete')</button>"+

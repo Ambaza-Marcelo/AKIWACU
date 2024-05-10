@@ -32,8 +32,12 @@
                     </div>
                     <br><br><br>
                     <br>
+                    @php
+                      $date = Carbon\Carbon::now();
+                    @endphp
                     <div>
-                        <h2 style="text-align: center;text-decoration: underline;">CA DU {{ \Carbon\Carbon::parse($start_date)->format('d/m/Y') }} AU {{ \Carbon\Carbon::parse($end_date)->format('d/m/Y') }} </h2>
+                        <h5>Date de tirage : Le {{ Carbon\Carbon::parse($date)->format('d/m/Y') }} à {{Carbon\Carbon::parse($date)->format('H:i:s') }}</h5>
+                        <h5 style="text-decoration: underline;">CA DU {{ \Carbon\Carbon::parse($start_date)->format('d/m/Y') }} AU {{ \Carbon\Carbon::parse($end_date)->format('d/m/Y') }}(Cash/Credit) </h5>
                     </div>
                     <br>
                     <div>

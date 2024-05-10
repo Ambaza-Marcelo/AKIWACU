@@ -26,10 +26,28 @@ class MaterialStoreReportExport implements FromCollection, WithMapping, WithHead
         $end_date = $endDate.' 23:59:59';
 
         return MsMaterialReport::select(
-                        DB::raw('id,created_at,material_id,quantity_stock_initial,value_stock_initial,quantity_stockin,value_stockin,quantity_reception,value_reception,quantity_transfer,value_transfer,quantity_stockout,value_stockout,quantity_stock_final,value_stock_final,description'))->whereBetween('created_at',[$start_date,$end_date])/*->where('code_store',$code_store)*/->groupBy('id','created_at','material_id','quantity_stock_initial','value_stock_initial','quantity_stockin','value_stockin','quantity_reception','value_reception','quantity_transfer','value_transfer','quantity_stockout','value_stockout','quantity_stock_final','value_stock_final','description')->orderBy('id','asc')->get();
+                        DB::raw('id,date,type_transaction,document_no,created_at,material_id,quantity_stock_initial,value_stock_initial,quantity_stockin,value_stockin,quantity_reception,value_reception,quantity_inventory,value_inventory,quantity_stockout,value_stockout,quantity_stock_final,value_stock_final,created_by,description'))->whereBetween('created_at',[$start_date,$end_date])/*->where('code_store',$code_store)*/->groupBy('id','date','type_transaction','document_no','created_at','material_id','quantity_stock_initial','value_stock_initial','quantity_stockin','value_stockin','quantity_reception','value_reception','quantity_inventory','value_inventory','quantity_stockout','value_stockout','quantity_stock_final','value_stock_final','description','created_by')->orderBy('id','desc')->get();
     }
 
     public function map($data) : array {
+
+        if (!empty($data->quantity_inventory)) {
+            $quantite = $data->quantity_inventory;
+            $valeur = $data->value_inventory;
+            $stock_total = $data->quantity_inventory;
+            $stock_final = $data->quantity_inventory;
+        }elseif (!empty($data->quantity_reception)) {
+            $quantite = $data->quantity_reception;
+            $valeur = $data->value_reception;
+            $stock_total = $data->quantity_stock_initial + $quantite;
+            $stock_final = ($data->quantity_stock_initial + $quantite) - ($data->quantity_stockout);
+        }else{
+            $quantite = $data->quantity_stockin;
+            $valeur = $data->value_stockin;
+            $stock_total = $data->quantity_stock_initial + $quantite;
+            $stock_final = ($data->quantity_stock_initial + $quantite) - ($data->quantity_stockout);
+        }
+
         return [
             $data->id,
             Carbon::parse($data->created_at)->format('d/m/Y'),
@@ -37,12 +55,15 @@ class MaterialStoreReportExport implements FromCollection, WithMapping, WithHead
             $data->material->code,
             $data->quantity_stock_initial,
             ($data->quantity_stock_initial * $data->material->cump),
-            $data->quantity_stockin + $data->quantity_reception,
-            ($data->value_stockin + $data->value_reception),
-            $data->quantity_stockout + $data->quantity_transfer,
-            (($data->quantity_stockout * $data->material->cump) + ($data->quantity_transfer * $data->material->cump)),
-            ($data->quantity_stock_initial + $data->quantity_stockin + $data->quantity_reception) - ($data->quantity_stockout + $data->quantity_transfer),
-            ((($data->quantity_stock_initial + $data->quantity_stockin + $data->quantity_reception) - ($data->quantity_stockout + $data->quantity_transfer)) * $data->material->cump),
+            $quantite,
+            $valeur,
+            $data->quantity_stockout,
+            ($data->quantity_stockout * $data->material->cump),
+            $stock_final,
+            ($stock_final * $data->material->cump),
+            $data->type_transaction,
+            $data->document_no,
+            $data->created_by,
             $data->description,
         ] ;
  
@@ -63,6 +84,9 @@ class MaterialStoreReportExport implements FromCollection, WithMapping, WithHead
             'Valeur Sortie',
             'Quantite Stock Final',
             'Valeur Stock Final',
+            'Type de Mouvement',
+            'Document No',
+            'Auteur',
             'Description'
         ] ;
     }

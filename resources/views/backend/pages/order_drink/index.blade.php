@@ -106,7 +106,7 @@
                                     <td>{{ $order->created_by }}</td>
                                     <td>
                                         @if (Auth::guard('admin')->user()->can('drink_order_client.create'))
-                                        @if($order->status == 1)
+                                        @if($order->status == -3 || $order->status == 1)
                                         <a href="{{ route('admin.order_drinks.generatepdf',$order->order_no) }}"><img src="{{ asset('img/ISSh.gif') }}" width="60" title="Télécharger d'abord le document et puis imprimer"></a>
                                         @endif
                                         @endif
@@ -150,12 +150,12 @@
                                             <a class="btn btn-success text-white" href="{{ route('admin.order_drinks.edit', $order->order_no) }}">@lang('messages.edit')</a>
                                         @endif
                                         @endif
-                                        @if($order->status == 1 || $order->status == -3 && $order->flag === 0)
+                                        @if($order->status == 1 || $order->status == -3 && $order->flag == 0)
                                         @if (Auth::guard('admin')->user()->can('invoice_drink.create'))
                                             <a class="btn btn-success text-white" href="{{ route('ebms_api.invoices.create', $order->order_no) }}">@lang('Facturation')</a>
                                         @endif
                                         @endif
-                                        @if($order->status == -3 && $order->flag === 1)
+                                        @if($order->status == -3 && $order->flag == 1)
                                         @if (Auth::guard('admin')->user()->can('invoice_drink.edit'))
                                             <a class="btn btn-success text-white" href="{{ route('ebms_api.invoices.edit', $order->order_no) }}">@lang('Modifier Facture')</a>
                                         @endif

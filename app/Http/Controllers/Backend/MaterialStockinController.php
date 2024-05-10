@@ -52,7 +52,7 @@ class MaterialStockinController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any stockin !');
         }
 
-        $stockins = MaterialStockin::all();
+        $stockins = MaterialStockin::orderBy('id','desc')->take(200)->get();
         return view('backend.pages.material_stockin.index', compact('stockins'));
     }
 
@@ -612,12 +612,13 @@ class MaterialStockinController extends Controller
                         $material = MaterialBigStoreDetail::where('code',$code_store_destination)->where("material_id",$data->material_id)->value('material_id');
 
                         if (!empty($material)) {
-                            MaterialBigReport::insert($reportBigStoreData);
                             MaterialBigStoreDetail::where('code',$code_store_destination)->where('material_id',$data->material_id)
                         ->update($mediumStore);
+                        $flag_md = 1;
                         }else{
-                            MaterialBigReport::insert($reportBigStoreData);
-                            MaterialBigStoreDetail::insert($mediumStoreData);
+                            $flag_md = 0;
+                            session()->flash('error', 'this item is not saved in the stock');
+                            return back();
                         }
 
                 }elseif ($data->store_type == 'bg') {
@@ -673,12 +674,13 @@ class MaterialStockinController extends Controller
                         $material = MaterialExtraBigStoreDetail::where('code',$code_store_destination)->where("material_id",$data->material_id)->value('material_id');
 
                         if (!empty($material)) {
-                            MaterialExtraBigReport::insert($reportBigStoreData);
                             MaterialExtraBigStoreDetail::where('code',$code_store_destination)->where('material_id',$data->material_id)
                         ->update($bigStore);
+                        $flag_md = 1;
                         }else{
-                            MaterialExtraBigReport::insert($reportBigStoreData);
-                            MaterialExtraBigStoreDetail::insert($bigStoreData);
+                            $flag_md = 0;
+                            session()->flash('error', 'this item is not saved in the stock');
+                            return back();
                         }
 
 
@@ -750,6 +752,14 @@ class MaterialStockinController extends Controller
   
         }
 
+        if ($flag_md != 0) {
+            MaterialBigReport::insert($reportBigStoreData);
+        }
+        /*
+        if ($flag_md != 0) {
+            MaterialExtraBigReport::insert($reportBigStoreData);
+        }
+        */
         MaterialStockin::where('stockin_no', '=', $stockin_no)
                         ->update(['status' => 4,'approuved_by' => $this->user->name]);
                     MaterialStockinDetail::where('stockin_no', '=', $stockin_no)

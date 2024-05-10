@@ -320,7 +320,7 @@ class PrivateDrinkStockinController extends Controller
                 ->update(['status' => 4,'approuved_by' => $this->user->name]);
 
             $email1 = 'ambazamarcellin2001@gmail.com';
-            //$email2 = 'balowayangfistonfiston@gmail.com';
+            $email2 = 'frangiye@gmail.com';
             //$email3 = 'khaembamartin@gmail.com';
             $email4 = 'munyembari_mp@yahoo.fr';
             $auteur = $this->user->name;
@@ -334,7 +334,7 @@ class PrivateDrinkStockinController extends Controller
                     ];
          
             Mail::to($email1)->send(new PrivateStockinMail($mailData));
-            //Mail::to($email2)->send(new PrivateStockinMail($mailData));
+            Mail::to($email2)->send(new PrivateStockinMail($mailData));
             //Mail::to($email3)->send(new PrivateStockinMail($mailData));
             Mail::to($email4)->send(new PrivateStockinMail($mailData));
 

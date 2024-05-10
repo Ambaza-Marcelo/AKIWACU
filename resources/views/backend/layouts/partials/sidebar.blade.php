@@ -328,13 +328,14 @@
                             @lang('Credits')
                         </span></a>
                         <ul class="collapse">
-                                @if ($usr->can('invoice_booking.edit'))
+                                @if ($usr->can('invoice_booking.view'))
                                 <li class=""><a href="{{ route('admin.credit-invoices.list') }}"><i class="fa fa-first-order"></i>&nbsp;@lang('Credits')</a></li>
                                 @endif
-                                
+                                <!--
                                 @if($usr->can('invoice_booking.edit'))
                                 <li class=""><a href="{{ route('admin.credit-payes.list') }}"><i class="fa fa-first-order"></i>&nbsp;@lang('Payes')</a></li>
                                 @endif
+                            -->
                         </ul>
                     </li>
                     @endif

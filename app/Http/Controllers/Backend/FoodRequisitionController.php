@@ -43,7 +43,7 @@ class FoodRequisitionController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any requisition !');
         }
 
-        $requisitions = FoodRequisition::all();
+        $requisitions = FoodRequisition::orderBy('id','desc')->take(200)->get();
         return view('backend.pages.food_requisition.index', compact('requisitions'));
     }
 

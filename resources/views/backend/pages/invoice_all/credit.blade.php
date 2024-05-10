@@ -57,17 +57,30 @@
                             </div>
                         </p>
                     </form><br>
-                    <form action="{{ route('admin.rapport-facture-credit')}}" method="GET">
+                    <form action="{{ route('admin.facture-globale.client')}}" method="GET">
                         <p class="float-right mb-2">
-                            <button type="submit" value="pdf" class="btn btn-info">Exporter En PDF</button>
+                            <button type="submit" value="pdf" class="btn btn-success" title="Cliquer pour exporter en PDF">Facture Globale</button>
                         </p>
                         <p class="float-right mb-2">
                             <div class="row">
-                                <div class="col-md-6">
-                                    <input type="date" name="start_date" class="form-control">
+                                <div class="col-md-4">
+                                    <label for="start_date">@lang('Date Debut')</label>
+                                    <input type="date" name="start_date" class="form-control" id="start_date">
                                 </div>
-                                <div class="col-md-6">
-                                    <input type="date" name="end_date" class="form-control">
+                                <div class="col-md-4">
+                                    <label for="end_date">@lang('Date Fin')</label>
+                                    <input type="date" name="end_date" class="form-control" id="end_date">
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="form-group">
+                                        <label for="client_id">@lang('Nom du Client')</label>
+                                        <select class="form-control" name="client_id" id="client_id">
+                                        <option disabled="disabled" selected="selected">Merci de choisir</option>
+                                        @foreach($clients as $client)
+                                            <option value="{{$client->id}}">{{$client->customer_name}}</option>
+                                        @endforeach
+                                    </select>
+                                    </div>
                                 </div>
                             </div>
                         </p>
@@ -81,8 +94,11 @@
                                     <th width="5%">#</th>
                                     <th width="20%">Le numéro de la facture</th>
                                     <th width="10%">Date de facturation</th>
-                                    <th width="10%">Serveur</th>
-                                    <th width="10%">Nom du client</th>
+                                    <th width="20%">Serveur</th>
+                                    <th width="20%">Nom du client</th>
+                                    <th width="20%">NIF du client</th>
+                                    <th width="20%">Telephone du client</th>
+                                    <th width="20%">Mail du client</th>
                                     <th width="10%">No Commande</th>
                                     <th width="10%">Signature</th>
                                     <th width="10%">Action</th>
@@ -93,15 +109,18 @@
                                <tr>
                                     <td>{{ $loop->index+1}}</td>
                                     <td><a href="@if($facture->drink_order_no){{ route('admin.facture.show',$facture->invoice_number) }} @elseif($facture->food_order_no) {{ route('admin.invoice-kitchens.show',$facture->invoice_number) }} @elseif($facture->bartender_order_no) {{ route('admin.bartender-invoices.show',$facture->invoice_number) }} @elseif($facture->barrist_order_no) {{ route('admin.barrist-invoices.show',$facture->invoice_number) }} @else {{ route('admin.booking-invoices.show',$facture->invoice_number) }} @endif">{{ $facture->invoice_number }}</a>&nbsp;
-                                    @if($facture->etat === '01' && $facture->statut_paied != '1')<span class="badge badge-info" title="{{ $facture->customer_name }}">validé(crédit)</span> @elseif($facture->etat === '1' && $facture->statut_paied === '1')<span class="badge badge-info" title="{{ $facture->customer_name }}">Payé</span> @endif</td>
+                                    @if($facture->etat_recouvrement == '1')<span class="badge badge-info" title="MONTANT A RECOUVRER : {{ number_format($facture->montant_total_credit,0,',',' ') }} - MONTANT RESTANT : {{ number_format($facture->reste_credit,0,',',' ') }}">Paiement Partiel</span> @elseif($facture->etat_recouvrement == '2')<span class="badge badge-success" title="MONTANT A RECOUVRER : {{ number_format($facture->montant_total_credit,0,',',' ') }} - MONTANT RECOUVRE : {{ number_format($facture->montant_recouvre,0,',',' ') }}">Paiement Total</span>@else<span class="badge badge-warning" title="MONTANT A RECOUVRER : {{ number_format($facture->montant_total_credit,0,',',' ') }}">Encours..</span> @endif</td>
                                     <td>{{ \Carbon\Carbon::parse($facture->invoice_date)->format('d/m/Y') }}</td>
                                     <td>@if($facture->employe_id){{ $facture->employe->name }} @endif</td>
                                     <td>@if($facture->client_id){{ $facture->client->customer_name }} @else {{ $facture->customer_name }} @endif</td>
+                                    <td>@if($facture->client_id){{ $facture->client->customer_TIN }} @else {{ $facture->customer_TIN }} @endif</td>
+                                    <td>@if($facture->client_id){{ $facture->client->telephone }} @else {{ $facture->telephone }} @endif</td>
+                                    <td>@if($facture->client_id){{ $facture->client->mail }} @else {{ $facture->mail }} @endif</td>
                                     <td>@if($facture->drink_order_no){{ $facture->drink_order_no }}<span class="badge badge-info">boisson</span> @elseif($facture->food_order_no){{ $facture->food_order_no }}<span class="badge badge-info">nourriture</span> @elseif($facture->barrist_order_no){{ $facture->barrist_order_no }}<span class="badge badge-info">barrist</span> @elseif($facture->bartender_order_no){{ $facture->bartender_order_no }}<span class="badge badge-info">bartender</span> @else {{ $facture->booking_no }}<span class="badge badge-info">reservation</span> @endif</td>
                                     <td>{{ $facture->invoice_signature }}</td>
                                     <td>
-                                        @if (Auth::guard('admin')->user()->can('invoice_booking.edit'))
-                                        @if($facture->etat === '01')
+                                        @if (Auth::guard('admin')->user()->can('invoice_booking.approuve'))
+                                        @if($facture->etat_recouvrement == '1' || $facture->etat_recouvrement == '0' || $facture->reste_credit > 0)
                                          <a href="{{ route('admin.payer-facture.credit', $facture->invoice_number) }}" class="btn btn-info">Payer Credit</a>
                                         @endif
                                         @endif                                       

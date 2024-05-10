@@ -17,7 +17,7 @@ class FoodOrderClientExport implements FromCollection, WithMapping, WithHeadings
     public function collection()
     {
 
-    	$d1 = request()->input('start_date');
+        $d1 = request()->input('start_date');
         $d2 = request()->input('end_date');
 
         $startDate = \Carbon\Carbon::parse($d1)->format('Y-m-d');
@@ -32,32 +32,32 @@ class FoodOrderClientExport implements FromCollection, WithMapping, WithHeadings
 
     public function map($data) : array {
 
-        if ($data->status == '0') {
+        if ($data->status == 0) {
             $status = "ENCOURS....";
-        }elseif ($data->status === '-1') {
+        }elseif ($data->status == -1) {
             $status = "REJETE";
-        }elseif ($data->status === '1') {
+        }elseif ($data->status == 1) {
             $status = "VALIDE";
-        }elseif ($data->status === '2') {
+        }elseif ($data->status == 2) {
             $status = "FACTURE ENCOURS";
-        }elseif ($data->status == '3') {
-        	$status = "FACTURE VALIDE";
+        }elseif ($data->status == 3) {
+            $status = "FACTURE VALIDE";
         }else{
             $status = "";
         }
 
         return [
             $data->id,
-            Carbon::parse($data->date)->format('Y-m-d'),
-			$data->order_no,
+            Carbon::parse($data->date)->format('d/m/Y'),
+            $data->order_no,
             $data->employe->name,
             $data->foodItem->name,
             $data->quantity,
             0,
             0,
             0,
-			$data->selling_price,
-			$data->total_amount_selling,
+            $data->selling_price,
+            $data->total_amount_selling,
             $status,
             $data->created_by,
             $data->confirmed_by,

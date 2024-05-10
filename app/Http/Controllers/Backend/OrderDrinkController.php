@@ -42,7 +42,7 @@ class OrderDrinkController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any order !');
         }
 
-        $orders = OrderDrink::take(200)->orderBy('order_no','desc')->get();
+        $orders = OrderDrink::take(200)->orderBy('id','desc')->get();
         
         return view('backend.pages.order_drink.index', compact('orders'));
     }
@@ -326,7 +326,7 @@ class OrderDrinkController extends Controller
             ->where('order_no', '=', $order_no)
             ->sum('total_amount_selling');
 
-        if($stat == 1 || $stat == 2 || $stat == 3){
+        if($stat == 1 || $stat == 2 || $stat == 3 || $stat == -3){
            $order_no = OrderDrink::where('order_no', $order_no)->value('order_no');
 
            $datas = OrderDrinkDetail::where('order_no', $order_no)->get();

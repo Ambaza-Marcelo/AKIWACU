@@ -44,7 +44,7 @@ class MaterialPurchaseController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any purchase !');
         }
 
-        $purchases = MaterialPurchase::all();
+        $purchases = MaterialPurchase::orderBy('id','desc')->take(200)->get();
         return view('backend.pages.material_purchase.index', compact('purchases'));
     }
 
@@ -79,6 +79,7 @@ class MaterialPurchaseController extends Controller
                 'material_id.*'  => 'required',
                 'date'  => 'required',
                 'quantity.*'  => 'required',
+                'price.*'  => 'required',
                 'unit.*'  => 'required',
                 'description'  => 'required'
             );
@@ -94,6 +95,7 @@ class MaterialPurchaseController extends Controller
             $material_id = $request->material_id;
             $date = $request->date;
             $quantity = $request->quantity;
+            $price = $request->price;
             $unit = $request->unit;
             $description =$request->description; 
             $latest = MaterialPurchase::latest()->first();
@@ -117,14 +119,14 @@ class MaterialPurchaseController extends Controller
             //insert details of purchase No.
             for( $count = 0; $count < count($material_id); $count++ ){
 
-                $price = Material::where('id', $material_id[$count])->value('purchase_price');
-                $total_value = $quantity[$count] * $price;
+                //$price = Material::where('id', $material_id[$count])->value('purchase_price');
+                $total_value = $quantity[$count] * $price[$count];
                 $data = array(
                     'material_id' => $material_id[$count],
                     'date' => $date,
                     'quantity' => $quantity[$count],
                     'unit' => $unit[$count],
-                    'price' => $price,
+                    'price' => $price[$count],
                     'description' => $description,
                     'total_value' => $total_value,
                     'created_by' => $created_by,
@@ -166,6 +168,13 @@ class MaterialPurchaseController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to edit any purchase !');
         }
 
+        $materials  = Material::orderBy('name','asc')->get();
+
+        $data = MaterialPurchase::where('purchase_no', $purchase_no)->first();
+        $datas = MaterialPurchaseDetail::where('purchase_no', $purchase_no)->get();
+
+        return view('backend.pages.material_purchase.edit', compact('datas','data','materials'));
+
     }
 
     /**
@@ -181,7 +190,63 @@ class MaterialPurchaseController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to edit any purchase !');
         }
 
-        
+       $rules = array(
+                'material_id.*'  => 'required',
+                'date'  => 'required',
+                'quantity.*'  => 'required',
+                'price.*'  => 'required',
+                'unit.*'  => 'required',
+                'description'  => 'required'
+            );
+
+            $error = Validator::make($request->all(),$rules);
+
+            if($error->fails()){
+                return response()->json([
+                    'error' => $error->errors()->all(),
+                ]);
+            }
+
+            $material_id = $request->material_id;
+            $date = $request->date;
+            $quantity = $request->quantity;
+            $price = $request->price;
+            $unit = $request->unit;
+            $description =$request->description; 
+
+            $purchase = MaterialPurchase::where('purchase_no',$purchase_no)->first();
+            $purchase->date = $date;
+            $purchase->description = $description;
+            $purchase->save();
+            //insert details of purchase No.
+            for( $count = 0; $count < count($material_id); $count++ ){
+
+                $created_by = $this->user->name;
+                $purchase_signature = MaterialPurchase::where('purchase_no',$purchase_no)->value('purchase_signature');
+                //$price = Material::where('id', $material_id[$count])->value('price');
+                $total_value = $quantity[$count] * $price[$count];
+                $data = array(
+                    'material_id' => $material_id[$count],
+                    'date' => $date,
+                    'quantity' => $quantity[$count],
+                    'unit' => $unit[$count],
+                    'price' => $price[$count],
+                    'description' => $description,
+                    'total_value' => $total_value,
+                    'created_by' => $created_by,
+                    'purchase_no' => $purchase_no,
+                    'purchase_signature' => $purchase_signature,
+                );
+                $insert_data[] = $data;
+            }
+
+            MaterialPurchaseDetail::where('purchase_no',$purchase_no)->delete();
+
+            MaterialPurchaseDetail::insert($insert_data);
+
+        session()->flash('success', 'Purchase has been updated successfuly !!');
+        return redirect()->route('admin.material-purchases.index');
+
     }
 
     public function validatePurchase($purchase_no)

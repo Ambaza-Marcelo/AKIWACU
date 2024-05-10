@@ -47,21 +47,6 @@
                             <a class="btn btn-primary text-white" href="{{ route('admin.drink-stockouts.create') }}">@lang('messages.new')</a>
                         @endif
                     </p>
-                    <form action="{{ route('admin.drink-stockouts.export-to-excel')}}" method="GET">
-                        <p class="float-right mb-2">
-                            <button type="submit" value="pdf" class="btn btn-success">Exporter En Excel</button>
-                        </p>
-                        <p class="float-right mb-2">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <input type="date" name="start_date" class="form-control">
-                                </div>
-                                <div class="col-md-6">
-                                    <input type="date" name="end_date" class="form-control">
-                                </div>
-                            </div>
-                        </p>
-                    </form><br>
                     <div class="clearfix"></div>
                     <div class="data-tables">
                         @include('backend.layouts.partials.messages')
@@ -85,7 +70,7 @@
                                @foreach ($stockouts as $stockout)
                                <tr>
                                     <td>{{ $loop->index+1 }}</td>
-                                    <td>{{ $stockout->date }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($stockout->date)->format('d/m/Y') }}</td>
                                     <td><a href="{{ route('admin.drink-stockouts.show',$stockout->stockout_no)}}">{{ $stockout->stockout_no }}</a></td>
                                     <td>{{ $stockout->stockout_signature }}</td>
                                     <td>@if($stockout->status == 1)<img src="{{ asset('img/warning3.gif')}}" width="35">@elseif($stockout->status == 1)<span class="badge badge-info">Encours</span> @elseif($stockout->status == 2)<span class="badge badge-info">Validé</span> @elseif($stockout->status == 3)<span class="badge badge-info">Confirmé</span> @elseif($stockout->status == 4)<span class="badge badge-info">Approuvé</span> @elseif($stockout->status == -1)<span class="badge badge-danger">Rejeté</span>@endif</td>

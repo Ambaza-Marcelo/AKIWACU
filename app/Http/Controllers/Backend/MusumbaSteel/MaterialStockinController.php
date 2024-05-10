@@ -348,6 +348,8 @@ class MaterialStockinController extends Controller
                     'created_by' => $this->user->name,
                     'description' => $data->description,
                     'date' => $data->date,
+                    'type_transaction' => $data->item_movement_type,
+                    'document_no' => $stockin_no,
                     'created_at' => \Carbon\Carbon::now()
                 );
                 $reportStoreData[] = $reportStore;
@@ -370,20 +372,26 @@ class MaterialStockinController extends Controller
                         'cump' => $cump
                     );
 
-                    MsMaterial::where('id',$data->material_id)
-                        ->update($materialData);
 
                         $material = MsMaterialStoreDetail::where('code',$code_store_destination)->where("material_id",$data->material_id)->value('material_id');
 
                         if (!empty($material)) {
-                            MsMaterialReport::insert($reportStoreData);
+                            $flag = 1;
+                            MsMaterial::where('id',$data->material_id)
+                            ->update($materialData);
                             MsMaterialStoreDetail::where('code',$code_store_destination)->where('material_id',$data->material_id)
                         ->update($mediumStore);
                         }else{
-                            MsMaterialReport::insert($reportStoreData);
-                            MsMaterialStoreDetail::insert($mediumStoreData);
+
+                            $flag = 0;
+                            session()->flash('error', 'this item is not saved in the stock');
+                            return back();
                         }
   
+        }
+
+        if ($flag != 0) {
+            MsMaterialReport::insert($reportStoreData);
         }
 
         MsMaterialStockin::where('stockin_no', '=', $stockin_no)
@@ -395,12 +403,6 @@ class MaterialStockinController extends Controller
                     return back();
 
     }
-
-    public function get_reception_data()
-    {
-        return Excel::download(new ReceptionExport, 'stockins.xlsx');
-    }
-
 
     /**
      * Remove the specified resource from storage.

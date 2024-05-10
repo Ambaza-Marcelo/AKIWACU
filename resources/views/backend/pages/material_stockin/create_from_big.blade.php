@@ -103,6 +103,8 @@
                                 <td><select class="form-control" name="unit[]" id="unit">
                                     <option disabled="disabled" selected="selected">Merci de choisir</option>
                                     <option value="pcs" class="form-control">Pieces</option>
+                                    <option value="boites" class="form-control">Boites</option>
+                                        <option value="kg" class="form-control">KG</option>
                                         <option value="paire" class="form-control">PAIRE</option>
                                         <option value="litres" class="form-control">Litres</option>
                                 </select></td>
@@ -149,6 +151,8 @@
                           "<select class='form-control' name='unit[]' id='unit'>"+
                                 "<option disabled='disabled' selected='selected'>Merci de choisir</option>"+
                                 "<option value='pcs' class='form-control'>Pieces</option>"+
+                                "<option value='boites' class='form-control'>Boites</option>"+
+                                "<option value='kg' class='form-control'>KG</option>"+
                                 "<option value='paire' class='form-control'>Paire</option>"+
                                 "<option value='litres' class='form-control'>Litres</option>"+
                                 "</select>"+

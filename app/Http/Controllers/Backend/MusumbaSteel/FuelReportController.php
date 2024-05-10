@@ -43,7 +43,7 @@ class FuelReportController extends Controller
                         DB::raw('car_id,sum(quantity) as qtite'))->groupBy('car_id')->orderBy('qtite','desc')->get();
 
         $fuelMovements = MsFuelReport::select(
-                        DB::raw('created_at,pump_id,quantity_inventory,car_id,quantity_stock_initial,description,quantity_stockout,cump,created_by,quantity_stockin,driver_id'))->groupBy('created_at','pump_id','car_id','quantity_stock_initial','description','cump','created_by','quantity_stockin','quantity_stockout','driver_id','quantity_inventory')->orderBy('created_at','desc')->get();
+                        DB::raw('id,created_at,date,pump_id,quantity_inventory,car_id,quantity_stock_initial,description,quantity_stockout,cump,created_by,quantity_stockin,quantity_reception,driver_id'))->where('quantity_stock_initial','!=','')->groupBy('id','created_at','date','pump_id','car_id','quantity_stock_initial','description','cump','created_by','quantity_stockin','quantity_reception','quantity_stockout','driver_id','quantity_inventory')->orderBy('id','desc')->take(200)->get();
         return view('backend.pages.musumba_steel.fuel.report.index',compact('fuelMovements','cars'));
     }
 
@@ -63,8 +63,8 @@ class FuelReportController extends Controller
         $end_date = $endDate.' 23:59:59';
 
 
-        $fuelMovements = MsFuelReport::select(
-                        DB::raw('created_at,pump_id,quantity_inventory,car_id,quantity_stock_initial,description,quantity_stockout,cump,created_by,quantity_stockin,driver_id'))->groupBy('created_at','pump_id','car_id','quantity_stock_initial','description','cump','created_by','quantity_stockin','quantity_stockout','driver_id','quantity_inventory')->orderBy('created_at','desc')->get();
+        $datas = MsFuelReport::select(
+                        DB::raw('id,created_at,date,type_transaction,document_no,pump_id,quantity_inventory,car_id,quantity_stock_initial,description,stock_total,cump,created_by,quantity_stockin,quantity_reception,quantity_stockout,driver_id,start_index,end_index'))->whereBetween('created_at',[$start_date,$end_date])->where('quantity_stock_initial','!=','')->groupBy('id','created_at','date','type_transaction','document_no','pump_id','car_id','quantity_stock_initial','description','cump','created_by','quantity_stockin','quantity_stockout','stock_total','driver_id','quantity_inventory','quantity_reception','start_index','end_index')->orderBy('id','asc')->get();
 
 
         $setting = DB::table('settings')->orderBy('created_at','desc')->first();

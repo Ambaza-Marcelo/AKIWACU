@@ -68,7 +68,10 @@
                                     <th width="10%">@lang('messages.code')</th>
                                     <th width="10%">@lang('messages.purchase_price')</th>
                                     <th width="10%">@lang('messages.unit')</th>
-                                    <th width="10%">@lang('TVA')</th>
+                                    <th width="10%">@lang('Taux TVA')</th>
+                                    <th width="10%">@lang('Taux marge')</th>
+                                    <th width="10%">@lang('Taux majoration')</th>
+                                    <th width="10%">@lang('Taux Reduction')</th>
                                     <th width="10%">@lang('messages.selling_price')</th>
                                     <th width="15%">Action</th>
                                 </tr>
@@ -82,6 +85,9 @@
                                     <td>{{ number_format($food->purchase_price,0,',',' ') }}</td>
                                     <td>{{ $food->unit }}</td>
                                     <td>{{ $food->vat }}%</td>
+                                    <td>{{ $food->taux_marge }}%</td>
+                                    <td>{{ $food->taux_majoration }}%</td>
+                                    <td>{{ $food->taux_reduction }}%</td>
                                     <td>{{ number_format($food->selling_price,0,',',' ') }}</td>
                                     <td>
                                         @if (Auth::guard('admin')->user()->can('food_item.view'))

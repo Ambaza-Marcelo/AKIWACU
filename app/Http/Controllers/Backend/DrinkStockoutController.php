@@ -55,7 +55,7 @@ class DrinkStockoutController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any stockout !');
         }
 
-        $stockouts = DrinkStockout::all();
+        $stockouts = DrinkStockout::orderBy('id','desc')->take(200)->get();
         return view('backend.pages.drink_stockout.index', compact('stockouts'));
     }
 

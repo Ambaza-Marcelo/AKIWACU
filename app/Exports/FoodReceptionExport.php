@@ -44,6 +44,12 @@ class FoodReceptionExport implements FromCollection, WithMapping, WithHeadings
         	$status = "APPROUVE";
         }
 
+        if (!empty($data->supplier_id)) {
+            $supplier = $data->supplier->name;
+        }else{
+            $supplier = "";
+        }
+
         return [
             $data->id,
             Carbon::parse($data->date)->format('Y-m-d'),
@@ -51,7 +57,7 @@ class FoodReceptionExport implements FromCollection, WithMapping, WithHeadings
 			$data->order_no,
 			$data->reception_no,
 			$data->invoice_no,
-            $data->supplier->name,
+            $supplier,
             $data->handingover,
             $data->receptionist,
             $data->food->name,
