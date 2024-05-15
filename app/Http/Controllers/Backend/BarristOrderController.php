@@ -78,7 +78,8 @@ class BarristOrderController extends Controller
                 'barrist_item_id.*'  => 'required',
                 'employe_id'  => 'required',
                 'quantity.*'  => 'required',
-                'table_no'  => 'required'
+                'table_no'  => 'required',
+                'ingredient_id.*'  => 'required'
             );
 
             $error = Validator::make($request->all(),$rules);

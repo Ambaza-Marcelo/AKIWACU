@@ -54,7 +54,7 @@ class DrinkReceptionExport implements FromCollection, WithMapping, WithHeadings
 
         return [
             $data->id,
-            Carbon::parse($data->date)->format('Y-m-d'),
+            Carbon::parse($data->date)->format('d/m/Y'),
 			$data->purchase_no,
 			$data->order_no,
 			$data->reception_no,
@@ -72,7 +72,8 @@ class DrinkReceptionExport implements FromCollection, WithMapping, WithHeadings
             $data->validated_by,
             $data->confirmed_by,
             $data->approuved_by,
-            $data->rejected_by
+            $data->rejected_by,
+            $data->description
         ] ;
  
  
@@ -99,7 +100,8 @@ class DrinkReceptionExport implements FromCollection, WithMapping, WithHeadings
             'Valide Par',
             'Confirme par',
             'Approuve par',
-            'Rejete Par'
+            'Rejete Par',
+            'Description'
         ] ;
     }
 }

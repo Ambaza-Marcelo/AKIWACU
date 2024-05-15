@@ -3,13 +3,13 @@
 namespace App\Exports;
 
 use Carbon\Carbon;
-use App\Models\FoodReceptionDetail;
+use App\Models\DrinkTransferDetail;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
-class FoodReceptionExport implements FromCollection, WithMapping, WithHeadings
+class DrinkTransfertExport implements FromCollection, WithMapping, WithHeadings
 {
     /**
     * @return \Illuminate\Support\Collection
@@ -26,8 +26,8 @@ class FoodReceptionExport implements FromCollection, WithMapping, WithHeadings
         $start_date = $startDate.' 00:00:00';
         $end_date = $endDate.' 23:59:59';
 
-        return FoodReceptionDetail::select(
-                        DB::raw('id,food_id,date,quantity_received,quantity_ordered,purchase_price,supplier_id,created_by,reception_no,validated_by,confirmed_by,approuved_by,rejected_by,status,invoice_no,order_no,purchase_no,receptionist,handingover,description,origin'))->whereBetween('date',[$start_date,$end_date])->groupBy('id','food_id','supplier_id','date','quantity_received','quantity_ordered','status','purchase_price','reception_no','confirmed_by','validated_by','approuved_by','created_by','rejected_by','invoice_no','order_no','purchase_no','receptionist','handingover','description','origin')->orderBy('id','asc')->get();
+        return DrinkTransferDetail::select(
+                        DB::raw('id,drink_id,date,quantity_transfered,quantity_requisitioned,price,created_by,transfer_no,validated_by,confirmed_by,approuved_by,rejected_by,status,requisition_no,description'))->whereBetween('date',[$start_date,$end_date])->groupBy('id','drink_id','date','quantity_transfered','quantity_requisitioned','status','price','transfer_no','confirmed_by','validated_by','approuved_by','created_by','rejected_by','requisition_no','description')->orderBy('id','asc')->get();
     }
 
     public function map($data) : array {
@@ -42,6 +42,8 @@ class FoodReceptionExport implements FromCollection, WithMapping, WithHeadings
             $status = "CONFIRME";
         }elseif ($data->status == '4') {
         	$status = "APPROUVE";
+        }else{
+            $status = "";
         }
 
         if (!empty($data->supplier_id)) {
@@ -52,19 +54,14 @@ class FoodReceptionExport implements FromCollection, WithMapping, WithHeadings
 
         return [
             $data->id,
-            Carbon::parse($data->date)->format('Y-m-d'),
-			$data->purchase_no,
-			$data->order_no,
-			$data->reception_no,
-			$data->invoice_no,
-            $supplier,
-            $data->handingover,
-            $data->receptionist,
-            $data->food->name,
-            $data->quantity_ordered,
-            $data->quantity_received,
-            $data->purchase_price,
-            $data->purchase_price * $data->quantity_received,
+            Carbon::parse($data->date)->format('d/m/Y'),
+			$data->requisition_no,
+			$data->transfer_no,
+            $data->drink->name,
+            $data->quantity_requisitioned,
+            $data->quantity_transfered,
+            $data->price,
+            $data->price * $data->quantity_transfered,
             $status,
             $data->created_by,
             $data->validated_by,
@@ -81,16 +78,11 @@ class FoodReceptionExport implements FromCollection, WithMapping, WithHeadings
         return [
             '#',
             'Date',
-            'BDA',
-            'BC',
-            'No Reception',
-            'No Facture',
-            'Nom du Fournisseur',
-            'Remettant',
-            'Receptionniste',
+            'Requisition No',
+            'No Transfert',
             'Libellé',
-            'Quantité Commandé',
-            'Quantité Recu',
+            'Quantité Requisitionné',
+            'Quantité Transfert',
             'P.A',
             'TOTAL P.A',
             'ETAT',

@@ -66,19 +66,19 @@
                         <div class="col-md-4" id="dynamicDiv">
                         <div class="form-group">
                             <label for="date">@lang('messages.date')</label>
-                            <input type="date" class="form-control" id="date" name="date">
+                            <input type="date" class="form-control" id="date" name="date" required>
                         </div>
                         </div>
                         <div class="col-md-4">
                         <div class="form-group">
                             <label for="table_no">@lang('Table No')</label>
-                            <input type="text" class="form-control" placeholder="Saisir Table No" id="table_no" name="table_no">
+                            <input type="text" class="form-control" placeholder="Saisir Table No" id="table_no" name="table_no" required>
                         </div>
                         </div>
                         <div class="col-md-4">
                         <div class="form-group">
                             <label for="employe_id">@lang('Serveur')</label>
-                            <select class="form-control" name="employe_id">
+                            <select class="form-control" name="employe_id" required>
                                 <option disabled="disabled" selected="selected">Merci de choisir Serveur</option>
                             @foreach ($employes as $employe)
                                 <option value="{{ $employe->id }}">{{ $employe->name }}/{{ $employe->telephone }}</option>
@@ -95,7 +95,7 @@
                                 <th>Action</th>
                             </tr>
                             <tr>  
-                                <td><select class="form-control" name="food_item_id[]" id="food_item_id">
+                                <td><select class="form-control" name="food_item_id[]" id="food_item_id" required>
                                 <option disabled="disabled" selected="selected">merci de choisir</option>
                                 @foreach($articles as $article)
                                 <option value="{{ $article->id }}" class="form-control">{{ $article->name }}</option>
@@ -106,7 +106,7 @@
 
                                         @foreach ($accompagnements as $accompagnement)
                                             <div class="form-check">
-                                                <input type="checkbox" class="form-check-input" name="accompagnement_id[]" id="{{ $accompagnement->id }}" value="{{ $accompagnement->id }}">
+                                                <input type="checkbox" class="form-check-input" name="accompagnement_id[]" id="{{ $accompagnement->id }}" value="{{ $accompagnement->id }}" required>
                                                 <label class="form-check-label" for="{{ $accompagnement->id }}">{{ $accompagnement->name }}</label>
                                             </div>
                                         @endforeach
@@ -149,12 +149,12 @@
                           "</select>"+
                         "</td>"+
                         "<td>"+
-                          "<input type='number' name='quantity[]' placeholder='Enter Quantity' class='form-control' required min='0' />"+
+                          "<input type='number' name='quantity[]' placeholder='Enter Quantity' class='form-control' required min='0' required/>"+
                         "</td>"+
                         "<td>"+
                                     "@foreach ($accompagnements as $accompagnement)"+
                                             "<div class='form-check'>"+
-                                               "<input type='checkbox' class='form-check-input' name='accompagnement_id[]' id='{{ $accompagnement->id }}' value='{{ $accompagnement->id }}'>"+
+                                               "<input type='checkbox' class='form-check-input' name='accompagnement_id[]' id='{{ $accompagnement->id }}' value='{{ $accompagnement->id }}' required>"+
                                                 "<label class='form-check-label' for='{{ $accompagnement->id }}'>{{ $accompagnement->name }}</label>"+
                                             "</div>"+
                                     "@endforeach"+

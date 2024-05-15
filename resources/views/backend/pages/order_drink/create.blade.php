@@ -66,19 +66,19 @@
                         <div class="col-md-4" id="dynamicDiv">
                         <div class="form-group">
                             <label for="date">@lang('messages.date')</label>
-                            <input type="date" class="form-control" id="date" name="date">
+                            <input type="date" class="form-control" id="date" name="date" required>
                         </div>
                         </div>
                         <div class="col-md-4">
                         <div class="form-group">
                             <label for="table_no">@lang('Table No')</label>
-                            <input type="text" class="form-control" placeholder="Saisir Table No" id="table_no" name="table_no">
+                            <input type="text" class="form-control" placeholder="Saisir Table No" id="table_no" name="table_no" required>
                         </div>
                         </div>
                         <div class="col-md-4">
                         <div class="form-group">
                             <label for="employe_id">@lang('Serveur')</label>
-                            <select class="form-control" name="employe_id">
+                            <select class="form-control" name="employe_id" required>
                                 <option disabled="disabled" selected="selected">Merci de choisir Serveur</option>
                             @foreach ($employes as $employe)
                                 <option value="{{ $employe->id }}">{{ $employe->name }}/{{ $employe->telephone }}</option>
@@ -94,13 +94,13 @@
                                 <th>Action</th>
                             </tr>
                             <tr>  
-                                <td><select class="form-control" name="drink_id[]" id="drink_id">
+                                <td><select class="form-control" name="drink_id[]" id="drink_id" required>
                                 <option disabled="disabled" selected="selected">merci de choisir</option>
                                 @foreach($articles as $article)
                                 <option value="{{ $article->id }}" class="form-control">{{ $article->name }}/{{$article->code }}</option>
                                 @endforeach
                                 </select></td>  
-                                <td><input type="number" name="quantity[]" placeholder="Entrer quantite" class="form-control" /></td>
+                                <td><input type="number" name="quantity[]" placeholder="Entrer quantite" class="form-control" required /></td>
                                 <td><button type="button" name="add" id="add" class="btn btn-success">@lang('messages.addmore')</button></td>     
                             </tr>
                         </table>
@@ -138,7 +138,7 @@
                           "</select>"+
                         "</td>"+
                         "<td>"+
-                          "<input type='number' name='quantity[]' placeholder='Enter Quantity' class='form-control' />"+
+                          "<input type='number' name='quantity[]' placeholder='Enter Quantity' class='form-control' required/>"+
                         "</td>"+
                         "<td>"+
                           "<button type='button' class='btn btn-danger remove-tr'>@lang('messages.delete')</button>"+

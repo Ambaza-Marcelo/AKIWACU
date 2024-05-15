@@ -125,11 +125,6 @@
                                         <a href="{{ route('admin.facture.imprimer',$facture->invoice_number) }}"><img src="{{ asset('img/ISSh.gif') }}" width="60" title="Télécharger d'abord le document et puis imprimer"></a>
                                         @endif
                                         @endif
-                                        @if (Auth::guard('admin')->user()->can('invoice_drink.edit'))
-                                        @if($facture->etat == 0 || $facture->etat == -1)
-                                        <a class="btn btn-success text-white" href="">Editer</a>
-                                        @endif
-                                        @endif
                                         @if (Auth::guard('admin')->user()->can('invoice_drink.validate'))
                                         @if($facture->etat == 0)
                                          <a class="btn btn-primary text-white" href="{{ route('admin.facture-booking.validate', $facture->invoice_number) }}"

@@ -903,6 +903,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::put('EBMS/drink-transfers/confirm/{transfer_no}','Backend\DrinkTransferController@confirm')->name('admin.drink-transfers.confirm');
     Route::put('EBMS/drink-transfers/approuve/{transfer_no}','Backend\DrinkTransferController@approuve')->name('admin.drink-transfers.approuve');
 
+    Route::get('EBMS/drink-transfers/export-to-excel','Backend\DrinkTransferController@exportToExcel')->name('admin.drink-transfers.export-to-excel');
+
     //food transfer routes
     Route::get('EBMS/food-transfers/index', 'Backend\FoodTransferController@index')->name('admin.food-transfers.index');
     Route::get('EBMS/food-transfers/create/{requisition_no}', 'Backend\FoodTransferController@create')->name('admin.food-transfers.create');

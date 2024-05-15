@@ -48,7 +48,7 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <label for="invoice_date">Date Facture</label>
-                                <input type="date" placeholder="Date Facture" name="invoice_date" class="form-control">
+                                <input type="date" placeholder="Date Facture" name="invoice_date" class="form-control" required>
                             </div>
                             <div class="col-md-4">
                                 <label for="drink_order_no">Commande No</label>

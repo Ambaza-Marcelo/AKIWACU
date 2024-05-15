@@ -26,6 +26,7 @@ use App\Models\DrinkRequisition;
 use App\Models\DrinkExtraBigReport;
 use App\Models\DrinkBigReport;
 use App\Models\DrinkSmallReport;
+use App\Exports\DrinkTransfertExport;
 use Carbon\Carbon;
 use PDF;
 use Validator;
@@ -776,9 +777,9 @@ class DrinkTransferController extends Controller
 
     }
 
-    public function get_reception_data()
+    public function exportToExcel()
     {
-        return Excel::download(new ReceptionExport, 'receptions.xlsx');
+        return Excel::download(new DrinkTransfertExport, 'transfert_boissons.xlsx');
     }
 
     public function rapportBoisson(Request $request)

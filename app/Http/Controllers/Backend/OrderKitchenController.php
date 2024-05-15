@@ -80,7 +80,8 @@ class OrderKitchenController extends Controller
                 'food_item_id.*'  => 'required',
                 'employe_id'  => 'required',
                 'quantity.*'  => 'required',
-                'table_no'  => 'required'
+                'table_no'  => 'required',
+                'accompagnement_id.*'  => 'required'
             );
 
             $error = Validator::make($request->all(),$rules);
