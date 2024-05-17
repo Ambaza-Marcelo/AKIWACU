@@ -105,7 +105,7 @@
                                 <td>
                                         @foreach ($ingredients as $ingredient)
                                             <div class="form-check">
-                                                <input type="checkbox" class="form-check-input" name="ingredient_id[]" id="{{ $ingredient->id }}" checked="checked" value="{{ $ingredient->id }}" required>
+                                                <input type="checkbox" class="form-check-input" name="ingredient_id[]" id="{{ $ingredient->id }}" checked="checked" value="{{ $ingredient->id }}">
                                                 <label class="form-check-label" for="{{ $ingredient->id }}">{{ $ingredient->name }}</label>
                                             </div>
                                         @endforeach
@@ -152,7 +152,7 @@
                         "</td>"+
                         "<td>"+
                         "<td>"+
-                         "<select class='form-control' name='ingredient_id[]' required"+
+                         "<select class='form-control' name='ingredient_id[]'"+
                             "<option>merci de choisir</option>"+
                              "@foreach($ingredients as $ingredient)"+
                                  "<option value='{{ $ingredient->id }}'>{{ $ingredient->name }}</option>"+

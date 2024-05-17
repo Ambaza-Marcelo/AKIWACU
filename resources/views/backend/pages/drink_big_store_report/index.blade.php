@@ -43,33 +43,34 @@
                 <div class="card-body">
                     
                     <form action="{{ route('admin.drink-big-store-report.export-to-excel')}}" method="GET">
-                        <p class="float-right mb-2">
-                            <button type="submit" value="search" title="Cliquer pour exporter en Excel" class="btn btn-primary">Exporter En Excel</button>
-                        </p>
-                        <p class="float-right mb-2">
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <label for="start_date">@lang('Date Debut')</label>
+                        <table>
+                            <tr>
+                                <th>Date Debut</th>
+                                <th>Date Fin</th>
+                                <th>Stock</th>
+                                <th>Action</th>
+                            </tr>
+                            <tr>
+                                <td>
                                     <input type="date" name="start_date" class="form-control" id="start_date">
-                                </div>
-                                <div class="col-md-4">
-                                    <label for="end_date">@lang('Date Fin')</label>
+                                </td>
+                                <td>
                                     <input type="date" name="end_date" class="form-control" id="end_date">
-                                </div>
-                                <div class="col-sm-4">
-                                    <div class="form-group">
-                                        <label for="code_store">@lang('Stock')</label>
-                                        <select class="form-control" name="code_store" id="code_store">
+                                </td>
+                                <td>
+                                    <select class="form-control" name="code_store" id="code_store">
                                         <option disabled="disabled" selected="selected">Merci de choisir</option>
                                         @foreach($stores as $store)
-                                            <option value="{{$store->code}}">{{$store->name}}</option>
+                                            <option value="{{$store->code}}">{{$store->code}}/{{$store->name}}</option>
                                         @endforeach
                                     </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </p>
-                    </form> 
+                                </td>
+                                <td>
+                                    <button type="submit" value="pdf" class="btn btn-success" title="Cliquer pour exporter en PDF">Exporter R. Stock Intermediaire Boissons</button>
+                                </td>
+                            </tr>
+                        </table>
+                    </form>
                     <form action="{{ route('admin.drink-big-store-report.export-to-pdf')}}" method="GET">
                         <table>
                             <tr>

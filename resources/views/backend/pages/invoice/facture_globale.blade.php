@@ -29,7 +29,7 @@
                    <img src="img/eden_logo.png" width="200" height="100">
                 </div>
                 <div><br>
-                           <strong style="text-decoration: underline;text-align: center;">FACTURE GLOBALE ............................................................................................ </strong>
+                           <strong style="text-decoration: underline;text-align: center;">FACTURE GLOBALE .......................................................................DU {{ \Carbon\Carbon::parse($start_date)->format('d/m/Y')}} AU {{ \Carbon\Carbon::parse($end_date)->format('d/m/Y')}} </strong>
                     </div>
                     <div><br>
                         <strong style="text-decoration: underline;text-align: center;">A. Identification du Vendeur</strong>

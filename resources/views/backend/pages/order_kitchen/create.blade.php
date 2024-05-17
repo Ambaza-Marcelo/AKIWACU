@@ -106,7 +106,7 @@
 
                                         @foreach ($accompagnements as $accompagnement)
                                             <div class="form-check">
-                                                <input type="checkbox" class="form-check-input" name="accompagnement_id[]" id="{{ $accompagnement->id }}" value="{{ $accompagnement->id }}" required>
+                                                <input type="checkbox" class="form-check-input" name="accompagnement_id[]" id="{{ $accompagnement->id }}" value="{{ $accompagnement->id }}">
                                                 <label class="form-check-label" for="{{ $accompagnement->id }}">{{ $accompagnement->name }}</label>
                                             </div>
                                         @endforeach
@@ -154,7 +154,7 @@
                         "<td>"+
                                     "@foreach ($accompagnements as $accompagnement)"+
                                             "<div class='form-check'>"+
-                                               "<input type='checkbox' class='form-check-input' name='accompagnement_id[]' id='{{ $accompagnement->id }}' value='{{ $accompagnement->id }}' required>"+
+                                               "<input type='checkbox' class='form-check-input' name='accompagnement_id[]' id='{{ $accompagnement->id }}' value='{{ $accompagnement->id }}'>"+
                                                 "<label class='form-check-label' for='{{ $accompagnement->id }}'>{{ $accompagnement->name }}</label>"+
                                             "</div>"+
                                     "@endforeach"+
