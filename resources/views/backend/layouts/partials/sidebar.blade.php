@@ -46,8 +46,8 @@
                                 @if($usr->can('booking_client.view'))
                                 <li class=""><a href="{{ route('admin.clients.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Clients')</a></li>
                                 @endif
-                                @if($usr->can('drink_category.view'))
-                                <li class=""><a href=""><i class="fa fa-male"></i>&nbsp;@lang('Table')</a></li>
+                                @if($usr->can('table.view'))
+                                <li class=""><a href="{{ route('admin.tables.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Table')</a></li>
                                 @endif
                                 @if($usr->can('drink_category.view'))
                                 <li class=""><a href="{{ route('admin.drink-category.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Categorie Boisson')</a></li>
@@ -246,7 +246,7 @@
                         </span></a>
                         <ul class="collapse">
                                 @if ($usr->can('drink_order_client.view'))
-                                <li class=""><a href="{{ route('admin.order_drinks.index') }}">@lang('Boissons')</a></li>
+                                <li class=""><a href="{{ route('admin.order_drinks.index',1) }}">@lang('Boissons')</a></li>
                                 @endif
                                 @if ($usr->can('food_order_client.view'))
                                 <li class=""><a href="{{ route('admin.order_kitchens.index') }}">@lang('Cuisine')</a></li>

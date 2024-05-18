@@ -36,207 +36,92 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
 
     <div class="col-lg-12"> 
         <div class="row">
-        <div class="col-md-10 offset-md-1">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <canvas id="canvas" height="280" width="500"></canvas>
+            <div class="col-md-10 offset-md-1">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <canvas id="canvas" height="280" width="500"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     <br><br>
     </div>
-            <div class="col-md-6 mb-3 mb-lg-0">
-                <div class="card">
-                    <div class="seo-fact sbg3">
-                        <a href="{{ route('admin.barrist-orders.index') }}">
-                            <div class="p-4 d-flex justify-content-between align-items-center">
-                                <div class="seofct-icon">
-                                    <img src="{{ asset('img/undraw_beer-006.svg') }}" width="200">
-
-                                    @lang('Commande Barrist')</div>
-                                <h2>
-                                </h2>
-                            </div>
-                        </a>
+    </div>
+                    <div class="row">
+                        @foreach($tables as $table)
+                        <div class="col-md-6 mb-3 mb-lg-0">
+                            <div class="card">
+                                <div class="seo-fact sbg3">
+                                    <a href="{{ route('admin.tables.choose-type-order',$table->id) }}">
+                                        <div class="p-4 d-flex justify-content-between align-items-center">
+                                            <div class="seofct-icon">
+                                                <img src="{{ asset('img/undraw_special_event-001.svg') }}" width="100">
+                                                {{ $table->name }}
+                                    </div>
+                                            <h4>
+                                                @if($table->etat == '0')
+                                                <span class="badge badge-success">libre</span>
+                                                @elseif($table->etat == '1')
+                                                <span class="badge badge-warning">{{ $table->waiter_name }} de {{ Carbon\Carbon::parse($table->opening_date)->format('H:i:s') }}({{ number_format($table->total_amount_paying,0,',',' ') }})</span>
+                                                @endif
+                                            </h4>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div><br>
+                        </div>
+                        @endforeach
                     </div>
-                </div><br>
-                <div class="card">
-                    <div class="seo-fact sbg3">
-                        <a href="{{ route('admin.bartender-orders.index') }}">
-                            <div class="p-4 d-flex justify-content-between align-items-center">
-                                <div class="seofct-icon">
-                                    <img src="{{ asset('img/undraw_beer-006.svg') }}" width="200">
-
-                                    @lang('Commande Bartender')</div>
-                                <h2>
-                                </h2>
-                            </div>
-                        </a>
+                    <div class="row">
+                        <div class="col-md-4 mb-3 mb-lg-0">
+                            <div class="card">
+                                <div class="seo-fact sbg4">
+                                    <a href="{{ route('admin.booking-kidness-space.index') }}">
+                                        <div class="p-4 d-flex justify-content-between align-items-center">
+                                            <div class="seofct-icon">
+                                                <img src="{{ asset('img/undraw_toy_car_-7-umw.svg') }}" width="60">
+                                                @lang('Reservation Kidness Space')
+                                            </div>
+                                            <h2>
+                                            </h2>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div><br>
+                        </div>
+                        <div class="col-md-4 mb-3 mb-lg-0">
+                            <div class="card">
+                                <div class="seo-fact sbg4">
+                                    <a href="{{ route('admin.booking-swiming-pool.index') }}">
+                                        <div class="p-4 d-flex justify-content-between align-items-center">
+                                            <div class="seofct-icon">
+                                                <img src="{{ asset('img/piscine1.jpg') }}" width="60">
+                                                @lang('Reservation Piscine')
+                                            </div>
+                                            <h2>
+                                            </h2>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div><br>
+                        </div>
+                        <div class="col-md-4 mb-3 mb-lg-0">
+                            <div class="card">
+                                <div class="seo-fact sbg3">
+                                    <a href="{{ route('admin.booking-breakfast.index') }}">
+                                        <div class="p-4 d-flex justify-content-between align-items-center">
+                                            <div class="seofct-icon">
+                                                <img src="{{ asset('img/undraw_special_event-001.svg') }}" width="60">
+                                                @lang('RESERVATION BREAKFAST')
+                                            </div>
+                                            <h2>
+                                            </h2>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div><br>
+                        </div>
                     </div>
-                </div><br>
-                <div class="card">
-                    <div class="seo-fact sbg5">
-                        <a href="{{ route('admin.order_drinks.index') }}">
-                            <div class="p-4 d-flex justify-content-between align-items-center">
-                                <div class="seofct-icon">
-                                    <img src="{{ asset('img/undraw_barista_at0v.svg') }}" width="200">
-
-                                    @lang('Commande Boissons')</div>
-                                <h2>
-                                </h2>
-                            </div>
-                        </a>
-                    </div>
-                </div><br>
-                <div class="card">
-                    <div class="seo-fact sbg6">
-                        <a href="{{ route('admin.order_kitchens.index') }}">
-                            <div class="p-4 d-flex justify-content-between align-items-center">
-                                <div class="seofct-icon">
-                                    <img src="{{ asset('img/undraw_eating_together-004.svg') }}" width="200">
-
-                                    @lang('Commande Cuisine')</div>
-                                <h2>
-                                </h2>
-                            </div>
-                        </a>
-                    </div>
-                </div><br>
-                <div class="card">
-                    <div class="seo-fact sbg4">
-                        
-                        <a href="{{ route('admin.booking-kidness-space.index') }}">
-                        
-                            <div class="p-4 d-flex justify-content-between align-items-center">
-                                <div class="seofct-icon">
-                                    <img src="{{ asset('img/undraw_toy_car_-7-umw.svg') }}" width="100">
-
-                                    @lang('Reservation Kidness Space')</div>
-                                <h2>
-                                </h2>
-                            </div>
-                        </a>
-                    </div>
-                </div><br>
-                <div class="card">
-                    <div class="seo-fact sbg4">
-                        
-                        <a href="{{ route('admin.booking-swiming-pool.index') }}">
-                        
-                            <div class="p-4 d-flex justify-content-between align-items-center">
-                                <div class="seofct-icon">
-                                    <img src="{{ asset('img/piscine1.jpg') }}" width="100">
-
-                                    @lang('Reservation Piscine')</div>
-                                <h2>
-                                </h2>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 mb-3 mb-lg-0">
-                <div class="card">
-                    <div class="seo-fact sbg4">
-                        <a href="{{ route('admin.barrist-invoices.index') }}">
-                            <div class="p-4 d-flex justify-content-between align-items-center">
-                                <div class="seofct-icon">
-                                    <img src="{{ asset('img/undraw_beer-006.svg') }}" width="200">
-
-                                    @lang('Vente Barrist')</div>
-                                <h2>
-                                </h2>
-                            </div>
-                        </a>
-                    </div>
-                </div><br>
-                <div class="card">
-                <div class="seo-fact sbg8">
-                        <a href="{{ route('ebms_api.invoices.index') }}">
-                            <div class="p-4 d-flex justify-content-between align-items-center">
-                                <div class="seofct-icon">
-                                    <img src="{{ asset('img/undraw_special_event-001.svg') }}" width="200">
-
-                                    @lang('Vente Boissons')</div>
-                                <h2>
-                                </h2>
-                            </div>
-                        </a>
-                    </div>
-                </div><br>
-                <div class="card">
-                    <div class="seo-fact sbg4">
-                        <a href="{{ route('admin.invoice-kitchens.index') }}">
-                            <div class="p-4 d-flex justify-content-between align-items-center">
-                                <div class="seofct-icon">
-                                    <img src="{{ asset('img/undraw_breakfast-005.svg') }}" width="200">
-
-                                    @lang('Vente Cuisine')</div>
-                                <h2>
-                                </h2>
-                            </div>
-                        </a>
-                    </div>
-                </div><br>
-                <div class="card">
-                    <div class="seo-fact sbg3">
-                        <a href="{{ route('admin.bartender-invoices.index') }}">
-                            <div class="p-4 d-flex justify-content-between align-items-center">
-                                <div class="seofct-icon">
-                                    <img src="{{ asset('img/undraw_beer-006.svg') }}" width="200">
-
-                                    @lang('Vente Bartender')</div>
-                                <h2>
-                                </h2>
-                            </div>
-                        </a>
-                    </div>
-                </div><br>
-                <div class="card">
-                    <div class="seo-fact sbg4">
-                        <a href="{{ route('admin.booking-breakfast.index') }}">
-                            <div class="p-4 d-flex justify-content-between align-items-center">
-                                <div class="seofct-icon">
-                                    <img src="{{ asset('img/undraw_special_event-001.svg') }}" width="100">
-
-                                    @lang('RESERVATION BREAKFAST')</div>
-                                <h2>
-                                </h2>
-                            </div>
-                        </a>
-                    </div>
-                </div><br>
-                <div class="card">
-                    <div class="seo-fact sbg4">
-                        <a href="{{ route('admin.booking-invoices.choose') }}">
-                            <div class="p-4 d-flex justify-content-between align-items-center">
-                                <div class="seofct-icon">
-                                    <img src="{{ asset('img/undraw_polaroid_re_481f.svg') }}" width="100">
-
-                                    @lang('Vente Reservation')</div>
-                                <h2>
-                                </h2>
-                            </div>
-                        </a>
-                    </div>
-                </div><br>
-                <div class="card">
-                    <div class="seo-fact sbg3">
-                        <a href="{{ route('admin.drink-requisitions.index') }}">
-                            <div class="p-4 d-flex justify-content-between align-items-center">
-                                <div class="seofct-icon">
-                                    <img src="{{ asset('img/undraw_beer-006.svg') }}" width="100">
-
-                                    @lang('Requisition Boissons')</div>
-                                <h2>
-                                </h2>
-                            </div>
-                        </a>
-                    </div>
-                </div><br>
-            </div>
-    </div><br>
     @if (Auth::guard('admin')->user()->can('drink_purchase.view') || Auth::guard('admin')->user()->can('food_purchase.view') || Auth::guard('admin')->user()->can('material_purchase.view'))
         <div class="row">
             <div class="col-md-6">
@@ -249,6 +134,22 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
                                 </div>
                                 <h2>
                                     LES PLANNINGS D'APPROVISIONNEMENT 
+                                </h2>
+                            </div>
+                        </a>
+                    </div>
+                </div><br>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="seo-fact sbg3">
+                        <a href="{{ route('admin.plan-purchase.choice') }}">
+                            <div class="p-4 d-flex justify-content-between align-items-center">
+                                <div class="seofct-icon">
+                                    <img src="{{ asset('img/undraw_beer-006.svg') }}" width="100">
+                                </div>
+                                <h2>
+                                    @lang('Requisition Boissons') 
                                 </h2>
                             </div>
                         </a>

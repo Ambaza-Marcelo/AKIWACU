@@ -2,7 +2,7 @@
 @extends('backend.layouts.master')
 
 @section('title')
-@lang('Nouvelle Categorie') - @lang('messages.admin_panel')
+@lang('Nouvelle table') - @lang('messages.admin_panel')
 @endsection
 
 @section('styles')
@@ -21,11 +21,11 @@
     <div class="row align-items-center">
         <div class="col-sm-6">
             <div class="breadcrumbs-area clearfix">
-                <h4 class="page-title pull-left">@lang('Nouvelle Categorie')</h4>
+                <h4 class="page-title pull-left">@lang('Nouvelle table')</h4>
                 <ul class="breadcrumbs pull-left">
                     <li><a href="{{ route('admin.dashboard') }}">@lang('messages.dashboard')</a></li>
-                    <li><a href="{{ route('admin.drink-category.index') }}">@lang('messages.list')</a></li>
-                    <li><span>@lang('Nouvelle Categorie')</span></li>
+                    <li><a href="{{ route('admin.tables.index') }}">@lang('messages.list')</a></li>
+                    <li><span>@lang('Nouvelle table')</span></li>
                 </ul>
             </div>
         </div>
@@ -42,14 +42,14 @@
         <div class="col-12 mt-5">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="header-title">Nouvelle Categorie</h4>
+                    <h4 class="header-title">Nouvelle table</h4>
                     @include('backend.layouts.partials.messages')
                     
-                    <form action="{{ route('admin.drink-category.store') }}" method="POST">
+                    <form action="{{ route('admin.tables.store') }}" method="POST">
                         @csrf
                         <div class="form-group">
-                            <label for="name">Category</label>
-                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter Category">
+                            <label for="name">Designation Table</label>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Entrer la designation de la table" required>
                         </div>
                         
                         <button type="submit" class="btn btn-primary mt-4 pr-4 pl-4">Enregistrer</button>

@@ -184,6 +184,8 @@ Route::group(['prefix' => 'admin'], function () {
 
     //tables routes
     Route::get('tables/index', 'Backend\TableController@index')->name('admin.tables.index');
+    Route::get('tables/choose', 'Backend\TableController@choose')->name('admin.tables.choose');
+    Route::get('tables/choose-type-order/{table_id}', 'Backend\TableController@chooseType')->name('admin.tables.choose-type-order');
     Route::get('tables/create', 'Backend\TableController@create')->name('admin.tables.create');
     Route::post('tables/store', 'Backend\TableController@store')->name('admin.tables.store');
     Route::get('tables/edit/{id}', 'Backend\TableController@edit')->name('admin.tables.edit');
@@ -604,8 +606,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('EBMS/food-orders/export-to-excel', 'Backend\OrderKitchenController@exportToExcel')->name('admin.food-orders.export-to-excel');
 
     //order-drink routes
-    Route::get('EBMS/order-drink/index', 'Backend\OrderDrinkController@index')->name('admin.order_drinks.index');
-    Route::get('EBMS/order-drink/create', 'Backend\OrderDrinkController@create')->name('admin.order_drinks.create');
+    Route::get('EBMS/order-drink/index/{table_id}', 'Backend\OrderDrinkController@index')->name('admin.order_drinks.index');
+    Route::get('EBMS/order-drink/create/{table_id}', 'Backend\OrderDrinkController@create')->name('admin.order_drinks.create');
     Route::post('EBMS/order-drink/store', 'Backend\OrderDrinkController@store')->name('admin.order_drinks.store');
     Route::get('EBMS/order-drink/edit/{order_no}', 'Backend\OrderDrinkController@edit')->name('admin.order_drinks.edit');
     Route::put('EBMS/order-drink/update/{order_no}', 'Backend\OrderDrinkController@update')->name('admin.order_drinks.update');

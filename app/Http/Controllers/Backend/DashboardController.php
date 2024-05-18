@@ -21,6 +21,7 @@ use App\Models\DrinkExtraBigStoreDetail;
 use App\Models\FoodExtraBigStoreDetail;
 use App\Models\MaterialExtraBigStoreDetail;
 use App\Models\Facture;
+use App\Models\Table;
 
 class DashboardController extends Controller
 {
@@ -100,7 +101,7 @@ class DashboardController extends Controller
         $total_roles = count(Role::select('id')->get());
         $total_admins = count(Admin::select('id')->get());
         $total_permissions = count(Permission::select('id')->get());
-
+        $tables = Table::all();
        $employes = Facture::select(
                         DB::raw('employe_id,count(invoice_number) as invoice_number'))->where('etat','-1')->groupBy('employe_id')->orderBy('invoice_number','desc')->take(5)->get();
 
@@ -109,7 +110,8 @@ class DashboardController extends Controller
             'total_admins', 
             'total_roles', 
             'total_permissions',
-            'employes'
+            'employes',
+            'tables'
 
             ))->with('year',json_encode($year,JSON_NUMERIC_CHECK))->with('drink_extra_big_store',json_encode($drink_extra_big_store,JSON_NUMERIC_CHECK))->with('year',json_encode($year,JSON_NUMERIC_CHECK))->with('drink_big_store',json_encode($drink_big_store,JSON_NUMERIC_CHECK))->with('drink_small_store',json_encode($drink_small_store,JSON_NUMERIC_CHECK))->with('year',json_encode($year,JSON_NUMERIC_CHECK))->with('food_extra_big_store',json_encode($food_extra_big_store,JSON_NUMERIC_CHECK))->with('food_big_store',json_encode($food_big_store,JSON_NUMERIC_CHECK))->with('food_small_store',json_encode($food_small_store,JSON_NUMERIC_CHECK))->with('year',json_encode($year,JSON_NUMERIC_CHECK))->with('material_extra_big_store',json_encode($material_extra_big_store,JSON_NUMERIC_CHECK))->with('material_big_store',json_encode($material_big_store,JSON_NUMERIC_CHECK))->with('material_small_store',json_encode($material_small_store,JSON_NUMERIC_CHECK))->with('barrist_store',json_encode($barrist_store,JSON_NUMERIC_CHECK));
     }

@@ -35,9 +35,15 @@ class CreateOrderKitchensTable extends Migration
             $table->text('cn_motif')->nullable(true);
             $table->string('type_space')->nullable(true);
             $table->bigInteger('employe_id')->unsigned()->nullable(true);
+            $table->bigInteger('table_id')->unsigned()->nullable(true);
             $table->foreign('employe_id')
                     ->references('id')
                     ->on('employes')
+                    ->onUpdate('cascade')
+                    ->onDelete('cascade');
+            $table->foreign('table_id')
+                    ->references('id')
+                    ->on('tables')
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
             $table->timestamps();

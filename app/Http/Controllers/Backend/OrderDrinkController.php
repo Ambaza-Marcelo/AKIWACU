@@ -17,6 +17,7 @@ use App\Models\Drink;
 use App\Models\Facture;
 use App\Models\DrinkSmallStore;
 use App\Models\DrinkSmallStoreDetail;
+use App\Models\Table;
 use Carbon\Carbon;
 use Validator;
 use PDF;
@@ -36,15 +37,15 @@ class OrderDrinkController extends Controller
         });
     }
 
-    public function index()
+    public function index($table_id)
     {
         if (is_null($this->user) || !$this->user->can('drink_order_client.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view any order !');
         }
 
-        $orders = OrderDrink::take(200)->orderBy('id','desc')->get();
+        $orders = OrderDrink::where('table_id',$table_id)->take(20)->orderBy('id','desc')->get();
         
-        return view('backend.pages.order_drink.index', compact('orders'));
+        return view('backend.pages.order_drink.index', compact('orders','table_id'));
     }
 
     /**
@@ -52,7 +53,7 @@ class OrderDrinkController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($table_id)
     {
         if (is_null($this->user) || !$this->user->can('drink_order_client.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any order !');
@@ -60,7 +61,8 @@ class OrderDrinkController extends Controller
 
         $articles  = Drink::where('selling_price','>',0)->orderBy('name','asc')->get();
         $employes  = Employe::orderBy('name','asc')->get();
-        return view('backend.pages.order_drink.create', compact('articles','employes'));
+        $table = Table::where('id',$table_id)->first();
+        return view('backend.pages.order_drink.create', compact('articles','employes','table_id','table'));
     }
 
     /**
@@ -79,7 +81,7 @@ class OrderDrinkController extends Controller
                 'drink_id.*'  => 'required',
                 'employe_id'  => 'required',
                 'quantity.*'  => 'required',
-                'table_no'  => 'required'
+                'table_id'  => 'required'
             );
 
             $error = Validator::make($request->all(),$rules);
@@ -93,7 +95,7 @@ class OrderDrinkController extends Controller
             $drink_id = $request->drink_id;
             $date = $request->date;
             $quantity = $request->quantity;
-            $table_no = $request->table_no;
+            $table_id = $request->table_id;
             $employe_id = $request->employe_id;
             $description =$request->description; 
             $status = 0; 
@@ -116,9 +118,10 @@ class OrderDrinkController extends Controller
             $order->employe_id = $employe_id;
             $order->created_by = $created_by;
             $order->description = $description;
-            $order->table_no = $table_no;
+            $order->table_id = $table_id;
             $order->status = $status;
             $order->save();
+
             //insert details of order No.
             for( $count = 0; $count < count($drink_id); $count++ ){
 
@@ -129,7 +132,7 @@ class OrderDrinkController extends Controller
                     'date' => $date,
                     'quantity' => $quantity[$count],
                     'selling_price' => $selling_price,
-                    'table_no' => $table_no,
+                    'table_id' => $table_id,
                     'description' => $description,
                     'total_amount_selling' => $total_amount_selling,
                     'created_by' => $created_by,
@@ -140,6 +143,7 @@ class OrderDrinkController extends Controller
                 );
                 $insert_data[] = $data;
             }
+
             /*
             $mail = Employe::where('id', $employe_id)->value('mail');
             $name = Employe::where('id', $employe_id)->value('name');
@@ -156,8 +160,20 @@ class OrderDrinkController extends Controller
 
             OrderDrinkDetail::insert($insert_data);
 
+            $waiter_name = Employe::where('id',$employe_id)->value('name');
+            $total_amount = DB::table('order_drink_details')
+            ->where('order_no',$order_no)->sum('total_amount_selling');
+            $total_amount_paying = Table::where('id',$table_id)->value('total_amount_paying');
+            $table = Table::where('id',$table_id)->first();
+            $table->date = Carbon::parse(Carbon::now());
+            $table->opening_date = Carbon::parse(Carbon::now());
+            $table->etat = 1;
+            $table->total_amount_paying = $total_amount_paying + $total_amount;
+            $table->waiter_name = $waiter_name;
+            $table->save();
+
         session()->flash('success', 'Order has been sent successfuly!!');
-        return redirect()->route('admin.order_drinks.index');
+        return redirect()->route('admin.order_drinks.index',$table_id);
     }
 
     /**

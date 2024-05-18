@@ -56,6 +56,12 @@ class CreateOrderKitchenDetailsTable extends Migration
                     ->on('accompagnements')
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
+            $table->bigInteger('table_id')->unsigned()->nullable(true);
+            $table->foreign('table_id')
+                    ->references('id')
+                    ->on('tables')
+                    ->onUpdate('cascade')
+                    ->onDelete('cascade');
             $table->timestamps();
         });
     }

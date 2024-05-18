@@ -22,7 +22,7 @@
                 <h4 class="page-title pull-left">@lang('Commande Boisson')</h4>
                 <ul class="breadcrumbs pull-left">
                     <li><a href="{{ route('admin.dashboard') }}">@lang('messages.dashboard')</a></li>
-                    <li><a href="{{ route('admin.order_drinks.index') }}">@lang('messages.list')</a></li>
+                    <li><a href="{{ route('admin.order_drinks.index',$table_id) }}">@lang('messages.list')</a></li>
                     <li><span>@lang('Commande Boisson')</span></li>
                 </ul>
             </div>
@@ -44,6 +44,30 @@
                     <form action="{{ route('admin.order_drinks.store') }}" method="post" id="dynamic_form">
                         @csrf
                     <div class="row">
+                        <div class="col-md-12 mb-3 mb-lg-0">
+                            <div class="card">
+                                <div class="seo-fact sbg3">
+                                    <a href="">
+                                        <div class="p-4 d-flex justify-content-between align-items-center">
+                                            <div class="seofct-icon">
+                                                <img src="{{ asset('img/undraw_special_event-001.svg') }}" width="200">
+                                                {{ $table->name }}
+                                    </div>
+                                            <h2>
+                                                @if($table->etat == '0')
+                                                <span class="badge badge-success">libre</span>
+                                                @elseif($table->etat == '1')
+                                                <span class="badge badge-warning">Si tu n'es pas {{ $table->waiter_name }},cliquer </span><a href="{{ route('admin.dashboard') }}" class="btn btn-info">@lang('ICI')</a>
+                                                @endif
+                                            </h2>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div><br>
+                        </div>
+                    </div>
+                    <input type="hidden" name="table_id" value="{{ $table_id }}">
+                    <div class="row">
                             <div class="col-md-12">
                                 <label for="espace">Dans quelle place ?</label>
                                 <div class="form-group">
@@ -63,19 +87,13 @@
                             </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4" id="dynamicDiv">
+                        <div class="col-md-6" id="dynamicDiv">
                         <div class="form-group">
                             <label for="date">@lang('messages.date')</label>
                             <input type="date" class="form-control" id="date" name="date" required>
                         </div>
                         </div>
-                        <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="table_no">@lang('Table No')</label>
-                            <input type="text" class="form-control" placeholder="Saisir Table No" id="table_no" name="table_no" required>
-                        </div>
-                        </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                         <div class="form-group">
                             <label for="employe_id">@lang('Serveur')</label>
                             <select class="form-control" name="employe_id" required>

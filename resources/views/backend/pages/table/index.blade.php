@@ -2,7 +2,7 @@
 @extends('backend.layouts.master')
 
 @section('title')
-@lang('messages.category') - @lang('messages.admin_panel')
+@lang('Table') - @lang('messages.admin_panel')
 @endsection
 
 @section('styles')
@@ -21,7 +21,7 @@
     <div class="row align-items-center">
         <div class="col-sm-6">
             <div class="breadcrumbs-area clearfix">
-                <h4 class="page-title pull-left">@lang('messages.category')</h4>
+                <h4 class="page-title pull-left">@lang('Table')</h4>
                 <ul class="breadcrumbs pull-left">
                     <li><a href="{{ route('admin.dashboard') }}">@lang('messages.dashboard')</a></li>
                     <li><span>@lang('messages.list')</span></li>
@@ -41,10 +41,10 @@
         <div class="col-12 mt-5">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="header-title float-left">Category List</h4>
+                    <h4 class="header-title float-left">Liste des tables</h4>
                     <p class="float-right mb-2">
-                        @if (Auth::guard('admin')->user()->can('drink_category.create'))
-                            <a class="btn btn-primary text-white" href="{{ route('admin.drink-category.create') }}">@lang('messages.new')</a>
+                        @if (Auth::guard('admin')->user()->can('table.create'))
+                            <a class="btn btn-primary text-white" href="{{ route('admin.tables.create') }}">@lang('messages.new')</a>
                         @endif
                     </p>
                     <div class="clearfix"></div>
@@ -54,27 +54,27 @@
                             <thead class="bg-light text-capitalize">
                                 <tr>
                                     <th width="5%">#</th>
-                                    <th width="30%">Category</th>
+                                    <th width="30%">Designation Table</th>
                                     <th width="15%">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                               @foreach ($categories as $category)
+                               @foreach ($tables as $table)
                                <tr>
                                     <td>{{ $loop->index+1 }}</td>
-                                    <td>{{ $category->name }}</td>
+                                    <td>{{ $table->name }}</td>
                                     <td>
-                                        @if (Auth::guard('admin')->user()->can('drink_category.edit'))
-                                            <a class="btn btn-success text-white" href="{{ route('admin.drink-category.edit', $category->id) }}">Edit</a>
+                                        @if (Auth::guard('admin')->user()->can('table.edit'))
+                                            <a class="btn btn-success text-white" href="{{ route('admin.tables.edit', $table->id) }}">Edit</a>
                                         @endif
 
-                                        @if (Auth::guard('admin')->user()->can('drink_category.edit'))
-                                            <a class="btn btn-danger text-white" href="{{ route('admin.drink-category.destroy', $category->id) }}"
-                                            onclick="event.preventDefault(); document.getElementById('delete-form-{{ $category->id }}').submit();">
+                                        @if (Auth::guard('admin')->user()->can('table.edit'))
+                                            <a class="btn btn-danger text-white" href="{{ route('admin.tables.destroy', $table->id) }}"
+                                            onclick="event.preventDefault(); document.getElementById('delete-form-{{ $table->id }}').submit();">
                                                 Delete
                                             </a>
 
-                                            <form id="delete-form-{{ $category->id }}" action="{{ route('admin.drink-category.destroy', $category->id) }}" method="POST" style="display: none;">
+                                            <form id="delete-form-{{ $table->id }}" action="{{ route('admin.tables.destroy', $table->id) }}" method="POST" style="display: none;">
                                                 @method('DELETE')
                                                 @csrf
                                             </form>
