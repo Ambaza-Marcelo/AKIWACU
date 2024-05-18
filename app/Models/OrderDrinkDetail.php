@@ -22,7 +22,8 @@ class OrderDrinkDetail extends Model
         'created_by',
         'description',
         'employe_id',
-        'drink_id'
+        'drink_id',
+        'table_id'
 
     ];
 
@@ -32,5 +33,9 @@ class OrderDrinkDetail extends Model
 
     public function drink(){
         return $this->belongsTo('App\Models\Drink');
+    }
+
+    public function table(){
+        return $this->belongsTo('App\Models\Table');
     }
 }

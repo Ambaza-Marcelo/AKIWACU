@@ -31,7 +31,8 @@ class Facture extends Model
         'invoice_signature_date',
         'employe_id',
         'client_id',
-        'bookingClient'
+        'bookingClient',
+        'table_id'
     ];
 
     public function employe(){
@@ -44,5 +45,9 @@ class Facture extends Model
 
     public function bookingClient(){
         return $this->belongsTo('\App\Models\BookingClient');
+    }
+
+    public function table(){
+        return $this->belongsTo('App\Models\Table');
     }
 }

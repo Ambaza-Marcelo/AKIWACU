@@ -23,7 +23,8 @@ class OrderKitchenDetail extends Model
         'description',
         'employe_id',
         'food_item_id',
-        'accompagnement_id'
+        'accompagnement_id',
+        'table_id'
 
     ];
 
@@ -37,6 +38,10 @@ class OrderKitchenDetail extends Model
 
     public function accompagnement(){
         return $this->belongsTo('App\Models\Accompagnement');
+    }
+
+    public function table(){
+        return $this->belongsTo('App\Models\Table');
     }
 
 }

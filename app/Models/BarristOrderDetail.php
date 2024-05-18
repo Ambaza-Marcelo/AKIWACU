@@ -22,7 +22,8 @@ class BarristOrderDetail extends Model
         'created_by',
         'description',
         'employe_id',
-        'barrist_item_id'
+        'barrist_item_id',
+        'table_id'
 
     ];
 
@@ -32,5 +33,9 @@ class BarristOrderDetail extends Model
 
     public function barristItem(){
         return $this->belongsTo('App\Models\BarristItem');
+    }
+
+    public function table(){
+        return $this->belongsTo('App\Models\Table');
     }
 }

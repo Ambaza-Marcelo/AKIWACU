@@ -22,10 +22,15 @@ class BarristOrder extends Model
         'reseted_by',
         'table_no',
         'status',
-        'employe_id'
+        'employe_id',
+        'table_id'
     ];
 
     public function employe(){
         return $this->belongsTo('App\Models\Employe');
+    }
+
+    public function table(){
+        return $this->belongsTo('App\Models\Table');
     }
 }

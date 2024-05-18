@@ -43,7 +43,8 @@ class FactureDetail extends Model
         'drink_order_no',
         'barrist_order_no',
         'food_item_id',
-        'barrist_item_id'
+        'barrist_item_id',
+        'table_id'
     ];
 
     public function drink(){
@@ -96,5 +97,9 @@ class FactureDetail extends Model
 
     public function kidnessSpace(){
         return $this->belongsTo('App\Models\KidnessSpace');
+    }
+
+    public function table(){
+        return $this->belongsTo('App\Models\Table');
     }
 }

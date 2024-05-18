@@ -22,7 +22,8 @@ class BartenderOrderDetail extends Model
         'created_by',
         'description',
         'employe_id',
-        'bartender_item_id'
+        'bartender_item_id',
+        'table_id'
 
     ];
 
@@ -32,5 +33,9 @@ class BartenderOrderDetail extends Model
 
     public function bartenderItem(){
         return $this->belongsTo('App\Models\BartenderItem');
+    }
+
+    public function table(){
+        return $this->belongsTo('App\Models\Table');
     }
 }
