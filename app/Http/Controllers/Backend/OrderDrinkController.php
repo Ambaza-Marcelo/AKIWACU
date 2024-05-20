@@ -44,8 +44,9 @@ class OrderDrinkController extends Controller
         }
 
         $orders = OrderDrink::where('table_id',$table_id)->take(20)->orderBy('id','desc')->get();
+        $table = Table::where('id',$table_id)->first();
         
-        return view('backend.pages.order_drink.index', compact('orders','table_id'));
+        return view('backend.pages.order_drink.index', compact('orders','table_id','table'));
     }
 
     /**

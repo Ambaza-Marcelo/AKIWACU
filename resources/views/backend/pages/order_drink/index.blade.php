@@ -42,18 +42,17 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="header-title float-left">Commande des Boissons</h4>
-                    @if (Auth::guard('admin')->user()->can('invoice_drink.view'))
-                    <form action="{{ route('admin.drink-orders.export-to-excel')}}" method="GET">
+                    @if (Auth::guard('admin')->user()->can('invoice_drink.create'))
+                    <form action="" method="GET">
                         <p class="float-right mb-2">
-                            <button type="submit" value="pdf" class="btn btn-success">Exporter En Excel</button>
+                            <button type="submit" value="pdf" class="btn btn-success">Cloturer toute la table</button>
                         </p>
                         <p class="float-right mb-2">
                             <div class="row">
-                                <div class="col-md-6">
-                                    <input type="date" name="start_date" class="form-control">
-                                </div>
-                                <div class="col-md-6">
-                                    <input type="date" name="end_date" class="form-control">
+                                <div class="col-md-12">
+                                    <select class="form-control" name="table_id" id="table_id">
+                                            <option value="{{ $table->id }}">@if($table->id){{$table->name}}({{$table->waiter_name}}) @endif</option>
+                                    </select>
                                 </div>
                             </div>
                         </p>
@@ -87,7 +86,7 @@
                                     <td>{{ $loop->index+1 }}</td>
                                     <td><a href="{{ route('admin.order_drinks.show',$order->order_no) }}">{{ $order->order_no }}</a></td>
                                     <td>{{ Carbon\Carbon::parse($order->date)->format('d/m/Y') }}</td>
-                                    <td>{{ $order->table_no }}</td>
+                                    <td>@if($order->table_id){{ $order->table->name }} @endif</td>
                                     <td>{{ $order->employe->name }}</td>
                                     @if($order->status == 1)
                                     <td><span  class="badge badge-success">Validée</span></td>
