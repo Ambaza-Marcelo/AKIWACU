@@ -86,6 +86,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('ebms_api/invoices/index', 'Backend\FactureController@index')->name('ebms_api.invoices.index');
     Route::get('ebms_api/invoices/list/all', 'Backend\FactureController@listAll')->name('ebms_api.invoices.listAll');
     Route::get('ebms_api/facture/create/{order_no}', 'Backend\FactureController@create')->name('ebms_api.invoices.create');
+    Route::get('ebms_api/facture/create-by-table/{table_id}', 'Backend\FactureController@createByTable')->name('ebms_api.invoices.create-by-table');
     Route::get('ebms_api/facture/edit/{invoice_number}', 'Backend\FactureController@edit')->name('ebms_api.invoices.edit');
     Route::post('eBMS-facture-boisson/store', 'Backend\FactureController@storeDrink')->name('ebms_api-facture-boisson.store');
     Route::post('eBMS-facture-barrist/store', 'Backend\FactureController@storeBarrist')->name('ebms_api-facture-barrist.store');

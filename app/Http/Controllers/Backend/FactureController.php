@@ -53,6 +53,7 @@ use App\Models\BookingSalle;
 use App\Models\BookingService;
 use App\Models\BookingClient;
 use App\Models\Client;
+use App\Models\Table;
 use App\Models\BookingTable;
 use App\Models\KidnessSpace;
 use App\Models\BreakFast;
@@ -83,7 +84,7 @@ class FactureController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any invoice !');
         }
 
-        $factures = Facture::where('drink_order_no','!=','')->take(200)->orderBy('id','desc')->get();
+        $factures = Facture::where('drink_order_no','!=','')->orWhere('table_id','!=','')->take(200)->orderBy('id','desc')->get();
         return view('backend.pages.invoice.index',compact('factures'));
     }
 
@@ -111,8 +112,27 @@ class FactureController extends Controller
         $drink_small_stores = DrinkSmallStore::all();
         $clients =  Client::orderBy('customer_name','asc')->get();
 
+        $table_id = OrderDrink::where('order_no',$order_no)->value('table_id');
+
         $data =  OrderDrink::where('order_no',$order_no)->first();
-        return view('backend.pages.invoice.create',compact('drinks','data','setting','orders','order_no','drink_small_stores','clients'));
+        return view('backend.pages.invoice.create',compact('drinks','data','setting','orders','order_no','drink_small_stores','clients','table_id'));
+    }
+
+    public function createByTable($table_id)
+    {
+        if (is_null($this->user) || !$this->user->can('invoice_drink.create')) {
+            abort(403, 'Sorry !! You are Unauthorized to create any invoice !');
+        }
+
+        $setting = DB::table('settings')->orderBy('created_at','desc')->first();
+
+        $drinks =  Drink::orderBy('name','asc')->get();
+        $orders =  OrderDrinkDetail::where('table_id',$table_id)->where('status',1)->orderBy('id','asc')->get();
+        $drink_small_stores = DrinkSmallStore::all();
+        $clients =  Client::orderBy('customer_name','asc')->get();
+
+        $data =  OrderDrink::where('table_id',$table_id)->first();
+        return view('backend.pages.invoice.create',compact('drinks','data','setting','orders','table_id','drink_small_stores','clients','order_no'));
     }
 
     /**
@@ -144,6 +164,7 @@ class FactureController extends Controller
                 //'invoice_signature_date' => 'required|max: |min:',
                 'code_store' => 'required',
                 'drink_id.*'  => 'required',
+                'drink_order_no.*'  => 'required',
                 'item_quantity.*'  => 'required',
                 'item_price.*'  => 'required',
                 'item_ct.*'  => 'required',
@@ -164,6 +185,15 @@ class FactureController extends Controller
             $item_ct = $request->item_ct;
             $item_tl =$request->item_tl; 
             $employe_id = $request->employe_id;
+
+            
+            if (!empty($request->table_id)) {
+                $table_id = $request->table_id;
+                $drink_order_no = $request->drink_order_no;
+            }else{
+                $table_id = '';
+                $drink_order_no = $request->drink_order_no;
+            }
             
             $latest = Facture::orderBy('id','desc')->first();
             if ($latest) {
@@ -220,6 +250,7 @@ class FactureController extends Controller
             'invoice_number'=>$invoice_number,
             'invoice_date'=> $request->invoice_date,
             'tp_type'=>$request->tp_type,
+            'table_id'=>$table_id,
             'tp_name'=>$request->tp_name,
             'tp_TIN'=>$request->tp_TIN,
             'tp_trade_number'=>$request->tp_trade_number,
@@ -240,7 +271,7 @@ class FactureController extends Controller
             'customer_TIN'=>$request->customer_TIN,
             'customer_address'=>$request->customer_address,
             'invoice_signature'=> $invoice_signature,
-            'drink_order_no'=>$request->drink_order_no,
+            'drink_order_no'=>$request->drink_order_no[$count],
             'cancelled_invoice_ref'=>$request->cancelled_invoice_ref,
             'cancelled_invoice'=>$request->cancelled_invoice,
             'invoice_currency'=>$request->invoice_currency,
@@ -270,6 +301,8 @@ class FactureController extends Controller
             $facture = new Facture();
             $facture->invoice_date = $request->invoice_date;
             $facture->invoice_number = $invoice_number;
+            $facture->table_id = $table_id;
+            //$facture->drink_order_no = $drink_order_no;
             $facture->invoice_date =  $request->invoice_date;
             $facture->tp_type = $request->tp_type;
             $facture->tp_name = $request->tp_name;
@@ -279,7 +312,6 @@ class FactureController extends Controller
             $facture->tp_address_province = $request->tp_address_province;
             $facture->tp_address_commune = $request->tp_address_commune;
             $facture->tp_address_quartier = $request->tp_address_quartier;
-            $facture->drink_order_no = $request->drink_order_no;
             $facture->vat_taxpayer = $request->vat_taxpayer;
             $facture->ct_taxpayer = $request->ct_taxpayer;
             $facture->tl_taxpayer = $request->tl_taxpayer;
@@ -301,10 +333,20 @@ class FactureController extends Controller
             $facture->invoice_signature_date = Carbon::now();
             $facture->save();
 
-            OrderDrink::where('order_no', '=', $facture->drink_order_no)
-                ->update(['status' => 2,'flag' => 1,'confirmed_by' => $this->user->name]);
-        OrderDrinkDetail::where('order_no', '=', $facture->drink_order_no)
-                ->update(['status' => 2,'flag' => 1,'confirmed_by' => $this->user->name]);
+
+            for( $count = 0; $count < count($drink_id); $count++ )
+            {
+                 $orderData = array(
+                    'confirmed_by' => $this->user->name,
+                    'status' => 2,
+                    'flag' => 1
+                );
+
+                OrderDrink::where('order_no', '=', $request->drink_order_no[$count])
+                    ->update($orderData);
+                OrderDrinkDetail::where('order_no', '=', $request->drink_order_no[$count])
+                    ->update($orderData);
+            }
 
             session()->flash('success', 'Le vente est fait avec succés!!');
             return redirect()->route('ebms_api.invoices.index');
@@ -1495,6 +1537,8 @@ class FactureController extends Controller
 
         $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
 
+        $table_id = FactureDetail::where('invoice_number', $invoice_number)->value('table_id');
+
         foreach($datas as $data){
             $valeurStockInitial = DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id', $data->drink_id)->value('total_cump_value');
             $quantityStockInitial = DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id', $data->drink_id)->value('quantity_bottle');
@@ -1604,16 +1648,30 @@ class FactureController extends Controller
         if ($flag != 1) {
             DrinkSmallReport::insert($report);
         }
+
+        foreach($datas as $data){
+                $orderData = array(
+                    'confirmed_by' => $this->user->name,
+                    'status' => 3,
+                );
+
+                OrderDrink::where('order_no', '=', $data->drink_order_no)
+                    ->update($orderData);
+                OrderDrinkDetail::where('order_no', '=', $data->drink_order_no)
+                    ->update($orderData);
+        }
+
+        $in_pending = count(OrderDrinkDetail::where('table_id',$table_id)->where('status','!=',3)->where('status','!=',2)->where('status','!=',-1)->get());
+
+        if ($in_pending < 1) {
+            Table::where('id',$table_id)->update(['etat' => 0,'waiter_name' => '','opened_by' => '','total_amount_paying' => 0]);
+        }
         
         DrinkSmallStoreDetail::where('drink_id','!=','')->update(['verified' => false]);
         Facture::where('invoice_number', '=', $invoice_number)
             ->update(['etat' => 1,'statut_paied' => '0','validated_by' => $this->user->name]);
         FactureDetail::where('invoice_number', '=', $invoice_number)
             ->update(['etat' => 1,'statut_paied' => '0','validated_by' => $this->user->name]);
-        OrderDrink::where('order_no', '=', $data->drink_order_no)
-            ->update(['status' => 3,'confirmed_by' => $this->user->name]);
-        OrderDrinkDetail::where('order_no', '=', $data->drink_order_no)
-            ->update(['status' => 3,'confirmed_by' => $this->user->name]);
 
         session()->flash('success', 'La Facture  est validée avec succés');
         return back();

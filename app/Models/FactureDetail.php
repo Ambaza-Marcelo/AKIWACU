@@ -83,7 +83,7 @@ class FactureDetail extends Model
         return $this->belongsTo('App\Models\BookingService');
     }
 
-    public function table(){
+    public function bookingTable(){
         return $this->belongsTo('App\Models\BookingTable');
     }
 

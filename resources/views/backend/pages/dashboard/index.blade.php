@@ -62,7 +62,7 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
                                                 @if($table->etat == '0')
                                                 <span class="badge badge-success">libre</span>
                                                 @elseif($table->etat == '1')
-                                                <span class="badge badge-warning">{{ $table->waiter_name }} de {{ Carbon\Carbon::parse($table->opening_date)->format('H:i:s') }}({{ number_format($table->total_amount_paying,0,',',' ') }})</span>
+                                                <span class="badge badge-warning">{{ $table->waiter_name }} ({{ number_format($table->total_amount_paying,0,',',' ') }})</span>
                                                 @endif
                                             </h4>
                                         </div>

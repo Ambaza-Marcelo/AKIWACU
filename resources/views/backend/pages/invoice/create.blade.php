@@ -50,10 +50,12 @@
                                 <label for="invoice_date">Date Facture</label>
                                 <input type="date" placeholder="Date Facture" name="invoice_date" class="form-control" required>
                             </div>
+                            @if($table_id)
                             <div class="col-md-4">
-                                <label for="drink_order_no">Commande No</label>
-                                <input type="text" name="drink_order_no" class="form-control" value="{{ $order_no }}" readonly>
+                                <label for="table_id">Table</label>
+                                <input type="number" name="table_id" class="form-control" value="{{ $table_id }}">
                             </div>
+                            @endif
                             <div class="col-md-4">
                                 <label for="employe_id">Serveur</label>
                                 <select class="form-control" name="employe_id" id="employe_id">
@@ -263,6 +265,7 @@
                                 <th>Prix Unitaire</th>
                                 <th>TC</th>
                                 <th>PFL</th>
+                                <th>Commande No</th>
                                 <th>Action</th>
                             </tr>
                             @foreach($orders as $order)
@@ -274,11 +277,14 @@
                                 <td><input type="number" step='any' min='0' value="{{ $order->selling_price }}" @if(Auth::guard('admin')->user()->can('invoice_drink.delete')) @else readonly @endif name="item_price[]" placeholder="Prix" class="form-control" /></td>
                                 <td><input type="number" step='any' min='0' name="item_ct[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_drink.delete')) @else readonly @endif/></td>   
                                 <td><input type="number" step='any' min='0' name="item_tl[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_drink.delete')) @else readonly @endif/></td>
+                                <td><input type="text" value="{{ $order->order_no }}" name="drink_order_no[]" class="form-control" readonly /></td>
                                 <td><button type='button' class='btn btn-danger remove-tr'><i class='fa fa-trash-o' title='Supprimer la ligne' aria-hidden='false'></i></button></td> 
                             </tr> 
                             @endforeach
                         </table> 
+                    <!--
                         <button type="button" name="add" id="add" class="btn btn-success"><i class="fa fa-plus-square" title="Ajouter Plus" aria-hidden="false"></i></button>
+                    -->
                         <button type="submit" onclick="this.style.visibility='hidden';" ondblclick="this.style.visibility='hidden';" class="btn btn-primary">Enregistrer</button>
                     </form>
                 </div>

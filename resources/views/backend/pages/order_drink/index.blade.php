@@ -43,9 +43,9 @@
                 <div class="card-body">
                     <h4 class="header-title float-left">Commande des Boissons</h4>
                     @if (Auth::guard('admin')->user()->can('invoice_drink.create'))
-                    <form action="" method="GET">
+                    @if ($in_pending > 0)
                         <p class="float-right mb-2">
-                            <button type="submit" value="pdf" class="btn btn-success">Cloturer toute la table</button>
+                            <a href="{{ route('ebms_api.invoices.create-by-table',$table_id) }}" class="btn btn-success">Cloturer toute la table</a>
                         </p>
                         <p class="float-right mb-2">
                             <div class="row">
@@ -56,7 +56,8 @@
                                 </div>
                             </div>
                         </p>
-                    </form><br>
+                        <br>
+                    @endif
                     @endif
                     <p class="float-right mb-2">
                         @if (Auth::guard('admin')->user()->can('drink_order_client.create'))
