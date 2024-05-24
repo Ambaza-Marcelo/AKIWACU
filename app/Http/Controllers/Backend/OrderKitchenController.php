@@ -46,7 +46,7 @@ class OrderKitchenController extends Controller
         $orders = OrderKitchen::take(20)->orderBy('id','desc')->get();
         $table = Table::where('id',$table_id)->first();
 
-        $in_pending = count(OrderKitchenDetail::where('table_id',$table_id)->where('status','!=',3)->where('status','!=',2)->where('status','!=',-1)->get());
+        $in_pending = count(OrderKitchenDetail::where('table_id',$table_id)->where('status','!=',3)->where('status','!=',2)->where('status','!=',-1)->where('status','!=',0)->get());
         return view('backend.pages.order_kitchen.index', compact('orders','table_id','table','in_pending'));
     }
 
