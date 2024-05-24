@@ -115,7 +115,11 @@ class FactureController extends Controller
         $table_id = OrderDrink::where('order_no',$order_no)->value('table_id');
 
         $data =  OrderDrink::where('order_no',$order_no)->first();
-        return view('backend.pages.invoice.create',compact('drinks','data','setting','orders','order_no','drink_small_stores','clients','table_id'));
+        $total_amount = DB::table('order_drink_details')
+            ->where('order_no',$order_no)
+            ->sum('total_amount_selling');
+
+        return view('backend.pages.invoice.create',compact('drinks','data','setting','orders','order_no','drink_small_stores','clients','table_id','total_amount'));
     }
 
     public function createByTable($table_id)
@@ -132,7 +136,11 @@ class FactureController extends Controller
         $clients =  Client::orderBy('customer_name','asc')->get();
 
         $data =  OrderDrink::where('table_id',$table_id)->first();
-        return view('backend.pages.invoice.create',compact('drinks','data','setting','orders','table_id','drink_small_stores','clients'));
+        $total_amount = DB::table('order_drink_details')
+            ->where('table_id',$table_id)->where('status',1)
+            ->sum('total_amount_selling');
+
+        return view('backend.pages.invoice.create',compact('drinks','data','setting','orders','table_id','drink_small_stores','clients','total_amount'));
     }
 
     /**

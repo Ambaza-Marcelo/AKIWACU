@@ -199,7 +199,11 @@ class FactureRestaurantController extends Controller
         $data =  OrderKitchen::where('order_no',$order_no)->first();
         $table_id = OrderKitchen::where('order_no',$order_no)->value('table_id');
 
-        return view('backend.pages.invoice_kitchen.create',compact('food_items','data','setting','orders','order_no','clients','table_id'));
+        $total_amount = DB::table('order_kitchen_details')
+            ->where('order_no', '=', $order_no)
+            ->sum('total_amount_selling');
+
+        return view('backend.pages.invoice_kitchen.create',compact('food_items','data','setting','orders','order_no','clients','table_id','total_amount'));
     }
 
     public function createByTable($table_id)
@@ -215,7 +219,11 @@ class FactureRestaurantController extends Controller
         $clients =  Client::orderBy('customer_name','asc')->get();
         $data =  OrderKitchen::where('table_id',$table_id)->first();
 
-        return view('backend.pages.invoice_kitchen.create',compact('food_items','data','setting','orders','clients','table_id'));
+        $total_amount = DB::table('order_kitchen_details')
+            ->where('table_id',$table_id)->where('status',1)
+            ->sum('total_amount_selling');
+
+        return view('backend.pages.invoice_kitchen.create',compact('food_items','data','setting','orders','clients','table_id','total_amount'));
     }
 
     /**
