@@ -42,22 +42,22 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="header-title float-left">Commande Cuisine</h4>
-                    @if (Auth::guard('admin')->user()->can('invoice_drink.view'))
-                    <form action="{{ route('admin.food-orders.export-to-excel')}}" method="GET">
+                    @if (Auth::guard('admin')->user()->can('invoice_kitchen.create'))
+                    @if ($in_pending > 0)
                         <p class="float-right mb-2">
-                            <button type="submit" value="pdf" class="btn btn-success">Exporter En Excel</button>
+                            <a href="{{ route('admin.invoice-kitchens.create-by-table',$table_id) }}" class="btn btn-success">Cloturer toute la table</a>
                         </p>
                         <p class="float-right mb-2">
                             <div class="row">
-                                <div class="col-md-6">
-                                    <input type="date" name="start_date" class="form-control">
-                                </div>
-                                <div class="col-md-6">
-                                    <input type="date" name="end_date" class="form-control">
+                                <div class="col-md-12">
+                                    <select class="form-control" name="table_id" id="table_id">
+                                            <option value="{{ $table->id }}">@if($table->id){{$table->name}}({{$table->waiter_name}}) @endif</option>
+                                    </select>
                                 </div>
                             </div>
                         </p>
-                    </form><br>
+                        <br>
+                    @endif
                     @endif
                     <p class="float-right mb-2">
                         @if (Auth::guard('admin')->user()->can('food_order_client.create'))
