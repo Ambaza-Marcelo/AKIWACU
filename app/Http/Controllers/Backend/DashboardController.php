@@ -103,7 +103,7 @@ class DashboardController extends Controller
         $total_permissions = count(Permission::select('id')->get());
         $tables = Table::all();
        $employes = Facture::select(
-                        DB::raw('employe_id,count(invoice_number) as invoice_number'))->where('etat','-1')->groupBy('employe_id')->orderBy('invoice_number','desc')->take(5)->get();
+                        DB::raw('employe_id,count(invoice_number) as invoice_number'))->where('etat','-1')->groupBy('employe_id')->take(5)->get();
 
         return view('backend.pages.dashboard.index', 
             compact(
