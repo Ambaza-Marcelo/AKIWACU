@@ -1691,6 +1691,7 @@ class FactureController extends Controller
         $client_id = $request->client_id;
 
         $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
+        $table_id = FactureDetail::where('invoice_number', $invoice_number)->value('table_id');
 
         foreach($datas as $data){
             $valeurStockInitial = DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id', $data->drink_id)->value('total_cump_value');
@@ -1805,6 +1806,24 @@ class FactureController extends Controller
             DrinkSmallReport::insert($report);
         }
 
+        foreach($datas as $data){
+                $orderData = array(
+                    'confirmed_by' => $this->user->name,
+                    'status' => 3,
+                );
+
+                OrderDrink::where('order_no', '=', $data->drink_order_no)
+                    ->update($orderData);
+                OrderDrinkDetail::where('order_no', '=', $data->drink_order_no)
+                    ->update($orderData);
+        }
+
+        $in_pending = count(OrderDrinkDetail::where('table_id',$table_id)->where('status','!=',3)->where('status','!=',2)->where('status','!=',-1)->get());
+
+        if ($in_pending < 1) {
+            Table::where('id',$table_id)->update(['etat' => 0,'waiter_name' => '','opened_by' => '','total_amount_paying' => 0]);
+        }
+
         DrinkSmallStoreDetail::where('drink_id','!=','')->update(['verified' => false]);
 
         $item_total_amount = DB::table('facture_details')
@@ -1815,10 +1834,6 @@ class FactureController extends Controller
             ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
         FactureDetail::where('invoice_number', '=', $invoice_number)
             ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
-        OrderDrink::where('order_no', '=', $data->drink_order_no)
-            ->update(['status' => 3,'confirmed_by' => $this->user->name]);
-        OrderDrinkDetail::where('order_no', '=', $data->drink_order_no)
-            ->update(['status' => 3,'confirmed_by' => $this->user->name]);
 
         session()->flash('success', 'La Facture  est validée avec succés');
         return back();
