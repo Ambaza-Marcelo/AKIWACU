@@ -132,7 +132,7 @@ class FactureController extends Controller
         $clients =  Client::orderBy('customer_name','asc')->get();
 
         $data =  OrderDrink::where('table_id',$table_id)->first();
-        return view('backend.pages.invoice.create',compact('drinks','data','setting','orders','table_id','drink_small_stores','clients','order_no'));
+        return view('backend.pages.invoice.create',compact('drinks','data','setting','orders','table_id','drink_small_stores','clients'));
     }
 
     /**
@@ -1836,7 +1836,7 @@ class FactureController extends Controller
             ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
 
         session()->flash('success', 'La Facture  est validée avec succés');
-        return back();
+        return redirect()->route('ebms_api.invoices.index');
 
         
     }
