@@ -296,7 +296,7 @@
                                 <td><input type="number" step='any' min='0' value="{{ $order->selling_price }}" name="item_price[]" placeholder="Prix" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_drink.delete')) @else readonly @endif/></td>
                                 <td><input type="number" step='any' min='0' name="item_ct[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_drink.delete')) @else readonly @endif/></td>   
                                 <td><input type="number" step='any' min='0' name="item_tl[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_drink.delete')) @else readonly @endif/></td>
-                                <td><input type="text" name="barrist_order_no[]" value="{{ $order->barrist_order_no }}" class="form-control" readonly/></td>
+                                <td><input type="text" name="barrist_order_no[]" value="{{ $order->order_no }}" class="form-control" readonly/></td>
                                 <td><button type='button' class='btn btn-danger remove-tr'><i class='fa fa-trash-o' title='Supprimer la ligne' aria-hidden='false'></i></button></td> 
                             </tr> 
                             @endforeach

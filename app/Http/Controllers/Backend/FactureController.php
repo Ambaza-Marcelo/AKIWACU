@@ -1728,10 +1728,21 @@ class FactureController extends Controller
                     ->update($orderData);
         }
 
+        $item_total_amount = DB::table('facture_details')
+            ->where('invoice_number', '=', $invoice_number)
+            ->sum('item_total_amount');
+
+        $total_amount_paying = DB::table('tables')
+            ->where('id', '=', $table_id)
+            ->sum('total_amount_paying');
+
         $in_pending = count(OrderDrinkDetail::where('table_id',$table_id)->where('status','!=',3)->where('status','!=',2)->where('status','!=',-1)->get());
 
-        if ($in_pending < 1) {
+        if ($in_pending < 1 && $item_total_amount >= $total_amount_paying) {
             Table::where('id',$table_id)->update(['etat' => 0,'waiter_name' => '','opened_by' => '','total_amount_paying' => 0]);
+        }else {
+            $total_amount_remaining = $total_amount_paying - $item_total_amount;
+            Table::where('id',$table_id)->update(['total_amount_paying' => $total_amount_remaining]);
         }
         
         DrinkSmallStoreDetail::where('drink_id','!=','')->update(['verified' => false]);
@@ -1885,17 +1896,24 @@ class FactureController extends Controller
                     ->update($orderData);
         }
 
-        $in_pending = count(OrderDrinkDetail::where('table_id',$table_id)->where('status','!=',3)->where('status','!=',2)->where('status','!=',-1)->get());
-
-        if ($in_pending < 1) {
-            Table::where('id',$table_id)->update(['etat' => 0,'waiter_name' => '','opened_by' => '','total_amount_paying' => 0]);
-        }
-
-        DrinkSmallStoreDetail::where('drink_id','!=','')->update(['verified' => false]);
-
         $item_total_amount = DB::table('facture_details')
             ->where('invoice_number', '=', $invoice_number)
             ->sum('item_total_amount');
+
+        $total_amount_paying = DB::table('tables')
+            ->where('id', '=', $table_id)
+            ->sum('total_amount_paying');
+
+        $in_pending = count(OrderDrinkDetail::where('table_id',$table_id)->where('status','!=',3)->where('status','!=',2)->where('status','!=',-1)->get());
+
+        if ($in_pending < 1 && $item_total_amount >= $total_amount_paying) {
+            Table::where('id',$table_id)->update(['etat' => 0,'waiter_name' => '','opened_by' => '','total_amount_paying' => 0]);
+        }else {
+            $total_amount_remaining = $total_amount_paying - $item_total_amount;
+            Table::where('id',$table_id)->update(['total_amount_paying' => $total_amount_remaining]);
+        }
+
+        DrinkSmallStoreDetail::where('drink_id','!=','')->update(['verified' => false]);
 
         Facture::where('invoice_number', '=', $invoice_number)
             ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
@@ -1978,10 +1996,21 @@ class FactureController extends Controller
                     ->update($orderData);
         }
 
+        $item_total_amount = DB::table('facture_details')
+            ->where('invoice_number', '=', $invoice_number)
+            ->sum('item_total_amount');
+
+        $total_amount_paying = DB::table('tables')
+            ->where('id', '=', $table_id)
+            ->sum('total_amount_paying');
+
         $in_pending = count(BarristOrderDetail::where('table_id',$table_id)->where('status','!=',3)->where('status','!=',2)->where('status','!=',-1)->get());
 
-        if ($in_pending < 1) {
+        if ($in_pending < 1 && $item_total_amount >= $total_amount_paying) {
             Table::where('id',$table_id)->update(['etat' => 0,'waiter_name' => '','opened_by' => '','total_amount_paying' => 0]);
+        }else {
+            $total_amount_remaining = $total_amount_paying - $item_total_amount;
+            Table::where('id',$table_id)->update(['total_amount_paying' => $total_amount_remaining]);
         }
 
         Facture::where('invoice_number', '=', $invoice_number)
@@ -2075,10 +2104,17 @@ class FactureController extends Controller
                     ->update($orderData);
         }
 
+        $total_amount_paying = DB::table('tables')
+            ->where('id', '=', $table_id)
+            ->sum('total_amount_paying');
+
         $in_pending = count(BarristOrderDetail::where('table_id',$table_id)->where('status','!=',3)->where('status','!=',2)->where('status','!=',-1)->get());
 
-        if ($in_pending < 1) {
+        if ($in_pending < 1 && $item_total_amount >= $total_amount_paying) {
             Table::where('id',$table_id)->update(['etat' => 0,'waiter_name' => '','opened_by' => '','total_amount_paying' => 0]);
+        }else {
+            $total_amount_remaining = $total_amount_paying - $item_total_amount;
+            Table::where('id',$table_id)->update(['total_amount_paying' => $total_amount_remaining]);
         }
 
         Facture::where('invoice_number', '=', $invoice_number)
@@ -2088,7 +2124,7 @@ class FactureController extends Controller
         BarristSmallReport::insert($report);
 
         session()->flash('success', 'La Facture  est validée avec succés');
-        return back();
+        return redirect()->route('admin.barrist-invoices.index');
     }
 
 
@@ -2192,10 +2228,21 @@ class FactureController extends Controller
                     ->update($orderData);
         }
 
+        $item_total_amount = DB::table('facture_details')
+            ->where('invoice_number', '=', $invoice_number)
+            ->sum('item_total_amount');
+
+        $total_amount_paying = DB::table('tables')
+            ->where('id', '=', $table_id)
+            ->sum('total_amount_paying');
+
         $in_pending = count(BartenderOrderDetail::where('table_id',$table_id)->where('status','!=',3)->where('status','!=',2)->where('status','!=',-1)->get());
 
-        if ($in_pending < 1) {
+        if ($in_pending < 1 && $item_total_amount >= $total_amount_paying) {
             Table::where('id',$table_id)->update(['etat' => 0,'waiter_name' => '','opened_by' => '','total_amount_paying' => 0]);
+        }else {
+            $total_amount_remaining = $total_amount_paying - $item_total_amount;
+            Table::where('id',$table_id)->update(['total_amount_paying' => $total_amount_remaining]);
         }
 
         BartenderSmallReport::insert($report);
@@ -2321,10 +2368,18 @@ class FactureController extends Controller
                     ->update($orderData);
         }
 
+
+        $total_amount_paying = DB::table('tables')
+            ->where('id', '=', $table_id)
+            ->sum('total_amount_paying');
+
         $in_pending = count(BartenderOrderDetail::where('table_id',$table_id)->where('status','!=',3)->where('status','!=',2)->where('status','!=',-1)->get());
 
-        if ($in_pending < 1) {
+        if ($in_pending < 1 && $item_total_amount >= $total_amount_paying) {
             Table::where('id',$table_id)->update(['etat' => 0,'waiter_name' => '','opened_by' => '','total_amount_paying' => 0]);
+        }else {
+            $total_amount_remaining = $total_amount_paying - $item_total_amount;
+            Table::where('id',$table_id)->update(['total_amount_paying' => $total_amount_remaining]);
         }
 
         Facture::where('invoice_number', '=', $invoice_number)
@@ -2333,7 +2388,7 @@ class FactureController extends Controller
             ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
 
         session()->flash('success', 'La Facture  est validée avec succés');
-        return back();
+        return redirect()->route('admin.bartender-invoices.index');
 
     }
 
@@ -2522,10 +2577,21 @@ class FactureController extends Controller
                     ->update($orderData);
         }
 
+        $item_total_amount = DB::table('facture_details')
+            ->where('invoice_number', '=', $invoice_number)
+            ->sum('item_total_amount');
+
+        $total_amount_paying = DB::table('tables')
+            ->where('id', '=', $table_id)
+            ->sum('total_amount_paying');
+
         $in_pending = count(OrderKitchenDetail::where('table_id',$table_id)->where('status','!=',3)->where('status','!=',2)->where('status','!=',-1)->get());
 
-        if ($in_pending < 1) {
+        if ($in_pending < 1 && $item_total_amount >= $total_amount_paying) {
             Table::where('id',$table_id)->update(['etat' => 0,'waiter_name' => '','opened_by' => '','total_amount_paying' => 0]);
+        }else {
+            $total_amount_remaining = $total_amount_paying - $item_total_amount;
+            Table::where('id',$table_id)->update(['total_amount_paying' => $total_amount_remaining]);
         }
         
         FoodBigStoreDetail::where('food_id','!=','')->update(['verified' => false]);
@@ -2678,10 +2744,21 @@ class FactureController extends Controller
                     ->update($orderData);
         }
 
+        $item_total_amount = DB::table('facture_details')
+            ->where('invoice_number', '=', $invoice_number)
+            ->sum('item_total_amount');
+
+        $total_amount_paying = DB::table('tables')
+            ->where('id', '=', $table_id)
+            ->sum('total_amount_paying');
+
         $in_pending = count(OrderKitchenDetail::where('table_id',$table_id)->where('status','!=',3)->where('status','!=',2)->where('status','!=',-1)->get());
 
-        if ($in_pending < 1) {
+        if ($in_pending < 1 && $item_total_amount >= $total_amount_paying) {
             Table::where('id',$table_id)->update(['etat' => 0,'waiter_name' => '','opened_by' => '','total_amount_paying' => 0]);
+        }else {
+            $total_amount_remaining = $total_amount_paying - $item_total_amount;
+            Table::where('id',$table_id)->update(['total_amount_paying' => $total_amount_remaining]);
         }
         
         FoodBigStoreDetail::where('food_id','!=','')->update(['verified' => false]);
@@ -2697,7 +2774,7 @@ class FactureController extends Controller
         //FoodStoreReport::insert($report);
 
         session()->flash('success', 'La Facture  est validée avec succés');
-        return back();
+        return redirect()->route('admin.invoice-kitchens.index');
     }
 
     public function annulerFacture(Request $request,$invoice_number)

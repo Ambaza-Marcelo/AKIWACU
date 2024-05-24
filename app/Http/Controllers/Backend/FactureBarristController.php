@@ -66,8 +66,8 @@ class FactureBarristController extends Controller
         $orders =  BarristOrderDetail::where('order_no',$order_no)->orderBy('order_no','asc')->get();
 
         $data =  BarristOrder::where('order_no',$order_no)->first();
-        $table_id = BartenderOrder::where('order_no',$order_no)->value('table_id');
-        $total_amount = DB::table('bartender_order_details')
+        $table_id = BarristOrder::where('order_no',$order_no)->value('table_id');
+        $total_amount = DB::table('barrist_order_details')
             ->where('order_no',$order_no)
             ->sum('total_amount_selling');
 
@@ -87,7 +87,7 @@ class FactureBarristController extends Controller
         $orders =  BarristOrderDetail::where('table_id',$table_id)->where('status',1)->orderBy('id','asc')->get();
 
         $data =  BarristOrder::where('table_id',$table_id)->first();
-        $total_amount = DB::table('bartender_order_details')
+        $total_amount = DB::table('barrist_order_details')
             ->where('table_id',$table_id)->where('status',1)
             ->sum('total_amount_selling');
 
