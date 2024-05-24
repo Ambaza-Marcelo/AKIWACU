@@ -61,7 +61,7 @@
                     @endif
                     <p class="float-right mb-2">
                         @if (Auth::guard('admin')->user()->can('drink_order_client.create'))
-                            <a class="btn btn-primary text-white" href="{{ route('admin.bartender-orders.create') }}">@lang('messages.new')</a>
+                            <a class="btn btn-primary text-white" href="{{ route('admin.bartender-orders.create',$table_id) }}">@lang('messages.new')</a>
                         @endif
                     </p>
                     <div class="clearfix"></div>

@@ -56,7 +56,7 @@ class OrderKitchenController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($table_id)
     {
         if (is_null($this->user) || !$this->user->can('food_order_client.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any order !');
@@ -65,7 +65,8 @@ class OrderKitchenController extends Controller
         $articles  = FoodItem::orderBy('name','asc')->get();
         $employes  = Employe::orderBy('name','asc')->get();
         $accompagnements  = Accompagnement::orderBy('name','asc')->get();
-        return view('backend.pages.order_kitchen.create', compact('articles','employes','accompagnements'));
+        $table = Table::where('id',$table_id)->first();
+        return view('backend.pages.order_kitchen.create', compact('articles','employes','accompagnements','table_id','table'));
     }
 
     /**
@@ -84,7 +85,7 @@ class OrderKitchenController extends Controller
                 'food_item_id.*'  => 'required',
                 'employe_id'  => 'required',
                 'quantity.*'  => 'required',
-                'table_no'  => 'required',
+                'table_id'  => 'required',
                 'accompagnement_id.*'  => 'required'
             );
 
@@ -99,7 +100,7 @@ class OrderKitchenController extends Controller
             $food_item_id = $request->food_item_id;
             $date = $request->date;
             $quantity = $request->quantity;
-            $table_no = $request->table_no;
+            $table_id = $request->table_id;
             $employe_id = $request->employe_id;
             $description =$request->description; 
             $status = 0; 
@@ -123,7 +124,7 @@ class OrderKitchenController extends Controller
             $order->employe_id = $employe_id;
             $order->created_by = $created_by;
             $order->description = $description;
-            $order->table_no = $table_no;
+            $order->table_id = $table_id;
             $order->status = $status;
             $order->save();
             //insert details of order No.
@@ -136,7 +137,7 @@ class OrderKitchenController extends Controller
                     'date' => $date,
                     'quantity' => $quantity[$count],
                     'selling_price' => $selling_price,
-                    'table_no' => $table_no,
+                    'table_id' => $table_id,
                     'status' => $status,
                     'description' => $description,
                     'total_amount_selling' => $total_amount_selling,
@@ -165,8 +166,20 @@ class OrderKitchenController extends Controller
             OrderKitchenDetail::insert($insert_data);
             AccompagnementDetail::insert($insert_accompagnement_data);
 
+            $waiter_name = Employe::where('id',$employe_id)->value('name');
+            $total_amount = DB::table('order_kitchen_details')
+            ->where('order_no',$order_no)->sum('total_amount_selling');
+            $total_amount_paying = Table::where('id',$table_id)->value('total_amount_paying');
+            $table = Table::where('id',$table_id)->first();
+            $table->date = Carbon::parse(Carbon::now());
+            $table->opening_date = Carbon::parse(Carbon::now());
+            $table->etat = 1;
+            $table->total_amount_paying = $total_amount_paying + $total_amount;
+            $table->waiter_name = $waiter_name;
+            $table->save();
+
         session()->flash('success', 'Order has been sent successfuly!!');
-        return redirect()->route('admin.order_kitchens.index');
+        return redirect()->route('admin.order_kitchens.index',$table_id);
     }
 
     /**

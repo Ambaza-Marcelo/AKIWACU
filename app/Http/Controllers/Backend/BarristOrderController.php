@@ -54,7 +54,7 @@ class BarristOrderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($table_id)
     {
         if (is_null($this->user) || !$this->user->can('drink_order_client.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any order !');
@@ -63,7 +63,8 @@ class BarristOrderController extends Controller
         $articles  = BarristItem::orderBy('name','asc')->get();
         $employes  = Employe::orderBy('name','asc')->get();
         $ingredients  = Ingredient::orderBy('name','asc')->get();
-        return view('backend.pages.order_barrist.create', compact('articles','employes','ingredients'));
+        $table = Table::where('id',$table_id)->first();
+        return view('backend.pages.order_barrist.create', compact('articles','employes','ingredients','table_id','table'));
     }
 
     /**
@@ -82,7 +83,7 @@ class BarristOrderController extends Controller
                 'barrist_item_id.*'  => 'required',
                 'employe_id'  => 'required',
                 'quantity.*'  => 'required',
-                'table_no'  => 'required',
+                'table_id'  => 'required',
                 'ingredient_id.*'  => 'required'
             );
 
@@ -97,7 +98,7 @@ class BarristOrderController extends Controller
             $barrist_item_id = $request->barrist_item_id;
             $date = $request->date;
             $quantity = $request->quantity;
-            $table_no = $request->table_no;
+            $table_id = $request->table_id;
             $employe_id = $request->employe_id;
             $description = $request->description; 
             $ingredient_id = $request->ingredient_id;
@@ -122,7 +123,7 @@ class BarristOrderController extends Controller
             $order->created_by = $created_by;
             $order->description = $description;
             $order->status = $status;
-            $order->table_no = $table_no;
+            $order->table_id = $table_id;
             $order->save();
             //insert details of order No.
             for( $count = 0; $count < count($barrist_item_id); $count++ ){
@@ -134,7 +135,7 @@ class BarristOrderController extends Controller
                     'date' => $date,
                     'quantity' => $quantity[$count],
                     'selling_price' => $selling_price,
-                    'table_no' => $table_no,
+                    'table_id' => $table_id,
                     'description' => $description,
                     'total_amount_selling' => $total_amount_selling,
                     'created_by' => $created_by,
@@ -176,8 +177,20 @@ class BarristOrderController extends Controller
             BarristOrderDetail::insert($insert_data);
             IngredientDetail::insert($insert_ingredient_data);
 
+            $waiter_name = Employe::where('id',$employe_id)->value('name');
+            $total_amount = DB::table('barrist_order_details')
+            ->where('order_no',$order_no)->sum('total_amount_selling');
+            $total_amount_paying = Table::where('id',$table_id)->value('total_amount_paying');
+            $table = Table::where('id',$table_id)->first();
+            $table->date = Carbon::parse(Carbon::now());
+            $table->opening_date = Carbon::parse(Carbon::now());
+            $table->etat = 1;
+            $table->total_amount_paying = $total_amount_paying + $total_amount;
+            $table->waiter_name = $waiter_name;
+            $table->save();
+
         session()->flash('success', 'Order has been sent successfuly!!');
-        return redirect()->route('admin.barrist-orders.index');
+        return redirect()->route('admin.barrist-orders.index',$table_id);
     }
 
     /**
