@@ -87,19 +87,13 @@
                             </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4" id="dynamicDiv">
+                        <div class="col-md-6" id="dynamicDiv">
                         <div class="form-group">
                             <label for="date">@lang('messages.date')</label>
                             <input type="date" class="form-control" id="date" name="date"  required>
                         </div>
                         </div>
-                        <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="table_no">@lang('Table No')</label>
-                            <input type="text" class="form-control" placeholder="Saisir Table No" id="table_no" name="table_no" required>
-                        </div>
-                        </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                         <div class="form-group">
                             <label for="employe_id">@lang('Serveur')</label>
                             <select class="form-control" name="employe_id" required>

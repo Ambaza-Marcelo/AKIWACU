@@ -87,19 +87,13 @@
                             </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-4" id="dynamicDiv">
+                        <div class="col-md-6" id="dynamicDiv">
                         <div class="form-group">
                             <label for="date">@lang('messages.date')</label>
                             <input type="date" class="form-control" id="date" name="date" required>
                         </div>
                         </div>
-                        <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="table_no">@lang('Table No')</label>
-                            <input type="text" class="form-control" placeholder="Saisir Table No" id="table_no" name="table_no" required>
-                        </div>
-                        </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                         <div class="form-group">
                             <label for="employe_id">@lang('Serveur')</label>
                             <select class="form-control" name="employe_id" required>
@@ -127,7 +121,10 @@
                                 </select></td>  
                                 <td><input type="number" name="quantity[]" placeholder="Entrer quantite" min="0" class="form-control" required /></td>
                                 <td>
-
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" name="accompagnement_id[]" id="1" value="1" checked="checked">
+                                                <label class="form-check-label" for="1"></label>
+                                            </div>
                                         @foreach ($accompagnements as $accompagnement)
                                             <div class="form-check">
                                                 <input type="checkbox" class="form-check-input" name="accompagnement_id[]" id="{{ $accompagnement->id }}" value="{{ $accompagnement->id }}">

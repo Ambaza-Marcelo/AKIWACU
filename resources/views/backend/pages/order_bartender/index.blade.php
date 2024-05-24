@@ -87,7 +87,7 @@
                                     <td>{{ $loop->index+1 }}</td>
                                     <td><a href="{{ route('admin.bartender-orders.show',$order->order_no) }}">{{ $order->order_no }}</a></td>
                                     <td>{{ Carbon\Carbon::parse($order->date)->format('d/m/Y') }}</td>
-                                    <td>{{ $order->table_no }}</td>
+                                    <td>@if($order->table_id){{ $order->table->name }} @endif</td>
                                     <td>{{ $order->employe->name }}</td>
                                     @if($order->status == 1)
                                     <td><span  class="badge badge-success">Validée</span></td>
