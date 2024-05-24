@@ -65,7 +65,25 @@ class FactureBarristController extends Controller
         $orders =  BarristOrderDetail::where('order_no',$order_no)->orderBy('order_no','asc')->get();
 
         $data =  BarristOrder::where('order_no',$order_no)->first();
-        return view('backend.pages.invoice_barrist.create',compact('barrist_items','data','setting','orders','order_no','clients'));
+        $table_id = BartenderOrder::where('order_no',$order_no)->value('table_id');
+
+        return view('backend.pages.invoice_barrist.create',compact('barrist_items','data','setting','orders','order_no','clients','table_id'));
+    }
+
+    public function createByTable($table_id)
+    {
+        if (is_null($this->user) || !$this->user->can('invoice_drink.create')) {
+            abort(403, 'Sorry !! You are Unauthorized to create any invoice !');
+        }
+
+        $setting = DB::table('settings')->orderBy('created_at','desc')->first();
+
+        $barrist_items =  BarristItem::orderBy('name','asc')->get();
+        $clients =  Client::orderBy('customer_name','asc')->get();
+        $orders =  BarristOrderDetail::where('table_id',$table_id)->orderBy('id','asc')->get();
+
+        $data =  BarristOrder::where('table_id',$table_id)->first();
+        return view('backend.pages.invoice_barrist.create',compact('barrist_items','data','setting','orders','table_id','clients'));
     }
 
     public function show($invoice_number)

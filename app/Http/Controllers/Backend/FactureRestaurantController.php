@@ -196,7 +196,25 @@ class FactureRestaurantController extends Controller
         $orders =  OrderKitchenDetail::where('order_no',$order_no)->orderBy('order_no','asc')->get();
         $clients =  Client::orderBy('customer_name','asc')->get();
         $data =  OrderKitchen::where('order_no',$order_no)->first();
-        return view('backend.pages.invoice_kitchen.create',compact('food_items','data','setting','orders','order_no','clients'));
+        $table_id = OrderKitchen::where('order_no',$order_no)->value('table_id');
+
+        return view('backend.pages.invoice_kitchen.create',compact('food_items','data','setting','orders','order_no','clients','table_id'));
+    }
+
+    public function createByTable($table_id)
+    {
+        if (is_null($this->user) || !$this->user->can('invoice_kitchen.create')) {
+            abort(403, 'Sorry !! You are Unauthorized to create any invoice !');
+        }
+
+        $setting = DB::table('settings')->orderBy('created_at','desc')->first();
+
+        $food_items =  FoodItem::orderBy('name','asc')->get();
+        $orders =  OrderKitchenDetail::where('table_id',$table_id)->orderBy('id','asc')->get();
+        $clients =  Client::orderBy('customer_name','asc')->get();
+        $data =  OrderKitchen::where('table_id',$table_id)->first();
+
+        return view('backend.pages.invoice_kitchen.create',compact('food_items','data','setting','orders','clients','table_id'));
     }
 
     /**
