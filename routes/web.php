@@ -533,6 +533,7 @@ Route::group(['prefix' => 'admin'], function () {
     //invoice kitchens routes
     Route::get('EBMS/invoice-kitchen/index', 'Backend\FactureRestaurantController@index')->name('admin.invoice-kitchens.index');
     Route::get('EBMS/invoice-kitchen/create/{order_no}', 'Backend\FactureRestaurantController@create')->name('admin.invoice-kitchens.create');
+    Route::get('EBMS/invoice-kitchen/create-by-table/{table_id}', 'Backend\FactureRestaurantController@createByTable')->name('admin.invoice-kitchens.create-by-table');
     Route::get('EBMS/invoice-kitchen/edit/{invoice_number}', 'Backend\FactureRestaurantController@edit')->name('admin.invoice-kitchens.edit');
     Route::get('EBMS/invoice-kitchen/show/{invoice_number}','Backend\FactureRestaurantController@show')->name('admin.invoice-kitchens.show');
 
@@ -540,6 +541,7 @@ Route::group(['prefix' => 'admin'], function () {
     //invoice barrist routes
     Route::get('EBMS/barrist-invoices/index', 'Backend\FactureBarristController@index')->name('admin.barrist-invoices.index');
     Route::get('EBMS/barrist-invoices/create/{order_no}', 'Backend\FactureBarristController@create')->name('admin.barrist-invoices.create');
+    Route::get('EBMS/barrist-invoices/create-by-table/{table_id}', 'Backend\FactureBarristController@createByTable')->name('admin.barrist-invoices.create-by-table');
     Route::get('EBMS/barrist-invoices/edit/{invoice_number}', 'Backend\FactureBarristController@edit')->name('admin.barrist-invoices.edit');
     Route::delete('EBMS/barrist-invoices/destroy/{invoice_number}', 'Backend\FactureBarristController@destroy')->name('admin.barrist-invoices.destroy');
     Route::get('EBMS/barrist-invoices/show/{invoice_number}','Backend\FactureBarristController@show')->name('admin.barrist-invoices.show');
@@ -547,6 +549,7 @@ Route::group(['prefix' => 'admin'], function () {
     //invoice bartender routes
     Route::get('EBMS/bartender-invoices/index', 'Backend\FactureBartenderController@index')->name('admin.bartender-invoices.index');
     Route::get('EBMS/bartender-invoices/create/{order_no}', 'Backend\FactureBartenderController@create')->name('admin.bartender-invoices.create');
+    Route::get('EBMS/bartender-invoices/create-by-table/{table_id}', 'Backend\FactureBartenderController@createByTable')->name('admin.bartender-invoices.create-by-table');
     Route::get('EBMS/bartender-invoices/edit/{invoice_number}', 'Backend\FactureBartenderController@edit')->name('admin.bartender-invoices.edit');
     Route::delete('EBMS/bartender-invoices/destroy/{invoice_number}', 'Backend\FactureBartenderController@destroy')->name('admin.bartender-invoices.destroy');
     Route::get('EBMS/bartender-invoices/show/{invoice_number}','Backend\FactureBartenderController@show')->name('admin.bartender-invoices.show');
@@ -590,8 +593,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::delete('EBMS/ingredients/destroy/{id}', 'Backend\IngredientController@destroy')->name('admin.ingredients.destroy');
 
     //order-kitchen routes
-    Route::get('EBMS/order-kitchen/index', 'Backend\OrderKitchenController@index')->name('admin.order_kitchens.index');
-    Route::get('EBMS/order-kitchen/create', 'Backend\OrderKitchenController@create')->name('admin.order_kitchens.create');
+    Route::get('EBMS/order-kitchen/index/{table_id}', 'Backend\OrderKitchenController@index')->name('admin.order_kitchens.index');
+    Route::get('EBMS/order-kitchen/create/{table_id}', 'Backend\OrderKitchenController@create')->name('admin.order_kitchens.create');
     Route::post('EBMS/order-kitchen/store', 'Backend\OrderKitchenController@store')->name('admin.order_kitchens.store');
     Route::get('EBMS/order-kitchen/edit/{order_no}', 'Backend\OrderKitchenController@edit')->name('admin.order_kitchens.edit');
     Route::put('EBMS/order-kitchen/update/{order_no}', 'Backend\OrderKitchenController@update')->name('admin.order_kitchens.update');
@@ -624,8 +627,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('EBMS/drink-orders/export-to-excel', 'Backend\OrderDrinkController@exportToExcel')->name('admin.drink-orders.export-to-excel');
 
     //barrist-orders routes
-    Route::get('EBMS/barrist-orders/index', 'Backend\BarristOrderController@index')->name('admin.barrist-orders.index');
-    Route::get('EBMS/barrist-orders/create', 'Backend\BarristOrderController@create')->name('admin.barrist-orders.create');
+    Route::get('EBMS/barrist-orders/index/{table_id}', 'Backend\BarristOrderController@index')->name('admin.barrist-orders.index');
+    Route::get('EBMS/barrist-orders/create/{table_id}', 'Backend\BarristOrderController@create')->name('admin.barrist-orders.create');
     Route::post('EBMS/barrist-orders/store', 'Backend\BarristOrderController@store')->name('admin.barrist-orders.store');
     Route::get('EBMS/barrist-orders/edit/{order_no}', 'Backend\BarristOrderController@edit')->name('admin.barrist-orders.edit');
     Route::put('EBMS/barrist-orders/update/{order_no}', 'Backend\BarristOrderController@update')->name('admin.barrist-orders.update');
@@ -643,8 +646,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('EBMS/barrist-orders/export-to-excel', 'Backend\BarristOrderController@exportToExcel')->name('admin.barrist-orders.export-to-excel');
 
     //bartender-orders routes
-    Route::get('EBMS/bartender-orders/index', 'Backend\BartenderOrderController@index')->name('admin.bartender-orders.index');
-    Route::get('EBMS/bartender-orders/create', 'Backend\BartenderOrderController@create')->name('admin.bartender-orders.create');
+    Route::get('EBMS/bartender-orders/index/{table_id}', 'Backend\BartenderOrderController@index')->name('admin.bartender-orders.index');
+    Route::get('EBMS/bartender-orders/create/{table_id}', 'Backend\BartenderOrderController@create')->name('admin.bartender-orders.create');
     Route::post('EBMS/bartender-orders/store', 'Backend\BartenderOrderController@store')->name('admin.bartender-orders.store');
     Route::get('EBMS/bartender-orders/edit/{order_no}', 'Backend\BartenderOrderController@edit')->name('admin.bartender-orders.edit');
     Route::put('EBMS/bartender-orders/update/{order_no}', 'Backend\BartenderOrderController@update')->name('admin.bartender-orders.update');
