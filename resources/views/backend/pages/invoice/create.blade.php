@@ -282,6 +282,9 @@
                             </tr> 
                             @endforeach
                         </table> 
+                        <div class="col-md-2 pull-right">
+                            <input type="text" class="form-control" value="{{ number_format($total_amount,0,',',' ')}}" readonly>
+                        </div>
                     <!--
                         <button type="button" name="add" id="add" class="btn btn-success"><i class="fa fa-plus-square" title="Ajouter Plus" aria-hidden="false"></i></button>
                     -->
