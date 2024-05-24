@@ -25,6 +25,7 @@ use App\Models\BarristOrderDetail;
 use App\Models\BarristItem;
 use App\Models\Employe;
 use App\Models\Client;
+use App\Models\Table;
 use App\Mail\ReportBarristMail;
 
 class FactureBarristController extends Controller

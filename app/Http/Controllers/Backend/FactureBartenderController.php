@@ -25,6 +25,7 @@ use App\Models\BartenderOrderDetail;
 use App\Models\BartenderItem;
 use App\Models\Employe;
 use App\Models\Client;
+use App\Models\Table;
 use App\Mail\ReportBartenderMail;
 
 class FactureBartenderController extends Controller

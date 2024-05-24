@@ -1906,6 +1906,8 @@ class FactureController extends Controller
 
         $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
 
+        $table_id = FactureDetail::where('invoice_number', $invoice_number)->value('table_id');
+
         foreach($datas as $data){
             $valeurStockInitial = BarristProductionStore::where('barrist_item_id', $data->barrist_item_id)->value('total_cump_value');
             $quantityStockInitial = BarristProductionStore::where('barrist_item_id', $data->barrist_item_id)->value('quantity');
@@ -1953,15 +1955,30 @@ class FactureController extends Controller
                     */
         }
 
+
+        foreach($datas as $data){
+                $orderData = array(
+                    'confirmed_by' => $this->user->name,
+                    'status' => 3,
+                );
+
+                BarristOrder::where('order_no', '=', $data->barrist_order_no)
+                    ->update($orderData);
+                BarristOrderDetail::where('order_no', '=', $data->barrist_order_no)
+                    ->update($orderData);
+        }
+
+        $in_pending = count(BarristOrderDetail::where('table_id',$table_id)->where('status','!=',3)->where('status','!=',2)->where('status','!=',-1)->get());
+
+        if ($in_pending < 1) {
+            Table::where('id',$table_id)->update(['etat' => 0,'waiter_name' => '','opened_by' => '','total_amount_paying' => 0]);
+        }
+
         Facture::where('invoice_number', '=', $invoice_number)
                 ->update(['etat' => 1,'statut_paied' => '0','validated_by' => $this->user->name]);
         FactureDetail::where('invoice_number', '=', $invoice_number)
                 ->update(['etat' => 1,'statut_paied' => '0','validated_by' => $this->user->name]);
-        BarristOrder::where('order_no', '=', $data->barrist_order_no)
-                ->update(['status' => 3,'confirmed_by' => $this->user->name]);
-            BarristOrderDetail::where('order_no', '=', $data->barrist_order_no)
-                ->update(['status' => 3,'confirmed_by' => $this->user->name]);
-            BarristSmallReport::insert($report);
+        BarristSmallReport::insert($report);
 
         session()->flash('success', 'La Facture  est validée avec succés');
         return back();
@@ -1980,6 +1997,8 @@ class FactureController extends Controller
         $client_id = $request->client_id;
 
         $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
+
+        $table_id = FactureDetail::where('invoice_number', $invoice_number)->value('table_id');
 
         foreach($datas as $data){
             $valeurStockInitial = BarristProductionStore::where('barrist_item_id', $data->barrist_item_id)->value('total_cump_value');
@@ -2034,15 +2053,29 @@ class FactureController extends Controller
             ->where('invoice_number', '=', $invoice_number)
             ->sum('item_total_amount');
 
+        foreach($datas as $data){
+                $orderData = array(
+                    'confirmed_by' => $this->user->name,
+                    'status' => 3,
+                );
+
+                BarristOrder::where('order_no', '=', $data->barrist_order_no)
+                    ->update($orderData);
+                BarristOrderDetail::where('order_no', '=', $data->barrist_order_no)
+                    ->update($orderData);
+        }
+
+        $in_pending = count(BarristOrderDetail::where('table_id',$table_id)->where('status','!=',3)->where('status','!=',2)->where('status','!=',-1)->get());
+
+        if ($in_pending < 1) {
+            Table::where('id',$table_id)->update(['etat' => 0,'waiter_name' => '','opened_by' => '','total_amount_paying' => 0]);
+        }
+
         Facture::where('invoice_number', '=', $invoice_number)
                 ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
         FactureDetail::where('invoice_number', '=', $invoice_number)
                 ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
-        BarristOrder::where('order_no', '=', $data->barrist_order_no)
-                ->update(['status' => 3,'confirmed_by' => $this->user->name]);
-            BarristOrderDetail::where('order_no', '=', $data->barrist_order_no)
-                ->update(['status' => 3,'confirmed_by' => $this->user->name]);
-            BarristSmallReport::insert($report);
+        BarristSmallReport::insert($report);
 
         session()->flash('success', 'La Facture  est validée avec succés');
         return back();
@@ -2056,6 +2089,8 @@ class FactureController extends Controller
         }
 
         $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
+
+        $table_id = FactureDetail::where('invoice_number', $invoice_number)->value('table_id');
 
         foreach($datas as $data){
             $valeurStockInitial = BartenderProductionStore::where('bartender_item_id', $data->bartender_item_id)->value('total_cump_value');
@@ -2135,15 +2170,29 @@ class FactureController extends Controller
                     }
         }
 
+        foreach($datas as $data){
+                $orderData = array(
+                    'confirmed_by' => $this->user->name,
+                    'status' => 3,
+                );
+
+                BartenderOrder::where('order_no', '=', $data->bartender_order_no)
+                    ->update($orderData);
+                BartenderOrderDetail::where('order_no', '=', $data->bartender_order_no)
+                    ->update($orderData);
+        }
+
+        $in_pending = count(BartenderOrderDetail::where('table_id',$table_id)->where('status','!=',3)->where('status','!=',2)->where('status','!=',-1)->get());
+
+        if ($in_pending < 1) {
+            Table::where('id',$table_id)->update(['etat' => 0,'waiter_name' => '','opened_by' => '','total_amount_paying' => 0]);
+        }
+
         BartenderSmallReport::insert($report);
         Facture::where('invoice_number', '=', $invoice_number)
             ->update(['etat' => 1,'statut_paied' => '0','validated_by' => $this->user->name]);
         FactureDetail::where('invoice_number', '=', $invoice_number)
             ->update(['etat' => 1,'statut_paied' => '0','validated_by' => $this->user->name]);
-        BartenderOrder::where('order_no', '=', $data->bartender_order_no)
-            ->update(['status' => 3,'confirmed_by' => $this->user->name]);
-        BartenderOrderDetail::where('order_no', '=', $data->bartender_order_no)
-            ->update(['status' => 3,'confirmed_by' => $this->user->name]);
 
         session()->flash('success', 'La Facture  est validée avec succés');
         return back();
@@ -2164,6 +2213,8 @@ class FactureController extends Controller
 
         $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
 
+        $table_id = FactureDetail::where('invoice_number', $invoice_number)->value('table_id');
+
         foreach($datas as $data){
             $valeurStockInitial = BartenderProductionStore::where('bartender_item_id', $data->bartender_item_id)->value('total_cump_value');
             $quantityStockInitial = BartenderProductionStore::where('bartender_item_id', $data->bartender_item_id)->value('quantity');
@@ -2248,14 +2299,28 @@ class FactureController extends Controller
             ->where('invoice_number', '=', $invoice_number)
             ->sum('item_total_amount');
 
+        foreach($datas as $data){
+                $orderData = array(
+                    'confirmed_by' => $this->user->name,
+                    'status' => 3,
+                );
+
+                BartenderOrder::where('order_no', '=', $data->bartender_order_no)
+                    ->update($orderData);
+                BartenderOrderDetail::where('order_no', '=', $data->bartender_order_no)
+                    ->update($orderData);
+        }
+
+        $in_pending = count(BartenderOrderDetail::where('table_id',$table_id)->where('status','!=',3)->where('status','!=',2)->where('status','!=',-1)->get());
+
+        if ($in_pending < 1) {
+            Table::where('id',$table_id)->update(['etat' => 0,'waiter_name' => '','opened_by' => '','total_amount_paying' => 0]);
+        }
+
         Facture::where('invoice_number', '=', $invoice_number)
             ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
         FactureDetail::where('invoice_number', '=', $invoice_number)
             ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
-        BartenderOrder::where('order_no', '=', $data->bartender_order_no)
-            ->update(['status' => 3,'confirmed_by' => $this->user->name]);
-        BartenderOrderDetail::where('order_no', '=', $data->bartender_order_no)
-            ->update(['status' => 3,'confirmed_by' => $this->user->name]);
 
         session()->flash('success', 'La Facture  est validée avec succés');
         return back();
@@ -2323,6 +2388,8 @@ class FactureController extends Controller
         $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
         $data = Facture::where('invoice_number', $invoice_number)->first();
 
+        $table_id = FactureDetail::where('invoice_number', $invoice_number)->value('table_id');
+
         foreach($datas as $data){
             $valeurStockInitial = FoodStore::where('food_item_id', $data->food_item_id)->value('total_cump_value');
             $quantityStockInitial = FoodStore::where('food_item_id', $data->food_item_id)->value('quantity');
@@ -2431,6 +2498,25 @@ class FactureController extends Controller
         if (!empty($food->food_id) && $flag != 1) {
             FoodBigReport::insert($reportBigStoreData);
         }
+
+
+        foreach($datas as $data){
+                $orderData = array(
+                    'confirmed_by' => $this->user->name,
+                    'status' => 3,
+                );
+
+                OrderKitchen::where('order_no', '=', $data->food_order_no)
+                    ->update($orderData);
+                OrderKitchenDetail::where('order_no', '=', $data->food_order_no)
+                    ->update($orderData);
+        }
+
+        $in_pending = count(OrderKitchenDetail::where('table_id',$table_id)->where('status','!=',3)->where('status','!=',2)->where('status','!=',-1)->get());
+
+        if ($in_pending < 1) {
+            Table::where('id',$table_id)->update(['etat' => 0,'waiter_name' => '','opened_by' => '','total_amount_paying' => 0]);
+        }
         
         FoodBigStoreDetail::where('food_id','!=','')->update(['verified' => false]);
 
@@ -2438,10 +2524,6 @@ class FactureController extends Controller
                 ->update(['etat' => 1,'statut_paied' => '0','validated_by' => $this->user->name]);
         FactureDetail::where('invoice_number', '=', $invoice_number)
                 ->update(['etat' => 1,'statut_paied' => '0','validated_by' => $this->user->name]);
-        OrderKitchen::where('order_no', '=', $data->food_order_no)
-                ->update(['status' => 3,'confirmed_by' => $this->user->name]);
-        OrderKitchenDetail::where('order_no', '=', $data->food_order_no)
-                ->update(['status' => 3,'confirmed_by' => $this->user->name]);
         //FoodStoreReport::insert($report);
 
         session()->flash('success', 'La Facture  est validée avec succés');
@@ -2462,6 +2544,8 @@ class FactureController extends Controller
 
         $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
         $data = Facture::where('invoice_number', $invoice_number)->first();
+
+        $table_id = FactureDetail::where('invoice_number', $invoice_number)->value('table_id');
         
         foreach($datas as $data){
             $valeurStockInitial = FoodStore::where('food_item_id', $data->food_item_id)->value('total_cump_value');
@@ -2571,6 +2655,24 @@ class FactureController extends Controller
         if (!empty($food->food_id) && $flag != 1) {
             FoodBigReport::insert($reportBigStoreData);
         }
+
+        foreach($datas as $data){
+                $orderData = array(
+                    'confirmed_by' => $this->user->name,
+                    'status' => 3,
+                );
+
+                OrderKitchen::where('order_no', '=', $data->food_order_no)
+                    ->update($orderData);
+                OrderKitchenDetail::where('order_no', '=', $data->food_order_no)
+                    ->update($orderData);
+        }
+
+        $in_pending = count(OrderKitchenDetail::where('table_id',$table_id)->where('status','!=',3)->where('status','!=',2)->where('status','!=',-1)->get());
+
+        if ($in_pending < 1) {
+            Table::where('id',$table_id)->update(['etat' => 0,'waiter_name' => '','opened_by' => '','total_amount_paying' => 0]);
+        }
         
         FoodBigStoreDetail::where('food_id','!=','')->update(['verified' => false]);
 
@@ -2582,10 +2684,6 @@ class FactureController extends Controller
                 ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
         FactureDetail::where('invoice_number', '=', $invoice_number)
                 ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
-        OrderKitchen::where('order_no', '=', $data->food_order_no)
-                ->update(['status' => 3,'confirmed_by' => $this->user->name]);
-        OrderKitchenDetail::where('order_no', '=', $data->food_order_no)
-                ->update(['status' => 3,'confirmed_by' => $this->user->name]);
         //FoodStoreReport::insert($report);
 
         session()->flash('success', 'La Facture  est validée avec succés');

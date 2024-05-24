@@ -28,6 +28,7 @@ use App\Models\MaterialBigStore;
 use App\Models\FoodItem;
 use App\Models\Employe;
 use App\Models\Client;
+use App\Models\Table;
 use App\Mail\ReportFoodMail;
 use App\Exports\ChiffreAffaireExport;
 use App\Exports\FactureCreditExport;

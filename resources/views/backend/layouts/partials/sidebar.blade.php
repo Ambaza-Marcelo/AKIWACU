@@ -239,27 +239,6 @@
                         </ul>
                     </li>
                     @endif
-                    @if ( $usr->can('food_order_client.create') || $usr->can('food_order_client.view') ||  $usr->can('food_order_client.edit') ||  $usr->can('food_order_client.delete') ||  $usr->can('drink_order_client.view') ||  $usr->can('drink_order_client.create'))
-                    <li>
-                        <a href="javascript:void(0)" aria-expanded="true"><i class="fa fa-shopping-cart"></i><span>
-                            @lang('messages.client_order')
-                        </span></a>
-                        <ul class="collapse">
-                                @if ($usr->can('drink_order_client.view'))
-                                <li class=""><a href="{{ route('admin.order_drinks.index',1) }}">@lang('Boissons')</a></li>
-                                @endif
-                                @if ($usr->can('food_order_client.view'))
-                                <li class=""><a href="{{ route('admin.order_kitchens.index') }}">@lang('Cuisine')</a></li>
-                                @endif
-                                @if ($usr->can('food_order_client.view'))
-                                <li class=""><a href="{{ route('admin.barrist-orders.index') }}">@lang('Barrist')</a></li>
-                                @endif
-                                @if ($usr->can('drink_order_client.view'))
-                                <li class=""><a href="{{ route('admin.bartender-orders.index') }}">@lang('Bartender')</a></li>
-                                @endif
-                        </ul>
-                    </li>
-                    @endif
                     @if ( $usr->can('drink_supplier_order.create') || $usr->can('drink_supplier_order.view') ||  $usr->can('drink_supplier_order.edit') ||  $usr->can('drink_supplier_order.delete') ||  $usr->can('food_supplier_order.view') ||  $usr->can('food_supplier_order.create') ||  $usr->can('material_supplier_order.view') ||  $usr->can('material_supplier_order.create'))
                     <li>
                         <a href="javascript:void(0)" aria-expanded="true"><i class="fa fa-shopping-cart"></i><span>
