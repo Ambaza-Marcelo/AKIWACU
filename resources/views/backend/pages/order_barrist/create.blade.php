@@ -2,7 +2,7 @@
 @extends('backend.layouts.master')
 
 @section('title')
-@lang('Commande Boisson') - @lang('messages.admin_panel')
+@lang('Commande Barrista') - @lang('messages.admin_panel')
 @endsection
 
 @section('styles')
@@ -19,11 +19,11 @@
     <div class="row align-items-center">
         <div class="col-sm-6">
             <div class="breadcrumbs-area clearfix">
-                <h4 class="page-title pull-left">@lang('Commande Boisson')</h4>
+                <h4 class="page-title pull-left">@lang('Commande Barrista')</h4>
                 <ul class="breadcrumbs pull-left">
                     <li><a href="{{ route('admin.dashboard') }}">@lang('messages.dashboard')</a></li>
                     <li><a href="{{ route('admin.barrist-orders.index') }}">@lang('messages.list')</a></li>
-                    <li><span>@lang('Commande Boisson')</span></li>
+                    <li><span>@lang('Commande Barrista')</span></li>
                 </ul>
             </div>
         </div>
@@ -38,7 +38,7 @@
          <div class="col-12 mt-5">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="header-title">Commande Boisson</h4>
+                    <h4 class="header-title">Commande Barrista</h4>
                     @include('backend.layouts.partials.messages')
                     
                     <form action="{{ route('admin.barrist-orders.store') }}" method="post" id="dynamic_form">
