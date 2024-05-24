@@ -373,6 +373,7 @@ class FactureController extends Controller
                 //'customer_address' => 'required|max:100|min:5',
                 //'invoice_signature' => 'required|max:90|min:10',
                 //'invoice_signature_date' => 'required|max: |min:',
+                'barrist_order_no.*'  => 'required',
                 'barrist_item_id.*'  => 'required',
                 'item_quantity.*'  => 'required',
                 'item_price.*'  => 'required',
@@ -396,6 +397,14 @@ class FactureController extends Controller
 
             $employe_id = $request->employe_id;
             
+            if (!empty($request->table_id)) {
+                $table_id = $request->table_id;
+                $barrist_order_no = $request->barrist_order_no;
+            }else{
+                $table_id = '';
+                $barrist_order_no = $request->barrist_order_no;
+            }
+
             $latest = Facture::orderBy('id','desc')->first();
             if ($latest) {
                $invoice_number = 'FA' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
@@ -430,6 +439,7 @@ class FactureController extends Controller
           $data = array(
             'invoice_number'=>$invoice_number,
             'invoice_date'=> $request->invoice_date,
+            'table_id'=> $table_id,
             'tp_type'=>$request->tp_type,
             'tp_name'=>$request->tp_name,
             'tp_TIN'=>$request->tp_TIN,
@@ -451,7 +461,7 @@ class FactureController extends Controller
             'customer_TIN'=>$request->customer_TIN,
             'customer_address'=>$request->customer_address,
             'invoice_signature'=> $invoice_signature,
-            'barrist_order_no'=>$request->barrist_order_no,
+            'barrist_order_no'=>$request->barrist_order_no[$count],
             'cancelled_invoice_ref'=>$request->cancelled_invoice_ref,
             'cancelled_invoice'=>$request->cancelled_invoice,
             'invoice_currency'=>$request->invoice_currency,
@@ -489,7 +499,7 @@ class FactureController extends Controller
             $facture->tp_address_province = $request->tp_address_province;
             $facture->tp_address_commune = $request->tp_address_commune;
             $facture->tp_address_quartier = $request->tp_address_quartier;
-            $facture->barrist_order_no = $request->barrist_order_no;
+            //$facture->barrist_order_no = $request->barrist_order_no;
             $facture->vat_taxpayer = $request->vat_taxpayer;
             $facture->ct_taxpayer = $request->ct_taxpayer;
             $facture->tl_taxpayer = $request->tl_taxpayer;
@@ -510,10 +520,19 @@ class FactureController extends Controller
             $facture->invoice_signature_date = Carbon::now();
             $facture->save();
 
-            BarristOrder::where('order_no', '=', $facture->barrist_order_no)
-                ->update(['status' => 2,'confirmed_by' => $this->user->name]);
-            BarristOrderDetail::where('order_no', '=', $facture->barrist_order_no)
-                ->update(['status' => 2,'confirmed_by' => $this->user->name]);
+            for( $count = 0; $count < count($barrist_item_id); $count++ )
+            {
+                 $orderData = array(
+                    'confirmed_by' => $this->user->name,
+                    'status' => 2,
+                    'flag' => 1
+                );
+
+                BarristOrder::where('order_no', '=', $request->barrist_order_no[$count])
+                    ->update($orderData);
+                BarristOrderDetail::where('order_no', '=', $request->barrist_order_no[$count])
+                    ->update($orderData);
+            }
 
             session()->flash('success', 'Le vente est fait avec succés!!');
             return redirect()->route('admin.barrist-invoices.index');
@@ -540,6 +559,7 @@ class FactureController extends Controller
                 //'customer_address' => 'required|max:100|min:5',
                 //'invoice_signature' => 'required|max:90|min:10',
                 //'invoice_signature_date' => 'required|max: |min:',
+                'food_order_no.*'  => 'required',
                 'food_item_id.*'  => 'required',
                 'item_quantity.*'  => 'required',
                 'item_price.*'  => 'required',
@@ -562,6 +582,14 @@ class FactureController extends Controller
             $item_tl =$request->item_tl; 
 
             $employe_id = $request->employe_id;
+
+            if (!empty($request->table_id)) {
+                $table_id = $request->table_id;
+                $food_order_no = $request->food_order_no;
+            }else{
+                $table_id = '';
+                $food_order_no = $request->food_order_no;
+            }
             
             $latest = Facture::orderBy('id','desc')->first();
             if ($latest) {
@@ -597,6 +625,7 @@ class FactureController extends Controller
           $data = array(
             'invoice_number'=>$invoice_number,
             'invoice_date'=> $request->invoice_date,
+            'table_id'=>$table_id,
             'tp_type'=>$request->tp_type,
             'tp_name'=>$request->tp_name,
             'tp_TIN'=>$request->tp_TIN,
@@ -618,7 +647,7 @@ class FactureController extends Controller
             'customer_TIN'=>$request->customer_TIN,
             'customer_address'=>$request->customer_address,
             'invoice_signature'=> $invoice_signature,
-            'food_order_no'=>$request->food_order_no,
+            'food_order_no'=>$request->food_order_no[$count],
             'cancelled_invoice_ref'=>$request->cancelled_invoice_ref,
             'cancelled_invoice'=>$request->cancelled_invoice,
             'invoice_currency'=>$request->invoice_currency,
@@ -656,7 +685,7 @@ class FactureController extends Controller
             $facture->tp_address_province = $request->tp_address_province;
             $facture->tp_address_commune = $request->tp_address_commune;
             $facture->tp_address_quartier = $request->tp_address_quartier;
-            $facture->food_order_no = $request->food_order_no;
+            //$facture->food_order_no = $request->food_order_no;
             $facture->vat_taxpayer = $request->vat_taxpayer;
             $facture->ct_taxpayer = $request->ct_taxpayer;
             $facture->tl_taxpayer = $request->tl_taxpayer;
@@ -677,10 +706,19 @@ class FactureController extends Controller
             $facture->invoice_signature_date = Carbon::now();
             $facture->save();
 
-            OrderKitchen::where('order_no', '=', $facture->food_order_no)
-                ->update(['status' => 2,'flag' => 1,'confirmed_by' => $this->user->name]);
-            OrderKitchenDetail::where('order_no', '=', $facture->food_order_no)
-                ->update(['status' => 2,'flag' => 1,'confirmed_by' => $this->user->name]);
+            for( $count = 0; $count < count($food_item_id); $count++ )
+            {
+                 $orderData = array(
+                    'confirmed_by' => $this->user->name,
+                    'status' => 2,
+                    'flag' => 1
+                );
+
+                OrderKitchen::where('order_no', '=', $request->food_order_no[$count])
+                    ->update($orderData);
+                OrderKitchenDetail::where('order_no', '=', $request->food_order_no[$count])
+                    ->update($orderData);
+            }
 
             session()->flash('success', 'Le vente est fait avec succés!!');
             return redirect()->route('admin.invoice-kitchens.index');
@@ -707,6 +745,7 @@ class FactureController extends Controller
                 //'customer_address' => 'required|max:100|min:5',
                 //'invoice_signature' => 'required|max:90|min:10',
                 //'invoice_signature_date' => 'required|max: |min:',
+                'bartender_order_no.*'  => 'required',
                 'bartender_item_id.*'  => 'required',
                 'item_quantity.*'  => 'required',
                 'item_price.*'  => 'required',
@@ -730,6 +769,14 @@ class FactureController extends Controller
 
             $employe_id = $request->employe_id;
             
+            if (!empty($request->table_id)) {
+                $table_id = $request->table_id;
+                $bartender_order_no = $request->bartender_order_no;
+            }else{
+                $table_id = '';
+                $bartender_order_no = $request->bartender_order_no;
+            }
+
             $latest = Facture::orderBy('id','desc')->first();
             if ($latest) {
                $invoice_number = 'FA' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
@@ -764,6 +811,7 @@ class FactureController extends Controller
           $data = array(
             'invoice_number'=>$invoice_number,
             'invoice_date'=> $request->invoice_date,
+            'table_id'=>$table_id,
             'tp_type'=>$request->tp_type,
             'tp_name'=>$request->tp_name,
             'tp_TIN'=>$request->tp_TIN,
@@ -785,7 +833,7 @@ class FactureController extends Controller
             'customer_TIN'=>$request->customer_TIN,
             'customer_address'=>$request->customer_address,
             'invoice_signature'=> $invoice_signature,
-            'bartender_order_no'=>$request->bartender_order_no,
+            'bartender_order_no'=>$request->bartender_order_no[$count],
             'cancelled_invoice_ref'=>$request->cancelled_invoice_ref,
             'cancelled_invoice'=>$request->cancelled_invoice,
             'invoice_currency'=>$request->invoice_currency,
@@ -823,7 +871,7 @@ class FactureController extends Controller
             $facture->tp_address_province = $request->tp_address_province;
             $facture->tp_address_commune = $request->tp_address_commune;
             $facture->tp_address_quartier = $request->tp_address_quartier;
-            $facture->bartender_order_no = $request->bartender_order_no;
+            //$facture->bartender_order_no = $request->bartender_order_no;
             $facture->vat_taxpayer = $request->vat_taxpayer;
             $facture->ct_taxpayer = $request->ct_taxpayer;
             $facture->tl_taxpayer = $request->tl_taxpayer;
@@ -844,10 +892,19 @@ class FactureController extends Controller
             $facture->invoice_signature_date = Carbon::now();
             $facture->save();
 
-            BartenderOrder::where('order_no', '=', $facture->bartender_order_no)
-                ->update(['status' => 2,'confirmed_by' => $this->user->name]);
-            BartenderOrderDetail::where('order_no', '=', $facture->bartender_order_no)
-                ->update(['status' => 2,'confirmed_by' => $this->user->name]);
+            for( $count = 0; $count < count($bartender_item_id); $count++ )
+            {
+                 $orderData = array(
+                    'confirmed_by' => $this->user->name,
+                    'status' => 2,
+                    'flag' => 1
+                );
+
+                BartenderOrder::where('order_no', '=', $request->bartender_order_no[$count])
+                    ->update($orderData);
+                BartenderOrderDetail::where('order_no', '=', $request->bartender_order_no[$count])
+                    ->update($orderData);
+            }
 
             session()->flash('success', 'Le vente est fait avec succés!!');
             return redirect()->route('admin.bartender-invoices.index');
