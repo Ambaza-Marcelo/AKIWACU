@@ -84,7 +84,7 @@ class FactureController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any invoice !');
         }
 
-        $factures = Facture::where('drink_order_no','!=','')->orWhere('table_id','!=','')->take(200)->orderBy('id','desc')->get();
+        $factures = Facture::where('drink_order_no','!=','')->take(200)->orderBy('id','desc')->get();
         return view('backend.pages.invoice.index',compact('factures'));
     }
 
@@ -304,13 +304,14 @@ class FactureController extends Controller
 
         FactureDetail::insert($data1);
 
+            $order_no = FactureDetail::where('invoice_number',$invoice_number)->value('drink_order_no');
 
             //create facture
             $facture = new Facture();
             $facture->invoice_date = $request->invoice_date;
             $facture->invoice_number = $invoice_number;
             $facture->table_id = $table_id;
-            //$facture->drink_order_no = $drink_order_no;
+            $facture->drink_order_no = $order_no;
             $facture->invoice_date =  $request->invoice_date;
             $facture->tp_type = $request->tp_type;
             $facture->tp_name = $request->tp_name;
@@ -493,6 +494,7 @@ class FactureController extends Controller
 
         FactureDetail::insert($data1);
 
+        $order_no = FactureDetail::where('invoice_number',$invoice_number)->value('barrist_order_no');
 
             //create facture
             $facture = new Facture();
@@ -507,7 +509,7 @@ class FactureController extends Controller
             $facture->tp_address_province = $request->tp_address_province;
             $facture->tp_address_commune = $request->tp_address_commune;
             $facture->tp_address_quartier = $request->tp_address_quartier;
-            //$facture->barrist_order_no = $request->barrist_order_no;
+            $facture->barrist_order_no = $order_no;
             $facture->vat_taxpayer = $request->vat_taxpayer;
             $facture->ct_taxpayer = $request->ct_taxpayer;
             $facture->tl_taxpayer = $request->tl_taxpayer;
@@ -679,7 +681,7 @@ class FactureController extends Controller
 
         FactureDetail::insert($data1);
 
-
+        $order_no = FactureDetail::where('invoice_number',$invoice_number)->value('food_order_no');
             //create facture
             $facture = new Facture();
             $facture->invoice_date = $request->invoice_date;
@@ -693,7 +695,7 @@ class FactureController extends Controller
             $facture->tp_address_province = $request->tp_address_province;
             $facture->tp_address_commune = $request->tp_address_commune;
             $facture->tp_address_quartier = $request->tp_address_quartier;
-            //$facture->food_order_no = $request->food_order_no;
+            $facture->food_order_no = $order_no;
             $facture->vat_taxpayer = $request->vat_taxpayer;
             $facture->ct_taxpayer = $request->ct_taxpayer;
             $facture->tl_taxpayer = $request->tl_taxpayer;
@@ -865,7 +867,7 @@ class FactureController extends Controller
 
         FactureDetail::insert($data1);
 
-
+        $order_no = FactureDetail::where('invoice_number',$invoice_number)->value('bartender_order_no');
             //create facture
             $facture = new Facture();
             $facture->invoice_date = $request->invoice_date;
@@ -879,7 +881,7 @@ class FactureController extends Controller
             $facture->tp_address_province = $request->tp_address_province;
             $facture->tp_address_commune = $request->tp_address_commune;
             $facture->tp_address_quartier = $request->tp_address_quartier;
-            //$facture->bartender_order_no = $request->bartender_order_no;
+            $facture->bartender_order_no = $order_no;
             $facture->vat_taxpayer = $request->vat_taxpayer;
             $facture->ct_taxpayer = $request->ct_taxpayer;
             $facture->tl_taxpayer = $request->tl_taxpayer;
