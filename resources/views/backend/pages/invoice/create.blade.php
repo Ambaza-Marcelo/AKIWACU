@@ -52,8 +52,8 @@
                             </div>
                             @if($table_id)
                             <div class="col-md-4">
-                                <label for="table_id">Table</label>
-                                <input type="number" name="table_id" class="form-control" value="{{ $table_id }}">
+                                <label for="table_id">Table : {{ $data->table->name }}</label>
+                                <input type="number" name="table_id" class="form-control" value="{{ $table_id }}" readonly>
                             </div>
                             @endif
                             <div class="col-md-4">
