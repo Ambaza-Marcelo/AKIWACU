@@ -46,7 +46,7 @@
                         <div class="col-md-6 mb-3 mb-lg-0">
                             <div class="card">
                                 <div class="seo-fact sbg3">
-                                    <a href="{{ route('admin.barrist-orders.index') }}">
+                                    <a href="{{ route('admin.barrist-orders.index',$table_id) }}">
                                         <div class="p-4 d-flex justify-content-between align-items-center">
                                             <div class="seofct-icon">
                                                 <img src="{{ asset('img/undraw_beer-006.svg') }}" width="200">
@@ -62,7 +62,7 @@
                         <div class="col-md-6 mb-3 mb-lg-0">
                             <div class="card">
                                 <div class="seo-fact sbg3">
-                                    <a href="{{ route('admin.bartender-orders.index') }}">
+                                    <a href="{{ route('admin.bartender-orders.index',$table_id) }}">
                                         <div class="p-4 d-flex justify-content-between align-items-center">
                                             <div class="seofct-icon">
                                                 <img src="{{ asset('img/undraw_beer-006.svg') }}" width="200">
@@ -96,7 +96,7 @@
                         <div class="col-md-6 mb-3 mb-lg-0">
                             <div class="card">
                                 <div class="seo-fact sbg6">
-                                    <a href="{{ route('admin.order_kitchens.index') }}">
+                                    <a href="{{ route('admin.order_kitchens.index',$table_id) }}">
                                         <div class="p-4 d-flex justify-content-between align-items-center">
                                             <div class="seofct-icon">
                                                 <img src="{{ asset('img/undraw_eating_together-004.svg') }}" width="200">
