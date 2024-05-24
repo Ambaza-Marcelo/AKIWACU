@@ -126,7 +126,7 @@
                             </tr> 
                             @endforeach
                         </table> 
-                        <button onclick="this.style.visibility='hidden';" ondblclick="this.style.visibility='hidden';" type="submit" class="btn btn-primary mt-4 pr-4 pl-4">VALIDER AVEC CREDIT(N'OUBLIE PAS NOM DU CLIENT)</button>
+                        <button  type="submit" onclick="this.style.visibility='hidden';" ondblclick="this.style.visibility='hidden';" class="btn btn-primary mt-4 pr-4 pl-4">VALIDER AVEC CREDIT(N'OUBLIE PAS NOM DU CLIENT)</button>
                     </form>
                 </div>
             </div>
