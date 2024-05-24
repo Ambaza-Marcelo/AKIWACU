@@ -16,6 +16,7 @@ use App\Models\BarristOrderDetail;
 use App\Models\BarristItem;
 use App\Models\Ingredient;
 use App\Models\IngredientDetail;
+use App\Models\Table;
 use Carbon\Carbon;
 use Validator;
 use PDF;
@@ -35,14 +36,17 @@ class BarristOrderController extends Controller
         });
     }
 
-    public function index()
+    public function index($table_id)
     {
         if (is_null($this->user) || !$this->user->can('drink_order_client.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view any order !');
         }
 
-        $orders = BarristOrder::take(200)->orderBy('id','desc')->get();
-        return view('backend.pages.order_barrist.index', compact('orders'));
+        $orders = BarristOrder::take(20)->orderBy('id','desc')->get();
+        $table = Table::where('id',$table_id)->first();
+
+        $in_pending = count(BarristOrderDetail::where('table_id',$table_id)->where('status','!=',3)->where('status','!=',2)->where('status','!=',-1)->get());
+        return view('backend.pages.order_barrist.index', compact('orders','table_id','table','in_pending'));
     }
 
     /**
