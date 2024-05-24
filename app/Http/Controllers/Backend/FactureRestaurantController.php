@@ -211,7 +211,7 @@ class FactureRestaurantController extends Controller
         $setting = DB::table('settings')->orderBy('created_at','desc')->first();
 
         $food_items =  FoodItem::orderBy('name','asc')->get();
-        $orders =  OrderKitchenDetail::where('table_id',$table_id)->orderBy('id','asc')->get();
+        $orders =  OrderKitchenDetail::where('table_id',$table_id)->where('status',1)->orderBy('id','asc')->get();
         $clients =  Client::orderBy('customer_name','asc')->get();
         $data =  OrderKitchen::where('table_id',$table_id)->first();
 

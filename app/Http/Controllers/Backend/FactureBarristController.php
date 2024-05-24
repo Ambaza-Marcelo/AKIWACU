@@ -81,7 +81,7 @@ class FactureBarristController extends Controller
 
         $barrist_items =  BarristItem::orderBy('name','asc')->get();
         $clients =  Client::orderBy('customer_name','asc')->get();
-        $orders =  BarristOrderDetail::where('table_id',$table_id)->orderBy('id','asc')->get();
+        $orders =  BarristOrderDetail::where('table_id',$table_id)->where('status',1)->orderBy('id','asc')->get();
 
         $data =  BarristOrder::where('table_id',$table_id)->first();
         return view('backend.pages.invoice_barrist.create',compact('barrist_items','data','setting','orders','table_id','clients'));

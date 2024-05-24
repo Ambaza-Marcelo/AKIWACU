@@ -81,7 +81,7 @@ class FactureBartenderController extends Controller
 
         $bartender_items =  BartenderItem::orderBy('name','asc')->get();
         $clients =  Client::orderBy('customer_name','asc')->get();
-        $orders =  BartenderOrderDetail::where('table_id',$table_id)->orderBy('id','asc')->get();
+        $orders =  BartenderOrderDetail::where('table_id',$table_id)->where('status',1)->orderBy('id','asc')->get();
 
         $data =  BartenderOrder::where('table_id',$table_id)->first();
 
