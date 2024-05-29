@@ -50,7 +50,7 @@
                         <a href="{{ route('admin.hr-journal-paies.show',[$code,$company->id]) }}">
                             <div class="p-4 d-flex justify-content-between align-items-center">
                                 <div class="seofct-icon">
-                                    <img src="{{ asset('img/undraw_town_re_2ng5.svg') }}" width="65">
+                                    <img src="{{ asset('img/eden_logo.png')}}" width="170" height="80">
 
                                     {{ $company->name }}</div>
                                 <h2>

@@ -15,7 +15,7 @@
         <div>
             <div>
                <div>
-                   <img src="img/logo_musumba.jpg" width="700" height="85">
+                   <img src="img/eden_logo.png" width="170" height="80">
                 </div>
                 <div>
                     <div style="float: left;">

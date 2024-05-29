@@ -17,7 +17,7 @@
         <div>
             <div>
                 <div>
-                   <img src="img/logo_musumba.jpg" width="700" height="85">
+                   <img src="img/eden_logo.png" width="170" height="80">
                 </div>
                 <div>
                     <div style="float: right; border-top-right-radius: 10px solid black;border-top-left-radius: 10px solid black;border-bottom-right-radius: 10px solid black;border-bottom-left-radius: 10px solid black; background-color: rgb(150,150,150);width: 242px;padding: 10px;">
@@ -268,7 +268,7 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>NTAKIRUTIMANA VICTOR.............................</td>
+                                    <td>IRAKOZE EVARISTE.............................</td>
                                     <td>@if($data->employe_id){{ $data->employe->firstname }} {{ $data->employe->lastname }}......................... @endif</td>
                                 </tr>
                             </tbody>
