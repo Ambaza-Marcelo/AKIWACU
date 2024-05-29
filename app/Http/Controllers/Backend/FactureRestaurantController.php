@@ -422,7 +422,7 @@ class FactureRestaurantController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any invoice !');
         }
 
-        $factures = FactureDetail::orderBy('id','desc')->take(2000)->get();
+        $factures = FactureDetail::orderBy('id','desc')->take(5000)->get();
         $clients = Client::orderBy('customer_name')->get();
         return view('backend.pages.invoice.report',compact('factures','clients'));
     }

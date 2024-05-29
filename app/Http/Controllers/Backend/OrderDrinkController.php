@@ -46,6 +46,8 @@ class OrderDrinkController extends Controller
         $orders = OrderDrink::where('table_id',$table_id)->take(20)->orderBy('id','desc')->get();
         $table = Table::where('id',$table_id)->first();
 
+        $table_id = $table->id;
+
         $in_pending = count(OrderDrinkDetail::where('table_id',$table_id)->where('status','!=',3)->where('status','!=',2)->where('status','!=',-1)->where('status','!=',0)->get());
         
         return view('backend.pages.order_drink.index', compact('orders','table_id','table','in_pending'));
@@ -65,6 +67,7 @@ class OrderDrinkController extends Controller
         $articles  = Drink::where('selling_price','>',0)->orderBy('name','asc')->get();
         $employes  = Employe::orderBy('name','asc')->get();
         $table = Table::where('id',$table_id)->first();
+        $table_id = $table->id;
         return view('backend.pages.order_drink.create', compact('articles','employes','table_id','table'));
     }
 

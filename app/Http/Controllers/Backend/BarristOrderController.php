@@ -42,8 +42,10 @@ class BarristOrderController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any order !');
         }
 
-        $orders = BarristOrder::take(20)->orderBy('id','desc')->get();
+        $orders = BarristOrder::where('table_id',$table_id)->take(20)->orderBy('id','desc')->get();
         $table = Table::where('id',$table_id)->first();
+
+        $table_id = $table->id;
 
         $in_pending = count(BarristOrderDetail::where('table_id',$table_id)->where('status','!=',3)->where('status','!=',2)->where('status','!=',-1)->where('status','!=',0)->get());
         return view('backend.pages.order_barrist.index', compact('orders','table_id','table','in_pending'));
@@ -64,6 +66,7 @@ class BarristOrderController extends Controller
         $employes  = Employe::orderBy('name','asc')->get();
         $ingredients  = Ingredient::orderBy('name','asc')->get();
         $table = Table::where('id',$table_id)->first();
+        $table_id = $table->id;
         return view('backend.pages.order_barrist.create', compact('articles','employes','ingredients','table_id','table'));
     }
 

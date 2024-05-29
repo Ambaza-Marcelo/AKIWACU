@@ -40,8 +40,10 @@ class BartenderOrderController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any order !');
         }
 
-        $orders = BartenderOrder::take(20)->orderBy('id','desc')->get();
+        $orders = BartenderOrder::where('table_id',$table_id)->take(20)->orderBy('id','desc')->get();
         $table = Table::where('id',$table_id)->first();
+
+        $table_id = $table->id;
 
         $in_pending = count(BartenderOrderDetail::where('table_id',$table_id)->where('status','!=',3)->where('status','!=',2)->where('status','!=',-1)->where('status','!=',0)->get());
         return view('backend.pages.order_bartender.index', compact('orders','table_id','table','in_pending'));
@@ -61,6 +63,7 @@ class BartenderOrderController extends Controller
         $articles  = BartenderItem::orderBy('name','asc')->get();
         $employes  = Employe::orderBy('name','asc')->get();
         $table = Table::where('id',$table_id)->first();
+        $table_id = $table->id;
         return view('backend.pages.order_bartender.create', compact('articles','employes','table_id','table'));
     }
 

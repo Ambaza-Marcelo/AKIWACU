@@ -33,7 +33,7 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
   <div class="row">
     <div class="col-md-2" id="side-navbar">
     </div>
-
+    @if (Auth::guard('admin')->user()->can('drink_purchase.view') || Auth::guard('admin')->user()->can('food_purchase.view') || Auth::guard('admin')->user()->can('material_purchase.view'))
     <div class="col-lg-12"> 
         <div class="row">
             <div class="col-md-10 offset-md-1">
@@ -46,7 +46,9 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
         </div>
     <br><br>
     </div>
-    </div>
+    @endif
+    </div>  
+                @if (Auth::guard('admin')->user()->can('food_order_client.create') || Auth::guard('admin')->user()->can('drink_order_client.create') || Auth::guard('admin')->user()->can('table.view'))        
                     <div class="row">
                         @foreach($tables as $table)
                         <div class="col-md-6 mb-3 mb-lg-0">
@@ -122,7 +124,8 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
                             </div><br>
                         </div>
                     </div>
-    @if (Auth::guard('admin')->user()->can('drink_purchase.view') || Auth::guard('admin')->user()->can('food_purchase.view') || Auth::guard('admin')->user()->can('material_purchase.view'))
+                @endif
+    @if (Auth::guard('admin')->user()->can('drink_purchase.view') || Auth::guard('admin')->user()->can('food_purchase.view') || Auth::guard('admin')->user()->can('material_purchase.view') || Auth::guard('admin')->user()->can('drink_requisition.view'))
         <div class="row">
             <div class="col-md-6">
                 <div class="card">
@@ -240,71 +243,58 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
 @if (Auth::guard('admin')->user()->can('dashboard.view'))
 <script type="text/javascript">
     var year = <?php echo $year; ?>;
-    var drink_extra_big_store = <?php echo $drink_extra_big_store; ?>;
-    var drink_big_store = <?php echo $drink_big_store; ?>;
-    var drink_small_store = <?php echo $drink_small_store; ?>;
-    var food_extra_big_store = <?php echo $food_extra_big_store; ?>;
-    var food_big_store = <?php echo $food_big_store; ?>;
-    var food_small_store = <?php echo ($food_small_store); ?>;
-    var material_extra_big_store = <?php echo $material_extra_big_store; ?>;
-    var material_big_store = <?php echo $material_big_store; ?>;
-    var material_small_store = <?php echo $material_small_store; ?>;
-    var barrist_store = <?php echo $barrist_store; ?>;
+    var beverage = <?php echo $beverage; ?>;
+    var food = <?php echo $food; ?>;
+    var barrist = <?php echo $barrist; ?>;
+    var bartender = <?php echo $bartender; ?>;
+    var salle = <?php echo ($salle); ?>;
+    var swiming_pool = <?php echo $swiming_pool; ?>;
+    var kidness_space = <?php echo $kidness_space; ?>;
+    var service = <?php echo $service; ?>;
 
     var barChartData = {
         labels: year,
         datasets: [
         {
-            label: 'GRAND STOCK(BOISSONS)',
-            backgroundColor: "red",
-            data: 0
-        },
-        {
-            label: 'STOCK INTERMEDIAIRE(BOISSONS)',
+            label: 'BOISSONS',
             backgroundColor: "#077D92",
-            data: drink_big_store
+            data: beverage
         },
         {
-            label: 'PETIT STOCK(BOISSONS)',
+            label: 'NOURRITURES',
             backgroundColor: "pink",
-            data: drink_small_store
+            data: food
         },
         {
-            label: 'GRAND STOCK(NOURRITURES)',
-            backgroundColor: "red",
-            data: food_extra_big_store
+            label: 'BARRISTA',
+            backgroundColor: "navy",
+            data: barrist
         },
         {
-            label: 'STOCK INTERMEDIAIRE(NOURRITURES)',
-            backgroundColor: "#077D92",
-            data: 0
+            label: 'BARTENDER',
+            backgroundColor: "lime",
+            data: bartender
         },
         {
-            label: 'PETIT STOCK(NOURRITURES',
-            backgroundColor: "pink",
-            data: 0
+            label: 'SALLES DE CONFERENCES',
+            backgroundColor: "maroon",
+            data: salle
         },
         {
-            label: 'GRAND STOCK(MATERIELS)',
-            backgroundColor: "red",
-            data: 0
+            label: 'PISCINE',
+            backgroundColor: "silver",
+            data: swiming_pool
         },
         {
-            label: 'STOCK INTERMEDIAIRE(MATERIELS)',
-            backgroundColor: "#077D92",
-            data: material_big_store
+            label: 'JEUX ENFANT',
+            backgroundColor: "olive",
+            data: kidness_space
         },
         {
-            label: 'PETIT STOCK(MATERIELS)',
-            backgroundColor: "pink",
-            data: material_small_store
-        },
-        /*
-        {
-            label: 'Barrist Store',
+            label: 'SERVICES',
             backgroundColor: "yellow",
-            data: barrist_store
-        }*/
+            data: service
+        }
 
         ]
     };
@@ -318,14 +308,14 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
                 elements: {
                     rectangle: {
                         borderWidth: 2,
-                        borderColor: '#c1c1c1',
+                        borderColor: '#077D92',
                         borderSkipped: 'bottom'
                     }
                 },
                 responsive: true,
                 title: {
                     display: true,  
-                    text: 'STATISTIQUE DES STOCKS'
+                    text: 'STATISTIQUE DES VENTES PAR AN'
                 }
             }
         });

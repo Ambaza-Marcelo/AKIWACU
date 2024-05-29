@@ -43,8 +43,10 @@ class OrderKitchenController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any order !');
         }
 
-        $orders = OrderKitchen::take(20)->orderBy('id','desc')->get();
+        $orders = OrderKitchen::where('table_id',$table_id)->take(20)->orderBy('id','desc')->get();
         $table = Table::where('id',$table_id)->first();
+
+        $table_id = $table->id;
 
         $in_pending = count(OrderKitchenDetail::where('table_id',$table_id)->where('status','!=',3)->where('status','!=',2)->where('status','!=',-1)->where('status','!=',0)->get());
         return view('backend.pages.order_kitchen.index', compact('orders','table_id','table','in_pending'));
@@ -66,6 +68,7 @@ class OrderKitchenController extends Controller
         $employes  = Employe::orderBy('name','asc')->get();
         $accompagnements  = Accompagnement::orderBy('name','asc')->get();
         $table = Table::where('id',$table_id)->first();
+        $table_id = $table->id;
         return view('backend.pages.order_kitchen.create', compact('articles','employes','accompagnements','table_id','table'));
     }
 

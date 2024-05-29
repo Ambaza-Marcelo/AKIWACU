@@ -10,17 +10,8 @@ use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
 use App\Events\RealTimeMessage;
-use App\Models\DrinkBigStoreDetail;
-use App\Models\DrinkSmallStoreDetail;
-use App\Models\FoodBigStoreDetail;
-use App\Models\FoodSmallStoreDetail;
-use App\Models\MaterialBigStoreDetail;
-use App\Models\MaterialSmallStoreDetail;
-use App\Models\BarristProductionStore;
-use App\Models\DrinkExtraBigStoreDetail;
-use App\Models\FoodExtraBigStoreDetail;
-use App\Models\MaterialExtraBigStoreDetail;
 use App\Models\Facture;
+use App\Models\FactureDetail;
 use App\Models\Table;
 
 class DashboardController extends Controller
@@ -46,64 +37,52 @@ class DashboardController extends Controller
         //$month = ['01','02','03','04','05','06','07','08','09','10','11','12'];
         $year = ['2023','2024','2025','2026','2027','2028','2029','2030'];
         
-        $drink_extra_big_store = [];
+        $food = [];
         foreach ($year as $key => $value) {
-            $drink_extra_big_store[] = DrinkExtraBigStoreDetail::where(\DB::raw("DATE_FORMAT(created_at, '%Y')"),$value)->sum('total_cump_value');
+            $food[] = FactureDetail::where(\DB::raw("DATE_FORMAT(invoice_date, '%Y')"),$value)->where('etat','!=','0')->where('etat','!=','-1')->where('food_item_id','!=','')->sum('item_total_amount');
         }
 
-        $drink_big_store = [];
+        $beverage = [];
         foreach ($year as $key => $value) {
-            $drink_big_store[] = DrinkBigStoreDetail::where(\DB::raw("DATE_FORMAT(created_at, '%Y')"),$value)->sum('total_cump_value');
+            $beverage[] = FactureDetail::where(\DB::raw("DATE_FORMAT(invoice_date, '%Y')"),$value)->where('etat','!=','0')->where('etat','!=','-1')->where('drink_id','!=','')->sum('item_total_amount');
         }
 
-        $drink_small_store = [];
+        $barrist = [];
         foreach ($year as $key => $value) {
-            $drink_small_store[] = DrinkSmallStoreDetail::where(\DB::raw("DATE_FORMAT(created_at, '%Y')"),$value)->sum('total_cump_value');
+            $barrist[] = FactureDetail::where(\DB::raw("DATE_FORMAT(invoice_date, '%Y')"),$value)->where('etat','!=','0')->where('etat','!=','-1')->where('barrist_item_id','!=','')->sum('item_total_amount');
         }
 
-        $food_extra_big_store = [];
+        $bartender = [];
         foreach ($year as $key => $value) {
-            $food_extra_big_store[] = FoodExtraBigStoreDetail::where(\DB::raw("DATE_FORMAT(created_at, '%Y')"),$value)->sum('total_cump_value');
+            $bartender[] = FactureDetail::where(\DB::raw("DATE_FORMAT(invoice_date, '%Y')"),$value)->where('etat','!=','0')->where('etat','!=','-1')->where('bartender_item_id','!=','')->sum('item_total_amount');
         }
 
-        $food_big_store = [];
+        $salle = [];
         foreach ($year as $key => $value) {
-            $food_big_store[] = FoodBigStoreDetail::where(\DB::raw("DATE_FORMAT(created_at, '%Y')"),$value)->sum('total_cump_value');
+            $salle[] = FactureDetail::where(\DB::raw("DATE_FORMAT(invoice_date, '%Y')"),$value)->where('etat','!=','0')->where('etat','!=','-1')->where('salle_id','!=','')->sum('item_total_amount');
         }
 
-        $food_small_store = [];
+        $kidness_space = [];
         foreach ($year as $key => $value) {
-            $food_small_store[] = FoodSmallStoreDetail::where(\DB::raw("DATE_FORMAT(created_at, '%Y')"),$value)->sum('total_cump_value');
+            $kidness_space[] = FactureDetail::where(\DB::raw("DATE_FORMAT(invoice_date, '%Y')"),$value)->where('etat','!=','0')->where('etat','!=','-1')->where('kidness_space_id','!=','')->sum('item_total_amount');
         }
 
-        $material_extra_big_store = [];
+        $swiming_pool = [];
         foreach ($year as $key => $value) {
-            $material_extra_big_store[] = MaterialExtraBigStoreDetail::where(\DB::raw("DATE_FORMAT(created_at, '%Y')"),$value)->sum('total_cump_value');
+            $swiming_pool[] = FactureDetail::where(\DB::raw("DATE_FORMAT(invoice_date, '%Y')"),$value)->where('etat','!=','0')->where('etat','!=','-1')->where('swiming_pool_id','!=','')->sum('item_total_amount');
         }
 
-        $material_big_store = [];
+        $service = [];
         foreach ($year as $key => $value) {
-            $material_big_store[] = MaterialBigStoreDetail::where(\DB::raw("DATE_FORMAT(created_at, '%Y')"),$value)->sum('total_cump_value');
+            $service[] = FactureDetail::where(\DB::raw("DATE_FORMAT(invoice_date, '%Y')"),$value)->where('etat','!=','0')->where('etat','!=','-1')->where('service_id','!=','')->sum('item_total_amount');
         }
-
-        $material_small_store = [];
-        foreach ($year as $key => $value) {
-            $material_small_store[] = MaterialSmallStoreDetail::where(\DB::raw("DATE_FORMAT(created_at, '%Y')"),$value)->sum('total_cump_value');
-        }
-
-        $barrist_store = [];
-        foreach ($year as $key => $value) {
-            $barrist_store[] = BarristProductionStore::where(\DB::raw("DATE_FORMAT(created_at, '%Y')"),$value)->sum('total_cump_value');
-        }
-
-
 
         $total_roles = count(Role::select('id')->get());
         $total_admins = count(Admin::select('id')->get());
         $total_permissions = count(Permission::select('id')->get());
         $tables = Table::all();
-       $employes = Facture::select(
-                        DB::raw('employe_id,count(invoice_number) as invoice_number'))->where('etat','-1')->groupBy('employe_id')->take(5)->get();
+        $employes = Facture::select(
+                        DB::raw('employe_id,count(invoice_number) as invoice_number'))->where('etat','-1')->groupBy('employe_id')->orderBy('invoice_number','desc')->take(5)->get();
 
         return view('backend.pages.dashboard.index', 
             compact(
@@ -113,7 +92,7 @@ class DashboardController extends Controller
             'employes',
             'tables'
 
-            ))->with('year',json_encode($year,JSON_NUMERIC_CHECK))->with('drink_extra_big_store',json_encode($drink_extra_big_store,JSON_NUMERIC_CHECK))->with('year',json_encode($year,JSON_NUMERIC_CHECK))->with('drink_big_store',json_encode($drink_big_store,JSON_NUMERIC_CHECK))->with('drink_small_store',json_encode($drink_small_store,JSON_NUMERIC_CHECK))->with('year',json_encode($year,JSON_NUMERIC_CHECK))->with('food_extra_big_store',json_encode($food_extra_big_store,JSON_NUMERIC_CHECK))->with('food_big_store',json_encode($food_big_store,JSON_NUMERIC_CHECK))->with('food_small_store',json_encode($food_small_store,JSON_NUMERIC_CHECK))->with('year',json_encode($year,JSON_NUMERIC_CHECK))->with('material_extra_big_store',json_encode($material_extra_big_store,JSON_NUMERIC_CHECK))->with('material_big_store',json_encode($material_big_store,JSON_NUMERIC_CHECK))->with('material_small_store',json_encode($material_small_store,JSON_NUMERIC_CHECK))->with('barrist_store',json_encode($barrist_store,JSON_NUMERIC_CHECK));
+            ))->with('year',json_encode($year,JSON_NUMERIC_CHECK))->with('food',json_encode($food,JSON_NUMERIC_CHECK))->with('year',json_encode($year,JSON_NUMERIC_CHECK))->with('beverage',json_encode($beverage,JSON_NUMERIC_CHECK))->with('barrist',json_encode($barrist,JSON_NUMERIC_CHECK))->with('year',json_encode($year,JSON_NUMERIC_CHECK))->with('bartender',json_encode($bartender,JSON_NUMERIC_CHECK))->with('salle',json_encode($salle,JSON_NUMERIC_CHECK))->with('swiming_pool',json_encode($swiming_pool,JSON_NUMERIC_CHECK))->with('year',json_encode($year,JSON_NUMERIC_CHECK))->with('service',json_encode($service,JSON_NUMERIC_CHECK))->with('kidness_space',json_encode($kidness_space,JSON_NUMERIC_CHECK));
     }
 
     public function changeLang(Request $request){

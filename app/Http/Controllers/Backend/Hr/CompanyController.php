@@ -78,13 +78,13 @@ class CompanyController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Company  $company
+     * @param  \App\HrCompany  $company
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
         //
-        $company = Company::findOrFail($id);
+        $company = HrCompany::findOrFail($id);
         return view('backend.pages.hr.company.edit', compact('company'));
     }
 
@@ -92,7 +92,7 @@ class CompanyController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Company  $company
+     * @param  \App\HrCompany  $company
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)

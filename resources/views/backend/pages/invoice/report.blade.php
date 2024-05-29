@@ -129,7 +129,11 @@
                                     <td>{{ $facture->item_quantity }}</td>
                                     <td>{{ $facture->item_total_amount }}</td>
                                     <td>
-                                        
+                                        @if (Auth::guard('admin')->user()->can('invoice_drink.reset'))
+                                        @if($facture->etat == 0)
+                                         <a href="{{ route('admin.voir-facture.reset', $facture->invoice_number) }}" class="btn btn-success">Annuler</a>
+                                        @endif
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
