@@ -87,7 +87,7 @@ class DrinkSupplierOrderController extends Controller
                 'quantity.*'  => 'required',
                 'purchase_price.*'  => 'required',
                 'purchase_no'  => 'required',
-                'description'  => 'required'
+                'description'  => 'required|max:490'
             );
 
             $error = Validator::make($request->all(),$rules);

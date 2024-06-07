@@ -217,7 +217,7 @@ class FactureRestaurantController extends Controller
         $food_items =  FoodItem::orderBy('name','asc')->get();
         $orders =  OrderKitchenDetail::where('table_id',$table_id)->where('status',1)->orderBy('id','asc')->get();
         $clients =  Client::orderBy('customer_name','asc')->get();
-        $data =  OrderKitchen::where('table_id',$table_id)->first();
+        $data =  OrderKitchen::where('table_id',$table_id)->where('status',1)->first();
 
         $total_amount = DB::table('order_kitchen_details')
             ->where('table_id',$table_id)->where('status',1)
@@ -262,6 +262,7 @@ class FactureRestaurantController extends Controller
         $datas =  OrderKitchenDetail::where('order_no',$food_order_no)->orderBy('order_no','asc')->get();
         $clients =  Client::orderBy('customer_name','asc')->get();
         $data =  Facture::where('invoice_number',$invoice_number)->first();
+        $table_id = OrderKitchen::where('order_no',$order_no)->value('table_id');
         return view('backend.pages.invoice_kitchen.edit',compact('food_items','data','setting','datas','food_order_no','clients','invoice_number'));
     }
 
@@ -422,7 +423,7 @@ class FactureRestaurantController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any invoice !');
         }
 
-        $factures = FactureDetail::orderBy('id','desc')->take(5000)->get();
+        $factures = FactureDetail::orderBy('id','desc')->take(10000)->get();
         $clients = Client::orderBy('customer_name')->get();
         return view('backend.pages.invoice.report',compact('factures','clients'));
     }

@@ -115,7 +115,7 @@ class DrinkTransferController extends Controller
                 //'origin_store_id'  => 'required',
                 'requisition_no'  => 'required',
                 //'destination_store_id'  => 'required',
-                'description'  => 'required'
+                'description'  => 'required|max:490'
             );
 
             $error = Validator::make($request->all(),$rules);

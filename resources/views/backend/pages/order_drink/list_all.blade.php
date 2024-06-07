@@ -2,7 +2,7 @@
 @extends('backend.layouts.master')
 
 @section('title')
-@lang('Commande Cuisine') - @lang('messages.admin_panel')
+@lang('Commande des Boissons') - @lang('messages.admin_panel')
 @endsection
 
 @section('styles')
@@ -21,7 +21,7 @@
     <div class="row align-items-center">
         <div class="col-sm-6">
             <div class="breadcrumbs-area clearfix">
-                <h4 class="page-title pull-left">@lang('Commande Cuisine')</h4>
+                <h4 class="page-title pull-left">@lang('Commande des Boissons')</h4>
                 <ul class="breadcrumbs pull-left">
                     <li><a href="{{ route('admin.dashboard') }}">@lang('messages.dashboard')</a></li>
                     <li><span>@lang('messages.list')</span></li>
@@ -41,29 +41,7 @@
         <div class="col-12 mt-5">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="header-title float-left">Commande Cuisine</h4>
-                    @if (Auth::guard('admin')->user()->can('invoice_kitchen.create'))
-                    @if ($in_pending > 0)
-                        <p class="float-right mb-2">
-                            <a href="{{ route('admin.invoice-kitchens.create-by-table',$table_id) }}" class="btn btn-success">Cloturer toute la table</a>
-                        </p>
-                        <p class="float-right mb-2">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <select class="form-control" name="table_id" id="table_id">
-                                            <option value="{{ $table->id }}">@if($table->id){{$table->name}}({{$table->waiter_name}}) @endif</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </p>
-                        <br>
-                    @endif
-                    @endif
-                    <p class="float-right mb-2">
-                        @if (Auth::guard('admin')->user()->can('food_order_client.create'))
-                            <a class="btn btn-primary text-white" href="{{ route('admin.order_kitchens.create',$table_id) }}">@lang('messages.new')</a>
-                        @endif
-                    </p>
+                    <h4 class="header-title float-left">Commande des Boissons</h4>
                     <div class="clearfix"></div>
                     <div class="data-tables">
                         @include('backend.layouts.partials.messages')
@@ -71,7 +49,7 @@
                             <thead class="bg-light text-capitalize">
                                 <tr>
                                     <th width="5%">#</th>
-                                    <th width="10%">Commande No</th>
+                                    <th width="10%">Order No</th>
                                     <th width="10%">@lang('messages.date')</th>
                                     <th width="30%">@lang('Table No')</th>
                                     <th width="30%">@lang('Serveur')</th>
@@ -85,7 +63,7 @@
                                @foreach ($orders as $order)
                                <tr>
                                     <td>{{ $loop->index+1 }}</td>
-                                    <td><a href="{{ route('admin.order_kitchens.show',$order->order_no) }}">{{ $order->order_no }}</a></td>
+                                    <td><a href="{{ route('admin.order_drinks.show',$order->order_no) }}">{{ $order->order_no }}</a></td>
                                     <td>{{ Carbon\Carbon::parse($order->date)->format('d/m/Y') }}</td>
                                     <td>@if($order->table_id){{ $order->table->name }} @endif</td>
                                     <td>{{ $order->employe->name }}</td>
@@ -93,75 +71,75 @@
                                     <td><span  class="badge badge-success">Validée</span></td>
                                     @elseif($order->status == -1)
                                     <td><span class="badge badge-danger">Rejetée</span></td>
-                                    @elseif($order->status == 2)
-                                    <td><span class="badge badge-warning">Facturée(Encours)</span></td>
+                                   @elseif($order->status == 2)
+                                    <td><span class="badge badge-warning">Facturé(Encours)</span></td>
                                     @elseif($order->status == 3)
-                                    <td><span class="badge badge-success">Facturée</span></td>
+                                    <td><span class="badge badge-success">Facturé</span></td>
                                     @elseif($order->status == -3)
                                     <td><span class="badge badge-warning">Modifié</span></td>
                                     @else
-                                    <td><span class="alert alert-primary">Encours...</span></td>
+                                    <td><span class="badge badge-primary">Encours...</span></td>
                                     @endif
                                     <td>{{ $order->description }}</td>
                                     <td>{{ $order->created_by }}</td>
                                     <td>
-                                        @if (Auth::guard('admin')->user()->can('food_order_client.create'))
+                                        @if (Auth::guard('admin')->user()->can('drink_order_client.create'))
                                         @if($order->status == -3 || $order->status == 1)
-                                        <a href="{{ route('admin.order_kitchens.generatepdf',$order->order_no) }}"><img src="{{ asset('img/ISSh.gif') }}" width="60" title="Télécharger d'abord le document et puis imprimer"></a>
+                                        <a href="{{ route('admin.order_drinks.generatepdf',$order->order_no) }}"><img src="{{ asset('img/ISSh.gif') }}" width="60" title="Télécharger d'abord le document et puis imprimer"></a>
                                         @endif
                                         @endif
-                                        @if (Auth::guard('admin')->user()->can('food_order_client.validate'))
+                                        @if (Auth::guard('admin')->user()->can('drink_order_client.validate'))
                                         @if($order->status == 0)
-                                            <a class="btn btn-primary text-white" href="{{ route('admin.order_kitchens.validate', $order->order_no) }}"
+                                            <a class="btn btn-primary text-white" href="{{ route('admin.order_drinks.validate', $order->order_no) }}"
                                             onclick="event.preventDefault(); document.getElementById('validate-form-{{ $order->order_no }}').submit();">
                                                 Valider
                                             </a>
 
-                                            <form id="validate-form-{{ $order->order_no }}" action="{{ route('admin.order_kitchens.validate', $order->order_no) }}" method="POST" style="display: none;">
+                                            <form id="validate-form-{{ $order->order_no }}" action="{{ route('admin.order_drinks.validate', $order->order_no) }}" method="POST" style="display: none;">
                                                 @method('PUT')
                                                 @csrf
                                             </form>
                                         @endif
                                         @endif
-                                        @if (Auth::guard('admin')->user()->can('food_order_client.reject'))
-                                            <a class="btn btn-primary text-white" href="{{ route('admin.order_kitchens.voir-commande-a-rejeter', $order->order_no) }}">
+                                        @if (Auth::guard('admin')->user()->can('drink_order_client.reject'))
+                                            <a class="btn btn-primary text-white" href="{{ route('admin.order_drinks.voir-commande-a-rejeter', $order->order_no) }}">
                                                 Rejeter
                                             </a>
                                         @endif
-                                        @if (Auth::guard('admin')->user()->can('food_order_client.reset'))
+                                        @if (Auth::guard('admin')->user()->can('drink_order_client.reset'))
                                             @if($order->status == -1 || $order->status == 1)
-                                            <a class="btn btn-primary text-white" href="{{ route('admin.order_kitchens.reset', $order->order_no) }}"
+                                            <a class="btn btn-primary text-white" href="{{ route('admin.order_drinks.reset', $order->order_no) }}"
                                             onclick="event.preventDefault(); document.getElementById('reset-form-{{ $order->order_no }}').submit();">
                                                 Annuler
                                             </a>
                                             @endif
-                                            <form id="reset-form-{{ $order->order_no }}" action="{{ route('admin.order_kitchens.reset', $order->order_no) }}" method="POST" style="display: none;">
+                                            <form id="reset-form-{{ $order->order_no }}" action="{{ route('admin.order_drinks.reset', $order->order_no) }}" method="POST" style="display: none;">
                                                 @method('PUT')
                                                 @csrf
                                             </form>
                                         @endif
                                         @if($order->status != 3 && $order->status != -1)
-                                        @if (Auth::guard('admin')->user()->can('food_order_client.edit'))
-                                            <a class="btn btn-success text-white" href="{{ route('admin.order_kitchens.edit', $order->order_no) }}">@lang('messages.edit')</a>
+                                        @if (Auth::guard('admin')->user()->can('drink_order_client.edit'))
+                                            <a class="btn btn-success text-white" href="{{ route('admin.order_drinks.edit', $order->order_no) }}">@lang('messages.edit')</a>
                                         @endif
                                         @endif
-                                        @if($order->status == 1 || $order->status == -3 && $order->flag === 0)
-                                        @if (Auth::guard('admin')->user()->can('invoice_kitchen.create'))
-                                            <a class="btn btn-success text-white" href="{{ route('admin.invoice-kitchens.create', $order->order_no) }}">@lang('Facturation')</a>
+                                        @if($order->status == 1 || $order->status == -3 && $order->flag == 0)
+                                        @if (Auth::guard('admin')->user()->can('invoice_drink.create'))
+                                            <a class="btn btn-success text-white" href="{{ route('ebms_api.invoices.create', $order->order_no) }}">@lang('Facturation')</a>
                                         @endif
                                         @endif
-                                        @if($order->status == -3 && $order->flag === 1)
-                                        @if (Auth::guard('admin')->user()->can('invoice_kitchen.edit'))
-                                            <a class="btn btn-success text-white" href="{{ route('admin.invoice-kitchens.edit', $order->order_no) }}">@lang('Modifier Facture')</a>
+                                        @if($order->status == -3 && $order->flag == 1)
+                                        @if (Auth::guard('admin')->user()->can('invoice_drink.edit'))
+                                            <a class="btn btn-success text-white" href="{{ route('ebms_api.invoices.edit', $order->order_no) }}">@lang('Modifier Facture')</a>
                                         @endif
                                         @endif
-                                        @if (Auth::guard('admin')->user()->can('food_order_client.delete'))
-                                            <a class="btn btn-danger text-white" href="{{ route('admin.order_kitchens.destroy', $order->order_no) }}"
+                                        @if (Auth::guard('admin')->user()->can('drink_order_client.delete'))
+                                            <a class="btn btn-danger text-white" href="{{ route('admin.order_drinks.destroy', $order->order_no) }}"
                                             onclick="event.preventDefault(); document.getElementById('delete-form-{{ $order->order_no }}').submit();">
                                                 @lang('messages.delete')
                                             </a>
 
-                                            <form id="delete-form-{{ $order->order_no }}" action="{{ route('admin.order_kitchens.destroy', $order->order_no) }}" method="POST" style="display: none;">
+                                            <form id="delete-form-{{ $order->order_no }}" action="{{ route('admin.order_drinks.destroy', $order->order_no) }}" method="POST" style="display: none;">
                                                 @method('DELETE')
                                                 @csrf
                                             </form>

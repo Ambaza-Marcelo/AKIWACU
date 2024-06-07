@@ -127,7 +127,7 @@ class MaterialStockinController extends Controller
                 'origin'  => 'required',
                 'receptionist'  => 'required',
                 'destination_bg_store_id'  => 'required',
-                'description'  => 'required'
+                'description'  => 'required|max:490'
             );
 
             $error = Validator::make($request->all(),$rules);

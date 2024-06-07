@@ -68,7 +68,7 @@ class ClientController extends Controller
         // Validation Data
         $request->validate([
             'customer_name' => 'required|max:100',
-            'mail' => 'required|min:10',
+            //'mail' => 'required|min:10',
             'telephone' => 'required',
         ]);
 
@@ -112,8 +112,7 @@ class ClientController extends Controller
         }
 
         $client = Client::find($id);
-        $addresses  = Address::all();
-        return view('backend.pages.client.edit', compact('client', 'addresses'));
+        return view('backend.pages.client.edit', compact('client'));
     }
 
     /**
@@ -133,11 +132,10 @@ class ClientController extends Controller
 
         $request->validate([
             'customer_name' => 'required|max:100',
-            'mail' => 'required|min:10',
+            //'mail' => 'required|min:10',
             'telephone' => 'required',
         ]);
 
-        // update Client
         $client->date = $request->date;
         $client->customer_name = $request->customer_name;
         $client->telephone = $request->telephone;
@@ -146,11 +144,11 @@ class ClientController extends Controller
         $client->customer_address = $request->customer_address;
         $client->vat_customer_payer = $request->vat_customer_payer;
         $client->company = $request->company;
-        $client->auteur = $this->user->name;
+        //$client->auteur = $this->user->name;
         $client->save();
 
         session()->flash('success', 'Client has been updated !!');
-        return back();
+        return redirect()->route('admin.clients.index');
     }
 
     /**

@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use Illuminate\Support\Facades\Storage;
 use App\Models\HrCompany;
 
 class CompanyController extends Controller
@@ -79,13 +78,13 @@ class CompanyController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\HrCompany  $company
+     * @param  \App\Company  $company
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
         //
-        $company = HrCompany::findOrFail($id);
+        $company = Company::findOrFail($id);
         return view('backend.pages.hr.company.edit', compact('company'));
     }
 
@@ -93,7 +92,7 @@ class CompanyController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\HrCompany  $company
+     * @param  \App\Company  $company
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)

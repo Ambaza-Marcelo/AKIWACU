@@ -593,6 +593,9 @@ Route::group(['prefix' => 'admin'], function () {
     Route::delete('EBMS/ingredients/destroy/{id}', 'Backend\IngredientController@destroy')->name('admin.ingredients.destroy');
 
     //order-kitchen routes
+     Route::get('EBMS/order-kitchen/listAll', 'Backend\OrderKitchenController@listAll')->name('admin.order_kitchens.listAll');
+
+
     Route::get('EBMS/order-kitchen/index/{table_id}', 'Backend\OrderKitchenController@index')->name('admin.order_kitchens.index');
     Route::get('EBMS/order-kitchen/create/{table_id}', 'Backend\OrderKitchenController@create')->name('admin.order_kitchens.create');
     Route::post('EBMS/order-kitchen/store', 'Backend\OrderKitchenController@store')->name('admin.order_kitchens.store');
@@ -601,6 +604,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::delete('EBMS/order-kitchen/destroy/{order_no}', 'Backend\OrderKitchenController@destroy')->name('admin.order_kitchens.destroy');
 
     Route::get('EBMS/order-kitchen/show/{order_no}', 'Backend\OrderKitchenController@show')->name('admin.order_kitchens.show');
+    Route::get('EBMS/order-kitchen/voir-commande-a-rejeter/{order_no}', 'Backend\OrderKitchenController@voirCommandeRejeter')->name('admin.order_kitchens.voir-commande-a-rejeter');
 
     Route::get('EBMS/order-kitchen/generatepdf/{order_no}','Backend\OrderKitchenController@htmlPdf')->name('admin.order_kitchens.generatepdf');
     Route::put('EBMS/order-kitchen/validate/{order_no}', 'Backend\OrderKitchenController@validateCommand')->name('admin.order_kitchens.validate');
@@ -610,14 +614,18 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('EBMS/food-orders/export-to-excel', 'Backend\OrderKitchenController@exportToExcel')->name('admin.food-orders.export-to-excel');
 
     //order-drink routes
+    Route::get('EBMS/order-drink/listAll', 'Backend\OrderDrinkController@listAll')->name('admin.order_drinks.listAll');
+
     Route::get('EBMS/order-drink/index/{table_id}', 'Backend\OrderDrinkController@index')->name('admin.order_drinks.index');
     Route::get('EBMS/order-drink/create/{table_id}', 'Backend\OrderDrinkController@create')->name('admin.order_drinks.create');
+    Route::get('EBMS/order-report/choose', 'Backend\OrderDrinkController@choose')->name('admin.order-report.choose');
     Route::post('EBMS/order-drink/store', 'Backend\OrderDrinkController@store')->name('admin.order_drinks.store');
     Route::get('EBMS/order-drink/edit/{order_no}', 'Backend\OrderDrinkController@edit')->name('admin.order_drinks.edit');
     Route::put('EBMS/order-drink/update/{order_no}', 'Backend\OrderDrinkController@update')->name('admin.order_drinks.update');
     Route::delete('EBMS/order-drink/destroy/{order_no}', 'Backend\OrderDrinkController@destroy')->name('admin.order_drinks.destroy');
 
     Route::get('EBMS/order-drink/show/{order_no}', 'Backend\OrderDrinkController@show')->name('admin.order_drinks.show');
+    Route::get('EBMS/order-drink/voir-commande-a-rejeter/{order_no}', 'Backend\OrderDrinkController@voirCommandeRejeter')->name('admin.order_drinks.voir-commande-a-rejeter');
 
     Route::get('EBMS/order-drink/generatepdf/{order_no}','Backend\OrderDrinkController@htmlPdf')->name('admin.order_drinks.generatepdf');
     Route::put('EBMS/order-drink/validate/{order_no}', 'Backend\OrderDrinkController@validateCommand')->name('admin.order_drinks.validate');
@@ -627,6 +635,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('EBMS/drink-orders/export-to-excel', 'Backend\OrderDrinkController@exportToExcel')->name('admin.drink-orders.export-to-excel');
 
     //barrist-orders routes
+    Route::get('EBMS/barrist-orders/listAll', 'Backend\BarristOrderController@listAll')->name('admin.barrist-orders.listAll');
+
     Route::get('EBMS/barrist-orders/index/{table_id}', 'Backend\BarristOrderController@index')->name('admin.barrist-orders.index');
     Route::get('EBMS/barrist-orders/create/{table_id}', 'Backend\BarristOrderController@create')->name('admin.barrist-orders.create');
     Route::post('EBMS/barrist-orders/store', 'Backend\BarristOrderController@store')->name('admin.barrist-orders.store');
@@ -635,6 +645,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::delete('EBMS/barrist-orders/destroy/{order_no}', 'Backend\BarristOrderController@destroy')->name('admin.barrist-orders.destroy');
 
     Route::get('EBMS/barrist-orders/show/{order_no}', 'Backend\BarristOrderController@show')->name('admin.barrist-orders.show');
+    Route::get('EBMS/barrist-orders/voir-commande-a-rejeter/{order_no}', 'Backend\BarristOrderController@voirCommandeRejeter')->name('admin.barrist-orders.voir-commande-a-rejeter');
 
     Route::get('EBMS/barrist-orders/print', 'Backend\BarristOrderController@print')->name('admin.barrist-orders.print');
 
@@ -646,6 +657,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('EBMS/barrist-orders/export-to-excel', 'Backend\BarristOrderController@exportToExcel')->name('admin.barrist-orders.export-to-excel');
 
     //bartender-orders routes
+    Route::get('EBMS/bartender-orders/listAll', 'Backend\BartenderOrderController@listAll')->name('admin.bartender-orders.listAll');
+
     Route::get('EBMS/bartender-orders/index/{table_id}', 'Backend\BartenderOrderController@index')->name('admin.bartender-orders.index');
     Route::get('EBMS/bartender-orders/create/{table_id}', 'Backend\BartenderOrderController@create')->name('admin.bartender-orders.create');
     Route::post('EBMS/bartender-orders/store', 'Backend\BartenderOrderController@store')->name('admin.bartender-orders.store');
@@ -654,6 +667,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::delete('EBMS/bartender-orders/destroy/{order_no}', 'Backend\BartenderOrderController@destroy')->name('admin.bartender-orders.destroy');
 
     Route::get('EBMS/bartender-orders/show/{order_no}', 'Backend\BartenderOrderController@show')->name('admin.bartender-orders.show');
+    Route::get('EBMS/bartender-orders/voir-commande-a-rejeter/{order_no}', 'Backend\BartenderOrderController@voirCommandeRejeter')->name('admin.bartender-orders.voir-commande-a-rejeter');
 
     Route::get('EBMS/bartender-orders/print', 'Backend\BartenderOrderController@print')->name('admin.bartender-orders.print');
 

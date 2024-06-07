@@ -135,7 +135,7 @@ class FactureController extends Controller
         $drink_small_stores = DrinkSmallStore::all();
         $clients =  Client::orderBy('customer_name','asc')->get();
 
-        $data =  OrderDrink::where('table_id',$table_id)->first();
+        $data =  OrderDrink::where('table_id',$table_id)->where('status',1)->first();
         $total_amount = DB::table('order_drink_details')
             ->where('table_id',$table_id)->where('status',1)
             ->sum('total_amount_selling');
@@ -2216,17 +2216,7 @@ class FactureController extends Controller
                     }
         }
 
-        foreach($datas as $data){
-                $orderData = array(
-                    'confirmed_by' => $this->user->name,
-                    'status' => 3,
-                );
-
-                BartenderOrder::where('order_no', '=', $data->bartender_order_no)
-                    ->update($orderData);
-                BartenderOrderDetail::where('order_no', '=', $data->bartender_order_no)
-                    ->update($orderData);
-        }
+        BartenderSmallReport::insert($report);
 
         $item_total_amount = DB::table('facture_details')
             ->where('invoice_number', '=', $invoice_number)
@@ -2244,8 +2234,7 @@ class FactureController extends Controller
             $total_amount_remaining = $total_amount_paying - $item_total_amount;
             Table::where('id',$table_id)->update(['total_amount_paying' => $total_amount_remaining]);
         }
-
-        BartenderSmallReport::insert($report);
+        
         Facture::where('invoice_number', '=', $invoice_number)
             ->update(['etat' => 1,'statut_paied' => '0','validated_by' => $this->user->name]);
         FactureDetail::where('invoice_number', '=', $invoice_number)

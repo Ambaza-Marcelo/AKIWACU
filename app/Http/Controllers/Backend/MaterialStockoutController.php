@@ -125,7 +125,7 @@ class MaterialStockoutController extends Controller
                 'asker'  => 'required',
                 'origin_bg_store_id'  => 'required',
                 'destination'  => 'required',
-                'description'  => 'required'
+                'description'  => 'required|max:490'
             );
 
             $error = Validator::make($request->all(),$rules);

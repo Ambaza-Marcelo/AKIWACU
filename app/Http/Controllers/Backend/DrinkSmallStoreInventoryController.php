@@ -96,7 +96,7 @@ class DrinkSmallStoreInventoryController extends Controller
             'new_purchase_price.*' => 'required',
             'new_selling_price.*' => 'required',
             'new_unit.*' => 'required',
-            'description' => 'required',
+            'description' => 'required|max:490',
             );
 
             $error = Validator::make($request->all(),$rules);

@@ -86,7 +86,7 @@ class FactureBarristController extends Controller
         $clients =  Client::orderBy('customer_name','asc')->get();
         $orders =  BarristOrderDetail::where('table_id',$table_id)->where('status',1)->orderBy('id','asc')->get();
 
-        $data =  BarristOrder::where('table_id',$table_id)->first();
+        $data =  BarristOrder::where('table_id',$table_id)->where('status',1)->first();
         $total_amount = DB::table('barrist_order_details')
             ->where('table_id',$table_id)->where('status',1)
             ->sum('total_amount_selling');

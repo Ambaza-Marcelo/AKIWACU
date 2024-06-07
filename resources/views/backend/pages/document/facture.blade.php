@@ -26,15 +26,15 @@
                         <small>
                            Order Number: {{ $data->drink_order_no }}
                         </small><br>
-                        @elseif($data->food_item_id)
+                        @elseif($data->food_order_no)
                         <small>
                            Order Number: {{ $data->food_order_no }}
                         </small><br>
-                        @elseif($data->bartender_item_id)
+                        @elseif($data->bartender_order_no)
                         <small>
                            Order Number: {{ $data->bartender_order_no }}
                         </small><br>
-                        @elseif($data->salle_id || $data->service_id || $data->table_id)
+                        @elseif($data->booking_no || $data->booking_no)
                         <small>
                            Booking Number: {{ $data->booking_no }}
                         </small><br>
@@ -90,7 +90,7 @@
                                 @foreach($datas as $data)
                                <tr>
                                     <td>{{ $loop->index + 1 }}</td>
-                                    <td>@if($data->drink_id){{ $data->drink->name }} @elseif($data->food_item_id){{ $data->foodItem->name }} @elseif($data->bartender_item_id){{ $data->bartenderItem->name }} @elseif($data->salle_id){{ $data->salle->name }} @elseif($data->service){{ $data->service->name }} @elseif($data->table_id){{ $data->table->name }} @elseif($data->breakfast_id) {{ $data->breakFast->name }} @elseif($data->swiming_pool_id) {{ $data->swimingPool->name }} @elseif($data->kidness_space_id) {{ $data->kidnessSpace->name }} @else {{ $data->barristItem->name }} @endif</td>
+                                    <td>@if($data->drink_id){{ $data->drink->name }} @elseif($data->food_item_id){{ $data->foodItem->name }} @elseif($data->bartender_item_id){{ $data->bartenderItem->name }} @elseif($data->salle_id){{ $data->salle->name }} @elseif($data->service){{ $data->service->name }}  @elseif($data->breakfast_id) {{ $data->breakFast->name }} @elseif($data->swiming_pool_id) {{ $data->swimingPool->name }} @elseif($data->kidness_space_id) {{ $data->kidnessSpace->name }} @else {{ $data->barristItem->name }} @endif</td>
                                     <td>{{ $data->item_quantity }}</td>
                                     <!--
                                     <td>{{ number_format($data->item_price,0,',',' ' )}}</td>

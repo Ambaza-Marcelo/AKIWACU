@@ -99,7 +99,7 @@ class DrinkStockoutController extends Controller
                 'asker'  => 'required',
                 'destination'  => 'required',
                 'item_movement_type'  => 'required',
-                'description'  => 'required'
+                'description'  => 'required|max:490'
             );
 
             $error = Validator::make($request->all(),$rules);

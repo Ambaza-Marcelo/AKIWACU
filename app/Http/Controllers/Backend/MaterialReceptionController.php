@@ -118,7 +118,7 @@ class MaterialReceptionController extends Controller
                 'receptionist'  => 'required',
                 'vat_supplier_payer'  => 'required',
                 'invoice_currency'  => 'required',
-                'description'  => 'required'
+                'description'  => 'required|max:490'
             );
 
             $error = Validator::make($request->all(),$rules);

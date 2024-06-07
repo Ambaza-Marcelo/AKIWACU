@@ -71,7 +71,7 @@ class FactureBartenderController extends Controller
             ->where('order_no',$order_no)
             ->sum('total_amount_selling');
 
-        return view('backend.pages.invoice_bartender.create',compact('bartender_items','data','setting','orders','order_no','clients','table_id'));
+        return view('backend.pages.invoice_bartender.create',compact('bartender_items','data','setting','orders','order_no','clients','table_id','total_amount'));
     }
 
     public function createByTable($table_id)
@@ -86,7 +86,7 @@ class FactureBartenderController extends Controller
         $clients =  Client::orderBy('customer_name','asc')->get();
         $orders =  BartenderOrderDetail::where('table_id',$table_id)->where('status',1)->orderBy('id','asc')->get();
 
-        $data =  BartenderOrder::where('table_id',$table_id)->first();
+        $data =  BartenderOrder::where('table_id',$table_id)->where('status',1)->first();
         $total_amount = DB::table('bartender_order_details')
             ->where('table_id',$table_id)->where('status',1)
             ->sum('total_amount_selling');

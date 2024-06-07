@@ -42,28 +42,6 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="header-title float-left">Commande Cuisine</h4>
-                    @if (Auth::guard('admin')->user()->can('invoice_kitchen.create'))
-                    @if ($in_pending > 0)
-                        <p class="float-right mb-2">
-                            <a href="{{ route('admin.invoice-kitchens.create-by-table',$table_id) }}" class="btn btn-success">Cloturer toute la table</a>
-                        </p>
-                        <p class="float-right mb-2">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <select class="form-control" name="table_id" id="table_id">
-                                            <option value="{{ $table->id }}">@if($table->id){{$table->name}}({{$table->waiter_name}}) @endif</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </p>
-                        <br>
-                    @endif
-                    @endif
-                    <p class="float-right mb-2">
-                        @if (Auth::guard('admin')->user()->can('food_order_client.create'))
-                            <a class="btn btn-primary text-white" href="{{ route('admin.order_kitchens.create',$table_id) }}">@lang('messages.new')</a>
-                        @endif
-                    </p>
                     <div class="clearfix"></div>
                     <div class="data-tables">
                         @include('backend.layouts.partials.messages')

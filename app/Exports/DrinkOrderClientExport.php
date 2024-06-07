@@ -27,23 +27,29 @@ class DrinkOrderClientExport implements FromCollection, WithMapping, WithHeading
         $end_date = $endDate.' 23:59:59';
 
         return OrderDrinkDetail::select(
-                        DB::raw('id,drink_id,date,quantity,purchase_price,selling_price,total_amount_selling,employe_id,created_by,order_no,confirmed_by,status'))->whereBetween('date',[$start_date,$end_date])->groupBy('id','drink_id','employe_id','date','quantity','status','purchase_price','selling_price','total_amount_selling','order_no','confirmed_by','created_by')->orderBy('id','asc')->get();
+                        DB::raw('id,drink_id,date,quantity,purchase_price,selling_price,total_amount_selling,employe_id,created_by,order_no,confirmed_by,status,rejected_by,rej_motif'))->whereBetween('date',[$start_date,$end_date])->groupBy('id','drink_id','employe_id','date','quantity','status','purchase_price','selling_price','total_amount_selling','order_no','confirmed_by','created_by','rejected_by','rej_motif')->orderBy('id','asc')->get();
     }
 
     public function map($data) : array {
 
-        if ($data->status == '0') {
+        if ($data->status == 0) {
             $status = "ENCOURS....";
-        }elseif ($data->status === '-1') {
+            $rej_motif = "";
+        }elseif ($data->status == -1) {
             $status = "REJETE";
-        }elseif ($data->status === '1') {
+            $rej_motif = $data->rej_motif;
+        }elseif ($data->status == 1) {
             $status = "VALIDE";
-        }elseif ($data->status === '2') {
+            $rej_motif = "";
+        }elseif ($data->status == 2) {
             $status = "FACTURE ENCOURS";
-        }elseif ($data->status == '3') {
-        	$status = "FACTURE VALIDE";
+            $rej_motif = "";
+        }elseif ($data->status == 3) {
+            $status = "FACTURE VALIDE";
+            $rej_motif = "";
         }else{
             $status = "";
+            $rej_motif = "";
         }
 
         return [
@@ -61,7 +67,8 @@ class DrinkOrderClientExport implements FromCollection, WithMapping, WithHeading
             $status,
             $data->created_by,
             $data->confirmed_by,
-            $data->rejected_by
+            $data->rejected_by,
+            $rej_motif
         ] ;
  
  
@@ -83,7 +90,8 @@ class DrinkOrderClientExport implements FromCollection, WithMapping, WithHeading
             'ETAT',
             'Auteur',
             'Accord de',
-            'Rejete Par'
+            'Rejete Par',
+            'Motif Rejete'
         ] ;
     }
 }

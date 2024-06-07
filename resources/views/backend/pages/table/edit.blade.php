@@ -45,7 +45,7 @@
                     <h4 class="header-title">Modifier Table</h4>
                     @include('backend.layouts.partials.messages')
                     
-                    <form action="{{ route('admin.drink-category.update',$table->id) }}" method="POST">
+                    <form action="{{ route('admin.tables.update',$table->id) }}" method="POST">
                         @method('PUT')
                         @csrf
                         <div class="form-group">

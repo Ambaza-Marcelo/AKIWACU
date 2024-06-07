@@ -128,11 +128,6 @@
                                 
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-6" id="dynamic_small_store">
-                                
-                            </div>
-                        </div>
                         <button type="submit" class="btn btn-primary mt-4 pr-4 pl-4">@lang('messages.update')</button>
                     </form>
                 </div>
@@ -174,7 +169,6 @@
                         "</div>";
         
         $("#dynamic_big_store").append(big_store);
-        $("#dynamic_small_store").hide();
     }
     if ($(this).val() === '2'){
 
@@ -188,8 +182,7 @@
                             +
                         "</div>";
         
-        $("#dynamic_small_store").append(small_store);
-        $("#dynamic_big_store").hide();
+        $("#dynamic_big_store").append(small_store);
     }
 
     })

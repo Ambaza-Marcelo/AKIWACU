@@ -113,7 +113,7 @@ class FoodReceptionController extends Controller
                 'vat_supplier_payer'  => 'required',
                 'invoice_currency'  => 'required',
                 'destination_store_id'  => 'required',
-                'description'  => 'required'
+                'description'  => 'required|max:490'
             );
 
             $error = Validator::make($request->all(),$rules);

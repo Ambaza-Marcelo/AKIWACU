@@ -127,7 +127,7 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
                 @endif
     @if (Auth::guard('admin')->user()->can('drink_purchase.view') || Auth::guard('admin')->user()->can('food_purchase.view') || Auth::guard('admin')->user()->can('material_purchase.view') || Auth::guard('admin')->user()->can('drink_requisition.view'))
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="card">
                     <div class="seo-fact sbg3">
                         <a href="{{ route('admin.plan-purchase.choice') }}">
@@ -143,7 +143,7 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
                     </div>
                 </div><br>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="card">
                     <div class="seo-fact sbg3">
                         <a href="{{ route('admin.plan-purchase.choice') }}">
@@ -153,6 +153,22 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
                                 </div>
                                 <h2>
                                     @lang('Requisition Boissons') 
+                                </h2>
+                            </div>
+                        </a>
+                    </div>
+                </div><br>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="seo-fact sbg3">
+                        <a href="{{ route('admin.order-report.choose') }}">
+                            <div class="p-4 d-flex justify-content-between align-items-center">
+                                <div class="seofct-icon">
+                                    <img src="{{ asset('img/undraw_beer-006.svg') }}" width="100">
+                                </div>
+                                <h2>
+                                    @lang('Rapport de commandes') 
                                 </h2>
                             </div>
                         </a>

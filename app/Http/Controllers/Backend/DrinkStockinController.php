@@ -94,7 +94,7 @@ class DrinkStockinController extends Controller
                 'receptionist'  => 'required',
                 'destination_bg_store_id'  => 'required',
                 'item_movement_type'  => 'required',
-                'description'  => 'required'
+                'description'  => 'required|max:490'
             );
 
             $error = Validator::make($request->all(),$rules);

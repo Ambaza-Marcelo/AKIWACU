@@ -108,7 +108,7 @@
                                         <option value="paire" class="form-control">PAIRE</option>
                                         <option value="litres" class="form-control">Litres</option>
                                 </select></td>
-                                <td><input type="number" name="purchase_price[]" placeholder="Enter purchase price" class="form-control" /></td>    
+                                <td><input type="number" name="purchase_price[]" placeholder="Enter purchase price" step="any" min="0" class="form-control" /></td>    
                                 <td><button type="button" name="add" id="add" class="btn btn-success">@lang('messages.addmore')</button></td>  
                             </tr>  
                         </table> 
@@ -158,7 +158,7 @@
                                 "</select>"+
                         "</td>"+
                         "<td>"+
-                        "<input type='number' name='purchase_price[]' placeholder='Enter purchase price' class='form-control' />"+
+                        "<input type='number' name='purchase_price[]' placeholder='Enter purchase price' class='form-control' step='any' />"+
                         "</td>"+
                         "<td>"+
                           "<button type='button' class='btn btn-danger remove-tr'>@lang('messages.delete')</button>"+

@@ -116,12 +116,12 @@
                                         
                                         @if (Auth::guard('admin')->user()->can('invoice_drink.validate'))
                                         @if($facture->etat == 0)
-                                         <a class="btn btn-primary text-white" href="{{ route('admin.facture-barrist.validate', $facture->invoice_number) }}"
+                                         <a class="btn btn-primary text-white" href="{{ route('admin.facture-bartender.validate', $facture->invoice_number) }}"
                                             onclick="event.preventDefault(); document.getElementById('validate-form-{{ $facture->invoice_number }}').submit();this.style.visibility='hidden';" ondblclick="this.style.visibility='hidden';">
                                                 Valider
                                             </a>
 
-                                            <form id="validate-form-{{ $facture->invoice_number }}" action="{{ route('admin.facture-barrist.validate', $facture->invoice_number) }}" method="POST" style="display: none;">
+                                            <form id="validate-form-{{ $facture->invoice_number }}" action="{{ route('admin.facture-bartender.validate', $facture->invoice_number) }}" method="POST" style="display: none;">
                                                 @method('PUT')
                                                 @csrf
                                             </form>

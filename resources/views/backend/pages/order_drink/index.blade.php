@@ -92,7 +92,7 @@
                                     @if($order->status == 1)
                                     <td><span  class="badge badge-success">Validée</span></td>
                                     @elseif($order->status == -1)
-                                    <td><span class="badge badge-danger">Rejetée</span></td>
+                                    <td><span class="badge badge-danger" title="{{ $order->rej_motif }}">Rejetée</span></td>
                                    @elseif($order->status == 2)
                                     <td><span class="badge badge-warning">Facturé(Encours)</span></td>
                                     @elseif($order->status == 3)
@@ -124,14 +124,9 @@
                                         @endif
                                         @endif
                                         @if (Auth::guard('admin')->user()->can('drink_order_client.reject'))
-                                            <a class="btn btn-primary text-white" href="{{ route('admin.order_drinks.reject', $order->order_no) }}"
-                                            onclick="event.preventDefault(); document.getElementById('reject-form-{{ $order->order_no }}').submit();">
+                                            <a class="btn btn-primary text-white" href="{{ route('admin.order_drinks.voir-commande-a-rejeter', $order->order_no) }}">
                                                 Rejeter
                                             </a>
-                                            <form id="reject-form-{{ $order->order_no }}" action="{{ route('admin.order_drinks.reject', $order->order_no) }}" method="POST" style="display: none;">
-                                                @method('PUT')
-                                                @csrf
-                                            </form>
                                         @endif
                                         @if (Auth::guard('admin')->user()->can('drink_order_client.reset'))
                                             @if($order->status == -1 || $order->status == 1)

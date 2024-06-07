@@ -100,7 +100,7 @@ class DrinkRequisitionController extends Controller
                 'date'  => 'required',
                 'quantity_requisitioned.*'  => 'required',
                 'unit.*'  => 'required',
-                'description'  => 'required'
+                'description'  => 'required|max:490'
             );
 
             $error = Validator::make($request->all(),$rules);

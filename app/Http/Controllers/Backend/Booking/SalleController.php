@@ -80,9 +80,9 @@ class SalleController extends Controller
         $salle->quantity = $request->quantity;
         $salle->specification = $request->specification;
         $salle->vat = $request->vat;
-        $salle->taux_marge = $request->taux_marge;
-        $salle->taux_majoration = $request->taux_majoration;
-        $salle->taux_reduction = $request->taux_reduction;
+        //$salle->taux_marge = $request->taux_marge;
+        //$salle->taux_majoration = $request->taux_majoration;
+        //$salle->taux_reduction = $request->taux_reduction;
         $salle->auteur = $this->user->name;
         $salle->save();
 
@@ -154,9 +154,9 @@ class SalleController extends Controller
         $salle->quantity = $request->quantity;
         $salle->specification = $request->specification;
         $salle->vat = $request->vat;
-        $salle->taux_marge = $request->taux_marge;
-        $salle->taux_majoration = $request->taux_majoration;
-        $salle->taux_reduction = $request->taux_reduction;
+        //$salle->taux_marge = $request->taux_marge;
+        //$salle->taux_majoration = $request->taux_majoration;
+        //$salle->taux_reduction = $request->taux_reduction;
         $salle->auteur = $this->user->name;
         $salle->save();
 

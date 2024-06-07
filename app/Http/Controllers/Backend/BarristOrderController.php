@@ -36,6 +36,17 @@ class BarristOrderController extends Controller
         });
     }
 
+    public function listAll()
+    {
+        if (is_null($this->user) || !$this->user->can('drink_order_client.view')) {
+            abort(403, 'Sorry !! You are Unauthorized to view any order !');
+        }
+
+        $orders = BarristOrder::orderBy('id','desc')->take(500)->get();
+        
+        return view('backend.pages.order_barrist.list_all', compact('orders'));
+    }
+
     public function index($table_id)
     {
         if (is_null($this->user) || !$this->user->can('drink_order_client.view')) {
