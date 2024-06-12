@@ -61,6 +61,7 @@
                                     <th width="10%">@lang('messages.receptionist')</th>
                                     <th width="10%">Remettant</th>
                                     <th width="10%">@lang('messages.created_by')</th>
+                                    <th width="20%">@lang('STOCK')</th>
                                     <th width="20%">@lang('messages.description')</th>
                                     <th width="15%">Action</th>
                                 </tr>
@@ -76,6 +77,7 @@
                                     <td>{{ $stockin->receptionist }}</td>
                                     <td>{{ $stockin->handingover }}</td>
                                     <td>{{ $stockin->created_by }}</td>
+                                    <td>@if($stockin->destination_bg_store_id)STOCK INTERMEDIAIRE @elseif($stockin->destination_sm_store_id) PETIT STOCK @else GRAND STOCK @endif</td>
                                     <td>{{ $stockin->description }}</td>
                                     <td>
                                         @if (Auth::guard('admin')->user()->can('drink_stockin.validate'))

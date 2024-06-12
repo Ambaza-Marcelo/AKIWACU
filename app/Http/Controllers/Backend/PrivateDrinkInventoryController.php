@@ -209,8 +209,14 @@ class PrivateDrinkInventoryController extends Controller
          $totalValueNew = DB::table('private_drink_inventory_details')
             ->where('inventory_no', '=', $inventory_no)
             ->sum('new_total_purchase_value');
+        $totalQuantity = DB::table('private_drink_inventory_details')
+            ->where('inventory_no', '=', $inventory_no)
+            ->sum('quantity');
+        $totalNewQuantity = DB::table('private_drink_inventory_details')
+            ->where('inventory_no', '=', $inventory_no)
+            ->sum('new_quantity');
         $gestionnaire = PrivateDrinkInventory::where('inventory_no', $inventory_no)->value('created_by');
-        $pdf = PDF::loadView('backend.pages.document.private_drink_inventory',compact('datas','inventory_no','totalValueActuelle','totalValueNew','gestionnaire','setting','title','description','date','inventory_signature'));//->setPaper('a4', 'landscape');
+        $pdf = PDF::loadView('backend.pages.document.private_drink_inventory',compact('datas','inventory_no','totalValueActuelle','totalValueNew','gestionnaire','setting','title','description','date','inventory_signature','totalQuantity','totalNewQuantity'));//->setPaper('a4', 'landscape');
 
         Storage::put('public/pdf/private_drink_inventory/'.'BON_INVENTAIRE_'.$inventory_no.'.pdf', $pdf->output());
 

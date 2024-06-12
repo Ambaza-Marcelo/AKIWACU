@@ -102,7 +102,7 @@
                                     @else
                                     <td><span class="badge badge-primary">Encours...</span></td>
                                     @endif
-                                    <td>{{ $order->description }}</td>
+                                    <td>@if($order->status == -1) {{ $order->rej_motif }} @else {{ $order->description }} @endif</td>
                                     <td>{{ $order->created_by }}</td>
                                     <td>
                                         @if (Auth::guard('admin')->user()->can('drink_order_client.create'))

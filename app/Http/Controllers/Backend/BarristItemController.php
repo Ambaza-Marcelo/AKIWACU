@@ -88,9 +88,9 @@ class BarristItemController extends Controller
         $barrist_item->quantity = $request->quantity;
         $barrist_item->specification = $request->specification;
         $barrist_item->vat = $request->vat;
-        $barrist_item->taux_marge = $request->taux_marge;
-        $barrist_item->taux_majoration = $request->taux_majoration;
-        $barrist_item->taux_reduction = $request->taux_reduction;
+        //$barrist_item->taux_marge = $request->taux_marge;
+        //$barrist_item->taux_majoration = $request->taux_majoration;
+        //$barrist_item->taux_reduction = $request->taux_reduction;
         $barrist_item->expiration_date = $request->expiration_date;
         $barrist_item->threshold_quantity = $request->threshold_quantity;
         $barrist_item->created_by = $this->user->name;

@@ -220,6 +220,7 @@ class FactureController extends Controller
         {
             $taux_tva = Drink::where('id', $drink_id[$count])->value('vat');
             $brarudi_price = Drink::where('id', $drink_id[$count])->value('brarudi_price');
+            $cump = Drink::where('id', $drink_id[$count])->value('cump');
 
             if($request->vat_taxpayer == 1){
 
@@ -296,6 +297,7 @@ class FactureController extends Controller
             'vat'=>$vat,
             'item_price_wvat'=>$item_price_wvat,
             'item_total_amount'=>$item_total_amount,
+            'cump'=>$cump,
             'employe_id'=> $employe_id,
         );
           $data1[] = $data;

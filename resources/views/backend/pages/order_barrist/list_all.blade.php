@@ -78,7 +78,7 @@
                                     @else
                                     <td><span class="badge badge-primary">Encours...</span></td>
                                     @endif
-                                    <td>{{ $order->description }}</td>
+                                    <td>@if($order->status == -1) {{ $order->rej_motif }} @else {{ $order->description }} @endif</td>
                                     <td>{{ $order->created_by }}</td>
                                     <td>
                                         @if (Auth::guard('admin')->user()->can('drink_order_client.create'))
@@ -100,14 +100,9 @@
                                         @endif
                                         @endif
                                         @if (Auth::guard('admin')->user()->can('drink_order_client.reject'))
-                                            <a class="btn btn-primary text-white" href="{{ route('admin.barrist-orders.reject', $order->order_no) }}"
-                                            onclick="event.preventDefault(); document.getElementById('reject-form-{{ $order->order_no }}').submit();">
+                                            <a class="btn btn-primary text-white" href="{{ route('admin.barrist-orders.voir-commande-a-rejeter', $order->order_no) }}">
                                                 Rejeter
                                             </a>
-                                            <form id="reject-form-{{ $order->order_no }}" action="{{ route('admin.barrist-orders.reject', $order->order_no) }}" method="POST" style="display: none;">
-                                                @method('PUT')
-                                                @csrf
-                                            </form>
                                         @endif
                                         @if (Auth::guard('admin')->user()->can('drink_order_client.reset'))
                                             @if($order->status == -1 || $order->status == 1)

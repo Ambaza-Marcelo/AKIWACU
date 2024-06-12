@@ -86,9 +86,9 @@ class BartenderItemController extends Controller
         $bartender_item->quantity = $request->quantity;
         $bartender_item->specification = $request->specification;
         $bartender_item->vat = $request->vat;
-        $bartender_item->taux_marge = $request->taux_marge;
-        $bartender_item->taux_majoration = $request->taux_majoration;
-        $bartender_item->taux_reduction = $request->taux_reduction;
+        //$bartender_item->taux_marge = $request->taux_marge;
+        //$bartender_item->taux_majoration = $request->taux_majoration;
+        //$bartender_item->taux_reduction = $request->taux_reduction;
         $bartender_item->expiration_date = $request->expiration_date;
         $bartender_item->threshold_quantity = $request->threshold_quantity;
         $bartender_item->created_by = $this->user->name;
@@ -189,9 +189,9 @@ class BartenderItemController extends Controller
         $bartender_item->quantity = $request->quantity;
         $bartender_item->specification = $request->specification;
         $bartender_item->vat = $request->vat;
-        $bartender_item->taux_marge = $request->taux_marge;
-        $bartender_item->taux_majoration = $request->taux_majoration;
-        $bartender_item->taux_reduction = $request->taux_reduction;
+        //$bartender_item->taux_marge = $request->taux_marge;
+        //$bartender_item->taux_majoration = $request->taux_majoration;
+        //$bartender_item->taux_reduction = $request->taux_reduction;
         $bartender_item->expiration_date = $request->expiration_date;
         $bartender_item->threshold_quantity = $request->threshold_quantity;
         $bartender_item->created_by = $this->user->name;

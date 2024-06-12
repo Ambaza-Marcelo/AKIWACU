@@ -18,6 +18,12 @@ use App\Models\DrinkStockinDetail;
 use App\Models\DrinkBigStoreDetail;
 use App\Models\DrinkBigStore;
 use App\Models\DrinkBigReport;
+use App\Models\DrinkSmallStoreDetail;
+use App\Models\DrinkSmallStore;
+use App\Models\DrinkExtraBigStoreDetail;
+use App\Models\DrinkExtraBigStore;
+use App\Models\DrinkSmallReport;
+use App\Models\DrinkExtraBigReport;
 use App\Exports\DrinkStockinExport;
 use Carbon\Carbon;
 use PDF;
@@ -65,8 +71,10 @@ class DrinkStockinController extends Controller
         }
 
         $drinks  = Drink::orderBy('name','asc')->get();
-        $destination_stores = DrinkBigStore::all();
-        return view('backend.pages.drink_stockin.create', compact('drinks','destination_stores'));
+        $drink_extra_big_stores = DrinkExtraBigStore::all();
+        $drink_big_stores = DrinkBigStore::all();
+        $drink_small_stores = DrinkSmallStore::all();
+        return view('backend.pages.drink_stockin.create', compact('drinks','drink_extra_big_stores','drink_big_stores','drink_small_stores'));
     }
 
     /**
@@ -91,8 +99,9 @@ class DrinkStockinController extends Controller
                 'purchase_price.*'  => 'required',
                 'handingover'  => 'required',
                 'origin'  => 'required',
+                'store_type'  => 'required',
                 'receptionist'  => 'required',
-                'destination_bg_store_id'  => 'required',
+                //'destination_bg_store_id'  => 'required',
                 'item_movement_type'  => 'required',
                 'description'  => 'required|max:490'
             );
@@ -111,8 +120,11 @@ class DrinkStockinController extends Controller
             $handingover = $request->handingover;
             $receptionist = $request->receptionist;
             $origin = $request->origin;
+            $store_type = $request->store_type;
             $description =$request->description; 
             $destination_bg_store_id = $request->destination_bg_store_id;
+            $destination_sm_store_id = $request->destination_sm_store_id;
+            $destination_extra_store_id = $request->destination_extra_store_id;
             $item_movement_type = $request->item_movement_type;
             $unit = $request->unit;
             $quantity = $request->quantity;
@@ -144,7 +156,10 @@ class DrinkStockinController extends Controller
                     'receptionist' => $receptionist,
                     'handingover' => $handingover,
                     'origin' => $origin,
+                    'store_type' => $store_type,
                     'destination_bg_store_id' => $destination_bg_store_id,
+                    'destination_sm_store_id' => $destination_sm_store_id,
+                    'destination_extra_store_id' => $destination_extra_store_id,
                     'item_movement_type' => $item_movement_type,
                     'stockin_no' => $stockin_no,
                     'stockin_signature' => $stockin_signature,
@@ -169,7 +184,10 @@ class DrinkStockinController extends Controller
             $stockin->receptionist = $receptionist;
             $stockin->handingover = $handingover;
             $stockin->origin = $origin;
+            $stockin->store_type = $store_type;
             $stockin->destination_bg_store_id = $destination_bg_store_id;
+            $stockin->destination_sm_store_id = $destination_sm_store_id;
+            $stockin->destination_extra_store_id = $destination_extra_store_id;
             $stockin->item_movement_type = $item_movement_type;
             $stockin->created_by = $created_by;
             $stockin->status = 1;
@@ -317,8 +335,11 @@ class DrinkStockinController extends Controller
 
         $datas = DrinkStockinDetail::where('stockin_no', $stockin_no)->get();
 
+        $data = DrinkStockinDetail::where('stockin_no', $stockin_no)->first();
+
         foreach($datas as $data){
 
+            if (!empty($data->destination_bg_store_id)) {
                 $code_store_destination = DrinkBigStore::where('id',$data->destination_bg_store_id)->value('code');
 
                 $valeurStockInitialDestination = DrinkBigStoreDetail::where('code',$code_store_destination)->where('drink_id','!=', '')->where('drink_id', $data->drink_id)->value('total_cump_value');
@@ -382,6 +403,36 @@ class DrinkStockinController extends Controller
                         ->update($bigStore);
                         $flag = 1;
                         }else{
+                            $code_store_destination = DrinkBigStore::where('id',$data->destination_sm_store_id)->value('code');
+
+                            $valeurStockInitialDestination = DrinkBigStoreDetail::where('code',$code_store_destination)->where('drink_id','!=', '')->where('drink_id', $data->drink_id)->value('total_cump_value');
+                            $quantityStockInitialDestination = DrinkBigStoreDetail::where('code',$code_store_destination)->where('drink_id','!=', '')->where('drink_id', $data->drink_id)->value('quantity_bottle');
+                            $quantityRestantSmallStore = $quantityStockInitialDestination - $data->quantity;
+
+
+                            $valeurAcquisition = $data->quantity * $data->purchase_price;
+
+                            $valeurTotalUnite = $data->quantity + $quantityStockInitialDestination;
+                            $cump = ($valeurStockInitialDestination + $valeurAcquisition) / $valeurTotalUnite;
+
+                            $returnBigStore = array(
+                                'drink_id' => $data->drink_id,
+                                'quantity_bottle' => $quantityRestantSmallStore,
+                                'purchase_price' => $data->purchase_price,
+                                'total_purchase_value' => $quantityRestantSmallStore * $data->purchase_price,
+                                'cump' => $cump,
+                                'total_cump_value' => $quantityRestantSmallStore * $cump,
+                                'created_by' => $this->user->name,
+                                'verified' => false
+                            );
+
+                            DrinkBigStoreDetail::where('code',$code_store_destination)->where('drink_id',$data->drink_id)->where('verified',true)
+                            ->update($returnBigStore);
+
+                            DrinkBigStoreDetail::where('drink_id','!=','')->update(['verified' => false]);
+                            DrinkSmallStoreDetail::where('drink_id','!=','')->update(['verified' => false]);
+                            DrinkExtraBigStoreDetail::where('drink_id','!=','')->update(['verified' => false]);
+
                             $flag = 0;
                             session()->flash('error', 'this item is not saved in the stock');
                             return back();
@@ -416,11 +467,280 @@ class DrinkStockinController extends Controller
 
                         ]); 
                         */
+            }elseif (!empty($data->destination_sm_store_id)) {
+                $code_store_destination = DrinkSmallStore::where('id',$data->destination_sm_store_id)->value('code');
+
+                $valeurStockInitialDestination = DrinkSmallStoreDetail::where('code',$code_store_destination)->where('drink_id','!=', '')->where('drink_id', $data->drink_id)->value('total_cump_value');
+                $quantityStockInitialDestination = DrinkSmallStoreDetail::where('code',$code_store_destination)->where('drink_id','!=', '')->where('drink_id', $data->drink_id)->value('quantity_bottle');
+                $quantityTotalSmallStore = $quantityStockInitialDestination + $data->quantity;
+
+
+                $valeurAcquisition = $data->quantity * $data->purchase_price;
+
+                $valeurTotalUnite = $data->quantity + $quantityStockInitialDestination;
+                $cump = ($valeurStockInitialDestination + $valeurAcquisition) / $valeurTotalUnite;
+
+                $reportSmallStore = array(
+                    'drink_id' => $data->drink_id,
+                    'quantity_stock_initial' => $quantityStockInitialDestination,
+                    'value_stock_initial' => $valeurStockInitialDestination,
+                    'code_store' => $code_store_destination,
+                    'stockin_no' => $data->stockin_no,
+                    'date' => $data->date,
+                    'quantity_stockin' => $data->quantity,
+                    'value_stockin' => $data->total_amount_purchase,
+                    'quantity_stock_final' => $quantityStockInitialDestination + $data->quantity,
+                    'value_stock_final' => $valeurStockInitialDestination + $data->total_amount_purchase,
+                    'type_transaction' => $data->item_movement_type,
+                    //'cump' => $cump,
+                    //'purchase_price' => $data->purchase_price,
+                    'document_no' => $data->stockin_no,
+                    'created_by' => $this->user->name,
+                    'description' => $data->description,
+                    'created_at' => \Carbon\Carbon::now()
+                );
+                $reportSmallStoreData[] = $reportSmallStore;
+
+                    $smallStore = array(
+                        'drink_id' => $data->drink_id,
+                        'quantity_bottle' => $quantityTotalSmallStore,
+                        //'purchase_price' => $data->purchase_price,
+                        'total_purchase_value' => $quantityTotalSmallStore * $data->purchase_price,
+                        //'cump' => $cump,
+                        'total_cump_value' => $quantityTotalSmallStore * $cump,
+                        'created_by' => $this->user->name,
+                        'verified' => true
+                    );
+
+                    $drinkData = array(
+                        'id' => $data->drink_id,
+                        'quantity_bottle' => $quantityTotalSmallStore,
+                        //'cump' => $cump,
+                        //'purchase_price' => $data->purchase_price,
+                    );
+
+                        Drink::where('id',$data->drink_id)
+                        ->update($drinkData);
+
+                    $smallStoreData[] = $smallStore;
+
+                        $drink = DrinkSmallStoreDetail::where('code',$code_store_destination)->where("drink_id",$data->drink_id)->value('drink_id');
+
+                        if (!empty($drink)) {
+                            DrinkSmallStoreDetail::where('code',$code_store_destination)->where('drink_id',$data->drink_id)
+                        ->update($smallStore);
+                        $flag = 1;
+                        }else{
+
+                            $code_store_destination = DrinkSmallStore::where('id',$data->destination_sm_store_id)->value('code');
+
+                            $valeurStockInitialDestination = DrinkSmallStoreDetail::where('code',$code_store_destination)->where('drink_id','!=', '')->where('drink_id', $data->drink_id)->value('total_cump_value');
+                            $quantityStockInitialDestination = DrinkSmallStoreDetail::where('code',$code_store_destination)->where('drink_id','!=', '')->where('drink_id', $data->drink_id)->value('quantity_bottle');
+                            $quantityRestantSmallStore = $quantityStockInitialDestination - $data->quantity;
+
+
+                            $valeurAcquisition = $data->quantity * $data->purchase_price;
+
+                            $valeurTotalUnite = $data->quantity + $quantityStockInitialDestination;
+                            $cump = ($valeurStockInitialDestination + $valeurAcquisition) / $valeurTotalUnite;
+
+                            $returnSmallStore = array(
+                                'drink_id' => $data->drink_id,
+                                'quantity_bottle' => $quantityRestantSmallStore,
+                                //'purchase_price' => $data->purchase_price,
+                                //'total_purchase_value' => $quantityRestantSmallStore * $data->purchase_price,
+                                //'cump' => $cump,
+                                //'total_cump_value' => $quantityRestantSmallStore * $cump,
+                                'created_by' => $this->user->name,
+                                'verified' => false
+                            );
+
+                            DrinkSmallStoreDetail::where('code',$code_store_destination)->where('drink_id',$data->drink_id)->where('verified',true)
+                            ->update($returnSmallStore);
+
+                            DrinkBigStoreDetail::where('drink_id','!=','')->update(['verified' => false]);
+                            DrinkSmallStoreDetail::where('drink_id','!=','')->update(['verified' => false]);
+                            DrinkExtraBigStoreDetail::where('drink_id','!=','')->update(['verified' => false]);
+
+                            $flag = 0;
+                            session()->flash('error', 'this item is not saved in the stock');
+                            return back();
+                        }
+                        /*
+                        $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
+                        $response = Http::post($theUrl, [
+                            'username'=> "ws400171161500565",
+                            'password'=> "5VS(GO:p"
+
+                        ]);
+                        $data1 =  json_decode($response);
+                        $data2 = ($data1->result);       
+    
+                        $token = $data2->token;
+
+                        $theUrl = config('app.guzzle_test_url').'/ebms_api/AddStockMovement';  
+                        $response = Http::withHeaders([
+                        'Authorization' => 'Bearer '.$token,
+                        'Accept' => 'application/json'])->post($theUrl, [
+                            'system_or_device_id'=> "ws400171161500565",
+                            'item_code'=> $data->drink->code,
+                            'item_designation'=>$data->drink->name,
+                            'item_quantity'=>$data->quantity,
+                            'item_measurement_unit'=>$data->unit,
+                            'item_purchase_or_sale_price'=>$data->purchase_price,
+                            'item_purchase_or_sale_currency'=> "BIF",
+                            'item_movement_type'=> $data->item_movement_type,
+                            'item_movement_invoice_ref'=> "",
+                            'item_movement_description'=>$data->description,
+                            'item_movement_date'=> Carbon::parse($data->updated_at)->format('Y-m-d H:i:s'),
+
+                        ]); 
+                        */                        
+            }else{
+                $code_store_destination = DrinkExtraBigStore::where('id',$data->destination_extra_store_id)->value('code');
+
+                $valeurStockInitialDestination = DrinkExtraBigStoreDetail::where('code',$code_store_destination)->where('drink_id','!=', '')->where('drink_id', $data->drink_id)->value('total_cump_value');
+                $quantityStockInitialDestination = DrinkExtraBigStoreDetail::where('code',$code_store_destination)->where('drink_id','!=', '')->where('drink_id', $data->drink_id)->value('quantity_bottle');
+                $quantityTotalBigStore = $quantityStockInitialDestination + $data->quantity;
+
+
+                $valeurAcquisition = $data->quantity * $data->purchase_price;
+
+                $valeurTotalUnite = $data->quantity + $quantityStockInitialDestination;
+                $cump = ($valeurStockInitialDestination + $valeurAcquisition) / $valeurTotalUnite;
+
+                $reportExtraBigStore = array(
+                    'drink_id' => $data->drink_id,
+                    'quantity_stock_initial' => $quantityStockInitialDestination,
+                    'value_stock_initial' => $valeurStockInitialDestination,
+                    'code_store' => $code_store_destination,
+                    'stockin_no' => $data->stockin_no,
+                    'date' => $data->date,
+                    'quantity_stockin' => $data->quantity,
+                    'value_stockin' => $data->total_amount_purchase,
+                    'quantity_stock_final' => $quantityStockInitialDestination + $data->quantity,
+                    'value_stock_final' => $valeurStockInitialDestination + $data->total_amount_purchase,
+                    'type_transaction' => $data->item_movement_type,
+                    'cump' => $cump,
+                    'purchase_price' => $data->purchase_price,
+                    'document_no' => $data->stockin_no,
+                    'created_by' => $this->user->name,
+                    'description' => $data->description,
+                    'created_at' => \Carbon\Carbon::now()
+                );
+                $reportExtraBigStoreData[] = $reportExtraBigStore;
+
+                    $extrabigStore = array(
+                        'drink_id' => $data->drink_id,
+                        'quantity_bottle' => $quantityTotalBigStore,
+                        'purchase_price' => $data->purchase_price,
+                        'total_purchase_value' => $quantityTotalBigStore * $data->purchase_price,
+                        'cump' => $cump,
+                        'total_cump_value' => $quantityTotalBigStore * $cump,
+                        'created_by' => $this->user->name,
+                        'verified' => false
+                    );
+
+                    $drinkData = array(
+                        'id' => $data->drink_id,
+                        'quantity_bottle' => $quantityTotalBigStore,
+                        'cump' => $cump,
+                        'purchase_price' => $data->purchase_price,
+                    );
+
+                        Drink::where('id',$data->drink_id)
+                        ->update($drinkData);
+
+                    $extrabigStoreData[] = $extrabigStore;
+
+                        $drink = DrinkExtraBigStoreDetail::where('code',$code_store_destination)->where("drink_id",$data->drink_id)->value('drink_id');
+
+                        if (!empty($drink)) {
+                            DrinkExtraBigStoreDetail::where('code',$code_store_destination)->where('drink_id',$data->drink_id)
+                        ->update($extrabigStore);
+                        $flag = 1;
+                        }else{
+                            $code_store_destination = DrinkExtraBigStore::where('id',$data->destination_sm_store_id)->value('code');
+
+                            $valeurStockInitialDestination = DrinkExtraBigStoreDetail::where('code',$code_store_destination)->where('drink_id','!=', '')->where('drink_id', $data->drink_id)->value('total_cump_value');
+                            $quantityStockInitialDestination = DrinkExtraBigStoreDetail::where('code',$code_store_destination)->where('drink_id','!=', '')->where('drink_id', $data->drink_id)->value('quantity_bottle');
+                            $quantityRestantSmallStore = $quantityStockInitialDestination - $data->quantity;
+
+
+                            $valeurAcquisition = $data->quantity * $data->purchase_price;
+
+                            $valeurTotalUnite = $data->quantity + $quantityStockInitialDestination;
+                            $cump = ($valeurStockInitialDestination + $valeurAcquisition) / $valeurTotalUnite;
+
+                            $returnExtraBigStore = array(
+                                'drink_id' => $data->drink_id,
+                                'quantity_bottle' => $quantityRestantSmallStore,
+                                'purchase_price' => $data->purchase_price,
+                                'total_purchase_value' => $quantityRestantSmallStore * $data->purchase_price,
+                                'cump' => $cump,
+                                'total_cump_value' => $quantityRestantSmallStore * $cump,
+                                'created_by' => $this->user->name,
+                                'verified' => false
+                            );
+
+                            DrinkExtraBigStoreDetail::where('code',$code_store_destination)->where('drink_id',$data->drink_id)->where('verified',true)
+                            ->update($returnExtraBigStore);
+
+                            DrinkBigStoreDetail::where('drink_id','!=','')->update(['verified' => false]);
+                            DrinkSmallStoreDetail::where('drink_id','!=','')->update(['verified' => false]);
+                            DrinkExtraBigStoreDetail::where('drink_id','!=','')->update(['verified' => false]);
+
+                            $flag = 0;
+                            session()->flash('error', 'this item is not saved in the stock');
+                            return back();
+                        }
+                        /*
+                        $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
+                        $response = Http::post($theUrl, [
+                            'username'=> "ws400171161500565",
+                            'password'=> "5VS(GO:p"
+
+                        ]);
+                        $data1 =  json_decode($response);
+                        $data2 = ($data1->result);       
+    
+                        $token = $data2->token;
+
+                        $theUrl = config('app.guzzle_test_url').'/ebms_api/AddStockMovement';  
+                        $response = Http::withHeaders([
+                        'Authorization' => 'Bearer '.$token,
+                        'Accept' => 'application/json'])->post($theUrl, [
+                            'system_or_device_id'=> "ws400171161500565",
+                            'item_code'=> $data->drink->code,
+                            'item_designation'=>$data->drink->name,
+                            'item_quantity'=>$data->quantity,
+                            'item_measurement_unit'=>$data->unit,
+                            'item_purchase_or_sale_price'=>$data->purchase_price,
+                            'item_purchase_or_sale_currency'=> "BIF",
+                            'item_movement_type'=> $data->item_movement_type,
+                            'item_movement_invoice_ref'=> "",
+                            'item_movement_description'=>$data->description,
+                            'item_movement_date'=> Carbon::parse($data->updated_at)->format('Y-m-d H:i:s'),
+
+                        ]); 
+                        */                
+            }
+                
         }
 
-            if ($flag != 0) {
-                DrinkBigReport::insert($reportBigStoreData);
-            }
+
+        if(!empty($data->destination_bg_store_id) && $flag != 0){
+            DrinkBigReport::insert($reportBigStoreData);
+        }elseif (!empty($data->destination_sm_store_id) && $flag != 0) {
+            DrinkSmallReport::insert($reportSmallStoreData);
+        }else{
+            DrinkExtraBigReport::insert($reportExtraBigStoreData);
+        }
+
+            DrinkBigStoreDetail::where('drink_id','!=','')->update(['verified' => false]);
+            DrinkSmallStoreDetail::where('drink_id','!=','')->update(['verified' => false]);
+            DrinkExtraBigStoreDetail::where('drink_id','!=','')->update(['verified' => false]);
+
             DrinkStockin::where('stockin_no', '=', $stockin_no)
                 ->update(['status' => 4,'approuved_by' => $this->user->name]);
             DrinkStockinDetail::where('stockin_no', '=', $stockin_no)

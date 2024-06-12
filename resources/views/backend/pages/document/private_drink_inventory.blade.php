@@ -86,10 +86,11 @@
                              <tfoot>
                                 <tr>
                                     <th>Totaux</th>
-                                    <th style="background-color: rgb(150,150,150);" colspan="5"></th>
+                                    <th style="background-color: rgb(150,150,150);" colspan="4"></th>
+                                    <th>{{number_format($totalQuantity,0,',',' ')}}</th>
                                     <th>{{number_format($totalValueActuelle,0,',',' ')}}</th>
-                                    <th style="background-color: rgb(150,150,150);" colspan="2"></th>
-                                    <th>{{ number_format($totalValueNew,0,',',' ') }}</th>
+                                    <th>{{number_format($totalNewQuantity,0,',',' ')}}</th>
+                                    <th colspan="2">{{ number_format($totalValueNew,0,',',' ') }}</th>
                                 </tr>
                             </tfoot>
                         </table>

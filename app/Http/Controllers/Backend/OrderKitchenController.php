@@ -44,7 +44,7 @@ class OrderKitchenController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any order !');
         }
 
-        $orders = OrderKitchen::orderBy('id','desc')->take(500)->get();
+        $orders = OrderKitchen::orderBy('id','desc')->take(1000)->get();
         
         return view('backend.pages.order_kitchen.list_all', compact('orders'));
     }
