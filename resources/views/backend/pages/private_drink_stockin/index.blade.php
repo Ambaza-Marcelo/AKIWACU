@@ -122,7 +122,7 @@
                                         @if (Auth::guard('admin')->user()->can('private_drink_stockin.approuve'))
                                         @if($stockin->status == 3)
                                             <a class="btn btn-primary text-white" href="{{ route('admin.private-drink-stockins.approuve', $stockin->stockin_no) }}"
-                                            onclick="event.preventDefault(); document.getElementById('approuve-form-{{ $stockin->stockin_no }}').submit();">
+                                            onclick="event.preventDefault(); document.getElementById('approuve-form-{{ $stockin->stockin_no }}').submit();this.style.visibility='hidden';" ondblclick="this.style.visibility='hidden';">
                                                 Approuver
                                             </a>
 

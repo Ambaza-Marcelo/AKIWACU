@@ -58,8 +58,17 @@ class TableController extends Controller
             abort(403, 'Sorry !! You are Unauthorized !');
         } 
 
+            $created_by = $this->user->name;
+            $waiter_name = Table::where('id',$table_id)->value('waiter_name');
 
-        return view('backend.pages.table.choose_type',compact('table_id'));
+            if ($waiter_name == $created_by || $waiter_name == '' || $this->user->can('invoice_drink.create')) {
+                return view('backend.pages.table.choose_type',compact('table_id'));
+            }else{
+                session()->flash('error', 'Tu n\'es pas '.$waiter_name.'veuillez utiliser vos comptes s\'il vous plait!!');
+                return back();
+            }
+
+        
     }
 
     public function store(Request $request)

@@ -28,7 +28,7 @@
 
 @if (Auth::guard('admin')->user()->can('food_order_client.view') || Auth::guard('admin')->user()->can('drink_order_client.view') || Auth::guard('admin')->user()->can('material_big_store.view') || Auth::guard('admin')->user()->can('drink_big_store.view') ||
 Auth::guard('admin')->user()->can('drink_small_store.view') || 
-Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')->user()->can('invoice_drink.view'))
+Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')->user()->can('invoice_drink.view') || Auth::guard('admin')->user()->can('booking.view'))
 <div class="main-content-inner">
   <div class="row">
     <div class="col-md-2" id="side-navbar">
@@ -48,7 +48,7 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
     </div>
     @endif
     </div>  
-                @if (Auth::guard('admin')->user()->can('food_order_client.create') || Auth::guard('admin')->user()->can('drink_order_client.create') || Auth::guard('admin')->user()->can('table.view'))        
+                @if (Auth::guard('admin')->user()->can('food_order_client.create') || Auth::guard('admin')->user()->can('drink_order_client.create') || Auth::guard('admin')->user()->can('table.view') || Auth::guard('admin')->user()->can('booking.view'))        
                     <div class="row">
                         @foreach($tables as $table)
                         <div class="col-md-6 mb-3 mb-lg-0">

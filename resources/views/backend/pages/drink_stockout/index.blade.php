@@ -75,7 +75,7 @@
                                     <td>{{ $stockout->stockout_signature }}</td>
                                     <td>@if($stockout->status == 1)<img src="{{ asset('img/warning3.gif')}}" width="35">@elseif($stockout->status == 1)<span class="badge badge-info">Encours</span> @elseif($stockout->status == 2)<span class="badge badge-info">Validé</span> @elseif($stockout->status == 3)<span class="badge badge-info">Confirmé</span> @elseif($stockout->status == 4)<span class="badge badge-info">Approuvé</span> @elseif($stockout->status == -1)<span class="badge badge-danger">Rejeté</span>@endif</td>
                                     <td>{{ $stockout->asker }}</td>
-                                    <td>@if($stockout->origin_sm_store_id){{ $stockout->origin_sm_store_id }} @elseif($stockout->origin_bg_store_id) {{ $stockout->origin_bg_store_id }} @else {{ $stockout->origin_extra_store_id }} @endif</td>
+                                    <td>@if($stockout->origin_sm_store_id)PETIT STOCK @elseif($stockout->origin_bg_store_id) STOCK INTERMEDIAIRE @else GRAND STOCK @endif</td>
                                     <td>{{ $stockout->destination }}</td>
                                     <td>{{ $stockout->created_by }}</td>
                                     <td>{{ $stockout->description }}</td>

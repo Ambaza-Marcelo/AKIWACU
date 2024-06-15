@@ -123,6 +123,15 @@ class OrderKitchenController extends Controller
             $created_by = $this->user->name;
             $accompagnement_id = $request->accompagnement_id;
 
+            $waiter_name = Employe::where('id',$employe_id)->value('name');
+
+            if ($waiter_name == $created_by) {
+                $employe_id = $request->employe_id;
+            }else{
+                session()->flash('error', 'Tu n\'es pas '.$waiter_name.'veuillez utiliser vos comptes s\'il vous plait!!');
+                return back();
+            }
+
             $latest = OrderKitchen::orderBy('id','desc')->first();
             if ($latest) {
                $order_no = 'BC' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
@@ -428,6 +437,11 @@ class OrderKitchenController extends Controller
            $pdf = PDF::loadView('backend.pages.document.food_order_client',compact('accompagnements','datas','order_no','setting','description','order_signature','date','order','totalValue'))->setPaper('a6', 'portrait');
 
            Storage::put('public/commande_cuisine/'.$order_no.'.pdf', $pdf->output());
+
+           OrderKitchen::where('order_no', '=', $order_no)
+                ->update(['flag' => 1]);
+            OrderKitchenDetail::where('order_no', '=', $order_no)
+                ->update(['flag' => 1]);
 
            // download pdf file
            return $pdf->download($order_no.'.pdf'); 

@@ -119,6 +119,7 @@ class OrderDrinkController extends Controller
                 ]);
             }
 
+
             $drink_id = $request->drink_id;
             $date = $request->date;
             $quantity = $request->quantity;
@@ -127,6 +128,14 @@ class OrderDrinkController extends Controller
             $description =$request->description; 
             $status = 0; 
             $created_by = $this->user->name;
+            $waiter_name = Employe::where('id',$employe_id)->value('name');
+
+            if ($waiter_name == $created_by) {
+                $employe_id = $request->employe_id;
+            }else{
+                session()->flash('error', 'Tu n\'es pas '.$waiter_name.'veuillez utiliser vos comptes s\'il vous plait!!');
+                return back();
+            }
 
             $latest = OrderDrink::orderBy('id','desc')->first();
             if ($latest) {
@@ -415,6 +424,11 @@ class OrderDrinkController extends Controller
            $pdf = PDF::loadView('backend.pages.document.drink_order_client',compact('datas','order_no','setting','description','order_signature','date','totalValue','order'))->setPaper('a6', 'portrait');
 
            Storage::put('public/commande_boisson/'.$order_no.'.pdf', $pdf->output());
+
+           OrderDrink::where('order_no', '=', $order_no)
+                ->update(['flag' => 1]);
+            OrderDrinkDetail::where('order_no', '=', $order_no)
+                ->update(['flag' => 1]);
 
            // download pdf file
            return $pdf->download('COMMANDE_'.$order_no.'.pdf'); 

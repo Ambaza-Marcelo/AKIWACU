@@ -116,6 +116,15 @@ class BartenderOrderController extends Controller
             $status = 0; 
             $created_by = $this->user->name;
 
+            $waiter_name = Employe::where('id',$employe_id)->value('name');
+
+            if ($waiter_name == $created_by) {
+                $employe_id = $request->employe_id;
+            }else{
+                session()->flash('error', 'Tu n\'es pas '.$waiter_name.'veuillez utiliser vos comptes s\'il vous plait!!');
+                return back();
+            }
+
             $latest = BartenderOrder::orderBy('id','desc')->first();
             if ($latest) {
                $order_no = 'BC' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
@@ -306,8 +315,13 @@ class BartenderOrderController extends Controller
 
            Storage::put('public/bartender_order/'.$order_no.'.pdf', $pdf->output());
 
+           BartenderOrder::where('order_no', '=', $order_no)
+                ->update(['flag' => 1]);
+            BartenderOrderDetail::where('order_no', '=', $order_no)
+                ->update(['flag' => 1]); 
+
            // download pdf file
-           return $pdf->download('COMMANDE_'.$order_no.'.pdf'); 
+           return $pdf->download('COMMANDE_'.$order_no.'.pdf');
            
         }else if ($stat == -1) {
             session()->flash('error', 'Order has been rejected !!');

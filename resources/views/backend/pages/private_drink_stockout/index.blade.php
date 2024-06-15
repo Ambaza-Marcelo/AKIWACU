@@ -123,7 +123,7 @@
                                         @if (Auth::guard('admin')->user()->can('private_drink_stockout.approuve'))
                                         @if($stockout->status == 3)
                                             <a class="btn btn-primary text-white" href="{{ route('admin.private-drink-stockouts.approuve', $stockout->stockout_no) }}"
-                                            onclick="event.preventDefault(); document.getElementById('approuve-form-{{ $stockout->stockout_no }}').submit();">
+                                            onclick="event.preventDefault(); document.getElementById('approuve-form-{{ $stockout->stockout_no }}').submit();this.style.visibility='hidden';" ondblclick="this.style.visibility='hidden';">
                                                 Approuver
                                             </a>
 

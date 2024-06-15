@@ -101,7 +101,7 @@
                                     <td>{{ $facture->tp_address_avenue }}</td>
                                     <td>{{ $facture->tp_address_rue }}</td>
                                 -->
-                                    <td>{{ $facture->customer_name }}</td>
+                                    <td>@if($facture->client_id){{ $facture->client->customer_name }} @else {{ $facture->customer_name }} @endif</td>
                                     <td>{{ $facture->customer_TIN }}</td>
                                     <td>{{ $facture->customer_address }}</td>
                                     <td>{{ $facture->auteur }}</td>

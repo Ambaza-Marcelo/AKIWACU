@@ -106,7 +106,7 @@
                                     <td>{{ $order->created_by }}</td>
                                     <td>
                                         @if (Auth::guard('admin')->user()->can('food_order_client.create'))
-                                        @if($order->status == -3 || $order->status == 1)
+                                        @if($order->status == -3 || $order->status == 1 && $order->flag != 1)
                                         <a href="{{ route('admin.order_kitchens.generatepdf',$order->order_no) }}"><img src="{{ asset('img/ISSh.gif') }}" width="60" title="Télécharger d'abord le document et puis imprimer"></a>
                                         @endif
                                         @endif
