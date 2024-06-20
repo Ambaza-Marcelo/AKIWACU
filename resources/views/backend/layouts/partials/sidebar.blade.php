@@ -32,7 +32,10 @@
                         </span></a>
                         <ul class="collapse">
                                 @if($usr->can('employe.view'))
-                                <li class=""><a href="{{ route('admin.employes.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Employés')</a></li>
+                                <li class=""><a href="{{ route('admin.employes.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Serveurs')</a></li>
+                                @endif
+                                @if($usr->can('employe.create'))
+                                <li class=""><a href="{{ route('admin.staff_members.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Responsables')</a></li>
                                 @endif
                                 @if ($usr->can('employe.view'))
                                 <li class=""><a href="{{ route('admin.positions.index') }}"><i class="fa fa-map-marker"></i>&nbsp;@lang('Position')</a></li>

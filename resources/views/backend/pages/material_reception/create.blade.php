@@ -203,7 +203,7 @@
                           "</select>"+
                         "</td>"+
                         "<td>"+
-                          "<input type='number' name='quantity[]' placeholder='Enter Quantity' class='form-control' />"+
+                          "<input type='number' name='quantity[]' placeholder='Enter Quantity' class='form-control' step='any' min='0'/>"+
                         "</td>"+
                         "<td>"+
                           "<select class='form-control' name='unit[]' id='unit'>"+
@@ -212,7 +212,7 @@
                                 "</select>"+
                         "</td>"+
                         "<td>"+
-                        "<input type='number' name='unit_price[]' placeholder='Enter Unit price' class='form-control' />"+
+                        "<input type='number' name='unit_price[]' placeholder='Enter Unit price' class='form-control' step='any' min='0' />"+
                         "</td>"+
                         "<td>"+
                           "<button type='button' class='btn btn-danger remove-tr'>@lang('messages.delete')</button>"+

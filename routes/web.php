@@ -193,6 +193,16 @@ Route::group(['prefix' => 'admin'], function () {
     Route::put('tables/update/{id}', 'Backend\TableController@update')->name('admin.tables.update');
     Route::delete('tables/destroy/{id}', 'Backend\TableController@destroy')->name('admin.tables.destroy');
 
+    //staff_members routes
+    Route::get('staff_members/index', 'Backend\HomeConsumption\StaffMemberController@index')->name('admin.staff_members.index');
+    Route::get('staff_members/choose', 'Backend\HomeConsumption\StaffMemberController@choose')->name('admin.staff_members.choose');
+    Route::get('staff_members/choose-type-consumption/{staff_member_id}', 'Backend\HomeConsumption\StaffMemberController@chooseType')->name('admin.staff_members.choose-type-consumption');
+    Route::get('staff_members/create', 'Backend\HomeConsumption\StaffMemberController@create')->name('admin.staff_members.create');
+    Route::post('staff_members/store', 'Backend\HomeConsumption\StaffMemberController@store')->name('admin.staff_members.store');
+    Route::get('staff_members/edit/{id}', 'Backend\HomeConsumption\StaffMemberController@edit')->name('admin.staff_members.edit');
+    Route::put('staff_members/update/{id}', 'Backend\HomeConsumption\StaffMemberController@update')->name('admin.staff_members.update');
+    Route::delete('staff_members/destroy/{id}', 'Backend\HomeConsumption\StaffMemberController@destroy')->name('admin.staff_members.destroy');
+
     Route::get('employes/index', 'Backend\EmployeController@index')->name('admin.employes.index');
     Route::get('employes/create', 'Backend\EmployeController@create')->name('admin.employes.create');
     Route::post('employes/store', 'Backend\EmployeController@store')->name('admin.employes.store');
@@ -677,6 +687,22 @@ Route::group(['prefix' => 'admin'], function () {
     Route::put('EBMS/bartender-orders/reset/{order_no}','Backend\BartenderOrderController@reset')->name('admin.bartender-orders.reset');
 
     Route::get('EBMS/bartender-orders/export-to-excel', 'Backend\BartenderOrderController@exportToExcel')->name('admin.bartender-orders.export-to-excel');
+
+    //consumption routes
+    Route::get('EBMS/home-consumption/barrist-index/{staff_member_id}', 'Backend\HomeConsumption\HomeConsumptionController@indexBarrist')->name('admin.home-consumption-barrist.index');
+    Route::get('EBMS/home-consumption/food-index/{staff_member_id}', 'Backend\HomeConsumption\HomeConsumptionController@indexFood')->name('admin.home-consumption-food.index');
+    Route::get('EBMS/home-consumption/barrist-create/{staff_member_id}', 'Backend\HomeConsumption\HomeConsumptionController@createBarrist')->name('admin.home-consumption-barrist.create');
+    Route::get('EBMS/home-consumption/food-create/{staff_member_id}', 'Backend\HomeConsumption\HomeConsumptionController@createFood')->name('admin.home-consumption-food.create');
+    Route::post('EBMS/home-consumption/store', 'Backend\HomeConsumption\HomeConsumptionController@store')->name('admin.home-consumption.store');
+    Route::delete('EBMS/home-consumption/destroy/{consumption_no}', 'Backend\HomeConsumption\HomeConsumptionController@destroy')->name('admin.home-consumption.destroy');
+
+    Route::get('EBMS/home-consumption/show/{consumption_no}', 'Backend\HomeConsumption\HomeConsumptionController@show')->name('admin.home-consumption.show');
+    Route::get('EBMS/home-consumption/voir-consommation-a-rejeter/{consumption_no}', 'Backend\HomeConsumption\HomeConsumptionController@voirConsommationRejeter')->name('admin.home-consumption.voir-consommation-a-rejeter');
+
+    Route::get('EBMS/home-consumption/generatepdf/{consumption_no}','Backend\HomeConsumption\HomeConsumptionController@htmlPdf')->name('admin.home-consumption.generatepdf');
+    Route::put('EBMS/home-consumption/reject/{consumption_no}','Backend\HomeConsumption\HomeConsumptionController@reject')->name('admin.home-consumption.reject');
+
+    Route::get('EBMS/home-consumption/export-to-excel', 'Backend\HomeConsumption\HomeConsumptionController@exportToExcel')->name('admin.home-consumption.export-to-excel');
 
     //Extra Grand Stock des Boissons
     Route::get('EBMS/drink-extra-big-store-inventory/index', 'Backend\DrinkExtraBigStoreInventoryController@index')->name('admin.drink-extra-big-store-inventory.index');

@@ -75,7 +75,7 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
                         @endforeach
                     </div>
                     <div class="row">
-                        <div class="col-md-4 mb-3 mb-lg-0">
+                        <div class="col-md-6 mb-3 mb-lg-0">
                             <div class="card">
                                 <div class="seo-fact sbg4">
                                     <a href="{{ route('admin.booking-kidness-space.index') }}">
@@ -91,7 +91,7 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
                                 </div>
                             </div><br>
                         </div>
-                        <div class="col-md-4 mb-3 mb-lg-0">
+                        <div class="col-md-6 mb-3 mb-lg-0">
                             <div class="card">
                                 <div class="seo-fact sbg4">
                                     <a href="{{ route('admin.booking-swiming-pool.index') }}">
@@ -107,7 +107,9 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
                                 </div>
                             </div><br>
                         </div>
-                        <div class="col-md-4 mb-3 mb-lg-0">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3 mb-lg-0">
                             <div class="card">
                                 <div class="seo-fact sbg3">
                                     <a href="{{ route('admin.booking-breakfast.index') }}">
@@ -115,6 +117,22 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
                                             <div class="seofct-icon">
                                                 <img src="{{ asset('img/undraw_special_event-001.svg') }}" width="60">
                                                 @lang('RESERVATION BREAKFAST')
+                                            </div>
+                                            <h2>
+                                            </h2>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div><br>
+                        </div>
+                        <div class="col-md-6 mb-3 mb-lg-0">
+                            <div class="card">
+                                <div class="seo-fact sbg3">
+                                    <a href="{{ route('admin.staff_members.choose') }}">
+                                        <div class="p-4 d-flex justify-content-between align-items-center">
+                                            <div class="seofct-icon">
+                                                <img src="{{ asset('img/undraw_special_event-001.svg') }}" width="60">
+                                                @lang('CONSOMMATION MAISON')
                                             </div>
                                             <h2>
                                             </h2>
