@@ -116,7 +116,7 @@
                             <tbody>
                                 @foreach($datas as $data)
                                <tr>
-                                    <td>@if($data->salle_id){{ $data->salle->name }} @elseif($data->service_id){{ $data->service->name }} @else{{ $data->salle->name }} @endif</td>
+                                    <td>@if($data->salle_id){{ $data->salle->name }} @elseif($data->service_id){{ $data->service->name }} @elseif($data->swiming_pool_id) {{ $data->swimingPool->name }} @elseif($data->kidness_space_id) {{ $data->kidnessSpace->name }} @endif</td>
                                     <td>{{ $data->quantity }}........................................{{ number_format($data->selling_price,2,',',' ') }}</td>
                                 </tr>
                                 @endforeach

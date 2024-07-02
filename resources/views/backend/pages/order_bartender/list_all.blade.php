@@ -98,14 +98,9 @@
                                         @endif
                                         @endif
                                         @if (Auth::guard('admin')->user()->can('drink_order_client.reject'))
-                                            <a class="btn btn-primary text-white" href="{{ route('admin.bartender-orders.reject', $order->order_no) }}"
-                                            onclick="event.preventDefault(); document.getElementById('reject-form-{{ $order->order_no }}').submit();">
+                                            <a class="btn btn-primary text-white" href="{{ route('admin.bartender-orders.voir-commande-a-rejeter', $order->order_no) }}">
                                                 Rejeter
                                             </a>
-                                            <form id="reject-form-{{ $order->order_no }}" action="{{ route('admin.bartender-orders.reject', $order->order_no) }}" method="POST" style="display: none;">
-                                                @method('PUT')
-                                                @csrf
-                                            </form>
                                         @endif
                                         @if (Auth::guard('admin')->user()->can('drink_order_client.reset'))
                                             @if($order->status == -1 || $order->status == 1)

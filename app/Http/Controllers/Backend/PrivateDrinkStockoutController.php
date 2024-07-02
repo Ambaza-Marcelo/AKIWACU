@@ -359,8 +359,8 @@ class PrivateDrinkStockoutController extends Controller
 
             $email1 = 'ambazamarcellin2001@gmail.com';
             $email2 = 'frangiye@gmail.com';
-            //$email3 = 'khaembamartin@gmail.com';
-            $email4 = 'munyembari_mp@yahoo.fr';
+            $email3 = 'khaembamartin@gmail.com';
+            //$email4 = 'munyembari_mp@yahoo.fr';
             $auteur = $this->user->name;
             $mailData = [
                     'title' => 'SORTIE DES ARTICLES AU STOCK PDG',
@@ -373,8 +373,8 @@ class PrivateDrinkStockoutController extends Controller
          
             Mail::to($email1)->send(new PrivateStockoutMail($mailData));
             Mail::to($email2)->send(new PrivateStockoutMail($mailData));
-            //Mail::to($email3)->send(new PrivateStockoutMail($mailData));
-            Mail::to($email4)->send(new PrivateStockoutMail($mailData));
+            Mail::to($email3)->send(new PrivateStockoutMail($mailData));
+            //Mail::to($email4)->send(new PrivateStockoutMail($mailData));
 
         session()->flash('success', 'Stockout has been done successfuly !');
         return back();

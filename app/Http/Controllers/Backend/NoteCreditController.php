@@ -19,8 +19,8 @@ use Validator;
 //use GuzzleHttp\Client;
 use App\Models\Facture;
 use App\Models\FactureDetail;
-use App\Models\FactureRestaurant;
-use App\Models\FactureRestaurantDetail;
+use App\Models\NoteCredit;
+use App\Models\NoteCreditDetail;
 use App\Models\Setting;
 use App\Models\OrderDrink;
 use App\Models\OrderDrinkDetail;
@@ -61,13 +61,11 @@ use App\Models\SwimingPool;
 use App\Mail\DeleteFactureMail;
 use App\Mail\InvoiceResetedMail;
 use App\Mail\ReportDrinkMail;
-use charlieuki\ReceiptPrinter\ReceiptPrinter as ReceiptPrinter;
 
-
-class FactureController extends Controller
+class NoteCreditController extends Controller
 {
     //
-     public $user;
+    public $user;
 
     public function __construct()
     {
@@ -84,22 +82,12 @@ class FactureController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any invoice !');
         }
 
-        $factures = Facture::where('drink_order_no','!=','')->take(200)->orderBy('id','desc')->get();
-        return view('backend.pages.invoice.index',compact('factures'));
-    }
-
-    public function listAll()
-    {
-        if (is_null($this->user) || !$this->user->can('invoice_drink.view')) {
-            abort(403, 'Sorry !! You are Unauthorized to view any invoice !');
-        }
-
-        $factures = Facture::take(500)->orderBy('invoice_number','desc')->get();
-        return view('backend.pages.invoice_all.index',compact('factures'));
+        $factures = Facture::take(200)->orderBy('id','desc')->get();
+        return view('backend.pages.note_credit.index',compact('factures'));
     }
 
 
-    public function create($order_no)
+    public function create($invoice_number)
     {
         if (is_null($this->user) || !$this->user->can('invoice_drink.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any invoice !');
@@ -1086,11 +1074,6 @@ class FactureController extends Controller
             $facture->invoice_signature_date = Carbon::now();
             $facture->save();
 
-            BookingBooking::where('booking_no', '=', $request->booking_no)
-                ->update(['status' => 2]);
-            BookingBookingDetail::where('booking_no', '=', $request->booking_no)
-                ->update(['status' => 2]);
-
         }elseif(!empty($service_id)){
             for( $count = 0; $count < count($service_id); $count++ )
         {
@@ -1191,11 +1174,6 @@ class FactureController extends Controller
             $facture->auteur = $this->user->name;
             $facture->invoice_signature_date = Carbon::now();
             $facture->save();
-
-            BookingBooking::where('booking_no', '=', $request->booking_no)
-                ->update(['status' => 2]);
-            BookingBookingDetail::where('booking_no', '=', $request->booking_no)
-                ->update(['status' => 2]);
 
         }elseif(!empty($kidness_space_id)){
             for( $count = 0; $count < count($kidness_space_id); $count++ )
@@ -1298,11 +1276,6 @@ class FactureController extends Controller
             $facture->invoice_signature_date = Carbon::now();
             $facture->save();
 
-            BookingBooking::where('booking_no', '=', $request->booking_no)
-                ->update(['status' => 2]);
-            BookingBookingDetail::where('booking_no', '=', $request->booking_no)
-                ->update(['status' => 2]);
-
         }elseif(!empty($swiming_pool_id)){
             for( $count = 0; $count < count($swiming_pool_id); $count++ )
         {
@@ -1403,11 +1376,6 @@ class FactureController extends Controller
             $facture->auteur = $this->user->name;
             $facture->invoice_signature_date = Carbon::now();
             $facture->save();
-
-            BookingBooking::where('booking_no', '=', $request->booking_no)
-                ->update(['status' => 2]);
-            BookingBookingDetail::where('booking_no', '=', $request->booking_no)
-                ->update(['status' => 2]);
 
         }elseif(!empty($breakfast_id)){
             for( $count = 0; $count < count($breakfast_id); $count++ )
@@ -1510,11 +1478,6 @@ class FactureController extends Controller
             $facture->invoice_signature_date = Carbon::now();
             $facture->save();
 
-            BookingBooking::where('booking_no', '=', $request->booking_no)
-                ->update(['status' => 2]);
-            BookingBookingDetail::where('booking_no', '=', $request->booking_no)
-                ->update(['status' => 2]);
-
         }elseif(!empty($table_id)){
             for( $count = 0; $count < count($table_id); $count++ )
         {
@@ -1616,11 +1579,6 @@ class FactureController extends Controller
             $facture->auteur = $this->user->name;
             $facture->invoice_signature_date = Carbon::now();
             $facture->save();
-
-            BookingBooking::where('booking_no', '=', $request->booking_no)
-                ->update(['status' => 2]);
-            BookingBookingDetail::where('booking_no', '=', $request->booking_no)
-                ->update(['status' => 2]);
 
         }
 
@@ -3910,6 +3868,4 @@ class FactureController extends Controller
         session()->flash('success', 'La facture est supprimée !!');
         return back();
     }
-
-    
 }

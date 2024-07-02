@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class FactureRestaurant extends Model
+class PrivateFacture extends Model
 {
     //
     protected $fillable = [
@@ -29,10 +29,6 @@ class FactureRestaurant extends Model
         'invoice_signature_date',
         'invoice_signature',
         'invoice_signature_date',
-        'employe_id'
     ];
 
-    public function employe(){
-        return $this->belongsTo('\App\Models\Employe');
-    }
 }

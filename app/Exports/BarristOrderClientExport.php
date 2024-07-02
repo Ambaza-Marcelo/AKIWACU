@@ -27,7 +27,7 @@ class BarristOrderClientExport implements FromCollection, WithMapping, WithHeadi
         $end_date = $endDate.' 23:59:59';
 
         return BarristOrderDetail::select(
-                        DB::raw('id,barrist_item_id,date,quantity,purchase_price,selling_price,total_amount_selling,employe_id,created_by,order_no,confirmed_by,status'))->whereBetween('date',[$start_date,$end_date])->groupBy('id','barrist_item_id','employe_id','date','quantity','status','purchase_price','selling_price','total_amount_selling','order_no','confirmed_by','created_by')->orderBy('id','asc')->get();
+                        DB::raw('id,barrist_item_id,date,quantity,purchase_price,selling_price,total_amount_selling,employe_id,created_by,order_no,confirmed_by,status,table_id,updated_at'))->whereBetween('date',[$start_date,$end_date])->groupBy('id','barrist_item_id','employe_id','date','quantity','status','purchase_price','selling_price','total_amount_selling','order_no','confirmed_by','created_by','table_id','updated_at')->orderBy('id','asc')->get();
     }
 
     public function map($data) : array {
@@ -46,10 +46,18 @@ class BarristOrderClientExport implements FromCollection, WithMapping, WithHeadi
             $status = " ";
         }
 
+        if (!empty($data->table_id)) {
+            $table = $data->table->name;
+        }else{
+            $table = $data->table_no;
+        }
+
         return [
             $data->id,
+            $data->updated_at,
             Carbon::parse($data->date)->format('Y-m-d'),
 			$data->order_no,
+            $table,
             $data->employe->name,
             $data->barristItem->name,
             $data->quantity,
@@ -70,8 +78,10 @@ class BarristOrderClientExport implements FromCollection, WithMapping, WithHeadi
     public function headings() : array {
         return [
             '#',
-            'Date',
+            '',
+            'Date operation',
             'No Commande',
+            'Table',
             'Nom du Serveur',
             'Libellé',
             'Quantité',

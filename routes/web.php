@@ -28,6 +28,7 @@ Route::get('MENU-CUISINE','WelcomeController@food')->name('menu-cuisine');
 Route::get('MENU-BARRISTA','WelcomeController@barrista')->name('menu-barrista');
 Route::get('MENU-EDEN-GARDEN','WelcomeController@eden')->name('menu-eden');
 Route::get('SALLES-DE-CONFERENCES','WelcomeController@salle')->name('salle-conferences');
+Route::get('MENU-BARTENDER','WelcomeController@bartender')->name('menu-bartender');
 
 /**
  * Admin routes
@@ -763,6 +764,28 @@ Route::group(['prefix' => 'admin'], function () {
     Route::put('PDG/private-drink-inventory/reject/{inventory_no}','Backend\PrivateDrinkInventoryController@rejectInventory')->name('admin.private-drink-inventory.reject');
     Route::put('PDG/private-drink-inventory/reset/{inventory_no}','Backend\PrivateDrinkInventoryController@resetInventory')->name('admin.private-drink-inventory.reset');
     Route::get('PDG/private-drink-inventory/export-to-excel/{inventory_no}','Backend\PrivateDrinkInventoryController@exportToExcel')->name('admin.private-drink-inventory.export-to-excel');
+
+    //private-factures routes
+    Route::get('MAGASIN-EDEN/private-factures/index', 'Backend\PrivateFactureController@index')->name('admin.private-factures.index');
+    Route::get('MAGASIN-EDEN/private-factures/create', 'Backend\PrivateFactureController@create')->name('admin.private-factures.create');
+    Route::post('MAGASIN-EDEN/private-factures/store', 'Backend\PrivateFactureController@store')->name('admin.private-factures.store');
+    Route::get('MAGASIN-EDEN/private-factures/edit/{invoice_number}', 'Backend\PrivateFactureController@edit')->name('admin.private-factures.edit');
+    Route::put('MAGASIN-EDEN/private-factures/update/{invoice_number}', 'Backend\PrivateFactureController@update')->name('admin.private-factures.update');
+    Route::delete('MAGASIN-EDEN/private-factures/destroy/{invoice_number}', 'Backend\PrivateFactureController@destroy')->name('admin.private-factures.destroy');
+
+    Route::get('MAGASIN-EDEN/private-factures/show/{invoice_number}', 'Backend\PrivateFactureController@show')->name('admin.private-factures.show');
+    Route::get('MAGASIN-EDEN/private-factures/voir-facture-a-credit/{invoice_number}', 'Backend\PrivateFactureController@voirFactureCredit')->name('admin.private-factures.voir-facture-a-credit');
+    Route::get('MAGASIN-EDEN/private-factures/voir-facture-a-recouvrer/{invoice_number}', 'Backend\PrivateFactureController@voirFactureRecouvrer')->name('admin.private-factures.voir-facture-a-recouvrer');
+    Route::get('MAGASIN-EDEN/private-factures/voir-facture-a-annuler/{invoice_number}', 'Backend\PrivateFactureController@voirFactureAnnuler')->name('admin.private-factures.voir-facture-a-annuler');
+
+    Route::get('MAGASIN-EDEN/private-factures/generatepdf/{invoice_number}','Backend\PrivateFactureController@facture')->name('admin.private-factures.generatepdf');
+    Route::put('MAGASIN-EDEN/private-factures/validate-cash/{invoice_number}', 'Backend\PrivateFactureController@validerFacture')->name('admin.private-factures.validate-cash');
+    Route::put('MAGASIN-EDEN/private-factures/validate-credit/{invoice_number}', 'Backend\PrivateFactureController@validerFactureCredit')->name('admin.private-factures.validate-credit');
+    Route::put('MAGASIN-EDEN/private-factures/recouvrement/{invoice_number}', 'Backend\PrivateFactureController@recouvrement')->name('admin.private-factures.recouvrement');
+    Route::put('MAGASIN-EDEN/private-factures/reset/{invoice_number}','Backend\PrivateFactureController@annulerFacture')->name('admin.private-factures.reset');
+    Route::put('MAGASIN-EDEN/private-factures/payer-credit/{invoice_number}','Backend\PrivateFactureController@payerCredit')->name('admin.private-factures.payer-credit');
+
+    Route::get('EBMS/private-factures/export-to-excel', 'Backend\PrivateFactureController@exportToExcel')->name('admin.private-factures.export-to-excel');
 
 
     //Extra Grand Stock des nourritures

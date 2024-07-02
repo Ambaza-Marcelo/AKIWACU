@@ -80,9 +80,9 @@ class SwimingPoolController extends Controller
         $swiming_pool->quantity = $request->quantity;
         $swiming_pool->specification = $request->specification;
         $swiming_pool->vat = $request->vat;
-        $swiming_pool->taux_marge = $request->taux_marge;
-        $swiming_pool->taux_majoration = $request->taux_majoration;
-        $swiming_pool->taux_reduction = $request->taux_reduction;
+        //$swiming_pool->taux_marge = $request->taux_marge;
+        //$swiming_pool->taux_majoration = $request->taux_majoration;
+        //$swiming_pool->taux_reduction = $request->taux_reduction;
         $swiming_pool->auteur = $this->user->name;
         $swiming_pool->save();
 
@@ -146,9 +146,9 @@ class SwimingPoolController extends Controller
         $swiming_pool->quantity = $request->quantity;
         $swiming_pool->specification = $request->specification;
         $swiming_pool->vat = $request->vat;
-        $swiming_pool->taux_marge = $request->taux_marge;
-        $swiming_pool->taux_majoration = $request->taux_majoration;
-        $swiming_pool->taux_reduction = $request->taux_reduction;
+        //$swiming_pool->taux_marge = $request->taux_marge;
+        //$swiming_pool->taux_majoration = $request->taux_majoration;
+        //$swiming_pool->taux_reduction = $request->taux_reduction;
         $swiming_pool->auteur = $this->user->name;
         $swiming_pool->save();
 

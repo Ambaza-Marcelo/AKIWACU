@@ -367,6 +367,10 @@
                                 <li class=""><a href="{{ route('admin.private-drink-stockouts.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Stockout Private Item')</a></li>
                                 @endif
 
+                                @if($usr->can('private_drink_stockout.create'))
+                                <li class=""><a href="{{ route('admin.private-factures.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Private Sales')</a></li>
+                                @endif
+
                         </ul>
                     </li>
                     @endif

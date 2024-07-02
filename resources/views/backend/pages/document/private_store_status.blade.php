@@ -45,7 +45,7 @@
                     <br><br><br><br><br>
                     <br><br><br>
                     <div>
-                        <h3 style="text-align: center;text-decoration: underline;">ETAT DU STOCK DES BOISSONS PDG MUSUMBA HOLDING</h3>
+                        <h3 style="text-align: center;text-decoration: underline;">ETAT DU STOCK DES BOISSONS X</h3>
                     </div>
                     <div>
                         <table style="border: 1px solid black;border-collapse: collapse;">

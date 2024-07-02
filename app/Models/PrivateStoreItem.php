@@ -31,7 +31,11 @@ class PrivateStoreItem extends Model
     public function privateDrinkStockoutDetail(){
         return $this->hasMany('App\Models\PrivateDrinkStockoutDetail','private_store_item_id');
     }
-public function privateDrinkInventoryDetail(){
+    public function privateDrinkInventoryDetail(){
         return $this->hasMany('App\Models\PrivateDrinkInventoryDetail','private_store_item_id');
+    }
+
+    public function privateFactureDetail(){
+        return $this->hasMany('App\Models\PrivateFactureDetail','private_store_item_id');
     }
 }

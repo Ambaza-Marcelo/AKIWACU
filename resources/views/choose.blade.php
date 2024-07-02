@@ -74,12 +74,12 @@
         <div class="col-md-6 mb-3 mb-lg-0">
                 <div class="card">
                     <div class="seo-fact sbg1">
-                        <a href="{{ route('menu-eden') }}">
+                        <a href="{{ route('menu-bartender') }}">
                             <div class="p-4 d-flex justify-content-between align-items-center">
                                 <div class="seofct-icon">
                                     <img src="{{ asset('img/eden_logo1.png') }}" width="200">
 
-                                    @lang('MENU EDEN GARDEN')</div>
+                                    @lang('BARTENDER')</div>
                                 <h2>
                                 </h2>
                             </div>
@@ -98,6 +98,22 @@
                                     <img src="{{ asset('img/eden_logo1.png') }}" width="200">
 
                                     @lang('SALLES DE CONFERENCES')</div>
+                                <h2>
+                                </h2>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3 mb-lg-0">
+                <div class="card">
+                    <div class="seo-fact sbg1">
+                        <a href="{{ route('menu-eden') }}">
+                            <div class="p-4 d-flex justify-content-between align-items-center">
+                                <div class="seofct-icon">
+                                    <img src="{{ asset('img/eden_logo1.png') }}" width="200">
+
+                                    @lang('MENU EDEN GARDEN')</div>
                                 <h2>
                                 </h2>
                             </div>

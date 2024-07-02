@@ -42,7 +42,7 @@ class BarristOrderController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any order !');
         }
 
-        $orders = BarristOrder::orderBy('id','desc')->take(500)->get();
+        $orders = BarristOrder::orderBy('id','desc')->take(1000)->get();
         
         return view('backend.pages.order_barrist.list_all', compact('orders'));
     }

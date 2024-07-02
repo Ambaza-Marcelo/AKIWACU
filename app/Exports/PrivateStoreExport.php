@@ -25,7 +25,8 @@ class PrivateStoreExport implements FromCollection, WithMapping, WithHeadings
             $data->name,
             $data->code,
             $data->quantity,
-            $data->unit
+            $data->unit,
+            $data->purchase_price
         ] ;
  
  
@@ -37,7 +38,8 @@ class PrivateStoreExport implements FromCollection, WithMapping, WithHeadings
             'Article',
             'Code',
             'Quantite',
-            'Unité'
+            'Unité',
+            'P.A'
         ] ;
     }
 }

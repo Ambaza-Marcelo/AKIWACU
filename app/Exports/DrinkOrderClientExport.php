@@ -27,7 +27,7 @@ class DrinkOrderClientExport implements FromCollection, WithMapping, WithHeading
         $end_date = $endDate.' 23:59:59';
 
         return OrderDrinkDetail::select(
-                        DB::raw('id,drink_id,date,quantity,purchase_price,selling_price,total_amount_selling,employe_id,created_by,order_no,confirmed_by,status,rejected_by,rej_motif'))->whereBetween('date',[$start_date,$end_date])->groupBy('id','drink_id','employe_id','date','quantity','status','purchase_price','selling_price','total_amount_selling','order_no','confirmed_by','created_by','rejected_by','rej_motif')->orderBy('id','asc')->get();
+                        DB::raw('id,drink_id,date,quantity,purchase_price,selling_price,total_amount_selling,employe_id,created_by,order_no,confirmed_by,status,rejected_by,rej_motif,table_id'))->whereBetween('date',[$start_date,$end_date])->groupBy('id','drink_id','employe_id','date','quantity','status','purchase_price','selling_price','total_amount_selling','order_no','confirmed_by','created_by','rejected_by','rej_motif','table_id')->orderBy('id','asc')->get();
     }
 
     public function map($data) : array {
@@ -52,10 +52,17 @@ class DrinkOrderClientExport implements FromCollection, WithMapping, WithHeading
             $rej_motif = "";
         }
 
+        if (!empty($data->table_id)) {
+            $table = $data->table->name;
+        }else{
+            $table = $data->table_no;
+        }
+
         return [
             $data->id,
             Carbon::parse($data->date)->format('Y-m-d'),
 			$data->order_no,
+            $table,
             $data->employe->name,
             $data->drink->name,
             $data->quantity,
@@ -79,6 +86,7 @@ class DrinkOrderClientExport implements FromCollection, WithMapping, WithHeading
             '#',
             'Date',
             'No Commande',
+            'Table',
             'Nom du Serveur',
             'Libellé',
             'Quantité',

@@ -33,6 +33,7 @@ class CreatePrivateStoreItemsTable extends Migration
             $table->string('threshold_quantity')->nullable(true);
             $table->string('expiration_date')->nullable(true);
             $table->string('status')->nullable(true);
+            $table->boolean('verified')->default(false);
             $table->string('updated_by')->nullable(true);
             $table->string('created_by')->nullable(true);
             $table->timestamps();

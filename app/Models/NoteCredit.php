@@ -4,13 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class FactureBarristDetail extends Model
+class NoteCredit extends Model
 {
     //
-    protected $table = 'barrist_invoice_details';
     protected $fillable = [
         'invoice_number',
         'invoice_date',
+        'sale_date',
+        'type_facture',
         'tp_type',
         'tp_name',
         'tp_TIN',
@@ -30,23 +31,25 @@ class FactureBarristDetail extends Model
         'invoice_signature_date',
         'invoice_signature',
         'invoice_signature_date',
-        'item_designation',
-        'item_quantity',
-        'item_price',
-        'item_ct',
-        'item_tl',
-        'item_price_nvat',
-        'vat',
-        'item_price_wvat',
-        'item_total_amount',
-        'barrist_item_id'
+        'employe_id',
+        'client_id',
+        'bookingClient',
+        'table_id'
     ];
 
-    public function barristItem(){
-        return $this->belongsTo('App\Models\BarristItem');
+    public function employe(){
+        return $this->belongsTo('\App\Models\Employe');
     }
 
-    public function employe(){
-        return $this->belongsTo('App\Models\Employe');
+    public function client(){
+        return $this->belongsTo('\App\Models\Client');
+    }
+
+    public function bookingClient(){
+        return $this->belongsTo('\App\Models\BookingClient');
+    }
+
+    public function table(){
+        return $this->belongsTo('App\Models\Table');
     }
 }

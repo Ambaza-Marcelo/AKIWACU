@@ -59,6 +59,7 @@
                                                 {{ $staff_member->name }}
                                             </div>
                                             @if (Auth::guard('admin')->user()->can('drink_reception.view') && Auth::guard('admin')->user()->can('drink_order_client.view'))
+                                            @if(Auth::guard('admin')->user()->name  == $staff_member->name)
                                             <h4>
                                                 @if($staff_member->etat == '0')
                                                 <span class="badge badge-success">Montant Authorisé : {{ number_format($staff_member->total_amount_authorized,0,',',' ')}} - Montant Consommé : {{ $staff_member->total_amount_consumed}}</span>
@@ -66,6 +67,7 @@
                                                 <span class="badge badge-danger">Montant Consommé : {{ number_format($staff_member->total_amount_consumed,0,',',' ') }}</span>
                                                 @endif
                                             </h4>
+                                            @endif
                                             @endif
                                         </div>
                                     </a>

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\FoodItem;
 use App\Models\Drink;
 use App\Models\BarristItem;
+use App\Models\BartenderItem;
 use App\Models\BookingSalle;
 use App\Models\BookingService;
 
@@ -69,6 +70,10 @@ class WelcomeController extends Controller
             $salles = BookingSalle::where('name', 'LIKE', '%'. $key. '%')
                     ->get();
             return view('salle',compact('salles'));
+        }elseif ($type == "BARTENDER") {
+            $bartenders = BartenderItem::where('name', 'LIKE', '%'. $key. '%')
+                    ->get();
+            return view('bartender',compact('bartenders'));
         }
     
     }
@@ -83,6 +88,18 @@ class WelcomeController extends Controller
     	$barrists = BarristItem::orderBy('name')->get();
 
     	return view('barrista',compact('barrists'));
+    }
+
+    public function bartender(Request $request){
+
+        if ($request->ajax()) {
+            return BartenderItem::select("name as value", "id")
+                    ->where('name', 'LIKE', '%'. $request->get('search'). '%')
+                    ->get();
+        }
+        $bartenders = BartenderItem::orderBy('name')->get();
+
+        return view('bartender',compact('bartenders'));
     }
 
     public function eden(Request $request){

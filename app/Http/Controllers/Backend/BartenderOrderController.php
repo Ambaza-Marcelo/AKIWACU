@@ -261,19 +261,58 @@ class BartenderOrderController extends Controller
         return back();
     }
 
-    public function reject($order_no)
+    public function voirCommandeRejeter($order_no)
+    {
+        if (is_null($this->user) || !$this->user->can('drink_order_client.reject')) {
+            abort(403, 'Sorry !! You are Unauthorized to reject any order !');
+        }
+        //
+         $data = BartenderOrder::where('order_no', $order_no)->first();
+         $datas = BartenderOrderDetail::where('order_no', $order_no)->get();
+         $articles  = BartenderItem::where('selling_price','>',0)->orderBy('name','asc')->get();
+         $employes  = Employe::orderBy('name','asc')->get();
+         return view('backend.pages.order_bartender.reject', compact('datas','data','articles','employes'));
+    }
+
+    public function reject(Request $request,$order_no)
     {
        if (is_null($this->user) || !$this->user->can('drink_order_client.reject')) {
             abort(403, 'Sorry !! You are Unauthorized to reject any order !');
         }
 
+        $request->validate([
+            'rej_motif' => 'required|min:10|max:490',
+            'table_id' => 'required'
+        ]);
+
+        $table_id = $request->table_id;
+
+        $rej_motif = $request->rej_motif;
+
+        $total_amount_selling = DB::table('bartender_order_details')
+            ->where('order_no', '=', $order_no)
+            ->sum('total_amount_selling');
+
+        $total_amount_paying = DB::table('tables')
+            ->where('id', '=', $table_id)
+            ->sum('total_amount_paying');
+
         BartenderOrder::where('order_no', '=', $order_no)
-                ->update(['status' => -1]);
+                ->update(['status' => -1,'rej_motif' => $rej_motif,'rejected_by' => $this->user->name]);
         BartenderOrderDetail::where('order_no', '=', $order_no)
-                ->update(['status' => -1]);
+                ->update(['status' => -1,'rej_motif' => $rej_motif,'rejected_by' => $this->user->name]);
+
+        $in_pending = count(BartenderOrderDetail::where('table_id',$table_id)->where('status','!=',3)->where('status','!=',-1)->get());
+
+        if ($in_pending < 1 && $total_amount_selling >= $total_amount_paying) {
+            Table::where('id',$table_id)->update(['etat' => 0,'waiter_name' => '','opened_by' => '','total_amount_paying' => 0]);
+        }else {
+            $total_amount_remaining = $total_amount_paying - $total_amount_selling;
+            Table::where('id',$table_id)->update(['total_amount_paying' => $total_amount_remaining]);
+        }
 
         session()->flash('success', 'Order has been rejected !!');
-        return back();
+        return redirect()->route('admin.bartender-orders.index',$table_id);
     }
 
     public function reset($order_no)
@@ -283,9 +322,9 @@ class BartenderOrderController extends Controller
         }
 
         BartenderOrder::where('order_no', '=', $order_no)
-                ->update(['status' => -2]);
+                ->update(['status' => 0]);
         BartenderOrderDetail::where('order_no', '=', $order_no)
-                ->update(['status' => -2]);
+                ->update(['status' => 0]);
 
         session()->flash('success', 'Order has been reseted !!');
         return back();

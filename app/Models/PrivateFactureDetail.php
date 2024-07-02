@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class FactureRestaurantDetail extends Model
+class PrivateFactureDetail extends Model
 {
     //
     protected $fillable = [
@@ -38,14 +38,11 @@ class FactureRestaurantDetail extends Model
         'vat',
         'item_price_wvat',
         'item_total_amount',
-        'food_item_id'
+        'private_store_item_id'
     ];
 
-    public function foodItem(){
-        return $this->belongsTo('App\Models\FoodItem');
+    public function privateStoreItem(){
+        return $this->belongsTo('App\Models\PrivateStoreItem');
     }
 
-    public function employe(){
-        return $this->belongsTo('App\Models\Employe');
-    }
 }

@@ -9,7 +9,7 @@
 
     <h3>{{ $mailData['title'] }}</h3>
   
-    <p>Salut,{{ $mailData['auteur']}} vient de sortir {{ $mailData['totalQuantity'] }} articles equivaut a {{ $mailData['totalValue'] }} au stock prive de PDG ({{ $mailData['description']}}),plus de details voir le document {{ $mailData['stockout_no'] }},Le Système AKIWACU ne cesse jamais de vous envoyer la notification en cas des operations pour le stock de PDG.</p>
+    <p>Salut,{{ $mailData['auteur']}} vient de sortir {{ $mailData['totalQuantity'] }} articles equivaut a {{ $mailData['totalValue'] }} au MAGASIN EGR ({{ $mailData['description']}}),plus de details voir le document {{ $mailData['stockout_no'] }},Le Système AKIWACU ne cesse jamais de vous envoyer la notification en cas des operations pour le MAGASIN EGR.</p>
 
      <p>
          POWERED BY Informaticien-Programmeur <a target="blank" href="https://ambazamarcellin.netlify.app/">Ambaza Marcellin</a>
