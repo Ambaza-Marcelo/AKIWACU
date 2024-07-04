@@ -207,7 +207,7 @@ class HomeConsumptionController extends Controller
             	
 
                 $data = array(
-                    'food_item_id' => $food_item_id[$count],
+                    'barrist_item_id' => $barrist_item_id[$count],
                     'date' => $date,
                     'quantity' => $quantity[$count],
                     'amount_consumed' => $amount,
