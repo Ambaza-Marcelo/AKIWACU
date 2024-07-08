@@ -2,7 +2,7 @@
 @extends('backend.layouts.master')
 
 @section('title')
-@lang('factures') - @lang('messages.admin_panel')
+@lang('liste des notes de credit') - @lang('messages.admin_panel')
 @endsection
 
 @section('styles')
@@ -21,7 +21,7 @@
     <div class="row align-items-center">
         <div class="col-sm-6">
             <div class="breadcrumbs-area clearfix">
-                <h4 class="page-title pull-left">@lang('factures')</h4>
+                <h4 class="page-title pull-left">@lang('liste des notes de credit')</h4>
                 <ul class="breadcrumbs pull-left">
                     <li><a href="{{ route('admin.dashboard') }}">@lang('messages.dashboard')</a></li>
                     <li><span>@lang('messages.list')</span></li>
@@ -41,8 +41,8 @@
         <div class="col-12 mt-5">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="header-title float-left">Liste des factures(BOISSONS)</h4>
-                <form action="{{ route('admin.facture-rapport.boisson')}}" method="GET">
+                    <h4 class="header-title float-left">liste des notes de credit</h4>
+                <form action="" method="GET">
                         <p class="float-right mb-2">
                             <button type="submit" value="pdf" class="btn btn-info">Exporter En PDF</button>
                         </p>
@@ -67,18 +67,9 @@
                                     <th width="20%">Le numéro de la facture</th>
                                     <th width="10%">Date de facturation</th>
                                     <th width="10%">Serveur</th>
-                                    <th width="10%">Le numéro RC </th>
-                                    <!--
-                                    <th width="10%">Telephone</th>
-                                    <th width="10%">Province</th>
-                                    <th width="10%">Commune</th>
-                                    <th width="10%">Quartier</th>
-                                    <th width="10%">Avenue</th>
-                                    <th width="10%">Rue</th>
-                                -->
                                     <th width="30%">Nom du client</th>
-                                    <th width="10%">NIF du client</th>
-                                    <th width="10%">Adresse du client</th>
+                                    <th width="10%">Reference fa. annulee</th>
+                                    <th width="10%">Motif Annulation</th>
                                     <th width="30%">Auteur</th>
                                     <th width="10%">Signature Facture </th>
                                     <th width="10%">Date Signature Facture</th>
@@ -92,18 +83,9 @@
                                     <td><a href="{{ route('admin.facture.show',$facture->invoice_number) }}">{{ $facture->invoice_number }}</a>&nbsp;@if($facture->etat == 0)<span class="badge badge-warning">Encours...</span>@elseif($facture->etat === '1')<span class="badge badge-success">Validée</span>@elseif($facture->etat ==2)<span class="badge badge-success">Envoyée</span>@elseif($facture->etat === '01')<span class="badge badge-info" title="@if($facture->client_id){{ $facture->client->customer_name }} @elseif($facture->booking_client_id) {{ $facture->bookingClient->customer_name }} @else {{ $facture->customer_name }} @endif">validé(crédit)</span>@else<span class="badge badge-danger" title="{{ $facture->cn_motif }}">Annulée</span>@endif</td>
                                     <td>{{ \Carbon\Carbon::parse($facture->invoice_date)->format('d/m/Y') }}</td>
                                     <td>{{ $facture->employe->name }}</td>
-                                    <td>{{ $facture->tp_trade_number }}</td>
-                                    <!--
-                                    <td>{{ $facture->tp_phone_number }}</td>
-                                    <td>{{ $facture->tp_address_province }}</td>
-                                    <td>{{ $facture->tp_address_commune }}</td>
-                                    <td>{{ $facture->tp_address_quartier }}</td>
-                                    <td>{{ $facture->tp_address_avenue }}</td>
-                                    <td>{{ $facture->tp_address_rue }}</td>
-                                -->
                                     <td>@if($facture->client_id){{ $facture->client->customer_name }} @else {{ $facture->customer_name }} @endif</td>
-                                    <td>{{ $facture->customer_TIN }}</td>
-                                    <td>{{ $facture->customer_address }}</td>
+                                    <td>{{ $facture->cancelled_invoice_ref }}</td>
+                                    <td>@if($facture->cn_motif == 1)<span class="badge badge-danger">Erreur sur la facture</span>@elseif($facture->cn_motif == 2)<span class="badge badge-danger">Retour marchandises</span>@elseif($facture->cn_motif == 3)<span class="badge badge-danger">Rabais</span>@else<span class="badge badge-danger">Reduction hors facture</span>@endif</td>
                                     <td>{{ $facture->auteur }}</td>
                                     <td>{{ $facture->invoice_signature }}</td>
                                     <td>{{ $facture->invoice_signature_date }}</td>
@@ -132,7 +114,11 @@
                                          <a href="{{ route('admin.voir-facture.credit', $facture->invoice_number) }}" class="btn btn-info">Valider avec Credit</a>
                                         @endif
                                         @endif
-                                    
+                                        @if (Auth::guard('admin')->user()->can('invoice_drink.reset'))
+                                        @if($facture->etat == 1 || $facture->etat == 01)
+                                         <a href="{{ route('admin.boissons-note-de-credit.create', $facture->invoice_number) }}" class="btn btn-success">Facture d'Avoir</a>
+                                        @endif
+                                        @endif 
                                         @if (Auth::guard('admin')->user()->can('invoice_drink.reset'))
                                         @if($facture->etat == 0)
                                          <a href="{{ route('admin.voir-facture.reset', $facture->invoice_number) }}" class="btn btn-success">Annuler</a>

@@ -301,6 +301,11 @@
                                 @if ($usr->can('invoice_booking.view'))
                                 <li class=""><a href="{{ route('admin.booking-invoices.choose') }}"><i class="fa fa-first-order"></i>&nbsp;@lang('Reservations')</a></li>
                                 @endif
+
+                                @if ($usr->can('invoice_booking.view'))
+                                <li class=""><a href="{{ route('admin.note-de-credit.index')}}"><i class="fa fa-first-order"></i>&nbsp;@lang('Facture d\'Avoir')</a></li>
+                                @endif
+                                
                         </ul>
                     </li>
                     @endif

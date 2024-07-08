@@ -23,6 +23,7 @@ use App\Models\NoteCredit;
 use App\Models\NoteCreditDetail;
 use App\Models\Setting;
 use App\Models\Drink;
+use App\Models\DrinkSmallStore;
 use App\Models\BarristItem;
 use App\Models\FoodItem;
 use App\Models\FoodItemDetail;
@@ -61,7 +62,7 @@ class NoteCreditController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any invoice !');
         }
 
-        $factures = Facture::take(200)->orderBy('id','desc')->get();
+        $factures = NoteCredit::orderBy('id','desc')->get();
         return view('backend.pages.note_credit.index',compact('factures'));
     }
 
@@ -157,7 +158,6 @@ class NoteCreditController extends Controller
         }
 
         $rules = array(
-                'invoice_date' => 'required',
                 //'invoice_number' => 'required',
                 'tp_type' => 'required',
                 'tp_name' => 'required|max:100|min:3',
@@ -166,7 +166,7 @@ class NoteCreditController extends Controller
                 'tp_phone_number' => 'required|max:20|min:6',
                 'tp_address_commune' => 'required|max:50|min:5',
                 'tp_address_quartier' => 'required|max:50|min:5',
-                //'client_id' => 'required|max:100|min:3',
+                'cn_motif' => 'required|max:255',
                 //'customer_TIN' => 'required|max:30|min:4',
                 //'customer_address' => 'required|max:100|min:5',
                 //'invoice_signature' => 'required|max:90|min:10',
@@ -194,17 +194,31 @@ class NoteCreditController extends Controller
             $item_ct = $request->item_ct;
             $item_tl =$request->item_tl; 
             $employe_id = $request->employe_id;
+            $cn_motif = $request->cn_motif;
+
+            $invoice_date = Carbon::now();
+
+            if ($cn_motif == 1) {
+                $cn_motif_detail = "Erreur sur la facture";
+            }elseif ($cn_motif == 2) {
+                $cn_motif_detail = "Retour marchandises";
+            }elseif ($cn_motif == 3) {
+                $cn_motif_detail = "Rabais";
+            }elseif ($cn_motif == 4) {
+                $cn_motif_detail = "Reduction hors facture";
+            }else{
+                $cn_motif_detail = "Erreur sur la facture";
+            }
+
+
+
+
+            $cancelled_invoice_ref = $request->invoice_number;
+
+            $drink_order_no = $request->drink_order_no;
 
             
-            if (!empty($request->table_id)) {
-                $table_id = $request->table_id;
-                $drink_order_no = $request->drink_order_no;
-            }else{
-                $table_id = 1;
-                $drink_order_no = $request->drink_order_no;
-            }
-            
-            $latest = Facture::orderBy('id','desc')->first();
+            $latest = NoteCredit::orderBy('id','desc')->first();
             if ($latest) {
                $invoice_number = 'FA' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{
@@ -212,10 +226,11 @@ class NoteCreditController extends Controller
             }
             
 
-
+            $cancelled_invoice = 1;
             
 
-            $invoice_signature = $request->tp_TIN."/ws400171161500565/".Carbon::parse($request->invoice_date)->format('YmdHis')."/".$invoice_number;
+            $invoice_signature = $request->tp_TIN."/ws400171161500565/".Carbon::parse($invoice_date)->format('YmdHis')."/".$invoice_number;
+            $invoice_ref = $invoice_number;
 
         for( $count = 0; $count < count($drink_id); $count++ )
         {
@@ -258,9 +273,8 @@ class NoteCreditController extends Controller
 
           $data = array(
             'invoice_number'=>$invoice_number,
-            'invoice_date'=> $request->invoice_date,
+            'invoice_date'=> $invoice_date,
             'tp_type'=>$request->tp_type,
-            'table_id'=>$table_id,
             'tp_name'=>$request->tp_name,
             'tp_TIN'=>$request->tp_TIN,
             'tp_trade_number'=>$request->tp_trade_number,
@@ -282,10 +296,10 @@ class NoteCreditController extends Controller
             'customer_address'=>$request->customer_address,
             'invoice_signature'=> $invoice_signature,
             'drink_order_no'=>$request->drink_order_no[$count],
-            'cancelled_invoice_ref'=>$request->cancelled_invoice_ref,
-            'cancelled_invoice'=>$request->cancelled_invoice,
+            'cancelled_invoice_ref'=>$cancelled_invoice_ref,
+            'cn_motif'=>$cn_motif,
             'invoice_currency'=>$request->invoice_currency,
-            'invoice_ref'=>$request->invoice_ref,
+            'invoice_ref'=>$invoice_ref,
             'code_store'=>$request->code_store,
             'auteur' => $this->user->name,
             'invoice_signature_date'=> Carbon::now(),
@@ -305,17 +319,15 @@ class NoteCreditController extends Controller
       }
 
 
-        FactureDetail::insert($data1);
+        NoteCreditDetail::insert($data1);
 
-            $order_no = FactureDetail::where('invoice_number',$invoice_number)->value('drink_order_no');
+            $order_no = NoteCreditDetail::where('invoice_number',$invoice_number)->value('drink_order_no');
 
             //create facture
-            $facture = new Facture();
-            $facture->invoice_date = $request->invoice_date;
+            $facture = new NoteCredit();
+            $facture->invoice_date = $invoice_date;
             $facture->invoice_number = $invoice_number;
-            $facture->table_id = $table_id;
             $facture->drink_order_no = $order_no;
-            $facture->invoice_date =  $request->invoice_date;
             $facture->tp_type = $request->tp_type;
             $facture->tp_name = $request->tp_name;
             $facture->tp_TIN = $request->tp_TIN;
@@ -336,14 +348,20 @@ class NoteCreditController extends Controller
             $facture->customer_TIN = $request->customer_TIN;
             $facture->customer_address = $request->customer_address;
             $facture->invoice_signature = $invoice_signature;
-            $facture->cancelled_invoice_ref = $request->cancelled_invoice_ref;
-            $facture->cancelled_invoice = $request->cancelled_invoice;
-            $facture->invoice_ref = $request->invoice_ref;
+            $facture->cancelled_invoice_ref = $cancelled_invoice_ref;
+            $facture->cn_motif = $cn_motif;
+            $facture->cancelled_invoice = $cancelled_invoice;
+            $facture->invoice_ref = $invoice_ref;
             $facture->code_store = $request->code_store;
             $facture->employe_id = $employe_id;
             $facture->auteur = $this->user->name;
             $facture->invoice_signature_date = Carbon::now();
             $facture->save();
+
+            Facture::where('invoice_number', '=', $cancelled_invoice_ref)
+                ->update(['etat' => -2,'cn_motif' => $cn_motif_detail,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
+            FactureDetail::where('invoice_number', '=', $cancelled_invoice_ref)
+                ->update(['etat' => -2,'cn_motif' => $cn_motif_detail,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
 
 
             session()->flash('success', 'La note de credit est faite avec succés!!');

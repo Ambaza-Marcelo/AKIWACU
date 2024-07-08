@@ -24,7 +24,7 @@
                 <h4 class="page-title pull-left">@lang('note de credit Boissons')</h4>
                 <ul class="breadcrumbs pull-left">
                     <li><a href="{{ route('admin.dashboard') }}">@lang('messages.dashboard')</a></li>
-                    <li><a href="{{ route('adamin.note-de-credit.index') }}">@lang('messages.list')</a></li>
+                    <li><a href="{{ route('admin.note-de-credit.index') }}">@lang('messages.list')</a></li>
                     <li><span>@lang('note de credit Boissons')</span></li>
                 </ul>
             </div>
@@ -46,16 +46,23 @@
                     <form action="{{ route('admin.boissons-note-de-credit.store') }}" method="POST">
                         @csrf
                         <input type="hidden" name="invoice_number" value="{{ $invoice_number }}">
+
                         <div class="row">
-                            <div class="col-md-4">
-                                <label for="invoice_date">Date note de credit</label>
-                                <input type="date" value="{{ date('Y-m-d H:i:s') }}" name="invoice_date" class="form-control" readonly required>
-                            </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <label for="employe_id">Serveur</label>
                                 <select class="form-control" name="employe_id" id="employe_id">
                                 <option disabled="disabled">Merci de choisir un Serveur</option>
                                 <option value="{{$data->employe_id}}" selected="selected">{{$data->employe->name}}</option>
+                            </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="cn_motif">Type Facture d'Avoir</label>
+                                <select class="form-control" name="cn_motif" id="cn_motif">
+                                <option disabled="disabled" selected="selected">Merci de choisir un Serveur</option>
+                                <option value="1" >Erreur sur la facture</option>
+                                <option value="2" >Retour marchandises</option>
+                                <option value="3" >Rabais</option>
+                                <option value="4" >Reduction hors facture</option>
                             </select>
                             </div>
                         </div>
@@ -66,7 +73,6 @@
                                     <label class="text">F. Normale
                                     <input type="checkbox" name="invoice_type" value="FN" class="form-control">
                                     </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <div class="form-group">
                                     <label class="text">facture d'Avoir
                                     <input type="checkbox" name="invoice_type" value="FA" checked="checked" class="form-control">
                                     </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -241,7 +247,7 @@
                                 <select class="form-control" name="client_id">
                                 <option disabled="disabled" selected="selected">Merci de choisir client</option>
                                 @foreach ($clients as $client)
-                                <option value="{{ $client->id }}" {{ $client->mail == 'clientcash@gmail.com' ? 'selected' : '' }} class="form-control">{{ $client->customer_name }}/{{ $client->telephone }}</option>
+                                <option value="{{ $client->id }}" {{ $data->client_id === $client->id ? 'selected' : '' }} class="form-control">{{ $client->customer_name }}/{{ $client->telephone }}</option>
                                 @endforeach
                                 </select>
                             </div>
@@ -251,7 +257,7 @@
                                 <select class="form-control" name="code_store" id="code_store" required>
                                 <option disabled="disabled" selected="selected">Merci de choisir un stock</option>
                                 @foreach($drink_small_stores as $drink_small_store)
-                                <option value="{{$drink_small_store->code}}">{{$drink_small_store->name}}/{{ $drink_small_store->code }}</option>
+                                <option value="{{$drink_small_store->code}}" {{ $data->code_store === $drink_small_store->code ? 'selected' : '' }}>{{$drink_small_store->name}}/{{ $drink_small_store->code }}</option>
                                 @endforeach
                                 </select>
                             </div>
@@ -267,16 +273,16 @@
                                 <th>Commande No</th>
                                 <th>Action</th>
                             </tr>
-                            @foreach($orders as $order)
+                            @foreach($datas as $data)
                             <tr>  
                                 <td><select class="form-control" name="drink_id[]" id="drink_id">
-                                <option value="{{ $order->drink_id }}" class="form-control">{{ $order->drink->name }}</option>
+                                <option value="{{ $data->drink_id }}" class="form-control">{{ $data->drink->name }}</option>
                                 </select></td>  
-                                <td><input type="number" step='any' min='0' value="{{ $order->quantity }}" name="item_quantity[]" placeholder="Quantite" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_drink.delete')) @else readonly @endif /></td>  
-                                <td><input type="number" step='any' min='0' value="{{ $order->selling_price }}" @if(Auth::guard('admin')->user()->can('invoice_drink.delete')) @else readonly @endif name="item_price[]" placeholder="Prix" class="form-control" /></td>
+                                <td><input type="number" step='any' min='0' value="{{ $data->item_quantity }}" name="item_quantity[]" placeholder="Quantite" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_drink.delete')) @else readonly @endif /></td>  
+                                <td><input type="number" step='any' min='0' value="{{ $data->item_price }}" @if(Auth::guard('admin')->user()->can('invoice_drink.delete')) @else readonly @endif name="item_price[]" placeholder="Prix" class="form-control" /></td>
                                 <td><input type="number" step='any' min='0' name="item_ct[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_drink.delete')) @else readonly @endif/></td>   
                                 <td><input type="number" step='any' min='0' name="item_tl[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_drink.delete')) @else readonly @endif/></td>
-                                <td><input type="text" value="{{ $order->order_no }}" name="drink_order_no[]" class="form-control" readonly /></td>
+                                <td><input type="text" value="{{ $data->drink_order_no }}" name="drink_order_no[]" class="form-control" readonly /></td>
                                 <td><button type='button' class='btn btn-danger remove-tr'><i class='fa fa-trash-o' title='Supprimer la ligne' aria-hidden='false'></i></button></td> 
                             </tr> 
                             @endforeach
