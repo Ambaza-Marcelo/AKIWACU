@@ -22,33 +22,12 @@ use App\Models\FactureDetail;
 use App\Models\NoteCredit;
 use App\Models\NoteCreditDetail;
 use App\Models\Setting;
-use App\Models\OrderDrink;
-use App\Models\OrderDrinkDetail;
-use App\Models\OrderKitchenDetail;
-use App\Models\OrderKitchen;
-use App\Models\BarristOrder;
-use App\Models\BarristOrderDetail;
-use App\Models\BartenderOrder;
-use App\Models\BartenderOrderDetail;
 use App\Models\Drink;
 use App\Models\BarristItem;
 use App\Models\FoodItem;
 use App\Models\FoodItemDetail;
 use App\Models\BartenderItem;
 use App\Models\Employe;
-use App\Models\DrinkSmallStore;
-use App\Models\DrinkSmallStoreDetail;
-use App\Models\DrinkSmallReport;
-use App\Models\BarristProductionStore;
-use App\Models\BartenderProductionStore;
-use App\Models\BarristSmallReport;
-use App\Models\BartenderSmallReport;
-use App\Models\FoodStore;
-use App\Models\FoodBigStoreDetail;
-use App\Models\FoodStoreReport;
-use App\Models\FoodBigReport;
-use App\Models\BookingBooking;
-use App\Models\BookingBookingDetail;
 use App\Models\BookingSalle;
 use App\Models\BookingService;
 use App\Models\BookingClient;
@@ -87,7 +66,7 @@ class NoteCreditController extends Controller
     }
 
 
-    public function create($invoice_number)
+    public function noteCreditBoisson($invoice_number)
     {
         if (is_null($this->user) || !$this->user->can('invoice_drink.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any invoice !');
@@ -96,21 +75,19 @@ class NoteCreditController extends Controller
         $setting = DB::table('settings')->orderBy('created_at','desc')->first();
 
         $drinks =  Drink::orderBy('name','asc')->get();
-        $orders =  OrderDrinkDetail::where('order_no',$order_no)->orderBy('order_no','asc')->get();
+        $datas =  FactureDetail::where('invoice_number',$invoice_number)->orderBy('invoice_number','asc')->get();
         $drink_small_stores = DrinkSmallStore::all();
         $clients =  Client::orderBy('customer_name','asc')->get();
 
-        $table_id = OrderDrink::where('order_no',$order_no)->value('table_id');
+        $data =  facture::where('invoice_number',$invoice_number)->first();
+        $total_amount = DB::table('facture_details')
+            ->where('invoice_number',$invoice_number)
+            ->sum('item_total_amount');
 
-        $data =  OrderDrink::where('order_no',$order_no)->first();
-        $total_amount = DB::table('order_drink_details')
-            ->where('order_no',$order_no)
-            ->sum('total_amount_selling');
-
-        return view('backend.pages.invoice.create',compact('drinks','data','setting','orders','order_no','drink_small_stores','clients','table_id','total_amount'));
+        return view('backend.pages.note_credit.create_drink',compact('drinks','data','setting','datas','invoice_number','drink_small_stores','clients','total_amount'));
     }
 
-    public function createByTable($table_id)
+    public function noteCreditBartender($invoice_number)
     {
         if (is_null($this->user) || !$this->user->can('invoice_drink.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any invoice !');
@@ -118,17 +95,53 @@ class NoteCreditController extends Controller
 
         $setting = DB::table('settings')->orderBy('created_at','desc')->first();
 
-        $drinks =  Drink::orderBy('name','asc')->get();
-        $orders =  OrderDrinkDetail::where('table_id',$table_id)->where('status',1)->orderBy('id','asc')->get();
-        $drink_small_stores = DrinkSmallStore::all();
+        $bartender_items =  BartenderItem::orderBy('name','asc')->get();
         $clients =  Client::orderBy('customer_name','asc')->get();
+        $datas =  FactureDetail::where('invoice_number',$invoice_number)->orderBy('invoice_number','asc')->get();
+        $data =  facture::where('invoice_number',$invoice_number)->first();
+        $total_amount = DB::table('facture_details')
+            ->where('invoice_number',$invoice_number)
+            ->sum('item_total_amount');
 
-        $data =  OrderDrink::where('table_id',$table_id)->where('status',1)->first();
-        $total_amount = DB::table('order_drink_details')
-            ->where('table_id',$table_id)->where('status',1)
-            ->sum('total_amount_selling');
+        return view('backend.pages.note_credit.create_bartender',compact('bartender_items','data','setting','datas','invoice_number','clients','total_amount'));
+    }
 
-        return view('backend.pages.invoice.create',compact('drinks','data','setting','orders','table_id','drink_small_stores','clients','total_amount'));
+    public function noteCreditBarrista($invoice_number)
+    {
+        if (is_null($this->user) || !$this->user->can('invoice_drink.create')) {
+            abort(403, 'Sorry !! You are Unauthorized to create any invoice !');
+        }
+
+        $setting = DB::table('settings')->orderBy('created_at','desc')->first();
+
+        $barrista_items =  BarristItem::orderBy('name','asc')->get();
+        $clients =  Client::orderBy('customer_name','asc')->get();
+        $datas =  FactureDetail::where('invoice_number',$invoice_number)->orderBy('invoice_number','asc')->get();
+        $data =  facture::where('invoice_number',$invoice_number)->first();
+        $total_amount = DB::table('facture_details')
+            ->where('invoice_number',$invoice_number)
+            ->sum('item_total_amount');
+
+        return view('backend.pages.note_credit.create_barrista',compact('barrista_items','data','setting','datas','invoice_number','clients','total_amount'));
+    }
+
+    public function noteCreditNourriture($invoice_number)
+    {
+        if (is_null($this->user) || !$this->user->can('invoice_drink.create')) {
+            abort(403, 'Sorry !! You are Unauthorized to create any invoice !');
+        }
+
+        $setting = DB::table('settings')->orderBy('created_at','desc')->first();
+
+        $food_items =  FoodItem::orderBy('name','asc')->get();
+        $clients =  Client::orderBy('customer_name','asc')->get();
+        $datas =  FactureDetail::where('invoice_number',$invoice_number)->orderBy('invoice_number','asc')->get();
+        $data =  facture::where('invoice_number',$invoice_number)->first();
+        $total_amount = DB::table('facture_details')
+            ->where('invoice_number',$invoice_number)
+            ->sum('item_total_amount');
+
+        return view('backend.pages.note_credit.create_food',compact('food_items','data','setting','datas','invoice_number','clients','total_amount'));
     }
 
     /**
@@ -333,25 +346,11 @@ class NoteCreditController extends Controller
             $facture->save();
 
 
-            for( $count = 0; $count < count($drink_id); $count++ )
-            {
-                 $orderData = array(
-                    'confirmed_by' => $this->user->name,
-                    'status' => 2,
-                    'flag' => 1
-                );
-
-                OrderDrink::where('order_no', '=', $request->drink_order_no[$count])
-                    ->update($orderData);
-                OrderDrinkDetail::where('order_no', '=', $request->drink_order_no[$count])
-                    ->update($orderData);
-            }
-
-            session()->flash('success', 'Le vente est fait avec succés!!');
-            return redirect()->route('ebms_api.invoices.index');
+            session()->flash('success', 'La note de credit est faite avec succés!!');
+            return redirect()->route('admin.note-de-credit.index');
     }
 
-    public function storeBarrist(Request  $request)
+    public function storeBarrista(Request  $request)
     {
         if (is_null($this->user) || !$this->user->can('invoice_drink.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any invoice !');
@@ -520,22 +519,8 @@ class NoteCreditController extends Controller
             $facture->invoice_signature_date = Carbon::now();
             $facture->save();
 
-            for( $count = 0; $count < count($barrist_item_id); $count++ )
-            {
-                 $orderData = array(
-                    'confirmed_by' => $this->user->name,
-                    'status' => 2,
-                    'flag' => 1
-                );
-
-                BarristOrder::where('order_no', '=', $request->barrist_order_no[$count])
-                    ->update($orderData);
-                BarristOrderDetail::where('order_no', '=', $request->barrist_order_no[$count])
-                    ->update($orderData);
-            }
-
-            session()->flash('success', 'Le vente est fait avec succés!!');
-            return redirect()->route('admin.barrist-invoices.index');
+            session()->flash('success', 'La note de credit est faite avec succés!!');
+            return redirect()->route('admin.note-de-credit.index');
     }
 
     public function storeFood(Request  $request)
@@ -706,22 +691,8 @@ class NoteCreditController extends Controller
             $facture->invoice_signature_date = Carbon::now();
             $facture->save();
 
-            for( $count = 0; $count < count($food_item_id); $count++ )
-            {
-                 $orderData = array(
-                    'confirmed_by' => $this->user->name,
-                    'status' => 2,
-                    'flag' => 1
-                );
-
-                OrderKitchen::where('order_no', '=', $request->food_order_no[$count])
-                    ->update($orderData);
-                OrderKitchenDetail::where('order_no', '=', $request->food_order_no[$count])
-                    ->update($orderData);
-            }
-
-            session()->flash('success', 'Le vente est fait avec succés!!');
-            return redirect()->route('admin.invoice-kitchens.index');
+            session()->flash('success', 'La note de credit est faite avec succés!!');
+            return redirect()->route('admin.note-de-credit.index');
     }
 
     public function storeBartender(Request  $request)
@@ -892,22 +863,8 @@ class NoteCreditController extends Controller
             $facture->invoice_signature_date = Carbon::now();
             $facture->save();
 
-            for( $count = 0; $count < count($bartender_item_id); $count++ )
-            {
-                 $orderData = array(
-                    'confirmed_by' => $this->user->name,
-                    'status' => 2,
-                    'flag' => 1
-                );
-
-                BartenderOrder::where('order_no', '=', $request->bartender_order_no[$count])
-                    ->update($orderData);
-                BartenderOrderDetail::where('order_no', '=', $request->bartender_order_no[$count])
-                    ->update($orderData);
-            }
-
-            session()->flash('success', 'Le vente est fait avec succés!!');
-            return redirect()->route('admin.bartender-invoices.index');
+            session()->flash('success', 'La note de credit est faite avec succés!!');
+            return redirect()->route('admin.note-de-credit.index');
     }
 
     public function storeBooking(Request  $request)
@@ -1582,8 +1539,8 @@ class NoteCreditController extends Controller
 
         }
 
-            session()->flash('success', 'Le vente est fait avec succés!!');
-            return redirect()->route('admin.booking-invoices.choose');
+            session()->flash('success', 'La note de credit est faite avec succés!!');
+            return redirect()->route('admin.note-de-credit.index');
     }
 
     public function validerFactureBoisson($invoice_number)
@@ -1594,8 +1551,6 @@ class NoteCreditController extends Controller
 
         $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
 
-        $table_id = FactureDetail::where('invoice_number', $invoice_number)->value('table_id');
-
         foreach($datas as $data){
             $valeurStockInitial = DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id', $data->drink_id)->value('total_cump_value');
             $quantityStockInitial = DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id', $data->drink_id)->value('quantity_bottle');
@@ -1706,225 +1661,18 @@ class NoteCreditController extends Controller
             DrinkSmallReport::insert($report);
         }
 
-        foreach($datas as $data){
-                $orderData = array(
-                    'confirmed_by' => $this->user->name,
-                    'status' => 3,
-                );
-
-                OrderDrink::where('order_no', '=', $data->drink_order_no)
-                    ->update($orderData);
-                OrderDrinkDetail::where('order_no', '=', $data->drink_order_no)
-                    ->update($orderData);
-        }
-
-        $item_total_amount = DB::table('facture_details')
-            ->where('invoice_number', '=', $invoice_number)
-            ->sum('item_total_amount');
-
-        $total_amount_paying = DB::table('tables')
-            ->where('id', '=', $table_id)
-            ->sum('total_amount_paying');
-
-        $in_pending = count(OrderDrinkDetail::where('table_id',$table_id)->where('status','!=',3)->where('status','!=',2)->where('status','!=',-1)->get());
-
-        if ($in_pending < 1 && $item_total_amount >= $total_amount_paying) {
-            Table::where('id',$table_id)->update(['etat' => 0,'waiter_name' => '','opened_by' => '','total_amount_paying' => 0]);
-        }else {
-            $total_amount_remaining = $total_amount_paying - $item_total_amount;
-            Table::where('id',$table_id)->update(['total_amount_paying' => $total_amount_remaining]);
-        }
-        
-        DrinkSmallStoreDetail::where('drink_id','!=','')->update(['verified' => false]);
-        Facture::where('invoice_number', '=', $invoice_number)
-            ->update(['etat' => 1,'statut_paied' => '0','validated_by' => $this->user->name]);
-        FactureDetail::where('invoice_number', '=', $invoice_number)
-            ->update(['etat' => 1,'statut_paied' => '0','validated_by' => $this->user->name]);
-
-        session()->flash('success', 'La Facture  est validée avec succés');
+        session()->flash('success', 'La note de credit a été validé avec succés!!');
         return back();
 
     }
 
-    public function validerFactureBoissonCredit(Request  $request,$invoice_number)
-    {
-        if (is_null($this->user) || !$this->user->can('invoice_drink.validate')) {
-            abort(403, 'Sorry !! You are Unauthorized to validate any invoice !');
-        }
-
-        $request->validate([
-            'client_id' => 'required'
-        ]);
-
-        $client_id = $request->client_id;
-
-        $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
-        $table_id = FactureDetail::where('invoice_number', $invoice_number)->value('table_id');
-
-        foreach($datas as $data){
-            $valeurStockInitial = DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id', $data->drink_id)->value('total_cump_value');
-            $quantityStockInitial = DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id', $data->drink_id)->value('quantity_bottle');
-            $cump = Drink::where('id', $data->drink_id)->value('cump');
-
-            $quantityRestant = $quantityStockInitial - $data->item_quantity;
-                      
-                $reportData = array(
-                    'drink_id' => $data->drink_id,
-                    'quantity_stock_initial' => $quantityStockInitial,
-                    'value_stock_initial' => $valeurStockInitial,
-                    'code_store' => $data->code_store,
-                    'quantity_sold' => $data->item_quantity,
-                    'value_sold' => $data->item_quantity * $data->item_price,
-                    'quantity_stock_final' => $quantityRestant,
-                    'value_stock_final' => $quantityRestant * $data->item_price,
-                    'invoice_no' => $data->invoice_number,
-                    'date' => $data->invoice_date,
-                    'commande_boisson_no' => $data->drink_order_no,
-                    'type_transaction' => 'VENTE',
-                    'document_no' => $data->invoice_number,
-                    'cump' => $cump,
-                    'created_by' => $this->user->name,
-                    'employe_id' => $data->employe_id,
-                    'origine_facture' => 'BOISSON',
-                    'description' => "SORTIE DES BOISSONS APRES VENTE",
-                    'created_at' => \Carbon\Carbon::now()
-                );
-                $report[] = $reportData;
-                
-                    $donnees = array(
-                        'drink_id' => $data->drink_id,
-                        'quantity_bottle' => $quantityRestant,
-                        'total_cump_value' => $quantityRestant * $data->item_price,
-                        'created_by' => $this->user->name,
-                        'verified' => true
-                    );
-                    
-                    if ($data->item_quantity <= $quantityStockInitial) {
-                        
-                        DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id',$data->drink_id)
-                        ->update($donnees);
-                        $flag = 0;
-                        /*
-                        $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
-                        $response = Http::post($theUrl, [
-                            'username'=> "ws400171161500565",
-                            'password'=> "5VS(GO:p"
-
-                        ]);
-                        $data1 =  json_decode($response);
-                        $data2 = ($data1->result);       
-    
-                        $token = $data2->token;
-
-                        $theUrl = config('app.guzzle_test_url').'/ebms_api/AddStockMovement';  
-                        $response = Http::withHeaders([
-                        'Authorization' => 'Bearer '.$token,
-                        'Accept' => 'application/json'])->post($theUrl, [
-                            'system_or_device_id'=> "ws400171161500565",
-                            'item_code'=> $data->drink->code,
-                            'item_designation'=>$data->drink->name,
-                            'item_quantity'=>$data->item_quantity,
-                            'item_measurement_unit'=>$data->drink->unit,
-                            'item_purchase_or_sale_price'=>$data->drink->purchase_price,
-                            'item_purchase_or_sale_currency'=> "BIF",
-                            'item_movement_type'=> 'SN',
-                            'item_movement_invoice_ref'=> "",
-                            'item_movement_description'=> 'SORTIES NORMALES DE VENTE DES MARCHANDISE',
-                            'item_movement_date'=> Carbon::parse($data->updated_at)->format('Y-m-d H:i:s'),
-
-                        ]);
-                        */
-                        
-                    }else{
-
-                        foreach ($datas as $data) {
-                            $valeurStockInitial = DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id', $data->drink_id)->value('total_cump_value');
-                            $quantityStockInitial = DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id', $data->drink_id)->where('verified',true)->value('quantity_bottle');
-                            $cump = Drink::where('id', $data->drink_id)->value('cump');
-
-                            $quantityTotal = $quantityStockInitial + $data->item_quantity;
-                      
-                
-                            $returnData = array(
-                                'drink_id' => $data->drink_id,
-                                'quantity_bottle' => $quantityTotal,
-                                'total_cump_value' => $quantityTotal * $cump,
-                                'created_by' => $this->user->name,
-                                'verified' => false
-                            );
-
-                            $status = DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id', $data->drink_id)->value('verified');
-                    
-
-                        
-                                DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id',$data->drink_id)->where('verified',true)
-                                ->update($returnData);
-                                $flag = 1;
-                            
-                        }
-
-                        DrinkSmallStoreDetail::where('drink_id','!=','')->update(['verified' => false]);
-
-                        session()->flash('error', $this->user->name.' ,why do you want selling a quantity that you do not have!');
-                        return redirect()->back();
-                    }
-        }
-        
-        if ($flag != 1) {
-            DrinkSmallReport::insert($report);
-        }
-
-        foreach($datas as $data){
-                $orderData = array(
-                    'confirmed_by' => $this->user->name,
-                    'status' => 3,
-                );
-
-                OrderDrink::where('order_no', '=', $data->drink_order_no)
-                    ->update($orderData);
-                OrderDrinkDetail::where('order_no', '=', $data->drink_order_no)
-                    ->update($orderData);
-        }
-
-        $item_total_amount = DB::table('facture_details')
-            ->where('invoice_number', '=', $invoice_number)
-            ->sum('item_total_amount');
-            
-        $total_amount_paying = DB::table('tables')
-            ->where('id', '=', $table_id)
-            ->sum('total_amount_paying');
-        
-        $in_pending = count(OrderDrinkDetail::where('table_id',$table_id)->where('status','!=',3)->where('status','!=',2)->where('status','!=',-1)->get());
-
-        if ($in_pending < 1 && $item_total_amount >= $total_amount_paying) {
-            Table::where('id',$table_id)->update(['etat' => 0,'waiter_name' => '','opened_by' => '','total_amount_paying' => 0]);
-        }else {
-            $total_amount_remaining = $total_amount_paying - $item_total_amount;
-            Table::where('id',$table_id)->update(['total_amount_paying' => $total_amount_remaining]);
-        }
-
-        DrinkSmallStoreDetail::where('drink_id','!=','')->update(['verified' => false]);
-
-        Facture::where('invoice_number', '=', $invoice_number)
-            ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
-        FactureDetail::where('invoice_number', '=', $invoice_number)
-            ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
-
-        session()->flash('success', 'La Facture  est validée avec succés');
-        return redirect()->route('ebms_api.invoices.index');
-
-        
-    }
-
-    public function validerFactureBarrist($invoice_number)
+    public function validerFactureBarrista($invoice_number)
     {
         if (is_null($this->user) || !$this->user->can('invoice_drink.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any invoice !');
         }
 
         $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
-
-        $table_id = FactureDetail::where('invoice_number', $invoice_number)->value('table_id');
 
         foreach($datas as $data){
             $valeurStockInitial = BarristProductionStore::where('barrist_item_id', $data->barrist_item_id)->value('total_cump_value');
@@ -1974,149 +1722,9 @@ class NoteCreditController extends Controller
         }
 
 
-        foreach($datas as $data){
-                $orderData = array(
-                    'confirmed_by' => $this->user->name,
-                    'status' => 3,
-                );
-
-                BarristOrder::where('order_no', '=', $data->barrist_order_no)
-                    ->update($orderData);
-                BarristOrderDetail::where('order_no', '=', $data->barrist_order_no)
-                    ->update($orderData);
-        }
-
-        $item_total_amount = DB::table('facture_details')
-            ->where('invoice_number', '=', $invoice_number)
-            ->sum('item_total_amount');
-
-        $total_amount_paying = DB::table('tables')
-            ->where('id', '=', $table_id)
-            ->sum('total_amount_paying');
-
-        $in_pending = count(BarristOrderDetail::where('table_id',$table_id)->where('status','!=',3)->where('status','!=',2)->where('status','!=',-1)->get());
-
-        if ($in_pending < 1 && $item_total_amount >= $total_amount_paying) {
-            Table::where('id',$table_id)->update(['etat' => 0,'waiter_name' => '','opened_by' => '','total_amount_paying' => 0]);
-        }else {
-            $total_amount_remaining = $total_amount_paying - $item_total_amount;
-            Table::where('id',$table_id)->update(['total_amount_paying' => $total_amount_remaining]);
-        }
-
-        Facture::where('invoice_number', '=', $invoice_number)
-                ->update(['etat' => 1,'statut_paied' => '0','validated_by' => $this->user->name]);
-        FactureDetail::where('invoice_number', '=', $invoice_number)
-                ->update(['etat' => 1,'statut_paied' => '0','validated_by' => $this->user->name]);
-        BarristSmallReport::insert($report);
-
-        session()->flash('success', 'La Facture  est validée avec succés');
+       session()->flash('success', 'La note de credit a été validé avec succés!!');
         return back();
     }
-
-    public function validerFactureBarristCredit(Request  $request,$invoice_number)
-    {
-        if (is_null($this->user) || !$this->user->can('invoice_drink.validate')) {
-            abort(403, 'Sorry !! You are Unauthorized to validate any invoice !');
-        }
-
-        $request->validate([
-            'client_id' => 'required'
-        ]);
-
-        $client_id = $request->client_id;
-
-        $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
-
-        $table_id = FactureDetail::where('invoice_number', $invoice_number)->value('table_id');
-
-        foreach($datas as $data){
-            $valeurStockInitial = BarristProductionStore::where('barrist_item_id', $data->barrist_item_id)->value('total_cump_value');
-            $quantityStockInitial = BarristProductionStore::where('barrist_item_id', $data->barrist_item_id)->value('quantity');
-            $cump = BarristProductionStore::where('barrist_item_id', $data->barrist_item_id)->value('cump');
-
-            $quantityRestant = $quantityStockInitial - $data->item_quantity;
-                      
-                $reportData = array(
-                    'barrist_item_id' => $data->barrist_item_id,
-                    'quantity_stock_initial' => $quantityStockInitial,
-                    'value_stock_initial' => $valeurStockInitial,
-                    'quantity_sold' => $data->item_quantity,
-                    'value_sold' => $data->item_quantity * $data->item_price,
-                    'quantity_stock_final' => $quantityRestant,
-                    'value_stock_final' => $quantityRestant * $data->item_price,
-                    'invoice_no' => $data->invoice_number,
-                    'commande_boisson_no' => $data->barrist_order_no,
-                    'type_transaction' => 'VENTE',
-                    'document_no' => $data->invoice_number,
-                    'created_by' => $this->user->name,
-                    'employe_id' => $data->employe_id,
-                    'origine_facture' => 'BOISSON',
-                    'created_at' => \Carbon\Carbon::now()
-                );
-                $report[] = $reportData;
-                    /*
-                    $donnees = array(
-                        'barrist_item_id' => $data->barrist_item_id,
-                        'quantity' => $quantityRestant,
-                        'total_cump_value' => $quantityRestant * $cump,
-                        'created_by' => $this->user->name,
-                        'verified' => false
-                    );
-                    
-                    if ($data->item_quantity <= $quantityStockInitial) {
-
-                        BarristSmallReport::insert($report);
-                        
-                        BarristProductionStore::where('barrist_item_id',$data->barrist_item_id)
-                        ->update($donnees);
-
-                        
-                    }else{
-                        session()->flash('error', $this->user->name.' ,why do you want selling a quantity that you do not have!');
-                        return redirect()->back();
-                    }
-                    */
-        }
-
-        $item_total_amount = DB::table('facture_details')
-            ->where('invoice_number', '=', $invoice_number)
-            ->sum('item_total_amount');
-
-        foreach($datas as $data){
-                $orderData = array(
-                    'confirmed_by' => $this->user->name,
-                    'status' => 3,
-                );
-
-                BarristOrder::where('order_no', '=', $data->barrist_order_no)
-                    ->update($orderData);
-                BarristOrderDetail::where('order_no', '=', $data->barrist_order_no)
-                    ->update($orderData);
-        }
-
-        $total_amount_paying = DB::table('tables')
-            ->where('id', '=', $table_id)
-            ->sum('total_amount_paying');
-
-        $in_pending = count(BarristOrderDetail::where('table_id',$table_id)->where('status','!=',3)->where('status','!=',2)->where('status','!=',-1)->get());
-
-        if ($in_pending < 1 && $item_total_amount >= $total_amount_paying) {
-            Table::where('id',$table_id)->update(['etat' => 0,'waiter_name' => '','opened_by' => '','total_amount_paying' => 0]);
-        }else {
-            $total_amount_remaining = $total_amount_paying - $item_total_amount;
-            Table::where('id',$table_id)->update(['total_amount_paying' => $total_amount_remaining]);
-        }
-
-        Facture::where('invoice_number', '=', $invoice_number)
-                ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
-        FactureDetail::where('invoice_number', '=', $invoice_number)
-                ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
-        BarristSmallReport::insert($report);
-
-        session()->flash('success', 'La Facture  est validée avec succés');
-        return redirect()->route('admin.barrist-invoices.index');
-    }
-
 
     public function validerFactureBartender($invoice_number)
     {
@@ -2126,7 +1734,6 @@ class NoteCreditController extends Controller
 
         $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
 
-        $table_id = FactureDetail::where('invoice_number', $invoice_number)->value('table_id');
 
         foreach($datas as $data){
             $valeurStockInitial = BartenderProductionStore::where('bartender_item_id', $data->bartender_item_id)->value('total_cump_value');
@@ -2208,178 +1815,8 @@ class NoteCreditController extends Controller
 
         BartenderSmallReport::insert($report);
 
-        $item_total_amount = DB::table('facture_details')
-            ->where('invoice_number', '=', $invoice_number)
-            ->sum('item_total_amount');
-
-        foreach($datas as $data){
-                $orderData = array(
-                    'confirmed_by' => $this->user->name,
-                    'status' => 3,
-                );
-
-                BartenderOrder::where('order_no', '=', $data->bartender_order_no)
-                    ->update($orderData);
-                BartenderOrderDetail::where('order_no', '=', $data->bartender_order_no)
-                    ->update($orderData);
-        }
-
-        $total_amount_paying = DB::table('tables')
-            ->where('id', '=', $table_id)
-            ->sum('total_amount_paying');
-
-        $in_pending = count(BartenderOrderDetail::where('table_id',$table_id)->where('status','!=',3)->where('status','!=',2)->where('status','!=',-1)->get());
-
-        if ($in_pending < 1 && $item_total_amount >= $total_amount_paying) {
-            Table::where('id',$table_id)->update(['etat' => 0,'waiter_name' => '','opened_by' => '','total_amount_paying' => 0]);
-        }else {
-            $total_amount_remaining = $total_amount_paying - $item_total_amount;
-            Table::where('id',$table_id)->update(['total_amount_paying' => $total_amount_remaining]);
-        }
-        
-        Facture::where('invoice_number', '=', $invoice_number)
-            ->update(['etat' => 1,'statut_paied' => '0','validated_by' => $this->user->name]);
-        FactureDetail::where('invoice_number', '=', $invoice_number)
-            ->update(['etat' => 1,'statut_paied' => '0','validated_by' => $this->user->name]);
-
-        session()->flash('success', 'La Facture  est validée avec succés');
+        session()->flash('success', 'La note de credit a été validé avec succés!!');
         return back();
-
-    }
-
-    public function validerFactureBartenderCredit(Request  $request,$invoice_number)
-    {
-        if (is_null($this->user) || !$this->user->can('invoice_drink.validate')) {
-            abort(403, 'Sorry !! You are Unauthorized to validate any invoice !');
-        }
-
-        $request->validate([
-            'client_id' => 'required'
-        ]);
-
-        $client_id = $request->client_id;
-
-        $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
-
-        $table_id = FactureDetail::where('invoice_number', $invoice_number)->value('table_id');
-
-        foreach($datas as $data){
-            $valeurStockInitial = BartenderProductionStore::where('bartender_item_id', $data->bartender_item_id)->value('total_cump_value');
-            $quantityStockInitial = BartenderProductionStore::where('bartender_item_id', $data->bartender_item_id)->value('quantity');
-            $cump = BartenderProductionStore::where('bartender_item_id', $data->bartender_item_id)->value('cump');
-
-            $quantityRestant = $quantityStockInitial - $data->item_quantity;
-                      
-                $reportData = array(
-                    'bartender_item_id' => $data->bartender_item_id,
-                    'quantity_stock_initial' => $quantityStockInitial,
-                    'value_stock_initial' => $valeurStockInitial,
-                    'quantity_sold' => $data->item_quantity,
-                    'value_sold' => $data->item_quantity * $data->item_price,
-                    'quantity_stock_final' => $quantityRestant,
-                    'value_stock_final' => $quantityRestant * $data->item_price,
-                    'invoice_no' => $data->invoice_number,
-                    'date' => $data->invoice_date,
-                    'commande_boisson_no' => $data->bartender_order_no,
-                    'type_transaction' => 'VENTE',
-                    'document_no' => $data->invoice_number,
-                    'created_by' => $this->user->name,
-                    'employe_id' => $data->employe_id,
-                    'origine_facture' => 'BOISSON',
-                    'created_at' => \Carbon\Carbon::now()
-                );
-                $report[] = $reportData;
-
-                $donnees = array(
-                        'bartender_item_id' => $data->bartender_item_id,
-                        'quantity' => $quantityRestant,
-                        'total_selling_value' => $quantityRestant * $data->item_price,
-                        'created_by' => $this->user->name,
-                        'verified' => false
-                    );
-                    
-                    if ($data->item_quantity <= $quantityStockInitial) {
-                        
-                        BartenderProductionStore::where('bartender_item_id',$data->bartender_item_id)
-                        ->update($donnees);
-
-                        /*
-                        $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
-                        $response = Http::post($theUrl, [
-                            'username'=> "ws400171161500565",
-                            'password'=> "5VS(GO:p"
-
-                        ]);
-                        $data1 =  json_decode($response);
-                        $data2 = ($data1->result);       
-    
-                        $token = $data2->token;
-
-                        $theUrl = config('app.guzzle_test_url').'/ebms_api/AddStockMovement';  
-                        $response = Http::withHeaders([
-                        'Authorization' => 'Bearer '.$token,
-                        'Accept' => 'application/json'])->post($theUrl, [
-                            'system_or_device_id'=> "ws400171161500565",
-                            'item_code'=> $data->bartenderItem->code,
-                            'item_designation'=>$data->bartenderItem->name,
-                            'item_quantity'=>$data->item_quantity,
-                            'item_measurement_unit'=>$data->bartenderItem->unit,
-                            'item_purchase_or_sale_price'=> "",
-                            'item_purchase_or_sale_currency'=> "BIF",
-                            'item_movement_type'=> 'SN',
-                            'item_movement_invoice_ref'=> "",
-                            'item_movement_description'=> 'SORTIES NORMALES DE VENTE DES MARCHANDISES',
-                            'item_movement_date'=> Carbon::parse($data->updated_at)->format('Y-m-d H:i:s'),
-
-                        ]);
-
-                    */
-                        
-                    }else{
-                        session()->flash('error', $this->user->name.' ,why do you want selling a quantity that you do not have!');
-                        return redirect()->back();
-                    }
-        }
-
-        BartenderSmallReport::insert($report);
-
-        $item_total_amount = DB::table('facture_details')
-            ->where('invoice_number', '=', $invoice_number)
-            ->sum('item_total_amount');
-
-        foreach($datas as $data){
-                $orderData = array(
-                    'confirmed_by' => $this->user->name,
-                    'status' => 3,
-                );
-
-                BartenderOrder::where('order_no', '=', $data->bartender_order_no)
-                    ->update($orderData);
-                BartenderOrderDetail::where('order_no', '=', $data->bartender_order_no)
-                    ->update($orderData);
-        }
-
-
-        $total_amount_paying = DB::table('tables')
-            ->where('id', '=', $table_id)
-            ->sum('total_amount_paying');
-
-        $in_pending = count(BartenderOrderDetail::where('table_id',$table_id)->where('status','!=',3)->where('status','!=',2)->where('status','!=',-1)->get());
-
-        if ($in_pending < 1 && $item_total_amount >= $total_amount_paying) {
-            Table::where('id',$table_id)->update(['etat' => 0,'waiter_name' => '','opened_by' => '','total_amount_paying' => 0]);
-        }else {
-            $total_amount_remaining = $total_amount_paying - $item_total_amount;
-            Table::where('id',$table_id)->update(['total_amount_paying' => $total_amount_remaining]);
-        }
-
-        Facture::where('invoice_number', '=', $invoice_number)
-            ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
-        FactureDetail::where('invoice_number', '=', $invoice_number)
-            ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
-
-        session()->flash('success', 'La Facture  est validée avec succés');
-        return redirect()->route('admin.bartender-invoices.index');
 
     }
 
@@ -2400,42 +1837,11 @@ class NoteCreditController extends Controller
         BookingBookingDetail::where('booking_no', '=', $data->booking_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
 
-        session()->flash('success', 'La Facture  est validée avec succés');
+        session()->flash('success', 'La note de credit a été validé avec succés!!');
         return back();
     }
 
-    public function validerFactureBookingCredit(Request  $request,$invoice_number)
-    {
-        if (is_null($this->user) || !$this->user->can('invoice_drink.validate')) {
-            abort(403, 'Sorry !! You are Unauthorized to validate any invoice !');
-        }
-
-        $request->validate([
-            'client_id' => 'required'
-        ]);
-
-        $client_id = $request->client_id;
-
-        $data = Facture::where('invoice_number',$invoice_number)->first();
-
-        $item_total_amount = DB::table('facture_details')
-            ->where('invoice_number', '=', $invoice_number)
-            ->sum('item_total_amount');
-
-        Facture::where('invoice_number', '=', $invoice_number)
-                ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
-        FactureDetail::where('invoice_number', '=', $invoice_number)
-                ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
-        BookingBooking::where('booking_no', '=', $data->booking_no)
-                ->update(['status' => 3,'confirmed_by' => $this->user->name]);
-        BookingBookingDetail::where('booking_no', '=', $data->booking_no)
-                ->update(['status' => 3,'confirmed_by' => $this->user->name]);
-
-        session()->flash('success', 'La Facture  est validée avec succés');
-        return back();
-    }
-
-    public function validerFactureCuisine($invoice_number)
+    public function validerFactureNourriture($invoice_number)
     {
         if (is_null($this->user) || !$this->user->can('invoice_kitchen.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any invoice !');
@@ -2555,560 +1961,9 @@ class NoteCreditController extends Controller
             FoodBigReport::insert($reportBigStoreData);
         }
 
-
-        foreach($datas as $data){
-                $orderData = array(
-                    'confirmed_by' => $this->user->name,
-                    'status' => 3,
-                );
-
-                OrderKitchen::where('order_no', '=', $data->food_order_no)
-                    ->update($orderData);
-                OrderKitchenDetail::where('order_no', '=', $data->food_order_no)
-                    ->update($orderData);
-        }
-
-        $item_total_amount = DB::table('facture_details')
-            ->where('invoice_number', '=', $invoice_number)
-            ->sum('item_total_amount');
-
-        $total_amount_paying = DB::table('tables')
-            ->where('id', '=', $table_id)
-            ->sum('total_amount_paying');
-
-        $in_pending = count(OrderKitchenDetail::where('table_id',$table_id)->where('status','!=',3)->where('status','!=',2)->where('status','!=',-1)->get());
-
-        if ($in_pending < 1 && $item_total_amount >= $total_amount_paying) {
-            Table::where('id',$table_id)->update(['etat' => 0,'waiter_name' => '','opened_by' => '','total_amount_paying' => 0]);
-        }else {
-            $total_amount_remaining = $total_amount_paying - $item_total_amount;
-            Table::where('id',$table_id)->update(['total_amount_paying' => $total_amount_remaining]);
-        }
-        
-        FoodBigStoreDetail::where('food_id','!=','')->update(['verified' => false]);
-
-        Facture::where('invoice_number', '=', $invoice_number)
-                ->update(['etat' => 1,'statut_paied' => '0','validated_by' => $this->user->name]);
-        FactureDetail::where('invoice_number', '=', $invoice_number)
-                ->update(['etat' => 1,'statut_paied' => '0','validated_by' => $this->user->name]);
-        //FoodStoreReport::insert($report);
-
-        session()->flash('success', 'La Facture  est validée avec succés');
+        session()->flash('success', 'La note de credit a été validé avec succés!!');
         return back();
-    }
-
-    public function validerFactureCuisineCredit(Request  $request,$invoice_number)
-    {
-        if (is_null($this->user) || !$this->user->can('invoice_kitchen.validate')) {
-            abort(403, 'Sorry !! You are Unauthorized to validate any invoice !');
-        }
-
-        $request->validate([
-            'client_id' => 'required'
-        ]);
-
-        $client_id = $request->client_id;
-
-        $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
-        $data = Facture::where('invoice_number', $invoice_number)->first();
-
-        $table_id = FactureDetail::where('invoice_number', $invoice_number)->value('table_id');
         
-        foreach($datas as $data){
-            $valeurStockInitial = FoodStore::where('food_item_id', $data->food_item_id)->value('total_cump_value');
-            $quantityStockInitial = FoodStore::where('food_item_id', $data->food_item_id)->value('quantity');
-            $cump = FoodStore::where('food_item_id', $data->food_item_id)->value('cump');
-
-            $quantityRestant = $quantityStockInitial - $data->item_quantity;
-                      
-                $reportData = array(
-                    'food_item_id' => $data->food_item_id,
-                    'quantity_stock_initial' => $quantityStockInitial,
-                    'value_stock_initial' => $valeurStockInitial,
-                    'quantity_sold' => $data->item_quantity,
-                    'value_sold' => $data->item_quantity * $data->item_price,
-                    'invoice_no' => $data->invoice_number,
-                    'date' => $data->invoice_date,
-                    'quantity_stock_final' => $quantityRestant,
-                    'value_stock_final' => $quantityRestant * $data->item_price,
-                    'commande_cuisine_no' => $data->food_order_no,
-                    'type_transaction' => 'VENTE',
-                    'document_no' => $data->invoice_number,
-                    'created_by' => $this->user->name,
-                    'employe_id' => $data->employe_id,
-                    'origine_facture' => 'CUISINE',
-                    'created_at' => \Carbon\Carbon::now()
-                );
-                $report[] = $reportData;
-                
-            $foods = FoodItemDetail::where('code', $data->foodItem->code)->get();
-            $food = FoodItemDetail::where('code', $data->foodItem->code)->first();
-            foreach($foods as $food){
-
-                $quantityStockInitial = FoodBigStoreDetail::where('food_id','!=', '')->where('food_id', $food->food_id)->value('quantity');
-
-                $quantiteSortie = $data->item_quantity * $food->quantity;
-                
-                $quantityRestantBigStore = $quantityStockInitial - $quantiteSortie;
-                $reportBigStore = array(
-                    'food_id' => $food->food_id,
-                    'quantity_stock_initial' => $quantityStockInitial,
-                    'value_stock_initial' => $quantityStockInitial * $food->food->purchase_price,
-                    'invoice_no' => $data->invoice_number,
-                    'date' => $data->invoice_date,
-                    'quantity_stockout' => $quantiteSortie,
-                    'value_stockout' => $quantiteSortie * $food->food->purchase_price,
-                    'quantity_stock_final' => $quantityRestantBigStore,
-                    'value_stock_final' => $quantityRestantBigStore * $food->food->purchase_price,
-                    'created_by' => $this->user->name,
-                    'created_at' => \Carbon\Carbon::now()
-                );
-                $reportBigStoreData[] = $reportBigStore;
-
-                    $bigStore = array(
-                        'food_id' => $food->food_id,
-                        'quantity' => $quantityRestantBigStore,
-                        'total_purchase_value' => $quantityRestantBigStore * $food->food->purchase_price,
-                        'total_cump_value' => $quantityRestantBigStore * $food->food->purchase_price,
-                        'verified' => true,
-                        'created_at' => \Carbon\Carbon::now()
-                    );
-                    
-                    
-                    if ($quantiteSortie <= $quantityStockInitial) {
-                        
-                        FoodBigStoreDetail::where('food_id',$food->food_id)
-                        ->update($bigStore);
-                        $flag = 0;
-                       
-                    }else{
-
-                        foreach($foods as $food){
-
-                        $quantityStockInitial = FoodBigStoreDetail::where('food_id','!=', '')->where('food_id', $food->food_id)->value('quantity');
-
-                        $quantiteSortie = $data->item_quantity * $food->quantity;
-                
-                        $quantityTotal = $quantityStockInitial + $quantiteSortie;
-
-                        $returnData = array(
-                            'food_id' => $food->food_id,
-                            'quantity' => $quantityTotal,
-                            'total_purchase_value' => $quantityTotal * $food->food->purchase_price,
-                            'total_cump_value' => $quantityTotal * $food->food->purchase_price,
-                            'verified' => false,
-                            'created_at' => \Carbon\Carbon::now()
-                        );
-                    
-                        $status = FoodBigStoreDetail::where('food_id','!=', '')->where('food_id', $food->food_id)->value('verified');
-                        if ($status == true) {
-                        
-                            FoodBigStoreDetail::where('food_id',$food->food_id)
-                            ->update($returnData);
-                            $flag = 1;
-                         }
-                     }
-                        FoodBigStoreDetail::where('food_id','!=','')->update(['verified' => false]);
-
-                        session()->flash('error', 'Quantite des ingredients insuffisante au stock intermediaire des nourritures!('.$food->food->name.':'.$food->name.')');
-                        return redirect()->back();
-                    }
-                    
-                    
-                    
-            }
-        }
-
-        if (!empty($food->food_id) && $flag != 1) {
-            FoodBigReport::insert($reportBigStoreData);
-        }
-
-        foreach($datas as $data){
-                $orderData = array(
-                    'confirmed_by' => $this->user->name,
-                    'status' => 3,
-                );
-
-                OrderKitchen::where('order_no', '=', $data->food_order_no)
-                    ->update($orderData);
-                OrderKitchenDetail::where('order_no', '=', $data->food_order_no)
-                    ->update($orderData);
-        }
-
-        $item_total_amount = DB::table('facture_details')
-            ->where('invoice_number', '=', $invoice_number)
-            ->sum('item_total_amount');
-
-        $total_amount_paying = DB::table('tables')
-            ->where('id', '=', $table_id)
-            ->sum('total_amount_paying');
-
-        $in_pending = count(OrderKitchenDetail::where('table_id',$table_id)->where('status','!=',3)->where('status','!=',2)->where('status','!=',-1)->get());
-
-        if ($in_pending < 1 && $item_total_amount >= $total_amount_paying) {
-            Table::where('id',$table_id)->update(['etat' => 0,'waiter_name' => '','opened_by' => '','total_amount_paying' => 0]);
-        }else {
-            $total_amount_remaining = $total_amount_paying - $item_total_amount;
-            Table::where('id',$table_id)->update(['total_amount_paying' => $total_amount_remaining]);
-        }
-        
-        FoodBigStoreDetail::where('food_id','!=','')->update(['verified' => false]);
-
-        $item_total_amount = DB::table('facture_details')
-            ->where('invoice_number', '=', $invoice_number)
-            ->sum('item_total_amount');
-        
-        Facture::where('invoice_number', '=', $invoice_number)
-                ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
-        FactureDetail::where('invoice_number', '=', $invoice_number)
-                ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
-        //FoodStoreReport::insert($report);
-
-        session()->flash('success', 'La Facture  est validée avec succés');
-        return redirect()->route('admin.invoice-kitchens.index');
-    }
-
-    public function annulerFacture(Request $request,$invoice_number)
-    {
-        if (is_null($this->user) || !$this->user->can('invoice_drink.reset')) {
-            abort(403, 'Sorry !! You are Unauthorized to reset any invoice !');
-        }
-
-
-        $request->validate([
-            'cn_motif' => 'required|min:10|max:500'
-        ]);
-
-        $cn_motif = $request->cn_motif;
-
-        $invoice_signature = Facture::where('invoice_number', $invoice_number)->value('invoice_signature');
-
-        $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
-        $facture = FactureDetail::where('invoice_number', $invoice_number)->first();
-        
-        if ($facture->etat === '1' && !empty($facture->food_item_id)) {
-            foreach($datas as $data){
-            $valeurStockInitial = FoodStore::where('food_item_id', $data->food_item_id)->value('total_cump_value');
-            $quantityStockInitial = FoodStore::where('food_item_id', $data->food_item_id)->value('quantity');
-            $cump = FoodStore::where('food_item_id', $data->food_item_id)->value('cump');
-
-            $quantityTotal = $quantityStockInitial + $data->item_quantity;
-                      
-                $reportData = array(
-                    'food_item_id' => $data->food_item_id,
-                    'quantity_stock_initial' => $quantityStockInitial,
-                    'value_stock_initial' => $valeurStockInitial,
-                    'quantity_stockin' => $data->item_quantity,
-                    'value_stockin' => $data->item_quantity * $data->item_price,
-                    'invoice_no' => $data->invoice_number,
-                    'date' => $data->invoice_date,
-                    'quantity_stock_final' => $quantityTotal,
-                    'value_stock_final' => $quantityTotal * $data->item_price,
-                    'commande_cuisine_no' => $data->food_order_no,
-                    'created_by' => $this->user->name,
-                    'employe_id' => $data->employe_id,
-                    'origine_facture' => 'CUISINE',
-                    'created_at' => \Carbon\Carbon::now()
-                );
-                $report[] = $reportData;
-
-            $foods = FoodItemDetail::where('code', $data->foodItem->code)->get();
-            foreach($foods as $food){
-
-                $quantityStockInitial = FoodBigStoreDetail::where('food_id','!=', '')->where('food_id', $food->food_id)->value('quantity');
-
-                $quantiteEntree = $data->item_quantity * $food->quantity;
-                
-                $quantityTotalBigStore = $quantityStockInitial + $quantiteEntree;
-                $reportBigStore = array(
-                    'food_id' => $food->food_id,
-                    'quantity_stock_initial' => $quantityStockInitial,
-                    'value_stock_initial' => $quantityStockInitial * $food->food->purchase_price,
-                    'invoice_no' => $data->invoice_number,
-                    'date' => $data->invoice_date,
-                    'quantity_stockin' => $quantiteEntree,
-                    'value_stockin' => $quantiteEntree * $food->food->purchase_price,
-                    'quantity_stock_final' => $quantityTotalBigStore,
-                    'value_stock_final' => $quantityTotalBigStore * $food->food->purchase_price,
-                    'created_by' => $this->user->name,
-                    'created_at' => \Carbon\Carbon::now()
-                );
-                $reportBigStoreData[] = $reportBigStore;
-
-                    $bigStore = array(
-                        'food_id' => $food->food_id,
-                        'quantity' => $quantityTotalBigStore,
-                        'total_purchase_value' => $quantityTotalBigStore * $food->food->purchase_price,
-                        'total_cump_value' => $quantityTotalBigStore * $food->food->purchase_price,
-                        'verified' => false,
-                        'created_at' => \Carbon\Carbon::now()
-                    );
-
-                        FoodBigReport::insert($reportBigStoreData);
-                        
-                        FoodBigStoreDetail::where('food_id',$food->food_id)
-                        ->update($bigStore);
-                }
-            }
-            
-
-        }else{
-            Facture::where('invoice_number', '=', $invoice_number)
-                ->update(['etat' => -1,'statut' => -1,'cn_motif' => $cn_motif,'reseted_by' => $this->user->name]);
-            FactureDetail::where('invoice_number', '=', $invoice_number)
-                ->update(['etat' => -1,'statut' => -1,'cn_motif' => $cn_motif,'reseted_by' => $this->user->name]);
-             
-            $email1 = 'ambazamarcellin2001@gmail.com';
-            $email2 = 'frangiye@gmail.com';
-            //$email3 = 'khaembamartin@gmail.com';
-            $email4 = 'munyembari_mp@yahoo.fr';
-            $auteur = $this->user->name;
-            $mailData = [
-                    'title' => 'Système de facturation électronique, Akiwacu',
-                    'invoice_number' => $invoice_number,
-                    'auteur' => $auteur,
-                    'cn_motif' => $cn_motif,
-                    ];
-         
-            Mail::to($email1)->send(new InvoiceResetedMail($mailData));
-            Mail::to($email2)->send(new InvoiceResetedMail($mailData));
-            //Mail::to($email3)->send(new InvoiceResetedMail($mailData));
-            Mail::to($email4)->send(new InvoiceResetedMail($mailData));
-            
-            
-            session()->flash('success', 'La Facture  est annulée avec succés');
-            return back();
-        }
-        
-            Facture::where('invoice_number', '=', $invoice_number)
-                ->update(['etat' => -1,'statut' => -1,'cn_motif' => $cn_motif,'reseted_by' => $this->user->name]);
-            FactureDetail::where('invoice_number', '=', $invoice_number)
-                ->update(['etat' => -1,'statut' => -1,'cn_motif' => $cn_motif,'reseted_by' => $this->user->name]);
-               
-            $email1 = 'ambazamarcellin2001@gmail.com';
-            $email2 = 'frangiye@gmail.com';
-            //$email3 = 'khaembamartin@gmail.com';
-            $email4 = 'munyembari_mp@yahoo.fr';
-            //$email5 = 'balowayangfistonfiston@gmail.com';
-            $auteur = $this->user->name;
-            $mailData = [
-                    'title' => 'Système de facturation électronique, edenSoft',
-                    'invoice_number' => $invoice_number,
-                    'auteur' => $auteur,
-                    'cn_motif' => $cn_motif,
-                    ];
-         
-            Mail::to($email1)->send(new InvoiceResetedMail($mailData));
-            Mail::to($email2)->send(new InvoiceResetedMail($mailData));
-            //Mail::to($email3)->send(new InvoiceResetedMail($mailData));
-            Mail::to($email4)->send(new InvoiceResetedMail($mailData));
-            //Mail::to($email5)->send(new InvoiceResetedMail($mailData));
-            
-            
-            session()->flash('success', 'La Facture  est annulée avec succés');
-            return back();
-
-    }
-
-    public function validerAnnulerFacture($invoice_number)
-    {
-        if (is_null($this->user) || !$this->user->can('invoice_drink.reset')) {
-            abort(403, 'Sorry !! You are Unauthorized to reset any invoice !');
-        }
-
-        Facture::where('invoice_number', '=', $invoice_number)
-                ->update(['etat' => -1,'reseted_by' => $this->user->name]);
-        FactureDetail::where('invoice_number', '=', $invoice_number)
-                ->update(['etat' => -1,'reseted_by' => $this->user->name]);
-
-        session()->flash('success', 'La Facture  est annulée avec succés');
-        return back();
-    }
-
-
-    public function addInvoiceConfirm(Request $request,$invoice_number){
-
-
-        $factures = Facture::where('invoice_number', $invoice_number)->get();
-
-        $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
-        /*
-        $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
-        $response = Http::post($theUrl, [
-            'username'=> "ws400171161500565",
-            'password'=> "5VS(GO:p"
-
-        ]);
-        $data =  json_decode($response);
-        $data2 = ($data->result);
-        
-    
-        $token = $data2->token;
-
-        foreach($datas as $data){
-            if (!empty($data->food_item_id)) {
-                $invoice_items = array(
-                'item_designation'=>$data->foodItem->name,
-                'item_quantity'=>$data->item_quantity,
-                'item_price'=>$data->item_price,
-                'item_ct'=>$data->item_ct,
-                'item_tl'=>$data->item_tl,
-                'item_price_nvat'=>$data->item_price_nvat,
-                'vat'=>$data->vat,
-                'item_price_wvat'=>$data->item_price_wvat,
-                'item_total_amount'=>$data->item_total_amount
-                );
-
-                $factureDetail[] = $invoice_items;
-            }elseif(!empty($data->drink_id)){
-                $invoice_items = array(
-                'item_designation'=>$data->drink->name,
-                'item_quantity'=>$data->item_quantity,
-                'item_price'=>$data->item_price,
-                'item_ct'=>$data->item_ct,
-                'item_tl'=>$data->item_tl,
-                'item_price_nvat'=>$data->item_price_nvat,
-                'vat'=>$data->vat,
-                'item_price_wvat'=>$data->item_price_wvat,
-                'item_total_amount'=>$data->item_total_amount
-                );
-
-                $factureDetail[] = $invoice_items;
-            }elseif(!empty($data->bartender_item_id)){
-                $invoice_items = array(
-                'item_designation'=>$data->bartenderItem->name,
-                'item_quantity'=>$data->item_quantity,
-                'item_price'=>$data->item_price,
-                'item_ct'=>$data->item_ct,
-                'item_tl'=>$data->item_tl,
-                'item_price_nvat'=>$data->item_price_nvat,
-                'vat'=>$data->vat,
-                'item_price_wvat'=>$data->item_price_wvat,
-                'item_total_amount'=>$data->item_total_amount
-                );
-
-                $factureDetail[] = $invoice_items;
-            }elseif(!empty($data->barrist_item_id)){
-                $invoice_items = array(
-                'item_designation'=>$data->barristItem->name,
-                'item_quantity'=>$data->item_quantity,
-                'item_price'=>$data->item_price,
-                'item_ct'=>$data->item_ct,
-                'item_tl'=>$data->item_tl,
-                'item_price_nvat'=>$data->item_price_nvat,
-                'vat'=>$data->vat,
-                'item_price_wvat'=>$data->item_price_wvat,
-                'item_total_amount'=>$data->item_total_amount
-                );
-
-                $factureDetail[] = $invoice_items;
-            }elseif(!empty($data->salle_id)){
-                $invoice_items = array(
-                'item_designation'=>$data->salle->name,
-                'item_quantity'=>$data->item_quantity,
-                'item_price'=>$data->item_price,
-                'item_ct'=>$data->item_ct,
-                'item_tl'=>$data->item_tl,
-                'item_price_nvat'=>$data->item_price_nvat,
-                'vat'=>$data->vat,
-                'item_price_wvat'=>$data->item_price_wvat,
-                'item_total_amount'=>$data->item_total_amount
-                );
-
-                $factureDetail[] = $invoice_items;
-            }elseif(!empty($data->service_id)){
-                $invoice_items = array(
-                'item_designation'=>$data->service->name,
-                'item_quantity'=>$data->item_quantity,
-                'item_price'=>$data->item_price,
-                'item_ct'=>$data->item_ct,
-                'item_tl'=>$data->item_tl,
-                'item_price_nvat'=>$data->item_price_nvat,
-                'vat'=>$data->vat,
-                'item_price_wvat'=>$data->item_price_wvat,
-                'item_total_amount'=>$data->item_total_amount
-                );
-
-                $factureDetail[] = $invoice_items;
-            }else{
-                $invoice_items = array(
-                'item_designation'=>$data->table->name,
-                'item_quantity'=>$data->item_quantity,
-                'item_price'=>$data->item_price,
-                'item_ct'=>$data->item_ct,
-                'item_tl'=>$data->item_tl,
-                'item_price_nvat'=>$data->item_price_nvat,
-                'vat'=>$data->vat,
-                'item_price_wvat'=>$data->item_price_wvat,
-                'item_total_amount'=>$data->item_total_amount
-                );
-
-                $factureDetail[] = $invoice_items;
-            }
-
-        }
-
-
-        foreach($factures as $facture){
-        $theUrl = config('app.guzzle_test_url').'/ebms_api/addInvoice';  
-        $response = Http::withHeaders([
-        'Authorization' => 'Bearer '.$token,
-        'Accept' => 'application/json'])->post($theUrl, [
-            'invoice_number'=>$facture->invoice_number,
-            'invoice_date'=> $facture->invoice_date,
-            'tp_type'=>$facture->tp_type,
-            'tp_name'=>$facture->tp_name,
-            'tp_TIN'=>$facture->tp_TIN,
-            'tp_trade_number'=>$facture->tp_trade_number,
-            'tp_phone_number'=>$facture->tp_phone_number,
-            'tp_address_province'=>$facture->tp_address_province,
-            'tp_address_commune'=>$facture->tp_address_commune,
-            'tp_address_quartier'=>$facture->tp_address_quartier,
-            'tp_address_avenue'=>$facture->tp_address_avenue,
-            'tp_address_rue'=>$facture->tp_address_rue,
-            'vat_taxpayer'=>$facture->vat_taxpayer,
-            'ct_taxpayer'=>$facture->ct_taxpayer,
-            'tl_taxpayer'=>$facture->tl_taxpayer,
-            'tp_fiscal_center'=>$facture->tp_fiscal_center,
-            'tp_activity_sector'=>$facture->tp_activity_sector,
-            'tp_legal_form'=>$facture->tp_legal_form,
-            'payment_type'=>$facture->payment_type,
-            'customer_name'=>$facture->customer_name,
-            'customer_TIN'=>$facture->customer_TIN,
-            'customer_address'=>$facture->customer_address,
-            'invoice_signature'=> $facture->invoice_signature,
-            'invoice_currency'=> $facture->invoice_currency,
-            'cancelled_invoice_ref'=> $facture->cancelled_invoice_ref,
-            'cancelled_invoice'=> $facture->cancelled_invoice,
-            'invoice_ref'=> $facture->invoice_ref,
-            'invoice_signature_date'=> $facture->invoice_signature_date,
-            'invoice_items' => $factureDetail,
-
-        ]); 
-
-        }
-
-        $data =  json_decode($response);
-        $done = $data->success;
-        $msg = $data->msg;
-
-
-        if ($done == true) {
-            Facture::where('invoice_number', '=', $invoice_number)
-                ->update(['statut' => 1]);
-            FactureDetail::where('invoice_number', '=', $invoice_number)
-                ->update(['statut' => 1]);
-
-            return $response->json();
-        }else{
-            return $response->json();
-        }
-
-
-    */
-        
-
-
     }
 
     public function facture($invoice_number)
@@ -3329,104 +2184,6 @@ class NoteCreditController extends Controller
         */
     }
 
-    public function factureBrouillon($invoice_number)
-    {
-        if (is_null($this->user) || !$this->user->can('invoice_drink.reset')) {
-            abort(403, 'Sorry !! You are Unauthorized to print invoice !more information you have to contact Marcellin');
-        }
-
-
-        $setting = DB::table('settings')->orderBy('created_at','desc')->first();
-
-        $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
-        $facture = Facture::where('invoice_number', $invoice_number)->first();
-        $invoice_signature = Facture::where('invoice_number', $invoice_number)->value('invoice_signature');
-        $data = Facture::where('invoice_number', $invoice_number)->first();
-        $totalValue = DB::table('facture_details')
-            ->where('invoice_number', '=', $invoice_number)
-            ->sum('item_price_nvat');
-        $item_total_amount = DB::table('facture_details')
-            ->where('invoice_number', '=', $invoice_number)
-            ->sum('item_total_amount');
-        $totalVat = DB::table('facture_details')
-            ->where('invoice_number', '=', $invoice_number)
-            ->sum('vat');
-        $client = Facture::where('invoice_number', $invoice_number)->value('customer_name');
-        $date = Facture::where('invoice_number', $invoice_number)->value('invoice_date');
-       
-        $pdf = PDF::loadView('backend.pages.document.facture',compact('datas','invoice_number','totalValue','item_total_amount','client','setting','date','data','invoice_signature','facture','totalVat'))->setPaper('a6', 'portrait');
-
-            // download pdf file
-        return $pdf->download('FACTURE_'.$invoice_number.'.pdf');
-
-    }
-
-    public function transfer($invoice_number){
-        $facture = FactureDetail::where('invoice_number',$invoice_number)->first();
-        $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
-        return view('backend.pages.invoice.transfer', compact('facture','datas'));
-    }
-
-    public function voirFactureAnnuler($invoice_number){
-        $facture = FactureDetail::where('invoice_number',$invoice_number)->first();
-        $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
-        $clients =  Client::orderBy('customer_name','asc')->get();
-        return view('backend.pages.invoice.reset', compact('facture','datas','clients'));
-    }
-
-    public function voirFactureCredit($invoice_number){
-        $facture = FactureDetail::where('invoice_number',$invoice_number)->first();
-        $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
-        $clients =  Client::orderBy('customer_name','asc')->get();
-        return view('backend.pages.invoice.credit', compact('facture','datas','clients'));
-    }
-
-    public function getCancelInvoice($invoice_number){
-        $facture = Facture::where('invoice_number',$invoice_number)->first();
-        $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
-        return view('backend.pages.invoice.cancel', compact('facture','datas'));
-    }
-
-    /**
-     * facture d'avoir of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function cancelInvoice(Request  $request,$invoice_number)
-    {
-
-        
-    }
-    //ebms_api of OBR
-    public function checkTIN(Request  $request)
-    {
-        $rules = array(
-                'tp_TIN'  => 'required',
-                'token'  => 'required|min:20'
-            );
-
-            $error = Validator::make($request->all(),$rules);
-
-            if($error->fails()){
-                return response()->json([
-                    'error' => $error->errors()->all(),
-                ]);
-            }
-
-        $tp_TIN = $request->tp_TIN;
-
-        $token = $request->token;
-
-        $theUrl = config('app.guzzle_test_url').'/ebms_api/checkTIN/';
-
-        $response = Http::withHeaders([
-        'Authorization' => 'Bearer '.$token,
-        'Accept' => 'application/json'])->post($theUrl, [
-            'tp_TIN'=>$tp_TIN 
-        ]);  
-
-         return $response->json();
-    }
 
     /**
      * Display the specified resource.
@@ -3447,137 +2204,6 @@ class NoteCreditController extends Controller
             ->where('invoice_number', '=', $invoice_number)
             ->sum('item_total_amount');
         return view('backend.pages.invoice.show',compact('facture','factureDetails','total_amount'));
-    }
-
-
-     public function payerCredit(Request  $request,$invoice_number)
-    {
-        if (is_null($this->user) || !$this->user->can('invoice_booking.edit')) {
-            abort(403, 'Sorry !! You are Unauthorized to validate any invoice !');
-        }
-
-        $request->validate([
-            'client_id' => 'required',
-            'statut_paied' => 'required',
-            'etat_recouvrement' => 'required',
-            'date_recouvrement' => 'required',
-            'nom_recouvrement' => 'required',
-            'note_recouvrement' => 'required',
-            'montant_total_credit' => 'required',
-            'montant_recouvre' => 'required',
-        ]);
-
-
-        $client_id = $request->client_id;
-        $statut_paied = $request->statut_paied;
-        $customer_address = $request->customer_address;
-        $customer_TIN = $request->customer_TIN;
-        $etat_recouvrement = $request->etat_recouvrement;
-        $date_recouvrement = $request->date_recouvrement;
-        $nom_recouvrement = $request->nom_recouvrement;
-        $note_recouvrement = $request->note_recouvrement;
-        $bank_name = $request->bank_name;
-        $cheque_no = $request->cheque_no;
-        $montant_total_credit = $request->montant_total_credit;
-        $montant_recouvre_input = $request->montant_recouvre;
-
-        $montant_recouvre = DB::table('factures')
-            ->where('invoice_number',$invoice_number)->where('etat','01')->sum('montant_recouvre');
-
-        if ($montant_total_credit >= $montant_recouvre_input) {
-
-            $montant_total_recouvre = $montant_recouvre_input + $montant_recouvre;
-            $reste_credit = $montant_total_credit - $montant_total_recouvre;
-
-            if ($reste_credit == 0) {
-                $etat_recouvrement = 2;
-                Facture::where('invoice_number', '=', $invoice_number)
-                    ->update([
-                        'client_id' => $client_id,
-                        'statut_paied' => $statut_paied,
-                        'customer_address' => $customer_address,
-                        'customer_TIN' => $customer_TIN,
-                        'etat_recouvrement' => $etat_recouvrement,
-                        'date_recouvrement' => $date_recouvrement,
-                        'nom_recouvrement' => $nom_recouvrement,
-                        'note_recouvrement' => $note_recouvrement,
-                        'bank_name' => $bank_name,
-                        'cheque_no' => $cheque_no,
-                        'montant_total_credit' => $montant_total_credit,
-                        'montant_recouvre' => $montant_total_recouvre,
-                        'reste_credit' => $reste_credit,
-                        'confirmed_by' => $this->user->name
-                    ]);
-                FactureDetail::where('invoice_number', '=', $invoice_number)
-                    ->update([
-                        'client_id' => $client_id,
-                        'statut_paied' => $statut_paied,
-                        'customer_address' => $customer_address,
-                        'customer_TIN' => $customer_TIN,
-                        'etat_recouvrement' => $etat_recouvrement,
-                        'date_recouvrement' => $date_recouvrement,
-                        'nom_recouvrement' => $nom_recouvrement,
-                        'note_recouvrement' => $note_recouvrement,
-                        'bank_name' => $bank_name,
-                        'cheque_no' => $cheque_no,
-                        'montant_total_credit' => $montant_total_credit,
-                        'montant_recouvre' => $montant_total_recouvre,
-                        'reste_credit' => $reste_credit,
-                        'confirmed_by' => $this->user->name
-                    ]);
-
-                session()->flash('success', 'Le credit  est payé avec succés');
-                return back();
-            }elseif ($reste_credit < 0) {
-                session()->flash('error', $this->user->name.' ,je vous prie de bien vouloir saisir les donnees exactes s\'il te plait! plus d\'info contacte IT Musumba Holding Marcellin ');
-                return back();
-            }
-            else{
-                $etat_recouvrement = 1;
-                Facture::where('invoice_number', '=', $invoice_number)
-                    ->update([
-                        'client_id' => $client_id,
-                        'statut_paied' => $statut_paied,
-                        'customer_address' => $customer_address,
-                        'customer_TIN' => $customer_TIN,
-                        'etat_recouvrement' => $etat_recouvrement,
-                        'date_recouvrement' => $date_recouvrement,
-                        'nom_recouvrement' => $nom_recouvrement,
-                        'note_recouvrement' => $note_recouvrement,
-                        'bank_name' => $bank_name,
-                        'cheque_no' => $cheque_no,
-                        'montant_total_credit' => $montant_total_credit,
-                        'montant_recouvre' => $montant_total_recouvre,
-                        'reste_credit' => $reste_credit,
-                        'confirmed_by' => $this->user->name
-                    ]);
-                FactureDetail::where('invoice_number', '=', $invoice_number)
-                    ->update([
-                        'client_id' => $client_id,
-                        'statut_paied' => $statut_paied,
-                        'customer_address' => $customer_address,
-                        'customer_TIN' => $customer_TIN,
-                        'etat_recouvrement' => $etat_recouvrement,
-                        'date_recouvrement' => $date_recouvrement,
-                        'nom_recouvrement' => $nom_recouvrement,
-                        'note_recouvrement' => $note_recouvrement,
-                        'bank_name' => $bank_name,
-                        'cheque_no' => $cheque_no,
-                        'montant_total_credit' => $montant_total_credit,
-                        'montant_recouvre' => $montant_total_recouvre,
-                        'reste_credit' => $reste_credit,
-                        'confirmed_by' => $this->user->name
-                    ]);
-
-                session()->flash('success', 'Le credit  est payé avec succés');
-                return redirect()->route('admin.credit-invoices.list');
-            }
-        }else{
-            session()->flash('error', 'Le montant saisi doit etre inferieur ou egal au montant total de la facture');
-            return redirect()->route('admin.credit-invoices.list');
-        }
-
-        
     }
 
     /**

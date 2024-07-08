@@ -159,6 +159,34 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('EBMS/transfert-rapport-boisson','Backend\DrinkTransferController@rapportBoisson')->name('admin.transfert-rapport.boisson');
     Route::get('EBMS/reception-rapport-boisson','Backend\DrinkReceptionController@rapportBoisson')->name('admin.reception-rapport.boisson');
 
+    //note de credit
+
+    Route::get('eBMS-note-de-credit/index', 'Backend\NoteCreditController@index')->name('admin.note-de-credit.index');
+
+    Route::get('EBMS/boissons-faire-note-de-credit/{invoice_number}','Backend\NoteCreditController@noteCreditBoisson')->name('admin.boissons-note-de-credit.create');
+    Route::get('EBMS/nourritures-faire-note-de-credit/{invoice_number}','Backend\NoteCreditController@noteCreditNourriture')->name('admin.nourritures-note-de-credit.create');
+    Route::get('EBMS/barrista-faire-note-de-credit/{invoice_number}','Backend\NoteCreditController@noteCreditbarrista')->name('admin.barrista-note-de-credit.create');
+    Route::get('EBMS/bartender-faire-note-de-credit/{invoice_number}','Backend\NoteCreditController@noteCreditBartender')->name('admin.bartender-note-de-credit.create');
+    Route::get('EBMS/booking-faire-note-de-credit/{invoice_number}','Backend\NoteCreditController@noteCreditBooking')->name('admin.booking-note-de-credit.create');
+
+
+    Route::get('EBMS/note-de-credit/{invoice_number}','Backend\NoteCreditController@facture')->name('admin.note-de-credit.facture');
+
+
+    Route::post('eBMS-boissons-note-de-credit/store', 'Backend\NoteCreditController@storeDrink')->name('admin.boissons-note-de-credit.store');
+    Route::post('eBMS-barrista-note-de-credit/store', 'Backend\NoteCreditController@storeBarrist')->name('admin.barrista-note-de-credit.store');
+    Route::post('eBMS-bartender-note-de-credit/store', 'Backend\NoteCreditController@storeBartender')->name('admin.bartender-note-de-credit.store');
+    Route::post('eBMS-nourritures-note-de-credit/store', 'Backend\NoteCreditController@storeFood')->name('admin.nourritures-note-de-credit.store');
+    Route::post('eBMS-booking-note-de-credit/store', 'Backend\NoteCreditController@storeBooking')->name('admin.booking-note-de-credit.store');
+
+
+
+    Route::put('eBMS-boissons-note-de-credit/valider/{invoice_number}', 'Backend\NoteCreditController@validerFactureDrink')->name('admin.boissons-note-de-credit.valider');
+    Route::put('eBMS-barrista-note-de-credit/valider/{invoice_number}', 'Backend\NoteCreditController@validerFactureBarrist')->name('admin.barrista-note-de-credit.valider');
+    Route::put('eBMS-bartender-note-de-credit/valider/{invoice_number}', 'Backend\NoteCreditController@validerFactureBartender')->name('admin.bartender-note-de-credit.store');
+    Route::put('eBMS-nourritures-note-de-credit/valider/{invoice_number}', 'Backend\NoteCreditController@validerFactureFood')->name('admin.nourritures-note-de-credit.valider');
+    Route::put('eBMS-booking-note-de-credit/valider/{invoice_number}', 'Backend\NoteCreditController@validerFactureBooking')->name('admin.booking-note-de-credit.valider');
+
 
 
     // Login Routes

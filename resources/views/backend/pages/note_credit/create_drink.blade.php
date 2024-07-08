@@ -2,7 +2,7 @@
 @extends('backend.layouts.master')
 
 @section('title')
-@lang('factures Boissons') - @lang('messages.admin_panel')
+@lang('note de credit Boissons') - @lang('messages.admin_panel')
 @endsection
 
 @section('styles')
@@ -21,11 +21,11 @@
     <div class="row align-items-center">
         <div class="col-sm-6">
             <div class="breadcrumbs-area clearfix">
-                <h4 class="page-title pull-left">@lang('factures Boissons')</h4>
+                <h4 class="page-title pull-left">@lang('note de credit Boissons')</h4>
                 <ul class="breadcrumbs pull-left">
                     <li><a href="{{ route('admin.dashboard') }}">@lang('messages.dashboard')</a></li>
-                    <li><a href="{{ route('ebms_api.invoices.index') }}">@lang('messages.list')</a></li>
-                    <li><span>@lang('factures Boissons')</span></li>
+                    <li><a href="{{ route('adamin.note-de-credit.index') }}">@lang('messages.list')</a></li>
+                    <li><span>@lang('note de credit Boissons')</span></li>
                 </ul>
             </div>
         </div>
@@ -40,22 +40,17 @@
         <div class="col-12 mt-5">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="header-title">Nouveau Facture</h4>
+                    <h4 class="header-title">Nouvelle Note de Credit</h4>
                     @include('backend.layouts.partials.messages')
                     
-                    <form action="{{ route('ebms_api-facture-boisson.store') }}" method="POST">
+                    <form action="{{ route('admin.boissons-note-de-credit.store') }}" method="POST">
                         @csrf
+                        <input type="hidden" name="invoice_number" value="{{ $invoice_number }}">
                         <div class="row">
                             <div class="col-md-4">
-                                <label for="invoice_date">Date Facture</label>
-                                <input type="date" placeholder="Date Facture" name="invoice_date" class="form-control" required>
+                                <label for="invoice_date">Date note de credit</label>
+                                <input type="date" value="{{ date('Y-m-d H:i:s') }}" name="invoice_date" class="form-control" readonly required>
                             </div>
-                            @if($table_id)
-                            <div class="col-md-4">
-                                <label for="table_id">Table : {{ $data->table->name }}</label>
-                                <input type="number" name="table_id" class="form-control" value="{{ $table_id }}" readonly>
-                            </div>
-                            @endif
                             <div class="col-md-4">
                                 <label for="employe_id">Serveur</label>
                                 <select class="form-control" name="employe_id" id="employe_id">
@@ -69,7 +64,11 @@
                                 <label for="invoice_type">Type Facture</label>
                                 <div class="form-group">
                                     <label class="text">F. Normale
-                                    <input type="checkbox" name="invoice_type" value="FN" checked="checked" class="form-control">
+                                    <input type="checkbox" name="invoice_type" value="FN" class="form-control">
+                                    </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <div class="form-group">
+                                    <label class="text">facture d'Avoir
+                                    <input type="checkbox" name="invoice_type" value="FA" checked="checked" class="form-control">
                                     </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <label class="text">R. Caution
                                     <input type="checkbox" name="invoice_type" value="RC" class="form-control">

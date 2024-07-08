@@ -205,9 +205,9 @@ class FactureController extends Controller
             
             $latest = Facture::orderBy('id','desc')->first();
             if ($latest) {
-               $invoice_number = 'FA' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
+               $invoice_number = 'FN' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{
-               $invoice_number = 'FA' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
+               $invoice_number = 'FN' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
             }
             
 
@@ -418,9 +418,9 @@ class FactureController extends Controller
 
             $latest = Facture::orderBy('id','desc')->first();
             if ($latest) {
-               $invoice_number = 'FA' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
+               $invoice_number = 'FN' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{
-               $invoice_number = 'FA' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
+               $invoice_number = 'FN' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
             }
             
 
@@ -605,9 +605,9 @@ class FactureController extends Controller
             
             $latest = Facture::orderBy('id','desc')->first();
             if ($latest) {
-               $invoice_number = 'FA' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
+               $invoice_number = 'FN' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{
-               $invoice_number = 'FA' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
+               $invoice_number = 'FN' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
             }
             
 
@@ -791,9 +791,9 @@ class FactureController extends Controller
 
             $latest = Facture::orderBy('id','desc')->first();
             if ($latest) {
-               $invoice_number = 'FA' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
+               $invoice_number = 'FN' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{
-               $invoice_number = 'FA' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
+               $invoice_number = 'FN' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
             }
             
 
@@ -973,9 +973,9 @@ class FactureController extends Controller
             
             $latest = Facture::orderBy('id','desc')->first();
             if ($latest) {
-               $invoice_number = 'FA' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
+               $invoice_number = 'FN' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{
-               $invoice_number = 'FA' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
+               $invoice_number = 'FN' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
             }
             
 
