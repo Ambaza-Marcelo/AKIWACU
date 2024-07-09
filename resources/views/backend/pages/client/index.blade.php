@@ -67,7 +67,7 @@
                                <tr>
                                     <td>{{ $loop->index+1 }}</td>
                                     <td>{{ $client->customer_name }}</td>
-                                    <td>{{ $client->customer_Tin }}</td>
+                                    <td>{{ $client->customer_TIN }}</td>
                                     <td>{{ $client->customer_address }}</td>
                                     <td>{{ $client->mail }}</td>
                                     <td>{{ $client->telephone }}</td>

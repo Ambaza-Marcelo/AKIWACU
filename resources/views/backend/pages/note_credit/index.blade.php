@@ -80,8 +80,8 @@
                             @foreach($factures as $facture)
                                <tr>
                                     <td>{{ $loop->index+1}}</td>
-                                    <td><a href="{{ route('admin.facture.show',$facture->invoice_number) }}">{{ $facture->invoice_number }}</a>&nbsp;@if($facture->etat == 0)<span class="badge badge-warning">Encours...</span>@elseif($facture->etat === '1')<span class="badge badge-success">Validée</span>@elseif($facture->etat ==2)<span class="badge badge-success">Envoyée</span>@elseif($facture->etat === '01')<span class="badge badge-info" title="@if($facture->client_id){{ $facture->client->customer_name }} @elseif($facture->booking_client_id) {{ $facture->bookingClient->customer_name }} @else {{ $facture->customer_name }} @endif">validé(crédit)</span>@else<span class="badge badge-danger" title="{{ $facture->cn_motif }}">Annulée</span>@endif</td>
-                                    <td>{{ \Carbon\Carbon::parse($facture->invoice_date)->format('d/m/Y') }}</td>
+                                    <td><a href="{{ route('admin.note-de-credit.show',$facture->invoice_number) }}">{{ $facture->invoice_number }}</a></td>
+                                    <td>{{ \Carbon\Carbon::parse($facture->invoice_date)->format('d/m/Y H:i:s') }}</td>
                                     <td>{{ $facture->employe->name }}</td>
                                     <td>@if($facture->client_id){{ $facture->client->customer_name }} @else {{ $facture->customer_name }} @endif</td>
                                     <td>{{ $facture->cancelled_invoice_ref }}</td>
@@ -92,7 +92,7 @@
                                     <td>
                                         @if (Auth::guard('admin')->user()->can('invoice_drink.create'))
                                         @if($facture->statut != '1')
-                                        <a href="{{ route('admin.facture.imprimer',$facture->invoice_number) }}"><img src="{{ asset('img/ISSh.gif') }}" width="60" title="Télécharger d'abord le document et puis imprimer"></a>
+                                        <a href="{{ route('admin.note-de-credit.facture',$facture->invoice_number) }}"><img src="{{ asset('img/ISSh.gif') }}" width="60" title="Télécharger d'abord le document et puis imprimer"></a>
                                         @endif
                                         @endif
                                         

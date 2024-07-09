@@ -47,37 +47,44 @@
                     
                     <form action="{{ route('admin.clients.store') }}" method="POST">
                         @csrf
-                        <div class="row">
-                        <div class="col-md-4">
+                    <div class="row">
+                        <div class="col-md-6">
                         <div class="form-group">
-                            <label for="customer_name">Nom du Client</label>
-                            <input type="text" class="form-control" id="customer_name" name="customer_name" placeholder="Entrer le nom du client">
+                            <label for="tp_type">Type de contribuable</label>
+                            <select name="tp_type" id="tp_type" class="form-control">
+                                <option disabled selected>merci de choisir</option>
+                                <option value="1">Personne Physique</option>
+                                <option value="2">société locale</option>
+                                <option value="3">société étrangère</option>
+                            </select>
                         </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6" id="customer_TIN">
+                            
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6" id="customer_name">
+
+                        </div>
+                        <div class="col-md-6">
                         <div class="form-group">
                             <label for="telephone">Telephone du Client</label>
                             <input type="tel" class="form-control" id="telephone" name="telephone" placeholder="Entrer le telephone">
-                        </div>
-                        </div>
-                        <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="mail">E-mail du Client</label>
-                            <input type="text" class="form-control" id="mail" name="mail" placeholder="Entrer le mail">
                         </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                         <div class="form-group">
-                            <label for="customer_TIN">NIF du Client</label>
-                            <input type="text" class="form-control" id="customer_TIN" name="customer_TIN" placeholder="Entrer le NIF du Client">
+                            <label for="customer_address">Adresse du Client</label>
+                            <input type="text" class="form-control" id="customer_address" name="customer_address" placeholder="Entrer l'adresse du Client">
                         </div>
                         </div>
                         <div class="col-md-6">
                         <div class="form-group">
-                            <label for="customer_address">Adresse du Client</label>
-                            <input type="text" class="form-control" id="customer_address" name="customer_address" placeholder="Entrer l'adresse du Client">
+                            <label for="mail">E-mail du Client</label>
+                            <input type="text" class="form-control" id="mail" name="mail" placeholder="Entrer le mail">
                         </div>
                         </div>
                     </div>
@@ -124,6 +131,42 @@
 
     }
     })
+
+    $('#tp_type').change(function () { 
+    if ($(this).val() === '2'){
+
+        var customer_TIN = "<div class='form-group'>"+
+                            "<label for='customer_TIN'>NIF du Client<strong style='color: red;'>*</strong></label>"+
+                                "<input type='text' class='form-control' name='customer_TIN' placeholder='Entrer le NIF du Client' required>"+
+                        "</div>";
+        
+        $("#customer_TIN").append(customer_TIN);
+        $("#customer_name").hidden();
+
+    }
+
+    if ($(this).val() === '1'){
+
+        var customer_name = "<div class='form-group'>"+
+                            "<label for='customer_name'>Nom du Client<strong style='color: red;'>*</strong></label>"+
+                                "<input type='text' class='form-control' name='customer_name' placeholder='Entrer le NIF du Client' required>"+
+                        "</div>";
+        
+        $("#customer_name").append(customer_name);
+    }
+
+    if ($(this).val() === '3'){
+
+        var customer_name = "<div class='form-group'>"+
+                            "<label for='customer_name'>Nom du Client<strong style='color: red;'>*</strong></label>"+
+                                "<input type='text' class='form-control' name='customer_name' placeholder='Entrer le NIF du Client' required>"+
+                        "</div>";
+        
+        $("#customer_name").append(customer_name);
+    }
+
+    })
+    .trigger( "change" );
 
 </script>
 @endsection

@@ -9,7 +9,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use App\Models\Client;
+use App\Models\EGRClient;
+use Illuminate\Support\Facades\Http;
+use GuzzleHttp\Client;
 
 class ClientController extends Controller
 {
@@ -35,7 +37,7 @@ class ClientController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any client !');
         }
 
-        $clients = Client::orderBy('customer_name','asc')->get();
+        $clients = EGRClient::orderBy('customer_name','asc')->get();
         return view('backend.pages.client.index', compact('clients'));
     }
 
@@ -68,24 +70,142 @@ class ClientController extends Controller
         // Validation Data
         $request->validate([
             'customer_name' => 'required|max:100',
-            //'mail' => 'required|min:10',
+            'tp_type' => 'required|min:10',
             'telephone' => 'required',
         ]);
 
-        // Create New Client
-        $client = new Client();
-        $client->date = $request->date;
-        $client->customer_name = $request->customer_name;
-        $client->telephone = $request->telephone;
-        $client->mail = $request->mail;
-        $client->customer_TIN = $request->customer_TIN;
-        $client->customer_address = $request->customer_address;
-        $client->vat_customer_payer = $request->vat_customer_payer;
-        $client->company = $request->company;
-        $client->save();
+        $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
+        $response = Http::post($theUrl, [
+            'username'=> "ws400104024700048",
+            'password'=> "[zkC%)P4"
+
+        ]);
+
+        $data =  json_decode($response);
+        $data2 = ($data->result);
+        
+    
+        $token = $data2->token;
+
+        $tp_TIN = $request->customer_TIN;
+
+        $clients = EGRClient::all();
+
+        foreach ($clients as $client) {
+            if ($client->customer_TIN == $tp_TIN) {
+                session()->flash('error', 'Le NIF du Contribuable existe déjà');
+                return redirect()->back();
+            }elseif ($client->customer_name == $request->customer_name) {
+                session()->flash('error', 'Le nom du Contribuable existe déjà');
+                return redirect()->back();
+            }elseif ($client->telephone == $request->telephone) {
+                session()->flash('error', 'Le Numero de telephone du Contribuable existe déjà');
+                return redirect()->back();
+            }elseif ($client->mail == $request->mail) {
+                session()->flash('error', 'Le mail du Contribuable existe déjà');
+                return redirect()->back();
+            }
+        }
+
+        if (empty($tp_TIN) && $request->vat_customer_payer == 1) {
+            session()->flash('error', 'Le NIF du client est obligatoire');
+            return redirect()->back();
+        }elseif (!empty($tp_TIN) && strlen($tp_TIN) < 10) {
+            session()->flash('error', 'Le NIF du client n\'existe pas');
+            return redirect()->back();
+        }
+
+        $theUrl = config('app.guzzle_test_url').'/ebms_api/checkTIN/';
+        $response = Http::withHeaders([
+        'Authorization' => 'Bearer '.$token,
+        'Accept' => 'application/json'])->post($theUrl, [
+            'tp_TIN'=>$tp_TIN,
+
+        ]); 
+
+        $data =  json_decode($response);
+        $data2 = ($data->result);
+        
+    
+        $success = $data->success;
+        $msg = $data->msg;
+
+        
+        if ($success == true && $request->vat_customer_payer == 1 || $request->vat_customer_payer == 0) {
+
+            $data3 = ($data2->taxpayer);
+
+            $index_one = ($data3['0']);
+
+            $tp_name = $index_one->tp_name;
+
+            $client = new EGRClient();
+            $client->date = $request->date;
+            $client->customer_name = $tp_name;
+            $client->tp_type = $request->tp_type;
+            $client->telephone = $request->telephone;
+            $client->mail = $request->mail;
+            $client->customer_TIN = $request->customer_TIN;
+            $client->customer_address = $request->customer_address;
+            $client->vat_customer_payer = $request->vat_customer_payer;
+            $client->company = $request->company;
+            $client->save();
+            session()->flash('success', 'Le client a été créé avec succés !!, OBR Message : '.$msg.'('.$tp_name.')');
+            return redirect()->route('admin.clients.index');
+        }elseif ($success == false && $request->vat_customer_payer == 1) {
+
+            session()->flash('error', 'Le NIF du Contribuable inconnu');
+            return redirect()->back();
+        }elseif ($success == false && !empty($tp_TIN) && $request->vat_customer_payer == 0) {
+
+            session()->flash('error', 'Le NIF du Contribuable inconnu');
+            return redirect()->back();
+        }else{
+            $client = new EGRClient();
+            $client->date = $request->date;
+            $client->customer_name = $request->customer_name;
+            $client->tp_type = $request->tp_type;
+            $client->telephone = $request->telephone;
+            $client->mail = $request->mail;
+            $client->customer_TIN = $request->customer_TIN;
+            $client->customer_address = $request->customer_address;
+            $client->vat_customer_payer = $request->vat_customer_payer;
+            $client->company = $request->company;
+            $client->save();
+        }
 
         session()->flash('success', 'Client has been created !!');
         return redirect()->route('admin.clients.index');
+    }
+
+    public function checkTIN(Request  $request)
+    {
+
+        $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
+        $response = Http::post($theUrl, [
+            'username'=> "ws400104024700048",
+            'password'=> "[zkC%)P4"
+
+        ]);
+
+        $data =  json_decode($response);
+        $data2 = ($data->result);
+        
+    
+        $token = $data2->token;
+
+        $tp_TIN = $request->tp_TIN;
+
+        $theUrl = config('app.guzzle_test_url').'/ebms_api/checkTIN/';
+        $response = Http::withHeaders([
+        'Authorization' => 'Bearer '.$token,
+        'Accept' => 'application/json'])->post($theUrl, [
+            'tp_TIN'=>$tp_TIN,
+
+        ]); 
+
+        //$data =  json_decode($response);
+        return $response->json();
     }
 
     /**
@@ -111,7 +231,7 @@ class ClientController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to edit any client !');
         }
 
-        $client = Client::find($id);
+        $client = EGRClient::find($id);
         return view('backend.pages.client.edit', compact('client'));
     }
 
@@ -128,15 +248,16 @@ class ClientController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to edit any client !');
         }
 
-        $client = Client::find($id);
+        $client = EGRClient::find($id);
 
         $request->validate([
             'customer_name' => 'required|max:100',
-            //'mail' => 'required|min:10',
+            'tp_type' => 'required|min:10',
             'telephone' => 'required',
         ]);
 
         $client->date = $request->date;
+        $client->tp_type = $request->tp_type;
         $client->customer_name = $request->customer_name;
         $client->telephone = $request->telephone;
         $client->mail = $request->mail;
@@ -163,7 +284,7 @@ class ClientController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to delete any client !');
         }
 
-        $client = Client::find($id);
+        $client = EGRClient::find($id);
         if (!is_null($client)) {
             $client->delete();
         }

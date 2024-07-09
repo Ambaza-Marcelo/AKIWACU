@@ -4,9 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Client extends Model
+class EGRClient extends Model
 {
     //
+    protected $table = 'clients';
     protected $fillable = [
     	'customer_name',
 		'telephone',

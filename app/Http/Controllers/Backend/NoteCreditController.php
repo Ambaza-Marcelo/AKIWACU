@@ -359,9 +359,9 @@ class NoteCreditController extends Controller
             $facture->save();
 
             Facture::where('invoice_number', '=', $cancelled_invoice_ref)
-                ->update(['etat' => -2,'cn_motif' => $cn_motif_detail,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
+                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif_detail,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
             FactureDetail::where('invoice_number', '=', $cancelled_invoice_ref)
-                ->update(['etat' => -2,'cn_motif' => $cn_motif_detail,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
+                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif_detail,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
 
 
             session()->flash('success', 'La note de credit est faite avec succés!!');
@@ -1993,38 +1993,38 @@ class NoteCreditController extends Controller
 
         $setting = DB::table('settings')->orderBy('created_at','desc')->first();
 
-        $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
-        $facture = Facture::where('invoice_number', $invoice_number)->first();
-        $invoice_signature = Facture::where('invoice_number', $invoice_number)->value('invoice_signature');
-        $data = Facture::where('invoice_number', $invoice_number)->first();
-        $totalValue = DB::table('facture_details')
+        $datas = NoteCreditDetail::where('invoice_number', $invoice_number)->get();
+        $facture = NoteCredit::where('invoice_number', $invoice_number)->first();
+        $invoice_signature = NoteCredit::where('invoice_number', $invoice_number)->value('invoice_signature');
+        $data = NoteCredit::where('invoice_number', $invoice_number)->first();
+        $totalValue = DB::table('note_credit_details')
             ->where('invoice_number', '=', $invoice_number)
             ->sum('item_price_nvat');
-        $item_total_amount = DB::table('facture_details')
+        $item_total_amount = DB::table('note_credit_details')
             ->where('invoice_number', '=', $invoice_number)
             ->sum('item_total_amount');
-        $totalVat = DB::table('facture_details')
+        $totalVat = DB::table('note_credit_details')
             ->where('invoice_number', '=', $invoice_number)
             ->sum('vat');
-        $client = Facture::where('invoice_number', $invoice_number)->value('customer_name');
-        $date = Facture::where('invoice_number', $invoice_number)->value('invoice_date');
+        $client = NoteCredit::where('invoice_number', $invoice_number)->value('customer_name');
+        $date = NoteCredit::where('invoice_number', $invoice_number)->value('invoice_date');
        
-        $pdf = PDF::loadView('backend.pages.document.facture',compact('datas','invoice_number','totalValue','item_total_amount','client','setting','date','data','invoice_signature','facture','totalVat'))->setPaper('a6', 'portrait');
+        $pdf = PDF::loadView('backend.pages.note_credit.facture',compact('datas','invoice_number','totalValue','item_total_amount','client','setting','date','data','invoice_signature','facture','totalVat'))->setPaper('a4', 'portrait');
 
-        Storage::put('public/factures/'.$invoice_number.'.pdf', $pdf->output());
+        Storage::put('public/note_credit/'.$invoice_number.'.pdf', $pdf->output());
 
 
-        $factures = Facture::where('invoice_number', $invoice_number)->get();
+        $factures = NoteCredit::where('invoice_number', $invoice_number)->get();
 
-        $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
+        $datas = NoteCreditDetail::where('invoice_number', $invoice_number)->get();
 
-        Facture::where('invoice_number', '=', $invoice_number)
+        NoteCredit::where('invoice_number', '=', $invoice_number)
                 ->update(['statut' => 1]);
-            FactureDetail::where('invoice_number', '=', $invoice_number)
+            NoteCreditDetail::where('invoice_number', '=', $invoice_number)
                 ->update(['statut' => 1]);
 
             // download pdf file
-        return $pdf->download('FACTURE_'.$invoice_number.'.pdf');
+        return $pdf->download('FACTURE_D_AVOIR_'.$invoice_number.'.pdf');
 
         /*
         $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';

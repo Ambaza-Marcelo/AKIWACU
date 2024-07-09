@@ -163,6 +163,8 @@ Route::group(['prefix' => 'admin'], function () {
 
     Route::get('eBMS-note-de-credit/index', 'Backend\NoteCreditController@index')->name('admin.note-de-credit.index');
 
+    Route::get('eBMS-note-de-credit/show/{invoice_number}', 'Backend\NoteCreditController@show')->name('admin.note-de-credit.show');
+
     Route::get('EBMS/boissons-faire-note-de-credit/{invoice_number}','Backend\NoteCreditController@noteCreditBoisson')->name('admin.boissons-note-de-credit.create');
     Route::get('EBMS/nourritures-faire-note-de-credit/{invoice_number}','Backend\NoteCreditController@noteCreditNourriture')->name('admin.nourritures-note-de-credit.create');
     Route::get('EBMS/barrista-faire-note-de-credit/{invoice_number}','Backend\NoteCreditController@noteCreditbarrista')->name('admin.barrista-note-de-credit.create');
@@ -320,6 +322,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('EBMS/clients/edit/{id}', 'Backend\ClientController@edit')->name('admin.clients.edit');
     Route::put('EBMS/clients/update/{id}', 'Backend\ClientController@update')->name('admin.clients.update');
     Route::delete('EBMS/clients/destroy/{id}', 'Backend\ClientController@destroy')->name('admin.clients.destroy');
+
+    Route::post('EBMS/clients/checkTIN', 'Backend\ClientController@checkTIN')->name('admin.clients.checkTIN');
 
     //booking-clients routes
     Route::get('EBMS/booking-clients/index', 'Backend\Booking\ClientController@index')->name('admin.booking-clients.index');

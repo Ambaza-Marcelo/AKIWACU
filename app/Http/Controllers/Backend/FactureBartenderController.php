@@ -16,7 +16,7 @@ use PDF;
 use Excel;
 use Mail;
 use Validator;
-//use GuzzleHttp\Client;
+//use GuzzleHttp\EGRClient;
 use App\Models\Facture;
 use App\Models\FactureDetail;
 use App\Models\Setting;
@@ -24,7 +24,7 @@ use App\Models\BartenderOrder;
 use App\Models\BartenderOrderDetail;
 use App\Models\BartenderItem;
 use App\Models\Employe;
-use App\Models\Client;
+use App\Models\EGRClient;
 use App\Models\Table;
 use App\Mail\ReportBartenderMail;
 
@@ -62,7 +62,7 @@ class FactureBartenderController extends Controller
         $setting = DB::table('settings')->orderBy('created_at','desc')->first();
 
         $bartender_items =  BartenderItem::orderBy('name','asc')->get();
-        $clients =  Client::orderBy('customer_name','asc')->get();
+        $EGRClients =  EGRClient::orderBy('customer_name','asc')->get();
         $orders =  BartenderOrderDetail::where('order_no',$order_no)->orderBy('order_no','asc')->get();
 
         $data =  BartenderOrder::where('order_no',$order_no)->first();
@@ -71,7 +71,7 @@ class FactureBartenderController extends Controller
             ->where('order_no',$order_no)
             ->sum('total_amount_selling');
 
-        return view('backend.pages.invoice_bartender.create',compact('bartender_items','data','setting','orders','order_no','clients','table_id','total_amount'));
+        return view('backend.pages.invoice_bartender.create',compact('bartender_items','data','setting','orders','order_no','EGRClients','table_id','total_amount'));
     }
 
     public function createByTable($table_id)
@@ -83,7 +83,7 @@ class FactureBartenderController extends Controller
         $setting = DB::table('settings')->orderBy('created_at','desc')->first();
 
         $bartender_items =  BartenderItem::orderBy('name','asc')->get();
-        $clients =  Client::orderBy('customer_name','asc')->get();
+        $EGRClients =  EGRClient::orderBy('customer_name','asc')->get();
         $orders =  BartenderOrderDetail::where('table_id',$table_id)->where('status',1)->orderBy('id','asc')->get();
 
         $data =  BartenderOrder::where('table_id',$table_id)->where('status',1)->first();
@@ -91,7 +91,7 @@ class FactureBartenderController extends Controller
             ->where('table_id',$table_id)->where('status',1)
             ->sum('total_amount_selling');
 
-        return view('backend.pages.invoice_bartender.create',compact('bartender_items','data','setting','orders','table_id','clients','total_amount'));
+        return view('backend.pages.invoice_bartender.create',compact('bartender_items','data','setting','orders','table_id','EGRClients','total_amount'));
     }
 
     public function show($invoice_number)
@@ -125,13 +125,13 @@ class FactureBartenderController extends Controller
         $end_date = $endDate.' 23:59:59';
 
         $datas = FactureDetail::select(
-                        DB::raw('id,bartender_item_id,invoice_number,invoice_date,item_quantity,item_price,vat,item_price_nvat,customer_name,bartender_order_no,client_id,item_total_amount'))->where('bartender_order_no','!=','')->where('etat','1')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','bartender_item_id','invoice_date','invoice_number','item_quantity','item_price','vat','item_price_nvat','customer_name','bartender_order_no','client_id','item_total_amount')->orderBy('invoice_number','asc')->get();
+                        DB::raw('id,bartender_item_id,invoice_number,invoice_date,item_quantity,item_price,vat,item_price_nvat,customer_name,bartender_order_no,EGRClient_id,item_total_amount'))->where('bartender_order_no','!=','')->where('etat','1')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','bartender_item_id','invoice_date','invoice_number','item_quantity','item_price','vat','item_price_nvat','customer_name','bartender_order_no','EGRClient_id','item_total_amount')->orderBy('invoice_number','asc')->get();
         $total_amount = DB::table('facture_details')->where('bartender_order_no','!=','')->where('etat','1')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
         $total_vat = DB::table('facture_details')->where('bartender_order_no','!=','')->where('etat','1')->whereBetween('invoice_date',[$start_date,$end_date])->sum('vat');
         $total_item_price_nvat = DB::table('facture_details')->where('bartender_order_no','!=','')->where('etat','1')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_price_nvat');
 
         $credits = FactureDetail::select(
-                        DB::raw('id,bartender_item_id,invoice_number,invoice_date,item_quantity,item_price,vat,item_price_nvat,customer_name,bartender_order_no,client_id,item_total_amount'))->where('bartender_order_no','!=','')->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','bartender_item_id','invoice_date','invoice_number','item_quantity','item_price','vat','item_price_nvat','customer_name','bartender_order_no','client_id','item_total_amount')->orderBy('invoice_number','asc')->get();
+                        DB::raw('id,bartender_item_id,invoice_number,invoice_date,item_quantity,item_price,vat,item_price_nvat,customer_name,bartender_order_no,EGRClient_id,item_total_amount'))->where('bartender_order_no','!=','')->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','bartender_item_id','invoice_date','invoice_number','item_quantity','item_price','vat','item_price_nvat','customer_name','bartender_order_no','EGRClient_id','item_total_amount')->orderBy('invoice_number','asc')->get();
         $total_amount_credit = DB::table('facture_details')->where('bartender_order_no','!=','')->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
         $total_vat_credit = DB::table('facture_details')->where('bartender_order_no','!=','')->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->sum('vat');
         $total_item_price_nvat_credit = DB::table('facture_details')->where('bartender_order_no','!=','')->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_price_nvat');
