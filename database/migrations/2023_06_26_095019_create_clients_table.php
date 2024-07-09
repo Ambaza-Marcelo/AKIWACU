@@ -23,6 +23,7 @@ class CreateClientsTable extends Migration
             $table->unique('mail');
             $table->string('customer_TIN')->nullable(true);
             $table->unique('customer_TIN');
+            $table->string('tp_type')->nullable(true);
             $table->string('customer_address')->nullable(true);
             $table->string('vat_customer_payer')->nullable(true);
             $table->string('company')->nullable(true);
