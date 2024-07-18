@@ -17,7 +17,7 @@
         <div>
             <div>
                 <div>
-                   <img src="img/eden_logo.png" width="200" height="65">
+                   <img src="{{ asset('img/eden_logo.png')}}" width="200" height="85">
                 </div>
                 <div>
                     <div>
@@ -61,10 +61,16 @@
                 </div>
                 <div>
                     <small>Nom du Serveur(se) : {{ $data->employe->name }}</small>
-                </div><br><br>
-                <small>
-                           &nbsp;&nbsp; <img src="data:image/png;base64, {!! base64_encode(QrCode::size(100)->generate('eSIGNATURE : '.$order_signature.' www.edengardenresorts.bi, Order Number : '.$order_no)) !!} ">
-                </small>
+                </div>
+                <div>
+                    <small>Table : {{ $data->table->name }}</small>
+                </div>
+                <br><br>
+                 <a href="javascript:window.print();"><small>Thank You For Work</small></a>
+                    <small>
+                           &nbsp;&nbsp;
+                           {!! QrCode::size(100)->backgroundColor(255,255,255)->generate('ID : '.$order_signature.' www.edengardenresorts.bi, Designed by AMBAZA Marcellin' ) !!}
+                    </small>
             </div>
         </div>
     </div>

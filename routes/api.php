@@ -18,14 +18,38 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
  });
 
-Route::post('ebms_api/login', 'Backend\FactureController@login')->name('ebms_api.login');
-	Route::post('ebms_api/getInvoice', 'Backend\FactureController@getInvoice')->name('ebms_api.getInvoice');
-	Route::post('ebms_api/addInvoiceConfirm/{invoice_number}', 'Backend\FactureController@addInvoiceConfirm')->name('ebms_api.addInvoice');
-	Route::post('ebms_api/checkTIN', 'Backend\FactureController@checkTIN')->name('ebms_api.checkTIN');
-	Route::post('ebms_api/cancelInvoice/{invoice_number}', 'Backend\FactureController@cancelInvoice')->name('ebms_api.cancelInvoice');
-	Route::post('ebms_api/addStockMovement', 'Backend\FactureController@addStockMovement')->name('ebms_api.addStockMovement');
+Route::group(['prefix' => 'admin'], function () {
 
-	Route::post('musumba-steel-ebp-factures/login', 'Backend\FactureController@login')->name('musumba-steel-ebp-factures.login');
-	Route::post('musumba-steel-ebp-factures/getInvoice', 'Backend\FactureController@getInvoice')->name('musumba-steel-ebp-factures.getInvoice');
-	Route::post('musumba-steel-factures/checkTIN', 'Backend\FactureController@checkTIN')->name('musumba-steel-factures.checkTIN');
-	Route::post('musumba-steel-factures/cancelInvoice/{invoice_number}', 'Backend\FactureController@cancelInvoice')->name('musumba-steel-factures.cancelInvoice');
+	//table api routes
+	Route::post('akwacu-api/getTable', 'Backend\TableController@getTable')->name('akiwacu_api.getTable');
+	Route::post('akwacu-api/addTransaction', 'Backend\TableController@addTransaction')->name('akiwacu_api.addTransaction');
+
+	//drink order api routes
+	Route::post('akwacu-api/getDrinkOrder', 'Backend\OrderDrinkController@getDrinkOrder')->name('akiwacu_api.getDrinkOrder');
+	Route::post('akwacu-api/getDrinkOrderDetail', 'Backend\OrderDrinkController@getDrinkOrderDetail')->name('akiwacu_api.getDrinkOrderDetail');
+	Route::post('akwacu-api/addDrinkOrder', 'Backend\OrderDrinkController@addDrinkOrder')->name('akiwacu_api.addDrinkOrder');
+
+	//food orders api routes
+	Route::post('akwacu-api/getFoodOrder', 'Backend\OrderKitchenController@getFoodOrder')->name('akiwacu_api.getFoodOrder');
+	Route::post('akwacu-api/getFoodOrderDetail', 'Backend\OrderKitchenController@getFoodOrderDetail')->name('akiwacu_api.getFoodOrderDetail');
+	Route::post('akwacu-api/addFoodOrder', 'Backend\OrderKitchenController@addFoodOrder')->name('akiwacu_api.addFoodOrder');
+
+	//barrista order api routes
+	Route::post('akwacu-api/getBarristaOrder', 'Backend\BarristOrderController@getBarristaOrder')->name('akiwacu_api.getBarristaOrder');
+	Route::post('akwacu-api/getBarristaOrderDetail', 'Backend\BarristOrderController@getBarristaOrderDetail')->name('akiwacu_api.getBarristaOrderDetail');
+	Route::post('akwacu-api/addBarristaOrder', 'Backend\BarristOrderController@addBarristaOrder')->name('akiwacu_api.addBarristaOrder');
+
+	//bartender order api routes
+	Route::post('akwacu-api/getBartenderOrder', 'Backend\BartenderOrderController@getBartenderOrder')->name('akiwacu_api.getBartenderOrder');
+	Route::post('akwacu-api/getBartenderOrderDetail', 'Backend\BartenderOrderController@getBartenderOrderDetail')->name('akiwacu_api.getBartenderOrderDetail');
+	Route::post('akwacu-api/addBartenderOrder', 'Backend\BartenderOrderController@addBartenderOrder')->name('akiwacu_api.addBartenderOrder');
+	//invoice api routes
+
+	Route::post('akwacu-api/addDrinkInvoice', 'Backend\FactureController@addDrinkInvoice')->name('akiwacu_api.addDrinkInvoice');
+	Route::post('akwacu-api/addFoodInvoice', 'Backend\FactureRestaurantController@addFoodInvoice')->name('akiwacu_api.addFoodInvoice');
+	Route::post('akwacu-api/addBarristaInvoice', 'Backend\FactureBarristController@addBarristaInvoice')->name('akiwacu_api.addBarristaInvoice');
+	Route::post('akwacu-api/addBartenderInvoice', 'Backend\FactureBartenderController@addBartenderInvoice')->name('akiwacu_api.addBartenderInvoice');
+	Route::post('akwacu-api/addBookingInvoice', 'Backend\FactureBookingController@addBookingInvoice')->name('akiwacu_api.addBookingInvoice');
+
+});
+

@@ -421,17 +421,18 @@ class OrderDrinkController extends Controller
            $order_no = OrderDrink::where('order_no', $order_no)->value('order_no');
 
            $datas = OrderDrinkDetail::where('order_no', $order_no)->get();
+           /*
            $pdf = PDF::loadView('backend.pages.document.drink_order_client',compact('datas','order_no','setting','description','order_signature','date','totalValue','order'))->setPaper('a6', 'portrait');
 
            Storage::put('public/commande_boisson/'.$order_no.'.pdf', $pdf->output());
-
+            */
            OrderDrink::where('order_no', '=', $order_no)
                 ->update(['flag' => 1]);
             OrderDrinkDetail::where('order_no', '=', $order_no)
                 ->update(['flag' => 1]);
-
+            return view('backend.pages.document.drink_order_client',compact('datas','order_no','setting','description','order_signature','date','totalValue','order'));
            // download pdf file
-           return $pdf->download('COMMANDE_'.$order_no.'.pdf'); 
+           //return $pdf->download('COMMANDE_'.$order_no.'.pdf'); 
            
         }else if ($stat == -1) {
             session()->flash('error', 'Order has been rejected !!');

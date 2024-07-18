@@ -350,17 +350,18 @@ class BartenderOrderController extends Controller
            $order_no = BartenderOrder::where('order_no', $order_no)->value('order_no');
 
            $datas = BartenderOrderDetail::where('order_no', $order_no)->get();
+           /*
            $pdf = PDF::loadView('backend.pages.document.bartender_order',compact('datas','order_no','setting','description','order_signature','date','totalValue','order'))->setPaper('a6', 'portrait');
 
            Storage::put('public/bartender_order/'.$order_no.'.pdf', $pdf->output());
-
+            */
            BartenderOrder::where('order_no', '=', $order_no)
                 ->update(['flag' => 1]);
             BartenderOrderDetail::where('order_no', '=', $order_no)
                 ->update(['flag' => 1]); 
-
+            return view('backend.pages.document.bartender_order',compact('datas','order_no','setting','description','order_signature','date','totalValue','order'));
            // download pdf file
-           return $pdf->download('COMMANDE_'.$order_no.'.pdf');
+           //return $pdf->download('COMMANDE_'.$order_no.'.pdf');
            
         }else if ($stat == -1) {
             session()->flash('error', 'Order has been rejected !!');

@@ -434,17 +434,20 @@ class OrderKitchenController extends Controller
 
            $datas = OrderKitchenDetail::where('order_no', $order_no)->get();
            $accompagnements = AccompagnementDetail::where('order_no', $order_no)->get();
+           /*
            $pdf = PDF::loadView('backend.pages.document.food_order_client',compact('accompagnements','datas','order_no','setting','description','order_signature','date','order','totalValue'))->setPaper('a6', 'portrait');
 
            Storage::put('public/commande_cuisine/'.$order_no.'.pdf', $pdf->output());
-
+            */
            OrderKitchen::where('order_no', '=', $order_no)
                 ->update(['flag' => 1]);
             OrderKitchenDetail::where('order_no', '=', $order_no)
                 ->update(['flag' => 1]);
 
+            return view('backend.pages.document.food_order_client',compact('accompagnements','datas','order_no','setting','description','order_signature','date','order','totalValue'));
+
            // download pdf file
-           return $pdf->download($order_no.'.pdf'); 
+           //return $pdf->download($order_no.'.pdf'); 
            
         }else if ($stat == -1) {
             session()->flash('error', 'Order has been rejected !!');

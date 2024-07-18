@@ -16,13 +16,13 @@
     <div>
         <div>
                 <div>
-                   <img src="img/eden_logo.png" width="200" height="65">
+                   <img src="{{ asset('img/eden_logo.png')}}" width="200" height="85">
                 </div>
                 <div>
                         <small>
                            <strong style="text-decoration: underline;">Bon d'Expedition</strong>
                         </small><br>
-                        @if($data->drink_id)
+                        @if($data->drink_order_no)
                         <small>
                            Order Number: {{ $data->drink_order_no }}
                         </small><br>
@@ -125,9 +125,10 @@
                     <br>
                     <small>Caissier(e) : {{ $facture->auteur }}</small>
                     <br><br>
-                    <small>Thank You For Visit</small>
+                    <a href="javascript:window.print();"><small>Thank You For Visit</small></a>
                     <small>
-                           &nbsp;&nbsp; <img src="data:image/png;base64, {!! base64_encode(QrCode::size(100)->generate('eSIGNATURE : '.$invoice_signature.' www.edengardenresorts.bi')) !!} ">
+                           &nbsp;&nbsp;
+                           {!! QrCode::size(100)->backgroundColor(255,255,255)->generate('ID : '.$invoice_signature.' www.edengardenresorts.bi, Designed by AMBAZA Marcellin' ) !!}
                     </small>
             </div>
         </div>

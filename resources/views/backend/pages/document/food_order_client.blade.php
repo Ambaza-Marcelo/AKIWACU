@@ -17,7 +17,7 @@
         <div>
             <div>
                 <div>
-                   <img src="img/eden_logo.png" width="200" height="65">
+                   <img src="{{ asset('img/eden_logo.png')}}" width="200" height="85">
                 </div>
                 <div>
                     <div>
