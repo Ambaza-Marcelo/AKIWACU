@@ -62,7 +62,7 @@ class FactureBarristController extends Controller
         $setting = DB::table('settings')->orderBy('created_at','desc')->first();
 
         $barrist_items =  BarristItem::orderBy('name','asc')->get();
-        $EGRClients =  EGRClient::orderBy('customer_name','asc')->get();
+        $clients =  EGRClient::orderBy('customer_name','asc')->get();
         $orders =  BarristOrderDetail::where('order_no',$order_no)->orderBy('order_no','asc')->get();
 
         $data =  BarristOrder::where('order_no',$order_no)->first();
@@ -71,7 +71,7 @@ class FactureBarristController extends Controller
             ->where('order_no',$order_no)
             ->sum('total_amount_selling');
 
-        return view('backend.pages.invoice_barrist.create',compact('barrist_items','data','setting','orders','order_no','EGRClients','table_id','total_amount'));
+        return view('backend.pages.invoice_barrist.create',compact('barrist_items','data','setting','orders','order_no','clients','table_id','total_amount'));
     }
 
     public function createByTable($table_id)
@@ -83,7 +83,7 @@ class FactureBarristController extends Controller
         $setting = DB::table('settings')->orderBy('created_at','desc')->first();
 
         $barrist_items =  BarristItem::orderBy('name','asc')->get();
-        $EGRClients =  EGRClient::orderBy('customer_name','asc')->get();
+        $clients =  EGRClient::orderBy('customer_name','asc')->get();
         $orders =  BarristOrderDetail::where('table_id',$table_id)->where('status',1)->orderBy('id','asc')->get();
 
         $data =  BarristOrder::where('table_id',$table_id)->where('status',1)->first();
@@ -91,7 +91,7 @@ class FactureBarristController extends Controller
             ->where('table_id',$table_id)->where('status',1)
             ->sum('total_amount_selling');
 
-        return view('backend.pages.invoice_barrist.create',compact('barrist_items','data','setting','orders','table_id','EGRClients','total_amount'));
+        return view('backend.pages.invoice_barrist.create',compact('barrist_items','data','setting','orders','table_id','clients','total_amount'));
     }
 
     public function show($invoice_number)

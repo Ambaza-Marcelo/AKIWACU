@@ -80,7 +80,7 @@
                             @foreach($factures as $facture)
                                <tr>
                                     <td>{{ $loop->index+1}}</td>
-                                    <td><a href="{{ route('admin.note-de-credit.show',$facture->invoice_number) }}">{{ $facture->invoice_number }}</a></td>
+                                    <td><a href="{{ route('admin.note-de-credit.show',$facture->invoice_number) }}">{{ $facture->invoice_number }}</a>&nbsp;@if($facture->etat == 0)<span class="badge badge-warning">Encours...</span>@elseif($facture->etat === '1')<span class="badge badge-success">Validée</span>@endif</td>
                                     <td>{{ \Carbon\Carbon::parse($facture->invoice_date)->format('d/m/Y H:i:s') }}</td>
                                     <td>{{ $facture->employe->name }}</td>
                                     <td>@if($facture->client_id){{ $facture->client->customer_name }} @else {{ $facture->customer_name }} @endif</td>
@@ -98,40 +98,12 @@
                                         
                                         @if (Auth::guard('admin')->user()->can('invoice_drink.validate'))
                                         @if($facture->etat == 0)
-                                         <a class="btn btn-primary text-white" href="{{ route('admin.facture-boisson.validate', $facture->invoice_number) }}"
+                                         <a class="btn btn-primary text-white" href="{{ route('admin.boissons-note-de-credit.valider', $facture->invoice_number) }}"
                                             onclick="event.preventDefault(); document.getElementById('validate-form-{{ $facture->invoice_number }}').submit();this.style.visibility='hidden';" ondblclick="this.style.visibility='hidden';">
                                                 Valider
                                             </a>
 
-                                            <form id="validate-form-{{ $facture->invoice_number }}" action="{{ route('admin.facture-boisson.validate', $facture->invoice_number) }}" method="POST" style="display: none;">
-                                                @method('PUT')
-                                                @csrf
-                                            </form>
-                                        @endif
-                                        @endif
-                                        @if (Auth::guard('admin')->user()->can('invoice_drink.validate'))
-                                        @if($facture->etat == 0)
-                                         <a href="{{ route('admin.voir-facture.credit', $facture->invoice_number) }}" class="btn btn-info">Valider avec Credit</a>
-                                        @endif
-                                        @endif
-                                        @if (Auth::guard('admin')->user()->can('invoice_drink.reset'))
-                                        @if($facture->etat == 1 || $facture->etat == 01)
-                                         <a href="{{ route('admin.boissons-note-de-credit.create', $facture->invoice_number) }}" class="btn btn-success">Facture d'Avoir</a>
-                                        @endif
-                                        @endif 
-                                        @if (Auth::guard('admin')->user()->can('invoice_drink.reset'))
-                                        @if($facture->etat == 0)
-                                         <a href="{{ route('admin.voir-facture.reset', $facture->invoice_number) }}" class="btn btn-success">Annuler</a>
-                                        @endif
-                                        @endif 
-                                        @if (Auth::guard('admin')->user()->can('invoice_drink.reject'))
-                                        @if($facture->etat == -1)
-                                         <a class="btn btn-primary text-white" href="{{ route('admin.facture.validate-reset', $facture->invoice_number) }}"
-                                            onclick="event.preventDefault(); document.getElementById('validate-form-{{ $facture->invoice_number }}').submit();">
-                                                Valider facture annulée
-                                            </a>
-
-                                            <form id="validate-form-{{ $facture->invoice_number }}" action="{{ route('admin.facture.validate-reset', $facture->invoice_number) }}" method="POST" style="display: none;">
+                                            <form id="validate-form-{{ $facture->invoice_number }}" action="{{ route('admin.boissons-note-de-credit.valider', $facture->invoice_number) }}" method="POST" style="display: none;">
                                                 @method('PUT')
                                                 @csrf
                                             </form>

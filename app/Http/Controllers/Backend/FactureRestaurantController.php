@@ -70,7 +70,7 @@ class FactureRestaurantController extends Controller
 
 
         $facture = Facture::where('invoice_number',$invoice_number)->where('etat','01')->first();
-        $EGRClients =  EGRClient::orderBy('customer_name','asc')->get();
+        $clients =  EGRClient::orderBy('customer_name','asc')->get();
         $datas = FactureDetail::where('invoice_number',$invoice_number)->where('etat','01')->get();
         $total_amount = DB::table('facture_details')
             ->where('invoice_number',$invoice_number)->where('etat','01')->sum('item_total_amount');
@@ -85,7 +85,7 @@ class FactureRestaurantController extends Controller
         $montant_recouvre = DB::table('factures')
             ->where('invoice_number',$invoice_number)->where('etat','01')->sum('montant_recouvre');
 
-        return view('backend.pages.invoice_all.payer-credit',compact('datas','facture','total_amount','EGRClients','reste_credit','montant_recouvre'));
+        return view('backend.pages.invoice_all.payer-credit',compact('datas','facture','total_amount','clients','reste_credit','montant_recouvre'));
     }
 
     public function voirFactureAcredit()
@@ -96,8 +96,8 @@ class FactureRestaurantController extends Controller
 
 
         $factures = Facture::where('etat','01')->orderBy('id','desc')->get();
-        $EGRClients =  EGRClient::orderBy('customer_name','asc')->get();
-        return view('backend.pages.invoice_all.credit',compact('factures','EGRClients'));
+        $clients =  EGRClient::orderBy('customer_name','asc')->get();
+        return view('backend.pages.invoice_all.credit',compact('factures','clients'));
     }
 
     public function creditPayes()
@@ -195,7 +195,7 @@ class FactureRestaurantController extends Controller
 
         $food_items =  FoodItem::orderBy('name','asc')->get();
         $orders =  OrderKitchenDetail::where('order_no',$order_no)->orderBy('order_no','asc')->get();
-        $EGRClients =  EGRClient::orderBy('customer_name','asc')->get();
+        $clients =  EGRClient::orderBy('customer_name','asc')->get();
         $data =  OrderKitchen::where('order_no',$order_no)->first();
         $table_id = OrderKitchen::where('order_no',$order_no)->value('table_id');
 
@@ -203,7 +203,7 @@ class FactureRestaurantController extends Controller
             ->where('order_no', '=', $order_no)
             ->sum('total_amount_selling');
 
-        return view('backend.pages.invoice_kitchen.create',compact('food_items','data','setting','orders','order_no','EGRClients','table_id','total_amount'));
+        return view('backend.pages.invoice_kitchen.create',compact('food_items','data','setting','orders','order_no','clients','table_id','total_amount'));
     }
 
     public function createByTable($table_id)
@@ -216,14 +216,14 @@ class FactureRestaurantController extends Controller
 
         $food_items =  FoodItem::orderBy('name','asc')->get();
         $orders =  OrderKitchenDetail::where('table_id',$table_id)->where('status',1)->orderBy('id','asc')->get();
-        $EGRClients =  EGRClient::orderBy('customer_name','asc')->get();
+        $clients =  EGRClient::orderBy('customer_name','asc')->get();
         $data =  OrderKitchen::where('table_id',$table_id)->where('status',1)->first();
 
         $total_amount = DB::table('order_kitchen_details')
             ->where('table_id',$table_id)->where('status',1)
             ->sum('total_amount_selling');
 
-        return view('backend.pages.invoice_kitchen.create',compact('food_items','data','setting','orders','EGRClients','table_id','total_amount'));
+        return view('backend.pages.invoice_kitchen.create',compact('food_items','data','setting','orders','clients','table_id','total_amount'));
     }
 
     /**
@@ -260,10 +260,10 @@ class FactureRestaurantController extends Controller
 
         $food_items =  FoodItem::orderBy('name','asc')->get();
         $datas =  OrderKitchenDetail::where('order_no',$food_order_no)->orderBy('order_no','asc')->get();
-        $EGRClients =  EGRClient::orderBy('customer_name','asc')->get();
+        $clients =  EGRClient::orderBy('customer_name','asc')->get();
         $data =  Facture::where('invoice_number',$invoice_number)->first();
         $table_id = OrderKitchen::where('order_no',$order_no)->value('table_id');
-        return view('backend.pages.invoice_kitchen.edit',compact('food_items','data','setting','datas','food_order_no','EGRClients','invoice_number'));
+        return view('backend.pages.invoice_kitchen.edit',compact('food_items','data','setting','datas','food_order_no','clients','invoice_number'));
     }
 
     public function update(Request  $request,$invoice_number)
@@ -424,8 +424,8 @@ class FactureRestaurantController extends Controller
         }
 
         $factures = FactureDetail::orderBy('id','desc')->take(10000)->get();
-        $EGRClients = EGRClient::orderBy('customer_name')->get();
-        return view('backend.pages.invoice.report',compact('factures','EGRClients'));
+        $clients = EGRClient::orderBy('customer_name')->get();
+        return view('backend.pages.invoice.report',compact('factures','clients'));
     }
 
     /**

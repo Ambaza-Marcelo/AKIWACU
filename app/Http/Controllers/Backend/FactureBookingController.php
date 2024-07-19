@@ -112,10 +112,10 @@ class FactureBookingController extends Controller
 
         $salles =  BookingSalle::orderBy('name','asc')->get();
         $bookings =  BookingBookingDetail::where('booking_no',$booking_no)->orderBy('id','asc')->get();
-        $EGRClients =  EGRClient::orderBy('customer_name','asc')->get();
+        $clients =  EGRClient::orderBy('customer_name','asc')->get();
 
         $data =  BookingBooking::where('booking_no',$booking_no)->first();
-        return view('backend.pages.invoice_booking.create',compact('bookings','data','setting','salles','booking_no','EGRClients'));
+        return view('backend.pages.invoice_booking.create',compact('bookings','data','setting','salles','booking_no','clients'));
     }
 
     public function show($invoice_number)

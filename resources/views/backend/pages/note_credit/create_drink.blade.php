@@ -58,7 +58,7 @@
                             <div class="col-md-6">
                                 <label for="cn_motif">Type Facture d'Avoir</label>
                                 <select class="form-control" name="cn_motif" id="cn_motif">
-                                <option disabled="disabled" selected="selected">Merci de choisir un Serveur</option>
+                                <option disabled="disabled" selected="selected">Merci de choisir</option>
                                 <option value="1" >Erreur sur la facture</option>
                                 <option value="2" >Retour marchandises</option>
                                 <option value="3" >Rabais</option>

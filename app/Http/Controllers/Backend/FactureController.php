@@ -110,7 +110,7 @@ class FactureController extends Controller
         $drinks =  Drink::orderBy('name','asc')->get();
         $orders =  OrderDrinkDetail::where('order_no',$order_no)->orderBy('order_no','asc')->get();
         $drink_small_stores = DrinkSmallStore::all();
-        $EGRClients =  EGRClient::orderBy('customer_name','asc')->get();
+        $clients =  EGRClient::orderBy('customer_name','asc')->get();
 
         $table_id = OrderDrink::where('order_no',$order_no)->value('table_id');
 
@@ -119,7 +119,7 @@ class FactureController extends Controller
             ->where('order_no',$order_no)
             ->sum('total_amount_selling');
 
-        return view('backend.pages.invoice.create',compact('drinks','data','setting','orders','order_no','drink_small_stores','EGRClients','table_id','total_amount'));
+        return view('backend.pages.invoice.create',compact('drinks','data','setting','orders','order_no','drink_small_stores','clients','table_id','total_amount'));
     }
 
     public function createByTable($table_id)
@@ -133,14 +133,14 @@ class FactureController extends Controller
         $drinks =  Drink::orderBy('name','asc')->get();
         $orders =  OrderDrinkDetail::where('table_id',$table_id)->where('status',1)->orderBy('id','asc')->get();
         $drink_small_stores = DrinkSmallStore::all();
-        $EGRClients =  EGRClient::orderBy('customer_name','asc')->get();
+        $clients =  EGRClient::orderBy('customer_name','asc')->get();
 
         $data =  OrderDrink::where('table_id',$table_id)->where('status',1)->first();
         $total_amount = DB::table('order_drink_details')
             ->where('table_id',$table_id)->where('status',1)
             ->sum('total_amount_selling');
 
-        return view('backend.pages.invoice.create',compact('drinks','data','setting','orders','table_id','drink_small_stores','EGRClients','total_amount'));
+        return view('backend.pages.invoice.create',compact('drinks','data','setting','orders','table_id','drink_small_stores','clients','total_amount'));
     }
 
     /**
@@ -165,7 +165,7 @@ class FactureController extends Controller
                 'tp_phone_number' => 'required|max:20|min:6',
                 'tp_address_commune' => 'required|max:50|min:5',
                 'tp_address_quartier' => 'required|max:50|min:5',
-                //'EGRClient_id' => 'required|max:100|min:3',
+                //'client_id' => 'required|max:100|min:3',
                 //'customer_TIN' => 'required|max:30|min:4',
                 //'customer_address' => 'required|max:100|min:5',
                 //'invoice_signature' => 'required|max:90|min:10',
@@ -276,7 +276,7 @@ class FactureController extends Controller
             'tp_activity_sector'=>$request->tp_activity_sector,
             'tp_legal_form'=>$request->tp_legal_form,
             'payment_type'=>$request->payment_type,
-            'EGRClient_id'=>$request->EGRClient_id,
+            'client_id'=>$request->client_id,
             'customer_TIN'=>$request->customer_TIN,
             'customer_address'=>$request->customer_address,
             'invoice_signature'=> $invoice_signature,
@@ -331,7 +331,7 @@ class FactureController extends Controller
             $facture->tp_legal_form = $request->tp_legal_form;
             $facture->invoice_currency = $request->invoice_currency;
             $facture->payment_type = $request->payment_type;
-            $facture->EGRClient_id = $request->EGRClient_id;
+            $facture->client_id = $request->client_id;
             $facture->customer_TIN = $request->customer_TIN;
             $facture->customer_address = $request->customer_address;
             $facture->invoice_signature = $invoice_signature;
@@ -379,7 +379,7 @@ class FactureController extends Controller
                 'tp_phone_number' => 'required|max:20|min:6',
                 'tp_address_commune' => 'required|max:50|min:5',
                 'tp_address_quartier' => 'required|max:50|min:5',
-                //'EGRClient_id' => 'required|max:100|min:3',
+                //'client_id' => 'required|max:100|min:3',
                 //'customer_TIN' => 'required|max:30|min:4',
                 //'customer_address' => 'required|max:100|min:5',
                 //'invoice_signature' => 'required|max:90|min:10',
@@ -468,7 +468,7 @@ class FactureController extends Controller
             'tp_activity_sector'=>$request->tp_activity_sector,
             'tp_legal_form'=>$request->tp_legal_form,
             'payment_type'=>$request->payment_type,
-            'EGRClient_id'=>$request->EGRClient_id,
+            'client_id'=>$request->client_id,
             'customer_TIN'=>$request->customer_TIN,
             'customer_address'=>$request->customer_address,
             'invoice_signature'=> $invoice_signature,
@@ -520,7 +520,7 @@ class FactureController extends Controller
             $facture->tp_legal_form = $request->tp_legal_form;
             $facture->invoice_currency = $request->invoice_currency;
             $facture->payment_type = $request->payment_type;
-            $facture->EGRClient_id = $request->EGRClient_id;
+            $facture->client_id = $request->client_id;
             $facture->customer_TIN = $request->customer_TIN;
             $facture->customer_address = $request->customer_address;
             $facture->invoice_signature = $invoice_signature;
@@ -566,7 +566,7 @@ class FactureController extends Controller
                 'tp_phone_number' => 'required|max:20|min:6',
                 'tp_address_commune' => 'required|max:50|min:5',
                 'tp_address_quartier' => 'required|max:50|min:5',
-                //'EGRClient_id' => 'required|max:100|min:3',
+                //'client_id' => 'required|max:100|min:3',
                 //'customer_TIN' => 'required|max:30|min:4',
                 //'customer_address' => 'required|max:100|min:5',
                 //'invoice_signature' => 'required|max:90|min:10',
@@ -655,7 +655,7 @@ class FactureController extends Controller
             'tp_activity_sector'=>$request->tp_activity_sector,
             'tp_legal_form'=>$request->tp_legal_form,
             'payment_type'=>$request->payment_type,
-            'EGRClient_id'=>$request->EGRClient_id,
+            'client_id'=>$request->client_id,
             'customer_TIN'=>$request->customer_TIN,
             'customer_address'=>$request->customer_address,
             'invoice_signature'=> $invoice_signature,
@@ -706,7 +706,7 @@ class FactureController extends Controller
             $facture->tp_legal_form = $request->tp_legal_form;
             $facture->invoice_currency = $request->invoice_currency;
             $facture->payment_type = $request->payment_type;
-            $facture->EGRClient_id = $request->EGRClient_id;
+            $facture->client_id = $request->client_id;
             $facture->customer_TIN = $request->customer_TIN;
             $facture->customer_address = $request->customer_address;
             $facture->invoice_signature = $invoice_signature;
@@ -752,7 +752,7 @@ class FactureController extends Controller
                 'tp_phone_number' => 'required|max:20|min:6',
                 'tp_address_commune' => 'required|max:50|min:5',
                 'tp_address_quartier' => 'required|max:50|min:5',
-                //'EGRClient_id' => 'required|max:100|min:3',
+                //'client_id' => 'required|max:100|min:3',
                 //'customer_TIN' => 'required|max:30|min:4',
                 //'customer_address' => 'required|max:100|min:5',
                 //'invoice_signature' => 'required|max:90|min:10',
@@ -841,7 +841,7 @@ class FactureController extends Controller
             'tp_activity_sector'=>$request->tp_activity_sector,
             'tp_legal_form'=>$request->tp_legal_form,
             'payment_type'=>$request->payment_type,
-            'EGRClient_id'=>$request->EGRClient_id,
+            'client_id'=>$request->client_id,
             'customer_TIN'=>$request->customer_TIN,
             'customer_address'=>$request->customer_address,
             'invoice_signature'=> $invoice_signature,
@@ -892,7 +892,7 @@ class FactureController extends Controller
             $facture->tp_legal_form = $request->tp_legal_form;
             $facture->invoice_currency = $request->invoice_currency;
             $facture->payment_type = $request->payment_type;
-            $facture->EGRClient_id = $request->EGRClient_id;
+            $facture->client_id = $request->client_id;
             $facture->customer_TIN = $request->customer_TIN;
             $facture->customer_address = $request->customer_address;
             $facture->invoice_signature = $invoice_signature;
@@ -938,7 +938,7 @@ class FactureController extends Controller
                 'tp_phone_number' => 'required|max:20|min:6',
                 'tp_address_commune' => 'required|max:50|min:5',
                 'tp_address_quartier' => 'required|max:50|min:5',
-                //'EGRClient_id' => 'required|max:100|min:3',
+                //'client_id' => 'required|max:100|min:3',
                 //'customer_TIN' => 'required|max:30|min:4',
                 //'customer_address' => 'required|max:100|min:5',
                 //'invoice_signature' => 'required|max:90|min:10',
@@ -1023,7 +1023,7 @@ class FactureController extends Controller
             'tp_activity_sector'=>$request->tp_activity_sector,
             'tp_legal_form'=>$request->tp_legal_form,
             'payment_type'=>$request->payment_type,
-            'EGRClient_id'=>$request->EGRClient_id,
+            'client_id'=>$request->client_id,
             'customer_TIN'=>$request->customer_TIN,
             'customer_address'=>$request->customer_address,
             'invoice_signature'=> $invoice_signature,
@@ -1074,7 +1074,7 @@ class FactureController extends Controller
             $facture->tp_legal_form = $request->tp_legal_form;
             $facture->invoice_currency = $request->invoice_currency;
             $facture->payment_type = $request->payment_type;
-            $facture->EGRClient_id = $request->EGRClient_id;
+            $facture->client_id = $request->client_id;
             $facture->customer_TIN = $request->customer_TIN;
             $facture->customer_address = $request->customer_address;
             $facture->invoice_signature = $invoice_signature;
@@ -1129,7 +1129,7 @@ class FactureController extends Controller
             'tp_activity_sector'=>$request->tp_activity_sector,
             'tp_legal_form'=>$request->tp_legal_form,
             'payment_type'=>$request->payment_type,
-            'EGRClient_id'=>$request->EGRClient_id,
+            'client_id'=>$request->client_id,
             'customer_TIN'=>$request->customer_TIN,
             'customer_address'=>$request->customer_address,
             'invoice_signature'=> $invoice_signature,
@@ -1180,7 +1180,7 @@ class FactureController extends Controller
             $facture->tp_legal_form = $request->tp_legal_form;
             $facture->invoice_currency = $request->invoice_currency;
             $facture->payment_type = $request->payment_type;
-            $facture->EGRClient_id = $request->EGRClient_id;
+            $facture->client_id = $request->client_id;
             $facture->customer_TIN = $request->customer_TIN;
             $facture->customer_address = $request->customer_address;
             $facture->invoice_signature = $invoice_signature;
@@ -1235,7 +1235,7 @@ class FactureController extends Controller
             'tp_activity_sector'=>$request->tp_activity_sector,
             'tp_legal_form'=>$request->tp_legal_form,
             'payment_type'=>$request->payment_type,
-            'EGRClient_id'=>$request->EGRClient_id,
+            'client_id'=>$request->client_id,
             'customer_TIN'=>$request->customer_TIN,
             'customer_address'=>$request->customer_address,
             'invoice_signature'=> $invoice_signature,
@@ -1286,7 +1286,7 @@ class FactureController extends Controller
             $facture->tp_legal_form = $request->tp_legal_form;
             $facture->invoice_currency = $request->invoice_currency;
             $facture->payment_type = $request->payment_type;
-            $facture->EGRClient_id = $request->EGRClient_id;
+            $facture->client_id = $request->client_id;
             $facture->customer_TIN = $request->customer_TIN;
             $facture->customer_address = $request->customer_address;
             $facture->invoice_signature = $invoice_signature;
@@ -1341,7 +1341,7 @@ class FactureController extends Controller
             'tp_activity_sector'=>$request->tp_activity_sector,
             'tp_legal_form'=>$request->tp_legal_form,
             'payment_type'=>$request->payment_type,
-            'EGRClient_id'=>$request->EGRClient_id,
+            'client_id'=>$request->client_id,
             'customer_TIN'=>$request->customer_TIN,
             'customer_address'=>$request->customer_address,
             'invoice_signature'=> $invoice_signature,
@@ -1392,7 +1392,7 @@ class FactureController extends Controller
             $facture->tp_legal_form = $request->tp_legal_form;
             $facture->invoice_currency = $request->invoice_currency;
             $facture->payment_type = $request->payment_type;
-            $facture->EGRClient_id = $request->EGRClient_id;
+            $facture->client_id = $request->client_id;
             $facture->customer_TIN = $request->customer_TIN;
             $facture->customer_address = $request->customer_address;
             $facture->invoice_signature = $invoice_signature;
@@ -1447,7 +1447,7 @@ class FactureController extends Controller
             'tp_activity_sector'=>$request->tp_activity_sector,
             'tp_legal_form'=>$request->tp_legal_form,
             'payment_type'=>$request->payment_type,
-            'EGRClient_id'=>$request->EGRClient_id,
+            'client_id'=>$request->client_id,
             'customer_TIN'=>$request->customer_TIN,
             'customer_address'=>$request->customer_address,
             'invoice_signature'=> $invoice_signature,
@@ -1498,7 +1498,7 @@ class FactureController extends Controller
             $facture->tp_legal_form = $request->tp_legal_form;
             $facture->invoice_currency = $request->invoice_currency;
             $facture->payment_type = $request->payment_type;
-            $facture->EGRClient_id = $request->EGRClient_id;
+            $facture->client_id = $request->client_id;
             $facture->customer_TIN = $request->customer_TIN;
             $facture->customer_address = $request->customer_address;
             $facture->invoice_signature = $invoice_signature;
@@ -1554,7 +1554,7 @@ class FactureController extends Controller
             'tp_activity_sector'=>$request->tp_activity_sector,
             'tp_legal_form'=>$request->tp_legal_form,
             'payment_type'=>$request->payment_type,
-            'EGRClient_id'=>$request->EGRClient_id,
+            'client_id'=>$request->client_id,
             'customer_TIN'=>$request->customer_TIN,
             'customer_address'=>$request->customer_address,
             'invoice_signature'=> $invoice_signature,
@@ -1605,7 +1605,7 @@ class FactureController extends Controller
             $facture->tp_legal_form = $request->tp_legal_form;
             $facture->invoice_currency = $request->invoice_currency;
             $facture->payment_type = $request->payment_type;
-            $facture->EGRClient_id = $request->EGRClient_id;
+            $facture->client_id = $request->client_id;
             $facture->customer_TIN = $request->customer_TIN;
             $facture->customer_address = $request->customer_address;
             $facture->invoice_signature = $invoice_signature;
@@ -1653,7 +1653,7 @@ class FactureController extends Controller
                     'quantity_sold' => $data->item_quantity,
                     'value_sold' => $data->item_quantity * $data->item_price,
                     'quantity_stock_final' => $quantityRestant,
-                    'value_stock_final' => $quantityRestant * $data->item_price,
+                    'value_stock_final' => $quantityRestant * $cump,
                     'invoice_no' => $data->invoice_number,
                     'date' => $data->invoice_date,
                     'commande_boisson_no' => $data->drink_order_no,
@@ -1671,7 +1671,7 @@ class FactureController extends Controller
                     $donnees = array(
                         'drink_id' => $data->drink_id,
                         'quantity_bottle' => $quantityRestant,
-                        'total_cump_value' => $quantityRestant * $data->item_price,
+                        'total_cump_value' => $quantityRestant * $cump,
                         'created_by' => $this->user->name,
                         'verified' => true
                     );
@@ -1795,10 +1795,10 @@ class FactureController extends Controller
         }
 
         $request->validate([
-            'EGRClient_id' => 'required'
+            'client_id' => 'required'
         ]);
 
-        $EGRClient_id = $request->EGRClient_id;
+        $client_id = $request->client_id;
 
         $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
         $table_id = FactureDetail::where('invoice_number', $invoice_number)->value('table_id');
@@ -1818,7 +1818,7 @@ class FactureController extends Controller
                     'quantity_sold' => $data->item_quantity,
                     'value_sold' => $data->item_quantity * $data->item_price,
                     'quantity_stock_final' => $quantityRestant,
-                    'value_stock_final' => $quantityRestant * $data->item_price,
+                    'value_stock_final' => $quantityRestant * $cump,
                     'invoice_no' => $data->invoice_number,
                     'date' => $data->invoice_date,
                     'commande_boisson_no' => $data->drink_order_no,
@@ -1836,7 +1836,7 @@ class FactureController extends Controller
                     $donnees = array(
                         'drink_id' => $data->drink_id,
                         'quantity_bottle' => $quantityRestant,
-                        'total_cump_value' => $quantityRestant * $data->item_price,
+                        'total_cump_value' => $quantityRestant * $cump,
                         'created_by' => $this->user->name,
                         'verified' => true
                     );
@@ -1948,9 +1948,9 @@ class FactureController extends Controller
         DrinkSmallStoreDetail::where('drink_id','!=','')->update(['verified' => false]);
 
         Facture::where('invoice_number', '=', $invoice_number)
-            ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','EGRClient_id' => $EGRClient_id,'validated_by' => $this->user->name]);
+            ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
         FactureDetail::where('invoice_number', '=', $invoice_number)
-            ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','EGRClient_id' => $EGRClient_id,'validated_by' => $this->user->name]);
+            ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
 
         session()->flash('success', 'La Facture  est validée avec succés');
         return redirect()->route('ebms_api.invoices.index');
@@ -2062,10 +2062,10 @@ class FactureController extends Controller
         }
 
         $request->validate([
-            'EGRClient_id' => 'required'
+            'client_id' => 'required'
         ]);
 
-        $EGRClient_id = $request->EGRClient_id;
+        $client_id = $request->client_id;
 
         $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
 
@@ -2150,9 +2150,9 @@ class FactureController extends Controller
         }
 
         Facture::where('invoice_number', '=', $invoice_number)
-                ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','EGRClient_id' => $EGRClient_id,'validated_by' => $this->user->name]);
+                ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
         FactureDetail::where('invoice_number', '=', $invoice_number)
-                ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','EGRClient_id' => $EGRClient_id,'validated_by' => $this->user->name]);
+                ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
         BarristSmallReport::insert($report);
 
         session()->flash('success', 'La Facture  est validée avec succés');
@@ -2296,10 +2296,10 @@ class FactureController extends Controller
         }
 
         $request->validate([
-            'EGRClient_id' => 'required'
+            'client_id' => 'required'
         ]);
 
-        $EGRClient_id = $request->EGRClient_id;
+        $client_id = $request->client_id;
 
         $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
 
@@ -2416,9 +2416,9 @@ class FactureController extends Controller
         }
 
         Facture::where('invoice_number', '=', $invoice_number)
-            ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','EGRClient_id' => $EGRClient_id,'validated_by' => $this->user->name]);
+            ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
         FactureDetail::where('invoice_number', '=', $invoice_number)
-            ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','EGRClient_id' => $EGRClient_id,'validated_by' => $this->user->name]);
+            ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
 
         session()->flash('success', 'La Facture  est validée avec succés');
         return redirect()->route('admin.bartender-invoices.index');
@@ -2453,10 +2453,10 @@ class FactureController extends Controller
         }
 
         $request->validate([
-            'EGRClient_id' => 'required'
+            'client_id' => 'required'
         ]);
 
-        $EGRClient_id = $request->EGRClient_id;
+        $client_id = $request->client_id;
 
         $data = Facture::where('invoice_number',$invoice_number)->first();
 
@@ -2465,9 +2465,9 @@ class FactureController extends Controller
             ->sum('item_total_amount');
 
         Facture::where('invoice_number', '=', $invoice_number)
-                ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','EGRClient_id' => $EGRClient_id,'validated_by' => $this->user->name]);
+                ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
         FactureDetail::where('invoice_number', '=', $invoice_number)
-                ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','EGRClient_id' => $EGRClient_id,'validated_by' => $this->user->name]);
+                ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
         BookingBooking::where('booking_no', '=', $data->booking_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
         BookingBookingDetail::where('booking_no', '=', $data->booking_no)
@@ -2646,10 +2646,10 @@ class FactureController extends Controller
         }
 
         $request->validate([
-            'EGRClient_id' => 'required'
+            'client_id' => 'required'
         ]);
 
-        $EGRClient_id = $request->EGRClient_id;
+        $client_id = $request->client_id;
 
         $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
         $data = Facture::where('invoice_number', $invoice_number)->first();
@@ -2801,9 +2801,9 @@ class FactureController extends Controller
             ->sum('item_total_amount');
         
         Facture::where('invoice_number', '=', $invoice_number)
-                ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','EGRClient_id' => $EGRClient_id,'validated_by' => $this->user->name]);
+                ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
         FactureDetail::where('invoice_number', '=', $invoice_number)
-                ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','EGRClient_id' => $EGRClient_id,'validated_by' => $this->user->name]);
+                ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
         //FoodStoreReport::insert($report);
 
         session()->flash('success', 'La Facture  est validée avec succés');
@@ -3416,15 +3416,15 @@ class FactureController extends Controller
     public function voirFactureAnnuler($invoice_number){
         $facture = FactureDetail::where('invoice_number',$invoice_number)->first();
         $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
-        $EGRClients =  EGRClient::orderBy('customer_name','asc')->get();
-        return view('backend.pages.invoice.reset', compact('facture','datas','EGRClients'));
+        $clients =  EGRClient::orderBy('customer_name','asc')->get();
+        return view('backend.pages.invoice.reset', compact('facture','datas','clients'));
     }
 
     public function voirFactureCredit($invoice_number){
         $facture = FactureDetail::where('invoice_number',$invoice_number)->first();
         $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
-        $EGRClients =  EGRClient::orderBy('customer_name','asc')->get();
-        return view('backend.pages.invoice.credit', compact('facture','datas','EGRClients'));
+        $clients =  EGRClient::orderBy('customer_name','asc')->get();
+        return view('backend.pages.invoice.credit', compact('facture','datas','clients'));
     }
 
     public function getCancelInvoice($invoice_number){
@@ -3503,7 +3503,7 @@ class FactureController extends Controller
         }
 
         $request->validate([
-            'EGRClient_id' => 'required',
+            'client_id' => 'required',
             'statut_paied' => 'required',
             'etat_recouvrement' => 'required',
             'date_recouvrement' => 'required',
@@ -3514,7 +3514,7 @@ class FactureController extends Controller
         ]);
 
 
-        $EGRClient_id = $request->EGRClient_id;
+        $client_id = $request->client_id;
         $statut_paied = $request->statut_paied;
         $customer_address = $request->customer_address;
         $customer_TIN = $request->customer_TIN;
@@ -3539,7 +3539,7 @@ class FactureController extends Controller
                 $etat_recouvrement = 2;
                 Facture::where('invoice_number', '=', $invoice_number)
                     ->update([
-                        'EGRClient_id' => $EGRClient_id,
+                        'client_id' => $client_id,
                         'statut_paied' => $statut_paied,
                         'customer_address' => $customer_address,
                         'customer_TIN' => $customer_TIN,
@@ -3556,7 +3556,7 @@ class FactureController extends Controller
                     ]);
                 FactureDetail::where('invoice_number', '=', $invoice_number)
                     ->update([
-                        'EGRClient_id' => $EGRClient_id,
+                        'client_id' => $client_id,
                         'statut_paied' => $statut_paied,
                         'customer_address' => $customer_address,
                         'customer_TIN' => $customer_TIN,
@@ -3582,7 +3582,7 @@ class FactureController extends Controller
                 $etat_recouvrement = 1;
                 Facture::where('invoice_number', '=', $invoice_number)
                     ->update([
-                        'EGRClient_id' => $EGRClient_id,
+                        'client_id' => $client_id,
                         'statut_paied' => $statut_paied,
                         'customer_address' => $customer_address,
                         'customer_TIN' => $customer_TIN,
@@ -3599,7 +3599,7 @@ class FactureController extends Controller
                     ]);
                 FactureDetail::where('invoice_number', '=', $invoice_number)
                     ->update([
-                        'EGRClient_id' => $EGRClient_id,
+                        'client_id' => $client_id,
                         'statut_paied' => $statut_paied,
                         'customer_address' => $customer_address,
                         'customer_TIN' => $customer_TIN,
@@ -3646,10 +3646,10 @@ class FactureController extends Controller
         $drinks =  Drink::orderBy('name','asc')->get();
         $datas =  OrderDrinkDetail::where('order_no',$drink_order_no)->get();
         $drink_small_stores = DrinkSmallStore::all();
-        $EGRClients =  EGRClient::orderBy('customer_name','asc')->get();
+        $clients =  EGRClient::orderBy('customer_name','asc')->get();
 
         $data =  Facture::where('invoice_number',$invoice_number)->first();
-        return view('backend.pages.invoice.edit',compact('drinks','data','setting','datas','invoice_number','drink_small_stores','EGRClients'));
+        return view('backend.pages.invoice.edit',compact('drinks','data','setting','datas','invoice_number','drink_small_stores','clients'));
     }
 
     /**
@@ -3675,7 +3675,7 @@ class FactureController extends Controller
                 'tp_phone_number' => 'required|max:20|min:6',
                 'tp_address_commune' => 'required|max:50|min:5',
                 'tp_address_quartier' => 'required|max:50|min:5',
-                //'EGRClient_id' => 'required|max:100|min:3',
+                //'client_id' => 'required|max:100|min:3',
                 //'customer_TIN' => 'required|max:30|min:4',
                 //'customer_address' => 'required|max:100|min:5',
                 //'invoice_signature' => 'required|max:90|min:10',
@@ -3753,7 +3753,7 @@ class FactureController extends Controller
             'tp_activity_sector'=>$request->tp_activity_sector,
             'tp_legal_form'=>$request->tp_legal_form,
             'payment_type'=>$request->payment_type,
-            'EGRClient_id'=>$request->EGRClient_id,
+            'client_id'=>$request->client_id,
             'customer_TIN'=>$request->customer_TIN,
             'customer_address'=>$request->customer_address,
             'drink_order_no'=>$request->drink_order_no,
@@ -3803,7 +3803,7 @@ class FactureController extends Controller
             $facture->tp_legal_form = $request->tp_legal_form;
             $facture->invoice_currency = $request->invoice_currency;
             $facture->payment_type = $request->payment_type;
-            $facture->EGRClient_id = $request->EGRClient_id;
+            $facture->client_id = $request->client_id;
             $facture->customer_TIN = $request->customer_TIN;
             $facture->customer_address = $request->customer_address;
             $facture->cancelled_invoice_ref = $request->cancelled_invoice_ref;
@@ -3839,13 +3839,13 @@ class FactureController extends Controller
         $end_date = $endDate.' 23:59:59';
 
         $datas = FactureDetail::select(
-                        DB::raw('id,drink_id,invoice_number,invoice_date,item_quantity,item_price,vat,item_price_nvat,customer_name,drink_order_no,EGRClient_id,item_total_amount'))->where('drink_order_no','!=','')->where('etat','1')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','drink_id','invoice_date','invoice_number','item_quantity','item_price','vat','item_price_nvat','customer_name','drink_order_no','EGRClient_id','item_total_amount')->orderBy('invoice_number','asc')->get();
+                        DB::raw('id,drink_id,invoice_number,invoice_date,item_quantity,item_price,vat,item_price_nvat,customer_name,drink_order_no,client_id,item_total_amount'))->where('drink_order_no','!=','')->where('etat','1')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','drink_id','invoice_date','invoice_number','item_quantity','item_price','vat','item_price_nvat','customer_name','drink_order_no','client_id','item_total_amount')->orderBy('invoice_number','asc')->get();
         $total_amount = DB::table('facture_details')->where('drink_order_no','!=','')->where('etat','1')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
         $total_vat = DB::table('facture_details')->where('drink_order_no','!=','')->where('etat','1')->whereBetween('invoice_date',[$start_date,$end_date])->sum('vat');
         $total_item_price_nvat = DB::table('facture_details')->where('drink_order_no','!=','')->where('etat','1')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_price_nvat');
 
         $credits = FactureDetail::select(
-                        DB::raw('id,drink_id,invoice_number,invoice_date,item_quantity,item_price,vat,item_price_nvat,customer_name,drink_order_no,EGRClient_id,item_total_amount'))->where('drink_order_no','!=','')->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','drink_id','invoice_date','invoice_number','item_quantity','item_price','vat','item_price_nvat','customer_name','drink_order_no','EGRClient_id','item_total_amount')->orderBy('invoice_number','asc')->get();
+                        DB::raw('id,drink_id,invoice_number,invoice_date,item_quantity,item_price,vat,item_price_nvat,customer_name,drink_order_no,client_id,item_total_amount'))->where('drink_order_no','!=','')->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','drink_id','invoice_date','invoice_number','item_quantity','item_price','vat','item_price_nvat','customer_name','drink_order_no','client_id','item_total_amount')->orderBy('invoice_number','asc')->get();
         $total_amount_credit = DB::table('facture_details')->where('drink_order_no','!=','')->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
         $total_vat_credit = DB::table('facture_details')->where('drink_order_no','!=','')->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->sum('vat');
         $total_item_price_nvat_credit = DB::table('facture_details')->where('drink_order_no','!=','')->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_price_nvat');

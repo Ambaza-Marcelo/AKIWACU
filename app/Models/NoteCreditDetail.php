@@ -58,7 +58,7 @@ class NoteCreditDetail extends Model
     }
 
     public function client(){
-        return $this->belongsTo('\App\Models\Client');
+        return $this->belongsTo('\App\Models\EGRClient');
     }
 
     public function bookingClient(){

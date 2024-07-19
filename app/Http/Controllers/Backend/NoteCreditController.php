@@ -23,7 +23,6 @@ use App\Models\NoteCredit;
 use App\Models\NoteCreditDetail;
 use App\Models\Setting;
 use App\Models\Drink;
-use App\Models\DrinkSmallStore;
 use App\Models\BarristItem;
 use App\Models\FoodItem;
 use App\Models\FoodItemDetail;
@@ -32,12 +31,15 @@ use App\Models\Employe;
 use App\Models\BookingSalle;
 use App\Models\BookingService;
 use App\Models\BookingClient;
-use App\Models\Client;
+use App\Models\EGRClient;
 use App\Models\Table;
 use App\Models\BookingTable;
 use App\Models\KidnessSpace;
 use App\Models\BreakFast;
 use App\Models\SwimingPool;
+use App\Models\DrinkSmallStore;
+use App\Models\DrinkSmallStoreDetail;
+use App\Models\DrinkSmallReport;
 use App\Mail\DeleteFactureMail;
 use App\Mail\InvoiceResetedMail;
 use App\Mail\ReportDrinkMail;
@@ -78,7 +80,7 @@ class NoteCreditController extends Controller
         $drinks =  Drink::orderBy('name','asc')->get();
         $datas =  FactureDetail::where('invoice_number',$invoice_number)->orderBy('invoice_number','asc')->get();
         $drink_small_stores = DrinkSmallStore::all();
-        $clients =  Client::orderBy('customer_name','asc')->get();
+        $clients =  EGRClient::orderBy('customer_name','asc')->get();
 
         $data =  facture::where('invoice_number',$invoice_number)->first();
         $total_amount = DB::table('facture_details')
@@ -97,7 +99,7 @@ class NoteCreditController extends Controller
         $setting = DB::table('settings')->orderBy('created_at','desc')->first();
 
         $bartender_items =  BartenderItem::orderBy('name','asc')->get();
-        $clients =  Client::orderBy('customer_name','asc')->get();
+        $clients =  EGRClient::orderBy('customer_name','asc')->get();
         $datas =  FactureDetail::where('invoice_number',$invoice_number)->orderBy('invoice_number','asc')->get();
         $data =  facture::where('invoice_number',$invoice_number)->first();
         $total_amount = DB::table('facture_details')
@@ -116,7 +118,7 @@ class NoteCreditController extends Controller
         $setting = DB::table('settings')->orderBy('created_at','desc')->first();
 
         $barrista_items =  BarristItem::orderBy('name','asc')->get();
-        $clients =  Client::orderBy('customer_name','asc')->get();
+        $clients =  EGRClient::orderBy('customer_name','asc')->get();
         $datas =  FactureDetail::where('invoice_number',$invoice_number)->orderBy('invoice_number','asc')->get();
         $data =  facture::where('invoice_number',$invoice_number)->first();
         $total_amount = DB::table('facture_details')
@@ -135,7 +137,7 @@ class NoteCreditController extends Controller
         $setting = DB::table('settings')->orderBy('created_at','desc')->first();
 
         $food_items =  FoodItem::orderBy('name','asc')->get();
-        $clients =  Client::orderBy('customer_name','asc')->get();
+        $clients =  EGRClient::orderBy('customer_name','asc')->get();
         $datas =  FactureDetail::where('invoice_number',$invoice_number)->orderBy('invoice_number','asc')->get();
         $data =  facture::where('invoice_number',$invoice_number)->first();
         $total_amount = DB::table('facture_details')
@@ -1561,53 +1563,52 @@ class NoteCreditController extends Controller
             return redirect()->route('admin.note-de-credit.index');
     }
 
-    public function validerFactureBoisson($invoice_number)
+    public function validerFactureDrink($invoice_number)
     {
         if (is_null($this->user) || !$this->user->can('invoice_drink.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any invoice !');
         }
 
-        $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
+        $datas = NoteCreditDetail::where('invoice_number', $invoice_number)->get();
 
         foreach($datas as $data){
-            $valeurStockInitial = DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id', $data->drink_id)->value('total_cump_value');
-            $quantityStockInitial = DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id', $data->drink_id)->value('quantity_bottle');
-            $cump = Drink::where('id', $data->drink_id)->value('cump');
+            if ($data->cn_motif == 2) {
+                $valeurStockInitial = DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id', $data->drink_id)->value('total_cump_value');
+                $quantityStockInitial = DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id', $data->drink_id)->value('quantity_bottle');
+                $cump = Drink::where('id', $data->drink_id)->value('cump');
 
-            $quantityRestant = $quantityStockInitial - $data->item_quantity;
+                $quantityTotal = $quantityStockInitial + $data->item_quantity;
                       
                 $reportData = array(
                     'drink_id' => $data->drink_id,
                     'quantity_stock_initial' => $quantityStockInitial,
                     'value_stock_initial' => $valeurStockInitial,
                     'code_store' => $data->code_store,
-                    'quantity_sold' => $data->item_quantity,
-                    'value_sold' => $data->item_quantity * $data->item_price,
-                    'quantity_stock_final' => $quantityRestant,
-                    'value_stock_final' => $quantityRestant * $data->item_price,
+                    'quantity_stockin' => $data->item_quantity,
+                    'value_stockin' => $data->item_quantity * $cump,
+                    'quantity_stock_final' => $quantityTotal,
+                    'value_stock_final' => $quantityTotal * $data->item_price,
                     'invoice_no' => $data->invoice_number,
                     'date' => $data->invoice_date,
                     'commande_boisson_no' => $data->drink_order_no,
-                    'type_transaction' => 'VENTE',
+                    'type_transaction' => 'NOTE DE CREDIT',
                     'document_no' => $data->invoice_number,
                     'cump' => $cump,
                     'created_by' => $this->user->name,
                     'employe_id' => $data->employe_id,
                     'origine_facture' => 'BOISSON',
-                    'description' => "SORTIE DES BOISSONS APRES VENTE",
+                    'description' => "RETOUR DES MARCHANDISES",
                     'created_at' => \Carbon\Carbon::now()
                 );
                 $report[] = $reportData;
                 
                     $donnees = array(
                         'drink_id' => $data->drink_id,
-                        'quantity_bottle' => $quantityRestant,
-                        'total_cump_value' => $quantityRestant * $data->item_price,
+                        'quantity_bottle' => $quantityTotal,
+                        'total_cump_value' => $quantityTotal * $cump,
                         'created_by' => $this->user->name,
                         'verified' => true
                     );
-                    
-                    if ($data->item_quantity <= $quantityStockInitial) {
                         
                         DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id',$data->drink_id)
                         ->update($donnees);
@@ -1643,42 +1644,26 @@ class NoteCreditController extends Controller
                         ]);
                         */
                         
-                    }else{
-
-                        foreach ($datas as $data) {
-                            $valeurStockInitial = DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id', $data->drink_id)->value('total_cump_value');
-                            $quantityStockInitial = DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id', $data->drink_id)->where('verified',true)->value('quantity_bottle');
-                            $cump = Drink::where('id', $data->drink_id)->value('cump');
-
-                            $quantityTotal = $quantityStockInitial + $data->item_quantity;
-                      
-                
-                            $returnData = array(
-                                'drink_id' => $data->drink_id,
-                                'quantity_bottle' => $quantityTotal,
-                                'total_cump_value' => $quantityTotal * $cump,
-                                'created_by' => $this->user->name,
-                                'verified' => false
-                            );
-
-                            $status = DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id', $data->drink_id)->value('verified');
-                    
-                        
-                                DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id',$data->drink_id)->where('verified',true)
-                                ->update($returnData);
-                                $flag = 1;
-                        }
-
-                        DrinkSmallStoreDetail::where('drink_id','!=','')->update(['verified' => false]);
-
-                        session()->flash('error', $this->user->name.' ,why do you want selling a quantity that you do not have!');
-                        return redirect()->back();
-                    }
+            }else{
+                $flag = 1;
+                NoteCredit::where('invoice_number', '=', $invoice_number)
+                    ->update(['etat' => 1,'validated_by' => $this->user->name]);
+                NoteCreditDetail::where('invoice_number', '=', $invoice_number)
+                    ->update(['etat' => 1,'validated_by' => $this->user->name]);
+                session()->flash('success', 'La note de credit a été validé avec succés!!');
+                return back();
+            }
         }
+
         if ($flag != 1) {
             DrinkSmallReport::insert($report);
         }
 
+        DrinkSmallStoreDetail::where('drink_id','!=','')->update(['verified' => false]);
+        NoteCredit::where('invoice_number', '=', $invoice_number)
+            ->update(['etat' => 1,'validated_by' => $this->user->name]);
+        NoteCreditDetail::where('invoice_number', '=', $invoice_number)
+            ->update(['etat' => 1,'validated_by' => $this->user->name]);
         session()->flash('success', 'La note de credit a été validé avec succés!!');
         return back();
 
@@ -2216,12 +2201,12 @@ class NoteCreditController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any invoice !');
         }
 
-        $factureDetails = FactureDetail::where('invoice_number',$invoice_number)->get();
-        $facture = Facture::with('employe')->where('invoice_number',$invoice_number)->first();
-        $total_amount = DB::table('facture_details')
+        $factureDetails = NoteCreditDetail::where('invoice_number',$invoice_number)->get();
+        $facture = NoteCredit::with('employe')->where('invoice_number',$invoice_number)->first();
+        $total_amount = DB::table('note_credit_details')
             ->where('invoice_number', '=', $invoice_number)
             ->sum('item_total_amount');
-        return view('backend.pages.invoice.show',compact('facture','factureDetails','total_amount'));
+        return view('backend.pages.note_credit.show',compact('facture','factureDetails','total_amount'));
     }
 
     /**
