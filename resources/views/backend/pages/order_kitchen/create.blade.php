@@ -173,6 +173,10 @@
                           "<input type='number' name='quantity[]' placeholder='Enter Quantity' class='form-control' required min='0' required/>"+
                         "</td>"+
                         "<td>"+
+                                    "<div class='form-check'>"+
+                                               "<input type='checkbox' class='form-check-input' name='accompagnement_id[]' id='1' value='1'>"+
+                                                "<label class='form-check-label' for='1'></label>"+
+                                            "</div>"+
                                     "@foreach ($accompagnements as $accompagnement)"+
                                             "<div class='form-check'>"+
                                                "<input type='checkbox' class='form-check-input' name='accompagnement_id[]' id='{{ $accompagnement->id }}' value='{{ $accompagnement->id }}'>"+
