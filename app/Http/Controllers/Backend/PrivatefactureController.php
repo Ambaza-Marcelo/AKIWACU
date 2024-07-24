@@ -107,7 +107,7 @@ class PrivatefactureController extends Controller
 
             
 
-            $invoice_signature = $request->tp_TIN."/ws400171161500565/".Carbon::parse($request->invoice_date)->format('YmdHis')."/".$invoice_number;
+            $invoice_signature = $request->tp_TIN."/wsconfig('app.tin_number_company')00565/".Carbon::parse($request->invoice_date)->format('YmdHis')."/".$invoice_number;
 
         for( $count = 0; $count < count($private_store_item_id); $count++ )
         {

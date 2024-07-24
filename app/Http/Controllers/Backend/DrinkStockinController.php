@@ -140,7 +140,7 @@ class DrinkStockinController extends Controller
 
             $created_by = $this->user->name;
 
-            $stockin_signature = "4001711615".Carbon::parse(Carbon::now())->format('YmdHis')."/".$stockin_no;
+            $stockin_signature = config('app.tin_number_company').Carbon::parse(Carbon::now())->format('YmdHis')."/".$stockin_no;
 
 
             for( $count = 0; $count < count($drink_id); $count++ ){
@@ -440,8 +440,8 @@ class DrinkStockinController extends Controller
                         /*
                         $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
                         $response = Http::post($theUrl, [
-                            'username'=> "ws400171161500565",
-                            'password'=> "5VS(GO:p"
+                            'username'=> config('app.obr_test_username'),
+                            'password'=> config('app.obr_test_pwd')
 
                         ]);
                         $data1 =  json_decode($response);
@@ -453,7 +453,7 @@ class DrinkStockinController extends Controller
                         $response = Http::withHeaders([
                         'Authorization' => 'Bearer '.$token,
                         'Accept' => 'application/json'])->post($theUrl, [
-                            'system_or_device_id'=> "ws400171161500565",
+                            'system_or_device_id'=> "wsconfig('app.tin_number_company')00565",
                             'item_code'=> $data->drink->code,
                             'item_designation'=>$data->drink->name,
                             'item_quantity'=>$data->quantity,
@@ -569,7 +569,7 @@ class DrinkStockinController extends Controller
                         /*
                         $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
                         $response = Http::post($theUrl, [
-                            'username'=> "ws400171161500565",
+                            'username'=> "wsconfig('app.tin_number_company')00565",
                             'password'=> "5VS(GO:p"
 
                         ]);
@@ -582,7 +582,7 @@ class DrinkStockinController extends Controller
                         $response = Http::withHeaders([
                         'Authorization' => 'Bearer '.$token,
                         'Accept' => 'application/json'])->post($theUrl, [
-                            'system_or_device_id'=> "ws400171161500565",
+                            'system_or_device_id'=> "wsconfig('app.tin_number_company')00565",
                             'item_code'=> $data->drink->code,
                             'item_designation'=>$data->drink->name,
                             'item_quantity'=>$data->quantity,
@@ -697,7 +697,7 @@ class DrinkStockinController extends Controller
                         /*
                         $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
                         $response = Http::post($theUrl, [
-                            'username'=> "ws400171161500565",
+                            'username'=> "wsconfig('app.tin_number_company')00565",
                             'password'=> "5VS(GO:p"
 
                         ]);
@@ -710,7 +710,7 @@ class DrinkStockinController extends Controller
                         $response = Http::withHeaders([
                         'Authorization' => 'Bearer '.$token,
                         'Accept' => 'application/json'])->post($theUrl, [
-                            'system_or_device_id'=> "ws400171161500565",
+                            'system_or_device_id'=> "wsconfig('app.tin_number_company')00565",
                             'item_code'=> $data->drink->code,
                             'item_designation'=>$data->drink->name,
                             'item_quantity'=>$data->quantity,

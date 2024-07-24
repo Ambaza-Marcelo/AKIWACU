@@ -82,7 +82,7 @@ class FoodExtraBigStoreController extends Controller
         $food_big_store->name = $request->name;
         $reference = strtoupper(substr($request->name, 0, 3));
         $food_big_store->code = $reference.date("y").substr(number_format(time() * mt_rand(), 0, '', ''), 0, 6);
-        $store_signature = "4001711615".Carbon::parse(Carbon::now())->format('YmdHis')."/".$food_big_store->code;
+        $store_signature = config('app.tin_number_company').Carbon::parse(Carbon::now())->format('YmdHis')."/".$food_big_store->code;
         $food_big_store->store_signature = $store_signature;
         $food_big_store->emplacement = $request->emplacement;
         $food_big_store->manager = $request->manager;

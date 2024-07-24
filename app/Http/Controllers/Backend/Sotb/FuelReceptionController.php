@@ -149,7 +149,7 @@ class FuelReceptionController extends Controller
 
             $created_by = $this->user->name;
 
-            $reception_signature = "4001711615".Carbon::parse(Carbon::now())->format('YmdHis')."/".$reception_no;
+            $reception_signature = config('app.tin_number_company').Carbon::parse(Carbon::now())->format('YmdHis')."/".$reception_no;
 
 
             for( $count = 0; $count < count($fuel_id); $count++ ){
@@ -278,7 +278,7 @@ class FuelReceptionController extends Controller
 
             $created_by = $this->user->name;
 
-            $reception_signature = "4001711615".Carbon::parse(Carbon::now())->format('YmdHis')."/".$reception_no;
+            $reception_signature = config('app.tin_number_company').Carbon::parse(Carbon::now())->format('YmdHis')."/".$reception_no;
 
 
             for( $count = 0; $count < count($fuel_id); $count++ ){

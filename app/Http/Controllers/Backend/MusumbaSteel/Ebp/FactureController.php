@@ -122,10 +122,9 @@ class FactureController extends Controller
             }
             
             */
-
             
 
-            $invoice_signature = $request->tp_TIN."/wsl400038739100326/".Carbon::parse($request->invoice_date)->format('YmdHis')."/".$invoice_number;
+            $invoice_signature = $request->tp_TIN."/".config('app.obr_test_username')."/".Carbon::parse($request->invoice_date)->format('YmdHis')."/".$invoice_number;
 
         for( $count = 0; $count < count($article_id); $count++ )
         {
@@ -240,8 +239,8 @@ class FactureController extends Controller
         
         $theUrl = config('app.guzzle_musumba_steel_url').'/ebms_api/login/';
         $response = Http::post($theUrl, [
-            'username'=> "wsl400038739100326",
-            'password'=> "D64iqIv?"
+            'username'=> config('app.obr_test_username'),
+            'password'=> config('app.obr_test_pwd')
 
         ]);
         $data =  json_decode($response);
@@ -356,8 +355,8 @@ class FactureController extends Controller
         
         $theUrl = config('app.guzzle_musumba_steel_url').'/ebms_api/login/';
         $response = Http::post($theUrl, [
-            'username'=> "wsl400038739100326",
-            'password'=> "D64iqIv?"
+            'username'=> config('app.obr_test_username'),
+            'password'=> config('app.obr_test_pwd')
 
         ]);
         $data =  json_decode($response);

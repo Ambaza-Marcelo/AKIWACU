@@ -81,7 +81,7 @@ class MaterialSmStoreController extends Controller
         $material_small_store->name = $request->name;
         $reference = strtoupper(substr($request->name, 0, 3));
         $material_small_store->code = $reference.date("y").substr(number_format(time() * mt_rand(), 0, '', ''), 0, 6);
-        $store_signature = "4001711615".Carbon::parse(Carbon::now())->format('YmdHis')."/".$material_small_store->code;
+        $store_signature = config('app.tin_number_company').Carbon::parse(Carbon::now())->format('YmdHis')."/".$material_small_store->code;
         $material_small_store->store_signature = $store_signature;
         $material_small_store->emplacement = $request->emplacement;
         $material_small_store->manager = $request->manager;

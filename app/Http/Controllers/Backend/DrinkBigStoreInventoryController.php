@@ -129,7 +129,7 @@ class DrinkBigStoreInventoryController extends Controller
                $inventory_no = 'BI' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
             }
 
-            $inventory_signature = "4001711615".Carbon::parse(Carbon::now())->format('YmdHis')."/".$inventory_no;
+            $inventory_signature = config('app.tin_number_company').Carbon::parse(Carbon::now())->format('YmdHis')."/".$inventory_no;
 
             $created_by = $this->user->name;
             $description =$request->description; 
@@ -356,7 +356,7 @@ class DrinkBigStoreInventoryController extends Controller
 
         $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
         $response = Http::post($theUrl, [
-            'username'=> "ws400171161500565",
+            'username'=> "wsconfig('app.tin_number_company')00565",
             'password'=> "5VS(GO:p"
 
         ]);
@@ -369,7 +369,7 @@ class DrinkBigStoreInventoryController extends Controller
         $response = Http::withHeaders([
         'Authorization' => 'Bearer '.$token,
         'Accept' => 'application/json'])->post($theUrl, [
-            'system_or_device_id'=> "ws400171161500565",
+            'system_or_device_id'=> "wsconfig('app.tin_number_company')00565",
             'item_code'=> $data->drink->code,
             'item_designation'=>$data->drink->name,
             'item_quantity'=>$data->new_quantity,

@@ -105,7 +105,7 @@ class MaterialPurchaseController extends Controller
                $purchase_no = 'BDA' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
             }
 
-            $purchase_signature = "4001711615".Carbon::parse(Carbon::now())->format('YmdHis')."/".$purchase_no;
+            $purchase_signature = config('app.tin_number_company').Carbon::parse(Carbon::now())->format('YmdHis')."/".$purchase_no;
             $created_by = $this->user->name;
 
             //create purchase

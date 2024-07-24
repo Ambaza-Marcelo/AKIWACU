@@ -240,7 +240,7 @@ class BookingController extends Controller
                $booking_no = 'SAL' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
             }
 
-            $order_signature = "4001711615".Carbon::parse(Carbon::now())->format('YmdHis')."/".$booking_no;
+            $order_signature = config('app.tin_number_company').Carbon::parse(Carbon::now())->format('YmdHis')."/".$booking_no;
 
             //create booking
             $booking = new BookingBooking();
@@ -365,7 +365,7 @@ class BookingController extends Controller
                $booking_no = 'SER' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
             }
 
-            $order_signature = "4001711615".Carbon::parse(Carbon::now())->format('YmdHis')."/".$booking_no;
+            $order_signature = config('app.tin_number_company').Carbon::parse(Carbon::now())->format('YmdHis')."/".$booking_no;
 
             //create booking
             $booking = new BookingBooking();
@@ -478,7 +478,7 @@ class BookingController extends Controller
                $booking_no = 'TAB' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
             }
 
-            $order_signature = "4001711615".Carbon::parse(Carbon::now())->format('YmdHis')."/".$booking_no;
+            $order_signature = config('app.tin_number_company').Carbon::parse(Carbon::now())->format('YmdHis')."/".$booking_no;
 
             //create booking
             $booking = new BookingBooking();
@@ -582,7 +582,7 @@ class BookingController extends Controller
                $booking_no = 'KID' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
             }
 
-            $order_signature = "4001711615".Carbon::parse(Carbon::now())->format('YmdHis')."/".$booking_no;
+            $order_signature = config('app.tin_number_company').Carbon::parse(Carbon::now())->format('YmdHis')."/".$booking_no;
 
             //create booking
             $booking = new BookingBooking();
@@ -691,7 +691,7 @@ class BookingController extends Controller
                $booking_no = 'PIS' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
             }
 
-            $order_signature = "4001711615".Carbon::parse(Carbon::now())->format('YmdHis')."/".$booking_no;
+            $order_signature = config('app.tin_number_company').Carbon::parse(Carbon::now())->format('YmdHis')."/".$booking_no;
 
             //create booking
             $booking = new BookingBooking();
@@ -800,7 +800,7 @@ class BookingController extends Controller
                $booking_no = 'BRE' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
             }
 
-            $order_signature = "4001711615".Carbon::parse(Carbon::now())->format('YmdHis')."/".$booking_no;
+            $order_signature = config('app.tin_number_company').Carbon::parse(Carbon::now())->format('YmdHis')."/".$booking_no;
 
             //create booking
             $booking = new BookingBooking();

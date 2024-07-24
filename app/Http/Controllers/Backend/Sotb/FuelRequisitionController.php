@@ -102,7 +102,7 @@ class FuelRequisitionController extends Controller
                $requisition_no = 'BR' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
             }
 
-            $requisition_signature = "4001711615".Carbon::parse(Carbon::now())->format('YmdHis')."/".$requisition_no;
+            $requisition_signature = config('app.tin_number_company').Carbon::parse(Carbon::now())->format('YmdHis')."/".$requisition_no;
             $created_by = $this->user->name;
 
             //create requisition

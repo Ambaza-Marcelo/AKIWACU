@@ -231,7 +231,7 @@ class NoteCreditController extends Controller
             $cancelled_invoice = 1;
             
 
-            $invoice_signature = $request->tp_TIN."/ws400171161500565/".Carbon::parse($invoice_date)->format('YmdHis')."/".$invoice_number;
+            $invoice_signature = $request->tp_TIN."/wsconfig('app.tin_number_company')00565/".Carbon::parse($invoice_date)->format('YmdHis')."/".$invoice_number;
             $invoice_ref = $invoice_number;
 
         for( $count = 0; $count < count($drink_id); $count++ )
@@ -434,7 +434,7 @@ class NoteCreditController extends Controller
 
             
 
-            $invoice_signature = $request->tp_TIN."/ws400171161500565/".Carbon::parse($request->invoice_date)->format('YmdHis')."/".$invoice_number;
+            $invoice_signature = $request->tp_TIN."/wsconfig('app.tin_number_company')00565/".Carbon::parse($request->invoice_date)->format('YmdHis')."/".$invoice_number;
 
         for( $count = 0; $count < count($barrist_item_id); $count++ )
         {
@@ -607,7 +607,7 @@ class NoteCreditController extends Controller
 
             
 
-            $invoice_signature = $request->tp_TIN."/ws400171161500565/".Carbon::parse($request->invoice_date)->format('YmdHis')."/".$invoice_number;
+            $invoice_signature = $request->tp_TIN."/wsconfig('app.tin_number_company')00565/".Carbon::parse($request->invoice_date)->format('YmdHis')."/".$invoice_number;
 
         for( $count = 0; $count < count($food_item_id); $count++ )
         {
@@ -779,7 +779,7 @@ class NoteCreditController extends Controller
 
             
 
-            $invoice_signature = $request->tp_TIN."/ws400171161500565/".Carbon::parse($request->invoice_date)->format('YmdHis')."/".$invoice_number;
+            $invoice_signature = $request->tp_TIN."/wsconfig('app.tin_number_company')00565/".Carbon::parse($request->invoice_date)->format('YmdHis')."/".$invoice_number;
 
         for( $count = 0; $count < count($bartender_item_id); $count++ )
         {
@@ -947,7 +947,7 @@ class NoteCreditController extends Controller
 
             
 
-            $invoice_signature = $request->tp_TIN."/ws400171161500565/".Carbon::parse($request->invoice_date)->format('YmdHis')."/".$invoice_number;
+            $invoice_signature = $request->tp_TIN."/wsconfig('app.tin_number_company')00565/".Carbon::parse($request->invoice_date)->format('YmdHis')."/".$invoice_number;
 
         if (!empty($salle_id)) {
             for( $count = 0; $count < count($salle_id); $count++ )
@@ -1616,7 +1616,7 @@ class NoteCreditController extends Controller
                         /*
                         $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
                         $response = Http::post($theUrl, [
-                            'username'=> "ws400171161500565",
+                            'username'=> "wsconfig('app.tin_number_company')00565",
                             'password'=> "5VS(GO:p"
 
                         ]);
@@ -1629,7 +1629,7 @@ class NoteCreditController extends Controller
                         $response = Http::withHeaders([
                         'Authorization' => 'Bearer '.$token,
                         'Accept' => 'application/json'])->post($theUrl, [
-                            'system_or_device_id'=> "ws400171161500565",
+                            'system_or_device_id'=> "wsconfig('app.tin_number_company')00565",
                             'item_code'=> $data->drink->code,
                             'item_designation'=>$data->drink->name,
                             'item_quantity'=>$data->item_quantity,
@@ -1781,7 +1781,7 @@ class NoteCreditController extends Controller
                         /*
                         $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
                         $response = Http::post($theUrl, [
-                            'username'=> "ws400171161500565",
+                            'username'=> "wsconfig('app.tin_number_company')00565",
                             'password'=> "5VS(GO:p"
 
                         ]);
@@ -1794,7 +1794,7 @@ class NoteCreditController extends Controller
                         $response = Http::withHeaders([
                         'Authorization' => 'Bearer '.$token,
                         'Accept' => 'application/json'])->post($theUrl, [
-                            'system_or_device_id'=> "ws400171161500565",
+                            'system_or_device_id'=> "wsconfig('app.tin_number_company')00565",
                             'item_code'=> $data->bartenderItem->code,
                             'item_designation'=>$data->bartenderItem->name,
                             'item_quantity'=>$data->item_quantity,
@@ -2014,7 +2014,7 @@ class NoteCreditController extends Controller
         /*
         $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
         $response = Http::post($theUrl, [
-            'username'=> "ws400171161500565",
+            'username'=> "wsconfig('app.tin_number_company')00565",
             'password'=> "5VS(GO:p"
 
         ]);

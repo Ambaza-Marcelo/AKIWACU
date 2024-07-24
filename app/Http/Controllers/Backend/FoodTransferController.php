@@ -143,7 +143,7 @@ class FoodTransferController extends Controller
 
             $created_by = $this->user->name;
 
-            $transfer_signature = "4001711615".Carbon::parse(Carbon::now())->format('YmdHis')."/".$transfer_no;
+            $transfer_signature = config('app.tin_number_company').Carbon::parse(Carbon::now())->format('YmdHis')."/".$transfer_no;
 
 
             for( $count = 0; $count < count($food_id); $count++ ){

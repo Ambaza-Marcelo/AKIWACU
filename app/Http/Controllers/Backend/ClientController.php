@@ -76,8 +76,8 @@ class ClientController extends Controller
 
         $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
         $response = Http::post($theUrl, [
-            'username'=> "ws400104024700048",
-            'password'=> "[zkC%)P4"
+            'username'=> config('app.obr_test_username'),
+            'password'=> config('app.obr_test_pwd')
 
         ]);
 
@@ -176,36 +176,6 @@ class ClientController extends Controller
 
         session()->flash('success', 'Client has been created !!');
         return redirect()->route('admin.clients.index');
-    }
-
-    public function checkTIN(Request  $request)
-    {
-
-        $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
-        $response = Http::post($theUrl, [
-            'username'=> "ws400104024700048",
-            'password'=> "[zkC%)P4"
-
-        ]);
-
-        $data =  json_decode($response);
-        $data2 = ($data->result);
-        
-    
-        $token = $data2->token;
-
-        $tp_TIN = $request->tp_TIN;
-
-        $theUrl = config('app.guzzle_test_url').'/ebms_api/checkTIN/';
-        $response = Http::withHeaders([
-        'Authorization' => 'Bearer '.$token,
-        'Accept' => 'application/json'])->post($theUrl, [
-            'tp_TIN'=>$tp_TIN,
-
-        ]); 
-
-        //$data =  json_decode($response);
-        return $response->json();
     }
 
     /**

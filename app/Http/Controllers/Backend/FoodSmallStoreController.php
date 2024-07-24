@@ -83,7 +83,7 @@ class FoodSmallStoreController extends Controller
         $food_small_store->name = $request->name;
         $reference = strtoupper(substr($request->name, 0, 3));
         $food_small_store->code = $reference.date("y").substr(number_format(time() * mt_rand(), 0, '', ''), 0, 6);
-        $store_signature = "4001711615".Carbon::parse(Carbon::now())->format('YmdHis')."/".$food_small_store->code;
+        $store_signature = config('app.tin_number_company').Carbon::parse(Carbon::now())->format('YmdHis')."/".$food_small_store->code;
         $food_small_store->store_signature = $store_signature;
         $food_small_store->emplacement = $request->emplacement;
         $food_small_store->manager = $request->manager;

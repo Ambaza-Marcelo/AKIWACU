@@ -126,7 +126,7 @@ class MaterialStockinController extends Controller
 
             $created_by = $this->user->name;
 
-            $stockin_signature = "4001711615".Carbon::parse(Carbon::now())->format('YmdHis')."/".$stockin_no;
+            $stockin_signature = config('app.tin_number_company').Carbon::parse(Carbon::now())->format('YmdHis')."/".$stockin_no;
 
 
             for( $count = 0; $count < count($material_id); $count++ ){

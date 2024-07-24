@@ -16,6 +16,9 @@ return [
     'name' => env('APP_NAME', 'EBMS'),
     'developer' => env('DEVELOPER','AIT'),
     'guzzle_test_url' => env('GUZZLE_TEST_URL'),
+    'obr_test_username' => env('OBR_TEST_USERNAME'),
+    'obr_test_pwd' => env('OBR_TEST_PWD'),
+    'tin_number_company' => env('TIN_NUMBER_COMPANY'),
     'guzzle_musumba_steel_url' => env('GUZZLE_MUSUMBA_STEEL_URL'),
     'guzzle_biotime_url' => env('GUZZLE_BIOTIME_URL'),
 

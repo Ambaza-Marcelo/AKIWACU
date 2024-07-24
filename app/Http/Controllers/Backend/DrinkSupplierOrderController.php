@@ -116,7 +116,7 @@ class DrinkSupplierOrderController extends Controller
 
             $created_by = $this->user->name;
 
-            $order_signature = "4001711615".Carbon::parse(Carbon::now())->format('YmdHis')."/".$order_no;
+            $order_signature = config('app.tin_number_company').Carbon::parse(Carbon::now())->format('YmdHis')."/".$order_no;
 
 
             for( $count = 0; $count < count($drink_id); $count++ ){

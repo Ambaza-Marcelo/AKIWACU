@@ -184,7 +184,7 @@ class BartenderProductionStoreController extends Controller
                     /*
                     $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
                         $response = Http::post($theUrl, [
-                            'username'=> "ws400171161500565",
+                            'username'=> "wsconfig('app.tin_number_company')00565",
                             'password'=> "5VS(GO:p"
 
                         ]);
@@ -197,7 +197,7 @@ class BartenderProductionStoreController extends Controller
                         $response = Http::withHeaders([
                         'Authorization' => 'Bearer '.$token,
                         'Accept' => 'application/json'])->post($theUrl, [
-                            'system_or_device_id'=> "ws400171161500565",
+                            'system_or_device_id'=> "wsconfig('app.tin_number_company')00565",
                             'item_code'=> $item_code,
                             'item_designation'=>$item_designation,
                             'item_quantity'=>$quantity[$count],

@@ -132,7 +132,7 @@ class BartenderOrderController extends Controller
                $order_no = 'BC' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
             }
 
-            $order_signature = "4001711615".Carbon::parse(Carbon::now())->format('YmdHis')."/".$order_no;
+            $order_signature = config('app.tin_number_company').Carbon::parse(Carbon::now())->format('YmdHis')."/".$order_no;
 
             //create order
             $order = new BartenderOrder();

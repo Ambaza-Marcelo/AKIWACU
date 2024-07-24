@@ -82,7 +82,7 @@ class DrinkExtraBigStoreController extends Controller
         $drink_big_store->name = $request->name;
         $reference = strtoupper(substr($request->name, 0, 3));
         $drink_big_store->code = $reference.date("y").substr(number_format(time() * mt_rand(), 0, '', ''), 0, 6);
-        $store_signature = "4001711615".Carbon::parse(Carbon::now())->format('YmdHis')."/".$drink_big_store->code;
+        $store_signature = config('app.tin_number_company').Carbon::parse(Carbon::now())->format('YmdHis')."/".$drink_big_store->code;
         $drink_big_store->store_signature = $store_signature;
         $drink_big_store->emplacement = $request->emplacement;
         $drink_big_store->manager = $request->manager;
