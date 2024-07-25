@@ -1,11 +1,11 @@
 
-<img src="img/login.png"><br>
+<img src="screenshoot/login.png"><br>
 
-<img src="img/dashboard.png"><br>
-<img src="img/store.png"><br>
-<img src="img/table.png"><br>
-<img src="img/booking.png"><br>
-<img src="img/plan.png"><br>
+<img src="screenshoot/dashboard.png"><br>
+<img src="screenshoot/store.png"><br>
+<img src="screenshoot/table.png"><br>
+<img src="screenshoot/booking.png"><br>
+<img src="screenshoot/plan.png"><br>
 <h1>AKIWACU</h1>
 
 				#AMBAZA MARCELLIN
