@@ -106,6 +106,8 @@ class FoodStockoutController extends Controller
                 ]);
             }
 
+            try {DB::beginTransaction();
+
             $food_id = $request->food_id;
             $date = $request->date;
             $asker = $request->asker;
@@ -236,9 +238,20 @@ class FoodStockoutController extends Controller
             $stockout->status = 1;
             $stockout->description = $description;
             $stockout->save();
+
+            DB::commit();
+            session()->flash('success', 'stockout has been created !!');
+            return redirect()->route('admin.food-stockouts.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
             
-        session()->flash('success', 'stockout has been created !!');
-        return redirect()->route('admin.food-stockouts.index');
     }
 
     /**

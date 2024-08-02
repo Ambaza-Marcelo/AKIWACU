@@ -103,6 +103,8 @@ class FoodBigStoreInventoryController extends Controller
                 ]);
             }
 
+            try {DB::beginTransaction();
+
             $food_id = $request->food_id;
             $date = $request->date;
             $unit = $request->unit;
@@ -165,9 +167,20 @@ class FoodBigStoreInventoryController extends Controller
             $inventory->description = $description;
             $inventory->created_by = $created_by;
             $inventory->save();
+
+            DB::commit();
+            session()->flash('success', 'Inventory has been created !!');
+            return redirect()->route('admin.food-big-store-inventory.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
          
-        session()->flash('success', 'Inventory has been created !!');
-        return redirect()->route('admin.food-big-store-inventory.index');
     }
 
     public function referenceInventaire()
@@ -237,87 +250,7 @@ class FoodBigStoreInventoryController extends Controller
         if (is_null($this->user) || !$this->user->can('food_big_inventory.edit')) {
             abort(403, 'Sorry !! You are Unauthorized to edit any inventory !');
         }
-        $rules = array(
-            'food_id.*' => 'required',
-            'date' => 'required|date',
-            'title' => 'required',
-            'quantity.*' => 'required',
-            'unit.*' => 'required',
-            'purchase_price.*' => 'required',
-            'new_quantity.*' => 'required',
-            'new_purchase_price.*' => 'required',
-            'new_unit.*' => 'required',
-            'description' => 'required',
-            );
-
-            $error = Validator::make($request->all(),$rules);
-
-            if($error->fails()){
-                return response()->json([
-                    'error' => $error->errors()->all(),
-                ]);
-            }
-
-            $food_id = $request->food_id;
-            $date = $request->date;
-            $unit = $request->unit;
-            $quantity = $request->quantity;
-            $purchase_price = $request->purchase_price;
-            $new_quantity = $request->new_quantity;
-            $new_price = $request->new_price;
-            $title = $request->title;
-            $code_store = $request->code_store;
-            $new_purchase_price = $request->new_purchase_price;
-            $new_unit = $request->new_unit; 
-
-            $created_by = $this->user->name;
-            $description =$request->description; 
-
-            for( $count = 0; $count < count($food_id); $count++ ){
-
-                $id_food = FoodBigStoreInventoryDetail::where('inventory_no',$inventory_no)->where('food_id',$food_id[$count])->value('food_id');
-
-                $total_purchase_value = $quantity[$count] * $purchase_price[$count];
-                $new_total_purchase_value = $new_quantity[$count] * $new_purchase_price[$count];
-                $relicat = $quantity[$count] - $new_quantity[$count];
-                $data = array(
-                    'food_id' => $food_id[$count],
-                    'date' => $date,
-                    'title' => $title,
-                    'code_store' => $code_store,
-                    'quantity' => $quantity[$count],
-                    'unit' => $unit[$count],
-                    'purchase_price' => $purchase_price[$count],
-                    'total_purchase_value' => $total_purchase_value,
-                    'new_quantity' => $new_quantity[$count],
-                    'new_purchase_price' => $new_purchase_price[$count],
-                    'new_total_purchase_value' => $new_total_purchase_value,
-                    'new_unit' => $new_unit[$count],
-                    'relicat' => $relicat,
-                    'inventory_no' => $inventory_no,
-                    'created_by' => $created_by,
-                    'description' => $description,
-                    'created_at' => \Carbon\Carbon::now()
-                );
-                $insert_data[] = $data;
-
-                if (!empty($id_food)) {
-                    FoodBigStoreInventoryDetail::where('inventory_no',$inventory_no)->delete();
-                }
-                
-            }
-            FoodBigStoreInventoryDetail::insert($insert_data);
-            //create inventory
-            $inventory = FoodBigStoreInventory::where('inventory_no',$inventory_no)->first();
-            $inventory->date = $date;
-            $inventory->title = $title;
-            $inventory->code_store = $code_store;
-            $inventory->description = $description;
-            $inventory->created_by = $created_by;
-            $inventory->save();
-         
-        session()->flash('success', 'Inventory has been updated !!');
-        return redirect()->route('admin.food-big-store-inventory.index');
+        
     }
 
     public function bon_inventaire($inventory_no)
@@ -361,6 +294,7 @@ class FoodBigStoreInventoryController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to validate any inventory !');
         }
 
+        try {DB::beginTransaction();
         $datas = FoodBigStoreInventoryDetail::where('inventory_no', $inventory_no)->get();
 
         foreach($datas as $data){
@@ -410,8 +344,20 @@ class FoodBigStoreInventoryController extends Controller
             FoodBigStoreInventoryDetail::where('inventory_no', '=', $inventory_no)
                 ->update(['status' => 2,'validated_by' => $this->user->name]);
 
-        session()->flash('success', 'inventory has been validated !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'inventory has been validated !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
+        
     }
 
     public function rejectInventory($inventory_no)
@@ -419,13 +365,27 @@ class FoodBigStoreInventoryController extends Controller
        if (is_null($this->user) || !$this->user->can('food_big_inventory.reject')) {
             abort(403, 'Sorry !! You are Unauthorized to reject any inventory !');
         }
+
+        try {DB::beginTransaction();
+
             FoodBigStoreInventory::where('inventory_no', '=', $inventory_no)
                 ->update(['status' => 1,'rejected_by' => $this->user->name]);
              FoodBigStoreInventoryDetail::where('inventory_no', '=', $inventory_no)
                 ->update(['status' => 1,'rejected_by' => $this->user->name]);
 
-        session()->flash('success', 'inventory has been rejected !!');
-        return back();
+            DB::commit();
+            session()->flash('success', 'inventory has been rejected !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function resetInventory($inventory_no)
@@ -433,13 +393,27 @@ class FoodBigStoreInventoryController extends Controller
        if (is_null($this->user) || !$this->user->can('food_big_inventory.reset')) {
             abort(403, 'Sorry !! You are Unauthorized to reset any inventory !');
         }
+
+        try {DB::beginTransaction();
+
             FoodBigStoreInventory::where('inventory_no', '=', $inventory_no)
                 ->update(['status' => 0,'reseted_by' => $this->user->name]);
                 FoodBigStoreInventoryDetail::where('inventory_no', '=', $inventory_no)
                 ->update(['status' => 0,'reseted_by' => $this->user->name]);
 
-        session()->flash('success', 'inventory has been reseted !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'inventory has been reseted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function exportToExcel(Request $request,$code)
@@ -459,6 +433,8 @@ class FoodBigStoreInventoryController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to delete any inventory !');
         }
 
+        try {DB::beginTransaction();
+
         $inventory = FoodBigStoreInventory::where('inventory_no', $inventory_no)->first();
         if (!is_null($inventory)) {
             $inventory->delete();
@@ -476,7 +452,18 @@ class FoodBigStoreInventoryController extends Controller
             Mail::to($email)->send(new DeleteInventoryMail($mailData));
         }
 
-        session()->flash('success', 'Inventory has been deleted !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Inventory has been deleted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 }

@@ -87,6 +87,8 @@ class FoodController extends Controller
             'code_store' => 'required',
         ]);
 
+        try {DB::beginTransaction();
+
         $store_type = $request->store_type;
         $code_store = $request->code_store;
         // Create New Item
@@ -219,8 +221,19 @@ class FoodController extends Controller
             }
         }
 
-        session()->flash('success', 'Food has been created !!');
-        return redirect()->route('admin.foods.index');
+        DB::commit();
+            session()->flash('success', 'Food has been created !!');
+            return redirect()->route('admin.foods.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     /**
@@ -286,6 +299,8 @@ class FoodController extends Controller
             'store_type' => 'required',
             'code_store' => 'required',
         ]);
+
+        try {DB::beginTransaction();
 
         $store_type = $request->store_type;
         $code_store = $request->code_store;
@@ -416,8 +431,19 @@ class FoodController extends Controller
             }
         }
 
-        session()->flash('success', 'Food has been updated !!');
-        return redirect()->route('admin.foods.index');
+        DB::commit();
+            session()->flash('success', 'Food has been updated !!');
+            return redirect()->route('admin.foods.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     /**

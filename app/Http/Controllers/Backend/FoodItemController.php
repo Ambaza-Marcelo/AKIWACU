@@ -94,6 +94,8 @@ class FoodItemController extends Controller
                 ]);
             }
 
+            try {DB::beginTransaction();
+
             $food_id = $request->food_id;
             $name = $request->name;
             $unit = $request->unit;
@@ -167,8 +169,19 @@ class FoodItemController extends Controller
         $food_store->created_by = $this->user->name;
         $food_store->save();
 
-        session()->flash('success', 'FoodItem has been created !!');
-        return redirect()->route('admin.food-items.index');
+        DB::commit();
+            session()->flash('success', 'FoodItem has been created !!');
+            return redirect()->route('admin.food-items.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     /**
@@ -209,12 +222,6 @@ class FoodItemController extends Controller
            return $pdf->download('FICHE_TECHNIQUE_'.$data->name.'.pdf');
     }
 
-
-    public function uploadArticle(Request $request)
-    {
-        Excel::import(new ArticlesImport, $request->file('file')->store('temp'));
-        return redirect()->back();
-    }
 
     public function exportToExcel(Request $request)
     {
@@ -277,6 +284,7 @@ class FoodItemController extends Controller
                 ]);
             }
 
+            try {DB::beginTransaction();
 
             $food_id = $request->food_id;
             $name = $request->name;
@@ -353,13 +361,18 @@ class FoodItemController extends Controller
         $food_store->save();
         */
 
-        session()->flash('success', 'FoodItem has been updated !!');
-        return redirect()->route('admin.food-items.index');
-    }
+        DB::commit();
+            session()->flash('success', 'FoodItem has been updated !!');
+            return redirect()->route('admin.food-items.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
 
-    public function get_article_data()
-    {
-        return Excel::download(new ArticleExport, 'articles.xlsx');
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     /**
@@ -374,13 +387,26 @@ class FoodItemController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to delete any food_item !');
         }
 
+        try {DB::beginTransaction();
+
         $food_item = FoodItem::where('code',$code)->first();
         if (!is_null($food_item)) {
             $food_item->delete();
             FoodItemDetail::where('code',$code)->delete();
         }
 
-        session()->flash('success', 'FoodItem has been deleted !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'FoodItem has been deleted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 }

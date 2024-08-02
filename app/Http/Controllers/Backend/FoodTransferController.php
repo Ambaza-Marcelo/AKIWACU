@@ -122,6 +122,8 @@ class FoodTransferController extends Controller
                 ]);
             }
 
+            try {DB::beginTransaction();
+
             $food_id = $request->food_id;
             $date = $request->date;
             $origin_store_id = $request->origin_store_id;
@@ -188,9 +190,20 @@ class FoodTransferController extends Controller
             $transfer->status = 1;
             $transfer->description = $description;
             $transfer->save();
+
+            DB::commit();
+            session()->flash('success', 'transfer has been created !!');
+            return redirect()->route('admin.food-transfers.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
             
-        session()->flash('success', 'transfer has been created !!');
-        return redirect()->route('admin.food-transfers.index');
     }
 
     /**
@@ -232,6 +245,8 @@ class FoodTransferController extends Controller
                 ]);
             }
 
+            try {DB::beginTransaction();
+
             $food_id = $request->food_id;
             $date_portion = $request->date_portion;
             $origin_store_id = $request->origin_store_id;
@@ -266,10 +281,22 @@ class FoodTransferController extends Controller
 
             FoodTransfer::where('transfer_no', '=', $transfer_no)
                 ->update(['status_portion' => 0]);
-            
+            FoodTransferDetail::where('transfer_no', '=', $transfer_no)
+                ->update(['status_portion' => 0]);
 
-        session()->flash('success', 'Food has been portioned successfuly !!');
-        return redirect()->route('admin.food-transfers.index');
+            DB::commit();
+            session()->flash('success', 'Food has been portioned successfuly !!');
+            return redirect()->route('admin.food-transfers.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+            
         
     }
 
@@ -335,13 +362,27 @@ class FoodTransferController extends Controller
        if (is_null($this->user) || !$this->user->can('food_transfer.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any transfer !');
         }
+
+        try {DB::beginTransaction();
+
             FoodTransfer::where('transfer_no', '=', $transfer_no)
                 ->update(['status' => 2,'validated_by' => $this->user->name]);
             FoodTransferDetail::where('transfer_no', '=', $transfer_no)
                 ->update(['status' => 2,'validated_by' => $this->user->name]);
 
-        session()->flash('success', 'transfer has been validated !!');
-        return back();
+            DB::commit();
+            session()->flash('success', 'transfer has been validated !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function reject($transfer_no)
@@ -350,13 +391,26 @@ class FoodTransferController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to reject any transfer !');
         }
 
+        try {DB::beginTransaction();
+
         FoodTransfer::where('transfer_no', '=', $transfer_no)
                 ->update(['status' => -1,'rejected_by' => $this->user->name]);
         FoodTransferDetail::where('transfer_no', '=', $transfer_no)
                 ->update(['status' => -1,'rejected_by' => $this->user->name]);
 
-        session()->flash('success', 'Transfer has been rejected !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Transfer has been rejected !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function reset($transfer_no)
@@ -365,13 +419,26 @@ class FoodTransferController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to reset any transfer !');
         }
 
+        try {DB::beginTransaction();
+
         FoodTransfer::where('transfer_no', '=', $transfer_no)
                 ->update(['status' => 1,'reseted_by' => $this->user->name]);
         FoodTransferDetail::where('transfer_no', '=', $transfer_no)
                 ->update(['status' => 1,'reseted_by' => $this->user->name]);
 
-        session()->flash('success', 'Transfer has been reseted !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Transfer has been reseted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function confirm($transfer_no)
@@ -380,13 +447,26 @@ class FoodTransferController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to confirm any transfer !');
         }
 
+        try {DB::beginTransaction();
+
         FoodTransfer::where('transfer_no', '=', $transfer_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
             FoodTransferDetail::where('transfer_no', '=', $transfer_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
 
-        session()->flash('success', 'Transfer has been confirmed !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Transfer has been confirmed !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function approuve($transfer_no)
@@ -395,6 +475,7 @@ class FoodTransferController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to confirm any transfer !');
         }
 
+        try {DB::beginTransaction();
 
         $datas = FoodTransferDetail::where('transfer_no', $transfer_no)->get();
 
@@ -535,8 +616,19 @@ class FoodTransferController extends Controller
             FoodTransferDetail::where('transfer_no', '=', $transfer_no)
                 ->update(['status' => 4,'approuved_by' => $this->user->name]);
 
-        session()->flash('success', 'Transfer has been done successfuly !,from store '.$code_store_origin.' to '.$code_store_destination);
-        return back();
+        DB::commit();
+            session()->flash('success', 'Transfer has been done successfuly !,from store '.$code_store_origin.' to '.$code_store_destination);
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
 
@@ -546,6 +638,7 @@ class FoodTransferController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to balidate any portion !');
         }
 
+        try {DB::beginTransaction();
 
         $datas = FoodTransferDetail::where('transfer_no', $transfer_no)->get();
 
@@ -593,15 +686,19 @@ class FoodTransferController extends Controller
             FoodTransferDetail::where('transfer_no', '=', $transfer_no)
                 ->update(['status_portion' => 1]);
 
-        session()->flash('success', 'Food Portioned has been validated successfuly !');
-        return back();
-    }
+        DB::commit();
+            session()->flash('success', 'Food Portioned has been validated successfuly !');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
 
-    public function get_reception_data()
-    {
-        return Excel::download(new ReceptionExport, 'receptions.xlsx');
-    }
+            DB::rollback();
 
+            // and throw the error again.
+
+            throw $e;
+        }
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -615,13 +712,26 @@ class FoodTransferController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to delete any transfer !');
         }
 
+        try {DB::beginTransaction();
+
         $transfer = FoodTransfer::where('transfer_no',$transfer_no)->first();
         if (!is_null($transfer)) {
             $transfer->delete();
             FoodTransferDetail::where('transfer_no',$transfer_no)->delete();
         }
 
-        session()->flash('success', 'Transfer has been deleted !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Transfer has been deleted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 }

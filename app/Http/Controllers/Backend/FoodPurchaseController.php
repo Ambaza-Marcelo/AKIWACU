@@ -90,6 +90,8 @@ class FoodPurchaseController extends Controller
                 ]);
             }
 
+            try {DB::beginTransaction();
+
             $food_id = $request->food_id;
             $date = $request->date;
             $quantity = $request->quantity;
@@ -149,8 +151,19 @@ class FoodPurchaseController extends Controller
 
             FoodPurchaseDetail::insert($insert_data);
 
-        session()->flash('success', 'Purchase has been created !!');
-        return redirect()->route('admin.food-purchases.index');
+            DB::commit();
+            session()->flash('success', 'Purchase has been created !!');
+            return redirect()->route('admin.food-purchases.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     /**
@@ -218,6 +231,8 @@ class FoodPurchaseController extends Controller
                 ]);
             }
 
+            try {DB::beginTransaction();
+
             $food_id = $request->food_id;
             $date = $request->date;
             $quantity = $request->quantity;
@@ -255,8 +270,18 @@ class FoodPurchaseController extends Controller
 
             FoodPurchaseDetail::insert($insert_data);
 
-        session()->flash('success', 'Purchase has been updated successfuly !!');
-        return redirect()->route('admin.food-purchases.index');
+            DB::commit();
+            session()->flash('success', 'Purchase has been updated successfuly !!');
+            return redirect()->route('admin.food-purchases.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
 
     }
 
@@ -265,13 +290,27 @@ class FoodPurchaseController extends Controller
        if (is_null($this->user) || !$this->user->can('food_purchase.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any purchase !');
         }
+
+        try {DB::beginTransaction();
+
             FoodPurchase::where('purchase_no', '=', $purchase_no)
                 ->update(['status' => 2,'validated_by' => $this->user->name]);
             FoodPurchaseDetail::where('purchase_no', '=', $purchase_no)
                 ->update(['status' => 2,'validated_by' => $this->user->name]);
 
-        session()->flash('success', 'purchase has been validated !!');
-        return back();
+            DB::commit();
+            session()->flash('success', 'purchase has been validated !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function reject($purchase_no)
@@ -280,13 +319,26 @@ class FoodPurchaseController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to reject any purchase !');
         }
 
+        try {DB::beginTransaction();
+
         FoodPurchase::where('purchase_no', '=', $purchase_no)
                 ->update(['status' => -1,'rejected_by' => $this->user->name]);
             FoodPurchaseDetail::where('purchase_no', '=', $purchase_no)
                 ->update(['status' => -1,'rejected_by' => $this->user->name]);
 
-        session()->flash('success', 'Purchase has been rejected !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Purchase has been rejected !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function reset($purchase_no)
@@ -295,13 +347,27 @@ class FoodPurchaseController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to reset any purchase !');
         }
 
+
+        try {DB::beginTransaction();
+
         FoodPurchase::where('purchase_no', '=', $purchase_no)
                 ->update(['status' => 1,'reseted_by' => $this->user->name]);
             FoodPurchaseDetail::where('purchase_no', '=', $purchase_no)
                 ->update(['status' => 1,'reseted_by' => $this->user->name]);
 
-        session()->flash('success', 'FoodPurchase has been reseted !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'FoodPurchase has been reseted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function confirm($purchase_no)
@@ -310,13 +376,26 @@ class FoodPurchaseController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to confirm any purchase !');
         }
 
+        try {DB::beginTransaction();
+
         FoodPurchase::where('purchase_no', '=', $purchase_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
             FoodPurchaseDetail::where('purchase_no', '=', $purchase_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
 
-        session()->flash('success', 'Purchase has been confirmed !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Purchase has been confirmed !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function approuve($purchase_no)
@@ -325,13 +404,26 @@ class FoodPurchaseController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to confirm any purchase !');
         }
 
+        try {DB::beginTransaction();
+
         FoodPurchase::where('purchase_no', '=', $purchase_no)
                 ->update(['status' => 4,'approuved_by' => $this->user->name]);
             FoodPurchaseDetail::where('purchase_no', '=', $purchase_no)
                 ->update(['status' => 4,'approuved_by' => $this->user->name]);
 
-        session()->flash('success', 'Purchase has been confirmed !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Purchase has been confirmed !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function foodPurchase($purchase_no)
@@ -381,13 +473,26 @@ class FoodPurchaseController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to delete any purchase !');
         }
 
+        try {DB::beginTransaction();
+
         $purchase = FoodPurchase::where('purchase_no',$purchase_no)->first();
         if (!is_null($purchase)) {
             $purchase->delete();
             FoodPurchaseDetail::where('purchase_no',$purchase_no)->delete();
         }
 
-        session()->flash('success', 'Purchase has been deleted !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Purchase has been deleted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 }

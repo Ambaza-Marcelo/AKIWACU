@@ -124,6 +124,8 @@ class FoodReceptionController extends Controller
                 ]);
             }
 
+            try {DB::beginTransaction();
+
             $food_id = $request->food_id;
             $date = $request->date;
             $vat_supplier_payer = $request->vat_supplier_payer;
@@ -223,9 +225,20 @@ class FoodReceptionController extends Controller
             $reception->status = 1;
             $reception->description = $description;
             $reception->save();
+
+            DB::commit();
+            session()->flash('success', 'reception has been created !!');
+            return redirect()->route('admin.food-receptions.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
             
-        session()->flash('success', 'reception has been created !!');
-        return redirect()->route('admin.food-receptions.index');
     }
 
     public function storeWithoutOrder(Request $request)
@@ -258,6 +271,8 @@ class FoodReceptionController extends Controller
                     'error' => $error->errors()->all(),
                 ]);
             }
+
+            try {DB::beginTransaction();
 
             $food_id = $request->food_id;
             $date = $request->date;
@@ -358,9 +373,20 @@ class FoodReceptionController extends Controller
             $reception->status = 1;
             $reception->description = $description;
             $reception->save();
+
+            DB::commit();
+            session()->flash('success', 'reception has been created !!');
+            return redirect()->route('admin.food-receptions.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
             
-        session()->flash('success', 'reception has been created !!');
-        return redirect()->route('admin.food-receptions.index');
     }
 
     /**
@@ -443,13 +469,27 @@ class FoodReceptionController extends Controller
        if (is_null($this->user) || !$this->user->can('food_reception.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any reception !');
         }
+
+        try {DB::beginTransaction();
+
             FoodReception::where('reception_no', '=', $reception_no)
                 ->update(['status' => 2,'validated_by' => $this->user->name]);
             FoodReceptionDetail::where('reception_no', '=', $reception_no)
                 ->update(['status' => 2,'validated_by' => $this->user->name]);
 
-        session()->flash('success', 'reception has been validated !!');
-        return back();
+            DB::commit();
+            session()->flash('success', 'reception has been validated !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function reject($reception_no)
@@ -458,13 +498,26 @@ class FoodReceptionController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to reject any reception !');
         }
 
+        try {DB::beginTransaction();
+
         FoodReception::where('reception_no', '=', $reception_no)
                 ->update(['status' => -1,'rejected_by' => $this->user->name]);
         FoodReceptionDetail::where('reception_no', '=', $reception_no)
                 ->update(['status' => -1,'rejected_by' => $this->user->name]);
 
-        session()->flash('success', 'Reception has been rejected !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Reception has been rejected !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function reset($reception_no)
@@ -473,13 +526,26 @@ class FoodReceptionController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to reset any reception !');
         }
 
+        try {DB::beginTransaction();
+
         FoodReception::where('reception_no', '=', $reception_no)
                 ->update(['status' => 1,'reseted_by' => $this->user->name]);
         FoodReceptionDetail::where('reception_no', '=', $reception_no)
                 ->update(['status' => 1,'reseted_by' => $this->user->name]);
 
-        session()->flash('success', 'Reception has been reseted !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Reception has been reseted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function confirm($reception_no)
@@ -488,13 +554,25 @@ class FoodReceptionController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to confirm any reception !');
         }
 
+        try {DB::beginTransaction();
+
         FoodReception::where('reception_no', '=', $reception_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
             FoodReceptionDetail::where('reception_no', '=', $reception_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
 
-        session()->flash('success', 'Reception has been confirmed !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Reception has been confirmed !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     public function approuve($reception_no)
@@ -503,6 +581,7 @@ class FoodReceptionController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to confirm any reception !');
         }
 
+        try {DB::beginTransaction();
 
         $datas = FoodReceptionDetail::where('reception_no', $reception_no)->get();
 
@@ -591,8 +670,19 @@ class FoodReceptionController extends Controller
             FoodReceptionDetail::where('reception_no', '=', $reception_no)
                 ->update(['status' => 4,'approuved_by' => $this->user->name]);
 
-        session()->flash('success', 'Reception has been done successfuly !, to '.$code_store_destination);
-        return back();
+            DB::commit();
+            session()->flash('success', 'Reception has been done successfuly !, to '.$code_store_destination);
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function exportToExcel(Request $request)
@@ -614,13 +704,26 @@ class FoodReceptionController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to delete any reception !');
         }
 
+        try {DB::beginTransaction();
+
         $reception = FoodReception::where('reception_no',$reception_no)->first();
         if (!is_null($reception)) {
             $reception->delete();
             FoodReceptionDetail::where('reception_no',$reception_no)->delete();
         }
 
-        session()->flash('success', 'Reception has been deleted !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Reception has been deleted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 }

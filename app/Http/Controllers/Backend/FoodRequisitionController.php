@@ -90,6 +90,7 @@ class FoodRequisitionController extends Controller
                 ]);
             }
 
+            try {DB::beginTransaction();
             $food_id = $request->food_id;
             $date = $request->date;
             $quantity_requisitioned = $request->quantity_requisitioned;
@@ -148,8 +149,19 @@ class FoodRequisitionController extends Controller
 
             FoodRequisitionDetail::insert($insert_data);
 
-        session()->flash('success', 'Requisition has been created !!');
-        return redirect()->route('admin.food-requisitions.index');
+        DB::commit();
+            session()->flash('success', 'Requisition has been created !!');
+            return redirect()->route('admin.food-requisitions.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     /**
@@ -201,13 +213,27 @@ class FoodRequisitionController extends Controller
        if (is_null($this->user) || !$this->user->can('food_requisition.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any requisition !');
         }
+
+        try {DB::beginTransaction();
+
             FoodRequisition::where('requisition_no', '=', $requisition_no)
                 ->update(['status' => 2,'validated_by' => $this->user->name]);
             FoodRequisitionDetail::where('requisition_no', '=', $requisition_no)
                 ->update(['status' => 2,'validated_by' => $this->user->name]);
 
-        session()->flash('success', 'requisition has been validated !!');
-        return back();
+            DB::commit();
+            session()->flash('success', 'requisition has been validated !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function reject($requisition_no)
@@ -216,13 +242,26 @@ class FoodRequisitionController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to reject any requisition !');
         }
 
+        try {DB::beginTransaction();
+
         FoodRequisition::where('requisition_no', '=', $requisition_no)
                 ->update(['status' => -1,'rejected_by' => $this->user->name]);
             FoodRequisitionDetail::where('requisition_no', '=', $requisition_no)
                 ->update(['status' => -1,'rejected_by' => $this->user->name]);
 
-        session()->flash('success', 'Requisition has been rejected !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Requisition has been rejected !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function reset($requisition_no)
@@ -231,13 +270,26 @@ class FoodRequisitionController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to reset any requisition !');
         }
 
+        try {DB::beginTransaction();
+
         FoodRequisition::where('requisition_no', '=', $requisition_no)
                 ->update(['status' => 1,'reseted_by' => $this->user->name]);
             FoodRequisitionDetail::where('requisition_no', '=', $requisition_no)
                 ->update(['status' => 1,'reseted_by' => $this->user->name]);
 
-        session()->flash('success', 'FoodRequisition has been reseted !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'FoodRequisition has been reseted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function confirm($requisition_no)
@@ -246,13 +298,26 @@ class FoodRequisitionController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to confirm any requisition !');
         }
 
+        try {DB::beginTransaction();
+
         FoodRequisition::where('requisition_no', '=', $requisition_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
             FoodRequisitionDetail::where('requisition_no', '=', $requisition_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
 
-        session()->flash('success', 'Requisition has been confirmed !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Requisition has been confirmed !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function approuve($requisition_no)
@@ -261,13 +326,26 @@ class FoodRequisitionController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to confirm any requisition !');
         }
 
+        try {DB::beginTransaction();
+
         FoodRequisition::where('requisition_no', '=', $requisition_no)
                 ->update(['status' => 4,'approuved_by' => $this->user->name]);
             FoodRequisitionDetail::where('requisition_no', '=', $requisition_no)
                 ->update(['status' => 4,'approuved_by' => $this->user->name]);
 
-        session()->flash('success', 'Requisition has been confirmed !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Requisition has been confirmed !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function demande_requisition($requisition_no)
@@ -317,13 +395,26 @@ class FoodRequisitionController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to delete any requisition !');
         }
 
+        try {DB::beginTransaction();
+
         $requisition = FoodRequisition::where('requisition_no',$requisition_no)->first();
         if (!is_null($requisition)) {
             $requisition->delete();
             FoodRequisitionDetail::where('requisition_no',$requisition_no)->delete();
         }
 
-        session()->flash('success', 'Requisition has been deleted !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Requisition has been deleted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 }
