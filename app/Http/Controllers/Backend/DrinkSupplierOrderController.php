@@ -98,6 +98,8 @@ class DrinkSupplierOrderController extends Controller
                 ]);
             }
 
+            try {DB::beginTransaction();
+
             $drink_id = $request->drink_id;
             $date = $request->date;
             $purchase_no = $request->purchase_no;
@@ -155,9 +157,20 @@ class DrinkSupplierOrderController extends Controller
             $order->status = 1;
             $order->description = $description;
             $order->save();
+
+            DB::commit();
+            session()->flash('success', 'order has been created !!');
+            return redirect()->route('admin.drink-supplier-orders.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
             
-        session()->flash('success', 'order has been created !!');
-        return redirect()->route('admin.drink-supplier-orders.index');
     }
 
     /**
@@ -210,13 +223,27 @@ class DrinkSupplierOrderController extends Controller
        if (is_null($this->user) || !$this->user->can('drink_supplier_order.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any order !');
         }
+
+        try {DB::beginTransaction();
+
             DrinkSupplierOrder::where('order_no', '=', $order_no)
                 ->update(['status' => 2,'validated_by' => $this->user->name]);
             DrinkSupplierOrderDetail::where('order_no', '=', $order_no)
                 ->update(['status' => 2,'validated_by' => $this->user->name]);
 
-        session()->flash('success', 'order has been validated !!');
-        return back();
+                DB::commit();
+            session()->flash('success', 'order has been validated !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function reject($order_no)
@@ -225,13 +252,26 @@ class DrinkSupplierOrderController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to reject any order !');
         }
 
+        try {DB::beginTransaction();
+
         DrinkSupplierOrder::where('order_no', '=', $order_no)
                 ->update(['status' => -1,'rejected_by' => $this->user->name]);
             DrinkSupplierOrderDetail::where('order_no', '=', $order_no)
                 ->update(['status' => -1,'rejected_by' => $this->user->name]);
 
-        session()->flash('success', 'Order has been rejected !!');
-        return back();
+                DB::commit();
+            session()->flash('success', 'Order has been rejected !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function reset($order_no)
@@ -240,13 +280,26 @@ class DrinkSupplierOrderController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to reset any order !');
         }
 
+        try {DB::beginTransaction();
+
         DrinkSupplierOrder::where('order_no', '=', $order_no)
                 ->update(['status' => 1,'reseted_by' => $this->user->name]);
             DrinkSupplierOrderDetail::where('order_no', '=', $order_no)
                 ->update(['status' => 1,'reseted_by' => $this->user->name]);
 
-        session()->flash('success', 'Order has been reseted !!');
-        return back();
+         DB::commit();
+            session()->flash('success', 'Order has been reseted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function confirm($order_no)
@@ -255,13 +308,26 @@ class DrinkSupplierOrderController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to confirm any order !');
         }
 
+        try {DB::beginTransaction();
+
         DrinkSupplierOrder::where('order_no', '=', $order_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
             DrinkSupplierOrderDetail::where('order_no', '=', $order_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
 
-        session()->flash('success', 'Order has been confirmed !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Order has been confirmed !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function approuve($order_no)
@@ -269,6 +335,8 @@ class DrinkSupplierOrderController extends Controller
        if (is_null($this->user) || !$this->user->can('drink_supplier_order.approuve')) {
             abort(403, 'Sorry !! You are Unauthorized to confirm any order !');
         }
+
+        try {DB::beginTransaction();
 
         DrinkSupplierOrder::where('order_no', '=', $order_no)
                 ->update(['status' => 4,'approuved_by' => $this->user->name]);
@@ -282,8 +350,19 @@ class DrinkSupplierOrderController extends Controller
         DrinkPurchaseDetail::where('purchase_no', '=', $purchase_no)
                         ->update(['status' => 5]);
 
-        session()->flash('success', 'Order has been confirmed !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Order has been confirmed !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function drinkSupplierOrder($order_no)
@@ -334,13 +413,25 @@ class DrinkSupplierOrderController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to delete any order !');
         }
 
+        try {DB::beginTransaction();
+
         $order = DrinkSupplierOrder::where('order_no',$order_no)->first();
         if (!is_null($order)) {
             $order->delete();
             DrinkSupplierOrderDetail::where('order_no',$order_no)->delete();
         }
 
-        session()->flash('success', 'Transfer has been deleted !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Transfer has been deleted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 }

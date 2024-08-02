@@ -77,6 +77,7 @@ class BarristItemController extends Controller
         ]);
 
         // Create New BarristItem
+        try {DB::beginTransaction();
         $barrist_item = new BarristItem();
         $barrist_item->name = $request->name;
         $artCode = strtoupper(substr($request->name, 0, 3));
@@ -118,9 +119,18 @@ class BarristItemController extends Controller
         $barrist_store->unit = $unit;
         $barrist_store->created_by = $this->user->name;
         $barrist_store->save();
+        DB::commit();
+            session()->flash('success', 'BarristItem has been created !!');
+            return redirect()->route('admin.barrist-items.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
 
-        session()->flash('success', 'BarristItem has been created !!');
-        return redirect()->route('admin.barrist-items.index');
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     /**
@@ -184,7 +194,7 @@ class BarristItemController extends Controller
             'quantity' => 'required',
         ]);
 
-
+        try {DB::beginTransaction();
         $barrist_item->name = $request->name;
         $barrist_item->unit = $request->unit;
         $barrist_item->purchase_price = $request->purchase_price;
@@ -220,13 +230,20 @@ class BarristItemController extends Controller
         $barrist_store->created_by = $this->user->name;
         $barrist_store->save();
 
-        session()->flash('success', 'BarristItem has been updated !!');
-        return redirect()->route('admin.barrist-items.index');
-    }
+        DB::commit();
+            session()->flash('success', 'BarristItem has been updated !!');
+            return redirect()->route('admin.barrist-items.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
 
-    public function get_article_data()
-    {
-        return Excel::download(new ArticleExport, 'articles.xlsx');
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
+        
     }
 
     /**

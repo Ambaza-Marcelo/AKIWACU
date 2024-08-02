@@ -47,10 +47,15 @@ class CreateFacturesTable extends Migration
             $table->string('invoice_currency')->nullable(true);
             $table->string('code_store')->nullable(true);
             $table->string('food_order_no')->nullable(true);
+            $table->unique('food_order_no');
             $table->string('drink_order_no')->nullable(true);
+            $table->unique('drink_order_no');
             $table->string('barrist_order_no')->nullable(true);
+            $table->unique('barrist_order_no');
             $table->string('bartender_order_no')->nullable(true);
+            $table->unique('bartender_order_no');
             $table->string('booking_no')->nullable(true);
+            $table->unique('booking_no');
             $table->string('auteur')->nullable(true);
             $table->string('validated_by')->nullable(true);
             $table->string('confirmed_by')->nullable(true);

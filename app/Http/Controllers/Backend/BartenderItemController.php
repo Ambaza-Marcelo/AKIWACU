@@ -76,6 +76,8 @@ class BartenderItemController extends Controller
         ]);
 
         // Create New BartenderItem
+        try {DB::beginTransaction();
+
         $bartender_item = new BartenderItem();
         $bartender_item->name = $request->name;
         $artCode = strtoupper(substr($request->name, 0, 3));
@@ -117,8 +119,19 @@ class BartenderItemController extends Controller
         $bartender_store->created_by = $this->user->name;
         $bartender_store->save();
 
-        session()->flash('success', 'BartenderItem has been created !!');
-        return redirect()->route('admin.bartender-items.index');
+        DB::commit();
+            session()->flash('success', 'BartenderItem has been created !!');
+            return redirect()->route('admin.bartender-items.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     /**
@@ -130,13 +143,6 @@ class BartenderItemController extends Controller
     public function show($id)
     {
         //
-    }
-
-
-    public function uploadArticle(Request $request)
-    {
-        Excel::import(new ArticlesImport, $request->file('file')->store('temp'));
-        return redirect()->back();
     }
 
 
@@ -181,7 +187,8 @@ class BartenderItemController extends Controller
             'quantity' => 'required',
         ]);
 
-        
+        try {DB::beginTransaction();
+
         $bartender_item->name = $request->name;
         $bartender_item->unit = $request->unit;
         $bartender_item->purchase_price = $request->purchase_price;
@@ -217,13 +224,18 @@ class BartenderItemController extends Controller
         $bartender_store->created_by = $this->user->name;
         $bartender_store->save();
 
-        session()->flash('success', 'BartenderItem has been updated !!');
-        return redirect()->route('admin.bartender-items.index');
-    }
+        DB::commit();
+            session()->flash('success', 'BartenderItem has been updated !!');
+            return redirect()->route('admin.bartender-items.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
 
-    public function get_article_data()
-    {
-        return Excel::download(new ArticleExport, 'articles.xlsx');
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     /**

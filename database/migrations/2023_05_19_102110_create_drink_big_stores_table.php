@@ -17,6 +17,8 @@ class CreateDrinkBigStoresTable extends Migration
             $table->id();
             $table->string('name')->nullable(true);
             $table->string('code')->nullable(true);
+            $table->unique('name');
+            $table->unique('code');
             $table->string('store_signature')->nullable(true);
             $table->string('emplacement')->nullable(true);
             $table->string('manager')->nullable(true);

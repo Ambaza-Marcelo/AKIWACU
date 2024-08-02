@@ -116,14 +116,26 @@ class FactureRestaurantController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to validate any invoice !');
         }
 
+        try {DB::beginTransaction();
 
         Facture::where('invoice_number', '=', $invoice_number)
                 ->update(['paid_either' => '1','approuved_by' => $this->user->name]);
         FactureDetail::where('invoice_number', '=', $invoice_number)
                 ->update(['paid_either' => '1','approuved_by' => $this->user->name]);
 
-        session()->flash('success', 'vous avez approuvé le paiement du crédit avec succés');
-        return back();
+        DB::commit();
+            session()->flash('success', 'vous avez approuvé le paiement du crédit avec succés');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function exporterChiffreAffaire(Request $request)
@@ -310,6 +322,7 @@ class FactureRestaurantController extends Controller
 
             $employe_id = $request->employe_id;
 
+            try {DB::beginTransaction();
 
         for( $count = 0; $count < count($food_item_id); $count++ )
         {
@@ -412,8 +425,19 @@ class FactureRestaurantController extends Controller
             OrderKitchenDetail::where('order_no', '=', $facture->food_order_no)
                 ->update(['status' => 2,'confirmed_by' => $this->user->name]);
 
+            DB::commit();
             session()->flash('success', 'Le vente est fait avec succés!!');
             return redirect()->route('admin.invoice-kitchens.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
 
@@ -543,7 +567,7 @@ class FactureRestaurantController extends Controller
         $montant_total_global_en_lettre = $this->numberToWord($montant_total_global);
 
         if (!empty($data->EGRClient_id)) {
-            $customer_name = $data->EGRClient->customer_name;
+            $customer_name = $data->client->customer_name;
         }else{
             $customer_name = $data->customer_name;
         }

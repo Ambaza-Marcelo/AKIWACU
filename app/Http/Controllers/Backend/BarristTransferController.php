@@ -124,6 +124,8 @@ class BarristTransferController extends Controller
                 ]);
             }
 
+            try { DB::beginTransaction();
+
             $drink_id = $request->drink_id;
             $date = $request->date;
             $origin_dstore_id = $request->origin_dstore_id;
@@ -187,9 +189,20 @@ class BarristTransferController extends Controller
             $transfer->status = 1;
             $transfer->description = $description;
             $transfer->save();
+
+            DB::commit();
+            session()->flash('success', 'transfer has been created !!');
+            return redirect()->route('admin.barrist-transfers.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
             
-        session()->flash('success', 'transfer has been created !!');
-        return redirect()->route('admin.barrist-transfers.index');
     }
 
     public function storeFood(Request $request)
@@ -218,6 +231,8 @@ class BarristTransferController extends Controller
                     'error' => $error->errors()->all(),
                 ]);
             }
+
+            try {DB::beginTransaction();
 
             $food_id = $request->food_id;
             $date = $request->date;
@@ -282,9 +297,20 @@ class BarristTransferController extends Controller
             $transfer->status = 1;
             $transfer->description = $description;
             $transfer->save();
+
+            DB::commit();
+            session()->flash('success', 'transfer has been created !!');
+            return redirect()->route('admin.barrist-transfers.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
             
-        session()->flash('success', 'transfer has been created !!');
-        return redirect()->route('admin.barrist-transfers.index');
     }
 
     /**
@@ -333,93 +359,7 @@ class BarristTransferController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to edit any transfer !');
         }
 
-        $rules = array(
-                'drink_id.*'  => 'required',
-                'date'  => 'required',
-                'unit.*'  => 'required',
-                'quantity.*'  => 'required',
-                'unit_price.*'  => 'required',
-                'total_value.*'  => 'required',
-                'invoice_no'  => 'required',
-                'requisition_no'  => 'required',
-                'supplier'  => 'required',
-                //'remaining_quantity'  => 'required',
-                'receptionist'  => 'required',
-                'description'  => 'required'
-            );
-
-            $error = Validator::make($request->all(),$rules);
-
-            if($error->fails()){
-                return response()->json([
-                    'error' => $error->errors()->all(),
-                ]);
-            }
-
-            $drink_id = $request->drink_id;
-            $date = $request->date;
-            $invoice_no = $request->invoice_no;
-            $requisition_no = $request->requisition_no;
-            $description =$request->description; 
-            $supplier = $request->supplier;
-            $unit = $request->unit;
-            $quantity = $request->quantity;
-            $unit_price = $request->unit_price;
-            //$remaining_quantity = $request->remaining_quantity;
-            $receptionist =$request->receptionist; 
-            $created_by = $this->user->name;
-
-
-            for( $count = 0; $count < count($drink_id); $count++ ){
-                $total_value = $quantity[$count] * $unit_price[$count];
-                $order_quantity = OrderDetail::where("requisition_no",$requisition_no)->where("article_id",$drink_id[$count])->value('quantity');
-                $remaining_quantity = $order_quantity - $quantity[$count];
-
-                $status = 0;
-                if ($remaining_quantity == 0) {
-                    $status = 2;
-                }else{
-                    $status = 1;
-                }
-                $data = array(
-                    'drink_id' => $drink_id[$count],
-                    'date' => $date,
-                    'quantity' => $quantity[$count],
-                    'unit' => $unit[$count],
-                    'unit_price' => $unit_price[$count],
-                    'total_value' => $total_value,
-                    'invoice_no' => $invoice_no,
-                    'requisition_no' => $requisition_no,
-                    'supplier' => $supplier,
-                    'remaining_quantity' => $remaining_quantity,
-                    'receptionist' => $receptionist,
-                    //'reception_no' => $bon_no,
-                    'created_by' => $created_by,
-                    'description' => $description,
-                    'status' => $status,
-                    'created_at' => \Carbon\Carbon::now()
-
-                );
-                //$insert_data[] = $data;
-                BarristTransferDetail::where('drink_id',$drink_id[$count])
-                        ->update($data);
-                
-            }
-            //BarristTransferDetail::insert($insert_data);
-
-            //update transfer
-            $transfer = BarristTransfer::where('reception_no', $bon_no)->first();
-            $transfer->date = $date;
-            $transfer->invoice_no = $invoice_no;
-            $transfer->requisition_no = $requisition_no;
-            $transfer->receptionist = $receptionist;
-            $transfer->supplier = $supplier;
-            $transfer->created_by = $created_by;
-            $transfer->description = $description;
-            $transfer->save();
-
-            session()->flash('success', 'transfer has been updated !!');
-        return redirect()->route('admin.receptions.index');
+        
         
     }
 
@@ -483,13 +423,26 @@ class BarristTransferController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to reject any transfer !');
         }
 
+        try {DB::beginTransaction();
+
         BarristTransfer::where('transfer_no', '=', $transfer_no)
                 ->update(['status' => -1,'rejected_by' => $this->user->name]);
         BarristTransferDetail::where('transfer_no', '=', $transfer_no)
                 ->update(['status' => -1,'rejected_by' => $this->user->name]);
 
-        session()->flash('success', 'Transfer has been rejected !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Transfer has been rejected !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function reset($transfer_no)
@@ -498,13 +451,25 @@ class BarristTransferController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to reset any transfer !');
         }
 
+        try {DB::beginTransaction();
+
         BarristTransfer::where('transfer_no', '=', $transfer_no)
                 ->update(['status' => 1,'reseted_by' => $this->user->name]);
         BarristTransferDetail::where('transfer_no', '=', $transfer_no)
                 ->update(['status' => 1,'reseted_by' => $this->user->name]);
+                DB::commit();
+            session()->flash('success', 'Transfer has been reseted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
 
-        session()->flash('success', 'Transfer has been reseted !!');
-        return back();
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function confirm($transfer_no)
@@ -513,13 +478,25 @@ class BarristTransferController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to confirm any transfer !');
         }
 
+        try {DB::beginTransaction();
+
         BarristTransfer::where('transfer_no', '=', $transfer_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
             BarristTransferDetail::where('transfer_no', '=', $transfer_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
+                DB::commit();
+            session()->flash('success', 'Transfer has been confirmed !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
 
-        session()->flash('success', 'Transfer has been confirmed !!');
-        return back();
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function approuveDrink($transfer_no)
@@ -528,6 +505,7 @@ class BarristTransferController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to confirm any transfer !');
         }
 
+        try {DB::beginTransaction();
 
         $datas = BarristTransferDetail::where('transfer_no', $transfer_no)->get();
 
@@ -649,8 +627,19 @@ class BarristTransferController extends Controller
             BarristTransferDetail::where('transfer_no', '=', $transfer_no)
                 ->update(['status' => 4,'approuved_by' => $this->user->name]);
 
-        session()->flash('success', 'Transfer has been done successfuly !,from store '.$code_store_origin.' to BARRIST STORE');
-        return back();
+            DB::commit();
+            session()->flash('success', 'Transfer has been done successfuly !,from store '.$code_store_origin.' to BARRIST STORE');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+        
     }
 
     public function approuveFood($transfer_no)
@@ -659,6 +648,7 @@ class BarristTransferController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to confirm any transfer !');
         }
 
+        try {DB::beginTransaction();
 
         $datas = BarristTransferDetail::where('transfer_no', $transfer_no)->get();
 
@@ -780,13 +770,18 @@ class BarristTransferController extends Controller
             BarristTransferDetail::where('transfer_no', '=', $transfer_no)
                 ->update(['status' => 4,'approuved_by' => $this->user->name]);
 
-        session()->flash('success', 'Transfer has been done successfuly !,from store '.$code_store_origin.' to BARRIST STORE');
-        return back();
-    }
+        DB::commit();
+            session()->flash('success', 'Transfer has been done successfuly !,from store '.$code_store_origin.' to BARRIST STORE');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
 
-    public function get_reception_data()
-    {
-        return Excel::download(new ReceptionExport, 'receptions.xlsx');
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
 
@@ -802,13 +797,26 @@ class BarristTransferController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to delete any transfer !');
         }
 
+        try {DB::beginTransaction();
+
         $transfer = BarristTransfer::where('transfer_no',$transfer_no)->first();
         if (!is_null($transfer)) {
             $transfer->delete();
             BarristTransferDetail::where('transfer_no',$transfer_no)->delete();
         }
 
-        session()->flash('success', 'Transfer has been deleted !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Transfer has been deleted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
+        
 }

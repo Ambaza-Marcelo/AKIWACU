@@ -100,6 +100,9 @@ class DrinkController extends Controller
         $store_type = $request->store_type;
         $code_store = $request->code_store;
         // Create New Item
+
+        try {DB::beginTransaction();
+            
         $drink = new Drink();
         $drink->name = $request->name;
         $drink->quantity_bottle = $request->quantity_bottle;
@@ -127,7 +130,6 @@ class DrinkController extends Controller
         $drink->store_type = $store_type;
         $drink->created_by = $this->user->name;
         $drink->save();
-
         $drink_id = Drink::latest()->first()->id;
 
             $unit = Drink::where('id',$drink_id)->value('unit');
@@ -270,9 +272,20 @@ class DrinkController extends Controller
                 $drink_in_extra_big_store->save();
             }
         }
+            DB::commit();
+            session()->flash('success', 'Drink has been created !!');
+            return redirect()->route('admin.drinks.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
 
-        session()->flash('success', 'Drink has been created !!');
-        return redirect()->route('admin.drinks.index');
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
+        
     }
 
     /**
@@ -335,6 +348,8 @@ class DrinkController extends Controller
             'store_type' => 'required',
             'code_store' => 'required',
         ]);
+
+        try {DB::beginTransaction();
 
         $store_type = $request->store_type;
         $code_store = $request->code_store;
@@ -493,9 +508,18 @@ class DrinkController extends Controller
                 $drink_in_extra_big_store->save();
             }
         }
+            DB::commit();
+            session()->flash('success', 'Drink has been updated succesfuly !!');
+            return redirect()->route('admin.drinks.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
 
-        session()->flash('success', 'Drink has been updated !!');
-        return redirect()->route('admin.drinks.index');
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     /**
@@ -509,7 +533,7 @@ class DrinkController extends Controller
         if (is_null($this->user) || !$this->user->can('drink.delete')) {
             abort(403, 'Sorry !! You are Unauthorized to delete any drink !');
         }
-
+        
         $drink = Drink::find($id);
         if (!is_null($drink)) {
             $drink->delete();

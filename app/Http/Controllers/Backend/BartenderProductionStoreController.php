@@ -91,6 +91,8 @@ class BartenderProductionStoreController extends Controller
                 ]);
             }
 
+            try {DB::beginTransaction();
+
             $code = date("y").substr(number_format(time() * mt_rand(), 0, '', ''), 0, 6);
 
             $bartender_item_id = $request->bartender_item_id;
@@ -213,8 +215,19 @@ class BartenderProductionStoreController extends Controller
                         */
             }
 
+
+            DB::commit();
             session()->flash('success', 'Data has been Saved Successfuly !!');
             return redirect()->route('admin.bartender-production-store.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     
     }
 

@@ -107,6 +107,8 @@ class BarristRequisitionController extends Controller
                 ]);
             }
 
+            try {DB::beginTransaction();
+
             $food_id = $request->food_id;
             $date = $request->date;
             $quantity_requisitioned = $request->quantity_requisitioned;
@@ -152,8 +154,18 @@ class BarristRequisitionController extends Controller
        
         BarristRequisitionDetail::insert($insert_data);
 
-        session()->flash('success', 'Requisition has been created !!');
-        return redirect()->route('admin.barrist-requisitions.index');
+            DB::commit();
+            session()->flash('success', 'Requisition has been created !!');
+            return redirect()->route('admin.barrist-requisitions.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
 
@@ -178,6 +190,8 @@ class BarristRequisitionController extends Controller
                     'error' => $error->errors()->all(),
                 ]);
             }
+
+            try {DB::beginTransaction();
 
             $drink_id = $request->drink_id;
             $date = $request->date;
@@ -224,8 +238,20 @@ class BarristRequisitionController extends Controller
        
         BarristRequisitionDetail::insert($insert_data);
 
-        session()->flash('success', 'Requisition has been created !!');
-        return redirect()->route('admin.barrist-requisitions.index');
+        DB::commit();
+            session()->flash('success', 'Requisition has been created !!');
+            return redirect()->route('admin.barrist-requisitions.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
+        
     }
     /**
      * Display the specified resource.
@@ -277,27 +303,54 @@ class BarristRequisitionController extends Controller
        if (is_null($this->user) || !$this->user->can('barrist_requisition.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any requisition !');
         }
+
+        try {DB::beginTransaction();
+
             BarristRequisition::where('requisition_no', '=', $requisition_no)
                 ->update(['status' => 2,'validated_by' => $this->user->name]);
             BarristRequisitionDetail::where('requisition_no', '=', $requisition_no)
                 ->update(['status' => 2,'validated_by' => $this->user->name]);
 
-        session()->flash('success', 'requisition has been validated !!');
-        return back();
+            DB::commit();
+            session()->flash('success', 'requisition has been validated !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     public function reject($requisition_no)
     {
        if (is_null($this->user) || !$this->user->can('barrist_requisition.reject')) {
             abort(403, 'Sorry !! You are Unauthorized to reject any requisition !');
-        }     
+        } 
+
+            try {DB::beginTransaction();
+
+
             BarristRequisition::where('requisition_no', '=', $requisition_no)
                 ->update(['status' => -1,'rejected_by' => $this->user->name]);
             BarristRequisitionDetail::where('requisition_no', '=', $requisition_no)
                 ->update(['status' => -1,'rejected_by' => $this->user->name]);
 
-        session()->flash('success', 'Requisition has been rejected !!');
-        return back();
+            DB::commit();
+            session()->flash('success', 'Requisition has been rejected !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     public function reset($requisition_no)
@@ -305,14 +358,25 @@ class BarristRequisitionController extends Controller
        if (is_null($this->user) || !$this->user->can('barrist_requisition.reset')) {
             abort(403, 'Sorry !! You are Unauthorized to reset any requisition !');
         }
+            try {DB::beginTransaction();
 
-        BarristRequisition::where('requisition_no', '=', $requisition_no)
+            BarristRequisition::where('requisition_no', '=', $requisition_no)
                 ->update(['status' => 1,'reseted_by' => $this->user->name]);
             BarristRequisitionDetail::where('requisition_no', '=', $requisition_no)
                 ->update(['status' => 1,'reseted_by' => $this->user->name]);
+            DB::commit();
+            session()->flash('success', 'BarristRequisition has been reseted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
 
-        session()->flash('success', 'BarristRequisition has been reseted !!');
-        return back();
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function confirm($requisition_no)
@@ -321,13 +385,26 @@ class BarristRequisitionController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to confirm any requisition !');
         }
 
-        BarristRequisition::where('requisition_no', '=', $requisition_no)
+        try {DB::beginTransaction();
+
+            BarristRequisition::where('requisition_no', '=', $requisition_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
             BarristRequisitionDetail::where('requisition_no', '=', $requisition_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
 
-        session()->flash('success', 'Requisition has been confirmed !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Requisition has been confirmed !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function approuve($requisition_no)
@@ -335,14 +412,26 @@ class BarristRequisitionController extends Controller
        if (is_null($this->user) || !$this->user->can('barrist_requisition.approuve')) {
             abort(403, 'Sorry !! You are Unauthorized to confirm any requisition !');
         }
+        try {DB::beginTransaction();
 
-        BarristRequisition::where('requisition_no', '=', $requisition_no)
+            BarristRequisition::where('requisition_no', '=', $requisition_no)
                 ->update(['status' => 4,'approuved_by' => $this->user->name]);
             BarristRequisitionDetail::where('requisition_no', '=', $requisition_no)
                 ->update(['status' => 4,'approuved_by' => $this->user->name]);
 
-        session()->flash('success', 'Requisition has been confirmed !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Requisition has been confirmed !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function demande_requisition($requisition_no)
@@ -399,14 +488,24 @@ class BarristRequisitionController extends Controller
         if (is_null($this->user) || !$this->user->can('barrist_requisition.delete')) {
             abort(403, 'Sorry !! You are Unauthorized to delete any requisition !');
         }
-
+        try {DB::beginTransaction();
         $requisition = BarristRequisition::where('requisition_no',$requisition_no)->first();
         if (!is_null($requisition)) {
             $requisition->delete();
             BarristRequisitionDetail::where('requisition_no',$requisition_no)->delete();
         }
 
-        session()->flash('success', 'Requisition has been deleted !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Requisition has been deleted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 }

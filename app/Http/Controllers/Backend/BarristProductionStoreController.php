@@ -96,6 +96,8 @@ class BarristProductionStoreController extends Controller
                 ]);
             }
 
+            try {DB::beginTransaction();
+
             $barrist_item_id = $request->barrist_item_id;
             $date = $request->date;
             $quantity = $request->quantity;
@@ -183,8 +185,18 @@ class BarristProductionStoreController extends Controller
        
         //BarristProductionStore::insert($insert_data);
 
-        session()->flash('success', 'Data has been Saved Successfuly !!');
-        return redirect()->route('admin.barrist-production-store.index');
+        DB::commit();
+            session()->flash('success', 'Data has been Saved Successfuly !!');
+            return redirect()->route('admin.barrist-production-store.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     public function toPdf()

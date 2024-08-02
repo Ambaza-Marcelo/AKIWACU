@@ -187,6 +187,8 @@ class FactureController extends Controller
                 ]);
             }
 
+            try {DB::beginTransaction();
+
             $drink_id = $request->drink_id;
             $item_quantity = $request->item_quantity;
             $item_price = $request->item_price;
@@ -359,8 +361,20 @@ class FactureController extends Controller
                     ->update($orderData);
             }
 
+
+            DB::commit();
             session()->flash('success', 'Le vente est fait avec succés!!');
             return redirect()->route('ebms_api.invoices.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function storeBarrist(Request  $request)
@@ -399,6 +413,8 @@ class FactureController extends Controller
                     'error' => $error->errors()->all(),
                 ]);
             }
+
+            try {DB::beginTransaction();
 
             $barrist_item_id = $request->barrist_item_id;
             $item_quantity = $request->item_quantity;
@@ -546,8 +562,19 @@ class FactureController extends Controller
                     ->update($orderData);
             }
 
+        DB::commit();
             session()->flash('success', 'Le vente est fait avec succés!!');
             return redirect()->route('admin.barrist-invoices.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function storeFood(Request  $request)
@@ -586,6 +613,8 @@ class FactureController extends Controller
                     'error' => $error->errors()->all(),
                 ]);
             }
+
+            try {DB::beginTransaction();
 
             $food_item_id = $request->food_item_id;
             $item_quantity = $request->item_quantity;
@@ -732,8 +761,19 @@ class FactureController extends Controller
                     ->update($orderData);
             }
 
+            DB::commit();
             session()->flash('success', 'Le vente est fait avec succés!!');
             return redirect()->route('admin.invoice-kitchens.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function storeBartender(Request  $request)
@@ -772,6 +812,8 @@ class FactureController extends Controller
                     'error' => $error->errors()->all(),
                 ]);
             }
+
+            try {DB::beginTransaction();
 
             $bartender_item_id = $request->bartender_item_id;
             $item_quantity = $request->item_quantity;
@@ -918,8 +960,19 @@ class FactureController extends Controller
                     ->update($orderData);
             }
 
+            DB::commit();
             session()->flash('success', 'Le vente est fait avec succés!!');
             return redirect()->route('admin.bartender-invoices.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function storeBooking(Request  $request)
@@ -957,6 +1010,9 @@ class FactureController extends Controller
                     'error' => $error->errors()->all(),
                 ]);
             }
+
+
+            try {DB::beginTransaction();
 
             $salle_id = $request->salle_id;
             $service_id = $request->service_id;
@@ -1624,8 +1680,19 @@ class FactureController extends Controller
 
         }
 
+        DB::commit();
             session()->flash('success', 'Le vente est fait avec succés!!');
             return redirect()->route('admin.booking-invoices.choose');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function validerFactureBoisson($invoice_number)
@@ -1633,6 +1700,8 @@ class FactureController extends Controller
         if (is_null($this->user) || !$this->user->can('invoice_drink.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any invoice !');
         }
+
+        try {DB::beginTransaction();
 
         $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
 
@@ -1783,8 +1852,19 @@ class FactureController extends Controller
         FactureDetail::where('invoice_number', '=', $invoice_number)
             ->update(['etat' => 1,'statut_paied' => '0','validated_by' => $this->user->name]);
 
-        session()->flash('success', 'La Facture  est validée avec succés');
-        return back();
+        DB::commit();
+            session()->flash('success', 'La Facture  est validée avec succés');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
 
     }
 
@@ -1797,6 +1877,8 @@ class FactureController extends Controller
         $request->validate([
             'client_id' => 'required'
         ]);
+
+        try {DB::beginTransaction();
 
         $client_id = $request->client_id;
 
@@ -1952,8 +2034,18 @@ class FactureController extends Controller
         FactureDetail::where('invoice_number', '=', $invoice_number)
             ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
 
-        session()->flash('success', 'La Facture  est validée avec succés');
-        return redirect()->route('ebms_api.invoices.index');
+        DB::commit();
+            session()->flash('success', 'La Facture  est validée avec succés');
+            return redirect()->route('ebms_api.invoices.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
 
         
     }
@@ -1963,6 +2055,8 @@ class FactureController extends Controller
         if (is_null($this->user) || !$this->user->can('invoice_drink.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any invoice !');
         }
+
+        try {DB::beginTransaction();
 
         $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
 
@@ -2051,8 +2145,19 @@ class FactureController extends Controller
                 ->update(['etat' => 1,'statut_paied' => '0','validated_by' => $this->user->name]);
         BarristSmallReport::insert($report);
 
-        session()->flash('success', 'La Facture  est validée avec succés');
-        return back();
+        DB::commit();
+            session()->flash('success', 'La Facture  est validée avec succés');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function validerFactureBarristCredit(Request  $request,$invoice_number)
@@ -2064,6 +2169,8 @@ class FactureController extends Controller
         $request->validate([
             'client_id' => 'required'
         ]);
+
+        try {DB::beginTransaction();
 
         $client_id = $request->client_id;
 
@@ -2155,8 +2262,19 @@ class FactureController extends Controller
                 ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
         BarristSmallReport::insert($report);
 
-        session()->flash('success', 'La Facture  est validée avec succés');
-        return redirect()->route('admin.barrist-invoices.index');
+        DB::commit();
+            session()->flash('success', 'La Facture  est validée avec succés');
+            return redirect()->route('admin.barrist-invoices.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
 
@@ -2165,6 +2283,8 @@ class FactureController extends Controller
         if (is_null($this->user) || !$this->user->can('invoice_drink.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any invoice !');
         }
+
+        try {DB::beginTransaction();
 
         $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
 
@@ -2284,8 +2404,18 @@ class FactureController extends Controller
         FactureDetail::where('invoice_number', '=', $invoice_number)
             ->update(['etat' => 1,'statut_paied' => '0','validated_by' => $this->user->name]);
 
-        session()->flash('success', 'La Facture  est validée avec succés');
-        return back();
+        DB::commit();
+            session()->flash('success', 'La Facture  est validée avec succés');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
 
     }
 
@@ -2299,6 +2429,8 @@ class FactureController extends Controller
             'client_id' => 'required'
         ]);
 
+        try {DB::beginTransaction();
+
         $client_id = $request->client_id;
 
         $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
@@ -2420,8 +2552,18 @@ class FactureController extends Controller
         FactureDetail::where('invoice_number', '=', $invoice_number)
             ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
 
-        session()->flash('success', 'La Facture  est validée avec succés');
-        return redirect()->route('admin.bartender-invoices.index');
+        DB::commit();
+            session()->flash('success', 'La Facture  est validée avec succés');
+            return redirect()->route('admin.bartender-invoices.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
 
     }
 
@@ -2430,6 +2572,8 @@ class FactureController extends Controller
         if (is_null($this->user) || !$this->user->can('invoice_drink.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any invoice !');
         }
+
+        try {DB::beginTransaction();
 
         $data = Facture::where('invoice_number',$invoice_number)->first();
 
@@ -2442,8 +2586,19 @@ class FactureController extends Controller
         BookingBookingDetail::where('booking_no', '=', $data->booking_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
 
-        session()->flash('success', 'La Facture  est validée avec succés');
-        return back();
+        DB::commit();
+            session()->flash('success', 'La Facture  est validée avec succés');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function validerFactureBookingCredit(Request  $request,$invoice_number)
@@ -2456,6 +2611,8 @@ class FactureController extends Controller
             'client_id' => 'required'
         ]);
 
+        try {DB::beginTransaction();
+
         $client_id = $request->client_id;
 
         $data = Facture::where('invoice_number',$invoice_number)->first();
@@ -2473,8 +2630,18 @@ class FactureController extends Controller
         BookingBookingDetail::where('booking_no', '=', $data->booking_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
 
-        session()->flash('success', 'La Facture  est validée avec succés');
-        return back();
+        DB::commit();
+            session()->flash('success', 'La Facture  est validée avec succés');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     public function validerFactureCuisine($invoice_number)
@@ -2482,6 +2649,8 @@ class FactureController extends Controller
         if (is_null($this->user) || !$this->user->can('invoice_kitchen.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any invoice !');
         }
+
+        try {DB::beginTransaction();
 
         $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
         $data = Facture::where('invoice_number', $invoice_number)->first();
@@ -2635,8 +2804,19 @@ class FactureController extends Controller
                 ->update(['etat' => 1,'statut_paied' => '0','validated_by' => $this->user->name]);
         //FoodStoreReport::insert($report);
 
-        session()->flash('success', 'La Facture  est validée avec succés');
-        return back();
+        DB::commit();
+            session()->flash('success', 'La Facture  est validée avec succés');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function validerFactureCuisineCredit(Request  $request,$invoice_number)
@@ -2648,6 +2828,8 @@ class FactureController extends Controller
         $request->validate([
             'client_id' => 'required'
         ]);
+
+        try {DB::beginTransaction();
 
         $client_id = $request->client_id;
 
@@ -2806,8 +2988,19 @@ class FactureController extends Controller
                 ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','client_id' => $client_id,'validated_by' => $this->user->name]);
         //FoodStoreReport::insert($report);
 
-        session()->flash('success', 'La Facture  est validée avec succés');
-        return redirect()->route('admin.invoice-kitchens.index');
+        DB::commit();
+            session()->flash('success', 'La Facture  est validée avec succés');
+            return redirect()->route('admin.invoice-kitchens.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function annulerFacture(Request $request,$invoice_number)
@@ -2820,6 +3013,8 @@ class FactureController extends Controller
         $request->validate([
             'cn_motif' => 'required|min:10|max:500'
         ]);
+
+        try {DB::beginTransaction();
 
         $cn_motif = $request->cn_motif;
 
@@ -2946,9 +3141,18 @@ class FactureController extends Controller
             Mail::to($email4)->send(new InvoiceResetedMail($mailData));
             //Mail::to($email5)->send(new InvoiceResetedMail($mailData));
             
-            
+            DB::commit();
             session()->flash('success', 'La Facture  est annulée avec succés');
             return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
 
     }
 
@@ -2958,200 +3162,26 @@ class FactureController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to reset any invoice !');
         }
 
+        try {DB::beginTransaction();
+
         Facture::where('invoice_number', '=', $invoice_number)
                 ->update(['etat' => -1,'reseted_by' => $this->user->name]);
         FactureDetail::where('invoice_number', '=', $invoice_number)
                 ->update(['etat' => -1,'reseted_by' => $this->user->name]);
 
-        session()->flash('success', 'La Facture  est annulée avec succés');
-        return back();
-    }
+        DB::commit();
+            session()->flash('success', 'La Facture  est annulée avec succés');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
 
+            DB::rollback();
 
-    public function addInvoiceConfirm(Request $request,$invoice_number){
+            // and throw the error again.
 
-
-        $factures = Facture::where('invoice_number', $invoice_number)->get();
-
-        $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
-        /*
-        $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
-        $response = Http::post($theUrl, [
-            'username'=> config('app.obr_test_username'),
-            'password'=> config('app.obr_test_pwd')
-
-        ]);
-        $data =  json_decode($response);
-        $data2 = ($data->result);
-        
-    
-        $token = $data2->token;
-
-        foreach($datas as $data){
-            if (!empty($data->food_item_id)) {
-                $invoice_items = array(
-                'item_designation'=>$data->foodItem->name,
-                'item_quantity'=>$data->item_quantity,
-                'item_price'=>$data->item_price,
-                'item_ct'=>$data->item_ct,
-                'item_tl'=>$data->item_tl,
-                'item_price_nvat'=>$data->item_price_nvat,
-                'vat'=>$data->vat,
-                'item_price_wvat'=>$data->item_price_wvat,
-                'item_total_amount'=>$data->item_total_amount
-                );
-
-                $factureDetail[] = $invoice_items;
-            }elseif(!empty($data->drink_id)){
-                $invoice_items = array(
-                'item_designation'=>$data->drink->name,
-                'item_quantity'=>$data->item_quantity,
-                'item_price'=>$data->item_price,
-                'item_ct'=>$data->item_ct,
-                'item_tl'=>$data->item_tl,
-                'item_price_nvat'=>$data->item_price_nvat,
-                'vat'=>$data->vat,
-                'item_price_wvat'=>$data->item_price_wvat,
-                'item_total_amount'=>$data->item_total_amount
-                );
-
-                $factureDetail[] = $invoice_items;
-            }elseif(!empty($data->bartender_item_id)){
-                $invoice_items = array(
-                'item_designation'=>$data->bartenderItem->name,
-                'item_quantity'=>$data->item_quantity,
-                'item_price'=>$data->item_price,
-                'item_ct'=>$data->item_ct,
-                'item_tl'=>$data->item_tl,
-                'item_price_nvat'=>$data->item_price_nvat,
-                'vat'=>$data->vat,
-                'item_price_wvat'=>$data->item_price_wvat,
-                'item_total_amount'=>$data->item_total_amount
-                );
-
-                $factureDetail[] = $invoice_items;
-            }elseif(!empty($data->barrist_item_id)){
-                $invoice_items = array(
-                'item_designation'=>$data->barristItem->name,
-                'item_quantity'=>$data->item_quantity,
-                'item_price'=>$data->item_price,
-                'item_ct'=>$data->item_ct,
-                'item_tl'=>$data->item_tl,
-                'item_price_nvat'=>$data->item_price_nvat,
-                'vat'=>$data->vat,
-                'item_price_wvat'=>$data->item_price_wvat,
-                'item_total_amount'=>$data->item_total_amount
-                );
-
-                $factureDetail[] = $invoice_items;
-            }elseif(!empty($data->salle_id)){
-                $invoice_items = array(
-                'item_designation'=>$data->salle->name,
-                'item_quantity'=>$data->item_quantity,
-                'item_price'=>$data->item_price,
-                'item_ct'=>$data->item_ct,
-                'item_tl'=>$data->item_tl,
-                'item_price_nvat'=>$data->item_price_nvat,
-                'vat'=>$data->vat,
-                'item_price_wvat'=>$data->item_price_wvat,
-                'item_total_amount'=>$data->item_total_amount
-                );
-
-                $factureDetail[] = $invoice_items;
-            }elseif(!empty($data->service_id)){
-                $invoice_items = array(
-                'item_designation'=>$data->service->name,
-                'item_quantity'=>$data->item_quantity,
-                'item_price'=>$data->item_price,
-                'item_ct'=>$data->item_ct,
-                'item_tl'=>$data->item_tl,
-                'item_price_nvat'=>$data->item_price_nvat,
-                'vat'=>$data->vat,
-                'item_price_wvat'=>$data->item_price_wvat,
-                'item_total_amount'=>$data->item_total_amount
-                );
-
-                $factureDetail[] = $invoice_items;
-            }else{
-                $invoice_items = array(
-                'item_designation'=>$data->table->name,
-                'item_quantity'=>$data->item_quantity,
-                'item_price'=>$data->item_price,
-                'item_ct'=>$data->item_ct,
-                'item_tl'=>$data->item_tl,
-                'item_price_nvat'=>$data->item_price_nvat,
-                'vat'=>$data->vat,
-                'item_price_wvat'=>$data->item_price_wvat,
-                'item_total_amount'=>$data->item_total_amount
-                );
-
-                $factureDetail[] = $invoice_items;
-            }
-
+            throw $e;
         }
-
-
-        foreach($factures as $facture){
-        $theUrl = config('app.guzzle_test_url').'/ebms_api/addInvoice';  
-        $response = Http::withHeaders([
-        'Authorization' => 'Bearer '.$token,
-        'Accept' => 'application/json'])->post($theUrl, [
-            'invoice_number'=>$facture->invoice_number,
-            'invoice_date'=> $facture->invoice_date,
-            'tp_type'=>$facture->tp_type,
-            'tp_name'=>$facture->tp_name,
-            'tp_TIN'=>$facture->tp_TIN,
-            'tp_trade_number'=>$facture->tp_trade_number,
-            'tp_phone_number'=>$facture->tp_phone_number,
-            'tp_address_province'=>$facture->tp_address_province,
-            'tp_address_commune'=>$facture->tp_address_commune,
-            'tp_address_quartier'=>$facture->tp_address_quartier,
-            'tp_address_avenue'=>$facture->tp_address_avenue,
-            'tp_address_rue'=>$facture->tp_address_rue,
-            'vat_taxpayer'=>$facture->vat_taxpayer,
-            'ct_taxpayer'=>$facture->ct_taxpayer,
-            'tl_taxpayer'=>$facture->tl_taxpayer,
-            'tp_fiscal_center'=>$facture->tp_fiscal_center,
-            'tp_activity_sector'=>$facture->tp_activity_sector,
-            'tp_legal_form'=>$facture->tp_legal_form,
-            'payment_type'=>$facture->payment_type,
-            'customer_name'=>$facture->customer_name,
-            'customer_TIN'=>$facture->customer_TIN,
-            'customer_address'=>$facture->customer_address,
-            'invoice_signature'=> $facture->invoice_signature,
-            'invoice_currency'=> $facture->invoice_currency,
-            'cancelled_invoice_ref'=> $facture->cancelled_invoice_ref,
-            'cancelled_invoice'=> $facture->cancelled_invoice,
-            'invoice_ref'=> $facture->invoice_ref,
-            'invoice_signature_date'=> $facture->invoice_signature_date,
-            'invoice_items' => $factureDetail,
-
-        ]); 
-
-        }
-
-        $data =  json_decode($response);
-        $done = $data->success;
-        $msg = $data->msg;
-
-
-        if ($done == true) {
-            Facture::where('invoice_number', '=', $invoice_number)
-                ->update(['statut' => 1]);
-            FactureDetail::where('invoice_number', '=', $invoice_number)
-                ->update(['statut' => 1]);
-
-            return $response->json();
-        }else{
-            return $response->json();
-        }
-
-
-    */
-        
-
-
-    }
+    } 
 
     public function facture($invoice_number)
     {
@@ -3407,12 +3437,6 @@ class FactureController extends Controller
 
     }
 
-    public function transfer($invoice_number){
-        $facture = FactureDetail::where('invoice_number',$invoice_number)->first();
-        $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
-        return view('backend.pages.invoice.transfer', compact('facture','datas'));
-    }
-
     public function voirFactureAnnuler($invoice_number){
         $facture = FactureDetail::where('invoice_number',$invoice_number)->first();
         $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
@@ -3431,47 +3455,6 @@ class FactureController extends Controller
         $facture = Facture::where('invoice_number',$invoice_number)->first();
         $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
         return view('backend.pages.invoice.cancel', compact('facture','datas'));
-    }
-
-    /**
-     * facture d'avoir of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function cancelInvoice(Request  $request,$invoice_number)
-    {
-
-        
-    }
-    //ebms_api of OBR
-    public function checkTIN(Request  $request)
-    {
-        $rules = array(
-                'tp_TIN'  => 'required',
-                'token'  => 'required|min:20'
-            );
-
-            $error = Validator::make($request->all(),$rules);
-
-            if($error->fails()){
-                return response()->json([
-                    'error' => $error->errors()->all(),
-                ]);
-            }
-
-        $tp_TIN = $request->tp_TIN;
-
-        $token = $request->token;
-
-        $theUrl = config('app.guzzle_test_url').'/ebms_api/checkTIN/';
-
-        $response = Http::withHeaders([
-        'Authorization' => 'Bearer '.$token,
-        'Accept' => 'application/json'])->post($theUrl, [
-            'tp_TIN'=>$tp_TIN 
-        ]);  
-
-         return $response->json();
     }
 
     /**
@@ -3513,6 +3496,7 @@ class FactureController extends Controller
             'montant_recouvre' => 'required',
         ]);
 
+        try {DB::beginTransaction();
 
         $client_id = $request->client_id;
         $statut_paied = $request->statut_paied;
@@ -3615,12 +3599,25 @@ class FactureController extends Controller
                         'confirmed_by' => $this->user->name
                     ]);
 
-                session()->flash('success', 'Le credit  est payé avec succés');
-                return redirect()->route('admin.credit-invoices.list');
+                //session()->flash('success', 'Le credit  est payé avec succés');
+                //return redirect()->route('admin.credit-invoices.list');
             }
         }else{
             session()->flash('error', 'Le montant saisi doit etre inferieur ou egal au montant total de la facture');
             return redirect()->route('admin.credit-invoices.list');
+        }
+
+        DB::commit();
+            session()->flash('success', 'Le credit  est payé avec succés');
+            return redirect()->route('admin.credit-invoices.list');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
         }
 
         
@@ -3702,6 +3699,8 @@ class FactureController extends Controller
             $item_tl =$request->item_tl; 
 
             $employe_id = $request->employe_id;
+
+        try {DB::beginTransaction();
 
         for( $count = 0; $count < count($drink_id); $count++ )
         {
@@ -3818,8 +3817,18 @@ class FactureController extends Controller
             OrderDrinkDetail::where('order_no', '=', $facture->drink_order_no)
                 ->update(['status' => 2,'confirmed_by' => $this->user->name]);
 
+            DB::commit();
             session()->flash('success', 'Le facture est modifié avec succés!!');
             return redirect()->route('ebms_api.invoices.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
 
     }
 
@@ -3894,6 +3903,8 @@ class FactureController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to delete any invoice !');
         }
 
+        try {DB::beginTransaction();
+
         $facture = Facture::where('invoice_number',$invoice_number)->first();
         if (!is_null($facture)) {
             $facture->delete();
@@ -3911,9 +3922,18 @@ class FactureController extends Controller
             Mail::to($email)->send(new DeleteFactureMail($mailData));
         }
 
-        session()->flash('success', 'La facture est supprimée !!');
-        return back();
-    }
+        DB::commit();
+            session()->flash('success', 'La facture est supprimée !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
 
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+    }
     
 }

@@ -35,6 +35,7 @@ class CreateMaterialSmallStoreDetails extends Migration
             $table->string('threshold_quantity')->nullable(true);
             $table->boolean('verified')->default(false);
             $table->bigInteger('material_id')->unsigned()->nullable(true);
+            $table->unique('material_id');
             $table->string('created_by')->nullable(true);
             $table->string('updated_by')->nullable(true);
             $table->text('description')->nullable(true);

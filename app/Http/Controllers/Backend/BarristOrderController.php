@@ -109,6 +109,8 @@ class BarristOrderController extends Controller
                 ]);
             }
 
+            try {DB::beginTransaction();
+
             $barrist_item_id = $request->barrist_item_id;
             $date = $request->date;
             $quantity = $request->quantity;
@@ -212,8 +214,19 @@ class BarristOrderController extends Controller
             $table->waiter_name = $waiter_name;
             $table->save();
 
-        session()->flash('success', 'Order has been sent successfuly!!');
-        return redirect()->route('admin.barrist-orders.index',$table_id);
+            DB::commit();
+            session()->flash('success', 'Order has been sent successfuly!!');
+            return redirect()->route('admin.barrist-orders.index',$table_id);
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     /**
@@ -270,13 +283,27 @@ class BarristOrderController extends Controller
        if (is_null($this->user) || !$this->user->can('drink_order_client.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any order !');
         }
-            BarristOrder::where('order_no', '=', $order_no)
+
+        try {DB::beginTransaction();
+          BarristOrder::where('order_no', '=', $order_no)
                 ->update(['status' => 1]);
             BarristOrderDetail::where('order_no', '=', $order_no)
                 ->update(['status' => 1]);
 
-        session()->flash('success', 'order has been validated !!');
-        return back();
+            DB::commit();
+            session()->flash('success', 'order has been validated !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
+        
     }
 
     public function voirCommandeRejeter($order_no)
@@ -302,6 +329,8 @@ class BarristOrderController extends Controller
             'rej_motif' => 'required|min:10|max:490',
             'table_id' => 'required'
         ]);
+
+        try {DB::beginTransaction();
 
         $table_id = $request->table_id;
 
@@ -329,8 +358,19 @@ class BarristOrderController extends Controller
             Table::where('id',$table_id)->update(['total_amount_paying' => $total_amount_remaining]);
         }
 
-        session()->flash('success', 'Order has been rejected !!');
-        return redirect()->route('admin.barrist-orders.index',$table_id);
+            DB::commit();
+            session()->flash('success', 'Order has been rejected !!');
+            return redirect()->route('admin.barrist-orders.index',$table_id);
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function reset($order_no)
@@ -339,13 +379,26 @@ class BarristOrderController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to reset any order !');
         }
 
+        try {DB::beginTransaction();
+
         BarristOrder::where('order_no', '=', $order_no)
                 ->update(['status' => -2]);
         BarristOrderDetail::where('order_no', '=', $order_no)
                 ->update(['status' => -2]);
 
-        session()->flash('success', 'Order has been reseted !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Order has been reseted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function htmlPdf($order_no)
@@ -409,13 +462,25 @@ class BarristOrderController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to delete any order !');
         }
 
+        try {DB::beginTransaction();
+
         $order = BarristOrder::where('order_no',$order_no)->first();
         if (!is_null($order)) {
             $order->delete();
             BarristOrderDetail::where('order_no',$order_no)->delete();
         }
+        DB::commit();
+            session()->flash('success', 'Order has been deleted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
 
-        session()->flash('success', 'Order has been deleted !!');
-        return back();
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 }
+

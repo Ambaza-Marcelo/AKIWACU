@@ -80,6 +80,8 @@ class DrinkBigStoreController extends Controller
         ]);
 
         // Create New store
+        try {DB::beginTransaction();
+
         $drink_big_store = new DrinkBigStore();
         $drink_big_store->name = $request->name;
         $reference = strtoupper(substr($request->name, 0, 3));
@@ -99,8 +101,20 @@ class DrinkBigStoreController extends Controller
         $drink_big_store_detail->manager = $drink_big_store->manager;
         $drink_big_store_detail->created_by = $this->user->name;
         $drink_big_store_detail->save();
-        session()->flash('success', 'Drink Big Store has been created !!');
-        return redirect()->route('admin.drink-big-store.index');
+
+            DB::commit();
+            session()->flash('success', 'Drink Big Store has been created !!');
+            return redirect()->route('admin.drink-big-store.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     /**
@@ -185,6 +199,7 @@ class DrinkBigStoreController extends Controller
             'emplacement' => 'required',
         ]);
 
+        try {DB::beginTransaction();
 
         $drink_big_store->name = $request->name;
         $drink_big_store->emplacement = $request->emplacement;
@@ -198,8 +213,19 @@ class DrinkBigStoreController extends Controller
         $drink_big_store_detail->created_by = $this->user->name;
         $drink_big_store_detail->save();
 
-        session()->flash('success', 'Drink Big Store has been updated !!');
-        return redirect()->route('admin.drink-big-store.index');
+            DB::commit();
+            session()->flash('success', 'Drink Big Store has been updated !!');
+            return redirect()->route('admin.drink-big-store.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function exportToExcel(Request $request,$code)

@@ -105,6 +105,8 @@ class DrinkExtraBigStoreInventoryController extends Controller
                 ]);
             }
 
+            try {DB::beginTransaction();
+
             $drink_id = $request->drink_id;
             $date = $request->date;
             $unit = $request->unit;
@@ -175,9 +177,20 @@ class DrinkExtraBigStoreInventoryController extends Controller
             $inventory->description = $description;
             $inventory->created_by = $created_by;
             $inventory->save();
+
+            DB::commit();
+            session()->flash('success', 'Inventory has been created !!');
+            return redirect()->route('admin.drink-extra-big-store-inventory.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
          
-        session()->flash('success', 'Inventory has been created !!');
-        return redirect()->route('admin.drink-extra-big-store-inventory.index');
     }
 
     public function referenceInventaire()
@@ -284,6 +297,8 @@ class DrinkExtraBigStoreInventoryController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to validate any inventory !');
         }
 
+        try {DB::beginTransaction();
+
         $datas = DrinkExtraBigStoreInventoryDetail::where('inventory_no', $inventory_no)->get();
 
         foreach($datas as $data){
@@ -335,8 +350,19 @@ class DrinkExtraBigStoreInventoryController extends Controller
             DrinkExtraBigStoreInventoryDetail::where('inventory_no', '=', $inventory_no)
                 ->update(['status' => 2,'validated_by' => $this->user->name]);
 
-        session()->flash('success', 'inventory has been validated !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'inventory has been validated !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function rejectInventory($inventory_no)
@@ -344,13 +370,26 @@ class DrinkExtraBigStoreInventoryController extends Controller
        if (is_null($this->user) || !$this->user->can('drink_extra_big_inventory.reject')) {
             abort(403, 'Sorry !! You are Unauthorized to reject any inventory !');
         }
+
+        try {DB::beginTransaction();
             DrinkExtraBigStoreInventory::where('inventory_no', '=', $inventory_no)
                 ->update(['status' => 1,'rejected_by' => $this->user->name]);
              DrinkExtraBigStoreInventoryDetail::where('inventory_no', '=', $inventory_no)
                 ->update(['status' => 1,'rejected_by' => $this->user->name]);
 
-        session()->flash('success', 'inventory has been rejected !!');
-        return back();
+                DB::commit();
+            session()->flash('success', 'inventory has been rejected !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function resetInventory($inventory_no)
@@ -358,13 +397,25 @@ class DrinkExtraBigStoreInventoryController extends Controller
        if (is_null($this->user) || !$this->user->can('drink_extra_big_inventory.reset')) {
             abort(403, 'Sorry !! You are Unauthorized to reset any inventory !');
         }
+
+        try {DB::beginTransaction();
             DrinkExtraBigStoreInventory::where('inventory_no', '=', $inventory_no)
                 ->update(['status' => 0,'reseted_by' => $this->user->name]);
                 DrinkExtraBigStoreInventoryDetail::where('inventory_no', '=', $inventory_no)
                 ->update(['status' => 0,'reseted_by' => $this->user->name]);
 
-        session()->flash('success', 'inventory has been reseted !!');
-        return back();
+                DB::commit();
+            session()->flash('success', 'inventory has been reseted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     /**
@@ -378,6 +429,8 @@ class DrinkExtraBigStoreInventoryController extends Controller
         if (is_null($this->user) || !$this->user->can('drink_extra_big_inventory.delete')) {
             abort(403, 'Sorry !! You are Unauthorized to delete any inventory !');
         }
+
+        try {DB::beginTransaction();
 
         $inventory = DrinkExtraBigStoreInventory::where('inventory_no', $inventory_no)->first();
         if (!is_null($inventory)) {
@@ -396,7 +449,17 @@ class DrinkExtraBigStoreInventoryController extends Controller
             Mail::to($email)->send(new DeleteInventoryMail($mailData));
         }
 
-        session()->flash('success', 'Inventory has been deleted !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Inventory has been deleted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 }

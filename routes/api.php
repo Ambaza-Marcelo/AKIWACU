@@ -14,6 +14,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+ Route::post('akwacu-api/getMenuKitchen', 'ApiController@getMenuKitchen')->name('akiwacu_api.getMenuKitchen');
+ Route::post('akwacu-api/getMenuDrink', 'ApiController@getMenuDrink')->name('akiwacu_api.getMenuDrink');
+ Route::post('akwacu-api/getMenuBarrista', 'ApiController@getMenuBarrista')->name('akiwacu_api.getMenuBarrista');
+ Route::post('akwacu-api/getMenuBartender', 'ApiController@getMenuBartender')->name('akiwacu_api.getMenuBartender');
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
  });
