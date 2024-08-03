@@ -79,6 +79,9 @@ class MaterialBigStoreController extends Controller
         ]);
 
         // Create New store
+
+        try {DB::beginTransaction();
+
         $material_big_store = new MaterialBigStore();
         $material_big_store->name = $request->name;
         $reference = strtoupper(substr($request->name, 0, 3));
@@ -98,8 +101,20 @@ class MaterialBigStoreController extends Controller
         $material_big_store_detail->manager = $request->manager;
         $material_big_store_detail->created_by = $this->user->name;
         $material_big_store_detail->save();
-        session()->flash('success', 'Material Big Store has been created !!');
-        return redirect()->route('admin.material-big-store.index');
+
+        DB::commit();
+            session()->flash('success', 'Material Big Store has been created !!');
+            return redirect()->route('admin.material-big-store.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+        
     }
 
     /**
@@ -182,6 +197,8 @@ class MaterialBigStoreController extends Controller
             'emplacement' => 'required',
         ]);
 
+        try {DB::beginTransaction();
+
 
         $material_big_store->name = $request->name;
         $material_big_store->emplacement = $request->emplacement;
@@ -195,8 +212,19 @@ class MaterialBigStoreController extends Controller
         $material_big_store_detail->created_by = $this->user->name;
         $material_big_store_detail->save();
 
-        session()->flash('success', 'Material Big Store has been updated !!');
-        return redirect()->route('admin.material-big-store.index');
+        DB::commit();
+            session()->flash('success', 'Material Big Store has been updated !!');
+            return redirect()->route('admin.material-big-store.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
 

@@ -113,6 +113,8 @@ class OrderKitchenController extends Controller
                 ]);
             }
 
+            try {DB::beginTransaction();
+
             $food_item_id = $request->food_item_id;
             $date = $request->date;
             $quantity = $request->quantity;
@@ -203,8 +205,18 @@ class OrderKitchenController extends Controller
             $table->waiter_name = $waiter_name;
             $table->save();
 
-        session()->flash('success', 'Order has been sent successfuly!!');
-        return redirect()->route('admin.order_kitchens.index',$table_id);
+            DB::commit();
+            session()->flash('success', 'Order has been sent successfuly!!');
+            return redirect()->route('admin.order_kitchens.index',$table_id);
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     /**
@@ -283,6 +295,8 @@ class OrderKitchenController extends Controller
                 ]);
             }
 
+            try {DB::beginTransaction();
+
             $food_item_id = $request->food_item_id;
             $date = $request->date;
             $quantity = $request->quantity;
@@ -339,8 +353,19 @@ class OrderKitchenController extends Controller
             OrderKitchenDetail::insert($insert_data);
             AccompagnementDetail::insert($insert_accompagnement_data);
 
-        session()->flash('success', 'Order has been updated successfuly!!');
-        return redirect()->route('admin.order_kitchens.index');
+        DB::commit();
+            session()->flash('success', 'Order has been updated successfuly!!');
+            return redirect()->route('admin.order_kitchens.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function validateCommand($order_no)
@@ -348,13 +373,26 @@ class OrderKitchenController extends Controller
        if (is_null($this->user) || !$this->user->can('food_order_client.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any order !');
         }
+
+        try {DB::beginTransaction();
+
             OrderKitchen::where('order_no', '=', $order_no)
                 ->update(['status' => 1]);
             OrderKitchenDetail::where('order_no', '=', $order_no)
                 ->update(['status' => 1]);
 
-        session()->flash('success', 'order has been validated !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'order has been validated !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     public function reject(Request $request,$order_no)
@@ -367,6 +405,8 @@ class OrderKitchenController extends Controller
             'rej_motif' => 'required|min:10|max:490',
             'table_id' => 'required'
         ]);
+
+        try {DB::beginTransaction();
 
         $table_id = $request->table_id;
 
@@ -394,8 +434,19 @@ class OrderKitchenController extends Controller
             Table::where('id',$table_id)->update(['total_amount_paying' => $total_amount_remaining]);
         }
 
-        session()->flash('success', 'Order has been rejected !!');
-        return redirect()->route('admin.order_kitchens.index',$table_id);
+        DB::commit();
+            session()->flash('success', 'Order has been rejected !!');
+            return redirect()->route('admin.order_kitchens.index',$table_id);
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function reset($order_no)
@@ -404,13 +455,26 @@ class OrderKitchenController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to reset any order !');
         }
 
+        try {DB::beginTransaction();
+
         OrderKitchen::where('order_no', '=', $order_no)
                 ->update(['status' => 0]);
         OrderKitchenDetail::where('order_no', '=', $order_no)
                 ->update(['status' => 0]);
 
-        session()->flash('success', 'Order has been reseted !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Order has been reseted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
 
@@ -476,13 +540,25 @@ class OrderKitchenController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to delete any order !');
         }
 
+        try {DB::beginTransaction();
+
         $order = OrderKitchen::where('order_no',$order_no)->first();
         if (!is_null($order)) {
             $order->delete();
             OrderKitchenDetail::where('order_no',$order_no)->delete();
         }
 
-        session()->flash('success', 'Order has been deleted !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Order has been deleted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 }

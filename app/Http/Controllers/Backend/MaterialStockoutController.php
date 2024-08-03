@@ -136,6 +136,8 @@ class MaterialStockoutController extends Controller
                 ]);
             }
 
+            try {DB::beginTransaction();
+
             $material_id = $request->material_id;
             $date = $request->date;
             $asker = $request->asker;
@@ -209,9 +211,20 @@ class MaterialStockoutController extends Controller
             $stockout->status = 1;
             $stockout->description = $description;
             $stockout->save();
+
+            DB::commit();
+            session()->flash('success', 'stockout has been created !!');
+            return redirect()->route('admin.material-stockouts.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
             
-        session()->flash('success', 'stockout has been created !!');
-        return redirect()->route('admin.material-stockouts.index');
     }
 
     public function storeFromBig(Request $request)
@@ -239,6 +252,8 @@ class MaterialStockoutController extends Controller
                     'error' => $error->errors()->all(),
                 ]);
             }
+
+            try {DB::beginTransaction();
 
             $material_id = $request->material_id;
             $date = $request->date;
@@ -313,9 +328,20 @@ class MaterialStockoutController extends Controller
             $stockout->status = 1;
             $stockout->description = $description;
             $stockout->save();
+
+            DB::commit();
+            session()->flash('success', 'stockout has been created !!');
+            return redirect()->route('admin.material-stockouts.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
             
-        session()->flash('success', 'stockout has been created !!');
-        return redirect()->route('admin.material-stockouts.index');
     }
 
 
@@ -344,6 +370,8 @@ class MaterialStockoutController extends Controller
                     'error' => $error->errors()->all(),
                 ]);
             }
+
+            try {DB::beginTransaction();
 
             $material_id = $request->material_id;
             $date = $request->date;
@@ -418,9 +446,20 @@ class MaterialStockoutController extends Controller
             $stockout->status = 1;
             $stockout->description = $description;
             $stockout->save();
+
+            DB::commit();
+            session()->flash('success', 'stockout has been created !!');
+            return redirect()->route('admin.material-stockouts.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
             
-        session()->flash('success', 'stockout has been created !!');
-        return redirect()->route('admin.material-stockouts.index');
     }
 
 
@@ -498,13 +537,26 @@ class MaterialStockoutController extends Controller
        if (is_null($this->user) || !$this->user->can('material_stockout.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any stockout !');
         }
+
+        try {DB::beginTransaction();
+
             MaterialStockout::where('stockout_no', '=', $stockout_no)
                 ->update(['status' => 2,'validated_by' => $this->user->name]);
             MaterialStockoutDetail::where('stockout_no', '=', $stockout_no)
                 ->update(['status' => 2,'validated_by' => $this->user->name]);
 
-        session()->flash('success', 'stockout has been validated !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'stockout has been validated !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     public function reject($stockout_no)
@@ -513,13 +565,26 @@ class MaterialStockoutController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to reject any stockout !');
         }
 
+        try {DB::beginTransaction();
+
         MaterialStockout::where('stockout_no', '=', $stockout_no)
                 ->update(['status' => -1,'rejected_by' => $this->user->name]);
         MaterialStockoutDetail::where('stockout_no', '=', $stockout_no)
                 ->update(['status' => -1,'rejected_by' => $this->user->name]);
 
-        session()->flash('success', 'Stockout has been rejected !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Stockout has been rejected !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function reset($stockout_no)
@@ -528,13 +593,25 @@ class MaterialStockoutController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to reset any stockout !');
         }
 
+        try {DB::beginTransaction();
+
         MaterialStockout::where('stockout_no', '=', $stockout_no)
                 ->update(['status' => 1,'reseted_by' => $this->user->name]);
         MaterialStockoutDetail::where('stockout_no', '=', $stockout_no)
                 ->update(['status' => 1,'reseted_by' => $this->user->name]);
 
-        session()->flash('success', 'Stockout has been reseted !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Stockout has been reseted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     public function confirm($stockout_no)
@@ -543,13 +620,26 @@ class MaterialStockoutController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to confirm any stockout !');
         }
 
+        try {DB::beginTransaction();
+
         MaterialStockout::where('stockout_no', '=', $stockout_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
             MaterialStockoutDetail::where('stockout_no', '=', $stockout_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
 
-        session()->flash('success', 'Stockout has been confirmed !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Stockout has been confirmed !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function approuve($stockout_no)
@@ -558,6 +648,7 @@ class MaterialStockoutController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to confirm any stockout !');
         }
 
+        try {DB::beginTransaction();
 
         $datas = MaterialStockoutDetail::where('stockout_no', $stockout_no)->get();
         $data = MaterialStockoutDetail::where('stockout_no', $stockout_no)->first();
@@ -638,11 +729,22 @@ class MaterialStockoutController extends Controller
                             }
                         }
 
-                        MaterialBigStoreDetail::where('material_id','!=','')->update(['verified' => false]);
-                        MaterialSmallStoreDetail::where('material_id','!=','')->update(['verified' => false]);
-                        MaterialExtraBigStoreDetail::where('material_id','!=','')->update(['verified' => false]);
-                        session()->flash('error', $this->user->name.' ,Why do you want to stockout a quantity you do not have in your store?please rewrite a valid quantity!');
-                        return redirect()->back();
+                        DB::commit();
+                            MaterialBigStoreDetail::where('material_id','!=','')->update(['verified' => false]);
+                            MaterialSmallStoreDetail::where('material_id','!=','')->update(['verified' => false]);
+                            MaterialExtraBigStoreDetail::where('material_id','!=','')->update(['verified' => false]);
+                            session()->flash('error', $this->user->name.' ,Why do you want to stockout a quantity you do not have in your store?please rewrite a valid quantity!');
+                            return redirect()->back();
+                        } catch (\Exception $e) {
+                        // An error occured; cancel the transaction...
+
+                            DB::rollback();
+
+                            // and throw the error again.
+
+                            throw $e;
+                        }
+
                     }
 
 
@@ -830,13 +932,19 @@ class MaterialStockoutController extends Controller
         MaterialStockoutDetail::where('stockout_no', '=', $stockout_no)
                     ->update(['status' => 4,'approuved_by' => $this->user->name]);
 
-        session()->flash('success', 'Stockout has been done successfuly !, from '.$code_store_origin);
-                return back();
-    }
+        DB::commit();
+            session()->flash('success', 'Stockout has been done successfuly !, from '.$code_store_origin);
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
 
-    public function get_reception_data()
-    {
-        return Excel::download(new ReceptionExport, 'stockouts.xlsx');
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
 
@@ -852,13 +960,25 @@ class MaterialStockoutController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to delete any stockout !');
         }
 
+        try {DB::beginTransaction();
+
         $stockout = MaterialStockout::where('stockout_no',$stockout_no)->first();
         if (!is_null($stockout)) {
             $stockout->delete();
             MaterialStockoutDetail::where('stockout_no',$stockout_no)->delete();
         }
 
-        session()->flash('success', 'Stockout has been deleted !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Stockout has been deleted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 }

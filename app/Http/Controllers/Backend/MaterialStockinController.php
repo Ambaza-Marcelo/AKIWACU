@@ -138,6 +138,8 @@ class MaterialStockinController extends Controller
                 ]);
             }
 
+            try {DB::beginTransaction();
+
             $material_id = $request->material_id;
             $date = $request->date;
             $invoice_currency = $request->invoice_currency;
@@ -208,9 +210,20 @@ class MaterialStockinController extends Controller
             $stockin->status = 1;
             $stockin->description = $description;
             $stockin->save();
+
+            DB::commit();
+            session()->flash('success', 'stockin has been created !!');
+            return redirect()->route('admin.material-stockins.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
             
-        session()->flash('success', 'stockin has been created !!');
-        return redirect()->route('admin.material-stockins.index');
     }
 
     public function storeFromBig(Request $request)
@@ -240,6 +253,8 @@ class MaterialStockinController extends Controller
                     'error' => $error->errors()->all(),
                 ]);
             }
+
+            try {DB::beginTransaction();
 
             $material_id = $request->material_id;
             $date = $request->date;
@@ -311,9 +326,20 @@ class MaterialStockinController extends Controller
             $stockin->status = 1;
             $stockin->description = $description;
             $stockin->save();
-            
-        session()->flash('success', 'stockin has been created !!');
-        return redirect()->route('admin.material-stockins.index');
+
+            DB::commit();
+            session()->flash('success', 'stockin has been created !!');
+            return redirect()->route('admin.material-stockins.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+        
     }
 
 
@@ -344,6 +370,8 @@ class MaterialStockinController extends Controller
                     'error' => $error->errors()->all(),
                 ]);
             }
+
+            try {DB::beginTransaction();
 
             $material_id = $request->material_id;
             $date = $request->date;
@@ -415,9 +443,20 @@ class MaterialStockinController extends Controller
             $stockin->status = 1;
             $stockin->description = $description;
             $stockin->save();
+
+            DB::commit();
+            session()->flash('success', 'stockin has been created !!');
+            return redirect()->route('admin.material-stockins.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
             
-        session()->flash('success', 'stockin has been created !!');
-        return redirect()->route('admin.material-stockins.index');
     }
 
     /**
@@ -494,13 +533,26 @@ class MaterialStockinController extends Controller
        if (is_null($this->user) || !$this->user->can('material_stockin.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any stockin !');
         }
+
+        try {DB::beginTransaction();
+
             MaterialStockin::where('stockin_no', '=', $stockin_no)
                 ->update(['status' => 2,'validated_by' => $this->user->name]);
             MaterialStockinDetail::where('stockin_no', '=', $stockin_no)
                 ->update(['status' => 2,'validated_by' => $this->user->name]);
 
-        session()->flash('success', 'stockin has been validated !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'stockin has been validated !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     public function reject($stockin_no)
@@ -509,13 +561,25 @@ class MaterialStockinController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to reject any stockin !');
         }
 
+        try {DB::beginTransaction();
+
         MaterialStockin::where('stockin_no', '=', $stockin_no)
                 ->update(['status' => -1,'rejected_by' => $this->user->name]);
         MaterialStockinDetail::where('stockin_no', '=', $stockin_no)
                 ->update(['status' => -1,'rejected_by' => $this->user->name]);
 
-        session()->flash('success', 'Stockin has been rejected !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Stockin has been rejected !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     public function reset($stockin_no)
@@ -524,13 +588,25 @@ class MaterialStockinController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to reset any stockin !');
         }
 
+        try {DB::beginTransaction();
+
         MaterialStockin::where('stockin_no', '=', $stockin_no)
                 ->update(['status' => 1,'reseted_by' => $this->user->name]);
         MaterialStockinDetail::where('stockin_no', '=', $stockin_no)
                 ->update(['status' => 1,'reseted_by' => $this->user->name]);
 
-        session()->flash('success', 'Stockin has been reseted !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Stockin has been reseted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     public function confirm($stockin_no)
@@ -539,13 +615,25 @@ class MaterialStockinController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to confirm any stockin !');
         }
 
+        try {DB::beginTransaction();
+
         MaterialStockin::where('stockin_no', '=', $stockin_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
             MaterialStockinDetail::where('stockin_no', '=', $stockin_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
 
-        session()->flash('success', 'Stockin has been confirmed !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Stockin has been confirmed !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     public function approuve($stockin_no)
@@ -554,6 +642,7 @@ class MaterialStockinController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to confirm any stockin !');
         }
 
+        try {DB::beginTransaction();
 
         $datas = MaterialStockinDetail::where('stockin_no', $stockin_no)->get();
 
@@ -762,19 +851,23 @@ class MaterialStockinController extends Controller
         */
         MaterialStockin::where('stockin_no', '=', $stockin_no)
                         ->update(['status' => 4,'approuved_by' => $this->user->name]);
-                    MaterialStockinDetail::where('stockin_no', '=', $stockin_no)
+        MaterialStockinDetail::where('stockin_no', '=', $stockin_no)
                         ->update(['status' => 4,'approuved_by' => $this->user->name]);
 
-                    session()->flash('success', 'Stockin has been done successfuly !, to '.$code_store_destination);
-                    return back();
+        DB::commit();
+            session()->flash('success', 'Stockin has been done successfuly !, to '.$code_store_destination);
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
 
     }
-
-    public function get_reception_data()
-    {
-        return Excel::download(new ReceptionExport, 'stockins.xlsx');
-    }
-
 
     /**
      * Remove the specified resource from storage.
@@ -788,13 +881,25 @@ class MaterialStockinController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to delete any stockin !');
         }
 
+        try {DB::beginTransaction();
+
         $stockin = MaterialStockin::where('stockin_no',$stockin_no)->first();
         if (!is_null($stockin)) {
             $stockin->delete();
             MaterialStockinDetail::where('stockin_no',$stockin_no)->delete();
         }
 
-        session()->flash('success', 'Stockin has been deleted !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Stockin has been deleted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 }

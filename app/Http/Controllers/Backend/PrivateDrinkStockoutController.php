@@ -98,6 +98,8 @@ class PrivateDrinkStockoutController extends Controller
                 ]);
             }
 
+            try {DB::beginTransaction();
+
             $private_store_item_id = $request->private_store_item_id;
             $date = $request->date;
             $invoice_currency = $request->invoice_currency;
@@ -171,9 +173,20 @@ class PrivateDrinkStockoutController extends Controller
             $stockout->status = 1;
             $stockout->description = $description;
             $stockout->save();
+
+            DB::commit();
+            session()->flash('success', 'stockout has been created !!');
+            return redirect()->route('admin.private-drink-stockouts.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
             
-        session()->flash('success', 'stockout has been created !!');
-        return redirect()->route('admin.private-drink-stockouts.index');
     }
 
     /**
@@ -219,13 +232,27 @@ class PrivateDrinkStockoutController extends Controller
        if (is_null($this->user) || !$this->user->can('private_drink_stockout.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any stockout !');
         }
+
+        try {DB::beginTransaction();
+
             PrivateDrinkStockout::where('stockout_no', '=', $stockout_no)
                 ->update(['status' => 2,'validated_by' => $this->user->name]);
             PrivateDrinkStockoutDetail::where('stockout_no', '=', $stockout_no)
                 ->update(['status' => 2,'validated_by' => $this->user->name]);
 
-        session()->flash('success', 'stockout has been validated !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'stockout has been validated !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function reject($stockout_no)
@@ -234,13 +261,26 @@ class PrivateDrinkStockoutController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to reject any stockout !');
         }
 
+        try {DB::beginTransaction();
+
         PrivateDrinkStockout::where('stockout_no', '=', $stockout_no)
                 ->update(['status' => -1,'rejected_by' => $this->user->name]);
         PrivateDrinkStockoutDetail::where('stockout_no', '=', $stockout_no)
                 ->update(['status' => -1,'rejected_by' => $this->user->name]);
 
-        session()->flash('success', 'Stockout has been rejected !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Stockout has been rejected !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function reset($stockout_no)
@@ -249,13 +289,26 @@ class PrivateDrinkStockoutController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to reset any stockout !');
         }
 
+        try {DB::beginTransaction();
+
         PrivateDrinkStockout::where('stockout_no', '=', $stockout_no)
                 ->update(['status' => 1,'reseted_by' => $this->user->name]);
         PrivateDrinkStockoutDetail::where('stockout_no', '=', $stockout_no)
                 ->update(['status' => 1,'reseted_by' => $this->user->name]);
 
-        session()->flash('success', 'Stockout has been reseted !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Stockout has been reseted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function confirm($stockout_no)
@@ -264,13 +317,26 @@ class PrivateDrinkStockoutController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to confirm any stockout !');
         }
 
+        try {DB::beginTransaction();
+
         PrivateDrinkStockout::where('stockout_no', '=', $stockout_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
             PrivateDrinkStockoutDetail::where('stockout_no', '=', $stockout_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
 
-        session()->flash('success', 'Stockout has been confirmed !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Stockout has been confirmed !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function approuve($stockout_no)
@@ -278,6 +344,9 @@ class PrivateDrinkStockoutController extends Controller
        if (is_null($this->user) || !$this->user->can('private_drink_stockout.approuve')) {
             abort(403, 'Sorry !! You are Unauthorized to confirm any stockout !');
         }
+
+
+        try {DB::beginTransaction();
 
 
         $datas = PrivateDrinkStockoutDetail::where('stockout_no', $stockout_no)->get();
@@ -376,8 +445,18 @@ class PrivateDrinkStockoutController extends Controller
             Mail::to($email3)->send(new PrivateStockoutMail($mailData));
             //Mail::to($email4)->send(new PrivateStockoutMail($mailData));
 
-        session()->flash('success', 'Stockout has been done successfuly !');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Stockout has been done successfuly !');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
 
 
     }
@@ -400,13 +479,25 @@ class PrivateDrinkStockoutController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to delete any stockout !');
         }
 
+        try {DB::beginTransaction();
+
         $stockout = PrivateDrinkStockout::where('stockout_no',$stockout_no)->first();
         if (!is_null($stockout)) {
             $stockout->delete();
             PrivateDrinkStockoutDetail::where('stockout_no',$stockout_no)->delete();
         }
 
-        session()->flash('success', 'Stockout has been deleted !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Stockout has been deleted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 }

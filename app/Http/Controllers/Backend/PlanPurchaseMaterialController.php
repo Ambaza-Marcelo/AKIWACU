@@ -90,6 +90,9 @@ class PlanPurchaseMaterialController extends Controller
                 ]);
             }
 
+
+            try {DB::beginTransaction();
+
             $material_id = $request->material_id;
             $start_date = $request->start_date;
             $end_date = $request->end_date;
@@ -139,8 +142,18 @@ class PlanPurchaseMaterialController extends Controller
 
             PlanPurchaseMaterialDetail::insert($insert_data);
 
-        session()->flash('success', 'plan has been created !!');
-        return redirect()->route('admin.plan-purchase-materials.index');
+        DB::commit();
+            session()->flash('success', 'plan has been created !!');
+            return redirect()->route('admin.plan-purchase-materials.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     /**
@@ -209,6 +222,8 @@ class PlanPurchaseMaterialController extends Controller
                 ]);
             }
 
+            try {DB::beginTransaction();
+
             $material_id = $request->material_id;
             $start_date = $request->start_date;
             $end_date = $request->end_date;
@@ -249,8 +264,18 @@ class PlanPurchaseMaterialController extends Controller
 
             PlanPurchaseMaterialDetail::insert($insert_data);
 
-        session()->flash('success', 'Plan has been updated successfuly !!');
-        return redirect()->route('admin.plan-purchase-materials.index');
+        DB::commit();
+            session()->flash('success', 'Plan has been updated successfuly !!');
+            return redirect()->route('admin.plan-purchase-materials.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
 
     }
 
@@ -259,13 +284,27 @@ class PlanPurchaseMaterialController extends Controller
        if (is_null($this->user) || !$this->user->can('material_purchase.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any plan !');
         }
+
+        try {DB::beginTransaction();
+
             PlanPurchaseMaterial::where('plan_no', '=', $plan_no)
                 ->update(['status' => 1,'validated_by' => $this->user->name]);
             PlanPurchaseMaterialDetail::where('plan_no', '=', $plan_no)
                 ->update(['status' => 1,'validated_by' => $this->user->name]);
 
-        session()->flash('success', 'Plan has been validated !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Plan has been validated !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function reject(Request $request,$plan_no)
@@ -282,13 +321,26 @@ class PlanPurchaseMaterialController extends Controller
 
         $rejected_motif = $request->rejected_motif;
 
+        try {DB::beginTransaction();
+
         PlanPurchaseMaterial::where('plan_no', '=', $plan_no)
                 ->update(['status' => -1,'rejected_motif' => $rejected_motif,'rejected_by' => $this->user->name]);
             PlanPurchaseMaterialDetail::where('plan_no', '=', $plan_no)
                 ->update(['status' => -1,'rejected_motif' => $rejected_motif,'rejected_by' => $this->user->name]);
 
-        session()->flash('success', 'Plan has been rejected !!');
-        return back();
+
+        DB::commit();
+            session()->flash('success', 'Plan has been rejected !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     public function reset($plan_no)
@@ -297,13 +349,25 @@ class PlanPurchaseMaterialController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to reset any plan !');
         }
 
+        try {DB::beginTransaction();
+
         PlanPurchaseMaterial::where('plan_no', '=', $plan_no)
                 ->update(['status' => 0,'reseted_by' => $this->user->name]);
             PlanPurchaseMaterialDetail::where('plan_no', '=', $plan_no)
                 ->update(['status' => 0,'reseted_by' => $this->user->name]);
 
-        session()->flash('success', 'Plan has been reseted !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Plan has been reseted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     public function confirm($plan_no)
@@ -327,13 +391,25 @@ class PlanPurchaseMaterialController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to confirm any plan !');
         }
 
+        try {DB::beginTransaction();
+
         PlanPurchaseMaterial::where('plan_no', '=', $plan_no)
                 ->update(['status' => 3,'approuved_by' => $this->user->name]);
             PlanPurchaseMaterialDetail::where('plan_no', '=', $plan_no)
                 ->update(['status' => 3,'approuved_by' => $this->user->name]);
 
-        session()->flash('success', 'Plan has been confirmed !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Plan has been confirmed !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     public function fichePlan($plan_no)
@@ -377,13 +453,25 @@ class PlanPurchaseMaterialController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to delete any plan !');
         }
 
+        try {DB::beginTransaction();
+
         $plan = PlanPurchaseMaterial::where('plan_no',$plan_no)->first();
         if (!is_null($plan)) {
             $plan->delete();
             PlanPurchaseMaterialDetail::where('plan_no',$plan_no)->delete();
         }
 
-        session()->flash('success', 'Plan has been deleted !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Plan has been deleted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 }

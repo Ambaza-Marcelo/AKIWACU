@@ -119,6 +119,7 @@ class OrderDrinkController extends Controller
                 ]);
             }
 
+            try {DB::beginTransaction();
 
             $drink_id = $request->drink_id;
             $date = $request->date;
@@ -208,8 +209,19 @@ class OrderDrinkController extends Controller
             $table->waiter_name = $waiter_name;
             $table->save();
 
-        session()->flash('success', 'Order has been sent successfuly!!');
-        return redirect()->route('admin.order_drinks.index',$table_id);
+            DB::commit();
+            session()->flash('success', 'Order has been sent successfuly!!');
+            return redirect()->route('admin.order_drinks.index',$table_id);
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     /**
@@ -286,6 +298,8 @@ class OrderDrinkController extends Controller
                 ]);
             }
 
+            try {DB::beginTransaction();
+
             $drink_id = $request->drink_id;
             $date = $request->date;
             $quantity = $request->quantity;
@@ -327,8 +341,18 @@ class OrderDrinkController extends Controller
 
         OrderDrinkDetail::insert($insert_data);
 
-        session()->flash('success', 'Order has been updated successfuly!!');
-        return redirect()->route('admin.order_drinks.index');
+        DB::commit();
+            session()->flash('success', 'Order has been updated successfuly!!');
+            return redirect()->route('admin.order_drinks.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     public function validateCommand($order_no)
@@ -336,13 +360,26 @@ class OrderDrinkController extends Controller
        if (is_null($this->user) || !$this->user->can('drink_order_client.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any order !');
         }
+
+        try {DB::beginTransaction();
+
             OrderDrink::where('order_no', '=', $order_no)
                 ->update(['status' => 1]);
             OrderDrinkDetail::where('order_no', '=', $order_no)
                 ->update(['status' => 1]);
 
-        session()->flash('success', 'order has been validated !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'order has been validated !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     public function reject(Request $request,$order_no)
@@ -355,6 +392,8 @@ class OrderDrinkController extends Controller
             'rej_motif' => 'required|min:10|max:490',
             'table_id' => 'required'
         ]);
+
+        try {DB::beginTransaction();
 
         $table_id = $request->table_id;
 
@@ -382,8 +421,18 @@ class OrderDrinkController extends Controller
             Table::where('id',$table_id)->update(['total_amount_paying' => $total_amount_remaining]);
         }
 
-        session()->flash('success', 'Order has been rejected !!');
-        return redirect()->route('admin.order_drinks.index',$table_id);
+        DB::commit();
+            session()->flash('success', 'Order has been rejected !!');
+            return redirect()->route('admin.order_drinks.index',$table_id);
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     public function reset($order_no)
@@ -392,13 +441,26 @@ class OrderDrinkController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to reset any order !');
         }
 
+        try {DB::beginTransaction();
+
         OrderDrink::where('order_no', '=', $order_no)
                 ->update(['status' => -2]);
         OrderDrinkDetail::where('order_no', '=', $order_no)
                 ->update(['status' => -2]);
 
-        session()->flash('success', 'Order has been reseted !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Order has been reseted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function htmlPdf($order_no)
@@ -460,13 +522,25 @@ class OrderDrinkController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to delete any order !');
         }
 
+        try {DB::beginTransaction();
+
         $order = OrderDrink::where('order_no',$order_no)->first();
         if (!is_null($order)) {
             $order->delete();
             OrderDrinkDetail::where('order_no',$order_no)->delete();
         }
 
-        session()->flash('success', 'Order has been deleted !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Order has been deleted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 }

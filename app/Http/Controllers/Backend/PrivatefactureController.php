@@ -90,6 +90,8 @@ class PrivatefactureController extends Controller
                 ]);
             }
 
+            try {DB::beginTransaction();
+
             $private_store_item_id = $request->private_store_item_id;
             $item_quantity = $request->item_quantity;
             //$item_price = $request->item_price;
@@ -210,8 +212,18 @@ class PrivatefactureController extends Controller
             $facture->invoice_signature_date = Carbon::now();
             $facture->save();
 
+            DB::commit();
             session()->flash('success', 'Le vente est fait avec succés!!');
             return redirect()->route('admin.private-factures.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     public function validerFacture($invoice_number)
@@ -219,6 +231,8 @@ class PrivatefactureController extends Controller
         if (is_null($this->user) || !$this->user->can('private_drink_stockout.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any invoice !');
         }
+
+        try {DB::beginTransaction();
         
         $datas = PrivateFactureDetail::where('invoice_number', $invoice_number)->get();
 
@@ -282,8 +296,18 @@ class PrivatefactureController extends Controller
         PrivateFactureDetail::where('invoice_number', '=', $invoice_number)
             ->update(['etat' => 1,'statut_paied' => '0','validated_by' => $this->user->name]);
 
-        session()->flash('success', 'La Facture  est validée avec succés');
-        return back();
+        DB::commit();
+            session()->flash('success', 'La Facture  est validée avec succés');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
         
 
     }
@@ -299,6 +323,8 @@ class PrivatefactureController extends Controller
         ]);
 
         $customer_name = $request->customer_name;
+
+        try {DB::beginTransaction();
 
         $datas = PrivateFactureDetail::where('invoice_number', $invoice_number)->get();
 
@@ -370,8 +396,18 @@ class PrivatefactureController extends Controller
         PrivateFactureDetail::where('invoice_number', '=', $invoice_number)
             ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','customer_name' => $customer_name,'validated_by' => $this->user->name]);
 
-        session()->flash('success', 'La Facture  est validée avec succés');
-        return redirect()->route('admin.private-factures.index');
+        DB::commit();
+            session()->flash('success', 'La Facture  est validée avec succés');
+            return redirect()->route('admin.private-factures.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
         
         
     }
@@ -388,6 +424,8 @@ class PrivatefactureController extends Controller
         ]);
 
         $cn_motif = $request->cn_motif;
+
+        try {DB::beginTransaction();
 
         $invoice_signature = PrivateFacture::where('invoice_number', $invoice_number)->value('invoice_signature');
 
@@ -416,9 +454,18 @@ class PrivatefactureController extends Controller
             //Mail::to($email3)->send(new InvoiceResetedMail($mailData));
             //Mail::to($email4)->send(new InvoiceResetedMail($mailData));
             
-            
+        DB::commit();
             session()->flash('success', 'La Facture  est annulée avec succés');
             return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
 
     }
 
@@ -584,6 +631,8 @@ class PrivatefactureController extends Controller
                 ]);
             }
 
+            try {DB::beginTransaction();
+
             $private_store_item_id = $request->private_store_item_id;
             $item_quantity = $request->item_quantity;
             $item_price = $request->item_price;
@@ -686,8 +735,18 @@ class PrivatefactureController extends Controller
             $facture->invoice_ref = $request->invoice_ref;
             $facture->save();
 
+        DB::commit();
             session()->flash('success', 'Le facture est modifié avec succés!!');
             return redirect()->route('admin.private-factures.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
 
     }
 
@@ -709,6 +768,8 @@ class PrivatefactureController extends Controller
         ]);
 
 
+        try {DB::beginTransaction();
+
         $customer_name = $request->customer_name;
         $statut_paied = $request->statut_paied;
         $customer_address = $request->customer_address;
@@ -722,7 +783,7 @@ class PrivatefactureController extends Controller
         $montant_total_credit = $request->montant_total_credit;
         $montant_recouvre_input = $request->montant_recouvre;
 
-        $montant_recouvre = DB::table('factures')
+        $montant_recouvre = DB::table('private_factures')
             ->where('invoice_number',$invoice_number)->where('etat','01')->sum('montant_recouvre');
 
         if ($montant_total_credit >= $montant_recouvre_input) {
@@ -732,7 +793,7 @@ class PrivatefactureController extends Controller
 
             if ($reste_credit == 0) {
                 $etat_recouvrement = 2;
-                Facture::where('invoice_number', '=', $invoice_number)
+                PrivateFacture::where('invoice_number', '=', $invoice_number)
                     ->update([
                         'customer_name' => $customer_name,
                         'statut_paied' => $statut_paied,
@@ -749,7 +810,7 @@ class PrivatefactureController extends Controller
                         'reste_credit' => $reste_credit,
                         'confirmed_by' => $this->user->name
                     ]);
-                FactureDetail::where('invoice_number', '=', $invoice_number)
+                PrivateFactureDetail::where('invoice_number', '=', $invoice_number)
                     ->update([
                         'customer_name' => $customer_name,
                         'statut_paied' => $statut_paied,
@@ -775,7 +836,7 @@ class PrivatefactureController extends Controller
             }
             else{
                 $etat_recouvrement = 1;
-                Facture::where('invoice_number', '=', $invoice_number)
+                PrivateFacture::where('invoice_number', '=', $invoice_number)
                     ->update([
                         'customer_name' => $customer_name,
                         'statut_paied' => $statut_paied,
@@ -792,7 +853,7 @@ class PrivatefactureController extends Controller
                         'reste_credit' => $reste_credit,
                         'confirmed_by' => $this->user->name
                     ]);
-                FactureDetail::where('invoice_number', '=', $invoice_number)
+                PrivateFactureDetail::where('invoice_number', '=', $invoice_number)
                     ->update([
                         'customer_name' => $customer_name,
                         'statut_paied' => $statut_paied,
@@ -818,6 +879,17 @@ class PrivatefactureController extends Controller
             return redirect()->route('admin.private-factures.index');
         }
 
+        DB::commit();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
         
     }
    
@@ -832,6 +904,8 @@ class PrivatefactureController extends Controller
         if (is_null($this->user) || !$this->user->can('private_drink_stockout.delete')) {
             abort(403, 'Sorry !! You are Unauthorized to delete any invoice !');
         }
+
+        try {DB::beginTransaction();
 
         $facture = PrivateFacture::where('invoice_number',$invoice_number)->first();
         if (!is_null($facture)) {
@@ -850,8 +924,18 @@ class PrivatefactureController extends Controller
             Mail::to($email)->send(new DeleteFactureMail($mailData));
         }
 
+        DB::commit();
         session()->flash('success', 'La facture est supprimée !!');
         return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     

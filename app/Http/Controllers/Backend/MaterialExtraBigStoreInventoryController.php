@@ -102,6 +102,8 @@ class MaterialExtraBigStoreInventoryController extends Controller
                 ]);
             }
 
+            try {DB::beginTransaction();
+
             $material_id = $request->material_id;
             $date = $request->date;
             $unit = $request->unit;
@@ -164,9 +166,20 @@ class MaterialExtraBigStoreInventoryController extends Controller
             $inventory->description = $description;
             $inventory->created_by = $created_by;
             $inventory->save();
+
+            DB::commit();
+            session()->flash('success', 'Inventory has been created !!');
+            return redirect()->route('admin.material-extra-big-store-inventory.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
          
-        session()->flash('success', 'Inventory has been created !!');
-        return redirect()->route('admin.material-extra-big-store-inventory.index');
     }
 
     public function referenceInventaire()
@@ -265,17 +278,14 @@ class MaterialExtraBigStoreInventoryController extends Controller
         return $pdf->download('BON_INVENTAIRE_'.$inventory_no.'.pdf');
     }
 
-    public function get_inventory_data()
-    {
-        return Excel::download(new InventoryExport, 'inventories.xlsx');
-    }
-
 
     public function validateInventory($inventory_no)
     {
        if (is_null($this->user) || !$this->user->can('material_extra_big_inventory.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any inventory !');
         }
+
+        try {DB::beginTransaction();
 
         $datas = MaterialExtraBigStoreInventoryDetail::where('inventory_no', $inventory_no)->get();
 
@@ -326,8 +336,19 @@ class MaterialExtraBigStoreInventoryController extends Controller
             MaterialExtraBigStoreInventoryDetail::where('inventory_no', '=', $inventory_no)
                 ->update(['status' => 2,'validated_by' => $this->user->name]);
 
-        session()->flash('success', 'inventory has been validated !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'inventory has been validated !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function rejectInventory($inventory_no)
@@ -335,13 +356,27 @@ class MaterialExtraBigStoreInventoryController extends Controller
        if (is_null($this->user) || !$this->user->can('material_extra_big_inventory.reject')) {
             abort(403, 'Sorry !! You are Unauthorized to reject any inventory !');
         }
+
+        try {DB::beginTransaction();
+
             MaterialExtraBigStoreInventory::where('inventory_no', '=', $inventory_no)
                 ->update(['status' => 1,'rejected_by' => $this->user->name]);
              MaterialExtraBigStoreInventoryDetail::where('inventory_no', '=', $inventory_no)
                 ->update(['status' => 1,'rejected_by' => $this->user->name]);
 
-        session()->flash('success', 'inventory has been rejected !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'inventory has been rejected !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function resetInventory($inventory_no)
@@ -349,13 +384,27 @@ class MaterialExtraBigStoreInventoryController extends Controller
        if (is_null($this->user) || !$this->user->can('material_extra_big_inventory.reset')) {
             abort(403, 'Sorry !! You are Unauthorized to reset any inventory !');
         }
+
+        try {DB::beginTransaction();
+
             MaterialExtraBigStoreInventory::where('inventory_no', '=', $inventory_no)
                 ->update(['status' => 0,'reseted_by' => $this->user->name]);
                 MaterialExtraBigStoreInventoryDetail::where('inventory_no', '=', $inventory_no)
                 ->update(['status' => 0,'reseted_by' => $this->user->name]);
 
-        session()->flash('success', 'inventory has been reseted !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'inventory has been reseted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     /**
@@ -369,6 +418,8 @@ class MaterialExtraBigStoreInventoryController extends Controller
         if (is_null($this->user) || !$this->user->can('material_extra_big_inventory.delete')) {
             abort(403, 'Sorry !! You are Unauthorized to delete any inventory !');
         }
+
+        try {DB::beginTransaction();
 
         $inventory = MaterialExtraBigStoreInventory::where('inventory_no', $inventory_no)->first();
         if (!is_null($inventory)) {
@@ -387,7 +438,18 @@ class MaterialExtraBigStoreInventoryController extends Controller
             Mail::to($email)->send(new DeleteInventoryMail($mailData));
         }
 
-        session()->flash('success', 'Inventory has been deleted !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Inventory has been deleted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 }

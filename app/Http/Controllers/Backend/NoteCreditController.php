@@ -190,6 +190,8 @@ class NoteCreditController extends Controller
                 ]);
             }
 
+            try {DB::beginTransaction();
+
             $drink_id = $request->drink_id;
             $item_quantity = $request->item_quantity;
             $item_price = $request->item_price;
@@ -365,9 +367,18 @@ class NoteCreditController extends Controller
             FactureDetail::where('invoice_number', '=', $cancelled_invoice_ref)
                 ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif_detail,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
 
-
+        DB::commit();
             session()->flash('success', 'La note de credit est faite avec succés!!');
             return redirect()->route('admin.note-de-credit.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     public function storeBarrista(Request  $request)
@@ -406,6 +417,9 @@ class NoteCreditController extends Controller
                     'error' => $error->errors()->all(),
                 ]);
             }
+
+
+            try {DB::beginTransaction();
 
             $barrist_item_id = $request->barrist_item_id;
             $item_quantity = $request->item_quantity;
@@ -539,8 +553,19 @@ class NoteCreditController extends Controller
             $facture->invoice_signature_date = Carbon::now();
             $facture->save();
 
+            DB::commit();
             session()->flash('success', 'La note de credit est faite avec succés!!');
             return redirect()->route('admin.note-de-credit.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function storeFood(Request  $request)
@@ -579,6 +604,8 @@ class NoteCreditController extends Controller
                     'error' => $error->errors()->all(),
                 ]);
             }
+
+            try {DB::beginTransaction();
 
             $food_item_id = $request->food_item_id;
             $item_quantity = $request->item_quantity;
@@ -711,8 +738,18 @@ class NoteCreditController extends Controller
             $facture->invoice_signature_date = Carbon::now();
             $facture->save();
 
+            DB::commit();
             session()->flash('success', 'La note de credit est faite avec succés!!');
             return redirect()->route('admin.note-de-credit.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     public function storeBartender(Request  $request)
@@ -751,6 +788,8 @@ class NoteCreditController extends Controller
                     'error' => $error->errors()->all(),
                 ]);
             }
+
+            try {DB::beginTransaction();
 
             $bartender_item_id = $request->bartender_item_id;
             $item_quantity = $request->item_quantity;
@@ -883,8 +922,18 @@ class NoteCreditController extends Controller
             $facture->invoice_signature_date = Carbon::now();
             $facture->save();
 
+            DB::commit();
             session()->flash('success', 'La note de credit est faite avec succés!!');
             return redirect()->route('admin.note-de-credit.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     public function storeBooking(Request  $request)
@@ -922,6 +971,8 @@ class NoteCreditController extends Controller
                     'error' => $error->errors()->all(),
                 ]);
             }
+
+            try {DB::beginTransaction();
 
             $salle_id = $request->salle_id;
             $service_id = $request->service_id;
@@ -1559,8 +1610,18 @@ class NoteCreditController extends Controller
 
         }
 
+        DB::commit();
             session()->flash('success', 'La note de credit est faite avec succés!!');
             return redirect()->route('admin.note-de-credit.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     public function validerFactureDrink($invoice_number)
@@ -1568,6 +1629,8 @@ class NoteCreditController extends Controller
         if (is_null($this->user) || !$this->user->can('invoice_drink.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any invoice !');
         }
+
+        try {DB::beginTransaction();
 
         $datas = NoteCreditDetail::where('invoice_number', $invoice_number)->get();
 
@@ -1664,8 +1727,19 @@ class NoteCreditController extends Controller
             ->update(['etat' => 1,'validated_by' => $this->user->name]);
         NoteCreditDetail::where('invoice_number', '=', $invoice_number)
             ->update(['etat' => 1,'validated_by' => $this->user->name]);
-        session()->flash('success', 'La note de credit a été validé avec succés!!');
-        return back();
+
+        DB::commit();
+            session()->flash('success', 'La note de credit a été validé avec succés!!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
 
     }
 
@@ -1674,6 +1748,8 @@ class NoteCreditController extends Controller
         if (is_null($this->user) || !$this->user->can('invoice_drink.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any invoice !');
         }
+
+        try {DB::beginTransaction();
 
         $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
 
@@ -1724,9 +1800,18 @@ class NoteCreditController extends Controller
                     */
         }
 
+        DB::commit();
+            session()->flash('success', 'La note de credit a été validé avec succés!!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
 
-       session()->flash('success', 'La note de credit a été validé avec succés!!');
-        return back();
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     public function validerFactureBartender($invoice_number)
@@ -1734,6 +1819,8 @@ class NoteCreditController extends Controller
         if (is_null($this->user) || !$this->user->can('invoice_drink.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any invoice !');
         }
+
+        try {DB::beginTransaction();
 
         $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
 
@@ -1818,8 +1905,18 @@ class NoteCreditController extends Controller
 
         BartenderSmallReport::insert($report);
 
-        session()->flash('success', 'La note de credit a été validé avec succés!!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'La note de credit a été validé avec succés!!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
 
     }
 
@@ -1828,6 +1925,8 @@ class NoteCreditController extends Controller
         if (is_null($this->user) || !$this->user->can('invoice_drink.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any invoice !');
         }
+
+        try {DB::beginTransaction();
 
         $data = Facture::where('invoice_number',$invoice_number)->first();
 
@@ -1840,8 +1939,18 @@ class NoteCreditController extends Controller
         BookingBookingDetail::where('booking_no', '=', $data->booking_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
 
-        session()->flash('success', 'La note de credit a été validé avec succés!!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'La note de credit a été validé avec succés!!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     public function validerFactureNourriture($invoice_number)
@@ -1849,6 +1958,8 @@ class NoteCreditController extends Controller
         if (is_null($this->user) || !$this->user->can('invoice_kitchen.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any invoice !');
         }
+
+        try {DB::beginTransaction();
 
         $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
         $data = Facture::where('invoice_number', $invoice_number)->first();
@@ -1964,8 +2075,18 @@ class NoteCreditController extends Controller
             FoodBigReport::insert($reportBigStoreData);
         }
 
-        session()->flash('success', 'La note de credit a été validé avec succés!!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'La note de credit a été validé avec succés!!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
         
     }
 
@@ -2249,160 +2370,7 @@ class NoteCreditController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to edit any invoice !');
         }
 
-        $rules = array(
-                'invoice_date' => 'required',
-                'tp_type' => 'required',
-                'tp_name' => 'required|max:100|min:3',
-                'tp_TIN' => 'required|max:30|min:4',
-                'tp_trade_number' => 'required|max:20|min:4',
-                'tp_phone_number' => 'required|max:20|min:6',
-                'tp_address_commune' => 'required|max:50|min:5',
-                'tp_address_quartier' => 'required|max:50|min:5',
-                //'client_id' => 'required|max:100|min:3',
-                //'customer_TIN' => 'required|max:30|min:4',
-                //'customer_address' => 'required|max:100|min:5',
-                //'invoice_signature' => 'required|max:90|min:10',
-                //'invoice_signature_date' => 'required|max: |min:',
-                'code_store' => 'required',
-                'drink_id.*'  => 'required',
-                'item_quantity.*'  => 'required',
-                'item_ct.*'  => 'required',
-                'item_tl.*'  => 'required'
-            );
-
-            $error = Validator::make($request->all(),$rules);
-
-            if($error->fails()){
-                return response()->json([
-                    'error' => $error->errors()->all(),
-                ]);
-            }
-
-            $drink_id = $request->drink_id;
-            $item_quantity = $request->item_quantity;
-            $item_price = $request->item_price;
-            $item_ct = $request->item_ct;
-            $item_tl =$request->item_tl; 
-
-            $employe_id = $request->employe_id;
-
-        for( $count = 0; $count < count($drink_id); $count++ )
-        {
-            $taux_tva = Drink::where('id', $drink_id[$count])->value('vat');
-            $brarudi_price = Drink::where('id', $drink_id[$count])->value('brarudi_price');
-
-            if($request->vat_taxpayer == 1){
-
-                if (!empty($brarudi_price) || $brarudi_price != 0) {
-                    $d_prix_tva = $item_price[$count] - $brarudi_price;
-                    $item_total_amount = ($item_price[$count]*$item_quantity[$count]);
-                    $item_total_amount_brarudi = ($d_prix_tva*$item_quantity[$count]);
-                    $item_price_nvat = ($item_total_amount_brarudi * 100)/110;
-                    $vat = ($item_price_nvat * $taux_tva)/100;
-                    $item_price_wvat = ($item_price_nvat + $vat); 
-                }else{
-
-                    $item_total_amount = ($item_price[$count]*$item_quantity[$count]);
-                    
-                    $item_price_nvat = ($item_total_amount* 100)/110;
-                    $vat = ($item_price_nvat * $taux_tva)/100;
-                    $item_price_wvat = ($item_price_nvat + $vat); 
-                }
-
-            }else{
-                $item_price_nvat = ($item_price[$count]*$item_quantity[$count])+$item_ct[$count];
-                $vat = 0;
-                $item_price_wvat = ($item_price_nvat + $vat);
-                $item_total_amount = $item_price_wvat + $item_tl[$count];
-            }
-
-          $data = array(
-            'invoice_date'=> $request->invoice_date,
-            'invoice_number'=> $invoice_number,
-            'tp_type'=>$request->tp_type,
-            'tp_name'=>$request->tp_name,
-            'tp_TIN'=>$request->tp_TIN,
-            'tp_trade_number'=>$request->tp_trade_number,
-            'tp_phone_number'=>$request->tp_phone_number,
-            'tp_address_province'=>$request->tp_address_province,
-            'tp_address_commune'=>$request->tp_address_commune,
-            'tp_address_quartier'=>$request->tp_address_quartier,
-            'tp_address_avenue'=>$request->tp_address_avenue,
-            'tp_address_rue'=>$request->tp_address_rue,
-            'vat_taxpayer'=>$request->vat_taxpayer,
-            'ct_taxpayer'=>$request->ct_taxpayer,
-            'tl_taxpayer'=>$request->tl_taxpayer,
-            'tp_fiscal_center'=>$request->tp_fiscal_center,
-            'tp_activity_sector'=>$request->tp_activity_sector,
-            'tp_legal_form'=>$request->tp_legal_form,
-            'payment_type'=>$request->payment_type,
-            'client_id'=>$request->client_id,
-            'customer_TIN'=>$request->customer_TIN,
-            'customer_address'=>$request->customer_address,
-            'drink_order_no'=>$request->drink_order_no,
-            'cancelled_invoice_ref'=>$request->cancelled_invoice_ref,
-            'cancelled_invoice'=>$request->cancelled_invoice,
-            'invoice_currency'=>$request->invoice_currency,
-            'invoice_ref'=>$request->invoice_ref,
-            'code_store'=>$request->code_store,
-            'invoice_signature_date'=> Carbon::now(),
-            'drink_id'=>$drink_id[$count],
-            'item_quantity'=>$item_quantity[$count],
-            'item_price'=>$item_price[$count],
-            'item_ct'=>$item_ct[$count],
-            'item_tl'=>$item_tl[$count],
-            'item_price_nvat'=>$item_price_nvat,
-            'vat'=>$vat,
-            'item_price_wvat'=>$item_price_wvat,
-            'item_total_amount'=>$item_total_amount,
-            'employe_id'=> $employe_id,
-        );
-
-          $data1[] = $data;
-
-          FactureDetail::where('invoice_number',$invoice_number)->delete();
-      }
-
-      FactureDetail::insert($data1);
-
-            //create facture
-            $facture = Facture::where('invoice_number',$invoice_number)->first();
-            $facture->invoice_date = $request->invoice_date;
-            $facture->invoice_date =  $request->invoice_date;
-            $facture->tp_type = $request->tp_type;
-            $facture->tp_name = $request->tp_name;
-            $facture->tp_TIN = $request->tp_TIN;
-            $facture->tp_trade_number = $request->tp_trade_number;
-            $facture->tp_phone_number = $request->tp_phone_number;
-            $facture->tp_address_province = $request->tp_address_province;
-            $facture->tp_address_commune = $request->tp_address_commune;
-            $facture->tp_address_quartier = $request->tp_address_quartier;
-            $facture->drink_order_no = $request->drink_order_no;
-            $facture->vat_taxpayer = $request->vat_taxpayer;
-            $facture->ct_taxpayer = $request->ct_taxpayer;
-            $facture->tl_taxpayer = $request->tl_taxpayer;
-            $facture->tp_fiscal_center = $request->tp_fiscal_center;
-            $facture->tp_activity_sector = $request->tp_activity_sector;
-            $facture->tp_legal_form = $request->tp_legal_form;
-            $facture->invoice_currency = $request->invoice_currency;
-            $facture->payment_type = $request->payment_type;
-            $facture->client_id = $request->client_id;
-            $facture->customer_TIN = $request->customer_TIN;
-            $facture->customer_address = $request->customer_address;
-            $facture->cancelled_invoice_ref = $request->cancelled_invoice_ref;
-            $facture->cancelled_invoice = $request->cancelled_invoice;
-            $facture->invoice_ref = $request->invoice_ref;
-            $facture->code_store = $request->code_store;
-            $facture->employe_id = $employe_id;
-            $facture->save();
-
-            OrderDrink::where('order_no', '=', $facture->drink_order_no)
-                ->update(['status' => 2,'confirmed_by' => $this->user->name]);
-            OrderDrinkDetail::where('order_no', '=', $facture->drink_order_no)
-                ->update(['status' => 2,'confirmed_by' => $this->user->name]);
-
-            session()->flash('success', 'Le facture est modifié avec succés!!');
-            return redirect()->route('ebms_api.invoices.index');
+        
 
     }
 
@@ -2477,6 +2445,8 @@ class NoteCreditController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to delete any invoice !');
         }
 
+        try {DB::beginTransaction();
+
         $facture = Facture::where('invoice_number',$invoice_number)->first();
         if (!is_null($facture)) {
             $facture->delete();
@@ -2494,7 +2464,17 @@ class NoteCreditController extends Controller
             Mail::to($email)->send(new DeleteFactureMail($mailData));
         }
 
-        session()->flash('success', 'La facture est supprimée !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'La facture est supprimée !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 }

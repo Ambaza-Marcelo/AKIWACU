@@ -79,6 +79,9 @@ class MaterialSmallStoreController extends Controller
         ]);
 
         // Create New store
+
+        try {DB::beginTransaction();
+
         $material_small_store = new MaterialSmallStore();
         $material_small_store->name = $request->name;
         $reference = strtoupper(substr($request->name, 0, 3));
@@ -98,8 +101,19 @@ class MaterialSmallStoreController extends Controller
         $material_small_store_detail->manager = $request->manager;
         $material_small_store_detail->created_by = $this->user->name;
         $material_small_store_detail->save();
-        session()->flash('success', 'Material Small Store has been created !!');
-        return redirect()->route('admin.material-small-store.index');
+
+        DB::commit();
+            session()->flash('success', 'Material Small Store has been created !!');
+            return redirect()->route('admin.material-small-store.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     /**
@@ -181,6 +195,7 @@ class MaterialSmallStoreController extends Controller
             'emplacement' => 'required',
         ]);
 
+        try {DB::beginTransaction();
 
         $material_small_store->name = $request->name;
         $material_small_store->emplacement = $request->emplacement;
@@ -194,8 +209,18 @@ class MaterialSmallStoreController extends Controller
         $material_small_store_detail->created_by = $this->user->name;
         $material_small_store_detail->save();
 
-        session()->flash('success', 'Material Small Store has been updated !!');
-        return redirect()->route('admin.material-small-store.index');
+        DB::commit();
+            session()->flash('success', 'Material Small Store has been updated !!');
+            return redirect()->route('admin.material-small-store.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     /**

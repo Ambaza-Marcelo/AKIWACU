@@ -92,6 +92,8 @@ class MaterialPurchaseController extends Controller
                 ]);
             }
 
+            try {DB::beginTransaction();
+
             $material_id = $request->material_id;
             $date = $request->date;
             $quantity = $request->quantity;
@@ -138,8 +140,18 @@ class MaterialPurchaseController extends Controller
 
             MaterialPurchaseDetail::insert($insert_data);
 
-        session()->flash('success', 'Material has been created !!');
-        return redirect()->route('admin.material-purchases.index');
+            DB::commit();
+            session()->flash('success', 'Material has been created !!');
+            return redirect()->route('admin.material-purchases.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     /**
@@ -207,6 +219,8 @@ class MaterialPurchaseController extends Controller
                 ]);
             }
 
+            try {DB::beginTransaction();
+
             $material_id = $request->material_id;
             $date = $request->date;
             $quantity = $request->quantity;
@@ -244,8 +258,19 @@ class MaterialPurchaseController extends Controller
 
             MaterialPurchaseDetail::insert($insert_data);
 
-        session()->flash('success', 'Purchase has been updated successfuly !!');
-        return redirect()->route('admin.material-purchases.index');
+
+        DB::commit();
+            session()->flash('success', 'Purchase has been updated successfuly !!');
+            return redirect()->route('admin.material-purchases.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
 
     }
 
@@ -254,13 +279,27 @@ class MaterialPurchaseController extends Controller
        if (is_null($this->user) || !$this->user->can('material_purchase.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any purchase !');
         }
+
+        try {DB::beginTransaction();
+
             MaterialPurchase::where('purchase_no', '=', $purchase_no)
                 ->update(['status' => 2,'validated_by' => $this->user->name]);
             MaterialPurchaseDetail::where('purchase_no', '=', $purchase_no)
                 ->update(['status' => 2,'validated_by' => $this->user->name]);
 
-        session()->flash('success', 'purchase has been validated !!');
-        return back();
+            DB::commit();
+            session()->flash('success', 'purchase has been validated !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function reject($purchase_no)
@@ -269,13 +308,26 @@ class MaterialPurchaseController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to reject any purchase !');
         }
 
+        try {DB::beginTransaction();
+
         MaterialPurchase::where('purchase_no', '=', $purchase_no)
                 ->update(['status' => -1,'rejected_by' => $this->user->name]);
             MaterialPurchaseDetail::where('purchase_no', '=', $purchase_no)
                 ->update(['status' => -1,'rejected_by' => $this->user->name]);
 
-        session()->flash('success', 'Material has been rejected !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Material has been rejected !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function reset($purchase_no)
@@ -284,13 +336,26 @@ class MaterialPurchaseController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to reset any purchase !');
         }
 
+        try {DB::beginTransaction();
+
         MaterialPurchase::where('purchase_no', '=', $purchase_no)
                 ->update(['status' => 1,'reseted_by' => $this->user->name]);
             MaterialPurchaseDetail::where('purchase_no', '=', $purchase_no)
                 ->update(['status' => 1,'reseted_by' => $this->user->name]);
 
-        session()->flash('success', 'MaterialPurchase has been reseted !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'MaterialPurchase has been reseted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function confirm($purchase_no)
@@ -299,13 +364,26 @@ class MaterialPurchaseController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to confirm any purchase !');
         }
 
+        try {DB::beginTransaction();
+
         MaterialPurchase::where('purchase_no', '=', $purchase_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
             MaterialPurchaseDetail::where('purchase_no', '=', $purchase_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
 
-        session()->flash('success', 'Material has been confirmed !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Material has been confirmed !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function approuve($purchase_no)
@@ -314,13 +392,26 @@ class MaterialPurchaseController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to confirm any purchase !');
         }
 
+        try {DB::beginTransaction();
+
         MaterialPurchase::where('purchase_no', '=', $purchase_no)
                 ->update(['status' => 4,'approuved_by' => $this->user->name]);
             MaterialPurchaseDetail::where('purchase_no', '=', $purchase_no)
                 ->update(['status' => 4,'approuved_by' => $this->user->name]);
 
-        session()->flash('success', 'Material has been confirmed !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Material has been confirmed !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function materialPurchase($purchase_no)
@@ -375,13 +466,25 @@ class MaterialPurchaseController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to delete any purchase !');
         }
 
+        try {DB::beginTransaction();
+
         $purchase = MaterialPurchase::where('purchase_no',$purchase_no)->first();
         if (!is_null($purchase)) {
             $purchase->delete();
             MaterialPurchaseDetail::where('purchase_no',$purchase_no)->delete();
         }
 
-        session()->flash('success', 'Material has been deleted !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Material has been deleted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 }

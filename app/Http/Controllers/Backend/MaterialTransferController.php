@@ -124,6 +124,8 @@ class MaterialTransferController extends Controller
                 ]);
             }
 
+            try {DB::beginTransaction();
+
             $material_id = $request->material_id;
             $date = $request->date;
             $origin_store_id = $request->origin_store_id;
@@ -193,9 +195,20 @@ class MaterialTransferController extends Controller
             $transfer->status = 1;
             $transfer->description = $description;
             $transfer->save();
+
+            DB::commit();
+            session()->flash('success', 'transfer has been created !!');
+            return redirect()->route('admin.material-transfers.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
             
-        session()->flash('success', 'transfer has been created !!');
-        return redirect()->route('admin.material-transfers.index');
     }
 
 
@@ -226,6 +239,8 @@ class MaterialTransferController extends Controller
                     'error' => $error->errors()->all(),
                 ]);
             }
+
+            try {DB::beginTransaction();
 
             $material_id = $request->material_id;
             $date = $request->date;
@@ -296,9 +311,20 @@ class MaterialTransferController extends Controller
             $transfer->status = 1;
             $transfer->description = $description;
             $transfer->save();
+
+            DB::commit();
+            session()->flash('success', 'transfer has been created !!');
+            return redirect()->route('admin.material-transfers.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
             
-        session()->flash('success', 'transfer has been created !!');
-        return redirect()->route('admin.material-transfers.index');
     }
 
     /**
@@ -379,13 +405,27 @@ class MaterialTransferController extends Controller
        if (is_null($this->user) || !$this->user->can('material_transfer.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any transfer !');
         }
+
+        try {DB::beginTransaction();
+
             MaterialTransfer::where('transfer_no', '=', $transfer_no)
                 ->update(['status' => 2,'validated_by' => $this->user->name]);
             MaterialTransferDetail::where('transfer_no', '=', $transfer_no)
                 ->update(['status' => 2,'validated_by' => $this->user->name]);
 
-        session()->flash('success', 'transfer has been validated !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'transfer has been validated !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function reject($transfer_no)
@@ -394,13 +434,26 @@ class MaterialTransferController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to reject any transfer !');
         }
 
+        try {DB::beginTransaction();
+
         MaterialTransfer::where('transfer_no', '=', $transfer_no)
                 ->update(['status' => -1,'rejected_by' => $this->user->name]);
         MaterialTransferDetail::where('transfer_no', '=', $transfer_no)
                 ->update(['status' => -1,'rejected_by' => $this->user->name]);
 
-        session()->flash('success', 'Transfer has been rejected !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Transfer has been rejected !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function reset($transfer_no)
@@ -409,13 +462,26 @@ class MaterialTransferController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to reset any transfer !');
         }
 
+        try {DB::beginTransaction();
+
         MaterialTransfer::where('transfer_no', '=', $transfer_no)
                 ->update(['status' => 1,'reseted_by' => $this->user->name]);
         MaterialTransferDetail::where('transfer_no', '=', $transfer_no)
                 ->update(['status' => 1,'reseted_by' => $this->user->name]);
 
-        session()->flash('success', 'Transfer has been reseted !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Transfer has been reseted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function confirm($transfer_no)
@@ -424,13 +490,26 @@ class MaterialTransferController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to confirm any transfer !');
         }
 
+        try {DB::beginTransaction();
+
         MaterialTransfer::where('transfer_no', '=', $transfer_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
             MaterialTransferDetail::where('transfer_no', '=', $transfer_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
 
-        session()->flash('success', 'Transfer has been confirmed !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Transfer has been confirmed !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function approuve($transfer_no)
@@ -438,6 +517,8 @@ class MaterialTransferController extends Controller
        if (is_null($this->user) || !$this->user->can('material_transfer.approuve')) {
             abort(403, 'Sorry !! You are Unauthorized to confirm any transfer !');
         }
+
+        try {DB::beginTransaction();
 
 
         $datas = MaterialTransferDetail::where('transfer_no', $transfer_no)->get();
@@ -698,19 +779,24 @@ class MaterialTransferController extends Controller
   
         }
 
-                    MaterialTransfer::where('transfer_no', '=', $transfer_no)
+        MaterialTransfer::where('transfer_no', '=', $transfer_no)
                         ->update(['status' => 4,'approuved_by' => $this->user->name]);
-                    MaterialTransferDetail::where('transfer_no', '=', $transfer_no)
+        MaterialTransferDetail::where('transfer_no', '=', $transfer_no)
                         ->update(['status' => 4,'approuved_by' => $this->user->name]);
 
-                    session()->flash('success', 'Transfer has been done successfuly !,from store '.$code_store_origin.' to '.$code_store_destination);
-                    return back();
+        DB::commit();
+            session()->flash('success', 'Transfer has been done successfuly !,from store '.$code_store_origin.' to '.$code_store_destination);
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
 
-    }
+            DB::rollback();
 
-    public function get_reception_data()
-    {
-        return Excel::download(new ReceptionExport, 'receptions.xlsx');
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
 
@@ -726,13 +812,25 @@ class MaterialTransferController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to delete any transfer !');
         }
 
+        try {DB::beginTransaction();
+
         $transfer = MaterialTransfer::where('transfer_no',$transfer_no)->first();
         if (!is_null($transfer)) {
             $transfer->delete();
             MaterialTransferDetail::where('transfer_no',$transfer_no)->delete();
         }
 
-        session()->flash('success', 'Transfer has been deleted !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Transfer has been deleted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 }
