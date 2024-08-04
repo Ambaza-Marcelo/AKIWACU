@@ -122,7 +122,7 @@ class OrderDrinkController extends Controller
             try {DB::beginTransaction();
 
             $drink_id = $request->drink_id;
-            $date = $request->date;
+            $date = Carbon::now();
             $quantity = $request->quantity;
             $table_id = $request->table_id;
             $employe_id = $request->employe_id;

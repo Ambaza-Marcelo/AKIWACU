@@ -156,7 +156,7 @@ class FactureController extends Controller
         }
 
         $rules = array(
-                'invoice_date' => 'required',
+                //'invoice_date' => 'required',
                 //'invoice_number' => 'required',
                 'tp_type' => 'required',
                 'tp_name' => 'required|max:100|min:3',
@@ -213,10 +213,10 @@ class FactureController extends Controller
             }
             
 
-
+            $invoice_date = Carbon::now();
             
 
-            $invoice_signature = $request->tp_TIN."/".config('app.obr_test_username')."/".Carbon::parse($request->invoice_date)->format('YmdHis')."/".$invoice_number;
+            $invoice_signature = $request->tp_TIN."/".config('app.obr_test_username')."/".Carbon::parse($invoice_date)->format('YmdHis')."/".$invoice_number;
 
         for( $count = 0; $count < count($drink_id); $count++ )
         {
@@ -259,7 +259,7 @@ class FactureController extends Controller
 
           $data = array(
             'invoice_number'=>$invoice_number,
-            'invoice_date'=> $request->invoice_date,
+            'invoice_date'=> $invoice_date,
             'tp_type'=>$request->tp_type,
             'table_id'=>$table_id,
             'tp_name'=>$request->tp_name,
@@ -312,11 +312,10 @@ class FactureController extends Controller
 
             //create facture
             $facture = new Facture();
-            $facture->invoice_date = $request->invoice_date;
+            $facture->invoice_date = $invoice_date;
             $facture->invoice_number = $invoice_number;
             $facture->table_id = $table_id;
             $facture->drink_order_no = $order_no;
-            $facture->invoice_date =  $request->invoice_date;
             $facture->tp_type = $request->tp_type;
             $facture->tp_name = $request->tp_name;
             $facture->tp_TIN = $request->tp_TIN;
@@ -384,7 +383,7 @@ class FactureController extends Controller
         }
 
         $rules = array(
-                'invoice_date' => 'required',
+                //'invoice_date' => 'required',
                 //'invoice_number' => 'required',
                 'tp_type' => 'required',
                 'tp_name' => 'required|max:100|min:3',
@@ -441,9 +440,9 @@ class FactureController extends Controller
             
 
 
-            
+            $invoice_date = Carbon::now();
 
-            $invoice_signature = $request->tp_TIN."/".config('app.obr_test_username')."/".Carbon::parse($request->invoice_date)->format('YmdHis')."/".$invoice_number;
+            $invoice_signature = $request->tp_TIN."/".config('app.obr_test_username')."/".Carbon::parse($invoice_date)->format('YmdHis')."/".$invoice_number;
 
         for( $count = 0; $count < count($barrist_item_id); $count++ )
         {
@@ -465,7 +464,7 @@ class FactureController extends Controller
 
           $data = array(
             'invoice_number'=>$invoice_number,
-            'invoice_date'=> $request->invoice_date,
+            'invoice_date'=> $invoice_date,
             'table_id'=> $table_id,
             'tp_type'=>$request->tp_type,
             'tp_name'=>$request->tp_name,
@@ -516,9 +515,8 @@ class FactureController extends Controller
 
             //create facture
             $facture = new Facture();
-            $facture->invoice_date = $request->invoice_date;
+            $facture->invoice_date = $invoice_date;
             $facture->invoice_number = $invoice_number;
-            $facture->invoice_date =  $request->invoice_date;
             $facture->tp_type = $request->tp_type;
             $facture->tp_name = $request->tp_name;
             $facture->tp_TIN = $request->tp_TIN;
@@ -584,7 +582,7 @@ class FactureController extends Controller
         }
 
         $rules = array(
-                'invoice_date' => 'required',
+                //'invoice_date' => 'required',
                 //'invoice_number' => 'required',
                 'tp_type' => 'required',
                 'tp_name' => 'required|max:100|min:3',
@@ -641,9 +639,9 @@ class FactureController extends Controller
             
 
 
-            
+            $invoice_date = Carbon::now();
 
-            $invoice_signature = $request->tp_TIN."/".config('app.obr_test_username')."/".Carbon::parse($request->invoice_date)->format('YmdHis')."/".$invoice_number;
+            $invoice_signature = $request->tp_TIN."/".config('app.obr_test_username')."/".Carbon::parse($invoice_date)->format('YmdHis')."/".$invoice_number;
 
         for( $count = 0; $count < count($food_item_id); $count++ )
         {
@@ -665,7 +663,7 @@ class FactureController extends Controller
 
           $data = array(
             'invoice_number'=>$invoice_number,
-            'invoice_date'=> $request->invoice_date,
+            'invoice_date'=> $invoice_date,
             'table_id'=>$table_id,
             'tp_type'=>$request->tp_type,
             'tp_name'=>$request->tp_name,
@@ -715,9 +713,8 @@ class FactureController extends Controller
         $order_no = FactureDetail::where('invoice_number',$invoice_number)->value('food_order_no');
             //create facture
             $facture = new Facture();
-            $facture->invoice_date = $request->invoice_date;
+            $facture->invoice_date = $invoice_date;
             $facture->invoice_number = $invoice_number;
-            $facture->invoice_date =  $request->invoice_date;
             $facture->tp_type = $request->tp_type;
             $facture->tp_name = $request->tp_name;
             $facture->tp_TIN = $request->tp_TIN;
@@ -783,7 +780,7 @@ class FactureController extends Controller
         }
 
         $rules = array(
-                'invoice_date' => 'required',
+                //'invoice_date' => 'required',
                 //'invoice_number' => 'required',
                 'tp_type' => 'required',
                 'tp_name' => 'required|max:100|min:3',
@@ -839,10 +836,10 @@ class FactureController extends Controller
             }
             
 
-
+            $invoice_date = Carbon::now();
             
 
-            $invoice_signature = $request->tp_TIN."/".config('app.obr_test_username')."/".Carbon::parse($request->invoice_date)->format('YmdHis')."/".$invoice_number;
+            $invoice_signature = $request->tp_TIN."/".config('app.obr_test_username')."/".Carbon::parse($invoice_date)->format('YmdHis')."/".$invoice_number;
 
         for( $count = 0; $count < count($bartender_item_id); $count++ )
         {
@@ -864,7 +861,7 @@ class FactureController extends Controller
 
           $data = array(
             'invoice_number'=>$invoice_number,
-            'invoice_date'=> $request->invoice_date,
+            'invoice_date'=> $invoice_date,
             'table_id'=>$table_id,
             'tp_type'=>$request->tp_type,
             'tp_name'=>$request->tp_name,
@@ -914,9 +911,8 @@ class FactureController extends Controller
         $order_no = FactureDetail::where('invoice_number',$invoice_number)->value('bartender_order_no');
             //create facture
             $facture = new Facture();
-            $facture->invoice_date = $request->invoice_date;
+            $facture->invoice_date = $invoice_date;
             $facture->invoice_number = $invoice_number;
-            $facture->invoice_date =  $request->invoice_date;
             $facture->tp_type = $request->tp_type;
             $facture->tp_name = $request->tp_name;
             $facture->tp_TIN = $request->tp_TIN;
@@ -982,7 +978,7 @@ class FactureController extends Controller
         }
 
         $rules = array(
-                'invoice_date' => 'required',
+                //'invoice_date' => 'required',
                 //'invoice_number' => 'required',
                 'tp_type' => 'required',
                 'tp_name' => 'required|max:100|min:3',
@@ -1035,10 +1031,10 @@ class FactureController extends Controller
             }
             
 
-
+            $invoice_date = Carbon::now();
             
 
-            $invoice_signature = $request->tp_TIN."/".config('app.obr_test_username')."/".Carbon::parse($request->invoice_date)->format('YmdHis')."/".$invoice_number;
+            $invoice_signature = $request->tp_TIN."/".config('app.obr_test_username')."/".Carbon::parse($invoice_date)->format('YmdHis')."/".$invoice_number;
 
         if (!empty($salle_id)) {
             for( $count = 0; $count < count($salle_id); $count++ )
@@ -1061,7 +1057,7 @@ class FactureController extends Controller
 
           $data = array(
             'invoice_number'=>$invoice_number,
-            'invoice_date'=> $request->invoice_date,
+            'invoice_date'=> $invoice_date,
             'tp_type'=>$request->tp_type,
             'tp_name'=>$request->tp_name,
             'tp_TIN'=>$request->tp_TIN,
@@ -1110,9 +1106,8 @@ class FactureController extends Controller
 
             //create facture
             $facture = new Facture();
-            $facture->invoice_date = $request->invoice_date;
+            $facture->invoice_date = $invoice_date;
             $facture->invoice_number = $invoice_number;
-            $facture->invoice_date =  $request->invoice_date;
             $facture->tp_type = $request->tp_type;
             $facture->tp_name = $request->tp_name;
             $facture->tp_TIN = $request->tp_TIN;
@@ -1167,7 +1162,7 @@ class FactureController extends Controller
 
           $data = array(
             'invoice_number'=>$invoice_number,
-            'invoice_date'=> $request->invoice_date,
+            'invoice_date'=> $invoice_date,
             'tp_type'=>$request->tp_type,
             'tp_name'=>$request->tp_name,
             'tp_TIN'=>$request->tp_TIN,
@@ -1216,9 +1211,8 @@ class FactureController extends Controller
 
             //create facture
             $facture = new Facture();
-            $facture->invoice_date = $request->invoice_date;
+            $facture->invoice_date = $invoice_date;
             $facture->invoice_number = $invoice_number;
-            $facture->invoice_date =  $request->invoice_date;
             $facture->tp_type = $request->tp_type;
             $facture->tp_name = $request->tp_name;
             $facture->tp_TIN = $request->tp_TIN;
@@ -1273,7 +1267,7 @@ class FactureController extends Controller
 
           $data = array(
             'invoice_number'=>$invoice_number,
-            'invoice_date'=> $request->invoice_date,
+            'invoice_date'=> $invoice_date,
             'tp_type'=>$request->tp_type,
             'tp_name'=>$request->tp_name,
             'tp_TIN'=>$request->tp_TIN,
@@ -1322,9 +1316,8 @@ class FactureController extends Controller
 
             //create facture
             $facture = new Facture();
-            $facture->invoice_date = $request->invoice_date;
+            $facture->invoice_date = $invoice_date;
             $facture->invoice_number = $invoice_number;
-            $facture->invoice_date =  $request->invoice_date;
             $facture->tp_type = $request->tp_type;
             $facture->tp_name = $request->tp_name;
             $facture->tp_TIN = $request->tp_TIN;
@@ -1379,7 +1372,7 @@ class FactureController extends Controller
 
           $data = array(
             'invoice_number'=>$invoice_number,
-            'invoice_date'=> $request->invoice_date,
+            'invoice_date'=> $invoice_date,
             'tp_type'=>$request->tp_type,
             'tp_name'=>$request->tp_name,
             'tp_TIN'=>$request->tp_TIN,
@@ -1428,9 +1421,8 @@ class FactureController extends Controller
 
             //create facture
             $facture = new Facture();
-            $facture->invoice_date = $request->invoice_date;
+            $facture->invoice_date = $invoice_date;
             $facture->invoice_number = $invoice_number;
-            $facture->invoice_date =  $request->invoice_date;
             $facture->tp_type = $request->tp_type;
             $facture->tp_name = $request->tp_name;
             $facture->tp_TIN = $request->tp_TIN;
@@ -1485,7 +1477,7 @@ class FactureController extends Controller
 
           $data = array(
             'invoice_number'=>$invoice_number,
-            'invoice_date'=> $request->invoice_date,
+            'invoice_date'=> $invoice_date,
             'tp_type'=>$request->tp_type,
             'tp_name'=>$request->tp_name,
             'tp_TIN'=>$request->tp_TIN,
@@ -1534,9 +1526,8 @@ class FactureController extends Controller
 
             //create facture
             $facture = new Facture();
-            $facture->invoice_date = $request->invoice_date;
+            $facture->invoice_date = $invoice_date;
             $facture->invoice_number = $invoice_number;
-            $facture->invoice_date =  $request->invoice_date;
             $facture->tp_type = $request->tp_type;
             $facture->tp_name = $request->tp_name;
             $facture->tp_TIN = $request->tp_TIN;
@@ -1592,7 +1583,7 @@ class FactureController extends Controller
 
           $data = array(
             'invoice_number'=>$invoice_number,
-            'invoice_date'=> $request->invoice_date,
+            'invoice_date'=> $invoice_date,
             'tp_type'=>$request->tp_type,
             'tp_name'=>$request->tp_name,
             'tp_TIN'=>$request->tp_TIN,
@@ -1641,9 +1632,8 @@ class FactureController extends Controller
 
             //create facture
             $facture = new Facture();
-            $facture->invoice_date = $request->invoice_date;
+            $facture->invoice_date = $invoice_date;
             $facture->invoice_number = $invoice_number;
-            $facture->invoice_date =  $request->invoice_date;
             $facture->tp_type = $request->tp_type;
             $facture->tp_name = $request->tp_name;
             $facture->tp_TIN = $request->tp_TIN;

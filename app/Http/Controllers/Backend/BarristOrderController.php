@@ -112,7 +112,7 @@ class BarristOrderController extends Controller
             try {DB::beginTransaction();
 
             $barrist_item_id = $request->barrist_item_id;
-            $date = $request->date;
+            $date = Carbon::now();
             $quantity = $request->quantity;
             $table_id = $request->table_id;
             $employe_id = $request->employe_id;

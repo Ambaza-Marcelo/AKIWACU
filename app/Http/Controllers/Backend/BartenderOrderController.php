@@ -110,7 +110,7 @@ class BartenderOrderController extends Controller
 
 
             $bartender_item_id = $request->bartender_item_id;
-            $date = $request->date;
+            $date = Carbon::now();
             $quantity = $request->quantity;
             $table_id = $request->table_id;
             $employe_id = $request->employe_id;
