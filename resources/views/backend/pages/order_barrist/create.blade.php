@@ -99,7 +99,7 @@
                             <select class="form-control" name="employe_id" required>
                                 <option disabled="disabled" selected="selected">Merci de choisir Serveur</option>
                             @foreach ($employes as $employe)
-                                <option value="{{ $employe->id }}">{{ $employe->name }}/{{ $employe->telephone }}</option>
+                                <option value="{{ $employe->id }}" {{ $employe->name == Auth::guard('admin')->user()->name ? 'selected' : '' }}>{{ $employe->name }}/{{ $employe->telephone }}</option>
                             @endforeach
                             </select>
                         </div>

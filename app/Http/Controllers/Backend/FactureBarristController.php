@@ -84,9 +84,9 @@ class FactureBarristController extends Controller
 
         $barrist_items =  BarristItem::orderBy('name','asc')->get();
         $clients =  EGRClient::orderBy('customer_name','asc')->get();
-        $orders =  BarristOrderDetail::where('table_id',$table_id)->where('status',1)->orderBy('id','asc')->get();
+        $orders =  BarristOrderDetail::where('table_id',$table_id)->where('status',1)->orderBy('id','desc')->get();
 
-        $data =  BarristOrder::where('table_id',$table_id)->where('status',1)->first();
+        $data =  BarristOrderDetail::where('table_id',$table_id)->where('status',1)->orderBy('id','desc')->first();
         $total_amount = DB::table('barrist_order_details')
             ->where('table_id',$table_id)->where('status',1)
             ->sum('total_amount_selling');
