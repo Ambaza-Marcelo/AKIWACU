@@ -53,13 +53,21 @@
                                 <tr>
                                     <th width="5%">#</th>
                                     <th width="30%">logo</th>
+                                    <th width="10%">Type Contribuable</th>
+                                    <th width="10%">Assujetti à la TVA</th>
+                                    <th width="10%">Assujetti au PF</th>
                                     <th width="10%">Nom</th>
                                     <th width="10%">NIF</th>
                                     <th width="10%">RC</th>
+                                    <th width="10%">Centre Fiscal</th>
+                                    <th width="10%">Secteur d'activite</th>
+                                    <th width="10%">Forme Juridique</th>
+                                    <th width="10%">Province</th>
                                     <th width="10%">Commune</th>
                                     <th width="10%">Zone</th>
                                     <th width="10%">Quartier</th>
                                     <th width="10%">Rue</th>
+                                    <th width="10%">Code Postal</th>
                                     <th width="10%">Telephone 1</th>
                                     <th width="10%">Telephone 2</th>
                                     <th width="10%">Email</th>
@@ -72,13 +80,21 @@
                                <tr>
                                     <td>{{ $loop->index+1 }}</td>
                                     <td> <img class="img-responsive" style="max-height: 50px;" src="{{ asset('storage/logo')}}/{{ $setting->logo }}" alt=""></td>
+                                    <td>@if($setting->tp_type == 1) Personne Physique @else Société @endif</td>
+                                    <td>@if($setting->vat_taxpayer == 1) OUI @else NON @endif</td>
+                                    <td>@if($setting->tl_taxpayer == 1) OUI @else NON @endif</td>
                                     <td>{{ $setting->name }}</td>
                                     <td>{{ $setting->nif }}</td>
                                     <td>{{ $setting->rc }}</td>
+                                    <td>{{ $setting->tp_fiscal_center }}</td>
+                                    <td>{{ $setting->tp_activity_sector }}</td>
+                                    <td>{{ $setting->tp_legal_form }}</td>
+                                    <td>{{ $setting->province }}</td>
                                     <td>{{ $setting->commune }}</td>
                                     <td>{{ $setting->zone }}</td>
                                     <td>{{ $setting->quartier }}</td>
                                     <td>{{ $setting->rue }}</td>
+                                    <td>{{ $setting->postal_number }}</td>
                                     <td>{{ $setting->telephone1 }}</td>
                                     <td>{{ $setting->telephone2 }}</td>
                                     <td>{{ $setting->email }}</td>

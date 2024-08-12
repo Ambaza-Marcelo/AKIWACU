@@ -29,12 +29,24 @@ class SettingController extends Controller
             'nif' => 'required',
             'rc' => 'required',
             'commune' => 'required',
+            'province' => 'required',
             'zone' => 'required',
+
+            'tp_type' => 'required',
+            'vat_taxpayer' => 'required',
+            //'ct_taxpayer' => 'required',
+            'tl_taxpayer' => 'required',
+            'tp_fiscal_center' => 'required',
+            'tp_activity_sector' => 'required',
+            'tp_legal_form' => 'required',
+            'postal_number' => 'required',
             'quartier' => 'required',
             'rue' => 'required',
             'logo' => 'required|mimes:jpeg,jpg,png,svg|max:2048',
 
         ]);
+
+        
 
         $storagepath = $request->file('logo')->store('public/logo');
         $fileName = basename($storagepath);
@@ -77,9 +89,19 @@ class SettingController extends Controller
             'nif' => 'required',
             'rc' => 'required',
             'commune' => 'required',
+            'province' => 'required',
             'zone' => 'required',
+
+            'tp_type' => 'required',
+            'vat_taxpayer' => 'required',
+            //'ct_taxpayer' => 'required',
+            'tl_taxpayer' => 'required',
+            'tp_fiscal_center' => 'required',
+            'tp_activity_sector' => 'required',
+            'tp_legal_form' => 'required',
+            'postal_number' => 'required',
             'quartier' => 'required',
-            'rue' => 'required'
+            'rue' => 'required',
 
         ]);
 

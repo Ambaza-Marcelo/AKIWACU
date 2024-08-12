@@ -48,6 +48,41 @@
                     <form action="{{ route('admin.settings.store') }}" method="POST"  enctype="multipart/form-data">
                         @csrf
                         <div class="row">
+                            <div class="col-md-4">
+                                <label for="tp_type">Type Contribuable</label>
+                                <div class="form-group">
+                                    <label class="text">Personne Physique
+                                    <input type="checkbox" name="tp_type" value="1" class="form-control">
+                                    </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <label class="text">Société
+                                    <input type="checkbox" checked="checked" name="tp_type" value="2" class="form-control">
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="vat_taxpayer">Assujetti à la TVA</label>
+                                <div class="form-group">
+                                    <label class="text">Non Assujetti
+                                    <input type="checkbox" name="vat_taxpayer" value="0" class="form-control">
+                                    </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <label class="text">Assujetti
+                                    <input type="checkbox" name="vat_taxpayer" value="1" checked="checked" class="form-control">
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="tl_taxpayer">Assujetti au PF</label>
+                                <div class="form-group">
+                                    <label class="text">Non Assujetti
+                                    <input type="checkbox" name="tl_taxpayer" value="0" checked="checked" class="form-control">
+                                    </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <label class="text">Assujetti
+                                    <input type="checkbox" name="tl_taxpayer" value="1" class="form-control">
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
                                         <label for="name">Nom Entreprise<span class="text-danger"></span></label>
@@ -70,6 +105,32 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
+                                        <label for="tp_fiscal_center">Centre Fiscal<span class="text-danger"></span></label>
+                                        <input autofocus type="text" class="form-control" name="tp_fiscal_center" placeholder="Entrer Centre Fiscal " required minlength="2" maxlength="255">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group has-feedback">
+                                        <label for="tp_activity_sector">Secteur Activite<span class="text-danger"></span></label>
+                                        <input autofocus type="text" class="form-control" name="tp_activity_sector" placeholder="Entrer Secteur Activite " required minlength="2" maxlength="255">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group has-feedback">
+                                        <label for="tp_legal_form">Forme Juridique<span class="text-danger"></span></label>
+                                        <input autofocus type="text" class="form-control" name="tp_legal_form" placeholder="Entrer la forme Juridique" required minlength="2" maxlength="255">
+                                    </div>
+                                </div>                               
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group has-feedback">
+                                        <label for="province">Province<span class="text-danger"></span></label>
+                                        <input autofocus type="text" class="form-control" name="province" placeholder="Entrer Province" required minlength="2" maxlength="255">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group has-feedback">
                                         <label for="commune">Commune<span class="text-danger"></span></label>
                                         <input autofocus type="text" class="form-control" name="commune" placeholder="Entrer Commune " required minlength="2" maxlength="255">
                                     </div>
@@ -77,27 +138,27 @@
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
                                         <label for="zone">Zone<span class="text-danger"></span></label>
-                                        <input autofocus type="text" class="form-control" name="zone" placeholder="Entrer Zone" required minlength="2" maxlength="255">
+                                        <input autofocus type="text" class="form-control" name="zone" placeholder="Entrer Zone " required minlength="2" maxlength="255">
                                     </div>
                                 </div>
+                            </div>
+                            <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
                                         <label for="quartier">Quartier<span class="text-danger"></span></label>
                                         <input autofocus type="text" class="form-control" name="quartier" placeholder="Entrer Quartier" required minlength="2" maxlength="255">
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="form-group has-feedback">
-                                        <label for="avenue">Avenue<span class="text-danger"></span></label>
-                                        <input autofocus type="text" class="form-control" name="avenue" placeholder="Entrer Avenue " required minlength="2" maxlength="255">
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-group has-feedback">
                                         <label for="rue">Rue<span class="text-danger"></span></label>
-                                        <input autofocus type="text" class="form-control" name="rue" placeholder="Entrer Rue" required minlength="2" maxlength="255">
+                                        <input autofocus type="text" class="form-control" name="rue" placeholder="Entrer Rue " required minlength="2" maxlength="255">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group has-feedback">
+                                        <label for="postal_number">Code Postal<span class="text-danger"></span></label>
+                                        <input autofocus type="text" class="form-control" name="postal_number" placeholder="Entrer code Postal" required minlength="2" maxlength="255">
                                     </div>
                                 </div>
                             </div>
@@ -105,19 +166,19 @@
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
                                         <label for="telephone1">Telephone 1<span class="text-danger"></span></label>
-                                        <input autofocus type="text" class="form-control" name="telephone1" placeholder="Entrer telephone 1" required minlength="6" maxlength="15">
+                                        <input autofocus type="tel" class="form-control" name="telephone1" placeholder="Entrer telephone 1" required minlength="6" maxlength="15">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
                                         <label for="telephone2">Telephone 2<span class="text-danger"></span></label>
-                                        <input autofocus type="text" class="form-control" name="telephone2" placeholder="Entrer Telephone 2 " required minlength="6" maxlength="15">
+                                        <input autofocus type="tel" class="form-control" name="telephone2" placeholder="Entrer Telephone 2 " required minlength="6" maxlength="15">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
                                         <label for="email">Email<span class="text-danger"></span></label>
-                                        <input autofocus type="text" class="form-control" name="email" placeholder="Entrer Email" required minlength="5" maxlength="255">
+                                        <input autofocus type="mail" class="form-control" name="email" placeholder="Entrer Email" required minlength="5" maxlength="255">
                                     </div>
                                 </div>
                             </div>

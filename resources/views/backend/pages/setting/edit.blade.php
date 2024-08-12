@@ -48,57 +48,118 @@
                     <form action="{{ route('admin.settings.update', $setting->id) }}" method="POST" enctype="multipart/form-data">
                         @method('PUT')
                         @csrf
+                            <div class="row">
+                            <div class="col-md-4">
+                                <label for="tp_type">Type Contribuable</label>
+                                <div class="form-group">
+                                    <label class="text">Personne Physique
+                                    <input type="checkbox" name="tp_type" value="1" class="form-control">
+                                    </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <label class="text">Société
+                                    <input type="checkbox" checked="checked" name="tp_type" value="2" class="form-control">
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="vat_taxpayer">Assujetti à la TVA</label>
+                                <div class="form-group">
+                                    <label class="text">Non Assujetti
+                                    <input type="checkbox" name="vat_taxpayer" value="0" class="form-control">
+                                    </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <label class="text">Assujetti
+                                    <input type="checkbox" name="vat_taxpayer" value="1" checked="checked" class="form-control">
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="tl_taxpayer">Assujetti au PF</label>
+                                <div class="form-group">
+                                    <label class="text">Non Assujetti
+                                    <input type="checkbox" name="tl_taxpayer" value="0" checked="checked" class="form-control">
+                                    </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <label class="text">Assujetti
+                                    <input type="checkbox" name="tl_taxpayer" value="1" class="form-control">
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
                         <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
                                         <label for="name">Nom Entreprise<span class="text-danger"></span></label>
-                                        <input autofocus type="text" class="form-control" name="name" value="{{$setting->name}} " required minlength="2" maxlength="255">
+                                        <input autofocus type="text" class="form-control" name="name" value="{{ $setting->name }}" required minlength="2" maxlength="255">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
                                         <label for="nif">NIF<span class="text-danger"></span></label>
-                                        <input autofocus type="text" class="form-control" name="nif" value="{{$setting->nif}} " required>
+                                        <input autofocus type="text" class="form-control" name="nif" value="{{ $setting->nif }}" required>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
                                         <label for="rc">Registre Commerce<span class="text-danger"></span></label>
-                                        <input autofocus type="text" class="form-control" name="rc" value="{{$setting->rc}} " required>
+                                        <input autofocus type="text" class="form-control" name="rc" value="{{ $setting->rc }}" required>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
+                                        <label for="tp_fiscal_center">Centre Fiscal<span class="text-danger"></span></label>
+                                        <input autofocus type="text" class="form-control" name="tp_fiscal_center" value="{{ $setting->tp_fiscal_center }} " required minlength="2" maxlength="255">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group has-feedback">
+                                        <label for="tp_activity_sector">Secteur Activite<span class="text-danger"></span></label>
+                                        <input autofocus type="text" class="form-control" name="tp_activity_sector" value="{{ $setting->tp_activity_sector }} " required minlength="2" maxlength="255">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group has-feedback">
+                                        <label for="tp_legal_form">Forme Juridique<span class="text-danger"></span></label>
+                                        <input autofocus type="text" class="form-control" name="tp_legal_form" value="{{ $setting->tp_legal_form }}" required minlength="2" maxlength="255">
+                                    </div>
+                                </div>                               
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group has-feedback">
+                                        <label for="province">Province<span class="text-danger"></span></label>
+                                        <input autofocus type="text" class="form-control" name="province" value="{{ $setting->province }}" required minlength="2" maxlength="255">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group has-feedback">
                                         <label for="commune">Commune<span class="text-danger"></span></label>
-                                        <input autofocus type="text" class="form-control" name="commune" value="{{$setting->commune}} " required minlength="2" maxlength="255">
+                                        <input autofocus type="text" class="form-control" name="commune" value="{{ $setting->commune }}" required minlength="2" maxlength="255">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-group has-feedback">
                                         <label for="zone">Zone<span class="text-danger"></span></label>
-                                        <input autofocus type="text" class="form-control" name="zone" value="{{$setting->zone}} " required minlength="2" maxlength="255">
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-group has-feedback">
-                                        <label for="quartier">Quartier<span class="text-danger"></span></label>
-                                        <input autofocus type="text" class="form-control" name="quartier" value="{{$setting->quartier}} " required minlength="2" maxlength="255">
+                                        <input autofocus type="text" class="form-control" name="zone" value="{{ $setting->zone }}" required minlength="2" maxlength="255">
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-group has-feedback">
-                                        <label for="avenue">Avenue<span class="text-danger"></span></label>
-                                        <input autofocus type="text" class="form-control" name="avenue" value=" " required minlength="2" maxlength="255">
+                                        <label for="quartier">Quartier<span class="text-danger"></span></label>
+                                        <input autofocus type="text" class="form-control" name="quartier" value="{{ $setting->quartier }}" required minlength="2" maxlength="255">
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-group has-feedback">
                                         <label for="rue">Rue<span class="text-danger"></span></label>
-                                        <input autofocus type="text" class="form-control" name="rue" value="{{$setting->rue}} " required minlength="2" maxlength="255">
+                                        <input autofocus type="text" class="form-control" name="rue" value="{{ $setting->rue }} " required minlength="2" maxlength="255">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group has-feedback">
+                                        <label for="postal_number">Code Postal<span class="text-danger"></span></label>
+                                        <input autofocus type="text" class="form-control" name="postal_number" value="{{ $setting->postal_number }}" required minlength="2" maxlength="255">
                                     </div>
                                 </div>
                             </div>
