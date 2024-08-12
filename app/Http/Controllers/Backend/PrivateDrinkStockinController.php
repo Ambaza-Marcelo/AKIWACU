@@ -387,7 +387,7 @@ class PrivateDrinkStockinController extends Controller
             $email1 = 'ambazamarcellin2001@gmail.com';
             $email2 = 'frangiye@gmail.com';
             //$email3 = 'khaembamartin@gmail.com';
-            $email4 = 'munyembari_mp@yahoo.fr';
+            //$email4 = 'munyembari_mp@yahoo.fr';
             $auteur = $this->user->name;
             $mailData = [
                     'title' => 'ENTREE DES ARTICLES AU MAGASIN EGR',
@@ -401,7 +401,7 @@ class PrivateDrinkStockinController extends Controller
             Mail::to($email1)->send(new PrivateStockinMail($mailData));
             Mail::to($email2)->send(new PrivateStockinMail($mailData));
             //Mail::to($email3)->send(new PrivateStockinMail($mailData));
-            Mail::to($email4)->send(new PrivateStockinMail($mailData));
+            //Mail::to($email4)->send(new PrivateStockinMail($mailData));
 
         DB::commit();
             session()->flash('success', 'Stockin has been done successfuly !');
