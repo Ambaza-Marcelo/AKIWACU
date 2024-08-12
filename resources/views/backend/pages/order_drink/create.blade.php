@@ -87,19 +87,13 @@
                             </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6" id="dynamicDiv">
-                        <div class="form-group">
-                            <label for="date">@lang('messages.date')</label>
-                            <input type="date" class="form-control" id="date" name="date" required>
-                        </div>
-                        </div>
-                        <div class="col-md-6">
+                        <div class="col-md-12">
                         <div class="form-group">
                             <label for="employe_id">@lang('Serveur')</label>
                             <select class="form-control" name="employe_id" required>
                                 <option disabled="disabled" selected="selected">Merci de choisir Serveur</option>
                             @foreach ($employes as $employe)
-                                <option value="{{ $employe->id }}">{{ $employe->name }}/{{ $employe->telephone }}</option>
+                                <option value="{{ $employe->id }}" {{ $employe->name == Auth::guard('admin')->user()->name ? 'selected' : '' }}>{{ $employe->name }}/{{ $employe->telephone }}</option>
                             @endforeach
                             </select>
                         </div>
