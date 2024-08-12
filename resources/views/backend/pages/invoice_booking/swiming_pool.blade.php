@@ -93,7 +93,7 @@
                                     <th width="10%">P.V</th>
                                     <th width="10%">TTC</th>
                                     <th width="30%">Auteur</th>
-                                    <th width="10%">Description</th>
+                                    <th width="30%">Motif</th>
                                     <th width="10%">Action</th>
                                 </tr>
                             </thead>
@@ -101,8 +101,8 @@
                             @foreach($factures as $facture)
                                <tr>
                                     <td>{{ $loop->index+1}}</td>
-                                    <td><a href="{{ route('admin.booking-invoices.show',$facture->invoice_number) }}">{{ $facture->invoice_number }}</a>&nbsp;@if($facture->etat == 0)<span class="badge badge-warning">Encours...</span>@elseif($facture->etat === '1')<span class="badge badge-success">Validée</span>@elseif($facture->etat ==2)<span class="badge badge-success">Envoyée</span>@elseif($facture->etat === '01')<span class="badge badge-info" title="@if($facture->client_id){{ $facture->client->customer_name }} @elseif($facture->booking_client_id) {{ $facture->bookingClient->customer_name }} @else {{ $facture->customer_name }} @endif">validé(crédit)</span>@else<span class="badge badge-danger" title="{{ $facture->cn_motif }}">Annulée</span>@endif</td>
-                                    <td>{{ \Carbon\Carbon::parse($facture->invoice_date)->format('d/m/Y') }}</td>
+                                    <td><a href="{{ route('admin.booking-invoices.show',$facture->invoice_number) }}">{{ $facture->invoice_number }}</a>&nbsp;@if($facture->etat == 0)<span class="badge badge-warning">Encours...</span>@elseif($facture->etat === '1')<span class="badge badge-success">Validée(@if($facture->cancelled_invoice == 1)<span class="badge badge-warning">note de crédit</span>@endif)</span>@elseif($facture->etat === '01')<span class="badge badge-info" title="@if($facture->client_id){{ $facture->client->customer_name }} @elseif($facture->booking_client_id) {{ $facture->bookingClient->customer_name }} @else {{ $facture->customer_name }} @endif">validé(crédit;@if($facture->cancelled_invoice == 1)<span class="badge badge-warning">note de crédit</span>@endif)</span>@else<span class="badge badge-danger" title="{{ $facture->cn_motif }}">Annulée</span>@endif</td>
+                                    <td>{{ \Carbon\Carbon::parse($facture->invoice_date)->format('d/m/Y H:i:s') }}</td>
                                     <td>{{ $facture->tp_trade_number }}</td>
                                     <!--
                                     <td>{{ $facture->tp_phone_number }}</td>
@@ -118,7 +118,7 @@
                                     <td>{{ number_format($facture->item_price,0,',',' ') }}</td>
                                     <td>{{ number_format($facture->item_total_amount ,0,',',' ')}}</td>
                                     <td>{{ $facture->auteur }}</td>
-                                    <td>{{ $facture->description }}</td>
+                                    <td>@if($facture->cancelled_invoice == 1 || $facture->etat == -1)<span class="badge badge-danger">{{ $facture->cn_motif }}</span> ;Référence Facture : <span class="badge badge-warning">{{ $facture->invoice_ref }}</span> @endif</td>
                                     <td>
                                         @if (Auth::guard('admin')->user()->can('invoice_swiming_pool.create'))
                                         @if($facture->statut != '1')
@@ -145,9 +145,11 @@
                                         @endif
                                         @if (Auth::guard('admin')->user()->can('note_credit.create'))
                                         @if($facture->etat == 1 || $facture->etat == 01)
+                                        @if($facture->cancelled_invoice != 1)
                                          <a href="{{ route('admin.booking-note-de-credit.create', $facture->invoice_number) }}" class="btn btn-success">Facture d'Avoir</a>
                                         @endif
                                         @endif 
+                                        @endif
                                         @if (Auth::guard('admin')->user()->can('invoice_swiming_pool.reset'))
                                         @if($facture->etat != 1 || $facture->etat != 2)
                                          <a href="{{ route('admin.voir-facture.reset', $facture->invoice_number) }}" class="btn btn-success">Annuler</a>

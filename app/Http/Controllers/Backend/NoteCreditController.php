@@ -1834,6 +1834,7 @@ class NoteCreditController extends Controller
                     ->update(['etat' => 1,'validated_by' => $this->user->name]);
                 NoteCreditDetail::where('invoice_number', '=', $invoice_number)
                     ->update(['etat' => 1,'validated_by' => $this->user->name]);
+                DB::commit();
                 session()->flash('success', 'La note de credit a été validé avec succés!!');
                 return back();
             }
