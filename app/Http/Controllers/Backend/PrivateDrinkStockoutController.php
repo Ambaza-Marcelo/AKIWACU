@@ -432,7 +432,7 @@ class PrivateDrinkStockoutController extends Controller
             //$email4 = 'munyembari_mp@yahoo.fr';
             $auteur = $this->user->name;
             $mailData = [
-                    'title' => 'SORTIE DES ARTICLES AU STOCK PDG',
+                    'title' => 'SORTIE DES ARTICLES AU MAGASIN EGR',
                     'stockout_no' => $stockout_no,
                     'auteur' => $auteur,
                     'description' => $description,
