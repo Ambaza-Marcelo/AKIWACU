@@ -69,11 +69,16 @@
                  {{ $data->description }}
                 </div>
                 <br><br>
+                <!--
                  <a href="javascript:window.print();"><small>Thank You For Work</small></a>
                     <small>
                            &nbsp;&nbsp;
                            {!! QrCode::size(100)->backgroundColor(255,255,255)->generate('ID : '.$order_signature.' www.edengardenresorts.bi, Designed by AMBAZA Marcellin' ) !!}
                     </small>
+                  -->
+                  <small>
+                           &nbsp;&nbsp; <img src="data:image/png;base64, {!! base64_encode(QrCode::size(100)->generate('eSIGNATURE : '.$order_signature.' www.ambazamarcellin.netlify.com, Order Number : '.$order_no)) !!} ">
+                 </small>
             </div>
         </div>
     </div>

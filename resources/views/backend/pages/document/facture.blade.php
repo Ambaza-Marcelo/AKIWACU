@@ -125,11 +125,16 @@
                     <br>
                     <small>Caissier(e) : {{ $facture->auteur }}</small>
                     <br><br>
+                    <!--
                     <a href="javascript:window.print();"><small>Thank You For Visit</small></a>
                     <small>
                            &nbsp;&nbsp;
                            {!! QrCode::size(100)->backgroundColor(255,255,255)->generate('ID : '.$invoice_signature.' www.edengardenresorts.bi, Designed by AMBAZA Marcellin' ) !!}
                     </small>
+                  -->
+                  <small>
+                           &nbsp;&nbsp; <img src="data:image/png;base64, {!! base64_encode(QrCode::size(100)->generate('eSIGNATURE : '.$invoice_signature.' www.ambazamarcellin.netlify.com')) !!} ">
+                 </small>
             </div>
         </div>
     </div>
