@@ -1637,6 +1637,17 @@ class RolePermissionSeeder extends Seeder
                     'profile.edit',
                 ]
             ],
+            [
+                'group_name' => 'consomation_maison',
+                'permissions' => [
+                    // consomation_maison Permissions
+                    'consomation_maison.create',
+                    'consomation_maison.view',
+                    'consomation_maison.show',
+                    'consomation_maison.edit',
+                    'consomation_maison.delete',
+                ]
+            ],
            
             [
                 'group_name' => 'private_store_item',

@@ -36,7 +36,7 @@ class HomeConsumptionController extends Controller
 
     public function indexBarrist($staff_member_id)
     {
-        if (is_null($this->user) || !$this->user->can('drink_order_client.view')) {
+        if (is_null($this->user) || !$this->user->can('consommation_maison.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view any order !');
         }
 
@@ -51,7 +51,7 @@ class HomeConsumptionController extends Controller
 
     public function indexFood($staff_member_id)
     {
-        if (is_null($this->user) || !$this->user->can('drink_order_client.view')) {
+        if (is_null($this->user) || !$this->user->can('consommation_maison.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view any order !');
         }
 
@@ -71,7 +71,7 @@ class HomeConsumptionController extends Controller
      */
     public function createBarrist($staff_member_id)
     {
-        if (is_null($this->user) || !$this->user->can('drink_order_client.create')) {
+        if (is_null($this->user) || !$this->user->can('consommation_maison.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any order !');
         }
 
@@ -83,7 +83,7 @@ class HomeConsumptionController extends Controller
 
     public function createFood($staff_member_id)
     {
-        if (is_null($this->user) || !$this->user->can('drink_order_client.create')) {
+        if (is_null($this->user) || !$this->user->can('consommation_maison.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any order !');
         }
 
@@ -101,7 +101,7 @@ class HomeConsumptionController extends Controller
      */
     public function store(Request $request)
     {
-        if (is_null($this->user) || !$this->user->can('drink_order_client.create')) {
+        if (is_null($this->user) || !$this->user->can('consommation_maison.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any order !');
         }
 
@@ -129,6 +129,9 @@ class HomeConsumptionController extends Controller
             	session()->flash('error', 'Veuillez bien choisir la designation de la commande');
                 return back();
             }
+
+
+            try {DB::beginTransaction();
 
             $date = $request->date;
             $quantity = $request->quantity;
@@ -241,11 +244,21 @@ class HomeConsumptionController extends Controller
             $staff_member->total_amount_remaining = $total_amount_authorized - $staff_member->total_amount_consumed;
             $staff_member->save();
 
-        session()->flash('success', 'Order has been sent successfuly!!');
-        if ($flag == 0) {
-        	return redirect()->route('admin.home-consumption-food.index',$staff_member_id);
-        }else{
-        	return redirect()->route('admin.home-consumption-barrist.index',$staff_member_id);
+            DB::commit();
+            session()->flash('success', 'Order has been sent successfuly!!');
+            if ($flag == 0) {
+            return redirect()->route('admin.home-consumption-food.index',$staff_member_id);
+            }else{
+            return redirect()->route('admin.home-consumption-barrist.index',$staff_member_id);
+            }
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
         }
     }
 
@@ -271,7 +284,7 @@ class HomeConsumptionController extends Controller
      */
     public function edit($id)
     {
-        if (is_null($this->user) || !$this->user->can('drink_order_client.edit')) {
+        if (is_null($this->user) || !$this->user->can('consommation_maison.edit')) {
             abort(403, 'Sorry !! You are Unauthorized to edit any order !');
         }
 
@@ -287,7 +300,7 @@ class HomeConsumptionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (is_null($this->user) || !$this->user->can('drink_order_client.edit')) {
+        if (is_null($this->user) || !$this->user->can('consommation_maison.edit')) {
             abort(403, 'Sorry !! You are Unauthorized to edit any order !');
         }
 
@@ -297,24 +310,40 @@ class HomeConsumptionController extends Controller
 
     public function reject($order_no)
     {
-       if (is_null($this->user) || !$this->user->can('drink_order_client.reject')) {
+       if (is_null($this->user) || !$this->user->can('consommation_maison.reject')) {
             abort(403, 'Sorry !! You are Unauthorized to reject any order !');
         }
+
+        try {DB::beginTransaction();
+            
 
         HomeConsumption::where('order_no', '=', $order_no)
                 ->update(['status' => -1]);
         HomeConsumptionDetail::where('order_no', '=', $order_no)
                 ->update(['status' => -1]);
 
-        session()->flash('success', 'Order has been rejected !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Order has been rejected !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function htmlPdf($consumption_no)
     {
-        if (is_null($this->user) || !$this->user->can('drink_order_client.create')) {
+        if (is_null($this->user) || !$this->user->can('consommation_maison.create')) {
             abort(403, 'Sorry !! You are Unauthorized!');
         }
+
+        try {DB::beginTransaction();
 
         $setting = DB::table('settings')->orderBy('created_at','desc')->first();
         $stat = HomeConsumption::where('consumption_no', $consumption_no)->value('status');
@@ -340,7 +369,17 @@ class HomeConsumptionController extends Controller
                 ->update(['flag' => 1]); 
 
            // download pdf file
+            DB::commit();
            return $pdf->download('BON_CONSOMMATION_'.$consumption_no.'.pdf');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
         
     }
 
@@ -357,9 +396,11 @@ class HomeConsumptionController extends Controller
      */
     public function destroy($order_no)
     {
-        if (is_null($this->user) || !$this->user->can('drink_order_client.delete')) {
+        if (is_null($this->user) || !$this->user->can('consommation_maison.delete')) {
             abort(403, 'Sorry !! You are Unauthorized to delete any order !');
         }
+
+        try {DB::beginTransaction();
 
         $order = HomeConsumption::where('order_no',$order_no)->first();
         if (!is_null($order)) {
@@ -367,7 +408,18 @@ class HomeConsumptionController extends Controller
             HomeConsumptionDetail::where('order_no',$order_no)->delete();
         }
 
-        session()->flash('success', 'Order has been deleted !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Order has been deleted !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 }

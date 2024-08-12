@@ -110,6 +110,8 @@ class PaiementController extends Controller
                 ]);
             }
 
+        try {DB::beginTransaction();
+
         $codeJournalPaieEncours = HrJournalPaie::where('etat', 0)->value('code');
 
         $plafond_cotisation = 450000;
@@ -217,8 +219,20 @@ class PaiementController extends Controller
         $paiement->created_by = $this->user->name;
         $paiement->save();
 
-        session()->flash('success', $this->user->name.', vous avez créé une fiche de paie avec succés !!');
+        DB::commit();
+
+            session()->flash('success', $this->user->name.', vous avez créé une fiche de paie avec succés !!');
             return redirect()->back();
+
+            } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
         //return redirect()->route('admin.hr-paiements.index',$company_id);
     }
 
@@ -315,6 +329,8 @@ class PaiementController extends Controller
                     'error' => $error->errors()->all(),
                 ]);
             }
+
+        try {DB::beginTransaction();
 
         $codeJournalPaieEncours = HrJournalPaie::where('etat', 0)->value('code');
 
@@ -441,8 +457,20 @@ class PaiementController extends Controller
         $employe->prime_fonction = $paiement->prime_fonction;
         $employe->save();
 
-        session()->flash('success', $this->user->name.', vous avez modifié le bulletin de paie!!');
-        return redirect()->back();
+        DB::commit();
+
+            session()->flash('success', $this->user->name.', vous avez modifié le bulletin de paie!!');
+            return redirect()->back();
+
+            } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     /**

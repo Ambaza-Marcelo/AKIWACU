@@ -64,7 +64,7 @@ class FactureBookingController extends Controller
 
     public function indexKidnessSpace()
     {
-        if (is_null($this->user) || !$this->user->can('invoice_booking.view')) {
+        if (is_null($this->user) || !$this->user->can('invoice_kidness_space.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view any invoice !');
         }
 
@@ -74,7 +74,7 @@ class FactureBookingController extends Controller
 
     public function indexSwimingPool()
     {
-        if (is_null($this->user) || !$this->user->can('invoice_booking.view')) {
+        if (is_null($this->user) || !$this->user->can('invoice_swiming_pool.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view any invoice !');
         }
 
@@ -84,7 +84,7 @@ class FactureBookingController extends Controller
 
     public function indexBreakFast()
     {
-        if (is_null($this->user) || !$this->user->can('invoice_booking.view')) {
+        if (is_null($this->user) || !$this->user->can('invoice_breakfast.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view any invoice !');
         }
 
@@ -104,7 +104,7 @@ class FactureBookingController extends Controller
 
     public function create($booking_no)
     {
-        if (is_null($this->user) || !$this->user->can('invoice_drink.create')) {
+        if (is_null($this->user) || !$this->user->can('invoice_booking.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any invoice !');
         }
 
@@ -121,7 +121,7 @@ class FactureBookingController extends Controller
     public function show($invoice_number)
     {
         //
-        if (is_null($this->user) || !$this->user->can('invoice_drink.view')) {
+        if (is_null($this->user) || !$this->user->can('invoice_booking.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view any invoice !');
         }
 
@@ -135,7 +135,7 @@ class FactureBookingController extends Controller
 
     public function rapportReservation(Request $request)
     {
-        if (is_null($this->user) || !$this->user->can('invoice_drink.view')) {
+        if (is_null($this->user) || !$this->user->can('invoice_booking.view') || !$this->user->can('invoice_swimming_pool.view') || !$this->user->can('invoice_kidness_space.view') || !$this->user->can('invoice_breakfast.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view any stock !');
         }
 

@@ -60,6 +60,8 @@ class CongePayeController extends Controller
 
         ]);
 
+        try {DB::beginTransaction();
+
         $conge_paye = new HrCongePaye();
         $conge_paye->nbre_jours = $request->nbre_jours;
         $conge_paye->session = $request->session;
@@ -84,9 +86,21 @@ class CongePayeController extends Controller
             }
                 HrJournalCongePaye::insert($insert_data);
 
-        session()->flash('success', 'Congé Payé est créé !!');
+            DB::commit();
 
-        return redirect()->back();
+            session()->flash('success', 'Congé Payé est créé !!');
+
+            return redirect()->back();
+
+            } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
 

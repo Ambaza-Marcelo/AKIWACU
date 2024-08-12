@@ -194,12 +194,12 @@ class BookingController extends Controller
                 'description'  => 'required',
                 'nom_referent'  => 'required',
                 'telephone_referent'  => 'required',
-                'courriel_referent'  => 'required',
+                //'courriel_referent'  => 'required',
                 'type_evenement'  => 'required',
                 'nombre_personnes'  => 'required',
                 'date_debut'  => 'required',
                 'date_fin'  => 'required',
-                'booking_client_id'  => 'required',
+                //'booking_client_id'  => 'required',
             );
 
             $error = Validator::make($request->all(),$rules);
@@ -209,6 +209,8 @@ class BookingController extends Controller
                     'error' => $error->errors()->all(),
                 ]);
             }
+
+            try {DB::beginTransaction();
 
             $date = $request->date;
             $booking_no = $request->booking_no;
@@ -310,8 +312,19 @@ class BookingController extends Controller
             BookingBookingDetail::insert($insert_data);
             BookingTechniqueDetail::insert($insert_technique_data);
 
-        session()->flash('success', 'Booking has been sent successfuly!!');
-        return redirect()->route('admin.booking-salles.index');
+            DB::commit();
+            session()->flash('success', 'Booking has been sent successfuly!!');
+            return redirect()->route('admin.booking-salles.index');
+
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     public function storeService(Request $request)
@@ -336,6 +349,8 @@ class BookingController extends Controller
                     'error' => $error->errors()->all(),
                 ]);
             }
+
+            try {DB::beginTransaction();
 
             $date = $request->date;
             $booking_no = $request->booking_no;
@@ -419,8 +434,20 @@ class BookingController extends Controller
 
             BookingBookingDetail::insert($insert_data);
 
-        session()->flash('success', 'Booking has been sent successfuly!!');
-        return redirect()->route('admin.booking-services.index');
+            DB::commit();
+
+            session()->flash('success', 'Booking has been sent successfuly!!');
+            return redirect()->route('admin.booking-services.index');
+
+            } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     public function storeTable(Request $request)
@@ -436,7 +463,7 @@ class BookingController extends Controller
                 'description'  => 'required',
                 'nom_referent'  => 'required',
                 'telephone_referent'  => 'required',
-                'courriel_referent'  => 'required',
+                //'courriel_referent'  => 'required',
                 'type_evenement'  => 'required',
                 'nombre_personnes'  => 'required',
                 'date_debut'  => 'required',
@@ -450,6 +477,8 @@ class BookingController extends Controller
                     'error' => $error->errors()->all(),
                 ]);
             }
+
+            try {DB::beginTransaction();
 
             $date = $request->date;
             $booking_no = $request->booking_no;
@@ -527,8 +556,20 @@ class BookingController extends Controller
 
             BookingBookingDetail::insert($insert_data);
 
-        session()->flash('success', 'Booking has been sent successfuly!!');
-        return redirect()->route('admin.booking-tables.index');
+            DB::commit();
+
+            session()->flash('success', 'Booking has been sent successfuly!!');
+            return redirect()->route('admin.booking-tables.index');
+
+            } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     public function storeKidnessSpace(Request $request)
@@ -553,6 +594,8 @@ class BookingController extends Controller
                     'error' => $error->errors()->all(),
                 ]);
             }
+
+            try {DB::beginTransaction();
 
             $date = $request->date;
             $booking_no = $request->booking_no;
@@ -636,8 +679,20 @@ class BookingController extends Controller
 
             BookingBookingDetail::insert($insert_data);
 
-        session()->flash('success', 'Booking has been sent successfuly!!');
-        return redirect()->route('admin.booking-kidness-space.index');
+            DB::commit();
+
+            session()->flash('success', 'Booking has been sent successfuly!!');
+            return redirect()->route('admin.booking-kidness-space.index');
+
+            } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     public function storeSwimingPool(Request $request)
@@ -662,6 +717,8 @@ class BookingController extends Controller
                     'error' => $error->errors()->all(),
                 ]);
             }
+
+            try {DB::beginTransaction();
 
             $date = $request->date;
             $booking_no = $request->booking_no;
@@ -745,8 +802,21 @@ class BookingController extends Controller
 
             BookingBookingDetail::insert($insert_data);
 
-        session()->flash('success', 'Booking has been sent successfuly!!');
-        return redirect()->route('admin.booking-swiming-pool.index');
+            DB::commit();
+
+            session()->flash('success', 'Booking has been sent successfuly!!');
+            return redirect()->route('admin.booking-swiming-pool.index');
+
+            } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
     public function storeBreakFast(Request $request)
@@ -771,6 +841,8 @@ class BookingController extends Controller
                     'error' => $error->errors()->all(),
                 ]);
             }
+
+            try {DB::beginTransaction();
 
             $date = $request->date;
             $booking_no = $request->booking_no;
@@ -854,8 +926,21 @@ class BookingController extends Controller
 
             BookingBookingDetail::insert($insert_data);
 
-        session()->flash('success', 'Booking has been sent successfuly!!');
-        return redirect()->route('admin.booking-breakfast.index');
+
+            DB::commit();
+
+            session()->flash('success', 'Booking has been sent successfuly!!');
+            return redirect()->route('admin.booking-breakfast.index');
+
+            } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     /**
@@ -913,6 +998,10 @@ class BookingController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to validate any booking !');
         }
 
+
+        try {DB::beginTransaction();
+            
+
         $data = BookingBookingDetail::where('booking_no',$booking_no)->first();
 
         if (!empty($data->salle_id)) {
@@ -963,8 +1052,21 @@ class BookingController extends Controller
                 ->update(['status' => 1,'validated_by' => $this->user->name]);;
         }
 
-        session()->flash('success', 'booking has been validated !!');
-        return back();
+
+            DB::commit();
+
+            session()->flash('success', 'booking has been validated !!');
+            return back();
+
+            } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     public function reject($booking_no)
@@ -973,13 +1075,27 @@ class BookingController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to reject any order !');
         }
 
+        try {DB::beginTransaction();
+
         BookingBooking::where('booking_no', '=', $booking_no)
                 ->update(['status' => -1,'rejected_by' => $this->user->name]);
             BookingBookingDetail::where('booking_no', '=', $booking_no)
                 ->update(['status' => -1,'rejected_by' => $this->user->name]);
 
-        session()->flash('success', 'Booking has been rejected !!');
-        return back();
+            DB::commit();
+
+            session()->flash('success', 'Booking has been rejected !!');
+            return back();
+
+            } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     public function reset($booking_no)
@@ -988,13 +1104,28 @@ class BookingController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to reset any order !');
         }
 
+        try {DB::beginTransaction();
+
         BookingBooking::where('booking_no', '=', $booking_no)
                 ->update(['status' => 0,'reseted_by' => $this->user->name]);
             BookingBookingDetail::where('booking_no', '=', $booking_no)
                 ->update(['status' => 0,'reseted_by' => $this->user->name]);
 
-        session()->flash('success', 'Booking has been reseted !!');
-        return back();
+            DB::commit();
+
+            session()->flash('success', 'Booking has been reseted !!');
+            return back();
+
+            } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
     }
 
 
@@ -1019,6 +1150,8 @@ class BookingController extends Controller
 
            // download pdf file
            return $pdf->download($booking_no.'.pdf'); 
+
+
         
     }
 
@@ -1034,13 +1167,27 @@ class BookingController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to delete any order !');
         }
 
+        try {DB::beginTransaction();
+
         $order = BookingBooking::where('booking_no',$booking_no)->first();
         if (!is_null($order)) {
             $order->delete();
             BookingBookingDetail::where('booking_no',$booking_no)->delete();
         }
 
-        session()->flash('success', 'Booking has been deleted !!');
-        return back();
+            DB::commit();
+
+            session()->flash('success', 'Booking has been deleted !!');
+            return back();
+
+            } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 }

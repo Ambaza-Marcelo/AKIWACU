@@ -96,6 +96,7 @@ class TakeCongePayeController extends Controller
 
         ]);
 
+        try {DB::beginTransaction();
 
         $nbre_jours_conge_paye = HrJournalCongePaye::where('employe_id',$request->employe_id)->value('nbre_jours_conge_paye');
         $nbre_jours_conge_restant = HrJournalCongePaye::where('employe_id',$request->employe_id)->value('nbre_jours_conge_restant');
@@ -121,6 +122,8 @@ class TakeCongePayeController extends Controller
 
         $employe = HrEmploye::where('id',$request->employe_id)->value('lastname');
 
+        DB::commit();
+
         session()->flash('success', $employe.', Vous venez de solliciter le congé payé de !'.$request->nbre_jours_conge_sollicite.' jours');
 
         return redirect()->route('admin.hr-take-conge-payes.index',$take_conge_paye->company_id);
@@ -128,6 +131,17 @@ class TakeCongePayeController extends Controller
         }else{
             session()->flash('error', $employe.', vous avez déjà sollicité '.$nbre_jours_conge_paye.' jours de votre congé payé!');
             return redirect()->route('admin.hr-take-conge-payes.index',$take_conge_paye->company_id);
+        }
+
+
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
         }
 
     }
@@ -151,6 +165,8 @@ class TakeCongePayeController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to reject any conge !');
         }
 
+        try {DB::beginTransaction();
+
         $employe_id = HrTakeCongePaye::where('id',$id)->value('employe_id');
 
         $data = HrJournalCongePaye::where('employe_id', $employe_id)->first();
@@ -172,8 +188,19 @@ class TakeCongePayeController extends Controller
         //$take_conge_paye->rejete_par = $this->user->name;
         $take_conge_paye->save();
 
+        DB::commit();
         session()->flash('success', 'congé est rejeté !!');
         return back();
+
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     public function annulerConge($id)
@@ -213,6 +240,8 @@ class TakeCongePayeController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to confirm any conge !');
         }
 
+        try {DB::beginTransaction();
+
         $datas = HrTakeCongePaye::where('id',$id)->get();
 
         foreach($datas as $data){
@@ -244,13 +273,22 @@ class TakeCongePayeController extends Controller
 
     }
 
-    }
-
         HrTakeCongePaye::where('id', '=', $id)
                 ->update(['etat' => 4,'approuve_par' => $this->user->name]);
 
+        DB::commit();
         session()->flash('success', 'Congé Payé est approuvé avec succés !!');
         return back();
+
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
 

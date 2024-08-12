@@ -407,6 +407,8 @@ class BarristOrderController extends Controller
             abort(403, 'Sorry !! You are Unauthorized!');
         }
 
+        try {DB::beginTransaction();
+
         $setting = DB::table('settings')->orderBy('created_at','desc')->first();
         $stat = BarristOrder::where('order_no', $order_no)->value('status');
         $description = BarristOrder::where('order_no', $order_no)->value('description');
@@ -422,18 +424,21 @@ class BarristOrderController extends Controller
            $order_no = BarristOrder::where('order_no', $order_no)->value('order_no');
 
            $datas = BarristOrderDetail::where('order_no', $order_no)->get();
-           /*
+           
            $pdf = PDF::loadView('backend.pages.document.barrist_order',compact('datas','ingredients','order_no','setting','description','order_signature','date','totalValue','order'))->setPaper('a6', 'portrait');
 
            Storage::put('public/barrist_order/'.$order_no.'.pdf', $pdf->output());
-            */
+            
            BarristOrder::where('order_no', '=', $order_no)
                 ->update(['flag' => 1]);
             BarristOrderDetail::where('order_no', '=', $order_no)
                 ->update(['flag' => 1]);
+                /*
             return view('backend.pages.document.barrist_order',compact('datas','ingredients','order_no','setting','description','order_signature','date','totalValue','order'));
+            */
            // download pdf file
-          // return $pdf->download('COMMANDE_'.$order_no.'.pdf'); 
+            DB::commit();
+           return $pdf->download('COMMANDE_'.$order_no.'.pdf'); 
            
         }else if ($stat == -1) {
             session()->flash('error', 'Order has been rejected !!');
@@ -441,6 +446,16 @@ class BarristOrderController extends Controller
         }else{
             session()->flash('error', 'wait until order will be validated !!');
             return back();
+        }
+
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
         }
         
     }

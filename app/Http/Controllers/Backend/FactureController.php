@@ -973,7 +973,7 @@ class FactureController extends Controller
 
     public function storeBooking(Request  $request)
     {
-        if (is_null($this->user) || !$this->user->can('invoice_drink.create')) {
+        if (is_null($this->user) || !$this->user->can('invoice_booking.create') || !$this->user->can('invoice_kidness_space.create') || !$this->user->can('invoice_swimming_pool.create') || !$this->user->can('invoice_breakfast.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any invoice !');
         }
 

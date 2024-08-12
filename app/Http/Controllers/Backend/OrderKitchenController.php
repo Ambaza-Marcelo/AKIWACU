@@ -484,6 +484,8 @@ class OrderKitchenController extends Controller
             abort(403, 'Sorry !! You are Unauthorized!');
         }
 
+        try {DB::beginTransaction();
+
         $setting = DB::table('settings')->orderBy('created_at','desc')->first();
         $stat = OrderKitchen::where('order_no', $order_no)->value('status');
         $description = OrderKitchen::where('order_no', $order_no)->value('description');
@@ -498,20 +500,20 @@ class OrderKitchenController extends Controller
 
            $datas = OrderKitchenDetail::where('order_no', $order_no)->get();
            $accompagnements = AccompagnementDetail::where('order_no', $order_no)->get();
-           /*
+           
            $pdf = PDF::loadView('backend.pages.document.food_order_client',compact('accompagnements','datas','order_no','setting','description','order_signature','date','order','totalValue'))->setPaper('a6', 'portrait');
 
            Storage::put('public/commande_cuisine/'.$order_no.'.pdf', $pdf->output());
-            */
+            
            OrderKitchen::where('order_no', '=', $order_no)
                 ->update(['flag' => 1]);
             OrderKitchenDetail::where('order_no', '=', $order_no)
                 ->update(['flag' => 1]);
-
+                /*
             return view('backend.pages.document.food_order_client',compact('accompagnements','datas','order_no','setting','description','order_signature','date','order','totalValue'));
-
+            */
            // download pdf file
-           //return $pdf->download($order_no.'.pdf'); 
+           return $pdf->download($order_no.'.pdf'); 
            
         }else if ($stat == -1) {
             session()->flash('error', 'Order has been rejected !!');
@@ -519,6 +521,16 @@ class OrderKitchenController extends Controller
         }else{
             session()->flash('error', 'wait until order will be validated !!');
             return back();
+        }
+
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
         }
         
     }
