@@ -54,18 +54,22 @@
                             <thead class="bg-light text-capitalize">
                                 <tr>
                                     <th width="5%">#</th>
+                                    <th width="20%">Type Contribuable</th>
+                                    <th width="20%">Assujetti à la TVA</th>
                                     <th width="20%">Nom Client</th>
                                     <th width="20%">NIF Client</th>
                                     <th width="20%">Adresse Client</th>
                                     <th width="20%">Mail</th>
-                                    <th width="10%">Phone No</th>
-                                    <th width="15%">Action</th>
+                                    <th width="20%">Phone No</th>
+                                    <th width="30%">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                @foreach ($clients as $client)
                                <tr>
                                     <td>{{ $loop->index+1 }}</td>
+                                    <td>@if($client->tp_type == 1) Personne Physique @else Société @endif</td>
+                                    <td>@if($client->vat_customer_payer == 1) OUI @else NON @endif</td>
                                     <td>{{ $client->customer_name }}</td>
                                     <td>{{ $client->customer_TIN }}</td>
                                     <td>{{ $client->customer_address }}</td>

@@ -69,8 +69,8 @@ class ClientController extends Controller
 
         // Validation Data
         $request->validate([
-            'customer_name' => 'required|max:100',
-            'tp_type' => 'required|min:10',
+            //'customer_name' => 'required|max:100',
+            'tp_type' => 'required',
             'telephone' => 'required',
         ]);
 
