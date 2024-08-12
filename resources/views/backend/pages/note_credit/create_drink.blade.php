@@ -278,10 +278,10 @@
                                 <td><select class="form-control" name="drink_id[]" id="drink_id">
                                 <option value="{{ $data->drink_id }}" class="form-control">{{ $data->drink->name }}</option>
                                 </select></td>  
-                                <td><input type="number" step='any' min='0' value="{{ $data->item_quantity }}" name="item_quantity[]" placeholder="Quantite" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_drink.delete')) @else readonly @endif /></td>  
-                                <td><input type="number" step='any' min='0' value="{{ $data->item_price }}" @if(Auth::guard('admin')->user()->can('invoice_drink.delete')) @else readonly @endif name="item_price[]" placeholder="Prix" class="form-control" /></td>
-                                <td><input type="number" step='any' min='0' name="item_ct[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_drink.delete')) @else readonly @endif/></td>   
-                                <td><input type="number" step='any' min='0' name="item_tl[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_drink.delete')) @else readonly @endif/></td>
+                                <td><input type="number" step='any' min='0' value="{{ $data->item_quantity }}" name="item_quantity[]" placeholder="Quantite" class="form-control" @if(Auth::guard('admin')->user()->can('note_credit.create')) @else readonly @endif /></td>  
+                                <td><input type="number" step='any' min='0' value="{{ $data->item_price }}" @if(Auth::guard('admin')->user()->can('note_credit.create')) @else readonly @endif name="item_price[]" placeholder="Prix" class="form-control" /></td>
+                                <td><input type="number" step='any' min='0' name="item_ct[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('note_credit.create')) @else readonly @endif/></td>   
+                                <td><input type="number" step='any' min='0' name="item_tl[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('note_credit.create')) @else readonly @endif/></td>
                                 <td><input type="text" value="{{ $data->drink_order_no }}" name="drink_order_no[]" class="form-control" readonly /></td>
                                 <td><button type='button' class='btn btn-danger remove-tr'><i class='fa fa-trash-o' title='Supprimer la ligne' aria-hidden='false'></i></button></td> 
                             </tr> 

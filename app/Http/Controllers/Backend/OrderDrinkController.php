@@ -476,7 +476,7 @@ class OrderDrinkController extends Controller
         $description = OrderDrink::where('order_no', $order_no)->value('description');
         $order_signature = OrderDrink::where('order_no', $order_no)->value('order_signature');
         $date = OrderDrink::where('order_no', $order_no)->value('created_at');
-        $order = OrderDrink::where('order_no', $order_no)->first();
+        $data = OrderDrink::where('order_no', $order_no)->first();
         $totalValue = DB::table('order_drink_details')
             ->where('order_no', '=', $order_no)
             ->sum('total_amount_selling');
@@ -486,7 +486,7 @@ class OrderDrinkController extends Controller
 
            $datas = OrderDrinkDetail::where('order_no', $order_no)->get();
            
-           $pdf = PDF::loadView('backend.pages.document.drink_order_client',compact('datas','order_no','setting','description','order_signature','date','totalValue','order'))->setPaper('a6', 'portrait');
+           $pdf = PDF::loadView('backend.pages.document.drink_order_client',compact('datas','order_no','setting','description','order_signature','date','totalValue','data'))->setPaper('a6', 'portrait');
 
            Storage::put('public/commande_boisson/'.$order_no.'.pdf', $pdf->output());
             

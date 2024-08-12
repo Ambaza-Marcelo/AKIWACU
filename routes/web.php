@@ -141,9 +141,9 @@ Route::group(['prefix' => 'admin'], function () {
 
 
     Route::put('eBMS-boissons-note-de-credit/valider/{invoice_number}', 'Backend\NoteCreditController@validerFactureDrink')->name('admin.boissons-note-de-credit.valider');
-    Route::put('eBMS-barrista-note-de-credit/valider/{invoice_number}', 'Backend\NoteCreditController@validerFactureBarrist')->name('admin.barrista-note-de-credit.valider');
+    Route::put('eBMS-barrista-note-de-credit/valider/{invoice_number}', 'Backend\NoteCreditController@validerFactureBarrista')->name('admin.barrista-note-de-credit.valider');
     Route::put('eBMS-bartender-note-de-credit/valider/{invoice_number}', 'Backend\NoteCreditController@validerFactureBartender')->name('admin.bartender-note-de-credit.store');
-    Route::put('eBMS-nourritures-note-de-credit/valider/{invoice_number}', 'Backend\NoteCreditController@validerFactureFood')->name('admin.nourritures-note-de-credit.valider');
+    Route::put('eBMS-nourritures-note-de-credit/valider/{invoice_number}', 'Backend\NoteCreditController@validerFactureNourriture')->name('admin.nourritures-note-de-credit.valider');
     Route::put('eBMS-booking-note-de-credit/valider/{invoice_number}', 'Backend\NoteCreditController@validerFactureBooking')->name('admin.booking-note-de-credit.valider');
 
 

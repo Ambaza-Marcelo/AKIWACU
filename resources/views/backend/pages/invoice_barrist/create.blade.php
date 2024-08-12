@@ -46,17 +46,13 @@
                     <form action="{{ route('ebms_api-facture-barrist.store') }}" method="POST">
                         @csrf
                         <div class="row">
-                            <div class="col-md-4">
-                                <label for="invoice_date">Date Facture</label>
-                                <input type="date" placeholder="Date Facture" name="invoice_date" class="form-control" required>
-                            </div>
                             @if($table_id)
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <label for="table_id">Table : {{ $data->table->name }}</label>
                                 <input type="number" name="table_id" class="form-control" value="{{ $table_id }}" readonly>
                             </div>
                             @endif
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <label for="employe_id">Serveur</label>
                                 <select class="form-control" name="employe_id" id="employe_id">
                                 <option disabled="disabled">Merci de choisir un Serveur</option>

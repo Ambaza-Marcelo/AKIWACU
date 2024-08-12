@@ -134,7 +134,7 @@
                                         @endif
                                         @if (Auth::guard('admin')->user()->can('note_credit.create'))
                                         @if($facture->etat == 1 || $facture->etat == 01)
-                                         <a href="{{ route('admin.nourriture-note-de-credit.create', $facture->invoice_number) }}" class="btn btn-success">Facture d'Avoir</a>
+                                         <a href="{{ route('admin.nourritures-note-de-credit.create', $facture->invoice_number) }}" class="btn btn-success">Facture d'Avoir</a>
                                         @endif
                                         @endif 
                                         @if (Auth::guard('admin')->user()->can('invoice_kitchen.reset'))

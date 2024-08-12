@@ -3009,82 +3009,7 @@ class FactureController extends Controller
         $cn_motif = $request->cn_motif;
 
         $invoice_signature = Facture::where('invoice_number', $invoice_number)->value('invoice_signature');
-
-        $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
-        $facture = FactureDetail::where('invoice_number', $invoice_number)->first();
         
-        if ($facture->etat === '1' && !empty($facture->food_item_id)) {
-            foreach($datas as $data){
-            $valeurStockInitial = FoodStore::where('food_item_id', $data->food_item_id)->value('total_cump_value');
-            $quantityStockInitial = FoodStore::where('food_item_id', $data->food_item_id)->value('quantity');
-            $cump = FoodStore::where('food_item_id', $data->food_item_id)->value('cump');
-
-            $quantityTotal = $quantityStockInitial + $data->item_quantity;
-                      
-                $reportData = array(
-                    'food_item_id' => $data->food_item_id,
-                    'quantity_stock_initial' => $quantityStockInitial,
-                    'value_stock_initial' => $valeurStockInitial,
-                    'quantity_stockin' => $data->item_quantity,
-                    'value_stockin' => $data->item_quantity * $data->item_price,
-                    'invoice_no' => $data->invoice_number,
-                    'date' => $data->invoice_date,
-                    'quantity_stock_final' => $quantityTotal,
-                    'value_stock_final' => $quantityTotal * $data->item_price,
-                    'commande_cuisine_no' => $data->food_order_no,
-                    'created_by' => $this->user->name,
-                    'employe_id' => $data->employe_id,
-                    'origine_facture' => 'CUISINE',
-                    'created_at' => \Carbon\Carbon::now()
-                );
-                $report[] = $reportData;
-
-            $foods = FoodItemDetail::where('code', $data->foodItem->code)->get();
-            foreach($foods as $food){
-
-                $quantityStockInitial = FoodBigStoreDetail::where('food_id','!=', '')->where('food_id', $food->food_id)->value('quantity');
-
-                $quantiteEntree = $data->item_quantity * $food->quantity;
-                
-                $quantityTotalBigStore = $quantityStockInitial + $quantiteEntree;
-                $reportBigStore = array(
-                    'food_id' => $food->food_id,
-                    'quantity_stock_initial' => $quantityStockInitial,
-                    'value_stock_initial' => $quantityStockInitial * $food->food->purchase_price,
-                    'invoice_no' => $data->invoice_number,
-                    'date' => $data->invoice_date,
-                    'quantity_stockin' => $quantiteEntree,
-                    'value_stockin' => $quantiteEntree * $food->food->purchase_price,
-                    'quantity_stock_final' => $quantityTotalBigStore,
-                    'value_stock_final' => $quantityTotalBigStore * $food->food->purchase_price,
-                    'created_by' => $this->user->name,
-                    'created_at' => \Carbon\Carbon::now()
-                );
-                $reportBigStoreData[] = $reportBigStore;
-
-                    $bigStore = array(
-                        'food_id' => $food->food_id,
-                        'quantity' => $quantityTotalBigStore,
-                        'total_purchase_value' => $quantityTotalBigStore * $food->food->purchase_price,
-                        'total_cump_value' => $quantityTotalBigStore * $food->food->purchase_price,
-                        'verified' => false,
-                        'created_at' => \Carbon\Carbon::now()
-                    );
-
-                        FoodBigReport::insert($reportBigStoreData);
-                        
-                        FoodBigStoreDetail::where('food_id',$food->food_id)
-                        ->update($bigStore);
-                }
-            }
-            
-
-        }else{
-            Facture::where('invoice_number', '=', $invoice_number)
-                ->update(['etat' => -1,'statut' => -1,'cn_motif' => $cn_motif,'reseted_by' => $this->user->name]);
-            FactureDetail::where('invoice_number', '=', $invoice_number)
-                ->update(['etat' => -1,'statut' => -1,'cn_motif' => $cn_motif,'reseted_by' => $this->user->name]);
-             
             $email1 = 'ambazamarcellin2001@gmail.com';
             $email2 = 'frangiye@gmail.com';
             //$email3 = 'khaembamartin@gmail.com';
@@ -3102,35 +3027,12 @@ class FactureController extends Controller
             //Mail::to($email3)->send(new InvoiceResetedMail($mailData));
             Mail::to($email4)->send(new InvoiceResetedMail($mailData));
             
-            
-            session()->flash('success', 'La Facture  est annulée avec succés');
-            return back();
-        }
         
             Facture::where('invoice_number', '=', $invoice_number)
                 ->update(['etat' => -1,'statut' => -1,'cn_motif' => $cn_motif,'reseted_by' => $this->user->name]);
             FactureDetail::where('invoice_number', '=', $invoice_number)
                 ->update(['etat' => -1,'statut' => -1,'cn_motif' => $cn_motif,'reseted_by' => $this->user->name]);
                
-            $email1 = 'ambazamarcellin2001@gmail.com';
-            $email2 = 'frangiye@gmail.com';
-            //$email3 = 'khaembamartin@gmail.com';
-            $email4 = 'munyembari_mp@yahoo.fr';
-            //$email5 = 'balowayangfistonfiston@gmail.com';
-            $auteur = $this->user->name;
-            $mailData = [
-                    'title' => 'Système de facturation électronique, edenSoft',
-                    'invoice_number' => $invoice_number,
-                    'auteur' => $auteur,
-                    'cn_motif' => $cn_motif,
-                    ];
-         
-            Mail::to($email1)->send(new InvoiceResetedMail($mailData));
-            Mail::to($email2)->send(new InvoiceResetedMail($mailData));
-            //Mail::to($email3)->send(new InvoiceResetedMail($mailData));
-            Mail::to($email4)->send(new InvoiceResetedMail($mailData));
-            //Mail::to($email5)->send(new InvoiceResetedMail($mailData));
-            
             DB::commit();
             session()->flash('success', 'La Facture  est annulée avec succés');
             return back();
@@ -3179,7 +3081,7 @@ class FactureController extends Controller
             abort(403, 'Sorry !! You are Unauthorized!');
         }
 
-
+        try {DB::beginTransaction();
         $setting = DB::table('settings')->orderBy('created_at','desc')->first();
 
         $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
@@ -3195,14 +3097,14 @@ class FactureController extends Controller
         $totalVat = DB::table('facture_details')
             ->where('invoice_number', '=', $invoice_number)
             ->sum('vat');
-        $EGRClient = Facture::where('invoice_number', $invoice_number)->value('customer_name');
+        $client = Facture::where('invoice_number', $invoice_number)->value('customer_name');
         $date = Facture::where('invoice_number', $invoice_number)->value('invoice_date');
-       /*
-        $pdf = PDF::loadView('backend.pages.document.facture',compact('datas','invoice_number','totalValue','item_total_amount','EGRClient','setting','date','data','invoice_signature','facture','totalVat'))->setPaper('a6', 'portrait');
+       
+        $pdf = PDF::loadView('backend.pages.document.facture',compact('datas','invoice_number','totalValue','item_total_amount','client','setting','date','data','invoice_signature','facture','totalVat'))->setPaper('a6', 'portrait');
 
         Storage::put('public/factures/'.$invoice_number.'.pdf', $pdf->output());
 
-        */
+        
         $factures = Facture::where('invoice_number', $invoice_number)->get();
 
         $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
@@ -3211,11 +3113,15 @@ class FactureController extends Controller
                 ->update(['statut' => 1]);
             FactureDetail::where('invoice_number', '=', $invoice_number)
                 ->update(['statut' => 1]);
-                
-        return view('backend.pages.document.facture',compact('datas','invoice_number','totalValue','item_total_amount','EGRClient','setting','date','data','invoice_signature','facture','totalVat'));
 
+            /*
+                
+        return view('backend.pages.document.facture',compact('datas','invoice_number','totalValue','item_total_amount','client','setting','date','data','invoice_signature','facture','totalVat'));
+            */
             // download pdf file
-        //return $pdf->download('FACTURE_'.$invoice_number.'.pdf');
+        DB::commit();
+
+        return $pdf->download('FACTURE_'.$invoice_number.'.pdf');
 
         /*
         $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
@@ -3391,6 +3297,15 @@ class FactureController extends Controller
             return $response->json();
         }
         */
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     public function factureBrouillon($invoice_number)

@@ -416,7 +416,7 @@ class BarristOrderController extends Controller
         $description = BarristOrder::where('order_no', $order_no)->value('description');
         $order_signature = BarristOrder::where('order_no', $order_no)->value('order_signature');
         $date = BarristOrder::where('order_no', $order_no)->value('created_at');
-        $order = BarristOrder::where('order_no', $order_no)->first();
+        $data = BarristOrder::where('order_no', $order_no)->first();
         $totalValue = DB::table('barrist_order_details')
             ->where('order_no', '=', $order_no)
             ->sum('total_amount_selling');
@@ -427,7 +427,7 @@ class BarristOrderController extends Controller
 
            $datas = BarristOrderDetail::where('order_no', $order_no)->get();
            
-           $pdf = PDF::loadView('backend.pages.document.barrist_order',compact('datas','ingredients','order_no','setting','description','order_signature','date','totalValue','order'))->setPaper('a6', 'portrait');
+           $pdf = PDF::loadView('backend.pages.document.barrist_order',compact('datas','ingredients','order_no','setting','description','order_signature','date','totalValue','data'))->setPaper('a6', 'portrait');
 
            Storage::put('public/barrist_order/'.$order_no.'.pdf', $pdf->output());
             

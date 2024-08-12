@@ -46,11 +46,7 @@
                     <form action="{{ route('ebms_api-facture-booking.store') }}" method="POST">
                         @csrf
                         <div class="row">
-                            <div class="col-md-4">
-                                <label for="invoice_date">Date Facture</label>
-                                <input type="date" placeholder="Date Facture" name="invoice_date" class="form-control">
-                            </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <label for="booking_no">Reservation No</label>
                                 <input type="text" name="booking_no" class="form-control" value="{{ $booking_no }}" readonly>
                             </div>

@@ -492,7 +492,7 @@ class OrderKitchenController extends Controller
         $description = OrderKitchen::where('order_no', $order_no)->value('description');
         $order_signature = OrderKitchen::where('order_no', $order_no)->value('order_signature');
         $date = OrderKitchen::where('order_no', $order_no)->value('created_at');
-        $order = OrderKitchen::where('order_no', $order_no)->first();
+        $data = OrderKitchen::where('order_no', $order_no)->first();
         $totalValue = DB::table('order_kitchen_details')
             ->where('order_no', '=', $order_no)
             ->sum('total_amount_selling');
@@ -502,7 +502,7 @@ class OrderKitchenController extends Controller
            $datas = OrderKitchenDetail::where('order_no', $order_no)->get();
            $accompagnements = AccompagnementDetail::where('order_no', $order_no)->get();
            
-           $pdf = PDF::loadView('backend.pages.document.food_order_client',compact('accompagnements','datas','order_no','setting','description','order_signature','date','order','totalValue'))->setPaper('a6', 'portrait');
+           $pdf = PDF::loadView('backend.pages.document.food_order_client',compact('accompagnements','datas','order_no','setting','description','order_signature','date','data','totalValue'))->setPaper('a6', 'portrait');
 
            Storage::put('public/commande_cuisine/'.$order_no.'.pdf', $pdf->output());
             

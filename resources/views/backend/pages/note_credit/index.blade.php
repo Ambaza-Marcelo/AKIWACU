@@ -98,12 +98,12 @@
                                         
                                         @if (Auth::guard('admin')->user()->can('note_credit.validate'))
                                         @if($facture->etat == 0)
-                                         <a class="btn btn-primary text-white" href="{{ route('admin.boissons-note-de-credit.valider', $facture->invoice_number) }}"
+                                         <a class="btn btn-primary text-white" href="@if($facture->drink_order_no){{ route('admin.boissons-note-de-credit.valider', $facture->invoice_number) }} @elseif($facture->food_order_no){{ route('admin.nourritures-note-de-credit.valider', $facture->invoice_number) }} @elseif($facture->bartender_order_no){{ route('admin.bartender-note-de-credit.valider', $facture->invoice_number) }} @elseif($facture->barrist_order_no){{ route('admin.barrista-note-de-credit.valider', $facture->invoice_number) }} @elseif($facture->booking_no){{ route('admin.booking-note-de-credit.valider', $facture->invoice_number) }} @endif"
                                             onclick="event.preventDefault(); document.getElementById('validate-form-{{ $facture->invoice_number }}').submit();this.style.visibility='hidden';" ondblclick="this.style.visibility='hidden';">
                                                 Valider
                                             </a>
 
-                                            <form id="validate-form-{{ $facture->invoice_number }}" action="{{ route('admin.boissons-note-de-credit.valider', $facture->invoice_number) }}" method="POST" style="display: none;">
+                                            <form id="validate-form-{{ $facture->invoice_number }}" action="@if($facture->drink_order_no){{ route('admin.boissons-note-de-credit.valider', $facture->invoice_number) }} @elseif($facture->food_order_no){{ route('admin.nourritures-note-de-credit.valider', $facture->invoice_number) }} @elseif($facture->bartender_order_no){{ route('admin.bartender-note-de-credit.valider', $facture->invoice_number) }} @elseif($facture->barrist_order_no){{ route('admin.barrista-note-de-credit.valider', $facture->invoice_number) }} @elseif($facture->booking_no){{ route('admin.booking-note-de-credit.valider', $facture->invoice_number) }} @endif" method="POST" style="display: none;">
                                                 @method('PUT')
                                                 @csrf
                                             </form>
@@ -111,12 +111,12 @@
                                         @endif
                                         @if (Auth::guard('admin')->user()->can('note_credit.delete'))
                                         @if($facture->etat == 0)
-                                         <a class="btn btn-danger text-white" href="{{ route('ebms_api.destroy',$facture->invoice_number) }}"
+                                         <a class="btn btn-danger text-white" href="#"
                                             onclick="event.preventDefault(); document.getElementById('delete-form-{{ $facture->invoice_number }}').submit();">
                                                 Supprimer
                                             </a>
 
-                                            <form id="delete-form-{{ $facture->invoice_number }}" action="{{ route('ebms_api.destroy',$facture->invoice_number) }}" method="POST" style="display: none;">
+                                            <form id="delete-form-{{ $facture->invoice_number }}" action="#" method="POST" style="display: none;">
                                                 @method('DELETE')
                                                 @csrf
                                             </form>

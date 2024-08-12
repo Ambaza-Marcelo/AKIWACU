@@ -43,7 +43,7 @@
                     <h4 class="header-title">Nouvelle Note de Credit</h4>
                     @include('backend.layouts.partials.messages')
                     
-                    <form action="{{ route('admin.boissons-note-de-credit.store') }}" method="POST">
+                    <form action="{{ route('admin.nourritures-note-de-credit.store') }}" method="POST">
                         @csrf
                         <input type="hidden" name="invoice_number" value="{{ $invoice_number }}">
 
@@ -252,15 +252,6 @@
                                 </select>
                             </div>
                             </div>
-                            <div class="col-md-6">
-                                <label for="code_store">Stock Boisson</label>
-                                <select class="form-control" name="code_store" id="code_store" required>
-                                <option disabled="disabled" selected="selected">Merci de choisir un stock</option>
-                                @foreach($drink_small_stores as $drink_small_store)
-                                <option value="{{$drink_small_store->code}}" {{ $data->code_store === $drink_small_store->code ? 'selected' : '' }}>{{$drink_small_store->name}}/{{ $drink_small_store->code }}</option>
-                                @endforeach
-                                </select>
-                            </div>
                         </div>
                         <br>
                          <table class="table table-bordered" id="dynamicTable">  
@@ -275,14 +266,14 @@
                             </tr>
                             @foreach($datas as $data)
                             <tr>  
-                                <td><select class="form-control" name="drink_id[]" id="drink_id">
-                                <option value="{{ $data->drink_id }}" class="form-control">{{ $data->drink->name }}</option>
+                                <td><select class="form-control" name="food_item_id[]" id="food_item_id">
+                                <option value="{{ $data->food_item_id }}" class="form-control">{{ $data->foodItem->name }}</option>
                                 </select></td>  
-                                <td><input type="number" step='any' min='0' value="{{ $data->item_quantity }}" name="item_quantity[]" placeholder="Quantite" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_drink.delete')) @else readonly @endif /></td>  
-                                <td><input type="number" step='any' min='0' value="{{ $data->item_price }}" @if(Auth::guard('admin')->user()->can('invoice_drink.delete')) @else readonly @endif name="item_price[]" placeholder="Prix" class="form-control" /></td>
-                                <td><input type="number" step='any' min='0' name="item_ct[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_drink.delete')) @else readonly @endif/></td>   
-                                <td><input type="number" step='any' min='0' name="item_tl[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_drink.delete')) @else readonly @endif/></td>
-                                <td><input type="text" value="{{ $data->drink_order_no }}" name="drink_order_no[]" class="form-control" readonly /></td>
+                                <td><input type="number" step='any' min='0' value="{{ $data->item_quantity }}" name="item_quantity[]" placeholder="Quantite" class="form-control" @if(Auth::guard('admin')->user()->can('note_credit.create')) @else readonly @endif /></td>  
+                                <td><input type="number" step='any' min='0' value="{{ $data->item_price }}" @if(Auth::guard('admin')->user()->can('note_credit.create')) @else readonly @endif name="item_price[]" placeholder="Prix" class="form-control" /></td>
+                                <td><input type="number" step='any' min='0' name="item_ct[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('note_credit.create')) @else readonly @endif/></td>   
+                                <td><input type="number" step='any' min='0' name="item_tl[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('note_credit.create')) @else readonly @endif/></td>
+                                <td><input type="text" value="{{ $data->food_order_no }}" name="food_order_no[]" class="form-control" readonly /></td>
                                 <td><button type='button' class='btn btn-danger remove-tr'><i class='fa fa-trash-o' title='Supprimer la ligne' aria-hidden='false'></i></button></td> 
                             </tr> 
                             @endforeach
@@ -313,12 +304,7 @@
 
          var markup = "<tr>"+
                         "<td>"+
-                          "<select class='form-control' name='drink_id[]'"+
-                            "<option>merci de choisir</option>"+
-                             "@foreach($drinks as $drink)"+
-                                 "<option value='{{ $drink->id }}'>{{ $drink->name }}</option>"+
-                             "@endforeach>"+
-                          "</select>"+
+                          
                         "</td>"+
                         "<td>"+
                         "<input type='number' step='any' min='0' name='item_quantity[]' placeholder='Quantite' class='form-control' />"+

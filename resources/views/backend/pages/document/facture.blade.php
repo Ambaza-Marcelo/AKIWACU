@@ -19,6 +19,15 @@
                    <img src="{{ asset('img/eden_logo.png')}}" width="200" height="85">
                 </div>
                 <div>
+                        @if($data->statut != 1)
+                        <small>
+                           <strong style="font-weight: bold;font-style: italic;">Original</strong>
+                        </small><br>
+                        @else
+                        <small>
+                           <strong style="font-weight: bold;font-style: italic;">Copie</strong>
+                        </small><br>
+                        @endif
                         <small>
                            <strong style="text-decoration: underline;">Bon d'Expedition</strong>
                         </small><br>
