@@ -108,13 +108,13 @@ class FactureController extends Controller
         $setting = DB::table('settings')->orderBy('created_at','desc')->first();
 
         $drinks =  Drink::orderBy('name','asc')->get();
-        $orders =  OrderDrinkDetail::where('order_no',$order_no)->orderBy('order_no','asc')->get();
+        $orders =  OrderDrinkDetail::where('order_no',$order_no)->orderBy('id','desc')->get();
         $drink_small_stores = DrinkSmallStore::all();
         $clients =  EGRClient::orderBy('customer_name','asc')->get();
 
         $table_id = OrderDrink::where('order_no',$order_no)->value('table_id');
 
-        $data =  OrderDrink::where('order_no',$order_no)->first();
+        $data =  OrderDrinkDetail::where('order_no',$order_no)->orderBy('id','desc')->first();
         $total_amount = DB::table('order_drink_details')
             ->where('order_no',$order_no)
             ->sum('total_amount_selling');
@@ -135,7 +135,7 @@ class FactureController extends Controller
         $drink_small_stores = DrinkSmallStore::all();
         $clients =  EGRClient::orderBy('customer_name','asc')->get();
 
-        $data =  OrderDrink::where('table_id',$table_id)->where('status',1)->first();
+        $data =  OrderDrinkDetail::where('table_id',$table_id)->where('status',1)->orderBy('id','desc')->first();
         $total_amount = DB::table('order_drink_details')
             ->where('table_id',$table_id)->where('status',1)
             ->sum('total_amount_selling');

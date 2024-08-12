@@ -229,7 +229,7 @@ class FactureRestaurantController extends Controller
         $food_items =  FoodItem::orderBy('name','asc')->get();
         $orders =  OrderKitchenDetail::where('table_id',$table_id)->where('status',1)->orderBy('id','asc')->get();
         $clients =  EGRClient::orderBy('customer_name','asc')->get();
-        $data =  OrderKitchen::where('table_id',$table_id)->where('status',1)->first();
+        $data =  OrderKitchenDetail::where('table_id',$table_id)->where('status',1)->orderBy('id','desc')->first();
 
         $total_amount = DB::table('order_kitchen_details')
             ->where('table_id',$table_id)->where('status',1)

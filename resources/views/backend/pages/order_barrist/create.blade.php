@@ -87,12 +87,6 @@
                             </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-6" id="dynamicDiv">
-                        <div class="form-group">
-                            <label for="date">@lang('messages.date')</label>
-                            <input type="date" class="form-control" id="date" name="date" required>
-                        </div>
-                        </div>
                         <div class="col-md-6">
                         <div class="form-group">
                             <label for="employe_id">@lang('Serveur')</label>
@@ -176,6 +170,7 @@
                         "<td>"+
                          "<select class='form-control' name='ingredient_id[]'"+
                             "<option>merci de choisir</option>"+
+                            "<option value='1' selected></option>"+
                              "@foreach($ingredients as $ingredient)"+
                                  "<option value='{{ $ingredient->id }}'>{{ $ingredient->name }}</option>"+
                              "@endforeach>"+
