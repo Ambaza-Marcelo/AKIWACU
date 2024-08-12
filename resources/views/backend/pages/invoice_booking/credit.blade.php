@@ -111,7 +111,7 @@
                             </tr>
                             @foreach($datas as $data)
                             <tr>  
-                                <td><input type="text" name="item_designation[]" value="@if($data->drink_id) {{ $data->drink->name }} @elseif($data->food_item_id) {{ $data->foodItem->name }} @elseif($data->barrist_item_id) {{ $data->barristItem->name }} @elseif($data->bartender_id) {{ $data->bartenderItem->name }} @endif" class="form-control" readonly /></td>  
+                                <td><input type="text" name="item_designation[]" value="@if($data->salle_id){{ $data->salle->name }} @elseif($data->service_id){{ $data->service->name }} @elseif($data->breakfast_id) BREAKFAST @elseif($data->swiming_pool_id) {{ $data->swimingPool->name }} @elseif($data->kidness_space_id) {{ $data->kidnessSpace->name }} @else{{ $data->table->name }} @endif" class="form-control" readonly /></td>  
                                 <td><input type="text" step='any' min='0' name="item_quantity[]" value="{{ $data->item_quantity }}" class="form-control" readonly /></td>  
                                 <td><input type="text" step='any' min='0' name="item_price[]" value="{{ $data->item_price }}" class="form-control" readonly /></td>
                                 <td><input type="text" step='any' min='0' name="item_ct[]" value="{{ $data->item_ct }}" class="form-control" readonly/></td>   

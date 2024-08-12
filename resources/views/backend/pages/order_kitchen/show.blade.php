@@ -52,7 +52,6 @@
                                     <th width="10%">Commande No</th>
                                     <th width="10%">@lang('messages.date')</th>
                                     <th width="10%">@lang('messages.item')</th>
-                                    <th width="10%">@lang('Accompagnement')</th>
                                     <th width="10%">@lang('messages.quantity')</th>
                                     <th width="10%">@lang('messages.total_value')</th>
                                     <th width="30%">@lang('messages.description')</th>
@@ -67,7 +66,6 @@
                                     <td>{{ $orderDetail->order_no }}</td>
                                     <td>{{ $orderDetail->date }}</td>
                                     <td>{{ $orderDetail->foodItem->name }}</td>
-                                    <td><small class="badge badge-info">{{ $orderDetail->accompagnement->name }}</small></td>
                                     <td>{{ $orderDetail->quantity }}</td>
                                     <td>{{ number_format($orderDetail->total_amount_selling,0,',',' ') }}</td>
                                     <td>{{ $orderDetail->description }}</td>

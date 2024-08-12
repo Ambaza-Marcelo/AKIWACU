@@ -113,17 +113,17 @@
                                     <td>{{ $facture->invoice_signature }}</td>
                                     <td>{{ $facture->invoice_signature_date }}</td>
                                     <td>
-                                        @if (Auth::guard('admin')->user()->can('invoice_drink.create'))
+                                        @if (Auth::guard('admin')->user()->can('invoice_booking.create'))
                                         @if($facture->statut != '1')
                                         <a href="{{ route('admin.facture.imprimer',$facture->invoice_number) }}"><img src="{{ asset('img/ISSh.gif') }}" width="60" title="Télécharger d'abord le document et puis imprimer"></a>
                                         @endif
                                         @endif
-                                        @if (Auth::guard('admin')->user()->can('invoice_drink.edit'))
+                                        @if (Auth::guard('admin')->user()->can('invoice_booking.edit'))
                                         @if($facture->etat == 0 || $facture->etat == -1)
                                         <a class="btn btn-success text-white" href="">Editer</a>
                                         @endif
                                         @endif
-                                        @if (Auth::guard('admin')->user()->can('invoice_drink.validate'))
+                                        @if (Auth::guard('admin')->user()->can('invoice_booking.validate'))
                                         @if($facture->etat == 0)
                                          <a class="btn btn-primary text-white" href="{{ route('admin.facture-booking.validate', $facture->invoice_number) }}"
                                             onclick="event.preventDefault(); document.getElementById('validate-form-{{ $facture->invoice_number }}').submit();this.style.visibility='hidden';" ondblclick="this.style.visibility='hidden';">
@@ -136,17 +136,22 @@
                                             </form>
                                         @endif
                                         @endif
-                                        @if (Auth::guard('admin')->user()->can('invoice_drink.validate'))
+                                        @if (Auth::guard('admin')->user()->can('invoice_booking.validate'))
                                         @if($facture->etat == 0)
                                          <a href="{{ route('admin.voir-facture.credit', $facture->invoice_number) }}" class="btn btn-info">Valider avec Credit</a>
                                         @endif
                                         @endif
-                                        @if (Auth::guard('admin')->user()->can('invoice_drink.reset'))
+                                        @if (Auth::guard('admin')->user()->can('note_credit.create'))
+                                        @if($facture->etat == 1 || $facture->etat == 01)
+                                         <a href="{{ route('admin.booking-note-de-credit.create', $facture->invoice_number) }}" class="btn btn-success">Facture d'Avoir</a>
+                                        @endif
+                                        @endif 
+                                        @if (Auth::guard('admin')->user()->can('invoice_booking.reset'))
                                         @if($facture->etat != 1 || $facture->etat != 2)
                                          <a href="{{ route('admin.voir-facture.reset', $facture->invoice_number) }}" class="btn btn-success">Annuler</a>
                                         @endif
                                         @endif 
-                                        @if (Auth::guard('admin')->user()->can('invoice_drink.delete'))
+                                        @if (Auth::guard('admin')->user()->can('invoice_booking.delete'))
                                          <a class="btn btn-danger text-white" href="{{ route('ebms_api.destroy',$facture->invoice_number) }}"
                                             onclick="event.preventDefault(); document.getElementById('delete-form-{{ $facture->invoice_number }}').submit();">
                                                 Supprimer

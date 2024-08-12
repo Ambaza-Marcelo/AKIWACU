@@ -83,9 +83,9 @@ class SupplierController extends Controller
         $supplier->mail = $request->mail;
         $supplier->phone_no = $request->phone_no;
         $supplier->address_id = $request->address_id;
-        //$supplier->category = $request->category;
-        //$supplier->vat_taxpayer = $request->vat_taxpayer;
-        //$supplier->tin_number = $request->tin_number;
+        $supplier->category = $request->category;
+        $supplier->vat_taxpayer = $request->vat_taxpayer;
+        $supplier->tin_number = $request->tin_number;
         $supplier->created_by = $this->user->name;
         $supplier->save();
 

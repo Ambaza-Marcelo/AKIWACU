@@ -43,7 +43,7 @@
                     <h4 class="header-title">Nouvelle Note de Credit</h4>
                     @include('backend.layouts.partials.messages')
                     
-                    <form action="{{ route('admin.boissons-note-de-credit.store') }}" method="POST">
+                    <form action="{{ route('admin.booking-note-de-credit.store') }}" method="POST">
                         @csrf
                         <input type="hidden" name="invoice_number" value="{{ $invoice_number }}">
 

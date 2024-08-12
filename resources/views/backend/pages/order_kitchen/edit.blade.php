@@ -73,7 +73,9 @@
                             <tr>
                                 <th>@lang('messages.item')</th>
                                 <th>@lang('messages.quantity')</th>
+                                <!--
                                 <th>Accompagnements</th>
+                            -->
                                 <th>Action</th>
                             </tr>
                             @foreach($datas as $data)
@@ -85,6 +87,7 @@
                                 @endforeach
                                 </select></td>  
                                 <td><input type="number" name="quantity[]" value="{{ $data->quantity }}" @if (Auth::guard('admin')->user()->can('food_order_client.edit')) @else readonly @endif class="form-control" /></td>
+                                <!--
                                 <td>
 
                                         @foreach ($accompagnements as $accompagnement)
@@ -95,6 +98,7 @@
                                         @endforeach
 
                                 </td>
+                            -->
                                 <td>@if(Auth::guard('admin')->user()->can('food_order_client.delete'))
                                     <button type='button' class='btn btn-danger remove-tr'><i class='fa fa-trash-o' title='Supprimer la ligne' aria-hidden='false'></i></button>
                                     @endif</td>     
@@ -131,6 +135,7 @@
                         "<td>"+
                           "<input type='number' name='quantity[]' placeholder='Enter Quantity' class='form-control' />"+
                         "</td>"+
+                        /*
                         "<td>"+
                                     "@foreach ($accompagnements as $accompagnement)"+
                                             "<div class='form-check'>"+
@@ -139,6 +144,7 @@
                                             "</div>"+
                                     "@endforeach"+
                         "</td>"+
+                        */
                         "<td>"+
                           "<button type='button' class='btn btn-danger remove-tr'>@lang('messages.delete')</button>"+
                         "</td>"+

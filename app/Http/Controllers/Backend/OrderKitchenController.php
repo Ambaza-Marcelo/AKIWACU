@@ -102,7 +102,7 @@ class OrderKitchenController extends Controller
                 'employe_id'  => 'required',
                 'quantity.*'  => 'required',
                 'table_id'  => 'required',
-                'accompagnement_id.*'  => 'required'
+                //'accompagnement_id.*'  => 'required'
             );
 
             $error = Validator::make($request->all(),$rules);
@@ -123,7 +123,7 @@ class OrderKitchenController extends Controller
             $description =$request->description; 
             $status = 0; 
             $created_by = $this->user->name;
-            $accompagnement_id = $request->accompagnement_id;
+            //$accompagnement_id = $request->accompagnement_id;
 
             $waiter_name = Employe::where('id',$employe_id)->value('name');
 
@@ -172,12 +172,12 @@ class OrderKitchenController extends Controller
                     'order_no' => $order_no,
                     'order_signature' => $order_signature,
                     'employe_id' => $employe_id,
-                    'accompagnement_id' => $accompagnement_id[$count],
+                    //'accompagnement_id' => $accompagnement_id[$count],
 
                 );
                 $insert_data[] = $data;
         }
-
+        /*
         for( $n = 0; $n < count($accompagnement_id); $n++ ){
 
                 $accompagnement_data = array(
@@ -189,9 +189,9 @@ class OrderKitchenController extends Controller
                 );
                     $insert_accompagnement_data[] = $accompagnement_data;
             }
-
+            */
             OrderKitchenDetail::insert($insert_data);
-            AccompagnementDetail::insert($insert_accompagnement_data);
+            //AccompagnementDetail::insert($insert_accompagnement_data);
 
             $waiter_name = Employe::where('id',$employe_id)->value('name');
             $total_amount = DB::table('order_kitchen_details')
@@ -304,7 +304,7 @@ class OrderKitchenController extends Controller
             $employe_id = $request->employe_id;
             $description =$request->description; 
             $status = -3; 
-            $accompagnement_id = $request->accompagnement_id;
+            //$accompagnement_id = $request->accompagnement_id;
             //create order
             $order = OrderKitchen::where('order_no',$order_no)->first();
             $order->date = $date;
@@ -327,7 +327,7 @@ class OrderKitchenController extends Controller
                     'total_amount_selling' => $total_amount_selling,
                     'order_no' => $order_no,
                     'employe_id' => $employe_id,
-                    'accompagnement_id' => $accompagnement_id[$count],
+                    //'accompagnement_id' => $accompagnement_id[$count],
 
                 );
                 $insert_data[] = $data;
@@ -335,7 +335,7 @@ class OrderKitchenController extends Controller
             }
 
             OrderKitchenDetail::where('order_no',$order_no)->delete();
-
+            /*
             for( $n = 0; $n < count($accompagnement_id); $n++ ){
 
                 $accompagnement_data = array(
@@ -349,9 +349,10 @@ class OrderKitchenController extends Controller
 
                     AccompagnementDetail::where('order_no',$order_no)->delete();
                 }
+                */
 
             OrderKitchenDetail::insert($insert_data);
-            AccompagnementDetail::insert($insert_accompagnement_data);
+            //AccompagnementDetail::insert($insert_accompagnement_data);
 
         DB::commit();
             session()->flash('success', 'Order has been updated successfuly!!');

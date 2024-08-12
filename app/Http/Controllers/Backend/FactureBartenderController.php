@@ -84,7 +84,7 @@ class FactureBartenderController extends Controller
 
         $bartender_items =  BartenderItem::orderBy('name','asc')->get();
         $clients =  EGRClient::orderBy('customer_name','asc')->get();
-        $orders =  BartenderOrderDetail::where('table_id',$table_id)->where('status',1)->orderBy('id','asc')->get();
+        $orders =  BartenderOrderDetail::where('table_id',$table_id)->where('status',1)->orderBy('id','desc')->get();
 
         $data =  BartenderOrderDetail::where('table_id',$table_id)->where('status',1)->orderBy('id','desc')->first();
         $total_amount = DB::table('bartender_order_details')

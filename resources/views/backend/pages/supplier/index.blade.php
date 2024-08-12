@@ -57,6 +57,7 @@
                                     <th width="10%">Name</th>
                                     <th width="10%">Mail</th>
                                     <th width="10%">Phone No</th>
+                                    <th width="10%">category</th>
                                     <th width="10%">Country</th>
                                     <th width="10%">City</th>
                                     <th width="10%">District</th>
@@ -70,6 +71,7 @@
                                     <td>{{ $supplier->name }}</td>
                                     <td>{{ $supplier->mail }}</td>
                                     <td>{{ $supplier->phone_no }}</td>
+                                    <td>{{ $supplier->category }}</td>
                                     <td>@if($supplier->address_id){{ $supplier->address->country_name }} @endif</td>
                                     <td>@if($supplier->address_id){{ $supplier->address->city }} @endif</td>
                                     <td>@if($supplier->address_id){{ $supplier->address->district }} @endif</td>

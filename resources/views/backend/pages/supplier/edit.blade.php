@@ -102,11 +102,17 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="category">Category</label>
-                                    <select class="form-control" name="category" id="category">
+                                    <select class="form-control" name="category" required="required" id="category">
                                         <option disabled="disabled" selected="selected">Thank You To Select</option>
+                                        @if (Auth::guard('admin')->user()->can('food_purchase.create'))
                                         <option value="FOOD">FOOD</option>
+                                        @endif
+                                        @if (Auth::guard('admin')->user()->can('material_purchase.create'))
                                         <option value="MATERIAL">MATERIAL</option>
+                                        @endif
+                                        @if (Auth::guard('admin')->user()->can('drink_purchase.create'))
                                         <option value="DRINK">DRINK</option>
+                                        @endif
                                     </select>
                             </div>
                             </div>

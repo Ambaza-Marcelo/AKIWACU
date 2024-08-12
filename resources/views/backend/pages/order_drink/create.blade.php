@@ -150,6 +150,7 @@
                       "<td>"+
                          "<select class='form-control' name='drink_id[]'"+
                             "<option>merci de choisir</option>"+
+                            "<option>merci de choisir</option>"+
                              "@foreach($articles as $article)"+
                                  "<option value='{{ $article->id }}'>{{ $article->name }}/{{ $article->specification }}</option>"+
                              "@endforeach>"+

@@ -98,7 +98,7 @@ class BarristOrderController extends Controller
                 'employe_id'  => 'required',
                 'quantity.*'  => 'required',
                 'table_id'  => 'required',
-                'ingredient_id.*'  => 'required'
+                //'ingredient_id.*'  => 'required'
             );
 
             $error = Validator::make($request->all(),$rules);
@@ -117,7 +117,7 @@ class BarristOrderController extends Controller
             $table_id = $request->table_id;
             $employe_id = $request->employe_id;
             $description = $request->description; 
-            $ingredient_id = $request->ingredient_id;
+            //$ingredient_id = $request->ingredient_id;
             $status = 0; 
             $created_by = $this->user->name;
 
@@ -168,11 +168,11 @@ class BarristOrderController extends Controller
                     'status' => $status,
                     'order_signature' => $order_signature,
                     'employe_id' => $employe_id,
-                    'ingredient_id' => $ingredient_id[$count]
+                    //'ingredient_id' => $ingredient_id[$count]
                 );
                 $insert_data[] = $data;
             }
-
+            /*
             for( $n = 0; $n < count($ingredient_id); $n++ ){
 
                 $ingredient_data = array(
@@ -185,6 +185,8 @@ class BarristOrderController extends Controller
                 );
                 $insert_ingredient_data[] = $ingredient_data;
             }
+
+            */
             /*
             $mail = Employe::where('id', $employe_id)->value('mail');
             $name = Employe::where('id', $employe_id)->value('name');
@@ -200,7 +202,7 @@ class BarristOrderController extends Controller
         */
 
             BarristOrderDetail::insert($insert_data);
-            IngredientDetail::insert($insert_ingredient_data);
+            //IngredientDetail::insert($insert_ingredient_data);
 
             $waiter_name = Employe::where('id',$employe_id)->value('name');
             $total_amount = DB::table('barrist_order_details')

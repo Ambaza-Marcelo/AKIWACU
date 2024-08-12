@@ -109,7 +109,7 @@
                             <tr>
                                 <th>@lang('messages.item')</th>
                                 <th>@lang('messages.quantity')</th>
-                                <th>Accompagnements</th>
+                               <!-- <th>Accompagnements</th> -->
                                 <th>Action</th>
                             </tr>
                             <tr>  
@@ -120,6 +120,7 @@
                                 @endforeach
                                 </select></td>  
                                 <td><input type="number" name="quantity[]" placeholder="Entrer quantite" min="0" class="form-control" required /></td>
+                                <!--
                                 <td>
                                             <div class="form-check">
                                                 <input type="checkbox" class="form-check-input" name="accompagnement_id[]" id="1" value="1" checked="checked">
@@ -133,6 +134,7 @@
                                         @endforeach
 
                                 </td>
+                            -->
                                 <td><button type="button" name="add" id="add" class="btn btn-success">@lang('messages.addmore')</button></td>     
                             </tr>
                         </table>
@@ -164,6 +166,7 @@
                       "<td>"+
                          "<select class='form-control' name='food_item_id[]'"+
                             "<option>merci de choisir</option>"+
+                            "<option>merci de choisir</option>"+
                              "@foreach($articles as $article)"+
                                  "<option value='{{ $article->id }}'>{{ $article->name }}</option>"+
                              "@endforeach>"+
@@ -172,6 +175,7 @@
                         "<td>"+
                           "<input type='number' name='quantity[]' placeholder='Enter Quantity' class='form-control' required min='0' required/>"+
                         "</td>"+
+                        /*
                         "<td>"+
                                     "<div class='form-check'>"+
                                                "<input type='checkbox' class='form-check-input' name='accompagnement_id[]' id='1' value='1'>"+
@@ -184,6 +188,7 @@
                                             "</div>"+
                                     "@endforeach"+
                         "</td>"+
+                        */
                         "<td>"+
                           "<button type='button' class='btn btn-danger remove-tr'>@lang('messages.delete')</button>"+
                         "</td>"+

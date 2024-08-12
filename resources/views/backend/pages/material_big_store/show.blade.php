@@ -57,6 +57,7 @@
                                     <th width="10%">@lang('messages.item')</th>
                                     <th width="10%">@lang('messages.item') @lang('messages.code')</th>
                                     <th width="10%">@lang('Code Store')</th>
+                                    <th width="10%">@lang('Category')</th>
                                     <th width="10%">@lang('messages.quantity')</th>
                                     <th width="10%">@lang('messages.unit')</th>
                                     <th width="10%">@lang('Min Store')</th>
@@ -71,6 +72,7 @@
                                     <td>{{ $loop->index+1 }}</td>
                                     <td>@if($material_big_store->material_id){{ $material_big_store->material->name }} @endif</td>
                                     <td>@if($material_big_store->material_id){{ $material_big_store->material->code }} @endif</td>
+                                    <td>@if($material_big_store->mcategory_id){{ $material_big_store->materialCategory->name }} @endif</td>
                                     <td>{{ $material_big_store->code }}</td>
                                     @if($material_big_store->quantity <= $material_big_store->threshold_quantity)
                                     <td>{{ $material_big_store->quantity }}<img src="{{ asset('img/warning.gif')}}" width="30"></td>

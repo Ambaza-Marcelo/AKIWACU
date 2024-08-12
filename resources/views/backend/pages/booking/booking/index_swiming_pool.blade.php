@@ -138,7 +138,7 @@
                                         @endif
                                         @endif
                                         @if($booking->status == 1)
-                                        @if (Auth::guard('admin')->user()->can('invoice_booking.create'))
+                                        @if (Auth::guard('admin')->user()->can('invoice_swiming_pool.create'))
                                             <a class="btn btn-success text-white" href="{{ route('admin.booking-invoices.create', $booking->booking_no) }}">@lang('Facturation')</a>
                                         @endif
                                         @endif

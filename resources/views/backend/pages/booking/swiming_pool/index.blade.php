@@ -43,7 +43,7 @@
                 <div class="card-body">
                     <h4 class="header-title float-left">@lang('Liste des piscines')</h4>
                     <p class="float-right mb-2">
-                        @if (Auth::guard('admin')->user()->can('booking_service.create'))
+                        @if (Auth::guard('admin')->user()->can('swiming_pool.create'))
                             <a class="btn btn-primary text-white" href="{{ route('admin.swiming-pools.create') }}">@lang('messages.new')</a>
                         @endif
                     </p>
@@ -78,11 +78,11 @@
                                     <td>{{ $service->taux_reduction }}%</td>
                                     <td>{{ number_format($service->selling_price,0,',',' ') }}</td>
                                     <td>
-                                        @if (Auth::guard('admin')->user()->can('booking_service.edit'))
+                                        @if (Auth::guard('admin')->user()->can('swiming_pool.edit'))
                                             <a class="btn btn-success text-white" href="{{ route('admin.swiming-pools.edit', $service->id) }}">@lang('messages.edit')</a>
                                         @endif
 
-                                        @if (Auth::guard('admin')->user()->can('booking_service.delete'))
+                                        @if (Auth::guard('admin')->user()->can('swiming_pool.delete'))
                                             <a class="btn btn-danger text-white" href="{{ route('admin.swiming-pools.destroy', $service->id) }}"
                                             onclick="event.preventDefault(); document.getElementById('delete-form-{{ $service->id }}').submit();">
                                                 @lang('messages.delete')

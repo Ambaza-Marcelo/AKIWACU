@@ -93,13 +93,13 @@
                                     <td>{{ $facture->invoice_signature }}</td>
                                     <td>{{ $facture->invoice_signature_date }}</td>
                                     <td>
-                                        @if (Auth::guard('admin')->user()->can('private_drink_stockout.create'))
+                                        @if (Auth::guard('admin')->user()->can('private_sales.create'))
                                         @if($facture->statut != '1')
                                         <a href="{{ route('admin.private-factures.generatepdf',$facture->invoice_number) }}"><img src="{{ asset('img/ISSh.gif') }}" width="60" title="Télécharger d'abord le document et puis imprimer"></a>
                                         @endif
                                         @endif
                                         
-                                        @if (Auth::guard('admin')->user()->can('private_drink_stockout.validate'))
+                                        @if (Auth::guard('admin')->user()->can('private_sales.validate'))
                                         @if($facture->etat == 0)
                                          <a class="btn btn-primary text-white" href="{{ route('admin.private-factures.validate-cash', $facture->invoice_number) }}"
                                             onclick="event.preventDefault(); document.getElementById('validate-form-{{ $facture->invoice_number }}').submit();this.style.visibility='hidden';" ondblclick="this.style.visibility='hidden';">
@@ -112,24 +112,24 @@
                                             </form>
                                         @endif
                                         @endif
-                                        @if (Auth::guard('admin')->user()->can('private_drink_stockout.validate'))
+                                        @if (Auth::guard('admin')->user()->can('private_sales.validate'))
                                         @if($facture->etat == 0)
                                          <a href="{{ route('admin.private-factures.voir-facture-a-credit', $facture->invoice_number) }}" class="btn btn-info">Valider avec Credit</a>
                                         @endif
                                         @endif
 
-                                        @if (Auth::guard('admin')->user()->can('private_drink_stockout.validate'))
+                                        @if (Auth::guard('admin')->user()->can('private_sales.validate'))
                                         @if($facture->etat == 01)
                                          <a href="{{ route('admin.private-factures.voir-facture-a-recouvrer', $facture->invoice_number) }}" class="btn btn-info">Recouvrement</a>
                                         @endif
                                         @endif
                                     
-                                        @if (Auth::guard('admin')->user()->can('private_drink_stockout.reset'))
+                                        @if (Auth::guard('admin')->user()->can('private_sales.reset'))
                                         @if($facture->etat == 0)
                                          <a href="#" class="btn btn-success">Annuler</a>
                                         @endif
                                         @endif 
-                                        @if (Auth::guard('admin')->user()->can('private_drink_stockout.delete'))
+                                        @if (Auth::guard('admin')->user()->can('private_sales.delete'))
                                         @if($facture->etat == 0)
                                          <a class="btn btn-danger text-white" href="{{ route('ebms_api.destroy',$facture->invoice_number) }}"
                                             onclick="event.preventDefault(); document.getElementById('delete-form-{{ $facture->invoice_number }}').submit();">

@@ -31,7 +31,7 @@ class KidnessSpaceController extends Controller
      */
     public function index()
     {
-        if (is_null($this->user) || !$this->user->can('booking_service.view')) {
+        if (is_null($this->user) || !$this->user->can('booking_kidness_space.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view any kidness_space !');
         }
 
@@ -46,7 +46,7 @@ class KidnessSpaceController extends Controller
      */
     public function create()
     {
-        if (is_null($this->user) || !$this->user->can('booking_service.create')) {
+        if (is_null($this->user) || !$this->user->can('booking_kidness_space.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any kidness_space !');
         }
         return view('backend.pages.booking.kidness_space.create');
@@ -60,7 +60,7 @@ class KidnessSpaceController extends Controller
      */
     public function store(Request $request)
     {
-        if (is_null($this->user) || !$this->user->can('booking_service.create')) {
+        if (is_null($this->user) || !$this->user->can('booking_kidness_space.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any kidness_space !');
         }
 
@@ -110,7 +110,7 @@ class KidnessSpaceController extends Controller
      */
     public function edit($id)
     {
-        if (is_null($this->user) || !$this->user->can('booking_service.edit')) {
+        if (is_null($this->user) || !$this->user->can('booking_kidness_space.edit')) {
             abort(403, 'Sorry !! You are Unauthorized to edit any kidness_space !');
         }
 
@@ -127,7 +127,7 @@ class KidnessSpaceController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (is_null($this->user) || !$this->user->can('booking_service.edit')) {
+        if (is_null($this->user) || !$this->user->can('booking_kidness_space.edit')) {
             abort(403, 'Sorry !! You are Unauthorized to edit any kidness_space !');
         }
 
@@ -165,7 +165,7 @@ class KidnessSpaceController extends Controller
      */
     public function destroy($id)
     {
-        if (is_null($this->user) || !$this->user->can('booking_service.delete')) {
+        if (is_null($this->user) || !$this->user->can('booking_kidness_space.delete')) {
             abort(403, 'Sorry !! You are Unauthorized to delete any kidness_space !');
         }
 

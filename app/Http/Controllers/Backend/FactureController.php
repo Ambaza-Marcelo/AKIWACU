@@ -131,7 +131,7 @@ class FactureController extends Controller
         $setting = DB::table('settings')->orderBy('created_at','desc')->first();
 
         $drinks =  Drink::orderBy('name','asc')->get();
-        $orders =  OrderDrinkDetail::where('table_id',$table_id)->where('status',1)->orderBy('id','asc')->get();
+        $orders =  OrderDrinkDetail::where('table_id',$table_id)->where('status',1)->orderBy('id','desc')->get();
         $drink_small_stores = DrinkSmallStore::all();
         $clients =  EGRClient::orderBy('customer_name','asc')->get();
 
@@ -973,7 +973,7 @@ class FactureController extends Controller
 
     public function storeBooking(Request  $request)
     {
-        if (is_null($this->user) || !$this->user->can('invoice_booking.create') || !$this->user->can('invoice_kidness_space.create') || !$this->user->can('invoice_swimming_pool.create') || !$this->user->can('invoice_breakfast.create')) {
+        if (is_null($this->user) || !$this->user->can('invoice_booking.create') || !$this->user->can('invoice_kidness_space.create') || !$this->user->can('invoice_swiming_pool.create') || !$this->user->can('invoice_breakfast.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any invoice !');
         }
 
@@ -3415,12 +3415,12 @@ class FactureController extends Controller
         $totalVat = DB::table('facture_details')
             ->where('invoice_number', '=', $invoice_number)
             ->sum('vat');
-        $EGRClient = Facture::where('invoice_number', $invoice_number)->value('customer_name');
+        $client = Facture::where('invoice_number', $invoice_number)->value('customer_name');
         $date = Facture::where('invoice_number', $invoice_number)->value('invoice_date');
 
-        return view('backend.pages.document.facture',compact('datas','invoice_number','totalValue','item_total_amount','EGRClient','setting','date','data','invoice_signature','facture','totalVat'));
+        return view('backend.pages.document.facture',compact('datas','invoice_number','totalValue','item_total_amount','client','setting','date','data','invoice_signature','facture','totalVat'));
        
-        //$pdf = PDF::loadView('backend.pages.document.facture',compact('datas','invoice_number','totalValue','item_total_amount','EGRClient','setting','date','data','invoice_signature','facture','totalVat'))->setPaper('a6', 'portrait');
+        //$pdf = PDF::loadView('backend.pages.document.facture',compact('datas','invoice_number','totalValue','item_total_amount','client','setting','date','data','invoice_signature','facture','totalVat'))->setPaper('a6', 'portrait');
 
             // download pdf file
         //return $pdf->download('FACTURE_'.$invoice_number.'.pdf');
@@ -3471,7 +3471,7 @@ class FactureController extends Controller
 
      public function payerCredit(Request  $request,$invoice_number)
     {
-        if (is_null($this->user) || !$this->user->can('invoice_booking.edit')) {
+        if (is_null($this->user) || !$this->user->can('recouvrement.create')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any invoice !');
         }
 

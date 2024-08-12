@@ -103,7 +103,7 @@
                             <tr>
                                 <th>@lang('messages.item')</th>
                                 <th>@lang('messages.quantity')</th>
-                                <th>Ingredient</th>
+                                <!--<th>Ingredient</th> -->
                                 <th>Action</th>
                             </tr>
                             <tr>  
@@ -114,6 +114,7 @@
                                 @endforeach
                                 </select></td>  
                                 <td><input type="number" name="quantity[]" required placeholder="Entrer quantite" class="form-control" /></td>
+                                <!--
                                 <td>
                                             <div class="form-check">
                                                 <input type="checkbox" class="form-check-input" name="ingredient_id[]" id="1" checked="checked" value="1">
@@ -127,6 +128,7 @@
                                         @endforeach
 
                                 </td>
+                            -->
                                 <td><button type="button" name="add" id="add" class="btn btn-success">@lang('messages.addmore')</button></td>     
                             </tr>
                         </table>
@@ -158,6 +160,7 @@
                       "<td>"+
                          "<select class='form-control' name='barrist_item_id[]'"+
                             "<option>merci de choisir</option>"+
+                            "<option>merci de choisir</option>"+
                              "@foreach($articles as $article)"+
                                  "<option value='{{ $article->id }}'>{{ $article->name }}/{{ $article->code }}</option>"+
                              "@endforeach>"+
@@ -167,6 +170,7 @@
                           "<input type='number' name='quantity[]' placeholder='Enter Quantity' class='form-control' required/>"+
                         "</td>"+
                         "<td>"+
+                        /*
                         "<td>"+
                          "<select class='form-control' name='ingredient_id[]'"+
                             "<option>merci de choisir</option>"+
@@ -176,6 +180,7 @@
                              "@endforeach>"+
                           "</select>"+
                         "</td>"+
+                        */
                         "<td>"+
                           "<button type='button' class='btn btn-danger remove-tr'>@lang('messages.delete')</button>"+
                         "</td>"+

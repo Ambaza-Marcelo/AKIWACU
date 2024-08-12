@@ -75,7 +75,7 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
                         @endforeach
                     </div>
                     <div class="row">
-                        @if ($usr->can('booking_kidness_space.view'))
+                        @if (Auth::guard('admin')->user()->can('booking_kidness_space.view'))
                         <div class="col-md-6 mb-3 mb-lg-0">
                             <div class="card">
                                 <div class="seo-fact sbg4">
@@ -93,7 +93,7 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
                             </div><br>
                         </div>
                         @endif
-                        @if ($usr->can('swiming_pool.view'))
+                        @if (Auth::guard('admin')->user()->can('swiming_pool.view'))
                         <div class="col-md-6 mb-3 mb-lg-0">
                             <div class="card">
                                 <div class="seo-fact sbg4">
@@ -113,7 +113,7 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
                         @endif
                     </div>
                     <div class="row">
-                        @if ($usr->can('booking_breakfast.view'))
+                        @if (Auth::guard('admin')->user()->can('booking_breakfast.view'))
                         <div class="col-md-6 mb-3 mb-lg-0">
                             <div class="card">
                                 <div class="seo-fact sbg3">
@@ -131,7 +131,7 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
                             </div><br>
                         </div>
                         @endif
-                        @if ($usr->can('consommation_maison.view'))
+                        @if (Auth::guard('admin')->user()->can('consommation_maison.view'))
                         <div class="col-md-6 mb-3 mb-lg-0">
                             <div class="card">
                                 <div class="seo-fact sbg3">
@@ -203,9 +203,9 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
             </div>
         </div>
         @endif
-    @if (Auth::guard('admin')->user()->can('invoice_booking.view'))
+    @if (Auth::guard('admin')->user()->can('invoice_booking.view') || Auth::guard('admin')->user()->can('recouvrement.view') || Auth::guard('admin')->user()->can('invoice_drink.view'))
         <div class="row">
-            @if ($usr->can('recouvrement.view'))
+            @if (Auth::guard('admin')->user()->can('recouvrement.view'))
             <div class="col-md-6">
                 <div class="card">
                     <div class="seo-fact sbg3">

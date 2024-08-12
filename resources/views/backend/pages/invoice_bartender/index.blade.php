@@ -132,7 +132,11 @@
                                          <a href="{{ route('admin.voir-facture.credit', $facture->invoice_number) }}" class="btn btn-info">Valider avec Credit</a>
                                         @endif
                                         @endif
-                                    
+                                        @if (Auth::guard('admin')->user()->can('note_credit.create'))
+                                        @if($facture->etat == 1 || $facture->etat == 01)
+                                         <a href="{{ route('admin.bartender-note-de-credit.create', $facture->invoice_number) }}" class="btn btn-success">Facture d'Avoir</a>
+                                        @endif
+                                        @endif 
                                         @if (Auth::guard('admin')->user()->can('invoice_drink.reset'))
                                         @if($facture->etat == 0)
                                          <a href="{{ route('admin.voir-facture.reset', $facture->invoice_number) }}" class="btn btn-success">Annuler</a>

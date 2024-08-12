@@ -104,7 +104,7 @@ class FactureBookingController extends Controller
 
     public function create($booking_no)
     {
-        if (is_null($this->user) || !$this->user->can('invoice_booking.create')) {
+        if (is_null($this->user) || !$this->user->can('invoice_booking.create') || !$this->user->can('invoice_swiming_pool.create') || !$this->user->can('invoice_salle.create') || !$this->user->can('invoice_breakfast.create') || !$this->user->can('invoice_kidness_space.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any invoice !');
         }
 

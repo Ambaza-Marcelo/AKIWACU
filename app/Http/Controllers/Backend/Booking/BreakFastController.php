@@ -31,7 +31,7 @@ class BreakFastController extends Controller
      */
     public function index()
     {
-        if (is_null($this->user) || !$this->user->can('booking_service.view')) {
+        if (is_null($this->user) || !$this->user->can('booking_breakfast.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view any break_fast !');
         }
 
@@ -46,7 +46,7 @@ class BreakFastController extends Controller
      */
     public function create()
     {
-        if (is_null($this->user) || !$this->user->can('booking_service.create')) {
+        if (is_null($this->user) || !$this->user->can('booking_breakfast.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any break_fast !');
         }
         return view('backend.pages.booking.break_fast.create');
@@ -60,7 +60,7 @@ class BreakFastController extends Controller
      */
     public function store(Request $request)
     {
-        if (is_null($this->user) || !$this->user->can('booking_service.create')) {
+        if (is_null($this->user) || !$this->user->can('booking_breakfast.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any break_fast !');
         }
 
@@ -117,7 +117,7 @@ class BreakFastController extends Controller
      */
     public function edit($id)
     {
-        if (is_null($this->user) || !$this->user->can('booking_service.edit')) {
+        if (is_null($this->user) || !$this->user->can('booking_breakfast.edit')) {
             abort(403, 'Sorry !! You are Unauthorized to edit any break_fast !');
         }
 
@@ -134,7 +134,7 @@ class BreakFastController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (is_null($this->user) || !$this->user->can('booking_service.edit')) {
+        if (is_null($this->user) || !$this->user->can('booking_breakfast.edit')) {
             abort(403, 'Sorry !! You are Unauthorized to edit any break_fast !');
         }
 
@@ -172,7 +172,7 @@ class BreakFastController extends Controller
      */
     public function destroy($id)
     {
-        if (is_null($this->user) || !$this->user->can('booking_service.delete')) {
+        if (is_null($this->user) || !$this->user->can('booking_breakfast.delete')) {
             abort(403, 'Sorry !! You are Unauthorized to delete any break_fast !');
         }
 

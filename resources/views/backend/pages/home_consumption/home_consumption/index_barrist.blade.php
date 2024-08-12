@@ -43,7 +43,7 @@
                 <div class="card-body">
                     <h4 class="header-title float-left">Liste des consommations maisons {{ $staff_member->name }}</h4>
                     <p class="float-right mb-2">
-                        @if (Auth::guard('admin')->user()->can('drink_order_client.create'))
+                        @if (Auth::guard('admin')->user()->can('consommation_maison.create'))
                             <a class="btn btn-primary text-white" href="{{ route('admin.home-consumption-barrist.create',$staff_member_id) }}">@lang('messages.new')</a>
                         @endif
                     </p>
@@ -74,10 +74,10 @@
                                     <td>@if($consumption->status == -1) {{ $consumption->rej_motif }} @else {{ $consumption->description }} @endif</td>
                                     <td>{{ $consumption->created_by }}</td>
                                     <td>
-                                        @if (Auth::guard('admin')->user()->can('food_order_client.create'))
+                                        @if (Auth::guard('admin')->user()->can('consommation_maison.create'))
                                         <a href="{{ route('admin.home-consumption.generatepdf',$consumption->consumption_no) }}"><img src="{{ asset('img/ISSh.gif') }}" width="60" title="Télécharger d'abord le document et puis imprimer"></a>
                                         @endif
-                                        @if (Auth::guard('admin')->user()->can('food_order_client.delete'))
+                                        @if (Auth::guard('admin')->user()->can('consommation_maison.delete'))
                                             <a class="btn btn-danger text-white" href="{{ route('admin.home-consumption.destroy', $consumption->consumption_no) }}"
                                             onclick="event.preventDefault(); document.getElementById('delete-form-{{ $consumption->consumption_no }}').submit();">
                                                 @lang('messages.delete')

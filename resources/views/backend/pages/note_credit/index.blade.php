@@ -90,13 +90,13 @@
                                     <td>{{ $facture->invoice_signature }}</td>
                                     <td>{{ $facture->invoice_signature_date }}</td>
                                     <td>
-                                        @if (Auth::guard('admin')->user()->can('invoice_drink.create'))
+                                        @if (Auth::guard('admin')->user()->can('note_credit.create'))
                                         @if($facture->statut != '1')
                                         <a href="{{ route('admin.note-de-credit.facture',$facture->invoice_number) }}"><img src="{{ asset('img/ISSh.gif') }}" width="60" title="Télécharger d'abord le document et puis imprimer"></a>
                                         @endif
                                         @endif
                                         
-                                        @if (Auth::guard('admin')->user()->can('invoice_drink.validate'))
+                                        @if (Auth::guard('admin')->user()->can('note_credit.validate'))
                                         @if($facture->etat == 0)
                                          <a class="btn btn-primary text-white" href="{{ route('admin.boissons-note-de-credit.valider', $facture->invoice_number) }}"
                                             onclick="event.preventDefault(); document.getElementById('validate-form-{{ $facture->invoice_number }}').submit();this.style.visibility='hidden';" ondblclick="this.style.visibility='hidden';">
@@ -109,7 +109,7 @@
                                             </form>
                                         @endif
                                         @endif
-                                        @if (Auth::guard('admin')->user()->can('invoice_drink.delete'))
+                                        @if (Auth::guard('admin')->user()->can('note_credit.delete'))
                                         @if($facture->etat == 0)
                                          <a class="btn btn-danger text-white" href="{{ route('ebms_api.destroy',$facture->invoice_number) }}"
                                             onclick="event.preventDefault(); document.getElementById('delete-form-{{ $facture->invoice_number }}').submit();">

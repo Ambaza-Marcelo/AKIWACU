@@ -64,7 +64,7 @@ class FactureRestaurantController extends Controller
 
     public function voirFacturePayercredit(Request $request,$invoice_number)
     {
-        if (is_null($this->user) || !$this->user->can('invoice_booking.approuve')) {
+        if (is_null($this->user) || !$this->user->can('recouvrement.view')) {
             abort(403, 'Sorry !! You are Unauthorized to do this ! more information,contact IT Msumba Holding Marcellin');
         }
 
@@ -90,7 +90,7 @@ class FactureRestaurantController extends Controller
 
     public function voirFactureAcredit()
     {
-        if (is_null($this->user) || !$this->user->can('invoice_booking.view')) {
+        if (is_null($this->user) || !$this->user->can('recouvrement.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view this ! more information,contact Marcellin');
         }
 
@@ -102,7 +102,7 @@ class FactureRestaurantController extends Controller
 
     public function creditPayes()
     {
-        if (is_null($this->user) || !$this->user->can('invoice_booking.edit')) {
+        if (is_null($this->user) || !$this->user->can('recouvrement.edit')) {
             abort(403, 'Sorry !! You are Unauthorized to view any invoice !');
         }
 
@@ -112,7 +112,7 @@ class FactureRestaurantController extends Controller
 
     public function validerPaye($invoice_number)
     {
-        if (is_null($this->user) || !$this->user->can('invoice_booking.edit')) {
+        if (is_null($this->user) || !$this->user->can('recouvrement.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any invoice !');
         }
 
@@ -206,7 +206,7 @@ class FactureRestaurantController extends Controller
         $setting = DB::table('settings')->orderBy('created_at','desc')->first();
 
         $food_items =  FoodItem::orderBy('name','asc')->get();
-        $orders =  OrderKitchenDetail::where('order_no',$order_no)->orderBy('order_no','asc')->get();
+        $orders =  OrderKitchenDetail::where('order_no',$order_no)->orderBy('id','desc')->get();
         $clients =  EGRClient::orderBy('customer_name','asc')->get();
         $data =  OrderKitchen::where('order_no',$order_no)->first();
         $table_id = OrderKitchen::where('order_no',$order_no)->value('table_id');
@@ -227,7 +227,7 @@ class FactureRestaurantController extends Controller
         $setting = DB::table('settings')->orderBy('created_at','desc')->first();
 
         $food_items =  FoodItem::orderBy('name','asc')->get();
-        $orders =  OrderKitchenDetail::where('table_id',$table_id)->where('status',1)->orderBy('id','asc')->get();
+        $orders =  OrderKitchenDetail::where('table_id',$table_id)->where('status',1)->orderBy('id','desc')->get();
         $clients =  EGRClient::orderBy('customer_name','asc')->get();
         $data =  OrderKitchenDetail::where('table_id',$table_id)->where('status',1)->orderBy('id','desc')->first();
 

@@ -31,7 +31,7 @@ class SwimingPoolController extends Controller
      */
     public function index()
     {
-        if (is_null($this->user) || !$this->user->can('booking_service.view')) {
+        if (is_null($this->user) || !$this->user->can('swiming_pool.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view any swiming_pool !');
         }
 
@@ -46,7 +46,7 @@ class SwimingPoolController extends Controller
      */
     public function create()
     {
-        if (is_null($this->user) || !$this->user->can('booking_service.create')) {
+        if (is_null($this->user) || !$this->user->can('swiming_pool.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any swiming_pool !');
         }
         return view('backend.pages.booking.swiming_pool.create');
@@ -60,7 +60,7 @@ class SwimingPoolController extends Controller
      */
     public function store(Request $request)
     {
-        if (is_null($this->user) || !$this->user->can('booking_service.create')) {
+        if (is_null($this->user) || !$this->user->can('swiming_pool.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any swiming_pool !');
         }
 
@@ -109,7 +109,7 @@ class SwimingPoolController extends Controller
      */
     public function edit($id)
     {
-        if (is_null($this->user) || !$this->user->can('booking_service.edit')) {
+        if (is_null($this->user) || !$this->user->can('swiming_pool.edit')) {
             abort(403, 'Sorry !! You are Unauthorized to edit any swiming_pool !');
         }
 
@@ -126,7 +126,7 @@ class SwimingPoolController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (is_null($this->user) || !$this->user->can('booking_service.edit')) {
+        if (is_null($this->user) || !$this->user->can('swiming_pool.edit')) {
             abort(403, 'Sorry !! You are Unauthorized to edit any swiming_pool !');
         }
 
@@ -164,7 +164,7 @@ class SwimingPoolController extends Controller
      */
     public function destroy($id)
     {
-        if (is_null($this->user) || !$this->user->can('booking_service.delete')) {
+        if (is_null($this->user) || !$this->user->can('swiming_pool.delete')) {
             abort(403, 'Sorry !! You are Unauthorized to delete any swiming_pool !');
         }
 

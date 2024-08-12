@@ -60,13 +60,13 @@
                                 @endforeach
                             </tbody>
                         </table>
-                      
+                      <!--
                         <ol>Accompagnement :
                             @foreach($accompagnements as $accomp)
                                 <li>{{ $accomp->accompagnement->name }}</li>
                             @endforeach
                         </ol>
-               
+                        -->
                     </div>
                 </div>
                 <div>
@@ -74,6 +74,9 @@
                 </div>
                 <div>
                     <small>Table : {{ $data->table->name }}</small>
+                </div><br>
+                <div>
+                 {{ $data->description }}
                 </div>
                 <br><br>
                  <a href="javascript:window.print();"><small>Thank You For Work</small></a>

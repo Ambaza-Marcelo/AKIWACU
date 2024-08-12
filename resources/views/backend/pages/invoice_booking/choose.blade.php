@@ -24,7 +24,7 @@
                 <h4 class="page-title pull-left">@lang('Thank You To Choose')</h4>
                 <ul class="breadcrumbs pull-left">
                     <li><a href="{{ route('admin.dashboard') }}">@lang('messages.dashboard')</a></li>
-                    <li><a href="{{ route('admin.material-requisitions.index') }}">@lang('messages.list')</a></li>
+                    <li><a href="#">@lang('messages.list')</a></li>
                     <li><span>@lang('Thank You To Choose')</span></li>
                 </ul>
             </div>
@@ -44,6 +44,7 @@
                     <h4 class="header-title">@lang('Thank You To Choose')</h4>
                     @include('backend.layouts.partials.messages')
                     <div class="row">
+                        @if (Auth::guard('admin')->user()->can('invoice_swiming_pool.view'))
                         <div class="col-md-4 mb-3 mb-lg-0">
                             <div class="card">
                             <div class="seo-fact sbg3">
@@ -58,6 +59,8 @@
                             </div>
                             </div><br>
                         </div>
+                        @endif
+                        @if (Auth::guard('admin')->user()->can('invoice_salle.view'))
                         <div class="col-md-4 mb-3 mb-lg-0">
                             <div class="card">
                             <div class="seo-fact sbg3">
@@ -72,6 +75,8 @@
                             </div>
                             </div><br>
                         </div>
+                        @endif
+                        @if (Auth::guard('admin')->user()->can('invoice_kidness_space.view'))
                         <div class="col-md-4 mb-3 mb-lg-0">
                             <div class="card">
                             <div class="seo-fact sbg3">
@@ -86,8 +91,10 @@
                             </div>
                             </div><br>
                         </div>
+                        @endif
                     </div>
                     <div class="row">
+                        @if (Auth::guard('admin')->user()->can('invoice_service.view'))
                         <div class="col-md-4 mb-3 mb-lg-0">
                             <div class="card">
                             <div class="seo-fact sbg3">
@@ -102,6 +109,8 @@
                             </div>
                             </div><br>
                         </div>
+                        @endif
+                        @if (Auth::guard('admin')->user()->can('invoice_breakfast.view'))
                         <div class="col-md-4 mb-3 mb-lg-0">
                             <div class="card">
                             <div class="seo-fact sbg3">
@@ -116,6 +125,7 @@
                             </div>
                             </div><br>
                         </div>
+                        @endif
                     </div>
                 </div>
             </div>
