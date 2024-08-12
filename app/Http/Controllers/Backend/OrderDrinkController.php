@@ -498,6 +498,7 @@ class OrderDrinkController extends Controller
             return view('backend.pages.document.drink_order_client',compact('datas','order_no','setting','description','order_signature','date','totalValue','order'));
             */
            // download pdf file
+            DB::commit();
            return $pdf->download('COMMANDE_'.$order_no.'.pdf'); 
            
         }else if ($stat == -1) {
