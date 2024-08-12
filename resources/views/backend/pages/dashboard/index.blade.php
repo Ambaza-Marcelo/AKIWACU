@@ -203,7 +203,7 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
             </div>
         </div>
         @endif
-    @if (Auth::guard('admin')->user()->can('invoice_booking.view') || Auth::guard('admin')->user()->can('recouvrement.view') || Auth::guard('admin')->user()->can('invoice_drink.view'))
+    @if (Auth::guard('admin')->user()->can('invoice_booking.view') || Auth::guard('admin')->user()->can('recouvrement.view'))
         <div class="row">
             @if (Auth::guard('admin')->user()->can('recouvrement.view'))
             <div class="col-md-6">
