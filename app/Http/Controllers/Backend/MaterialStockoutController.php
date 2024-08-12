@@ -729,21 +729,11 @@ class MaterialStockoutController extends Controller
                             }
                         }
 
-                        DB::commit();
                             MaterialBigStoreDetail::where('material_id','!=','')->update(['verified' => false]);
                             MaterialSmallStoreDetail::where('material_id','!=','')->update(['verified' => false]);
                             MaterialExtraBigStoreDetail::where('material_id','!=','')->update(['verified' => false]);
                             session()->flash('error', $this->user->name.' ,Why do you want to stockout a quantity you do not have in your store?please rewrite a valid quantity!');
                             return redirect()->back();
-                        } catch (\Exception $e) {
-                        // An error occured; cancel the transaction...
-
-                            DB::rollback();
-
-                            // and throw the error again.
-
-                            throw $e;
-                        }
 
                     }
 

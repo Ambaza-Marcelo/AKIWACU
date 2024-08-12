@@ -64,11 +64,15 @@
                                     <label for="store_type">@lang('Store Type')<strong style="color: red;">*</strong></label>
                                     <select class="form-control" name="store_type" id="store_type">
                                         <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                        <!--
+                                        @if (Auth::guard('admin')->user()->can('food_extra_big_inventory.view'))
                                         <option value="0" class="form-control">Food Extra Big Store</option>
-                                    -->
+                                        @endif
+                                        @if (Auth::guard('admin')->user()->can('food_big_inventory.view'))
                                         <option value="1" class="form-control">Food Big Store</option>
+                                        @endif
+                                        @if (Auth::guard('admin')->user()->can('food_small_inventory.view'))
                                         <option value="2" class="form-control">Food Small Store</option>
+                                        @endif
                                     </select>
                                 </div>
                             </div>

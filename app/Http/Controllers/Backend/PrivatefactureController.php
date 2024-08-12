@@ -35,7 +35,7 @@ class PrivatefactureController extends Controller
 
     public function index()
     {
-        if (is_null($this->user) || !$this->user->can('private_drink_stockout.view')) {
+        if (is_null($this->user) || !$this->user->can('private_sales.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view any invoice !');
         }
 
@@ -45,7 +45,7 @@ class PrivatefactureController extends Controller
 
     public function create()
     {
-        if (is_null($this->user) || !$this->user->can('private_drink_stockout.create')) {
+        if (is_null($this->user) || !$this->user->can('private_sales.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any invoice !');
         }
 
@@ -64,7 +64,7 @@ class PrivatefactureController extends Controller
      */
     public function store(Request  $request)
     {
-        if (is_null($this->user) || !$this->user->can('private_drink_stockout.create')) {
+        if (is_null($this->user) || !$this->user->can('private_sales.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any invoice !');
         }
 
@@ -228,7 +228,7 @@ class PrivatefactureController extends Controller
 
     public function validerFacture($invoice_number)
     {
-        if (is_null($this->user) || !$this->user->can('private_drink_stockout.validate')) {
+        if (is_null($this->user) || !$this->user->can('private_sales.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any invoice !');
         }
 
@@ -314,7 +314,7 @@ class PrivatefactureController extends Controller
 
     public function validerFactureCredit(Request  $request,$invoice_number)
     {
-        if (is_null($this->user) || !$this->user->can('private_drink_stockout.validate')) {
+        if (is_null($this->user) || !$this->user->can('private_sales.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any invoice !');
         }
         
@@ -414,7 +414,7 @@ class PrivatefactureController extends Controller
 
     public function annulerFacture(Request $request,$invoice_number)
     {
-        if (is_null($this->user) || !$this->user->can('private_drink_stockout.reset')) {
+        if (is_null($this->user) || !$this->user->can('private_sales.reset')) {
             abort(403, 'Sorry !! You are Unauthorized to reset any invoice !');
         }
 
@@ -472,7 +472,7 @@ class PrivatefactureController extends Controller
 
     public function facture($invoice_number)
     {
-        if (is_null($this->user) || !$this->user->can('private_drink_stockout.create')) {
+        if (is_null($this->user) || !$this->user->can('private_sales.create')) {
             abort(403, 'Sorry !! You are Unauthorized!');
         }
 
@@ -558,7 +558,7 @@ class PrivatefactureController extends Controller
     public function show($invoice_number)
     {
         //
-        if (is_null($this->user) || !$this->user->can('private_drink_stockout.view')) {
+        if (is_null($this->user) || !$this->user->can('private_sales.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view any invoice !');
         }
 
@@ -579,7 +579,7 @@ class PrivatefactureController extends Controller
 
     public function edit($invoice_number)
     {
-        if (is_null($this->user) || !$this->user->can('private_drink_stockout.edit')) {
+        if (is_null($this->user) || !$this->user->can('private_sales.edit')) {
             abort(403, 'Sorry !! You are Unauthorized to edit any invoice !');
         }
 
@@ -604,7 +604,7 @@ class PrivatefactureController extends Controller
     public function update(Request  $request,$invoice_number)
     {
 
-        if (is_null($this->user) || !$this->user->can('private_drink_stockout.edit')) {
+        if (is_null($this->user) || !$this->user->can('private_sales.edit')) {
             abort(403, 'Sorry !! You are Unauthorized to edit any invoice !');
         }
 
@@ -752,7 +752,7 @@ class PrivatefactureController extends Controller
 
     public function recouvrement(Request  $request,$invoice_number)
     {
-        if (is_null($this->user) || !$this->user->can('private_drink_stockout.create')) {
+        if (is_null($this->user) || !$this->user->can('private_sales.create')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any invoice !');
         }
 
@@ -901,7 +901,7 @@ class PrivatefactureController extends Controller
      */
     public function destroy($invoice_number)
     {
-        if (is_null($this->user) || !$this->user->can('private_drink_stockout.delete')) {
+        if (is_null($this->user) || !$this->user->can('private_sales.delete')) {
             abort(403, 'Sorry !! You are Unauthorized to delete any invoice !');
         }
 

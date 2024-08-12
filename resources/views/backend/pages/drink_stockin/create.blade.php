@@ -78,7 +78,9 @@
                                     <option disabled="disabled" selected="selected">Merci de choisir</option>
                                         <option value="EN">Entrée Normale</option>
                                         <option value="ER">Entrée Retour Marchandises</option>
+                                        @if (Auth::guard('admin')->user()->can('drink_stockin.edit'))
                                         <option value="EAJ">Entrée Ajustement</option>
+                                        @endif
                                         <option value="EAU">Entrée Autre</option>
                                 </select>
                                 </div>
@@ -90,9 +92,15 @@
                                     <label for="store_type">@lang('Store Type')<strong style="color: red;">*</strong></label>
                                     <select class="form-control" name="store_type" id="store_type">
                                         <option disabled="disabled" selected="selected">Merci de choisir</option>
+                                        @if (Auth::guard('admin')->user()->can('drink_extra_big_inventory.view'))
                                         <option value="0" class="form-control">Drink Extra Big Store</option>
+                                        @endif
+                                        @if (Auth::guard('admin')->user()->can('drink_big_inventory.view'))
                                         <option value="1" class="form-control">Drink Big Store</option>
+                                        @endif
+                                        @if (Auth::guard('admin')->user()->can('drink_small_inventory.view'))
                                         <option value="2" class="form-control">Drink Small Store</option>
+                                        @endif
                                     </select>
                                 </div>
                             </div>

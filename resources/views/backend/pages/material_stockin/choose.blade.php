@@ -44,6 +44,7 @@
                     <h4 class="header-title">@lang('Thank You To Choose')</h4>
                     @include('backend.layouts.partials.messages')
                     <div class="row">
+                        @if (Auth::guard('admin')->user()->can('material_extra_big_inventory.view'))
                         <div class="col-md-6 mb-3 mb-lg-0">
                 <div class="card">
                     <div class="seo-fact sbg3">
@@ -60,6 +61,8 @@
                     </div>
                 </div><br>
             </div>
+            @endif
+            @if (Auth::guard('admin')->user()->can('material_big_inventory.view'))
             <div class="col-md-6 mb-3 mb-lg-0">
                 <div class="card">
                     <div class="seo-fact sbg4">
@@ -76,8 +79,10 @@
                     </div>
                 </div><br>
             </div>
+            @endif
                     </div>
                     <div class="row">
+                        @if (Auth::guard('admin')->user()->can('material_small_inventory.view'))
                         <div class="col-md-6 mb-3 mb-lg-0">
                 <div class="card">
                     <div class="seo-fact sbg3">
@@ -94,6 +99,7 @@
                     </div>
                 </div><br>
             </div>
+            @endif
                     </div>
                 </div>
             </div>

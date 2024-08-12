@@ -75,6 +75,7 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
                         @endforeach
                     </div>
                     <div class="row">
+                        @if ($usr->can('booking_kidness_space.view'))
                         <div class="col-md-6 mb-3 mb-lg-0">
                             <div class="card">
                                 <div class="seo-fact sbg4">
@@ -91,6 +92,8 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
                                 </div>
                             </div><br>
                         </div>
+                        @endif
+                        @if ($usr->can('swiming_pool.view'))
                         <div class="col-md-6 mb-3 mb-lg-0">
                             <div class="card">
                                 <div class="seo-fact sbg4">
@@ -107,8 +110,10 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
                                 </div>
                             </div><br>
                         </div>
+                        @endif
                     </div>
                     <div class="row">
+                        @if ($usr->can('booking_breakfast.view'))
                         <div class="col-md-6 mb-3 mb-lg-0">
                             <div class="card">
                                 <div class="seo-fact sbg3">
@@ -125,6 +130,8 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
                                 </div>
                             </div><br>
                         </div>
+                        @endif
+                        @if ($usr->can('consommation_maison.view'))
                         <div class="col-md-6 mb-3 mb-lg-0">
                             <div class="card">
                                 <div class="seo-fact sbg3">
@@ -141,6 +148,7 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
                                 </div>
                             </div><br>
                         </div>
+                        @endif
                     </div>
                 @endif
     @if (Auth::guard('admin')->user()->can('drink_purchase.view') || Auth::guard('admin')->user()->can('food_purchase.view') || Auth::guard('admin')->user()->can('material_purchase.view') || Auth::guard('admin')->user()->can('drink_requisition.view'))
@@ -197,6 +205,7 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
         @endif
     @if (Auth::guard('admin')->user()->can('invoice_booking.view'))
         <div class="row">
+            @if ($usr->can('recouvrement.view'))
             <div class="col-md-6">
                 <div class="card">
                     <div class="seo-fact sbg3">
@@ -206,31 +215,14 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
                                     <img src="{{ asset('img/undraw_special_event-001.svg') }}" width="100">
                                 </div>
                                 <h2>
-                                    Credits 
+                                    Recouvrement 
                                 </h2>
                             </div>
                         </a>
                     </div>
                 </div><br>
             </div>
-            <!--
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="seo-fact sbg3">
-                        <a href="{{ route('admin.credit-payes.list') }}">
-                            <div class="p-4 d-flex justify-content-between align-items-center">
-                                <div class="seofct-icon">
-                                    <img src="{{ asset('img/undraw_special_event-001.svg') }}" width="100">
-                                </div>
-                                <h2>
-                                    Credits Payes 
-                                </h2>
-                            </div>
-                        </a>
-                    </div>
-                </div><br>
-            </div>
-        -->
+            @endif
             <div class="col-md-6">
                 <div class="card">
                     <div class="seo-fact sbg3">
