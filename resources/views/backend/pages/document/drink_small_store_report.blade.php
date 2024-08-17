@@ -66,7 +66,7 @@
                                 @foreach($datas as $data)
                                <tr>
                                     <td>{{ $loop->index+1 }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($data->created_at)->format('d/m/Y') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($data->date)->format('d/m/Y') }}</td>
                                     <td>{{ $data->drink->name }} </td>
                                     <td>{{ $data->drink->code }} </td>
                                     <td>{{ $data->quantity_stock_initial }} </td>

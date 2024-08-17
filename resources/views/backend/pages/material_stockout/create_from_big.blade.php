@@ -92,7 +92,7 @@
                                 <option value="{{ $material->id }}" class="form-control">{{ $material->name }}</option>
                             @endforeach
                             </select></td>  
-                                <td><input type="number" name="quantity[]" placeholder="Enter quantity" class="form-control" /></td>  
+                                <td><input type="number" name="quantity[]" placeholder="Enter quantity" class="form-control" step="any" /></td>  
                                 <td><select class="form-control" name="unit[]" id="unit">
                                     <option disabled="disabled" selected="selected">Merci de choisir</option>
                                     <option value="pcs" class="form-control">Pieces</option>
@@ -137,7 +137,7 @@
                           "</select>"+
                         "</td>"+
                         "<td>"+
-                          "<input type='number' name='quantity[]' placeholder='Enter Quantity' class='form-control' />"+
+                          "<input type='number' name='quantity[]' placeholder='Enter Quantity' class='form-control' step='any' />"+
                         "</td>"+
                         "<td>"+
                           "<select class='form-control' name='unit[]' id='unit'>"+

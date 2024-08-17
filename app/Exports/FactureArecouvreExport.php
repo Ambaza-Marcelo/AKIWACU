@@ -67,7 +67,9 @@ class FactureArecouvreExport implements FromCollection, WithMapping, WithHeading
     		$order_no = $data->booking_no;
     	}elseif (!empty($data->booking_no)) {
     		$order_no = $data->booking_no;
-    	}
+    	}else{
+            $order_no = " ";
+        }
 
         if ($data->statut_paied == '1') {
             $mode_paiement = "CASH";

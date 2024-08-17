@@ -26,7 +26,7 @@ class Material extends Model
     ];
 
     public function materialCategory(){
-        return $this->belongsTo('App\Models\FoodCategory');
+        return $this->belongsTo('App\Models\MaterialCategory');
     }
 
 

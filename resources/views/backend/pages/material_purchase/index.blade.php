@@ -58,7 +58,7 @@
                         </p>
                     </form><br>
                     <p class="float-right mb-2">
-                        @if (Auth::guard('admin')->user()->can('material_requisition.create'))
+                        @if (Auth::guard('admin')->user()->can('material_purchase.create'))
                             <a class="btn btn-primary text-white" href="{{ route('admin.material-purchases.create') }}">@lang('messages.new')</a>
                         @endif
                     </p>

@@ -61,7 +61,7 @@
                         <a class="btn btn-info text-white" href="" title="Exporter en pdf l'état du stock"><i class="fa fa-file-pdf-o"></i>&nbsp;PDF</a>
                     </p>
                     <p class="float-right mb-2">
-                        @if (Auth::guard('admin')->user()->can('bartender_item.view'))
+                        @if (Auth::guard('admin')->user()->can('bartender_production_store.view'))
                             <a class="btn btn-primary text-white" href="{{ route('admin.bartender-transformation.create') }}">@lang('Saisie Production')</a>&nbsp;&nbsp;
                         @endif
                     </p>

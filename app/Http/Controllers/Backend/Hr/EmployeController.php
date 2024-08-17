@@ -101,9 +101,9 @@ class EmployeController extends Controller
 
             $latest = HrEmploye::latest()->first();
             if ($latest) {
-               $matricule_no = 'MU' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
+               $matricule_no = 'EGR' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{
-               $matricule_no = 'MU' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
+               $matricule_no = 'EGR' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
             }
 
         $employe = new HrEmploye();

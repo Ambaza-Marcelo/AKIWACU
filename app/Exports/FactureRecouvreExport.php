@@ -65,7 +65,9 @@ class FactureRecouvreExport implements FromCollection, WithMapping, WithHeadings
     		$order_no = $data->booking_no;
     	}elseif (!empty($data->service_id)) {
     		$order_no = $data->booking_no;
-    	}
+    	}else{
+            $order_no = "";
+        }
 
         return [
             $data->id,

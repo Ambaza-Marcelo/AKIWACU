@@ -58,7 +58,7 @@
                                <tr>
                                     <td>{{ $loop->index + 1 }}</td>
                                     <td>{{ \Carbon\Carbon::parse($data->invoice_date)->format('d/m/Y') }}</td>
-                                    <td>{{ $data->bartender_order_no }}</td>
+                                    <td>@if($data->bartender_order_no){{ $data->bartender_order_no }} @endif</td>
                                     <td>{{ $data->invoice_number }}</td>
                                     <td>@if($data->client_id){{ $data->client->customer_name }} @else {{ $data->customer_name }} @endif</td>
                                     <td>{{ $data->bartenderItem->name }}</td>

@@ -146,10 +146,10 @@
                                 <td> <select class="form-control" name="drink_id[]" id="drink_id">
                                 <option value="{{ $data->drink_id }}" class="form-control">{{ $data->drink->name }}/{{ $data->drink->code }}</option>
                                 </select></td>  
-                                <td><input type="number" name="quantity_ordered[]" value="{{ $data->quantity }}" class="form-control"  readonly /></td>  
+                                <td><input type="number" name="quantity_ordered[]" value="{{ $data->quantity }}" step="any" class="form-control"  readonly /></td>  
                                 <td><input type="text" name="unit[]" value="{{$data->unit}}" class="form-control"  readonly /></td>
                                 <td><input type="number" name="" value="{{$data->purchase_price}}" class="form-control" step="any" min="0" readonly /></td>
-                                <td><input type="number" name="quantity_received[]" value="{{ $data->quantity }}" class="form-control" min="0" /></td> 
+                                <td><input type="number" name="quantity_received[]" value="{{ $data->quantity }}" class="form-control" min="0" step="any" /></td> 
                                 <td>
                                     <select class="form-control" name="unit[]" id="unit">
                                         <option disabled="disabled" selected="selected">Merci de choisir</option>
@@ -202,7 +202,7 @@
                           "</select>"+
                         "</td>"+
                         "<td>"+
-                          "<input type='number' name='quantity[]' placeholder='Enter Quantity' class='form-control' />"+
+                          "<input type='number' name='quantity[]' placeholder='Enter Quantity' class='form-control' step='any' />"+
                         "</td>"+
                         "<td>"+
                           "<select class='form-control' name='unit[]' id='unit'>"+
@@ -211,7 +211,7 @@
                                 "</select>"+
                         "</td>"+
                         "<td>"+
-                        "<input type='number' name='unit_price[]' placeholder='Enter Unit price' class='form-control' />"+
+                        "<input type='number' name='unit_price[]' placeholder='Enter Unit price' class='form-control' step='any' />"+
                         "</td>"+
                         "<td>"+
                           "<button type='button' class='btn btn-danger remove-tr'>@lang('messages.delete')</button>"+

@@ -60,7 +60,7 @@
                             </div><br>
                         </div>
                         @endif
-                        @if (Auth::guard('admin')->user()->can('invoice_salle.view'))
+                        @if (Auth::guard('admin')->user()->can('invoice_booking.view'))
                         <div class="col-md-4 mb-3 mb-lg-0">
                             <div class="card">
                             <div class="seo-fact sbg3">
@@ -94,7 +94,7 @@
                         @endif
                     </div>
                     <div class="row">
-                        @if (Auth::guard('admin')->user()->can('invoice_service.view'))
+                        @if (Auth::guard('admin')->user()->can('invoice_booking.view'))
                         <div class="col-md-4 mb-3 mb-lg-0">
                             <div class="card">
                             <div class="seo-fact sbg3">

@@ -43,7 +43,7 @@
                 <div class="card-body">
                     <h4 class="header-title float-left">Les Reservations</h4>
                     <p class="float-right mb-2">
-                        @if (Auth::guard('admin')->user()->can('booking_service.create'))
+                        @if (Auth::guard('admin')->user()->can('booking.create'))
                             <a class="btn btn-primary text-white" href="{{ route('admin.booking-services.create') }}">@lang('messages.new')</a>
                         @endif
                     </p>
@@ -92,12 +92,12 @@
                                     <td>{{ $booking->description }}</td>
                                     <td>{{ $booking->created_by }}</td>
                                     <td>
-                                        @if (Auth::guard('admin')->user()->can('booking_service.create'))
+                                        @if (Auth::guard('admin')->user()->can('booking.create'))
                                         @if($booking->status == 0 || $booking->status == 1)
                                         <a href="{{ route('admin.bookings.generatepdf',$booking->booking_no) }}"><img src="{{ asset('img/ISSh.gif') }}" width="60" title="Télécharger d'abord le document et puis imprimer"></a>
                                         @endif
                                         @endif
-                                        @if (Auth::guard('admin')->user()->can('booking_service.validate'))
+                                        @if (Auth::guard('admin')->user()->can('booking.validate'))
                                         @if($booking->status == 0 || $booking->status == -1)
                                             <a class="btn btn-primary text-white" href="{{ route('admin.bookings.validate', $booking->booking_no) }}"
                                             onclick="event.preventDefault(); document.getElementById('validate-form-{{ $booking->booking_no }}').submit();">
@@ -110,7 +110,7 @@
                                             </form>
                                         @endif
                                         @endif
-                                        @if (Auth::guard('admin')->user()->can('booking_service.reject'))
+                                        @if (Auth::guard('admin')->user()->can('booking.reject'))
                                             <a class="btn btn-primary text-white" href="{{ route('admin.bookings.reject', $booking->booking_no) }}"
                                             onclick="event.preventDefault(); document.getElementById('reject-form-{{ $booking->booking_no }}').submit();">
                                                 Rejeter
@@ -120,7 +120,7 @@
                                                 @csrf
                                             </form>
                                         @endif
-                                        @if (Auth::guard('admin')->user()->can('booking_service.reset'))
+                                        @if (Auth::guard('admin')->user()->can('booking.reset'))
                                             @if($booking->status == -1 || $booking->status == 1)
                                             <a class="btn btn-primary text-white" href="{{ route('admin.bookings.reset', $booking->booking_no) }}"
                                             onclick="event.preventDefault(); document.getElementById('reset-form-{{ $booking->booking_no }}').submit();">
@@ -133,16 +133,16 @@
                                             </form>
                                         @endif
                                         @if($booking->status == 0)
-                                        @if (Auth::guard('admin')->user()->can('booking_service.edit'))
+                                        @if (Auth::guard('admin')->user()->can('booking.edit'))
                                             <a class="btn btn-success text-white" href="{{ route('admin.bookings.edit', $booking->booking_no) }}">@lang('messages.edit')</a>
                                         @endif
                                         @endif
                                         @if($booking->status == 1)
-                                        @if (Auth::guard('admin')->user()->can('invoice_service.create'))
+                                        @if (Auth::guard('admin')->user()->can('invoice_booking.create'))
                                             <a class="btn btn-success text-white" href="{{ route('admin.booking-invoices.create', $booking->booking_no) }}">@lang('Facturation')</a>
                                         @endif
                                         @endif
-                                        @if (Auth::guard('admin')->user()->can('booking_service.delete'))
+                                        @if (Auth::guard('admin')->user()->can('booking.delete'))
                                             <a class="btn btn-danger text-white" href="{{ route('admin.bookings.destroy', $booking->booking_no) }}"
                                             onclick="event.preventDefault(); document.getElementById('delete-form-{{ $booking->booking_no }}').submit();">
                                                 @lang('messages.delete')

@@ -36,7 +36,7 @@ class HomeConsumptionController extends Controller
 
     public function indexBarrist($staff_member_id)
     {
-        if (is_null($this->user) || !$this->user->can('consommation_maison.view')) {
+        if (is_null($this->user) || !$this->user->can('consomation_maison.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view any order !');
         }
 
@@ -51,7 +51,7 @@ class HomeConsumptionController extends Controller
 
     public function indexFood($staff_member_id)
     {
-        if (is_null($this->user) || !$this->user->can('consommation_maison.view')) {
+        if (is_null($this->user) || !$this->user->can('consomation_maison.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view any order !');
         }
 
@@ -71,7 +71,7 @@ class HomeConsumptionController extends Controller
      */
     public function createBarrist($staff_member_id)
     {
-        if (is_null($this->user) || !$this->user->can('consommation_maison.create')) {
+        if (is_null($this->user) || !$this->user->can('consomation_maison.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any order !');
         }
 
@@ -83,7 +83,7 @@ class HomeConsumptionController extends Controller
 
     public function createFood($staff_member_id)
     {
-        if (is_null($this->user) || !$this->user->can('consommation_maison.create')) {
+        if (is_null($this->user) || !$this->user->can('consomation_maison.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any order !');
         }
 
@@ -101,7 +101,7 @@ class HomeConsumptionController extends Controller
      */
     public function store(Request $request)
     {
-        if (is_null($this->user) || !$this->user->can('consommation_maison.create')) {
+        if (is_null($this->user) || !$this->user->can('consomation_maison.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any order !');
         }
 
@@ -284,7 +284,7 @@ class HomeConsumptionController extends Controller
      */
     public function edit($id)
     {
-        if (is_null($this->user) || !$this->user->can('consommation_maison.edit')) {
+        if (is_null($this->user) || !$this->user->can('consomation_maison.edit')) {
             abort(403, 'Sorry !! You are Unauthorized to edit any order !');
         }
 
@@ -300,7 +300,7 @@ class HomeConsumptionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (is_null($this->user) || !$this->user->can('consommation_maison.edit')) {
+        if (is_null($this->user) || !$this->user->can('consomation_maison.edit')) {
             abort(403, 'Sorry !! You are Unauthorized to edit any order !');
         }
 
@@ -310,7 +310,7 @@ class HomeConsumptionController extends Controller
 
     public function reject($order_no)
     {
-       if (is_null($this->user) || !$this->user->can('consommation_maison.reject')) {
+       if (is_null($this->user) || !$this->user->can('consomation_maison.reject')) {
             abort(403, 'Sorry !! You are Unauthorized to reject any order !');
         }
 
@@ -339,7 +339,7 @@ class HomeConsumptionController extends Controller
 
     public function htmlPdf($consumption_no)
     {
-        if (is_null($this->user) || !$this->user->can('consommation_maison.create')) {
+        if (is_null($this->user) || !$this->user->can('consomation_maison.create')) {
             abort(403, 'Sorry !! You are Unauthorized!');
         }
 
@@ -396,7 +396,7 @@ class HomeConsumptionController extends Controller
      */
     public function destroy($order_no)
     {
-        if (is_null($this->user) || !$this->user->can('consommation_maison.delete')) {
+        if (is_null($this->user) || !$this->user->can('consomation_maison.delete')) {
             abort(403, 'Sorry !! You are Unauthorized to delete any order !');
         }
 

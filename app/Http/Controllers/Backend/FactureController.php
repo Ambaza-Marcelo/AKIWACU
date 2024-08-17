@@ -973,7 +973,7 @@ class FactureController extends Controller
 
     public function storeBooking(Request  $request)
     {
-        if (is_null($this->user) || !$this->user->can('invoice_booking.create') || !$this->user->can('invoice_kidness_space.create') || !$this->user->can('invoice_swiming_pool.create') || !$this->user->can('invoice_breakfast.create')) {
+        if (is_null($this->user) || !$this->user->can('invoice_booking.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any invoice !');
         }
 
@@ -3077,7 +3077,7 @@ class FactureController extends Controller
 
     public function facture($invoice_number)
     {
-        if (is_null($this->user) || !$this->user->can('invoice_drink.create')) {
+        if (is_null($this->user) || !$this->user->can('invoice_booking.create')) {
             abort(403, 'Sorry !! You are Unauthorized!');
         }
 
@@ -3332,13 +3332,13 @@ class FactureController extends Controller
             ->sum('vat');
         $client = Facture::where('invoice_number', $invoice_number)->value('customer_name');
         $date = Facture::where('invoice_number', $invoice_number)->value('invoice_date');
-
+        /*
         return view('backend.pages.document.facture',compact('datas','invoice_number','totalValue','item_total_amount','client','setting','date','data','invoice_signature','facture','totalVat'));
-       
-        //$pdf = PDF::loadView('backend.pages.document.facture',compact('datas','invoice_number','totalValue','item_total_amount','client','setting','date','data','invoice_signature','facture','totalVat'))->setPaper('a6', 'portrait');
+        */
+        $pdf = PDF::loadView('backend.pages.document.facture',compact('datas','invoice_number','totalValue','item_total_amount','client','setting','date','data','invoice_signature','facture','totalVat'))->setPaper('a6', 'portrait');
 
             // download pdf file
-        //return $pdf->download('FACTURE_'.$invoice_number.'.pdf');
+        return $pdf->download('FACTURE_'.$invoice_number.'.pdf');
 
     }
 

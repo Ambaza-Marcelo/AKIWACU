@@ -131,7 +131,7 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
                             </div><br>
                         </div>
                         @endif
-                        @if (Auth::guard('admin')->user()->can('consommation_maison.view'))
+                        @if (Auth::guard('admin')->user()->can('consomation_maison.view'))
                         <div class="col-md-6 mb-3 mb-lg-0">
                             <div class="card">
                                 <div class="seo-fact sbg3">
@@ -203,7 +203,7 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
             </div>
         </div>
         @endif
-    @if (Auth::guard('admin')->user()->can('invoice_booking.view') || Auth::guard('admin')->user()->can('recouvrement.view'))
+    @if (Auth::guard('admin')->user()->can('invoice_booking.view') || Auth::guard('admin')->user()->can('recouvrement.view') || Auth::guard('admin')->user()->can('invoice_kitchen.view') || Auth::guard('admin')->user()->can('invoice_kidness_space.view'))
         <div class="row">
             @if (Auth::guard('admin')->user()->can('recouvrement.view'))
             <div class="col-md-6">

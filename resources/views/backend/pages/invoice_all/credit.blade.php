@@ -119,7 +119,7 @@
                                     <td>@if($facture->drink_order_no){{ $facture->drink_order_no }}<span class="badge badge-info">boisson</span> @elseif($facture->food_order_no){{ $facture->food_order_no }}<span class="badge badge-info">nourriture</span> @elseif($facture->barrist_order_no){{ $facture->barrist_order_no }}<span class="badge badge-info">barrist</span> @elseif($facture->bartender_order_no){{ $facture->bartender_order_no }}<span class="badge badge-info">bartender</span> @else {{ $facture->booking_no }}<span class="badge badge-info">reservation</span> @endif</td>
                                     <td>{{ $facture->invoice_signature }}</td>
                                     <td>
-                                        @if (Auth::guard('admin')->user()->can('invoice_booking.approuve'))
+                                        @if (Auth::guard('admin')->user()->can('recouvrement.validate'))
                                         @if($facture->etat_recouvrement == '1' || $facture->etat_recouvrement == '0' || $facture->reste_credit > 0)
                                          <a href="{{ route('admin.payer-facture.credit', $facture->invoice_number) }}" class="btn btn-info">Payer Credit</a>
                                         @endif

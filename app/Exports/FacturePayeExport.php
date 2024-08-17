@@ -78,6 +78,8 @@ class FacturePayeExport implements FromCollection, WithMapping, WithHeadings
             $order_no = $data->booking_no;
         }elseif (!empty($data->kidness_space_id)) {
             $order_no = $data->booking_no;
+        }else{
+            $order_no = "";
         }
 
         return [

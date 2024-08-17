@@ -120,13 +120,13 @@
                                     <td>{{ $facture->auteur }}</td>
                                     <td>@if($facture->cancelled_invoice == 1 || $facture->etat == -1)<span class="badge badge-danger">{{ $facture->cn_motif }}</span> ;Référence Facture : <span class="badge badge-warning">{{ $facture->invoice_ref }}</span> @endif</td>
                                     <td>
-                                        @if (Auth::guard('admin')->user()->can('invoice_salle.create'))
+                                        @if (Auth::guard('admin')->user()->can('invoice_booking.create'))
                                         @if($facture->statut != '1')
                                         <a href="{{ route('admin.facture.imprimer',$facture->invoice_number) }}"><img src="{{ asset('img/ISSh.gif') }}" width="60" title="Télécharger d'abord le document et puis imprimer"></a>
                                         @endif
                                         @endif
                                         
-                                        @if (Auth::guard('admin')->user()->can('invoice_salle.validate'))
+                                        @if (Auth::guard('admin')->user()->can('invoice_booking.validate'))
                                         @if($facture->etat == 0)
                                          <a class="btn btn-primary text-white" href="{{ route('admin.facture-booking.validate', $facture->invoice_number) }}"
                                             onclick="event.preventDefault(); document.getElementById('validate-form-{{ $facture->invoice_number }}').submit();this.style.visibility='hidden';" ondblclick="this.style.visibility='hidden';">
@@ -139,7 +139,7 @@
                                             </form>
                                         @endif
                                         @endif
-                                        @if (Auth::guard('admin')->user()->can('invoice_salle.validate'))
+                                        @if (Auth::guard('admin')->user()->can('invoice_booking.validate'))
                                         @if($facture->etat == 0)
                                          <a href="{{ route('admin.voir-facture.credit', $facture->invoice_number) }}" class="btn btn-info">Valider avec Credit</a>
                                         @endif
@@ -151,12 +151,12 @@
                                         @endif
                                         @endif 
                                         @endif
-                                        @if (Auth::guard('admin')->user()->can('invoice_salle.reset'))
+                                        @if (Auth::guard('admin')->user()->can('invoice_booking.reset'))
                                         @if($facture->etat == 0)
                                          <a href="{{ route('admin.voir-facture.reset', $facture->invoice_number) }}" class="btn btn-success">Annuler</a>
                                         @endif
                                         @endif 
-                                        @if (Auth::guard('admin')->user()->can('invoice_salle.delete'))
+                                        @if (Auth::guard('admin')->user()->can('invoice_booking.delete'))
                                         @if($facture->etat == 0)
                                          <a class="btn btn-danger text-white" href="{{ route('ebms_api.destroy',$facture->invoice_number) }}"
                                             onclick="event.preventDefault(); document.getElementById('delete-form-{{ $facture->invoice_number }}').submit();">

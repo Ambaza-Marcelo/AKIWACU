@@ -33,7 +33,7 @@ class ClientController extends Controller
      */
     public function index()
     {
-        if (is_null($this->user) || !$this->user->can('booking_client.view')) {
+        if (is_null($this->user) || !$this->user->can('client.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view any client !');
         }
 
@@ -48,7 +48,7 @@ class ClientController extends Controller
      */
     public function create()
     {
-        if (is_null($this->user) || !$this->user->can('booking_client.create')) {
+        if (is_null($this->user) || !$this->user->can('client.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any client !');
         }
 
@@ -63,7 +63,7 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
-        if (is_null($this->user) || !$this->user->can('booking_client.create')) {
+        if (is_null($this->user) || !$this->user->can('client.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any client !');
         }
 
@@ -197,7 +197,7 @@ class ClientController extends Controller
      */
     public function edit($id)
     {
-        if (is_null($this->user) || !$this->user->can('booking_client.edit')) {
+        if (is_null($this->user) || !$this->user->can('client.edit')) {
             abort(403, 'Sorry !! You are Unauthorized to edit any client !');
         }
 
@@ -214,7 +214,7 @@ class ClientController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (is_null($this->user) || !$this->user->can('booking_client.edit')) {
+        if (is_null($this->user) || !$this->user->can('client.edit')) {
             abort(403, 'Sorry !! You are Unauthorized to edit any client !');
         }
 
@@ -250,7 +250,7 @@ class ClientController extends Controller
      */
     public function destroy($id)
     {
-        if (is_null($this->user) || !$this->user->can('booking_client.delete')) {
+        if (is_null($this->user) || !$this->user->can('client.delete')) {
             abort(403, 'Sorry !! You are Unauthorized to delete any client !');
         }
 

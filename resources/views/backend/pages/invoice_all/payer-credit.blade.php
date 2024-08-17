@@ -131,7 +131,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="nom_recouvrement">Nom Charge de recouvrement</label>
-                                <input type="text" name="nom_recouvrement" value="NIYONCUTI RAISSA" class="form-control" required>
+                                <input type="text" name="nom_recouvrement" value="{{ Auth::guard('admin')->user()->name }}" class="form-control" required>
                             </div>
                         </div>
                         <br>

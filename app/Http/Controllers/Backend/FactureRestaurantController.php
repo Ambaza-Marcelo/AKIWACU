@@ -102,7 +102,7 @@ class FactureRestaurantController extends Controller
 
     public function creditPayes()
     {
-        if (is_null($this->user) || !$this->user->can('recouvrement.edit')) {
+        if (is_null($this->user) || !$this->user->can('recouvrement.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view any invoice !');
         }
 
@@ -525,9 +525,9 @@ class FactureRestaurantController extends Controller
 
         $d1 = $request->query('start_date');
         $d2 = $request->query('end_date');
-        $EGRClient_id = $request->query('EGRClient_id');
+        $client_id = $request->query('client_id');
 
-        $data = Facture::where('EGRClient_id',$EGRClient_id)->first();
+        $data = Facture::where('client_id',$client_id)->first();
 
         $startDate = \Carbon\Carbon::parse($d1)->format('Y-m-d');
         $endDate = \Carbon\Carbon::parse($d2)->format('Y-m-d');
@@ -535,47 +535,47 @@ class FactureRestaurantController extends Controller
         $start_date = $startDate.' 00:00:00';
         $end_date = $endDate.' 23:59:59';
 
-        $item_total_amount = DB::table('facture_details')->where('etat','1')->where('EGRClient_id',$EGRClient_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
-        $total_vat = DB::table('facture_details')->where('etat','1')->where('EGRClient_id',$EGRClient_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('vat');
+        $item_total_amount = DB::table('facture_details')->where('etat','1')->where('client_id',$client_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
+        $total_vat = DB::table('facture_details')->where('etat','1')->where('client_id',$client_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('vat');
 
-        $item_total_amount_credit = DB::table('facture_details')->where('etat','01')->where('EGRClient_id',$EGRClient_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
-        $total_vat_credit = DB::table('facture_details')->where('etat','01')->where('EGRClient_id',$EGRClient_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('vat');
+        $item_total_amount_credit = DB::table('facture_details')->where('etat','01')->where('client_id',$client_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
+        $total_vat_credit = DB::table('facture_details')->where('etat','01')->where('client_id',$client_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('vat');
 
 
-        $item_total_amount_kitchen = DB::table('facture_details')->where('etat','01')->where('food_item_id','!=','')->where('EGRClient_id',$EGRClient_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
-        $total_vat_kitchen = DB::table('facture_details')->where('etat','01')->where('food_item_id','!=','')->where('EGRClient_id',$EGRClient_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('vat');
-        $item_total_nvat_kitchen = DB::table('facture_details')->where('etat','01')->where('food_item_id','!=','')->where('EGRClient_id',$EGRClient_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_price_nvat');
+        $item_total_amount_kitchen = DB::table('facture_details')->where('etat','01')->where('food_item_id','!=','')->where('client_id',$client_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
+        $total_vat_kitchen = DB::table('facture_details')->where('etat','01')->where('food_item_id','!=','')->where('client_id',$client_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('vat');
+        $item_total_nvat_kitchen = DB::table('facture_details')->where('etat','01')->where('food_item_id','!=','')->where('client_id',$client_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_price_nvat');
 
-        $item_total_amount_drink = DB::table('facture_details')->where('etat','01')->where('drink_id','!=','')->where('EGRClient_id',$EGRClient_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
-        $total_vat_drink = DB::table('facture_details')->where('etat','01')->where('drink_id','!=','')->where('EGRClient_id',$EGRClient_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('vat');
-        $item_total_nvat_drink = DB::table('facture_details')->where('etat','01')->where('drink_id','!=','')->where('EGRClient_id',$EGRClient_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_price_nvat');
+        $item_total_amount_drink = DB::table('facture_details')->where('etat','01')->where('drink_id','!=','')->where('client_id',$client_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
+        $total_vat_drink = DB::table('facture_details')->where('etat','01')->where('drink_id','!=','')->where('client_id',$client_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('vat');
+        $item_total_nvat_drink = DB::table('facture_details')->where('etat','01')->where('drink_id','!=','')->where('client_id',$client_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_price_nvat');
 
-        $item_total_amount_barrista = DB::table('facture_details')->where('etat','01')->where('barrist_item_id','!=','')->where('EGRClient_id',$EGRClient_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
-        $total_vat_barrista = DB::table('facture_details')->where('etat','01')->where('barrist_item_id','!=','')->where('EGRClient_id',$EGRClient_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('vat');
-        $item_total_nvat_barrista = DB::table('facture_details')->where('etat','01')->where('barrist_item_id','!=','')->where('EGRClient_id',$EGRClient_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_price_nvat');
+        $item_total_amount_barrista = DB::table('facture_details')->where('etat','01')->where('barrist_item_id','!=','')->where('client_id',$client_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
+        $total_vat_barrista = DB::table('facture_details')->where('etat','01')->where('barrist_item_id','!=','')->where('client_id',$client_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('vat');
+        $item_total_nvat_barrista = DB::table('facture_details')->where('etat','01')->where('barrist_item_id','!=','')->where('client_id',$client_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_price_nvat');
 
-        $item_total_amount_bartender = DB::table('facture_details')->where('etat','01')->where('bartender_item_id','!=','')->where('EGRClient_id',$EGRClient_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
-        $total_vat_bartender = DB::table('facture_details')->where('etat','01')->where('bartender_item_id','!=','')->where('EGRClient_id',$EGRClient_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('vat');
-        $item_total_nvat_bartender = DB::table('facture_details')->where('etat','01')->where('bartender_item_id','!=','')->where('EGRClient_id',$EGRClient_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_price_nvat');
+        $item_total_amount_bartender = DB::table('facture_details')->where('etat','01')->where('bartender_item_id','!=','')->where('client_id',$client_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
+        $total_vat_bartender = DB::table('facture_details')->where('etat','01')->where('bartender_item_id','!=','')->where('client_id',$client_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('vat');
+        $item_total_nvat_bartender = DB::table('facture_details')->where('etat','01')->where('bartender_item_id','!=','')->where('client_id',$client_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_price_nvat');
 
-        $item_total_amount_service = DB::table('facture_details')->where('etat','01')->where('booking_no','!=','')->where('EGRClient_id',$EGRClient_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
-        $total_vat_service = DB::table('facture_details')->where('etat','01')->where('booking_no','!=','')->where('EGRClient_id',$EGRClient_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('vat');
-        $item_total_nvat_service = DB::table('facture_details')->where('etat','01')->where('booking_no','!=','')->where('EGRClient_id',$EGRClient_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_price_nvat');
+        $item_total_amount_service = DB::table('facture_details')->where('etat','01')->where('booking_no','!=','')->where('client_id',$client_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
+        $total_vat_service = DB::table('facture_details')->where('etat','01')->where('booking_no','!=','')->where('client_id',$client_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('vat');
+        $item_total_nvat_service = DB::table('facture_details')->where('etat','01')->where('booking_no','!=','')->where('client_id',$client_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_price_nvat');
 
         $montant_total_global = ($item_total_amount_drink + $item_total_amount_kitchen + $item_total_amount_barrista + $item_total_amount_bartender + $item_total_amount_service);
 
         $montant_total_global_en_lettre = $this->numberToWord($montant_total_global);
 
-        if (!empty($data->EGRClient_id)) {
+        if (!empty($data->client_id)) {
             $customer_name = $data->client->customer_name;
         }else{
             $customer_name = $data->customer_name;
         }
 
         $datas = FactureDetail::select(
-                        DB::raw('id,drink_id,food_item_id,barrist_item_id,bartender_item_id,service_id,salle_id,invoice_number,invoice_date,sum(item_quantity) as item_quantity,sum(item_price) as item_price,sum(vat) as vat,sum(item_price_nvat) as item_price_nvat,sum(item_total_amount) as item_total_amount'))->where('etat','1')->where('EGRClient_id',$EGRClient_id)->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','drink_id','food_item_id','barrist_item_id','bartender_item_id','service_id','salle_id')->orderBy('invoice_number')->get();
+                        DB::raw('id,drink_id,food_item_id,barrist_item_id,bartender_item_id,service_id,salle_id,invoice_number,invoice_date,sum(item_quantity) as item_quantity,sum(item_price) as item_price,sum(vat) as vat,sum(item_price_nvat) as item_price_nvat,sum(item_total_amount) as item_total_amount'))->where('etat','1')->where('client_id',$client_id)->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','drink_id','food_item_id','barrist_item_id','bartender_item_id','service_id','salle_id')->orderBy('invoice_number')->get();
         $credits = FactureDetail::select(
-                        DB::raw('id,drink_id,food_item_id,barrist_item_id,bartender_item_id,service_id,salle_id,invoice_number,invoice_date,sum(item_quantity) as item_quantity,sum(item_price) as item_price,sum(vat) as vat,sum(item_price_nvat) as item_price_nvat,sum(item_total_amount) as item_total_amount'))->where('etat','01')->where('EGRClient_id',$EGRClient_id)->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','drink_id','food_item_id','barrist_item_id','bartender_item_id','service_id','salle_id')->orderBy('invoice_number')->get();
+                        DB::raw('id,drink_id,food_item_id,barrist_item_id,bartender_item_id,service_id,salle_id,invoice_number,invoice_date,sum(item_quantity) as item_quantity,sum(item_price) as item_price,sum(vat) as vat,sum(item_price_nvat) as item_price_nvat,sum(item_total_amount) as item_total_amount'))->where('etat','01')->where('client_id',$client_id)->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','drink_id','food_item_id','barrist_item_id','bartender_item_id','service_id','salle_id')->orderBy('invoice_number')->get();
 
         $setting = DB::table('settings')->orderBy('created_at','desc')->first();
 
@@ -628,13 +628,13 @@ class FactureRestaurantController extends Controller
         $end_date = $endDate.' 23:59:59';
 
         $datas = FactureDetail::select(
-                        DB::raw('id,food_item_id,invoice_number,invoice_date,item_quantity,vat,item_price_nvat,item_price,food_order_no,customer_name,EGRClient_id,item_total_amount'))->where('food_order_no','!=','')->where('etat','1')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','food_item_id','invoice_date','invoice_number','item_quantity','item_price','vat','item_price_nvat','customer_name','EGRClient_id','item_total_amount','food_order_no')->orderBy('invoice_number','asc')->get();
+                        DB::raw('id,food_item_id,invoice_number,invoice_date,item_quantity,vat,item_price_nvat,item_price,food_order_no,customer_name,client_id,item_total_amount'))->where('food_order_no','!=','')->where('etat','1')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','food_item_id','invoice_date','invoice_number','item_quantity','item_price','vat','item_price_nvat','customer_name','client_id','item_total_amount','food_order_no')->orderBy('invoice_number','asc')->get();
         $total_amount = DB::table('facture_details')->where('food_order_no','!=','')->where('etat','1')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
         $total_vat = DB::table('facture_details')->where('food_order_no','!=','')->where('etat','1')->whereBetween('invoice_date',[$start_date,$end_date])->sum('vat');
         $total_item_price_nvat = DB::table('facture_details')->where('food_order_no','!=','')->where('etat','1')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_price_nvat');
 
         $credits = FactureDetail::select(
-                        DB::raw('id,food_item_id,invoice_number,invoice_date,item_quantity,vat,item_price_nvat,item_price,food_order_no,customer_name,EGRClient_id,item_total_amount'))->where('food_order_no','!=','')->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','food_item_id','invoice_date','invoice_number','item_quantity','item_price','vat','item_price_nvat','customer_name','food_order_no','EGRClient_id','item_total_amount')->orderBy('invoice_number','asc')->get();
+                        DB::raw('id,food_item_id,invoice_number,invoice_date,item_quantity,vat,item_price_nvat,item_price,food_order_no,customer_name,client_id,item_total_amount'))->where('food_order_no','!=','')->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','food_item_id','invoice_date','invoice_number','item_quantity','item_price','vat','item_price_nvat','customer_name','food_order_no','client_id','item_total_amount')->orderBy('invoice_number','asc')->get();
         $total_amount_credit = DB::table('facture_details')->where('food_order_no','!=','')->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
         $total_vat_credit = DB::table('facture_details')->where('food_order_no','!=','')->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->sum('vat');
         $total_item_price_nvat_credit = DB::table('facture_details')->where('food_order_no','!=','')->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_price_nvat');
@@ -720,11 +720,11 @@ class FactureRestaurantController extends Controller
         $end_date = $endDate.' 23:59:59';
 
         $datas = FactureDetail::select(
-                        DB::raw('invoice_number,invoice_date,sum(item_quantity) as item_quantity,customer_name,EGRClient_id,drink_order_no,food_order_no,bartender_order_no,barrist_order_no,sum(item_total_amount) as item_total_amount'))->where('etat','1')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('invoice_date','invoice_number','item_quantity','drink_order_no','food_order_no','bartender_order_no','barrist_order_no','customer_name','EGRClient_id','item_total_amount')->orderBy('invoice_number','asc')->get();
+                        DB::raw('invoice_number,invoice_date,sum(item_quantity) as item_quantity,customer_name,client_id,drink_order_no,food_order_no,bartender_order_no,barrist_order_no,sum(item_total_amount) as item_total_amount'))->where('etat','1')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('invoice_date','invoice_number','item_quantity','drink_order_no','food_order_no','bartender_order_no','barrist_order_no','customer_name','client_id','item_total_amount')->orderBy('invoice_number','asc')->get();
         $total_amount = DB::table('facture_details')->where('etat','1')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
 
         $credits = FactureDetail::select(
-                        DB::raw('invoice_number,invoice_date,sum(item_quantity) as item_quantity,customer_name,EGRClient_id,drink_order_no,food_order_no,bartender_order_no,barrist_order_no,sum(item_total_amount) as item_total_amount'))->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('invoice_date','invoice_number','item_quantity','drink_order_no','food_order_no','bartender_order_no','barrist_order_no','customer_name','EGRClient_id','item_total_amount')->orderBy('invoice_number','asc')->get();
+                        DB::raw('invoice_number,invoice_date,sum(item_quantity) as item_quantity,customer_name,client_id,drink_order_no,food_order_no,bartender_order_no,barrist_order_no,sum(item_total_amount) as item_total_amount'))->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('invoice_date','invoice_number','item_quantity','drink_order_no','food_order_no','bartender_order_no','barrist_order_no','customer_name','client_id','item_total_amount')->orderBy('invoice_number','asc')->get();
         $total_amount_credit = DB::table('facture_details')->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
 
         $setting = DB::table('settings')->orderBy('created_at','desc')->first();
@@ -745,7 +745,7 @@ class FactureRestaurantController extends Controller
 
     public function rapportCredit(Request $request)
     {
-        if (is_null($this->user) || !$this->user->can('invoice_booking.edit')) {
+        if (is_null($this->user) || !$this->user->can('recouvrement.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view any stock !');
         }
 
@@ -759,7 +759,7 @@ class FactureRestaurantController extends Controller
         $end_date = $endDate.' 23:59:59';
 
         $datas = FactureDetail::select(
-                        DB::raw('id,food_item_id,drink_id,barrist_item_id,bartender_item_id,invoice_number,invoice_date,item_quantity,customer_name,EGRClient_id,drink_order_no,food_order_no,bartender_order_no,barrist_order_no,item_total_amount,vat,item_price_nvat'))->where('etat','01')->where('statut_paied','0')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','drink_id','food_item_id','bartender_item_id','barrist_item_id','invoice_date','invoice_number','item_quantity','drink_order_no','food_order_no','bartender_order_no','barrist_order_no','customer_name','EGRClient_id','item_total_amount','vat','item_price_nvat')->orderBy('customer_name','asc')->get();
+                        DB::raw('id,food_item_id,drink_id,barrist_item_id,bartender_item_id,invoice_number,invoice_date,item_quantity,customer_name,client_id,drink_order_no,food_order_no,bartender_order_no,barrist_order_no,item_total_amount,vat,item_price_nvat'))->where('etat','01')->where('statut_paied','0')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','drink_id','food_item_id','bartender_item_id','barrist_item_id','invoice_date','invoice_number','item_quantity','drink_order_no','food_order_no','bartender_order_no','barrist_order_no','customer_name','client_id','item_total_amount','vat','item_price_nvat')->orderBy('customer_name','asc')->get();
         $total_amount = DB::table('facture_details')->where('etat','01')->where('statut_paied','0')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
         $total_vat = DB::table('facture_details')->where('etat','01')->where('statut_paied','0')->whereBetween('invoice_date',[$start_date,$end_date])->sum('vat');
         $total_item_price_nvat = DB::table('facture_details')->where('etat','01')->where('statut_paied','0')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_price_nvat');
@@ -781,7 +781,7 @@ class FactureRestaurantController extends Controller
 
     public function rapportCreditPaye(Request $request)
     {
-        if (is_null($this->user) || !$this->user->can('invoice_booking.edit')) {
+        if (is_null($this->user) || !$this->user->can('recouvrement.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view any stock !');
         }
 
@@ -795,7 +795,7 @@ class FactureRestaurantController extends Controller
         $end_date = $endDate.' 23:59:59';
 
         $datas = FactureDetail::select(
-                        DB::raw('id,food_item_id,drink_id,barrist_item_id,bartender_item_id,invoice_number,invoice_date,item_quantity,customer_name,EGRClient_id,drink_order_no,food_order_no,bartender_order_no,barrist_order_no,item_total_amount,vat,item_price_nvat'))->where('statut_paied','!=','0')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','drink_id','food_item_id','bartender_item_id','barrist_item_id','invoice_date','invoice_number','item_quantity','drink_order_no','food_order_no','bartender_order_no','barrist_order_no','customer_name','EGRClient_id','item_total_amount','vat','item_price_nvat')->orderBy('customer_name','asc')->get();
+                        DB::raw('id,food_item_id,drink_id,barrist_item_id,bartender_item_id,invoice_number,invoice_date,item_quantity,customer_name,client_id,drink_order_no,food_order_no,bartender_order_no,barrist_order_no,item_total_amount,vat,item_price_nvat'))->where('statut_paied','!=','0')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','drink_id','food_item_id','bartender_item_id','barrist_item_id','invoice_date','invoice_number','item_quantity','drink_order_no','food_order_no','bartender_order_no','barrist_order_no','customer_name','client_id','item_total_amount','vat','item_price_nvat')->orderBy('customer_name','asc')->get();
         $total_amount = DB::table('facture_details')->where('statut_paied','!=','0')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
         $total_vat = DB::table('facture_details')->where('statut_paied','!=','0')->whereBetween('invoice_date',[$start_date,$end_date])->sum('vat');
         $total_item_price_nvat = DB::table('facture_details')->where('statut_paied','!=','0')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_price_nvat');
@@ -804,6 +804,7 @@ class FactureRestaurantController extends Controller
         $currentTime = Carbon::now();
 
         $dateT =  $currentTime->toDateTimeString();
+        
 
         $dateTime = str_replace([' ',':'], '_', $dateT);
         $pdf = PDF::loadView('backend.pages.document.rapport_facture_credit_paye',compact('datas','dateTime','setting','end_date','start_date','total_amount','total_vat','total_item_price_nvat'))->setPaper('a4', 'landscape');

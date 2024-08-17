@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class MaterialCategory extends Model
 {
     //
+    protected $table = 'material_categories';
+    
     protected $fillable = ['name'];
 
 
-    public function materialCategory(){
-        return $this->hasMany('App\Models\MaterialCategory','mcategory_id');
+    public function material(){
+        return $this->hasMany('App\Models\Material','mcategory_id');
     }
 }
