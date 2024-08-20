@@ -56,6 +56,8 @@ use App\Models\EGRClient;
 use App\Models\Table;
 use App\Models\BookingTable;
 use App\Models\KidnessSpace;
+use App\Models\NoteCredit;
+use App\Models\NoteCreditDetail;
 use App\Models\BreakFast;
 use App\Models\SwimingPool;
 use App\Mail\DeleteFactureMail;
@@ -3769,8 +3771,13 @@ class FactureController extends Controller
 
         $dateT =  $currentTime->toDateTimeString();
 
+        //note de credit
+
+        $note_credits = NoteCreditDetail::select(
+                        DB::raw('id,drink_id,invoice_ref,invoice_date,item_quantity,item_price,vat,item_price_nvat,customer_name,invoice_number,client_id,item_total_amount'))->where('drink_id','!=','')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','drink_id','invoice_date','invoice_ref','item_quantity','item_price','vat','item_price_nvat','customer_name','invoice_number','client_id','item_total_amount')->orderBy('invoice_number','asc')->get();
+
         $dateTime = str_replace([' ',':'], '_', $dateT);
-        $pdf = PDF::loadView('backend.pages.document.rapport_facture_boisson',compact('datas','dateTime','setting','end_date','start_date','total_amount','total_amount_credit','credits','total_vat','total_item_price_nvat','total_vat_credit','total_item_price_nvat_credit'))->setPaper('a4', 'landscape');
+        $pdf = PDF::loadView('backend.pages.document.rapport_facture_boisson',compact('datas','dateTime','setting','end_date','start_date','total_amount','total_amount_credit','credits','total_vat','total_item_price_nvat','total_vat_credit','total_item_price_nvat_credit','note_credits'))->setPaper('a4', 'landscape');
         /*
             $email1 = 'ambazamarcellin2001@gmail.com';
             $email2 = 'frankirakoze77@gmail.com';
