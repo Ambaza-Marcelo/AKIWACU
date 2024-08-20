@@ -130,7 +130,7 @@ class PrivateDrinkStockoutController extends Controller
                 $cump = PrivateStoreItem::where('id', $private_store_item_id[$count])->value('cump');
 
                 $total_value = $quantity[$count] * $purchase_price;
-                $total_purchase_value = $quantity[$count] * $cump;
+                $total_purchase_value = $quantity[$count] * $purchase_price;
                 $total_selling_value = $quantity[$count] * $selling_price;
 
                 $data = array(

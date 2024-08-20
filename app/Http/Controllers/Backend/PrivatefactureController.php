@@ -495,7 +495,7 @@ class PrivatefactureController extends Controller
         $client = PrivateFacture::where('invoice_number', $invoice_number)->value('customer_name');
         $date = PrivateFacture::where('invoice_number', $invoice_number)->value('invoice_date');
        
-        $pdf = PDF::loadView('backend.pages.private_invoice.facture',compact('datas','invoice_number','totalValue','item_total_amount','client','setting','date','data','invoice_signature','facture','totalVat'))->setPaper('a6', 'portrait');
+        $pdf = PDF::loadView('backend.pages.private_invoice.facture',compact('datas','invoice_number','totalValue','item_total_amount','client','setting','date','data','invoice_signature','facture','totalVat'))->setPaper('a4', 'portrait');
 
         Storage::put('public/privatefactures/'.$invoice_number.'.pdf', $pdf->output());
 

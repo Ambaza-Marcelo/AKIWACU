@@ -3461,8 +3461,8 @@ class FactureController extends Controller
                         'confirmed_by' => $this->user->name
                     ]);
 
-                session()->flash('success', 'Le credit  est payé avec succés');
-                return back();
+                //session()->flash('success', 'Le credit  est payé avec succés');
+                //return back();
             }elseif ($reste_credit < 0) {
                 session()->flash('error', $this->user->name.' ,je vous prie de bien vouloir saisir les donnees exactes s\'il te plait! plus d\'info contacte IT Musumba Holding Marcellin ');
                 return back();
@@ -3505,14 +3505,14 @@ class FactureController extends Controller
                     ]);
 
                 //session()->flash('success', 'Le credit  est payé avec succés');
-                //return redirect()->route('admin.credit-invoices.list');
+               // return redirect()->route('admin.credit-invoices.list');
             }
         }else{
             session()->flash('error', 'Le montant saisi doit etre inferieur ou egal au montant total de la facture');
             return redirect()->route('admin.credit-invoices.list');
         }
 
-        DB::commit();
+            DB::commit();
             session()->flash('success', 'Le credit  est payé avec succés');
             return redirect()->route('admin.credit-invoices.list');
         } catch (\Exception $e) {
