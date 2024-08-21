@@ -435,12 +435,12 @@ class BarristOrderController extends Controller
                 ->update(['flag' => 1]);
             BarristOrderDetail::where('order_no', '=', $order_no)
                 ->update(['flag' => 1]);
-                /*
-            return view('backend.pages.document.barrist_order',compact('datas','ingredients','order_no','setting','description','order_signature','date','totalValue','order'));
-            */
+            
            // download pdf file
             DB::commit();
-           return $pdf->download('COMMANDE_'.$order_no.'.pdf'); 
+
+            return view('backend.pages.document.barrist_order',compact('datas','ingredients','order_no','setting','description','order_signature','date','totalValue','order'));
+           //return $pdf->download('COMMANDE_'.$order_no.'.pdf'); 
            
         }else if ($stat == -1) {
             session()->flash('error', 'Order has been rejected !!');

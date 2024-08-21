@@ -412,12 +412,13 @@ class BartenderOrderController extends Controller
                 ->update(['flag' => 1]);
             BartenderOrderDetail::where('order_no', '=', $order_no)
                 ->update(['flag' => 1]); 
-                /*
-            return view('backend.pages.document.bartender_order',compact('datas','order_no','setting','description','order_signature','date','totalValue','order'));
-            */
+                
            // download pdf file
             DB::commit();
-           return $pdf->download('COMMANDE_'.$order_no.'.pdf');
+
+            return view('backend.pages.document.bartender_order',compact('datas','order_no','setting','description','order_signature','date','totalValue','order'));
+            
+           //return $pdf->download('COMMANDE_'.$order_no.'.pdf');
            
         }else if ($stat == -1) {
             session()->flash('error', 'Order has been rejected !!');

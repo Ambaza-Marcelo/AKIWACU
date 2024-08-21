@@ -510,12 +510,13 @@ class OrderKitchenController extends Controller
                 ->update(['flag' => 1]);
             OrderKitchenDetail::where('order_no', '=', $order_no)
                 ->update(['flag' => 1]);
-                /*
-            return view('backend.pages.document.food_order_client',compact('accompagnements','datas','order_no','setting','description','order_signature','date','order','totalValue'));
-            */
+                
            // download pdf file
             DB::commit();
-           return $pdf->download($order_no.'.pdf'); 
+
+            return view('backend.pages.document.food_order_client',compact('accompagnements','datas','order_no','setting','description','order_signature','date','order','totalValue'));
+            
+           //return $pdf->download($order_no.'.pdf'); 
            
         }else if ($stat == -1) {
             session()->flash('error', 'Order has been rejected !!');

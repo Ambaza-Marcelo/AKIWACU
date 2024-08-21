@@ -494,12 +494,12 @@ class OrderDrinkController extends Controller
                 ->update(['flag' => 1]);
             OrderDrinkDetail::where('order_no', '=', $order_no)
                 ->update(['flag' => 1]);
-                /*
-            return view('backend.pages.document.drink_order_client',compact('datas','order_no','setting','description','order_signature','date','totalValue','order'));
-            */
+            
            // download pdf file
             DB::commit();
-           return $pdf->download('COMMANDE_'.$order_no.'.pdf'); 
+           //return $pdf->download('COMMANDE_'.$order_no.'.pdf'); 
+
+            return view('backend.pages.document.drink_order_client',compact('datas','order_no','setting','description','order_signature','date','totalValue','data'));
            
         }else if ($stat == -1) {
             session()->flash('error', 'Order has been rejected !!');

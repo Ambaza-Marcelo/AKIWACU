@@ -3116,14 +3116,15 @@ class FactureController extends Controller
             FactureDetail::where('invoice_number', '=', $invoice_number)
                 ->update(['statut' => 1]);
 
-            /*
-                
-        return view('backend.pages.document.facture',compact('datas','invoice_number','totalValue','item_total_amount','client','setting','date','data','invoice_signature','facture','totalVat'));
-            */
+            
+            
             // download pdf file
         DB::commit();
 
-        return $pdf->download('FACTURE_'.$invoice_number.'.pdf');
+        return view('backend.pages.document.facture',compact('datas','invoice_number','totalValue','item_total_amount','client','setting','date','data','invoice_signature','facture','totalVat'));
+            
+
+        //return $pdf->download('FACTURE_'.$invoice_number.'.pdf');
 
         /*
         $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';

@@ -9,6 +9,18 @@
              width: auto;
         }
 
+        @page 
+        {
+            size: auto;   /* auto is the current printer page size */
+            margin: 0mm;  /* this affects the margin in the printer settings */
+        }
+
+        body 
+        {
+            background-color:#FFFFFF; 
+            margin: 0px;  /* the margin on the content before printing */
+       }
+
     </style>
 
 <body>
@@ -134,16 +146,17 @@
                     <br>
                     <small>Caissier(e) : {{ $facture->auteur }}</small>
                     <br><br>
-                    <!--
+                    
                     <a href="javascript:window.print();"><small>Thank You For Visit</small></a>
                     <small>
                            &nbsp;&nbsp;
                            {!! QrCode::size(100)->backgroundColor(255,255,255)->generate('ID : '.$invoice_signature.' www.edengardenresorts.bi, Designed by AMBAZA Marcellin' ) !!}
                     </small>
-                  -->
+                  <!--
                   <small>
                            &nbsp;&nbsp; <img src="data:image/png;base64, {!! base64_encode(QrCode::size(100)->generate('eSIGNATURE : '.$invoice_signature.' www.ambazamarcellin.netlify.com')) !!} ">
                  </small>
+               -->
             </div>
         </div>
     </div>
