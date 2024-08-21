@@ -3335,13 +3335,13 @@ class FactureController extends Controller
             ->sum('vat');
         $client = Facture::where('invoice_number', $invoice_number)->value('customer_name');
         $date = Facture::where('invoice_number', $invoice_number)->value('invoice_date');
-        /*
+        
         return view('backend.pages.document.facture',compact('datas','invoice_number','totalValue','item_total_amount','client','setting','date','data','invoice_signature','facture','totalVat'));
-        */
-        $pdf = PDF::loadView('backend.pages.document.facture',compact('datas','invoice_number','totalValue','item_total_amount','client','setting','date','data','invoice_signature','facture','totalVat'))->setPaper('a6', 'portrait');
+        
+        //$pdf = PDF::loadView('backend.pages.document.facture',compact('datas','invoice_number','totalValue','item_total_amount','client','setting','date','data','invoice_signature','facture','totalVat'))->setPaper('a6', 'portrait');
 
             // download pdf file
-        return $pdf->download('FACTURE_'.$invoice_number.'.pdf');
+        //return $pdf->download('FACTURE_'.$invoice_number.'.pdf');
 
     }
 
