@@ -28,7 +28,7 @@ class ChiffreAffaireExport implements FromCollection, WithMapping, WithHeadings
         $end_date = $endDate.' 23:59:59';
 
         return FactureDetail::select(
-                        DB::raw('id,food_item_id,updated_at,drink_id,barrist_item_id,bartender_item_id,salle_id,service_id,breakfast_id,swiming_pool_id,kidness_space_id,invoice_number,invoice_date,item_quantity,customer_name,client_id,drink_order_no,food_order_no,bartender_order_no,barrist_order_no,booking_no,item_total_amount,vat,item_price_nvat,cump,etat,reseted_by,cn_motif,auteur,validated_by,employe_id,cancelled_invoice,invoice_ref,table_id'))/*->where('etat','!=','0')->where('etat','!=','-1')*/->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','drink_id','food_item_id','bartender_item_id','barrist_item_id','salle_id','service_id','breakfast_id','swiming_pool_id','kidness_space_id','invoice_date','updated_at','invoice_number','item_quantity','etat','reseted_by','cn_motif','drink_order_no','food_order_no','bartender_order_no','barrist_order_no','booking_no','customer_name','client_id','item_total_amount','vat','item_price_nvat','cump','auteur','validated_by','employe_id','cancelled_invoice','invoice_ref','table_id')->orderBy('id','asc')->get();
+                        DB::raw('id,food_item_id,created_at,updated_at,drink_id,barrist_item_id,bartender_item_id,salle_id,service_id,breakfast_id,swiming_pool_id,kidness_space_id,invoice_number,invoice_date,item_quantity,customer_name,client_id,drink_order_no,food_order_no,bartender_order_no,barrist_order_no,booking_no,item_total_amount,vat,item_price_nvat,cump,etat,reseted_by,cn_motif,auteur,validated_by,employe_id,cancelled_invoice,invoice_ref,table_id'))/*->where('etat','!=','0')->where('etat','!=','-1')*/->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','drink_id','food_item_id','bartender_item_id','barrist_item_id','salle_id','service_id','breakfast_id','swiming_pool_id','kidness_space_id','invoice_date','updated_at','created_at','invoice_number','item_quantity','etat','reseted_by','cn_motif','drink_order_no','food_order_no','bartender_order_no','barrist_order_no','booking_no','customer_name','client_id','item_total_amount','vat','item_price_nvat','cump','auteur','validated_by','employe_id','cancelled_invoice','invoice_ref','table_id')->orderBy('id','asc')->get();
     }
 
     public function map($data) : array {
@@ -140,14 +140,21 @@ class ChiffreAffaireExport implements FromCollection, WithMapping, WithHeadings
 
         if ($data->cancelled_invoice == 1) {
             $note_credit = "Facture Normale mais avec facture d'avoir ";
+            $item_price_nvat = $data->item_price_nvat;
+            $vat = $data->vat;
+            $item_total_amount = $data->item_total_amount;
         }else{
             $note_credit = "Facture Normale";
+            $item_price_nvat = -$data->item_price_nvat;
+            $vat = -$data->vat;
+            $item_total_amount = -$data->item_total_amount;
         }
 
         return [
             $data->id,
-            $data->updated_at,
-            Carbon::parse($data->invoice_date)->format('d/m/Y'),
+            //$data->created_at,
+           //$data->updated_at,
+            Carbon::parse($data->invoice_date)->format('d/m/Y à H:i:s'),
 			$data->invoice_number,
 			$order_no,
             $serveur,
@@ -159,9 +166,9 @@ class ChiffreAffaireExport implements FromCollection, WithMapping, WithHeadings
             $cump,
             $pa,
             $pa * $data->item_quantity,
-			$data->item_price_nvat,
-			$data->vat,
-			$data->item_total_amount,
+			$item_price_nvat,
+			$vat,
+			$item_total_amount,
             $etat,
             $data->auteur,
             $data->validated_by,
@@ -177,7 +184,8 @@ class ChiffreAffaireExport implements FromCollection, WithMapping, WithHeadings
     public function headings() : array {
         return [
             '#',
-            'updated at ',
+            //'Created at',
+            //'updated at ',
             'Date de facturation',
             'No Facture',
             'No Commande',

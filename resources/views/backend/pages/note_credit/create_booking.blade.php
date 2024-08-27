@@ -46,7 +46,7 @@
                     <form action="{{ route('admin.booking-note-de-credit.store') }}" method="POST">
                         @csrf
                         <input type="hidden" name="invoice_number" value="{{ $invoice_number }}">
-
+                        <input type="hidden" name="etat" value="{{ $data->etat }}">
                         <div class="row">
                             <div class="col-md-12">
                                 <label for="cn_motif">Type Facture d'Avoir</label>

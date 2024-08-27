@@ -70,6 +70,7 @@
                                     <th width="30%">Nom du client</th>
                                     <th width="10%">Reference fa. annulee</th>
                                     <th width="10%">Motif Annulation</th>
+                                    <th width="10%">Statut</th>
                                     <th width="30%">Auteur</th>
                                     <th width="10%">Signature Facture </th>
                                     <th width="10%">Date Signature Facture</th>
@@ -80,24 +81,25 @@
                             @foreach($factures as $facture)
                                <tr>
                                     <td>{{ $loop->index+1}}</td>
-                                    <td><a href="{{ route('admin.note-de-credit.show',$facture->invoice_number) }}">{{ $facture->invoice_number }}</a>&nbsp;@if($facture->etat == 0)<span class="badge badge-warning">Encours...</span>@elseif($facture->etat === '1')<span class="badge badge-success">Validée</span>@endif</td>
+                                    <td><a href="{{ route('admin.note-de-credit.show',$facture->invoice_number) }}">{{ $facture->invoice_number }}</a>&nbsp;@if($facture->etat === '01')<span class="badge badge-info">crédit</span>@elseif($facture->etat === '1')<span class="badge badge-info">cash</span>@endif</td>
                                     <td>{{ \Carbon\Carbon::parse($facture->invoice_date)->format('d/m/Y H:i:s') }}</td>
                                     <td>{{ $facture->employe->name }}</td>
                                     <td>@if($facture->client_id){{ $facture->client->customer_name }} @else {{ $facture->customer_name }} @endif</td>
                                     <td>{{ $facture->cancelled_invoice_ref }}</td>
                                     <td>@if($facture->cn_motif == 1)<span class="badge badge-danger">Erreur sur la facture</span>@elseif($facture->cn_motif == 2)<span class="badge badge-danger">Retour marchandises</span>@elseif($facture->cn_motif == 3)<span class="badge badge-danger">Rabais</span>@else<span class="badge badge-danger">Reduction hors facture</span>@endif</td>
+                                    <td>@if($facture->statut == 2)<span class="badge badge-info">Validée</span>@else <span class="badge badge-warning">Encours...</span>@endif</td>
                                     <td>{{ $facture->auteur }}</td>
                                     <td>{{ $facture->invoice_signature }}</td>
                                     <td>{{ $facture->invoice_signature_date }}</td>
                                     <td>
                                         @if (Auth::guard('admin')->user()->can('note_credit.create'))
-                                        @if($facture->statut != '1')
+                                        @if($facture->statut != '1' && $facture->statut != '2')
                                         <a href="{{ route('admin.note-de-credit.facture',$facture->invoice_number) }}"><img src="{{ asset('img/ISSh.gif') }}" width="60" title="Télécharger d'abord le document et puis imprimer"></a>
                                         @endif
                                         @endif
                                         
                                         @if (Auth::guard('admin')->user()->can('note_credit.validate'))
-                                        @if($facture->etat == 0)
+                                        @if($facture->statut == 1)
                                          <a class="btn btn-primary text-white" href="@if(!empty($facture->drink_order_no)){{ route('admin.boissons-note-de-credit.valider', $facture->invoice_number) }} @elseif(!empty($facture->food_order_no)){{ route('admin.nourritures-note-de-credit.valider', $facture->invoice_number) }} @elseif(!empty($facture->bartender_order_no)){{ route('admin.bartender-note-de-credit.valider', $facture->invoice_number) }} @elseif(!empty($facture->barrist_order_no)){{ route('admin.barrista-note-de-credit.valider', $facture->invoice_number) }} @elseif(!empty($facture->booking_no)){{ route('admin.booking-note-de-credit.valider', $facture->invoice_number) }} @endif"
                                             onclick="event.preventDefault(); document.getElementById('validate-form-{{ $facture->invoice_number }}').submit();this.style.visibility='hidden';" ondblclick="this.style.visibility='hidden';">
                                                 Valider
@@ -105,19 +107,6 @@
 
                                             <form id="validate-form-{{ $facture->invoice_number }}" action="@if(!empty($facture->drink_order_no)){{ route('admin.boissons-note-de-credit.valider', $facture->invoice_number) }} @elseif(!empty($facture->food_order_no)){{ route('admin.nourritures-note-de-credit.valider', $facture->invoice_number) }} @elseif(!empty($facture->bartender_order_no)){{ route('admin.bartender-note-de-credit.valider', $facture->invoice_number) }} @elseif(!empty($facture->barrist_order_no)){{ route('admin.barrista-note-de-credit.valider', $facture->invoice_number) }} @elseif(!empty($facture->booking_no)){{ route('admin.booking-note-de-credit.valider', $facture->invoice_number) }} @endif" method="POST" style="display: none;">
                                                 @method('PUT')
-                                                @csrf
-                                            </form>
-                                        @endif
-                                        @endif
-                                        @if (Auth::guard('admin')->user()->can('note_credit.delete'))
-                                        @if($facture->etat == 0)
-                                         <a class="btn btn-danger text-white" href="#"
-                                            onclick="event.preventDefault(); document.getElementById('delete-form-{{ $facture->invoice_number }}').submit();">
-                                                Supprimer
-                                            </a>
-
-                                            <form id="delete-form-{{ $facture->invoice_number }}" action="#" method="POST" style="display: none;">
-                                                @method('DELETE')
                                                 @csrf
                                             </form>
                                         @endif

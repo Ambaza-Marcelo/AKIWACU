@@ -46,7 +46,7 @@
                     <form action="{{ route('admin.boissons-note-de-credit.store') }}" method="POST">
                         @csrf
                         <input type="hidden" name="invoice_number" value="{{ $invoice_number }}">
-
+                        <input type="hidden" name="etat" value="{{ $data->etat }}">
                         <div class="row">
                             <div class="col-md-6">
                                 <label for="employe_id">Serveur</label>

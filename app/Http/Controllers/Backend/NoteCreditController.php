@@ -199,6 +199,7 @@ class NoteCreditController extends Controller
             $item_tl =$request->item_tl; 
             $employe_id = $request->employe_id;
             $cn_motif = $request->cn_motif;
+            $etat = $request->etat;
 
             $invoice_date = Carbon::now();
 
@@ -306,6 +307,7 @@ class NoteCreditController extends Controller
             'invoice_ref'=>$invoice_ref,
             'code_store'=>$request->code_store,
             'auteur' => $this->user->name,
+            'etat' => $etat,
             'invoice_signature_date'=> Carbon::now(),
             'drink_id'=>$drink_id[$count],
             'item_quantity'=>$item_quantity[$count],
@@ -354,6 +356,7 @@ class NoteCreditController extends Controller
             $facture->invoice_signature = $invoice_signature;
             $facture->cancelled_invoice_ref = $cancelled_invoice_ref;
             $facture->cn_motif = $cn_motif;
+            $facture->etat = $etat;
             $facture->cancelled_invoice = $cancelled_invoice;
             $facture->invoice_ref = $invoice_ref;
             $facture->code_store = $request->code_store;
@@ -428,6 +431,7 @@ class NoteCreditController extends Controller
             $item_tl =$request->item_tl; 
             $employe_id = $request->employe_id;
             $cn_motif = $request->cn_motif;
+            $etat = $request->etat;
 
             $invoice_date = Carbon::now();
 
@@ -514,6 +518,7 @@ class NoteCreditController extends Controller
             'invoice_currency'=>$request->invoice_currency,
             'invoice_ref'=>$invoice_ref,
             'auteur' => $this->user->name,
+            'etat' => $etat,
             'invoice_signature_date'=> Carbon::now(),
             'barrist_item_id'=>$barrist_item_id[$count],
             'item_quantity'=>$item_quantity[$count],
@@ -561,6 +566,7 @@ class NoteCreditController extends Controller
             $facture->invoice_signature = $invoice_signature;
             $facture->cancelled_invoice_ref = $cancelled_invoice_ref;
             $facture->cn_motif = $cn_motif;
+            $facture->etat = $etat;
             $facture->cancelled_invoice = $cancelled_invoice;
             $facture->invoice_ref = $invoice_ref;
             $facture->employe_id = $employe_id;
@@ -634,6 +640,7 @@ class NoteCreditController extends Controller
             $item_tl =$request->item_tl; 
             $employe_id = $request->employe_id;
             $cn_motif = $request->cn_motif;
+            $etat = $request->etat;
 
             $invoice_date = Carbon::now();
 
@@ -720,6 +727,7 @@ class NoteCreditController extends Controller
             'invoice_currency'=>$request->invoice_currency,
             'invoice_ref'=>$invoice_ref,
             'auteur' => $this->user->name,
+            'etat' => $etat,
             'invoice_signature_date'=> Carbon::now(),
             'food_item_id'=>$food_item_id[$count],
             'item_quantity'=>$item_quantity[$count],
@@ -767,6 +775,7 @@ class NoteCreditController extends Controller
             $facture->invoice_signature = $invoice_signature;
             $facture->cancelled_invoice_ref = $cancelled_invoice_ref;
             $facture->cn_motif = $cn_motif;
+            $facture->etat = $etat;
             $facture->cancelled_invoice = $cancelled_invoice;
             $facture->invoice_ref = $invoice_ref;
             $facture->employe_id = $employe_id;
@@ -839,6 +848,7 @@ class NoteCreditController extends Controller
             $item_tl =$request->item_tl; 
             $employe_id = $request->employe_id;
             $cn_motif = $request->cn_motif;
+            $etat = $request->etat;
 
             $invoice_date = Carbon::now();
 
@@ -925,6 +935,7 @@ class NoteCreditController extends Controller
             'invoice_currency'=>$request->invoice_currency,
             'invoice_ref'=>$invoice_ref,
             'auteur' => $this->user->name,
+            'etat' => $etat,
             'invoice_signature_date'=> Carbon::now(),
             'bartender_item_id'=>$bartender_item_id[$count],
             'item_quantity'=>$item_quantity[$count],
@@ -972,6 +983,7 @@ class NoteCreditController extends Controller
             $facture->invoice_signature = $invoice_signature;
             $facture->cancelled_invoice_ref = $cancelled_invoice_ref;
             $facture->cn_motif = $cn_motif;
+            $facture->etat = $etat;
             $facture->cancelled_invoice = $cancelled_invoice;
             $facture->invoice_ref = $invoice_ref;
             $facture->employe_id = $employe_id;
@@ -1050,6 +1062,7 @@ class NoteCreditController extends Controller
             $employe_id = $request->employe_id;
             
             $cn_motif = $request->cn_motif;
+            $etat = $request->etat;
 
             $invoice_date = Carbon::now();
 
@@ -1134,6 +1147,7 @@ class NoteCreditController extends Controller
             'invoice_currency'=>$request->invoice_currency,
             'invoice_ref'=>$invoice_ref,
             'auteur' => $this->user->name,
+            'etat' => $etat,
             'invoice_signature_date'=> Carbon::now(),
             'salle_id'=>$bartender_item_id[$count],
             'item_quantity'=>$item_quantity[$count],
@@ -1181,6 +1195,7 @@ class NoteCreditController extends Controller
             $facture->invoice_signature = $invoice_signature;
             $facture->cancelled_invoice_ref = $cancelled_invoice_ref;
             $facture->cn_motif = $cn_motif;
+            $facture->etat = $etat;
             $facture->cancelled_invoice = $cancelled_invoice;
             $facture->invoice_ref = $invoice_ref;
             $facture->employe_id = $employe_id;
@@ -1241,6 +1256,7 @@ class NoteCreditController extends Controller
             'invoice_currency'=>$request->invoice_currency,
             'invoice_ref'=>$invoice_ref,
             'auteur' => $this->user->name,
+            'etat' => $etat,
             'invoice_signature_date'=> Carbon::now(),
             'service_id'=>$service_id[$count],
             'item_quantity'=>$item_quantity[$count],
@@ -1288,6 +1304,7 @@ class NoteCreditController extends Controller
             $facture->invoice_signature = $invoice_signature;
             $facture->cancelled_invoice_ref = $cancelled_invoice_ref;
             $facture->cn_motif = $cn_motif;
+            $facture->etat = $etat;
             $facture->cancelled_invoice = $cancelled_invoice;
             $facture->invoice_ref = $invoice_ref;
             $facture->employe_id = $employe_id;
@@ -1348,6 +1365,7 @@ class NoteCreditController extends Controller
             'invoice_currency'=>$request->invoice_currency,
             'invoice_ref'=>$invoice_ref,
             'auteur' => $this->user->name,
+            'etat' => $etat,
             'invoice_signature_date'=> Carbon::now(),
             'kidness_space_id'=>$kidness_space_id[$count],
             'item_quantity'=>$item_quantity[$count],
@@ -1395,6 +1413,7 @@ class NoteCreditController extends Controller
             $facture->invoice_signature = $invoice_signature;
             $facture->cancelled_invoice_ref = $cancelled_invoice_ref;
             $facture->cn_motif = $cn_motif;
+            $facture->etat = $etat;
             $facture->cancelled_invoice = $cancelled_invoice;
             $facture->invoice_ref = $invoice_ref;
             $facture->employe_id = $employe_id;
@@ -1455,6 +1474,7 @@ class NoteCreditController extends Controller
             'invoice_currency'=>$request->invoice_currency,
             'invoice_ref'=>$invoice_ref,
             'auteur' => $this->user->name,
+            'etat' => $etat,
             'invoice_signature_date'=> Carbon::now(),
             'swiming_pool_id'=>$swiming_pool_id[$count],
             'item_quantity'=>$item_quantity[$count],
@@ -1502,6 +1522,7 @@ class NoteCreditController extends Controller
             $facture->invoice_signature = $invoice_signature;
             $facture->cancelled_invoice_ref = $cancelled_invoice_ref;
             $facture->cn_motif = $cn_motif;
+            $facture->etat = $etat;
             $facture->cancelled_invoice = $cancelled_invoice;
             $facture->invoice_ref = $invoice_ref;
             $facture->employe_id = $employe_id;
@@ -1562,6 +1583,7 @@ class NoteCreditController extends Controller
             'invoice_currency'=>$request->invoice_currency,
             'invoice_ref'=>$invoice_ref,
             'auteur' => $this->user->name,
+            'etat' => $etat,
             'invoice_signature_date'=> Carbon::now(),
             'swiming_pool_id'=>$swiming_pool_id[$count],
             'item_quantity'=>$item_quantity[$count],
@@ -1609,6 +1631,7 @@ class NoteCreditController extends Controller
             $facture->invoice_signature = $invoice_signature;
             $facture->cancelled_invoice_ref = $cancelled_invoice_ref;
             $facture->cn_motif = $cn_motif;
+            $facture->etat = $etat;
             $facture->cancelled_invoice = $cancelled_invoice;
             $facture->invoice_ref = $invoice_ref;
             $facture->employe_id = $employe_id;
@@ -1670,6 +1693,7 @@ class NoteCreditController extends Controller
             'invoice_currency'=>$request->invoice_currency,
             'invoice_ref'=>$invoice_ref,
             'auteur' => $this->user->name,
+            'etat' => $etat,
             'invoice_signature_date'=> Carbon::now(),
             'table_id'=>$table_id[$count],
             'item_quantity'=>$item_quantity[$count],
@@ -1717,6 +1741,7 @@ class NoteCreditController extends Controller
             $facture->invoice_signature = $invoice_signature;
             $facture->cancelled_invoice_ref = $cancelled_invoice_ref;
             $facture->cn_motif = $cn_motif;
+            $facture->etat = $etat;
             $facture->cancelled_invoice = $cancelled_invoice;
             $facture->invoice_ref = $invoice_ref;
             $facture->employe_id = $employe_id;
@@ -1793,6 +1818,53 @@ class NoteCreditController extends Controller
                         'created_by' => $this->user->name,
                         'verified' => true
                     );
+
+                    $noteCreditdata = array(
+                        'drink_id' => $data->drink_id,
+                        //'invoice_number'=>$data->invoice_number,
+                        'invoice_date'=> $data->invoice_date,
+                        'tp_type'=>$data->tp_type,
+                        'tp_name'=>$data->tp_name,
+                        'tp_TIN'=>$data->tp_TIN,
+                        'tp_trade_number'=>$data->tp_trade_number,
+                        'tp_phone_number'=>$data->tp_phone_number,
+                        'tp_address_province'=>$data->tp_address_province,
+                        'tp_address_commune'=>$data->tp_address_commune,
+                        'tp_address_quartier'=>$data->tp_address_quartier,
+                        'tp_address_avenue'=>$data->tp_address_avenue,
+                        'tp_address_rue'=>$data->tp_address_rue,
+                        'vat_taxpayer'=>$data->vat_taxpayer,
+                        'ct_taxpayer'=>$data->ct_taxpayer,
+                        'tl_taxpayer'=>$data->tl_taxpayer,
+                        'tp_fiscal_center'=>$data->tp_fiscal_center,
+                        'tp_activity_sector'=>$data->tp_activity_sector,
+                        'tp_legal_form'=>$data->tp_legal_form,
+                        'payment_type'=>$data->payment_type,
+                        'client_id'=>$data->client_id,
+                        'customer_TIN'=>$data->customer_TIN,
+                        'customer_address'=>$data->customer_address,
+                        //'invoice_signature'=> $invoice_signature,
+                        //'drink_order_no'=>$data->drink_order_no,
+                        'cancelled_invoice_ref'=>$data->cancelled_invoice_ref,
+                        'cn_motif'=>$data->cn_motif,
+                        'invoice_currency'=>$data->invoice_currency,
+                        'invoice_ref'=>$data->invoice_ref,
+                        'etat' => $data->etat,
+                        'auteur' => $this->user->name,
+                        'invoice_signature_date'=> Carbon::now(),
+                        //'table_id'=>$data->table_id,
+                        'item_quantity'=>$data->item_quantity,
+                        'item_price'=>-$data->item_price,
+                        'item_ct'=>$data->item_ct,
+                        'item_tl'=>$data->item_tl,
+                        'item_price_nvat'=>-$data->item_price_nvat,
+                        'vat'=>-$data->vat,
+                        'item_price_wvat'=>-$data->item_price_wvat,
+                        'item_total_amount'=>-$data->item_total_amount,
+                        'employe_id'=> $data->employe_id,
+                    );
+
+                    $noteCredit[] = $noteCreditdata;
                         
                         DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id',$data->drink_id)
                         ->update($donnees);
@@ -1829,14 +1901,55 @@ class NoteCreditController extends Controller
                         */
                         
             }else{
+
+                    $noteCreditdata = array(
+                        'drink_id' => $data->drink_id,
+                        //'invoice_number'=>$data->invoice_number,
+                        'invoice_date'=> $data->invoice_date,
+                        'tp_type'=>$data->tp_type,
+                        'tp_name'=>$data->tp_name,
+                        'tp_TIN'=>$data->tp_TIN,
+                        'tp_trade_number'=>$data->tp_trade_number,
+                        'tp_phone_number'=>$data->tp_phone_number,
+                        'tp_address_province'=>$data->tp_address_province,
+                        'tp_address_commune'=>$data->tp_address_commune,
+                        'tp_address_quartier'=>$data->tp_address_quartier,
+                        'tp_address_avenue'=>$data->tp_address_avenue,
+                        'tp_address_rue'=>$data->tp_address_rue,
+                        'vat_taxpayer'=>$data->vat_taxpayer,
+                        'ct_taxpayer'=>$data->ct_taxpayer,
+                        'tl_taxpayer'=>$data->tl_taxpayer,
+                        'tp_fiscal_center'=>$data->tp_fiscal_center,
+                        'tp_activity_sector'=>$data->tp_activity_sector,
+                        'tp_legal_form'=>$data->tp_legal_form,
+                        'payment_type'=>$data->payment_type,
+                        'client_id'=>$data->client_id,
+                        'customer_TIN'=>$data->customer_TIN,
+                        'customer_address'=>$data->customer_address,
+                        //'invoice_signature'=> $invoice_signature,
+                        //'drink_order_no'=>$data->drink_order_no,
+                        'cancelled_invoice_ref'=>$data->cancelled_invoice_ref,
+                        'cn_motif'=>$data->cn_motif,
+                        'invoice_currency'=>$data->invoice_currency,
+                        'invoice_ref'=>$data->invoice_ref,
+                        'auteur' => $this->user->name,
+                        'etat' => $data->etat,
+                        'invoice_signature_date'=> Carbon::now(),
+                        //'table_id'=>$data->table_id,
+                        'item_quantity'=>$data->item_quantity,
+                        'item_price'=>-$data->item_price,
+                        'item_ct'=>$data->item_ct,
+                        'item_tl'=>$data->item_tl,
+                        'item_price_nvat'=>$data->item_price_nvat,
+                        'vat'=>$data->vat,
+                        'item_price_wvat'=>$data->item_price_wvat,
+                        'item_total_amount'=>$data->item_total_amount,
+                        'employe_id'=> $data->employe_id,
+                    );
+
+                    $noteCredit[] = $noteCreditdata;
+
                 $flag = 1;
-                NoteCredit::where('invoice_number', '=', $invoice_number)
-                    ->update(['etat' => 1,'validated_by' => $this->user->name]);
-                NoteCreditDetail::where('invoice_number', '=', $invoice_number)
-                    ->update(['etat' => 1,'validated_by' => $this->user->name]);
-                DB::commit();
-                session()->flash('success', 'La note de credit a été validé avec succés!!');
-                return back();
             }
         }
 
@@ -1844,11 +1957,13 @@ class NoteCreditController extends Controller
             DrinkSmallReport::insert($report);
         }
 
+        FactureDetail::insert($noteCredit);
+
         DrinkSmallStoreDetail::where('drink_id','!=','')->update(['verified' => false]);
         NoteCredit::where('invoice_number', '=', $invoice_number)
-            ->update(['etat' => 1,'validated_by' => $this->user->name]);
+            ->update(['statut' => 2,'validated_by' => $this->user->name]);
         NoteCreditDetail::where('invoice_number', '=', $invoice_number)
-            ->update(['etat' => 1,'validated_by' => $this->user->name]);
+            ->update(['statut' => 2,'validated_by' => $this->user->name]);
 
         DB::commit();
             session()->flash('success', 'La note de credit a été validé avec succés!!');
@@ -1873,10 +1988,63 @@ class NoteCreditController extends Controller
 
         try {DB::beginTransaction();
 
+        $datas = NoteCreditDetail::where('invoice_number', $invoice_number)->get();
+
+        foreach ($datas as $data) {
+                $noteCreditdata = array(
+                        'barrist_item_id' => $data->barrist_item_id,
+                        //'invoice_number'=>$data->invoice_number,
+                        'invoice_date'=> $data->invoice_date,
+                        'tp_type'=>$data->tp_type,
+                        'tp_name'=>$data->tp_name,
+                        'tp_TIN'=>$data->tp_TIN,
+                        'tp_trade_number'=>$data->tp_trade_number,
+                        'tp_phone_number'=>$data->tp_phone_number,
+                        'tp_address_province'=>$data->tp_address_province,
+                        'tp_address_commune'=>$data->tp_address_commune,
+                        'tp_address_quartier'=>$data->tp_address_quartier,
+                        'tp_address_avenue'=>$data->tp_address_avenue,
+                        'tp_address_rue'=>$data->tp_address_rue,
+                        'vat_taxpayer'=>$data->vat_taxpayer,
+                        'ct_taxpayer'=>$data->ct_taxpayer,
+                        'tl_taxpayer'=>$data->tl_taxpayer,
+                        'tp_fiscal_center'=>$data->tp_fiscal_center,
+                        'tp_activity_sector'=>$data->tp_activity_sector,
+                        'tp_legal_form'=>$data->tp_legal_form,
+                        'payment_type'=>$data->payment_type,
+                        'client_id'=>$data->client_id,
+                        'customer_TIN'=>$data->customer_TIN,
+                        'customer_address'=>$data->customer_address,
+                        //'invoice_signature'=> $invoice_signature,
+                        //'barrist_order_no'=>$data->barrist_order_no,
+                        'cancelled_invoice_ref'=>$data->cancelled_invoice_ref,
+                        'cn_motif'=>$data->cn_motif,
+                        'invoice_currency'=>$data->invoice_currency,
+                        'invoice_ref'=>$data->invoice_ref,
+                        'auteur' => $this->user->name,
+                        'etat' => $data->etat,
+                        'invoice_signature_date'=> Carbon::now(),
+                        //'table_id'=>$data->table_id,
+                        'item_quantity'=>$data->item_quantity,
+                        'item_price'=>$data->item_price,
+                        'item_ct'=>$data->item_ct,
+                        'item_tl'=>$data->item_tl,
+                        'item_price_nvat'=>$data->item_price_nvat,
+                        'vat'=>$data->vat,
+                        'item_price_wvat'=>$data->item_price_wvat,
+                        'item_total_amount'=>$data->item_total_amount,
+                        'employe_id'=> $data->employe_id,
+                    );
+
+                $noteCredit[] = $noteCreditdata;
+        }
+
+        FactureDetail::insert($noteCredit);
+
         NoteCredit::where('invoice_number', '=', $invoice_number)
-            ->update(['etat' => 1,'validated_by' => $this->user->name]);
+            ->update(['statut' => 2,'validated_by' => $this->user->name]);
         NoteCreditDetail::where('invoice_number', '=', $invoice_number)
-            ->update(['etat' => 1,'validated_by' => $this->user->name]);
+            ->update(['statut' => 2,'validated_by' => $this->user->name]);
 
         DB::commit();
             session()->flash('success', 'La note de credit a été validé avec succés!!');
@@ -1938,6 +2106,54 @@ class NoteCreditController extends Controller
                         'created_by' => $this->user->name,
                         'verified' => false
                     );
+
+
+                    $noteCreditdata = array(
+                        'bartender_item_id' => $data->bartender_item_id,
+                        //'invoice_number'=>$data->invoice_number,
+                        'invoice_date'=> $data->invoice_date,
+                        'tp_type'=>$data->tp_type,
+                        'tp_name'=>$data->tp_name,
+                        'tp_TIN'=>$data->tp_TIN,
+                        'tp_trade_number'=>$data->tp_trade_number,
+                        'tp_phone_number'=>$data->tp_phone_number,
+                        'tp_address_province'=>$data->tp_address_province,
+                        'tp_address_commune'=>$data->tp_address_commune,
+                        'tp_address_quartier'=>$data->tp_address_quartier,
+                        'tp_address_avenue'=>$data->tp_address_avenue,
+                        'tp_address_rue'=>$data->tp_address_rue,
+                        'vat_taxpayer'=>$data->vat_taxpayer,
+                        'ct_taxpayer'=>$data->ct_taxpayer,
+                        'tl_taxpayer'=>$data->tl_taxpayer,
+                        'tp_fiscal_center'=>$data->tp_fiscal_center,
+                        'tp_activity_sector'=>$data->tp_activity_sector,
+                        'tp_legal_form'=>$data->tp_legal_form,
+                        'payment_type'=>$data->payment_type,
+                        'client_id'=>$data->client_id,
+                        'customer_TIN'=>$data->customer_TIN,
+                        'customer_address'=>$data->customer_address,
+                        //'invoice_signature'=> $invoice_signature,
+                        //'drink_order_no'=>$data->drink_order_no,
+                        'cancelled_invoice_ref'=>$data->cancelled_invoice_ref,
+                        'cn_motif'=>$data->cn_motif,
+                        'invoice_currency'=>$data->invoice_currency,
+                        'invoice_ref'=>$data->invoice_ref,
+                        'auteur' => $this->user->name,
+                        'etat' => $data->etat,
+                        'invoice_signature_date'=> Carbon::now(),
+                        //'table_id'=>$data->table_id,
+                        'item_quantity'=>$data->item_quantity,
+                        'item_price'=>-$data->item_price,
+                        'item_ct'=>$data->item_ct,
+                        'item_tl'=>$data->item_tl,
+                        'item_price_nvat'=>$data->item_price_nvat,
+                        'vat'=>$data->vat,
+                        'item_price_wvat'=>$data->item_price_wvat,
+                        'item_total_amount'=>$data->item_total_amount,
+                        'employe_id'=> $data->employe_id,
+                    );
+
+                    $noteCredit[] = $noteCreditdata;
                     
                         
                         BartenderProductionStore::where('bartender_item_id',$data->bartender_item_id)
@@ -1980,10 +2196,12 @@ class NoteCreditController extends Controller
 
         BartenderSmallReport::insert($report);
 
+        FactureDetail::insert($noteCredit);
+
         NoteCredit::where('invoice_number', '=', $invoice_number)
-            ->update(['etat' => 1,'validated_by' => $this->user->name]);
+            ->update(['statut' => 2,'validated_by' => $this->user->name]);
         NoteCreditDetail::where('invoice_number', '=', $invoice_number)
-            ->update(['etat' => 1,'validated_by' => $this->user->name]);
+            ->update(['statut' => 2,'validated_by' => $this->user->name]);
 
         DB::commit();
             session()->flash('success', 'La note de credit a été validé avec succés!!');
@@ -2008,10 +2226,245 @@ class NoteCreditController extends Controller
 
         try {DB::beginTransaction();
 
+        $datas = NoteCreditDetail::where('invoice_number', $invoice_number)->get();
+
+        foreach ($datas as $data) {
+            if (!empty($data->salle_id)) {
+                $noteCreditdata = array(
+                        'salle_id' => $data->salle_id,
+                        //'invoice_number'=>$data->invoice_number,
+                        'invoice_date'=> $data->invoice_date,
+                        'tp_type'=>$data->tp_type,
+                        'tp_name'=>$data->tp_name,
+                        'tp_TIN'=>$data->tp_TIN,
+                        'tp_trade_number'=>$data->tp_trade_number,
+                        'tp_phone_number'=>$data->tp_phone_number,
+                        'tp_address_province'=>$data->tp_address_province,
+                        'tp_address_commune'=>$data->tp_address_commune,
+                        'tp_address_quartier'=>$data->tp_address_quartier,
+                        'tp_address_avenue'=>$data->tp_address_avenue,
+                        'tp_address_rue'=>$data->tp_address_rue,
+                        'vat_taxpayer'=>$data->vat_taxpayer,
+                        'ct_taxpayer'=>$data->ct_taxpayer,
+                        'tl_taxpayer'=>$data->tl_taxpayer,
+                        'tp_fiscal_center'=>$data->tp_fiscal_center,
+                        'tp_activity_sector'=>$data->tp_activity_sector,
+                        'tp_legal_form'=>$data->tp_legal_form,
+                        'payment_type'=>$data->payment_type,
+                        'client_id'=>$data->client_id,
+                        'customer_TIN'=>$data->customer_TIN,
+                        'customer_address'=>$data->customer_address,
+                        //'invoice_signature'=> $invoice_signature,
+                        //'barrist_order_no'=>$data->barrist_order_no,
+                        'cancelled_invoice_ref'=>$data->cancelled_invoice_ref,
+                        'cn_motif'=>$data->cn_motif,
+                        'invoice_currency'=>$data->invoice_currency,
+                        'invoice_ref'=>$data->invoice_ref,
+                        'auteur' => $this->user->name,
+                        'etat' => $data->etat,
+                        'invoice_signature_date'=> Carbon::now(),
+                        //'table_id'=>$data->table_id,
+                        'item_quantity'=>$data->item_quantity,
+                        'item_price'=>$data->item_price,
+                        'item_ct'=>$data->item_ct,
+                        'item_tl'=>$data->item_tl,
+                        'item_price_nvat'=>$data->item_price_nvat,
+                        'vat'=>$data->vat,
+                        'item_price_wvat'=>$data->item_price_wvat,
+                        'item_total_amount'=>$data->item_total_amount,
+                        'employe_id'=> $data->employe_id,
+                    );
+            }elseif (!empty($data->swiming_pool_id)) {
+                $noteCreditdata = array(
+                        'swiming_pool_id' => $data->swiming_pool_id,
+                        //'invoice_number'=>$data->invoice_number,
+                        'invoice_date'=> $data->invoice_date,
+                        'tp_type'=>$data->tp_type,
+                        'tp_name'=>$data->tp_name,
+                        'tp_TIN'=>$data->tp_TIN,
+                        'tp_trade_number'=>$data->tp_trade_number,
+                        'tp_phone_number'=>$data->tp_phone_number,
+                        'tp_address_province'=>$data->tp_address_province,
+                        'tp_address_commune'=>$data->tp_address_commune,
+                        'tp_address_quartier'=>$data->tp_address_quartier,
+                        'tp_address_avenue'=>$data->tp_address_avenue,
+                        'tp_address_rue'=>$data->tp_address_rue,
+                        'vat_taxpayer'=>$data->vat_taxpayer,
+                        'ct_taxpayer'=>$data->ct_taxpayer,
+                        'tl_taxpayer'=>$data->tl_taxpayer,
+                        'tp_fiscal_center'=>$data->tp_fiscal_center,
+                        'tp_activity_sector'=>$data->tp_activity_sector,
+                        'tp_legal_form'=>$data->tp_legal_form,
+                        'payment_type'=>$data->payment_type,
+                        'client_id'=>$data->client_id,
+                        'customer_TIN'=>$data->customer_TIN,
+                        'customer_address'=>$data->customer_address,
+                        //'invoice_signature'=> $invoice_signature,
+                        //'barrist_order_no'=>$data->barrist_order_no,
+                        'cancelled_invoice_ref'=>$data->cancelled_invoice_ref,
+                        'cn_motif'=>$data->cn_motif,
+                        'invoice_currency'=>$data->invoice_currency,
+                        'invoice_ref'=>$data->invoice_ref,
+                        'auteur' => $this->user->name,
+                        'etat' => $data->etat,
+                        'invoice_signature_date'=> Carbon::now(),
+                        //'table_id'=>$data->table_id,
+                        'item_quantity'=>$data->item_quantity,
+                        'item_price'=>$data->item_price,
+                        'item_ct'=>$data->item_ct,
+                        'item_tl'=>$data->item_tl,
+                        'item_price_nvat'=>$data->item_price_nvat,
+                        'vat'=>$data->vat,
+                        'item_price_wvat'=>$data->item_price_wvat,
+                        'item_total_amount'=>$data->item_total_amount,
+                        'employe_id'=> $data->employe_id,
+                    );
+            }elseif (!empty($data->service_id)) {
+                $noteCreditdata = array(
+                        'service_id' => $data->service_id,
+                        //'invoice_number'=>$data->invoice_number,
+                        'invoice_date'=> $data->invoice_date,
+                        'tp_type'=>$data->tp_type,
+                        'tp_name'=>$data->tp_name,
+                        'tp_TIN'=>$data->tp_TIN,
+                        'tp_trade_number'=>$data->tp_trade_number,
+                        'tp_phone_number'=>$data->tp_phone_number,
+                        'tp_address_province'=>$data->tp_address_province,
+                        'tp_address_commune'=>$data->tp_address_commune,
+                        'tp_address_quartier'=>$data->tp_address_quartier,
+                        'tp_address_avenue'=>$data->tp_address_avenue,
+                        'tp_address_rue'=>$data->tp_address_rue,
+                        'vat_taxpayer'=>$data->vat_taxpayer,
+                        'ct_taxpayer'=>$data->ct_taxpayer,
+                        'tl_taxpayer'=>$data->tl_taxpayer,
+                        'tp_fiscal_center'=>$data->tp_fiscal_center,
+                        'tp_activity_sector'=>$data->tp_activity_sector,
+                        'tp_legal_form'=>$data->tp_legal_form,
+                        'payment_type'=>$data->payment_type,
+                        'client_id'=>$data->client_id,
+                        'customer_TIN'=>$data->customer_TIN,
+                        'customer_address'=>$data->customer_address,
+                        //'invoice_signature'=> $invoice_signature,
+                        //'barrist_order_no'=>$data->barrist_order_no,
+                        'cancelled_invoice_ref'=>$data->cancelled_invoice_ref,
+                        'cn_motif'=>$data->cn_motif,
+                        'invoice_currency'=>$data->invoice_currency,
+                        'invoice_ref'=>$data->invoice_ref,
+                        'auteur' => $this->user->name,
+                        'etat' => $data->etat,
+                        'invoice_signature_date'=> Carbon::now(),
+                        //'table_id'=>$data->table_id,
+                        'item_quantity'=>$data->item_quantity,
+                        'item_price'=>$data->item_price,
+                        'item_ct'=>$data->item_ct,
+                        'item_tl'=>$data->item_tl,
+                        'item_price_nvat'=>$data->item_price_nvat,
+                        'vat'=>$data->vat,
+                        'item_price_wvat'=>$data->item_price_wvat,
+                        'item_total_amount'=>$data->item_total_amount,
+                        'employe_id'=> $data->employe_id,
+                    );
+            }elseif (!empty($data->breakfast_id)) {
+                $noteCreditdata = array(
+                        'breakfast_id' => $data->breakfast_id,
+                        //'invoice_number'=>$data->invoice_number,
+                        'invoice_date'=> $data->invoice_date,
+                        'tp_type'=>$data->tp_type,
+                        'tp_name'=>$data->tp_name,
+                        'tp_TIN'=>$data->tp_TIN,
+                        'tp_trade_number'=>$data->tp_trade_number,
+                        'tp_phone_number'=>$data->tp_phone_number,
+                        'tp_address_province'=>$data->tp_address_province,
+                        'tp_address_commune'=>$data->tp_address_commune,
+                        'tp_address_quartier'=>$data->tp_address_quartier,
+                        'tp_address_avenue'=>$data->tp_address_avenue,
+                        'tp_address_rue'=>$data->tp_address_rue,
+                        'vat_taxpayer'=>$data->vat_taxpayer,
+                        'ct_taxpayer'=>$data->ct_taxpayer,
+                        'tl_taxpayer'=>$data->tl_taxpayer,
+                        'tp_fiscal_center'=>$data->tp_fiscal_center,
+                        'tp_activity_sector'=>$data->tp_activity_sector,
+                        'tp_legal_form'=>$data->tp_legal_form,
+                        'payment_type'=>$data->payment_type,
+                        'client_id'=>$data->client_id,
+                        'customer_TIN'=>$data->customer_TIN,
+                        'customer_address'=>$data->customer_address,
+                        //'invoice_signature'=> $invoice_signature,
+                        //'barrist_order_no'=>$data->barrist_order_no,
+                        'cancelled_invoice_ref'=>$data->cancelled_invoice_ref,
+                        'cn_motif'=>$data->cn_motif,
+                        'invoice_currency'=>$data->invoice_currency,
+                        'invoice_ref'=>$data->invoice_ref,
+                        'auteur' => $this->user->name,
+                        'etat' => $data->etat,
+                        'invoice_signature_date'=> Carbon::now(),
+                        //'table_id'=>$data->table_id,
+                        'item_quantity'=>$data->item_quantity,
+                        'item_price'=>$data->item_price,
+                        'item_ct'=>$data->item_ct,
+                        'item_tl'=>$data->item_tl,
+                        'item_price_nvat'=>$data->item_price_nvat,
+                        'vat'=>$data->vat,
+                        'item_price_wvat'=>$data->item_price_wvat,
+                        'item_total_amount'=>$data->item_total_amount,
+                        'employe_id'=> $data->employe_id,
+                    );
+            }elseif (!empty($data->kidness_space_id)) {
+                $noteCreditdata = array(
+                        'kidness_space_id' => $data->kidness_space_id,
+                        //'invoice_number'=>$data->invoice_number,
+                        'invoice_date'=> $data->invoice_date,
+                        'tp_type'=>$data->tp_type,
+                        'tp_name'=>$data->tp_name,
+                        'tp_TIN'=>$data->tp_TIN,
+                        'tp_trade_number'=>$data->tp_trade_number,
+                        'tp_phone_number'=>$data->tp_phone_number,
+                        'tp_address_province'=>$data->tp_address_province,
+                        'tp_address_commune'=>$data->tp_address_commune,
+                        'tp_address_quartier'=>$data->tp_address_quartier,
+                        'tp_address_avenue'=>$data->tp_address_avenue,
+                        'tp_address_rue'=>$data->tp_address_rue,
+                        'vat_taxpayer'=>$data->vat_taxpayer,
+                        'ct_taxpayer'=>$data->ct_taxpayer,
+                        'tl_taxpayer'=>$data->tl_taxpayer,
+                        'tp_fiscal_center'=>$data->tp_fiscal_center,
+                        'tp_activity_sector'=>$data->tp_activity_sector,
+                        'tp_legal_form'=>$data->tp_legal_form,
+                        'payment_type'=>$data->payment_type,
+                        'client_id'=>$data->client_id,
+                        'customer_TIN'=>$data->customer_TIN,
+                        'customer_address'=>$data->customer_address,
+                        //'invoice_signature'=> $invoice_signature,
+                        //'barrist_order_no'=>$data->barrist_order_no,
+                        'cancelled_invoice_ref'=>$data->cancelled_invoice_ref,
+                        'cn_motif'=>$data->cn_motif,
+                        'invoice_currency'=>$data->invoice_currency,
+                        'invoice_ref'=>$data->invoice_ref,
+                        'auteur' => $this->user->name,
+                        'etat' => $data->etat,
+                        'invoice_signature_date'=> Carbon::now(),
+                        //'table_id'=>$data->table_id,
+                        'item_quantity'=>$data->item_quantity,
+                        'item_price'=>$data->item_price,
+                        'item_ct'=>$data->item_ct,
+                        'item_tl'=>$data->item_tl,
+                        'item_price_nvat'=>$data->item_price_nvat,
+                        'vat'=>$data->vat,
+                        'item_price_wvat'=>$data->item_price_wvat,
+                        'item_total_amount'=>$data->item_total_amount,
+                        'employe_id'=> $data->employe_id,
+                    );
+            }
+
+                $noteCredit[] = $noteCreditdata;
+        }
+
+        FactureDetail::insert($noteCredit);
+
         NoteCredit::where('invoice_number', '=', $invoice_number)
-            ->update(['etat' => 1,'validated_by' => $this->user->name]);
+            ->update(['statut' => 2,'validated_by' => $this->user->name]);
         NoteCreditDetail::where('invoice_number', '=', $invoice_number)
-            ->update(['etat' => 1,'validated_by' => $this->user->name]);
+            ->update(['statut' => 2,'validated_by' => $this->user->name]);
 
         DB::commit();
             session()->flash('success', 'La note de credit a été validé avec succés!!');
@@ -2035,10 +2488,63 @@ class NoteCreditController extends Controller
 
         try {DB::beginTransaction();
 
+        $datas = NoteCreditDetail::where('invoice_number', $invoice_number)->get();
+
+        foreach ($datas as $data) {
+                $noteCreditdata = array(
+                        'food_item_id' => $data->food_item_id,
+                        //'invoice_number'=>$data->invoice_number,
+                        'invoice_date'=> $data->invoice_date,
+                        'tp_type'=>$data->tp_type,
+                        'tp_name'=>$data->tp_name,
+                        'tp_TIN'=>$data->tp_TIN,
+                        'tp_trade_number'=>$data->tp_trade_number,
+                        'tp_phone_number'=>$data->tp_phone_number,
+                        'tp_address_province'=>$data->tp_address_province,
+                        'tp_address_commune'=>$data->tp_address_commune,
+                        'tp_address_quartier'=>$data->tp_address_quartier,
+                        'tp_address_avenue'=>$data->tp_address_avenue,
+                        'tp_address_rue'=>$data->tp_address_rue,
+                        'vat_taxpayer'=>$data->vat_taxpayer,
+                        'ct_taxpayer'=>$data->ct_taxpayer,
+                        'tl_taxpayer'=>$data->tl_taxpayer,
+                        'tp_fiscal_center'=>$data->tp_fiscal_center,
+                        'tp_activity_sector'=>$data->tp_activity_sector,
+                        'tp_legal_form'=>$data->tp_legal_form,
+                        'payment_type'=>$data->payment_type,
+                        'client_id'=>$data->client_id,
+                        'customer_TIN'=>$data->customer_TIN,
+                        'customer_address'=>$data->customer_address,
+                        //'invoice_signature'=> $invoice_signature,
+                        //'barrist_order_no'=>$data->barrist_order_no,
+                        'cancelled_invoice_ref'=>$data->cancelled_invoice_ref,
+                        'cn_motif'=>$data->cn_motif,
+                        'invoice_currency'=>$data->invoice_currency,
+                        'invoice_ref'=>$data->invoice_ref,
+                        'auteur' => $this->user->name,
+                        'etat' => $data->etat,
+                        'invoice_signature_date'=> Carbon::now(),
+                        //'table_id'=>$data->table_id,
+                        'item_quantity'=>$data->item_quantity,
+                        'item_price'=>$data->item_price,
+                        'item_ct'=>$data->item_ct,
+                        'item_tl'=>$data->item_tl,
+                        'item_price_nvat'=>$data->item_price_nvat,
+                        'vat'=>$data->vat,
+                        'item_price_wvat'=>$data->item_price_wvat,
+                        'item_total_amount'=>$data->item_total_amount,
+                        'employe_id'=> $data->employe_id,
+                    );
+
+                $noteCredit[] = $noteCreditdata;
+        }
+
+        FactureDetail::insert($noteCredit);
+
         NoteCredit::where('invoice_number', '=', $invoice_number)
-            ->update(['etat' => 1,'validated_by' => $this->user->name]);
+            ->update(['statut' => 2,'validated_by' => $this->user->name]);
         NoteCreditDetail::where('invoice_number', '=', $invoice_number)
-            ->update(['etat' => 1,'validated_by' => $this->user->name]);
+            ->update(['statut' => 2,'validated_by' => $this->user->name]);
 
         DB::commit();
             session()->flash('success', 'La note de credit a été validé avec succés!!');
