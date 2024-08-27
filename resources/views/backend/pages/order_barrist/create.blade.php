@@ -169,7 +169,6 @@
                         "<td>"+
                           "<input type='number' name='quantity[]' placeholder='Enter Quantity' class='form-control' required/>"+
                         "</td>"+
-                        "<td>"+
                         /*
                         "<td>"+
                          "<select class='form-control' name='ingredient_id[]'"+

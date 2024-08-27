@@ -514,7 +514,7 @@ class OrderKitchenController extends Controller
            // download pdf file
             DB::commit();
 
-            return view('backend.pages.document.food_order_client',compact('accompagnements','datas','order_no','setting','description','order_signature','date','order','totalValue'));
+            return view('backend.pages.document.food_order_client',compact('accompagnements','datas','order_no','setting','description','order_signature','date','data','totalValue'));
             
            //return $pdf->download($order_no.'.pdf'); 
            

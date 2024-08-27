@@ -439,7 +439,7 @@ class BarristOrderController extends Controller
            // download pdf file
             DB::commit();
 
-            return view('backend.pages.document.barrist_order',compact('datas','ingredients','order_no','setting','description','order_signature','date','totalValue','order'));
+            return view('backend.pages.document.barrist_order',compact('datas','ingredients','order_no','setting','description','order_signature','date','totalValue','data'));
            //return $pdf->download('COMMANDE_'.$order_no.'.pdf'); 
            
         }else if ($stat == -1) {

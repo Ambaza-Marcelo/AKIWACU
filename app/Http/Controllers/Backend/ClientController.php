@@ -88,7 +88,7 @@ class ClientController extends Controller
         $token = $data2->token;
 
         $tp_TIN = $request->customer_TIN;
-
+        /*
         $clients = EGRClient::all();
 
         foreach ($clients as $client) {
@@ -106,6 +106,7 @@ class ClientController extends Controller
                 return redirect()->back();
             }
         }
+        */
 
         if (empty($tp_TIN) && $request->vat_customer_payer == 1) {
             session()->flash('error', 'Le NIF du client est obligatoire');
@@ -131,7 +132,7 @@ class ClientController extends Controller
         $msg = $data->msg;
 
         
-        if ($success == true && $request->vat_customer_payer == 1 || $request->vat_customer_payer == 0) {
+        if ($request->vat_customer_payer == 1 && $request->tp_type == 2) {
 
             $data3 = ($data2->taxpayer);
 

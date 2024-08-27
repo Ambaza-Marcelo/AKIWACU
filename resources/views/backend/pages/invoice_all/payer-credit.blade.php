@@ -196,6 +196,7 @@
                                 "<option value='COOPEC'>COOPEC</option>"+
                                 "<option value='CORILAC'>CORILAC</option>"+
                                 "<option value='ECOBANK'>ECOBANK</option>"+
+                                "<option value='FINBANK'>FINBANK</option>"+
                                 "<option value='KCB'>KCB</option>"+
                                 "<option value='INTERBANK'>INTERBANK</option>"+
                             +

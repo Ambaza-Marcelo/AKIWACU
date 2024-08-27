@@ -245,7 +245,7 @@ class MaterialBigStoreController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to delete any material store !');
         }
 
-        $material_big_store = MaterialBigStoreDetail::find($id);
+        $material_big_store = MaterialBigStore::find($id);
         if (!is_null($material_big_store)) {
             $material_big_store->delete();
         }

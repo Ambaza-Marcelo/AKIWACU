@@ -416,7 +416,7 @@ class BartenderOrderController extends Controller
            // download pdf file
             DB::commit();
 
-            return view('backend.pages.document.bartender_order',compact('datas','order_no','setting','description','order_signature','date','totalValue','order'));
+            return view('backend.pages.document.bartender_order',compact('datas','order_no','setting','description','order_signature','date','totalValue','data'));
             
            //return $pdf->download('COMMANDE_'.$order_no.'.pdf');
            
