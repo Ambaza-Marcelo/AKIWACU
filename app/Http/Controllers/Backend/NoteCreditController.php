@@ -1821,7 +1821,7 @@ class NoteCreditController extends Controller
 
                     $noteCreditdata = array(
                         'drink_id' => $data->drink_id,
-                        //'invoice_number'=>$data->invoice_number,
+                        'invoice_number'=>$data->invoice_number,
                         'invoice_date'=> $data->invoice_date,
                         'tp_type'=>$data->tp_type,
                         'tp_name'=>$data->tp_name,
@@ -1843,8 +1843,8 @@ class NoteCreditController extends Controller
                         'client_id'=>$data->client_id,
                         'customer_TIN'=>$data->customer_TIN,
                         'customer_address'=>$data->customer_address,
-                        //'invoice_signature'=> $invoice_signature,
-                        //'drink_order_no'=>$data->drink_order_no,
+                        'invoice_signature'=> $invoice_signature,
+                        'drink_order_no'=>$data->drink_order_no,
                         'cancelled_invoice_ref'=>$data->cancelled_invoice_ref,
                         'cn_motif'=>$data->cn_motif,
                         'invoice_currency'=>$data->invoice_currency,
@@ -1904,7 +1904,7 @@ class NoteCreditController extends Controller
 
                     $noteCreditdata = array(
                         'drink_id' => $data->drink_id,
-                        //'invoice_number'=>$data->invoice_number,
+                        'invoice_number'=>$data->invoice_number,
                         'invoice_date'=> $data->invoice_date,
                         'tp_type'=>$data->tp_type,
                         'tp_name'=>$data->tp_name,
@@ -1926,8 +1926,8 @@ class NoteCreditController extends Controller
                         'client_id'=>$data->client_id,
                         'customer_TIN'=>$data->customer_TIN,
                         'customer_address'=>$data->customer_address,
-                        //'invoice_signature'=> $invoice_signature,
-                        //'drink_order_no'=>$data->drink_order_no,
+                        'invoice_signature'=> $invoice_signature,
+                        'drink_order_no'=>$data->drink_order_no,
                         'cancelled_invoice_ref'=>$data->cancelled_invoice_ref,
                         'cn_motif'=>$data->cn_motif,
                         'invoice_currency'=>$data->invoice_currency,
@@ -1993,7 +1993,7 @@ class NoteCreditController extends Controller
         foreach ($datas as $data) {
                 $noteCreditdata = array(
                         'barrist_item_id' => $data->barrist_item_id,
-                        //'invoice_number'=>$data->invoice_number,
+                        'invoice_number'=>$data->invoice_number,
                         'invoice_date'=> $data->invoice_date,
                         'tp_type'=>$data->tp_type,
                         'tp_name'=>$data->tp_name,
@@ -2015,8 +2015,8 @@ class NoteCreditController extends Controller
                         'client_id'=>$data->client_id,
                         'customer_TIN'=>$data->customer_TIN,
                         'customer_address'=>$data->customer_address,
-                        //'invoice_signature'=> $invoice_signature,
-                        //'barrist_order_no'=>$data->barrist_order_no,
+                        'invoice_signature'=> $invoice_signature,
+                        'barrist_order_no'=>$data->barrist_order_no,
                         'cancelled_invoice_ref'=>$data->cancelled_invoice_ref,
                         'cn_motif'=>$data->cn_motif,
                         'invoice_currency'=>$data->invoice_currency,
@@ -2110,7 +2110,7 @@ class NoteCreditController extends Controller
 
                     $noteCreditdata = array(
                         'bartender_item_id' => $data->bartender_item_id,
-                        //'invoice_number'=>$data->invoice_number,
+                        'invoice_number'=>$data->invoice_number,
                         'invoice_date'=> $data->invoice_date,
                         'tp_type'=>$data->tp_type,
                         'tp_name'=>$data->tp_name,
@@ -2132,8 +2132,8 @@ class NoteCreditController extends Controller
                         'client_id'=>$data->client_id,
                         'customer_TIN'=>$data->customer_TIN,
                         'customer_address'=>$data->customer_address,
-                        //'invoice_signature'=> $invoice_signature,
-                        //'drink_order_no'=>$data->drink_order_no,
+                        'invoice_signature'=> $invoice_signature,
+                        'drink_order_no'=>$data->drink_order_no,
                         'cancelled_invoice_ref'=>$data->cancelled_invoice_ref,
                         'cn_motif'=>$data->cn_motif,
                         'invoice_currency'=>$data->invoice_currency,
@@ -2232,7 +2232,7 @@ class NoteCreditController extends Controller
             if (!empty($data->salle_id)) {
                 $noteCreditdata = array(
                         'salle_id' => $data->salle_id,
-                        //'invoice_number'=>$data->invoice_number,
+                        'invoice_number'=>$data->invoice_number,
                         'invoice_date'=> $data->invoice_date,
                         'tp_type'=>$data->tp_type,
                         'tp_name'=>$data->tp_name,
@@ -2254,8 +2254,8 @@ class NoteCreditController extends Controller
                         'client_id'=>$data->client_id,
                         'customer_TIN'=>$data->customer_TIN,
                         'customer_address'=>$data->customer_address,
-                        //'invoice_signature'=> $invoice_signature,
-                        //'barrist_order_no'=>$data->barrist_order_no,
+                        'invoice_signature'=> $invoice_signature,
+                        'booking_no'=>$data->booking_no,
                         'cancelled_invoice_ref'=>$data->cancelled_invoice_ref,
                         'cn_motif'=>$data->cn_motif,
                         'invoice_currency'=>$data->invoice_currency,
@@ -2277,7 +2277,7 @@ class NoteCreditController extends Controller
             }elseif (!empty($data->swiming_pool_id)) {
                 $noteCreditdata = array(
                         'swiming_pool_id' => $data->swiming_pool_id,
-                        //'invoice_number'=>$data->invoice_number,
+                        'invoice_number'=>$data->invoice_number,
                         'invoice_date'=> $data->invoice_date,
                         'tp_type'=>$data->tp_type,
                         'tp_name'=>$data->tp_name,
@@ -2299,8 +2299,8 @@ class NoteCreditController extends Controller
                         'client_id'=>$data->client_id,
                         'customer_TIN'=>$data->customer_TIN,
                         'customer_address'=>$data->customer_address,
-                        //'invoice_signature'=> $invoice_signature,
-                        //'barrist_order_no'=>$data->barrist_order_no,
+                        'invoice_signature'=> $invoice_signature,
+                        'booking_no'=>$data->booking_no,
                         'cancelled_invoice_ref'=>$data->cancelled_invoice_ref,
                         'cn_motif'=>$data->cn_motif,
                         'invoice_currency'=>$data->invoice_currency,
@@ -2322,7 +2322,7 @@ class NoteCreditController extends Controller
             }elseif (!empty($data->service_id)) {
                 $noteCreditdata = array(
                         'service_id' => $data->service_id,
-                        //'invoice_number'=>$data->invoice_number,
+                        'invoice_number'=>$data->invoice_number,
                         'invoice_date'=> $data->invoice_date,
                         'tp_type'=>$data->tp_type,
                         'tp_name'=>$data->tp_name,
@@ -2344,8 +2344,8 @@ class NoteCreditController extends Controller
                         'client_id'=>$data->client_id,
                         'customer_TIN'=>$data->customer_TIN,
                         'customer_address'=>$data->customer_address,
-                        //'invoice_signature'=> $invoice_signature,
-                        //'barrist_order_no'=>$data->barrist_order_no,
+                        'invoice_signature'=> $invoice_signature,
+                        'booking_no'=>$data->booking_no,
                         'cancelled_invoice_ref'=>$data->cancelled_invoice_ref,
                         'cn_motif'=>$data->cn_motif,
                         'invoice_currency'=>$data->invoice_currency,
@@ -2367,7 +2367,7 @@ class NoteCreditController extends Controller
             }elseif (!empty($data->breakfast_id)) {
                 $noteCreditdata = array(
                         'breakfast_id' => $data->breakfast_id,
-                        //'invoice_number'=>$data->invoice_number,
+                        'invoice_number'=>$data->invoice_number,
                         'invoice_date'=> $data->invoice_date,
                         'tp_type'=>$data->tp_type,
                         'tp_name'=>$data->tp_name,
@@ -2389,8 +2389,8 @@ class NoteCreditController extends Controller
                         'client_id'=>$data->client_id,
                         'customer_TIN'=>$data->customer_TIN,
                         'customer_address'=>$data->customer_address,
-                        //'invoice_signature'=> $invoice_signature,
-                        //'barrist_order_no'=>$data->barrist_order_no,
+                        'invoice_signature'=> $invoice_signature,
+                        'booking_no'=>$data->booking_no,
                         'cancelled_invoice_ref'=>$data->cancelled_invoice_ref,
                         'cn_motif'=>$data->cn_motif,
                         'invoice_currency'=>$data->invoice_currency,
@@ -2412,7 +2412,7 @@ class NoteCreditController extends Controller
             }elseif (!empty($data->kidness_space_id)) {
                 $noteCreditdata = array(
                         'kidness_space_id' => $data->kidness_space_id,
-                        //'invoice_number'=>$data->invoice_number,
+                        'invoice_number'=>$data->invoice_number,
                         'invoice_date'=> $data->invoice_date,
                         'tp_type'=>$data->tp_type,
                         'tp_name'=>$data->tp_name,
@@ -2434,8 +2434,8 @@ class NoteCreditController extends Controller
                         'client_id'=>$data->client_id,
                         'customer_TIN'=>$data->customer_TIN,
                         'customer_address'=>$data->customer_address,
-                        //'invoice_signature'=> $invoice_signature,
-                        //'barrist_order_no'=>$data->barrist_order_no,
+                        'invoice_signature'=> $invoice_signature,
+                        'booking_no'=>$data->booking_no,
                         'cancelled_invoice_ref'=>$data->cancelled_invoice_ref,
                         'cn_motif'=>$data->cn_motif,
                         'invoice_currency'=>$data->invoice_currency,
@@ -2493,7 +2493,7 @@ class NoteCreditController extends Controller
         foreach ($datas as $data) {
                 $noteCreditdata = array(
                         'food_item_id' => $data->food_item_id,
-                        //'invoice_number'=>$data->invoice_number,
+                        'invoice_number'=>$data->invoice_number,
                         'invoice_date'=> $data->invoice_date,
                         'tp_type'=>$data->tp_type,
                         'tp_name'=>$data->tp_name,
@@ -2515,8 +2515,8 @@ class NoteCreditController extends Controller
                         'client_id'=>$data->client_id,
                         'customer_TIN'=>$data->customer_TIN,
                         'customer_address'=>$data->customer_address,
-                        //'invoice_signature'=> $invoice_signature,
-                        //'barrist_order_no'=>$data->barrist_order_no,
+                        'invoice_signature'=> $invoice_signature,
+                        'food_order_no'=>$data->food_order_no,
                         'cancelled_invoice_ref'=>$data->cancelled_invoice_ref,
                         'cn_motif'=>$data->cn_motif,
                         'invoice_currency'=>$data->invoice_currency,
