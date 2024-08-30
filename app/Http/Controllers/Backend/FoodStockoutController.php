@@ -670,10 +670,6 @@ class FoodStockoutController extends Controller
         return back();
     }
 
-    public function get_reception_data()
-    {
-        return Excel::download(new ReceptionExport, 'stockouts.xlsx');
-    }
 
 
     /**

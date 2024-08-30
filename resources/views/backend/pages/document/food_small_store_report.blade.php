@@ -77,7 +77,7 @@
                                     <td>@if($data->quantity_stockin || $data->quantity_stockout || $data->quantity_transfer || $data->quantity_reception){{ ($data->quantity_stock_initial + $data->quantity_stockin + $data->quantity_reception + $data->quantity_transfer) - ($data->quantity_stockout) }} @endif/@if($data->quantity_portion){{ ($data->quantity_stock_initial_portion + $data->quantity_portion) }} @elseif($data->inventory_quantity_portion) {{ $data->inventory_quantity_portion }} @endif</td>
 
                                     @php
-                                        $value_inventory = $quantity_inventory * $data->food->cump;
+                                        $value_inventory = $data->quantity_inventory * $data->food->cump;
                                     @endphp
                                     <td>@if($data->value_inventory){{ number_format($value_inventory,0,',',' ')  }} @else {{ number_format((($data->quantity_stock_initial + $data->quantity_stockin + $data->quantity_reception + $data->quantity_transfer) - ($data->quantity_stockout))*$data->food->cump,0,',',' ') }} @endif</td>
                                 </tr>

@@ -162,7 +162,7 @@ class FactureRestaurantController extends Controller
         $dateT =  $currentTime->toDateTimeString();
 
         $dateTime = str_replace([' ',':'], '_', $dateT);
-        $pdf = PDF::loadView('backend.pages.document.chiffre_affaire',compact('datas','dateTime','setting','end_date','start_date'))->setPaper('a6', 'portrait');
+        $pdf = PDF::loadView('backend.pages.document.chiffre_affaire',compact('datas','dateTime','setting','end_date','start_date'))->setPaper('a4', 'portrait');
 
         //Storage::put('public/journal_general/'.$d1.'_'.$d2.'.pdf', $pdf->output());
 

@@ -234,7 +234,7 @@ class NoteCreditController extends Controller
             $cancelled_invoice = 1;
             
 
-            $invoice_signature = $request->tp_TIN."/wsconfig('app.tin_number_company')/".Carbon::parse($invoice_date)->format('YmdHis')."/".$invoice_number;
+            $invoice_signature = $request->tp_TIN."/".config('app.obr_test_username')."/".Carbon::parse($invoice_date)->format('YmdHis')."/".$invoice_number;
             $invoice_ref = $invoice_number;
 
         for( $count = 0; $count < count($drink_id); $count++ )
@@ -466,7 +466,7 @@ class NoteCreditController extends Controller
             $cancelled_invoice = 1;
             
 
-            $invoice_signature = $request->tp_TIN."/wsconfig('app.tin_number_company')/".Carbon::parse($invoice_date)->format('YmdHis')."/".$invoice_number;
+            $invoice_signature = $request->tp_TIN."/".config('app.obr_test_username')."/".Carbon::parse($invoice_date)->format('YmdHis')."/".$invoice_number;
             $invoice_ref = $invoice_number;
 
         for( $count = 0; $count < count($barrist_item_id); $count++ )
@@ -675,7 +675,7 @@ class NoteCreditController extends Controller
             $cancelled_invoice = 1;
             
 
-            $invoice_signature = $request->tp_TIN."/wsconfig('app.tin_number_company')/".Carbon::parse($invoice_date)->format('YmdHis')."/".$invoice_number;
+            $invoice_signature = $request->tp_TIN."/".config('app.obr_test_username')."/".Carbon::parse($invoice_date)->format('YmdHis')."/".$invoice_number;
             $invoice_ref = $invoice_number;
 
         for( $count = 0; $count < count($food_item_id); $count++ )
@@ -883,7 +883,7 @@ class NoteCreditController extends Controller
             $cancelled_invoice = 1;
             
 
-            $invoice_signature = $request->tp_TIN."/wsconfig('app.tin_number_company')/".Carbon::parse($invoice_date)->format('YmdHis')."/".$invoice_number;
+            $invoice_signature = $request->tp_TIN."/".config('app.obr_test_username')."/".Carbon::parse($invoice_date)->format('YmdHis')."/".$invoice_number;
             $invoice_ref = $invoice_number;
 
         for( $count = 0; $count < count($bartender_item_id); $count++ )
@@ -1095,7 +1095,7 @@ class NoteCreditController extends Controller
             $cancelled_invoice = 1;
             
 
-            $invoice_signature = $request->tp_TIN."/wsconfig('app.tin_number_company')/".Carbon::parse($invoice_date)->format('YmdHis')."/".$invoice_number;
+            $invoice_signature = $request->tp_TIN."/".config('app.obr_test_username')."/".Carbon::parse($invoice_date)->format('YmdHis')."/".$invoice_number;
             $invoice_ref = $invoice_number;
 
         if (!empty($salle_id)) {
@@ -1780,7 +1780,11 @@ class NoteCreditController extends Controller
 
         $datas = NoteCreditDetail::where('invoice_number', $invoice_number)->get();
 
+
         foreach($datas as $data){
+
+            $date = Facture::where('invoice_number',$data->cancelled_invoice_ref)->value('invoice_date');
+
             if ($data->cn_motif == 2) {
                 $valeurStockInitial = DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id', $data->drink_id)->value('total_cump_value');
                 $quantityStockInitial = DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id', $data->drink_id)->value('quantity_bottle');
@@ -1822,7 +1826,7 @@ class NoteCreditController extends Controller
                     $noteCreditdata = array(
                         'drink_id' => $data->drink_id,
                         'invoice_number'=>$data->invoice_number,
-                        'invoice_date'=> $data->invoice_date,
+                        'invoice_date'=> $date,
                         'tp_type'=>$data->tp_type,
                         'tp_name'=>$data->tp_name,
                         'tp_TIN'=>$data->tp_TIN,
@@ -1843,7 +1847,7 @@ class NoteCreditController extends Controller
                         'client_id'=>$data->client_id,
                         'customer_TIN'=>$data->customer_TIN,
                         'customer_address'=>$data->customer_address,
-                        'invoice_signature'=> $invoice_signature,
+                        'invoice_signature'=> $data->invoice_signature,
                         'drink_order_no'=>$data->drink_order_no,
                         'cancelled_invoice_ref'=>$data->cancelled_invoice_ref,
                         'cn_motif'=>$data->cn_motif,
@@ -1905,7 +1909,7 @@ class NoteCreditController extends Controller
                     $noteCreditdata = array(
                         'drink_id' => $data->drink_id,
                         'invoice_number'=>$data->invoice_number,
-                        'invoice_date'=> $data->invoice_date,
+                        'invoice_date'=> $date,
                         'tp_type'=>$data->tp_type,
                         'tp_name'=>$data->tp_name,
                         'tp_TIN'=>$data->tp_TIN,
@@ -1926,7 +1930,7 @@ class NoteCreditController extends Controller
                         'client_id'=>$data->client_id,
                         'customer_TIN'=>$data->customer_TIN,
                         'customer_address'=>$data->customer_address,
-                        'invoice_signature'=> $invoice_signature,
+                        'invoice_signature'=> $data->invoice_signature,
                         'drink_order_no'=>$data->drink_order_no,
                         'cancelled_invoice_ref'=>$data->cancelled_invoice_ref,
                         'cn_motif'=>$data->cn_motif,
@@ -1991,10 +1995,13 @@ class NoteCreditController extends Controller
         $datas = NoteCreditDetail::where('invoice_number', $invoice_number)->get();
 
         foreach ($datas as $data) {
+
+            $date = Facture::where('invoice_number',$data->cancelled_invoice_ref)->value('invoice_date');
+
                 $noteCreditdata = array(
                         'barrist_item_id' => $data->barrist_item_id,
                         'invoice_number'=>$data->invoice_number,
-                        'invoice_date'=> $data->invoice_date,
+                        'invoice_date'=> $date,
                         'tp_type'=>$data->tp_type,
                         'tp_name'=>$data->tp_name,
                         'tp_TIN'=>$data->tp_TIN,
@@ -2015,7 +2022,7 @@ class NoteCreditController extends Controller
                         'client_id'=>$data->client_id,
                         'customer_TIN'=>$data->customer_TIN,
                         'customer_address'=>$data->customer_address,
-                        'invoice_signature'=> $invoice_signature,
+                        'invoice_signature'=> $data->invoice_signature,
                         'barrist_order_no'=>$data->barrist_order_no,
                         'cancelled_invoice_ref'=>$data->cancelled_invoice_ref,
                         'cn_motif'=>$data->cn_motif,
@@ -2072,6 +2079,9 @@ class NoteCreditController extends Controller
 
 
         foreach($datas as $data){
+
+            $date = Facture::where('invoice_number',$data->cancelled_invoice_ref)->value('invoice_date');
+
          if ($data->cn_motif == 2) {
             $valeurStockInitial = BartenderProductionStore::where('bartender_item_id', $data->bartender_item_id)->value('total_cump_value');
             $quantityStockInitial = BartenderProductionStore::where('bartender_item_id', $data->bartender_item_id)->value('quantity');
@@ -2111,7 +2121,7 @@ class NoteCreditController extends Controller
                     $noteCreditdata = array(
                         'bartender_item_id' => $data->bartender_item_id,
                         'invoice_number'=>$data->invoice_number,
-                        'invoice_date'=> $data->invoice_date,
+                        'invoice_date'=> $date,
                         'tp_type'=>$data->tp_type,
                         'tp_name'=>$data->tp_name,
                         'tp_TIN'=>$data->tp_TIN,
@@ -2132,7 +2142,7 @@ class NoteCreditController extends Controller
                         'client_id'=>$data->client_id,
                         'customer_TIN'=>$data->customer_TIN,
                         'customer_address'=>$data->customer_address,
-                        'invoice_signature'=> $invoice_signature,
+                        'invoice_signature'=> $data->invoice_signature,
                         'drink_order_no'=>$data->drink_order_no,
                         'cancelled_invoice_ref'=>$data->cancelled_invoice_ref,
                         'cn_motif'=>$data->cn_motif,
@@ -2229,11 +2239,12 @@ class NoteCreditController extends Controller
         $datas = NoteCreditDetail::where('invoice_number', $invoice_number)->get();
 
         foreach ($datas as $data) {
+            $date = Facture::where('invoice_number',$data->cancelled_invoice_ref)->value('invoice_date');
             if (!empty($data->salle_id)) {
                 $noteCreditdata = array(
                         'salle_id' => $data->salle_id,
                         'invoice_number'=>$data->invoice_number,
-                        'invoice_date'=> $data->invoice_date,
+                        'invoice_date'=> $date,
                         'tp_type'=>$data->tp_type,
                         'tp_name'=>$data->tp_name,
                         'tp_TIN'=>$data->tp_TIN,
@@ -2254,7 +2265,7 @@ class NoteCreditController extends Controller
                         'client_id'=>$data->client_id,
                         'customer_TIN'=>$data->customer_TIN,
                         'customer_address'=>$data->customer_address,
-                        'invoice_signature'=> $invoice_signature,
+                        'invoice_signature'=> $data->invoice_signature,
                         'booking_no'=>$data->booking_no,
                         'cancelled_invoice_ref'=>$data->cancelled_invoice_ref,
                         'cn_motif'=>$data->cn_motif,
@@ -2278,7 +2289,7 @@ class NoteCreditController extends Controller
                 $noteCreditdata = array(
                         'swiming_pool_id' => $data->swiming_pool_id,
                         'invoice_number'=>$data->invoice_number,
-                        'invoice_date'=> $data->invoice_date,
+                        'invoice_date'=> $date,
                         'tp_type'=>$data->tp_type,
                         'tp_name'=>$data->tp_name,
                         'tp_TIN'=>$data->tp_TIN,
@@ -2299,7 +2310,7 @@ class NoteCreditController extends Controller
                         'client_id'=>$data->client_id,
                         'customer_TIN'=>$data->customer_TIN,
                         'customer_address'=>$data->customer_address,
-                        'invoice_signature'=> $invoice_signature,
+                        'invoice_signature'=> $data->invoice_signature,
                         'booking_no'=>$data->booking_no,
                         'cancelled_invoice_ref'=>$data->cancelled_invoice_ref,
                         'cn_motif'=>$data->cn_motif,
@@ -2323,7 +2334,7 @@ class NoteCreditController extends Controller
                 $noteCreditdata = array(
                         'service_id' => $data->service_id,
                         'invoice_number'=>$data->invoice_number,
-                        'invoice_date'=> $data->invoice_date,
+                        'invoice_date'=> $date,
                         'tp_type'=>$data->tp_type,
                         'tp_name'=>$data->tp_name,
                         'tp_TIN'=>$data->tp_TIN,
@@ -2344,7 +2355,7 @@ class NoteCreditController extends Controller
                         'client_id'=>$data->client_id,
                         'customer_TIN'=>$data->customer_TIN,
                         'customer_address'=>$data->customer_address,
-                        'invoice_signature'=> $invoice_signature,
+                        'invoice_signature'=> $data->invoice_signature,
                         'booking_no'=>$data->booking_no,
                         'cancelled_invoice_ref'=>$data->cancelled_invoice_ref,
                         'cn_motif'=>$data->cn_motif,
@@ -2368,7 +2379,7 @@ class NoteCreditController extends Controller
                 $noteCreditdata = array(
                         'breakfast_id' => $data->breakfast_id,
                         'invoice_number'=>$data->invoice_number,
-                        'invoice_date'=> $data->invoice_date,
+                        'invoice_date'=> $date,
                         'tp_type'=>$data->tp_type,
                         'tp_name'=>$data->tp_name,
                         'tp_TIN'=>$data->tp_TIN,
@@ -2389,7 +2400,7 @@ class NoteCreditController extends Controller
                         'client_id'=>$data->client_id,
                         'customer_TIN'=>$data->customer_TIN,
                         'customer_address'=>$data->customer_address,
-                        'invoice_signature'=> $invoice_signature,
+                        'invoice_signature'=> $data->invoice_signature,
                         'booking_no'=>$data->booking_no,
                         'cancelled_invoice_ref'=>$data->cancelled_invoice_ref,
                         'cn_motif'=>$data->cn_motif,
@@ -2413,7 +2424,7 @@ class NoteCreditController extends Controller
                 $noteCreditdata = array(
                         'kidness_space_id' => $data->kidness_space_id,
                         'invoice_number'=>$data->invoice_number,
-                        'invoice_date'=> $data->invoice_date,
+                        'invoice_date'=> $date,
                         'tp_type'=>$data->tp_type,
                         'tp_name'=>$data->tp_name,
                         'tp_TIN'=>$data->tp_TIN,
@@ -2434,7 +2445,7 @@ class NoteCreditController extends Controller
                         'client_id'=>$data->client_id,
                         'customer_TIN'=>$data->customer_TIN,
                         'customer_address'=>$data->customer_address,
-                        'invoice_signature'=> $invoice_signature,
+                        'invoice_signature'=> $data->invoice_signature,
                         'booking_no'=>$data->booking_no,
                         'cancelled_invoice_ref'=>$data->cancelled_invoice_ref,
                         'cn_motif'=>$data->cn_motif,
@@ -2491,10 +2502,13 @@ class NoteCreditController extends Controller
         $datas = NoteCreditDetail::where('invoice_number', $invoice_number)->get();
 
         foreach ($datas as $data) {
+
+            $date = Facture::where('invoice_number',$data->cancelled_invoice_ref)->value('invoice_date');
+
                 $noteCreditdata = array(
                         'food_item_id' => $data->food_item_id,
                         'invoice_number'=>$data->invoice_number,
-                        'invoice_date'=> $data->invoice_date,
+                        'invoice_date'=> $date,
                         'tp_type'=>$data->tp_type,
                         'tp_name'=>$data->tp_name,
                         'tp_TIN'=>$data->tp_TIN,
@@ -2515,7 +2529,7 @@ class NoteCreditController extends Controller
                         'client_id'=>$data->client_id,
                         'customer_TIN'=>$data->customer_TIN,
                         'customer_address'=>$data->customer_address,
-                        'invoice_signature'=> $invoice_signature,
+                        'invoice_signature'=> $data->invoice_signature,
                         'food_order_no'=>$data->food_order_no,
                         'cancelled_invoice_ref'=>$data->cancelled_invoice_ref,
                         'cn_motif'=>$data->cn_motif,

@@ -130,7 +130,7 @@ class FoodController extends Controller
                 $food_in_big_store->purchase_price = $purchase_price;
                 $food_in_big_store->cum = $purchase_price;
                 $food_in_big_store->selling_price = $selling_price;
-                //$food_in_big_store->total_value = $quantity * $food->purchase_price;
+                //$food_in_big_store->total_cump_value = $quantity * $food->purchase_price;
                 $food_in_big_store->total_purchase_value = $quantity * $food->purchase_price;
                 $food_in_big_store->total_selling_value = $quantity * $food->selling_price;
                 $food_in_big_store->unit = $unit;
@@ -145,7 +145,7 @@ class FoodController extends Controller
                 $food_in_big_store->purchase_price = $purchase_price;
                 $food_in_big_store->cump = $purchase_price;
                 $food_in_big_store->selling_price = $selling_price;
-                //$food_in_big_store->total_value = $quantity * $food->purchase_price;
+                //$food_in_big_store->total_cump_value = $quantity * $food->purchase_price;
                 $food_in_big_store->total_purchase_value = $quantity * $food->purchase_price;
                 $food_in_big_store->total_selling_value = $quantity * $food->selling_price;
                 $food_in_big_store->unit = $unit;
@@ -163,7 +163,7 @@ class FoodController extends Controller
                 $food_in_small_store->purchase_price = $purchase_price;
                 $food_in_small_store->cump = $purchase_price;
                 $food_in_small_store->selling_price = $selling_price;
-                //$food_in_small_store->total_value = $quantity * $food->purchase_price;
+                //$food_in_small_store->total_cump_value = $quantity * $food->purchase_price;
                 $food_in_small_store->total_purchase_value = $quantity * $food->purchase_price;
                 $food_in_small_store->total_selling_value = $quantity * $food->selling_price;
                 $food_in_small_store->unit = $unit;
@@ -178,7 +178,7 @@ class FoodController extends Controller
                 $food_in_small_store->purchase_price = $purchase_price;
                 $food_in_small_store->cump = $purchase_price;
                 $food_in_small_store->selling_price = $selling_price;
-                //$food_in_small_store->total_value = $quantity * $food->purchase_price;
+                //$food_in_small_store->total_cump_value = $quantity * $food->purchase_price;
                 $food_in_small_store->total_purchase_value = $quantity * $food->purchase_price;
                 $food_in_small_store->total_selling_value = $quantity * $food->selling_price;
                 $food_in_small_store->unit = $unit;
@@ -196,7 +196,7 @@ class FoodController extends Controller
                 $food_in_big_store->purchase_price = $purchase_price;
                 $food_in_big_store->cump = $purchase_price;
                 $food_in_big_store->selling_price = $selling_price;
-                //$food_in_big_store->total_value = $quantity * $food->purchase_price;
+                //$food_in_big_store->total_cump_value = $quantity * $food->purchase_price;
                 $food_in_big_store->total_purchase_value = $quantity * $food->purchase_price;
                 $food_in_big_store->total_selling_value = $quantity * $food->selling_price;
                 $food_in_big_store->unit = $unit;
@@ -211,7 +211,7 @@ class FoodController extends Controller
                 $food_in_big_store->purchase_price = $purchase_price;
                 $food_in_big_store->cump = $purchase_price;
                 $food_in_big_store->selling_price = $selling_price;
-                //$food_in_big_store->total_value = $quantity * $food->purchase_price;
+                //$food_in_big_store->total_cump_value = $quantity * $food->purchase_price;
                 $food_in_big_store->total_purchase_value = $quantity * $food->purchase_price;
                 $food_in_big_store->total_selling_value = $quantity * $food->selling_price;
                 $food_in_big_store->unit = $unit;
@@ -340,7 +340,7 @@ class FoodController extends Controller
                 $food_in_big_store->purchase_price = $purchase_price;
                 $food_in_big_store->cump = $purchase_price;
                 $food_in_big_store->selling_price = $selling_price;
-                $food_in_big_store->total_value_bottle = $quantity * $food->purchase_price;
+                $food_in_big_store->total_cump_value = $quantity * $food->purchase_price;
                 $food_in_big_store->total_purchase_value = $quantity * $food->purchase_price;
                 $food_in_big_store->total_selling_value = $quantity * $food->selling_price;
                 $food_in_big_store->unit = $unit;
@@ -355,7 +355,7 @@ class FoodController extends Controller
                 $food_in_big_store->purchase_price = $purchase_price;
                 $food_in_big_store->cump = $purchase_price;
                 $food_in_big_store->selling_price = $selling_price;
-                $food_in_big_store->total_value_bottle = $quantity * $food->purchase_price;
+                $food_in_big_store->total_cump_value = $quantity * $food->purchase_price;
                 $food_in_big_store->total_purchase_value = $quantity * $food->purchase_price;
                 $food_in_big_store->total_selling_value = $quantity * $food->selling_price;
                 $food_in_big_store->unit = $unit;
@@ -373,7 +373,7 @@ class FoodController extends Controller
                 $food_in_small_store->purchase_price = $purchase_price;
                 $food_in_small_store->cump = $purchase_price;
                 $food_in_small_store->selling_price = $selling_price;
-                $food_in_small_store->total_value_bottle = $quantity * $food->purchase_price;
+                $food_in_small_store->total_cump_value = $quantity * $food->purchase_price;
                 $food_in_small_store->total_purchase_value = $quantity * $food->purchase_price;
                 $food_in_small_store->total_selling_value = $quantity * $food->selling_price;
                 $food_in_small_store->unit = $unit;
@@ -388,7 +388,7 @@ class FoodController extends Controller
                 $food_in_small_store->purchase_price = $purchase_price;
                 $food_in_small_store->cump = $purchase_price;
                 $food_in_small_store->selling_price = $selling_price;
-                $food_in_small_store->total_value_bottle = $quantity * $food->purchase_price;
+                $food_in_small_store->total_cump_value = $quantity * $food->purchase_price;
                 $food_in_small_store->total_purchase_value = $quantity * $food->purchase_price;
                 $food_in_small_store->total_selling_value = $quantity * $food->selling_price;
                 $food_in_small_store->unit = $unit;
@@ -406,7 +406,7 @@ class FoodController extends Controller
                 $food_in_big_store->purchase_price = $purchase_price;
                 $food_in_big_store->cump = $purchase_price;
                 $food_in_big_store->selling_price = $selling_price;
-                $food_in_big_store->total_value_bottle = $quantity * $food->purchase_price;
+                $food_in_big_store->total_cump_value = $quantity * $food->purchase_price;
                 $food_in_big_store->total_purchase_value = $quantity * $food->purchase_price;
                 $food_in_big_store->total_selling_value = $quantity * $food->selling_price;
                 $food_in_big_store->unit = $unit;
@@ -421,7 +421,7 @@ class FoodController extends Controller
                 $food_in_big_store->purchase_price = $purchase_price;
                 $food_in_big_store->cump = $purchase_price;
                 $food_in_big_store->selling_price = $selling_price;
-                $food_in_big_store->total_value_bottle = $quantity * $food->purchase_price;
+                $food_in_big_store->total_cump_value = $quantity * $food->purchase_price;
                 $food_in_big_store->total_purchase_value = $quantity * $food->purchase_price;
                 $food_in_big_store->total_selling_value = $quantity * $food->selling_price;
                 $food_in_big_store->unit = $unit;

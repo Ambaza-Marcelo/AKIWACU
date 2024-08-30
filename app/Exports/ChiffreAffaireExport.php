@@ -138,23 +138,23 @@ class ChiffreAffaireExport implements FromCollection, WithMapping, WithHeadings
             $table = "";
         }
 
-        if ($data->cancelled_invoice == 1) {
-            $note_credit = "Facture Normale mais avec facture d'avoir ";
-            $item_price_nvat = $data->item_price_nvat;
-            $vat = $data->vat;
-            $item_total_amount = $data->item_total_amount;
-        }else{
-            $note_credit = "Facture Normale";
+        if ($data->cancelled_invoice == 1 && $data->invoice_number == $invoice_ref) {
+            $note_credit = "facture d'avoir ";
             $item_price_nvat = -$data->item_price_nvat;
             $vat = -$data->vat;
             $item_total_amount = -$data->item_total_amount;
+        }else{
+            $note_credit = "Facture Normale";
+            $item_price_nvat = $data->item_price_nvat;
+            $vat = $data->vat;
+            $item_total_amount = $data->item_total_amount;
         }
 
         return [
             $data->id,
             //$data->created_at,
            //$data->updated_at,
-            Carbon::parse($data->invoice_date)->format('d/m/Y à H:i:s'),
+            Carbon::parse($data->invoice_date)->format('d/m/Y'),
 			$data->invoice_number,
 			$order_no,
             $serveur,

@@ -127,12 +127,12 @@
                                             </form>
                                         @endif
                                         @if (Auth::guard('admin')->user()->can('food_transfer.portion'))
-                                            @if($transfer->status == -1 || $transfer->status == 2 || $transfer->status == 3 || $transfer->status == 4)
+                                            @if($transfer->status == 4 && $transfer->status_portion == 0)
                                             <a class="btn btn-success text-white" href="{{ route('admin.food-transfers.portion', $transfer->transfer_no) }}">@lang('Portionner')</a>
                                             @endif 
                                         @endif
                                         @if (Auth::guard('admin')->user()->can('food_transfer.validatePortion'))
-                                            @if($transfer->status == -1 || $transfer->status == 2 || $transfer->status == 3 || $transfer->status == 4 && $transfer->status_portion == 0)
+                                            @if($transfer->status == 4 && $transfer->status_portion == 1)
                                             <a class="btn btn-primary text-white" href="{{ route('admin.food-transfers.validatePortion', $transfer->transfer_no) }}"
                                             onclick="event.preventDefault(); document.getElementById('validatePortion-form-{{ $transfer->transfer_no }}').submit();">
                                                 Valider Portion
@@ -144,7 +144,7 @@
                                             </form>
                                         @endif
                                         @if (Auth::guard('admin')->user()->can('food_transfer.reset'))
-                                            @if($transfer->status == -1 || $transfer->status == 2 || $transfer->status == 3 || $transfer->status == 4)
+                                            @if($transfer->status == -1 || $transfer->status == 2 || $transfer->status == 3)
                                             <a class="btn btn-primary text-white" href="{{ route('admin.food-transfers.reset', $transfer->transfer_no) }}"
                                             onclick="event.preventDefault(); document.getElementById('reset-form-{{ $transfer->transfer_no }}').submit();">
                                                 Annuler

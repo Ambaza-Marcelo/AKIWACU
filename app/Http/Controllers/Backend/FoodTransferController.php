@@ -280,9 +280,9 @@ class FoodTransferController extends Controller
             }
 
             FoodTransfer::where('transfer_no', '=', $transfer_no)
-                ->update(['status_portion' => 0]);
+                ->update(['status_portion' => 1]);
             FoodTransferDetail::where('transfer_no', '=', $transfer_no)
-                ->update(['status_portion' => 0]);
+                ->update(['status_portion' => 1]);
 
             DB::commit();
             session()->flash('success', 'Food has been portioned successfuly !!');
@@ -506,6 +506,9 @@ class FoodTransferController extends Controller
                     'code_store_origin' => $code_store_origin,
                     'code_store_destination' => $code_store_destination,
                     'transfer_no' => $data->transfer_no,
+                    'document_no' => $data->transfer_no,
+                    'type_transaction' => "SORTIE TRANSFERT",
+                    'description' => $data->description,
                     'date' => $data->date,
                     'quantity_transfer' => $data->quantity_transfered,
                     'value_transfer' => $data->total_value_transfered,
@@ -525,6 +528,9 @@ class FoodTransferController extends Controller
                     'code_store_origin' => $code_store_origin,
                     'code_store_destination' => $code_store_destination,
                     'transfer_no' => $data->transfer_no,
+                    'document_no' => $data->transfer_no,
+                    'type_transaction' => "ENTREE TRANSFERT",
+                    'description' => $data->description,
                     'date' => $data->date,
                     'quantity_transfer' => $data->quantity_transfered,
                     'value_transfer' => $data->total_value_transfered,
@@ -644,9 +650,23 @@ class FoodTransferController extends Controller
 
         foreach($datas as $data){
                 $code_store = FoodSmallStore::where('id',$data->destination_store_id)->value('code');
+
+
+                $valeurStockInitialTransit = FoodSmallStoreDetail::where('code',$code_store)->where('food_id','!=', '')->where('food_id', $data->food_id)->value('total_cump_value');
+                $quantityStockInitialTransit = FoodSmallStoreDetail::where('code',$code_store)->where('food_id','!=', '')->where('food_id', $data->food_id)->value('quantity');
+                $quantityRestantTransit = $quantityStockInitialTransit - $data->quantity_transfered;
+
+
+
                 $valeurStockInitial = FoodSmallStoreDetail::where('code',$code_store)->where('food_id','!=', '')->where('food_id', $data->food_id)->value('value_portion');
                 $quantityStockInitial = FoodSmallStoreDetail::where('code',$code_store)->where('food_id','!=', '')->where('food_id', $data->food_id)->value('quantity_portion');
                 $quantityTotal = $quantityStockInitial + $data->quantity_portion;
+
+
+                $transitStore = array(
+                            'food_id' => $data->food_id,
+                            'quantity' => $quantityStockInitialTransit - $data->quantity_transfered,
+                        );
 
                 $reportSmallStore = array(
                     'food_id' => $data->food_id,
@@ -654,6 +674,9 @@ class FoodTransferController extends Controller
                     'value_stock_initial_portion' => $valeurStockInitial,
                     'code_store' => $code_store,
                     'transfer_no' => $data->transfer_no,
+                    'document_no' => $data->transfer_no,
+                    'type_transaction' => "PORTIONNAGE",
+                    'description' => $data->description,
                     'quantity_portion' => $data->quantity_portion,
                     'value_portion' => $data->value_portion,
                     'quantity_stock_final_portion' => $quantityStockInitial + $data->quantity_portion,
@@ -674,6 +697,8 @@ class FoodTransferController extends Controller
                         );
                         
                         FoodSmallStoreDetail::where('code',$code_store)->where('food_id',$data->food_id)
+                        ->update($transitStore);
+                        FoodSmallStoreDetail::where('code',$code_store)->where('food_id',$data->food_id)
                         ->update($smStore);
                         FoodSmallReport::where('transfer_no',$transfer_no)->where('food_id',$data->food_id)
                         ->update($reportSmallStore);
@@ -682,9 +707,9 @@ class FoodTransferController extends Controller
 
 
             FoodTransfer::where('transfer_no', '=', $transfer_no)
-                ->update(['status_portion' => 1]);
+                ->update(['status_portion' => 2]);
             FoodTransferDetail::where('transfer_no', '=', $transfer_no)
-                ->update(['status_portion' => 1]);
+                ->update(['status_portion' => 2]);
 
         DB::commit();
             session()->flash('success', 'Food Portioned has been validated successfuly !');
