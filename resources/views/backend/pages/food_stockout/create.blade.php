@@ -59,7 +59,7 @@
                         </div>
                     </div>
                     <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="store_type">@lang('Store Type')<strong style="color: red;">*</strong></label>
                                     <select class="form-control" name="store_type" id="store_type">
@@ -76,12 +76,30 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                             <div class="form-group">
                                 <label for="destination">Destination</label>
                                 <input type="text" class="form-control" id="destination" name="destination" placeholder="Enter destination">
                             </div>
                         </div>
+                        <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="item_movement_type">@lang('Type de Sortie')</label>
+                                    <select class="form-control" name="item_movement_type" id="item_movement_type" required>
+                                    <option disabled="disabled" selected="selected">Merci de choisir</option>
+                                        <option value="SN">Sortie Normale</option>
+                                        @if (Auth::guard('admin')->user()->can('food_stockout.edit'))
+                                        <option value="SP">Sortie Perte</option>
+                                        <option value="SV">Sortie Vol</option>
+                                        <option value="SD">Sortie Désuétude</option>
+                                        <option value="SC">Sortie Casse</option>
+                                        <option value="SAJ">Sortie Ajustement</option>
+                                        @endif
+                                        <option value="ST">Sortie Transfert</option>
+                                        <option value="SAU">Sortie Autre</option>
+                                </select>
+                                </div>
+                            </div>
                     </div>
                         <div class="row">
                             <div class="col-md-6" id="dynamic_big_store">

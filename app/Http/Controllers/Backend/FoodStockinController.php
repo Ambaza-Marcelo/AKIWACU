@@ -15,7 +15,13 @@ use App\Models\FoodStockin;
 use App\Models\FoodStockinDetail;
 use App\Models\FoodBigStoreDetail;
 use App\Models\FoodBigStore;
+use App\Models\FoodExtraBigStore;
+use App\Models\FoodExtraBigStoreDetail;
+use App\Models\FoodSmallStore;
+use App\Models\FoodSmallStoreDetail;
 use App\Models\FoodBigReport;
+use App\Models\FoodExtraBigReport;
+use App\Models\FoodSmallReport;
 use Carbon\Carbon;
 use PDF;
 use Validator;
@@ -62,8 +68,10 @@ class FoodStockinController extends Controller
         }
 
         $foods  = Food::orderBy('name','asc')->get();
-        $destination_stores = FoodBigStore::all();
-        return view('backend.pages.food_stockin.create', compact('foods','destination_stores'));
+        $food_big_stores = FoodBigStore::all();
+        $food_extra_big_stores = FoodExtraBigStore::all();
+        $food_small_stores = FoodSmallStore::all();
+        return view('backend.pages.food_stockin.create', compact('foods','food_big_stores','food_extra_big_stores','food_small_stores'));
     }
 
     /**
@@ -89,7 +97,8 @@ class FoodStockinController extends Controller
                 'handingover'  => 'required',
                 'origin'  => 'required',
                 'receptionist'  => 'required',
-                'destination_bg_store_id'  => 'required',
+                'item_movement_type'  => 'required',
+                'store_type'  => 'required',
                 'description'  => 'required|max:490'
             );
 
@@ -109,8 +118,12 @@ class FoodStockinController extends Controller
             $handingover = $request->handingover;
             $receptionist = $request->receptionist;
             $origin = $request->origin;
+            $store_type = $request->store_type;
             $description =$request->description; 
+            $item_movement_type =$request->item_movement_type; 
+            $destination_extra_store_id = $request->destination_extra_store_id;
             $destination_bg_store_id = $request->destination_bg_store_id;
+            $destination_sm_store_id = $request->destination_sm_store_id;
             $unit = $request->unit;
             $quantity = $request->quantity;
             $purchase_price = $request->purchase_price;
@@ -134,6 +147,7 @@ class FoodStockinController extends Controller
                 $data = array(
                     'food_id' => $food_id[$count],
                     'date' => $date,
+                    'store_type' => $store_type,
                     'quantity' => $quantity[$count],
                     'unit' => $unit[$count],
                     'purchase_price' => $purchase_price[$count],
@@ -141,11 +155,14 @@ class FoodStockinController extends Controller
                     'receptionist' => $receptionist,
                     'handingover' => $handingover,
                     'origin' => $origin,
+                    'destination_extra_store_id' => $destination_extra_store_id,
                     'destination_bg_store_id' => $destination_bg_store_id,
+                    'destination_sm_store_id' => $destination_sm_store_id,
                     'stockin_no' => $stockin_no,
                     'stockin_signature' => $stockin_signature,
                     'created_by' => $created_by,
                     'description' => $description,
+                    'item_movement_type' => $item_movement_type,
                     'status' => 1,
                     'created_at' => \Carbon\Carbon::now()
 
@@ -165,9 +182,13 @@ class FoodStockinController extends Controller
             $stockin->receptionist = $receptionist;
             $stockin->handingover = $handingover;
             $stockin->origin = $origin;
+            $stockin->destination_extra_store_id = $destination_extra_store_id;
             $stockin->destination_bg_store_id = $destination_bg_store_id;
+            $stockin->destination_sm_store_id = $destination_sm_store_id;
             $stockin->created_by = $created_by;
+            $stockin->store_type = $store_type;
             $stockin->status = 1;
+            $stockin->item_movement_type = $item_movement_type;
             $stockin->description = $description;
             $stockin->save();
 
@@ -381,7 +402,75 @@ class FoodStockinController extends Controller
 
         foreach($datas as $data){
 
-                $code_store_destination = FoodBigStore::where('id',$data->destination_bg_store_id)->value('code');
+                if ($data->store_type == '2') {
+                    $code_store_destination = FoodSmallStore::where('id',$data->destination_sm_store_id)->value('code');
+
+                $valeurStockInitialDestination = FoodSmallStoreDetail::where('code',$code_store_destination)->where('food_id','!=', '')->where('food_id', $data->food_id)->value('total_cump_value');
+                $quantityStockInitialDestination = FoodSmallStoreDetail::where('code',$code_store_destination)->where('food_id','!=', '')->where('food_id', $data->food_id)->value('quantity');
+                $quantityTotalBigStore = $quantityStockInitialDestination + $data->quantity;
+
+
+                $valeurAcquisition = $data->quantity * $data->purchase_price;
+
+                $valeurTotalUnite = $data->quantity + $quantityStockInitialDestination;
+                $cump = ($valeurStockInitialDestination + $valeurAcquisition) / $valeurTotalUnite;
+
+                $reportSmallStore = array(
+                    'food_id' => $data->food_id,
+                    'quantity_stock_initial' => $quantityStockInitialDestination,
+                    'value_stock_initial' => $valeurStockInitialDestination,
+                    'code_store' => $code_store_destination,
+                    'stockin_no' => $data->stockin_no,
+                    'date' => $data->date,
+                    'quantity_stockin' => $data->quantity,
+                    'value_stockin' => $data->total_amount_purchase,
+                    'quantity_stock_final' => $quantityStockInitialDestination + $data->quantity,
+                    'value_stock_final' => $valeurStockInitialDestination + $data->total_amount_purchase,
+                    'created_by' => $this->user->name,
+                    'type_transaction' => $data->item_movement_type,
+                    'document_no' => $data->stockin_no,
+                    'description' => $data->description,
+                    'created_at' => \Carbon\Carbon::now()
+                );
+                $reportSmallStoreData[] = $reportSmallStore;
+
+                    $smallStore = array(
+                        'food_id' => $data->food_id,
+                        'quantity' => $quantityTotalBigStore,
+                        'purchase_price' => $data->purchase_price,
+                        'total_purchase_value' => $quantityTotalBigStore * $data->purchase_price,
+                        'cump' => $cump,
+                        'total_cump_value' => $quantityTotalBigStore * $cump,
+                        'created_by' => $this->user->name,
+                        'verified' => false
+                    );
+
+                    $bigStoreData[] = $smallStore;
+
+                    $foodData = array(
+                        'id' => $data->food_id,
+                        'quantity' => $quantityTotalBigStore,
+                        'cump' => $cump,
+                        'purchase_price' => $data->purchase_price,
+                    );
+
+                    Food::where('id',$data->food_id)
+                        ->update($foodData);
+
+                        $food = FoodSmallStoreDetail::where('code',$code_store_destination)->where("food_id",$data->food_id)->value('food_id');
+
+                        if (!empty($food)) {
+                            FoodSmallStoreDetail::where('code',$code_store_destination)->where('food_id',$data->food_id)
+                        ->update($smallStore);
+                        $flag = 1;
+                        }else{
+                            $flag = 0;
+                            session()->flash('error', 'this item is not saved in the stock');
+                            return back();
+                        }
+  
+                }elseif ($data->store_type == '1') {
+                    $code_store_destination = FoodBigStore::where('id',$data->destination_bg_store_id)->value('code');
 
                 $valeurStockInitialDestination = FoodBigStoreDetail::where('code',$code_store_destination)->where('food_id','!=', '')->where('food_id', $data->food_id)->value('total_cump_value');
                 $quantityStockInitialDestination = FoodBigStoreDetail::where('code',$code_store_destination)->where('food_id','!=', '')->where('food_id', $data->food_id)->value('quantity');
@@ -405,6 +494,8 @@ class FoodStockinController extends Controller
                     'quantity_stock_final' => $quantityStockInitialDestination + $data->quantity,
                     'value_stock_final' => $valeurStockInitialDestination + $data->total_amount_purchase,
                     'created_by' => $this->user->name,
+                    'type_transaction' => $data->item_movement_type,
+                    'document_no' => $data->stockin_no,
                     'description' => $data->description,
                     'created_at' => \Carbon\Carbon::now()
                 );
@@ -445,11 +536,83 @@ class FoodStockinController extends Controller
                             return back();
                         }
   
+                }else{
+                    $code_store_destination = FoodExtraBigStore::where('id',$data->destination_extra_store_id)->value('code');
+
+                $valeurStockInitialDestination = FoodExtraBigStoreDetail::where('code',$code_store_destination)->where('food_id','!=', '')->where('food_id', $data->food_id)->value('total_cump_value');
+                $quantityStockInitialDestination = FoodExtraBigStoreDetail::where('code',$code_store_destination)->where('food_id','!=', '')->where('food_id', $data->food_id)->value('quantity');
+                $quantityTotalBigStore = $quantityStockInitialDestination + $data->quantity;
+
+
+                $valeurAcquisition = $data->quantity * $data->purchase_price;
+
+                $valeurTotalUnite = $data->quantity + $quantityStockInitialDestination;
+                $cump = ($valeurStockInitialDestination + $valeurAcquisition) / $valeurTotalUnite;
+
+                $reportExtraBigStore = array(
+                    'food_id' => $data->food_id,
+                    'quantity_stock_initial' => $quantityStockInitialDestination,
+                    'value_stock_initial' => $valeurStockInitialDestination,
+                    'code_store' => $code_store_destination,
+                    'stockin_no' => $data->stockin_no,
+                    'date' => $data->date,
+                    'quantity_stockin' => $data->quantity,
+                    'value_stockin' => $data->total_amount_purchase,
+                    'quantity_stock_final' => $quantityStockInitialDestination + $data->quantity,
+                    'value_stock_final' => $valeurStockInitialDestination + $data->total_amount_purchase,
+                    'created_by' => $this->user->name,
+                    'type_transaction' => $data->item_movement_type,
+                    'document_no' => $data->stockin_no,
+                    'description' => $data->description,
+                    'created_at' => \Carbon\Carbon::now()
+                );
+                $reportExtraBigStoreData[] = $reportExtraBigStore;
+
+                    $bigStore = array(
+                        'food_id' => $data->food_id,
+                        'quantity' => $quantityTotalBigStore,
+                        'purchase_price' => $data->purchase_price,
+                        'total_purchase_value' => $quantityTotalBigStore * $data->purchase_price,
+                        'cump' => $cump,
+                        'total_cump_value' => $quantityTotalBigStore * $cump,
+                        'created_by' => $this->user->name,
+                        'verified' => false
+                    );
+
+                    $bigStoreData[] = $bigStore;
+
+                    $foodData = array(
+                        'id' => $data->food_id,
+                        'quantity' => $quantityTotalBigStore,
+                        'cump' => $cump,
+                        'purchase_price' => $data->purchase_price,
+                    );
+
+                    Food::where('id',$data->food_id)
+                        ->update($foodData);
+
+                        $food = FoodExtraBigStoreDetail::where('code',$code_store_destination)->where("food_id",$data->food_id)->value('food_id');
+
+                        if (!empty($food)) {
+                            FoodExtraBigStoreDetail::where('code',$code_store_destination)->where('food_id',$data->food_id)
+                        ->update($bigStore);
+                        $flag = 1;
+                        }else{
+                            $flag = 0;
+                            session()->flash('error', 'this item is not saved in the stock');
+                            return back();
+                        }
+  
+                }
         }
 
-            if ($flag != 0) {
-                FoodBigReport::insert($reportBigStoreData);
-            }
+        if(!empty($data->destination_bg_store_id) && $flag != 0){
+            FoodBigReport::insert($reportBigStoreData);
+        }elseif (!empty($data->destination_sm_store_id) && $flag != 0) {
+            FoodSmallReport::insert($reportSmallStoreData);
+        }else{
+            FoodExtraBigReport::insert($reportExtraBigStoreData);
+        }
             FoodStockin::where('stockin_no', '=', $stockin_no)
                 ->update(['status' => 4,'approuved_by' => $this->user->name]);
             FoodStockinDetail::where('stockin_no', '=', $stockin_no)

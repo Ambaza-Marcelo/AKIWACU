@@ -73,14 +73,39 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="destination_bg_store_id">@lang('Stock Destination')</label>
-                                    <select class="form-control" name="destination_bg_store_id" id="destination_bg_store_id">
+                                    <label for="item_movement_type">@lang('Type Entrée')</label>
+                                    <select class="form-control" name="item_movement_type" id="item_movement_type" required>
                                     <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                    @foreach($destination_stores as $destination_store)
-                                        <option value="{{$destination_store->id}}">{{$destination_store->name}}</option>
-                                    @endforeach
+                                        <option value="EN">Entrée Normale</option>
+                                        <option value="ER">Entrée Retour Marchandises</option>
+                                        @if (Auth::guard('admin')->user()->can('drink_stockin.edit'))
+                                        <option value="EAJ">Entrée Ajustement</option>
+                                        @endif
+                                        <option value="EAU">Entrée Autre</option>
                                 </select>
                                 </div>
+                            </div>
+                    </div>
+                    <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="store_type">@lang('Store Type')<strong style="color: red;">*</strong></label>
+                                    <select class="form-control" name="store_type" id="store_type">
+                                        <option disabled="disabled" selected="selected">Merci de choisir</option>
+                                        @if (Auth::guard('admin')->user()->can('food_extra_big_inventory.view'))
+                                        <option value="0" class="form-control">Food Extra Big Store</option>
+                                        @endif
+                                        @if (Auth::guard('admin')->user()->can('food_big_inventory.view'))
+                                        <option value="1" class="form-control">Food Big Store</option>
+                                        @endif
+                                        @if (Auth::guard('admin')->user()->can('food_small_inventory.view'))
+                                        <option value="2" class="form-control">Food Small Store</option>
+                                        @endif
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6" id="dynamic_store">
+                                
                             </div>
                     </div>
                          <table class="table table-bordered" id="dynamicTable">  
@@ -186,6 +211,53 @@
     $(document).on('click', '.remove-tr', function(){  
          $(this).parents('tr').remove();
     }); 
+
+    $('#store_type').change(function () { 
+    if ($(this).val() === '0'){
+
+        var extra_big_store = "<div class='form-group'>"+
+                            "<label for='destination_extra_store_id'>Food Extra Big Store<strong style='color: red;'>*</strong></label>"+
+                            "<select name='destination_extra_store_id' class='form-control'>"+
+                                "<option selected disabled>merci de choisir</option>"+
+                                "@foreach($food_extra_big_stores as $food_big_store)"+
+                                "<option value='{{$food_big_store->id}}'>{{ $food_big_store->code}}&nbsp;{{ $food_big_store->name}}"+
+                                "@endforeach"
+                            +
+                        "</div>";
+        
+        $("#dynamic_store").append(extra_big_store);
+    }
+    if ($(this).val() === '1'){
+
+        var big_store = "<div class='form-group'>"+
+                            "<label for='destination_bg_store_id'>Food Big Store<strong style='color: red;'>*</strong></label>"+
+                            "<select name='destination_bg_store_id' class='form-control'>"+
+                                "<option selected disabled>merci de choisir</option>"+
+                                "@foreach($food_big_stores as $food_big_store)"+
+                                "<option value='{{$food_big_store->id}}'>{{ $food_big_store->code}}&nbsp;{{ $food_big_store->name}}"+
+                                "@endforeach"
+                            +
+                        "</div>";
+        
+        $("#dynamic_store").append(big_store);
+    }
+    if ($(this).val() === '2'){
+
+        var small_store = "<div class='form-group'>"+
+                            "<label for='destination_sm_store_id'>Food Small Store<strong style='color: red;'>*</strong></label>"+
+                            "<select name='destination_sm_store_id' class='form-control'>"+
+                                "<option selected disabled>merci de choisir</option>"+
+                                "@foreach($food_small_stores as $food_small_store)"+
+                                "<option value='{{$food_small_store->id}}'>{{ $food_small_store->code }}&nbsp;{{ $food_small_store->name}}</option>"+
+                                "@endforeach"
+                            +
+                        "</div>";
+        
+        $("#dynamic_store").append(small_store);
+    }
+
+    })
+    .trigger( "change" );
 
 </script>
 @endsection

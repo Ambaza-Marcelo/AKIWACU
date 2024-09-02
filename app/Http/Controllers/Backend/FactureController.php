@@ -45,8 +45,10 @@ use App\Models\BarristSmallReport;
 use App\Models\BartenderSmallReport;
 use App\Models\FoodStore;
 use App\Models\FoodBigStoreDetail;
+use App\Models\FoodSmallStoreDetail;
 use App\Models\FoodStoreReport;
 use App\Models\FoodBigReport;
+use App\Models\FoodSmallReport;
 use App\Models\BookingBooking;
 use App\Models\BookingBookingDetail;
 use App\Models\BookingSalle;
@@ -2648,7 +2650,7 @@ class FactureController extends Controller
         $data = Facture::where('invoice_number', $invoice_number)->first();
 
         $table_id = FactureDetail::where('invoice_number', $invoice_number)->value('table_id');
-
+        /*
         foreach($datas as $data){
             $valeurStockInitial = FoodStore::where('food_item_id', $data->food_item_id)->value('total_cump_value');
             $quantityStockInitial = FoodStore::where('food_item_id', $data->food_item_id)->value('quantity');
@@ -2680,7 +2682,7 @@ class FactureController extends Controller
             $food = FoodItemDetail::where('code', $data->foodItem->code)->first();
             foreach($foods as $food){
 
-                $quantityStockInitial = FoodBigStoreDetail::where('food_id','!=', '')->where('food_id', $food->food_id)->value('quantity');
+                $quantityStockInitial = FoodSmallStoreDetail::where('food_id','!=', '')->where('food_id', $food->food_id)->value('quantity');
 
                 $quantiteSortie = $data->item_quantity * $food->quantity;
                 
@@ -2712,7 +2714,7 @@ class FactureController extends Controller
                     
                     if ($quantiteSortie <= $quantityStockInitial) {
                         
-                        FoodBigStoreDetail::where('food_id',$food->food_id)
+                        FoodSmallStoreDetail::where('food_id',$food->food_id)
                         ->update($bigStore);
                         $flag = 0;
                        
@@ -2720,7 +2722,7 @@ class FactureController extends Controller
 
                         foreach($foods as $food){
 
-                        $quantityStockInitial = FoodBigStoreDetail::where('food_id','!=', '')->where('food_id', $food->food_id)->value('quantity');
+                        $quantityStockInitial = FoodSmallStoreDetail::where('food_id','!=', '')->where('food_id', $food->food_id)->value('quantity');
 
                         $quantiteSortie = $data->item_quantity * $food->quantity;
                 
@@ -2735,15 +2737,15 @@ class FactureController extends Controller
                             'created_at' => \Carbon\Carbon::now()
                         );
                     
-                        $status = FoodBigStoreDetail::where('food_id','!=', '')->where('food_id', $food->food_id)->value('verified');
+                        $status = FoodSmallStoreDetail::where('food_id','!=', '')->where('food_id', $food->food_id)->value('verified');
                         if ($status == true) {
                         
-                            FoodBigStoreDetail::where('food_id',$food->food_id)
+                            FoodSmallStoreDetail::where('food_id',$food->food_id)
                             ->update($returnData);
                             $flag = 1;
                          }
                      }
-                        FoodBigStoreDetail::where('food_id','!=','')->update(['verified' => false]);
+                        FoodSmallStoreDetail::where('food_id','!=','')->update(['verified' => false]);
 
                         session()->flash('error', 'Quantite des ingredients insuffisante au stock intermediaire des nourritures!('.$food->food->name.':'.$food->name.')');
                         return redirect()->back();
@@ -2755,10 +2757,10 @@ class FactureController extends Controller
         }
 
         if (!empty($food->food_id) && $flag != 1) {
-            FoodBigReport::insert($reportBigStoreData);
+            FoodSmallReport::insert($reportBigStoreData);
         }
 
-
+        */
         foreach($datas as $data){
                 $orderData = array(
                     'confirmed_by' => $this->user->name,
@@ -2788,7 +2790,7 @@ class FactureController extends Controller
             Table::where('id',$table_id)->update(['total_amount_paying' => $total_amount_remaining]);
         }
         
-        FoodBigStoreDetail::where('food_id','!=','')->update(['verified' => false]);
+        FoodSmallStoreDetail::where('food_id','!=','')->update(['verified' => false]);
 
         Facture::where('invoice_number', '=', $invoice_number)
                 ->update(['etat' => 1,'statut_paied' => '0','validated_by' => $this->user->name]);
@@ -2829,7 +2831,7 @@ class FactureController extends Controller
         $data = Facture::where('invoice_number', $invoice_number)->first();
 
         $table_id = FactureDetail::where('invoice_number', $invoice_number)->value('table_id');
-        
+        /*
         foreach($datas as $data){
             $valeurStockInitial = FoodStore::where('food_item_id', $data->food_item_id)->value('total_cump_value');
             $quantityStockInitial = FoodStore::where('food_item_id', $data->food_item_id)->value('quantity');
@@ -2861,7 +2863,7 @@ class FactureController extends Controller
             $food = FoodItemDetail::where('code', $data->foodItem->code)->first();
             foreach($foods as $food){
 
-                $quantityStockInitial = FoodBigStoreDetail::where('food_id','!=', '')->where('food_id', $food->food_id)->value('quantity');
+                $quantityStockInitial = FoodSmallStoreDetail::where('food_id','!=', '')->where('food_id', $food->food_id)->value('quantity');
 
                 $quantiteSortie = $data->item_quantity * $food->quantity;
                 
@@ -2893,7 +2895,7 @@ class FactureController extends Controller
                     
                     if ($quantiteSortie <= $quantityStockInitial) {
                         
-                        FoodBigStoreDetail::where('food_id',$food->food_id)
+                        FoodSmallStoreDetail::where('food_id',$food->food_id)
                         ->update($bigStore);
                         $flag = 0;
                        
@@ -2901,7 +2903,7 @@ class FactureController extends Controller
 
                         foreach($foods as $food){
 
-                        $quantityStockInitial = FoodBigStoreDetail::where('food_id','!=', '')->where('food_id', $food->food_id)->value('quantity');
+                        $quantityStockInitial = FoodSmallStoreDetail::where('food_id','!=', '')->where('food_id', $food->food_id)->value('quantity');
 
                         $quantiteSortie = $data->item_quantity * $food->quantity;
                 
@@ -2916,15 +2918,15 @@ class FactureController extends Controller
                             'created_at' => \Carbon\Carbon::now()
                         );
                     
-                        $status = FoodBigStoreDetail::where('food_id','!=', '')->where('food_id', $food->food_id)->value('verified');
+                        $status = FoodSmallStoreDetail::where('food_id','!=', '')->where('food_id', $food->food_id)->value('verified');
                         if ($status == true) {
                         
-                            FoodBigStoreDetail::where('food_id',$food->food_id)
+                            FoodSmallStoreDetail::where('food_id',$food->food_id)
                             ->update($returnData);
                             $flag = 1;
                          }
                      }
-                        FoodBigStoreDetail::where('food_id','!=','')->update(['verified' => false]);
+                        FoodSmallStoreDetail::where('food_id','!=','')->update(['verified' => false]);
 
                         session()->flash('error', 'Quantite des ingredients insuffisante au stock intermediaire des nourritures!('.$food->food->name.':'.$food->name.')');
                         return redirect()->back();
@@ -2936,8 +2938,10 @@ class FactureController extends Controller
         }
 
         if (!empty($food->food_id) && $flag != 1) {
-            FoodBigReport::insert($reportBigStoreData);
+            FoodSmallReport::insert($reportBigStoreData);
         }
+
+        */
 
         foreach($datas as $data){
                 $orderData = array(
@@ -2968,7 +2972,7 @@ class FactureController extends Controller
             Table::where('id',$table_id)->update(['total_amount_paying' => $total_amount_remaining]);
         }
         
-        FoodBigStoreDetail::where('food_id','!=','')->update(['verified' => false]);
+        FoodSmallStoreDetail::where('food_id','!=','')->update(['verified' => false]);
 
         $item_total_amount = DB::table('facture_details')
             ->where('invoice_number', '=', $invoice_number)

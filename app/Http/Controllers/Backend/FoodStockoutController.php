@@ -95,6 +95,7 @@ class FoodStockoutController extends Controller
                 'quantity.*'  => 'required',
                 'asker'  => 'required',
                 'destination'  => 'required',
+                'item_movement_type' => 'required',
                 'description'  => 'required|max:490'
             );
 
@@ -119,6 +120,7 @@ class FoodStockoutController extends Controller
             $unit = $request->unit;
             $quantity = $request->quantity;
             $store_type = $request->store_type;
+            $item_movement_type = $request->item_movement_type;
             
 
             $latest = FoodStockout::latest()->first();
@@ -155,6 +157,7 @@ class FoodStockoutController extends Controller
                         'stockout_no' => $stockout_no,
                         'stockout_signature' => $stockout_signature,
                         'store_type' => $store_type,
+                        'item_movement_type' => $item_movement_type,
                         'created_by' => $created_by,
                         'description' => $description,
                         'status' => 1,
@@ -181,6 +184,7 @@ class FoodStockoutController extends Controller
                         'stockout_no' => $stockout_no,
                         'stockout_signature' => $stockout_signature,
                         'store_type' => $store_type,
+                        'item_movement_type' => $item_movement_type,
                         'created_by' => $created_by,
                         'description' => $description,
                         'status' => 1,
@@ -209,6 +213,7 @@ class FoodStockoutController extends Controller
                         'stockout_no' => $stockout_no,
                         'stockout_signature' => $stockout_signature,
                         'store_type' => $store_type,
+                        'item_movement_type' => $item_movement_type,
                         'created_by' => $created_by,
                         'description' => $description,
                         'status' => 1,
@@ -413,6 +418,8 @@ class FoodStockoutController extends Controller
                     'quantity_stock_final' => $quantityStockInitial - $data->quantity,
                     'value_stock_final' => $valeurStockInitial - $data->total_selling_value,
                     'created_by' => $this->user->name,
+                    'type_transaction' => $data->item_movement_type,
+                    'documen_no' => $data->stockout_no,
                     'description' => $data->description,
                     'created_at' => \Carbon\Carbon::now()
                 );
@@ -495,6 +502,8 @@ class FoodStockoutController extends Controller
                     'quantity_stock_final' => $quantityStockInitial - $data->quantity_portion,
                     'value_stock_final' => $valeurStockInitial - $data->total_selling_value,
                     'created_by' => $this->user->name,
+                    'type_transaction' => $data->item_movement_type,
+                    'documen_no' => $data->stockout_no,
                     'description' => $data->description,
                     'created_at' => \Carbon\Carbon::now()
                 );
@@ -579,6 +588,8 @@ class FoodStockoutController extends Controller
                     'quantity_stock_final' => $quantityStockInitial - $data->quantity,
                     'value_stock_final' => $valeurStockInitial - $data->total_selling_value,
                     'created_by' => $this->user->name,
+                    'type_transaction' => $data->item_movement_type,
+                    'documen_no' => $data->stockout_no,
                     'description' => $data->description,
                     'created_at' => \Carbon\Carbon::now()
                 );
