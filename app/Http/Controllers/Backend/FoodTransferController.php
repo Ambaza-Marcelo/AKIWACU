@@ -51,7 +51,7 @@ class FoodTransferController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any transfer !');
         }
 
-        $transfers = FoodTransfer::all();
+        $transfers = FoodTransfer::orderBy('id','desc')->get();
         return view('backend.pages.food_transfer.index', compact('transfers'));
     }
 
@@ -492,11 +492,7 @@ class FoodTransferController extends Controller
                 $quantityStockInitialDestination = FoodSmallStoreDetail::where('code',$code_store_destination)->where('food_id','!=', '')->where('food_id', $data->food_id)->value('quantity');
                 $quantityRestantSmallStore = $quantityStockInitialDestination - $data->quantity_transfered;
 
-
-                $valeurAcquisition = $data->quantity_transfered * $data->price;
-
-                $valeurTotalUnite = $data->quantity_transfered + $quantityStockInitialDestination;
-                $cump = ($valeurStockInitialDestination + $valeurAcquisition) / $valeurTotalUnite;
+                $cump = FoodBigStoreDetail::where('code',$code_store_origin)->where('food_id','!=', '')->where('food_id', $data->food_id)->value('cump');
 
                 $reportBigStore = array(
                     'food_id' => $data->food_id,
@@ -514,6 +510,7 @@ class FoodTransferController extends Controller
                     'value_transfer' => $data->total_value_transfered,
                     'quantity_stock_final' => $quantityStockInitialOrigine - $data->quantity_transfered,
                     'value_stock_final' => $valeurStockInitialOrigine - $data->total_value_transfered,
+                    'cump' => $cump,
                     'created_by' => $this->user->name,
                     'created_at' => \Carbon\Carbon::now()
                 );
@@ -536,6 +533,7 @@ class FoodTransferController extends Controller
                     'value_transfer' => $data->total_value_transfered,
                     'quantity_stock_final' => $quantityStockInitialDestination + $data->quantity_transfered,
                     'value_stock_final' => $valeurStockInitialDestination + $data->total_value_transfered,
+                    'cump' => $cump,
                     'created_by' => $this->user->name,
                     'created_at' => \Carbon\Carbon::now()
                 );
@@ -557,13 +555,11 @@ class FoodTransferController extends Controller
                             'food_id' => $data->food_id,
                             'quantity' => $data->quantity_transfered,
                             'cump' => $cump,
-                            'unit' => $data->unit,
                             'code' => $code_store_destination,
                             'purchase_price' => $data->price,
                             'selling_price' => $data->price,
                             'total_cump_value' => $cump * ($data->quantity_transfered + $quantityStockInitialDestination),
-                            'total_purchase_value' => $data->price * ($data->quantity_transfered + $quantityStockInitialDestination),
-                            'total_selling_value' => $data->price * ($data->quantity_transfered + $quantityStockInitialDestination),
+                            'total_purchase_value' => $cump * ($data->quantity_transfered + $quantityStockInitialDestination),
                             'verified' => false,
                             'created_by' => $this->user->name,
                             'created_at' => \Carbon\Carbon::now()
@@ -574,11 +570,8 @@ class FoodTransferController extends Controller
                             'food_id' => $data->food_id,
                             'quantity' => $quantityStockInitialDestination + $data->quantity_transfered,
                             'cump' => $cump,
-                            //'purchase_price' => $data->price,
-                            //'selling_price' => $data->price,
                             'total_cump_value' => $cump * ($data->quantity_transfered + $quantityStockInitialDestination),
-                            'total_purchase_value' => $data->price * ($data->quantity_transfered + $quantityStockInitialDestination),
-                            'total_selling_value' => $data->price * ($data->quantity_transfered + $quantityStockInitialDestination),
+                            'total_purchase_value' => $cump * ($data->quantity_transfered + $quantityStockInitialDestination),
                             'verified' => false,
                             'created_by' => $this->user->name,
                             'created_at' => \Carbon\Carbon::now()
@@ -589,25 +582,18 @@ class FoodTransferController extends Controller
 
                     if ($data->quantity_transfered <= $quantityStockInitialOrigine) {
 
-                        FoodBigReport::insert($reportBigStoreData);
+                        
                         
                         FoodBigStoreDetail::where('code',$code_store_origin)->where('food_id',$data->food_id)
                         ->update($bigStore);
-
-                        if (!empty($food)) {
-                            FoodSmallReport::insert($reportSmallStoreData);
-                            FoodSmallStoreDetail::where('code',$code_store_destination)->where('food_id',$data->food_id)
+                            
+                        FoodSmallStoreDetail::where('code',$code_store_destination)->where('food_id',$data->food_id)
                         ->update($smStore);
-                        }else{
-                            FoodSmallReport::insert($reportSmallStoreData);
-                            FoodSmallStoreDetail::insert($smallStore);
-                        }
 
                         FoodRequisition::where('requisition_no', '=', $data->requisition_no)
                         ->update(['status' => 5]);
                         FoodRequisitionDetail::where('requisition_no', '=', $data->requisition_no)
                         ->update(['status' => 5]);
-
                         
                     }else{
                         session()->flash('error', 'Why do you want transfering quantity you do not have in your store?please rewrite a valid quantity!');
@@ -617,12 +603,15 @@ class FoodTransferController extends Controller
         }
 
 
+            FoodBigReport::insert($reportBigStoreData);
+            FoodSmallReport::insert($reportSmallStoreData);
+
             FoodTransfer::where('transfer_no', '=', $transfer_no)
                 ->update(['status' => 4,'approuved_by' => $this->user->name]);
             FoodTransferDetail::where('transfer_no', '=', $transfer_no)
                 ->update(['status' => 4,'approuved_by' => $this->user->name]);
 
-        DB::commit();
+            DB::commit();
             session()->flash('success', 'Transfer has been done successfuly !,from store '.$code_store_origin.' to '.$code_store_destination);
             return back();
         } catch (\Exception $e) {
@@ -662,6 +651,8 @@ class FoodTransferController extends Controller
                 $quantityStockInitial = FoodSmallStoreDetail::where('code',$code_store)->where('food_id','!=', '')->where('food_id', $data->food_id)->value('quantity_portion');
                 $quantityTotal = $quantityStockInitial + $data->quantity_portion;
 
+                $cump = FoodSmallStoreDetail::where('code',$code_store)->where('food_id','!=', '')->where('food_id', $data->food_id)->value('cump');
+
 
                 $transitStore = array(
                             'food_id' => $data->food_id,
@@ -670,6 +661,8 @@ class FoodTransferController extends Controller
 
                 $reportSmallStore = array(
                     'food_id' => $data->food_id,
+                    'quantity_stock_initial' => $quantityStockInitialTransit - $data->quantity_transfered,
+                    'value_stock_initial' => ($quantityStockInitialTransit - $data->quantity_transfered)*$cump,
                     'quantity_stock_initial_portion' => $quantityStockInitial,
                     'value_stock_initial_portion' => $valeurStockInitial,
                     'code_store' => $code_store,
@@ -681,6 +674,7 @@ class FoodTransferController extends Controller
                     'value_portion' => $data->value_portion,
                     'quantity_stock_final_portion' => $quantityStockInitial + $data->quantity_portion,
                     'value_stock_final_portion' => $valeurStockInitial + $data->value_portion,
+                    'cump' => $cump,
                     'created_portion_by' => $this->user->name,
                     'description_portion' => $data->description_portion,
                     'updated_at' => \Carbon\Carbon::now()
@@ -691,6 +685,7 @@ class FoodTransferController extends Controller
                             'food_id' => $data->food_id,
                             'quantity_portion' => $quantityStockInitial + $data->quantity_portion,
                             'value_portion' => $data->value_portion + $valeurStockInitial,
+                            'cump' => $cump,
                             'verified' => false,
                             //'created_by' => $this->user->name,
                             'created_at' => \Carbon\Carbon::now()
@@ -711,7 +706,7 @@ class FoodTransferController extends Controller
             FoodTransferDetail::where('transfer_no', '=', $transfer_no)
                 ->update(['status_portion' => 2]);
 
-        DB::commit();
+            DB::commit();
             session()->flash('success', 'Food Portioned has been validated successfuly !');
             return back();
         } catch (\Exception $e) {

@@ -28,8 +28,6 @@ class CreateFoodSmallReportsTable extends Migration
             $table->string('stock_total')->nullable();
             $table->string('quantity_stockout')->nullable();
             $table->string('value_stockout')->nullable();
-            $table->string('quantity_sold')->nullable();
-            $table->string('value_sold')->nullable();
             $table->string('quantity_reception')->nullable();
             $table->string('value_reception')->nullable();
             $table->string('quantity_inventory')->nullable();
@@ -51,10 +49,7 @@ class CreateFoodSmallReportsTable extends Migration
             $table->string('destination')->nullable();
             $table->string('asker')->nullable();
             $table->string('unit')->nullable(true);
-            $table->string('origine_facture')->nullable(true);
-            $table->string('commande_cuisine_no')->nullable(true);
-            $table->string('commande_boisson_no')->nullable(true);
-            $table->string('table_no')->nullable(true);
+            $table->string('cump')->nullable(true);
             $table->string('date')->nullable(true);
             $table->string('created_by')->nullable(true);
             $table->string('updated_by')->nullable(true);

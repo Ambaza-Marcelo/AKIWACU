@@ -90,9 +90,6 @@
                                 <th>@lang('messages.unit_price')</th>
                                 <th>@lang('Transfering Quantity')</th>
                                 <th>@lang('Transfering unit')</th>
-                                <th>@lang('Transfering Price')</th>
-                                <!--
-                                <th>Remaining Quantity</th> -->
                                 <th>Action</th>
                             </tr>
                             @foreach($datas as $data)
@@ -103,7 +100,7 @@
                                 <td><input type="number" name="quantity_requisitioned[]" value="{{ $data->quantity_requisitioned }}" class="form-control" step="any"  readonly /></td>  
                                 <td><input type="text" name="unit[]" value="{{$data->unit}}" class="form-control"  readonly /></td>
                                 <td><input type="number" name="price[]" value="{{$data->price}}" class="form-control" step="any" min="0" readonly /></td>
-                                <td><input type="number" name="quantity_transfered[]" value="{{ $data->quantity_requisitioned }}" class="form-control" min="0" step="any" /></td>  
+                                <td><input type="number" name="quantity_transfered[]" value="{{ $data->quantity_requisitioned }}" class="form-control" min="0" max="{{ $data->quantity_requisitioned }}" step="any" /></td>  
                                 <td>
                                     <select class="form-control" name="unit[]" id="unit">
                                         <option disabled="disabled" selected="selected">Merci de choisir</option>
@@ -122,7 +119,6 @@
                                         <option value="boites" {{ $data->unit == 'boites' ? 'selected' : '' }} class="form-control">Boites</option>
                                     </select>
                                 </td>
-                                <td><input type="hidden" name="price[]" value="{{$data->price}}" class="form-control" step="any" min="0"/></td>
                                 <td><button type='button' class='btn btn-danger remove-tr'>@lang('messages.delete')</button></td>  
                             </tr> 
                             @endforeach 
@@ -182,9 +178,6 @@
                                 "<option value='sachets' class='form-control'>Sachets</option>"+
                                 "<option value='boites' class='form-control'>Boites</option>"+
                                 "</select>"+
-                        "</td>"+
-                        "<td>"+
-                        "<input type='hidden' name='unit_price[]' placeholder='Enter Unit price' class='form-control' />"+
                         "</td>"+
                         "<td>"+
                           "<button type='button' class='btn btn-danger remove-tr'>@lang('messages.delete')</button>"+

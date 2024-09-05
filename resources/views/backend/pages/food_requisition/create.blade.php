@@ -57,7 +57,6 @@
                                 <th>@lang('messages.item')</th>
                                 <th>@lang('messages.quantity')</th>
                                 <th>@lang('messages.unit')</th>
-                                <th>@lang('messages.price')</th>
                                 <th>Action</th>
                             </tr>
                             <tr class="">  
@@ -84,7 +83,6 @@
                                         <option value="sachets" class="form-control">Sachets</option>
                                         <option value="boites" class="form-control">Boites</option>
                                 </select></td>
-                                <td><input type="hidden" name="price[]" placeholder="Enter Price" class="form-control"  step="any" min="0"/></td> 
                                 <td><button type="button" name="add" id="add" class="btn btn-success">@lang('messages.addmore')</button></td>     
                             </tr>
                         </table> 
@@ -141,9 +139,6 @@
                                 "<option value='sachets' class='form-control'>Sachets</option>"+
                                 "<option value='boites' class='form-control'>Boites</option>"+
                             "</select>"+
-                        "</td>"+
-                        "<td>"+
-                          "<input type='hidden' name='price[]' placeholder='Enter Price' class='form-control' min='0' />"+
                         "</td>"+
                         "<td>"+
                           "<button type='button' class='btn btn-danger remove-tr'>@lang('messages.delete')</button>"+

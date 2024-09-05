@@ -30,26 +30,28 @@ class FoodMdStoreReportExport implements FromCollection, WithMapping, WithHeadin
         $end_date = $endDate.' 23:59:59';
 
         return FoodBigReport::select(
-                        DB::raw('id,date,created_at,food_id,quantity_stock_initial,value_stock_initial,quantity_stockin,value_stockin,quantity_reception,value_reception,quantity_transfer,value_transfer,quantity_stockout,value_stockout,quantity_stock_final,value_stock_final,invoice_no,commande_cuisine_no,description'))->whereBetween('created_at',[$start_date,$end_date])/*->where('code_store',$code_store)*/->groupBy('id','date','created_at','food_id','quantity_stock_initial','value_stock_initial','quantity_stockin','value_stockin','quantity_reception','value_reception','quantity_transfer','value_transfer','quantity_stockout','value_stockout','quantity_stock_final','value_stock_final','invoice_no','commande_cuisine_no','description')->orderBy('created_at','desc')->get();
+                        DB::raw('id,created_at,created_by,food_id,date,document_no,type_transaction,quantity_stock_initial,cump,value_stock_initial,quantity_stockin,value_stockin,quantity_reception,value_reception,quantity_transfer,value_transfer,transfer_no,quantity_stockout,value_stockout,quantity_stock_final,value_stock_final'))->whereBetween('created_at',[$start_date,$end_date])/*->where('code_store',$code_store)*/->groupBy('id','created_at','created_by','document_no','date','type_transaction','food_id','quantity_stock_initial','cump','value_stock_initial','quantity_stockin','value_stockin','quantity_reception','value_reception','quantity_transfer','transfer_no','value_transfer','quantity_stockout','value_stockout','quantity_stock_final','value_stock_final')->orderBy('id','asc')->get();
     }
 
     public function map($data) : array {
         return [
             $data->id,
-            Carbon::parse($data->created_at)->format('d-m-Y'),
-            Carbon::parse($data->date)->format('d-m-Y'),
+            Carbon::parse($data->created_at)->format('d/m/Y'),
+            Carbon::parse($data->date)->format('d/m/Y'),
             $data->food->name,
             $data->food->code,
             $data->quantity_stock_initial,
-            ($data->quantity_stock_initial * $data->food->cump),
+            $data->cump,
+            ($data->quantity_stock_initial * $data->cump),
             $data->quantity_stockin + $data->quantity_reception,
-            ($data->value_stockin + $data->value_reception),
+            ($data->quantity_stockin + $data->quantity_reception)*$data->cump,
             $data->quantity_stockout + $data->quantity_transfer,
-            (($data->quantity_stockout * $data->food->cump) + ($data->quantity_transfer * $data->food->cump)),
+            (($data->quantity_stockout * $data->cump) + ($data->quantity_transfer * $data->cump)),
             ($data->quantity_stock_initial + $data->quantity_stockin + $data->quantity_reception) - ($data->quantity_stockout + $data->quantity_transfer),
-            ((($data->quantity_stock_initial + $data->quantity_stockin + $data->quantity_reception) - ($data->quantity_stockout + $data->quantity_transfer)) * $data->food->cump),
-            $data->invoice_no,
-            $data->commande_cuisine_no,
+            ((($data->quantity_stock_initial + $data->quantity_stockin + $data->quantity_reception) - ($data->quantity_stockout + $data->quantity_transfer)) * $data->cump),
+            $data->type_transaction,
+            $data->document_no,
+            $data->created_by,
             $data->description
         ] ;
  
@@ -64,6 +66,7 @@ class FoodMdStoreReportExport implements FromCollection, WithMapping, WithHeadin
             'Article',
             'Code',
             'Quantite Stock Initial',
+            'C.U.M.P',
             'Valeur Stock Initial',
             'Quantite Entree',
             'Valeur Entree',
@@ -71,8 +74,9 @@ class FoodMdStoreReportExport implements FromCollection, WithMapping, WithHeadin
             'Valeur Sortie',
             'Quantite Stock Final',
             'Valeur Stock Final',
-            'No Facture',
-            'No Commande',
+            'Type Transaction',
+            'No Document',
+            'Auteur',
             'Description'
         ] ;
     }

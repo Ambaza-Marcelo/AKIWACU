@@ -6,6 +6,12 @@
         tr,th,td{
              border: 1px solid black;
              text-align: center;
+             width: auto;
+        }
+
+        body{
+
+            font-size: 12px;
         }
 
     </style>
@@ -16,7 +22,7 @@
         <div>
             <div>
                 <div>
-                   <img src="img/eden_logo.png" width="200" height="65">
+                   <img src="img/eden_logo.png" width="200" height="85">
                 </div>
                 <div>
                     <div style="float: left;">
@@ -38,7 +44,7 @@
                     <br><br><br><br><br>
                     <br><br><br>
                     <div>
-                        <h2 style="text-align: center;text-decoration: underline;">RAPPORT DU STOCK DES NOURRITURES (GRAND STOCK)</h2>
+                        <h2 style="text-align: center;text-decoration: underline;">RAPPORT DU STOCK INTERMEDIAIRE DES NOURRITURES</h2>
                     </div>
                     <div>
                         <table style="border: 1px solid black;border-collapse: collapse;">
@@ -52,10 +58,13 @@
                                     <th width="10%">V. S. Initial</th>
                                     <th width="10%">Q. Entree/Reception</th>
                                     <th width="10%">V. Entree/Reception</th>
-                                    <th width="10%">Q. Sortie</th>
-                                    <th width="10%">V. Sortie</th>
+                                    <th width="10%">Q. Sortie/Transfert</th>
+                                    <th width="10%">V. Sortie/Transfert</th>
                                     <th width="10%">Q. S. Final</th>
                                     <th width="10%">V. S. Final</th>
+                                    <th width="10%">Type Transaction</th>
+                                    <th width="10%">No Document</th>
+                                    <th width="10%">Auteur</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -67,19 +76,22 @@
                                     <td>{{ $data->food->code }} </td>
                                     <td>{{ $data->quantity_stock_initial }} </td>
                                     @php 
-                                        $value_stock_initial = $data->quantity_stock_initial * $data->food->purchase_price;
+                                        $value_stock_initial = $data->quantity_stock_initial * $data->cump;
                                     @endphp
                                     <td>{{ number_format($value_stock_initial,0,',',' ') }} </td>
                                     <td>@if($data->quantity_stockin){{ $data->quantity_stockin }} @elseif($data->quantity_reception) {{ $data->quantity_reception }} @endif </td>
                                     <td>@if($data->value_stockin){{ number_format($data->value_stockin,0,',',' ') }} @elseif($data->value_reception) {{ number_format($data->value_reception,0,',',' ') }} @endif </td>
                                     <td>@if($data->quantity_stockout){{ $data->quantity_stockout }} @elseif($data->quantity_transfer) {{ $data->quantity_transfer }} @endif </td>
                                     @php
-                                    $value_stockout = $data->quantity_stockout * $data->food->purchase_price;
-                                    $value_transfer = $data->quantity_transfer * $data->food->purchase_price;
+                                    $value_stockout = $data->quantity_stockout * $data->cump;
+                                    $value_transfer = $data->quantity_transfer * $data->cump;
                                     @endphp
                                     <td>@if($data->value_stockout){{ number_format($value_stockout,0,',',' ') }} @elseif($data->value_transfer) {{ number_format($value_transfer,0,',',' ') }} @endif </td>
                                     <td>{{ ($data->quantity_stock_initial + $data->quantity_stockin + $data->quantity_reception) - ($data->quantity_stockout + $data->quantity_transfer) }} </td>
-                                    <td>{{ number_format(((($data->quantity_stock_initial + $data->quantity_stockin + $data->quantity_reception) - ($data->quantity_stockout + $data->quantity_transfer)) * $data->food->purchase_price),0,',',' ') }} </td>
+                                    <td>{{ number_format(((($data->quantity_stock_initial + $data->quantity_stockin + $data->quantity_reception) - ($data->quantity_stockout + $data->quantity_transfer)) * $data->cump),0,',',' ') }} </td>
+                                    <td>{{ $data->type_transaction }}</td>
+                                    <td>{{ $data->document_no }}</td>
+                                    <td>{{ $data->created_by }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
