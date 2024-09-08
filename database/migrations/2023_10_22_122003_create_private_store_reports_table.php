@@ -29,7 +29,7 @@ class CreatePrivateStoreReportsTable extends Migration
             $table->string('quantity_stock_final')->nullable();
             $table->string('value_stock_final')->nullable();
             $table->string('stockin_no')->nullable();
-            $table->string('reception_no')->nullable();
+            $table->string('cump')->nullable();
             $table->string('stockout_no')->nullable();
             $table->string('invoice_no')->nullable();
             $table->string('inventory_no')->nullable();

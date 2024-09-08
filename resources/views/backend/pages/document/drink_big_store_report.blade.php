@@ -71,16 +71,16 @@
                                     <td>{{ $data->drink->code }} </td>
                                     <td>{{ $data->quantity_stock_initial }} </td>
                                     @php 
-                                        $value_stock_initial = $data->quantity_stock_initial * $data->drink->cump;
+                                        $value_stock_initial = $data->quantity_stock_initial * $data->cump;
                                     @endphp
                                     <td>{{ number_format($value_stock_initial,0,',',' ') }} </td>
                                     <td>@if($data->quantity_stockin){{ $data->quantity_stockin }} @elseif($data->quantity_reception) {{ $data->quantity_reception }} @endif </td>
                                     <td>@if($data->value_stockin){{ number_format($data->value_stockin,0,',',' ') }} @elseif($data->value_reception) {{ number_format($data->value_reception,0,',',' ') }} @endif </td>
                                     <td>@if($data->quantity_stockout){{ $data->quantity_stockout }} @elseif($data->quantity_transfer) {{ $data->quantity_transfer }} @endif </td>
                                     @php
-                                        $value_stockout = $data->quantity_stockout * $data->drink->cump;
+                                        $value_stockout = $data->quantity_stockout * $data->cump;
 
-                                        $value_transfer = $data->quantity_transfer * $data->drink->cump;
+                                        $value_transfer = $data->quantity_transfer * $data->cump;
                                     @endphp
                                     <td>@if($data->value_stockout){{ number_format($value_stockout,0,',',' ') }} @elseif($data->value_transfer) {{ number_format($value_transfer,0,',',' ') }} @endif </td>
                                     <td>{{ ($data->quantity_stock_initial + $data->quantity_stockin + $data->quantity_reception) - ($data->quantity_stockout + $data->quantity_transfer) }} </td>
@@ -90,7 +90,7 @@
                                         $quantity_stock_initial = $data->quantity_stock_initial;
                                     @endphp
 
-                                    <td>{{ number_format(($quantite_finale * $data->drink->cump),0,',',' ') }} </td>
+                                    <td>{{ number_format(($quantite_finale * $data->cump),0,',',' ') }} </td>
                                     <td>{{ $data->created_by }} </td>
                                     <td>{{ $data->type_transaction }} </td>
                                     <td>{{ $data->document_no }} </td>

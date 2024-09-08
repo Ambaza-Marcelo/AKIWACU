@@ -589,8 +589,7 @@ class PrivatefactureController extends Controller
         $montant_recouvre = DB::table('private_factures')
             ->where('invoice_number',$invoice_number)->where('etat','01')->sum('montant_recouvre');
 
-        return view('backend.pages.private_invoice.recouvrement', compact('facture','datas','
-            reste_credit','montant_recouvre'));
+        return view('backend.pages.private_invoice.recouvrement', compact('facture','datas','reste_credit','total_amount','montant_recouvre'));
     }
 
     /**
@@ -916,7 +915,7 @@ class PrivatefactureController extends Controller
                     ]);
 
                 session()->flash('success', 'Le credit  est payé avec succés');
-                return redirect()->route('admin.credit-invoices.list');
+                return redirect()->route('admin.private-factures.index');
             }
         }else{
             session()->flash('error', 'Le montant saisi doit etre inferieur ou egal au montant total de la facture');

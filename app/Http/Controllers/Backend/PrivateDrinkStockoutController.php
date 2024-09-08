@@ -451,7 +451,7 @@ class PrivateDrinkStockoutController extends Controller
 
             $email1 = 'ambazamarcellin2001@gmail.com';
             $email2 = 'frangiye@gmail.com';
-            $email3 = 'khaembamartin@gmail.com';
+            //$email3 = 'khaembamartin@gmail.com';
             $auteur = $this->user->name;
             $mailData = [
                     'title' => 'SORTIE DES ARTICLES AU MAGASIN EGR',
@@ -462,8 +462,8 @@ class PrivateDrinkStockoutController extends Controller
                     'totalValue' => $totalValue,
                     ];
          
-            //Mail::to($email1)->send(new PrivateStockoutMail($mailData));
-            //Mail::to($email2)->send(new PrivateStockoutMail($mailData));
+            Mail::to($email1)->send(new PrivateStockoutMail($mailData));
+            Mail::to($email2)->send(new PrivateStockoutMail($mailData));
             //Mail::to($email3)->send(new PrivateStockoutMail($mailData));
 
         DB::commit();

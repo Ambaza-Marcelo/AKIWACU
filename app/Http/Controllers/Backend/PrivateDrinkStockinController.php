@@ -420,8 +420,8 @@ class PrivateDrinkStockinController extends Controller
                     'totalValue' => $totalValue,
                     ];
          
-            //Mail::to($email1)->send(new PrivateStockinMail($mailData));
-            //Mail::to($email2)->send(new PrivateStockinMail($mailData));
+            Mail::to($email1)->send(new PrivateStockinMail($mailData));
+            Mail::to($email2)->send(new PrivateStockinMail($mailData));
             //Mail::to($email3)->send(new PrivateStockinMail($mailData));
 
         DB::commit();

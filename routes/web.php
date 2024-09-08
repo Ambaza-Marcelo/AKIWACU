@@ -776,6 +776,10 @@ Route::group(['prefix' => 'admin'], function () {
 
     Route::get('EBMS/private-factures/export-to-excel', 'Backend\PrivateFactureController@exportToExcel')->name('admin.private-factures.export-to-excel');
 
+    Route::get('EBMS/private-store-report/index', 'Backend\PrivateStoreReportController@index')->name('admin.private-store-report.index');
+    Route::get('EBMS/private-store-report/export-to-excel', 'Backend\PrivateStoreReportController@exportToExcel')->name('admin.private-store-report.export-to-excel');
+    Route::get('EBMS/private-store-report/export-to-pdf', 'Backend\PrivateStoreReportController@exportToPdf')->name('admin.private-store-report.export-to-pdf');
+
 
     //Extra Grand Stock des nourritures
     Route::get('EBMS/food-extra-big-store-inventory/index', 'Backend\FoodExtraBigStoreInventoryController@index')->name('admin.food-extra-big-store-inventory.index');

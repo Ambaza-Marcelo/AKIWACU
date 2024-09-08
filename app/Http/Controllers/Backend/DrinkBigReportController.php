@@ -40,7 +40,7 @@ class DrinkBigReportController extends Controller
             abort(403, 'Muradutunge !! Ntaburenganzira mufise bwo kuraba raporo,mufise ico mubaza murashobora guhamagara kuri 122 !');
         }
             $datas = DrinkBigReport::select(
-                        DB::raw('id,created_at,drink_id,quantity_stock_initial,value_stock_initial,quantity_stockin,value_stockin,quantity_reception,value_reception,quantity_transfer,value_transfer,quantity_stockout,value_stockout,quantity_stock_final,value_stock_final'))->groupBy('id','created_at','drink_id','quantity_stock_initial','value_stock_initial','quantity_stockin','value_stockin','quantity_reception','value_reception','quantity_transfer','value_transfer','quantity_stockout','value_stockout','quantity_stock_final','value_stock_final')->orderBy('id','desc')->take(200)->get();
+                        DB::raw('id,created_at,drink_id,quantity_stock_initial,value_stock_initial,quantity_stockin,value_stockin,quantity_reception,value_reception,quantity_transfer,value_transfer,quantity_stockout,value_stockout,quantity_stock_final,value_stock_final,cump'))->groupBy('id','created_at','drink_id','quantity_stock_initial','value_stock_initial','quantity_stockin','value_stockin','quantity_reception','value_reception','quantity_transfer','value_transfer','quantity_stockout','value_stockout','quantity_stock_final','value_stock_final','cump')->orderBy('id','desc')->take(200)->get();
 
             $stores = DrinkBigStore::all();
             $drinks = Drink::all();
@@ -68,7 +68,7 @@ class DrinkBigReportController extends Controller
         $end_date = $endDate.' 23:59:59';
 
         $datas = DrinkBigReport::select(
-                        DB::raw('id,created_at,drink_id,type_transaction,document_no,created_by,quantity_stock_initial,value_stock_initial,quantity_stockin,value_stockin,quantity_reception,value_reception,quantity_transfer,value_transfer,quantity_stockout,value_stockout,quantity_stock_final,value_stock_final'))->whereBetween('date',[$start_date,$end_date])->where('code_store',$code_store)->where('drink_id',$drink_id)->groupBy('id','created_at','drink_id','type_transaction','document_no','created_by','quantity_stock_initial','value_stock_initial','quantity_stockin','value_stockin','quantity_reception','value_reception','quantity_transfer','value_transfer','quantity_stockout','value_stockout','quantity_stock_final','value_stock_final')->orderBy('id','asc')->get();
+                        DB::raw('id,created_at,drink_id,type_transaction,document_no,created_by,quantity_stock_initial,value_stock_initial,quantity_stockin,value_stockin,quantity_reception,value_reception,quantity_transfer,value_transfer,quantity_stockout,value_stockout,quantity_stock_final,value_stock_final,cump'))->whereBetween('date',[$start_date,$end_date])->where('code_store',$code_store)->where('drink_id',$drink_id)->groupBy('id','created_at','drink_id','type_transaction','document_no','created_by','quantity_stock_initial','value_stock_initial','quantity_stockin','value_stockin','quantity_reception','value_reception','quantity_transfer','value_transfer','quantity_stockout','value_stockout','quantity_stock_final','value_stock_final','cump')->orderBy('id','asc')->get();
 
         $setting = DB::table('settings')->orderBy('created_at','desc')->first();
         $currentTime = Carbon::now();

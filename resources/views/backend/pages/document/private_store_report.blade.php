@@ -17,19 +17,13 @@
         <div>
             <div>
                 <div>
-                   <img src="img/eden_logo.png" width="200" height="65">
+                   MAGASIN EGR
                 </div>
                 <div>
-                    <div style="float: left;">
-                          <small> &nbsp;&nbsp;{{$setting->commune}}-{{$setting->zone}}</small><br>
-                          <small>&nbsp;&nbsp;{{$setting->rue}}</small><br>
-                          <small>&nbsp;&nbsp;{{$setting->telephone1}}-{{$setting->telephone2}}</small><br>
-                          <small>&nbsp;&nbsp;{{$setting->email}}</small>
-                    </div>
-                    <br>
+                    
                     <div style="float: right; border-top-right-radius: 10px solid black;border-top-left-radius: 10px solid black;border-bottom-right-radius: 10px solid black;border-bottom-left-radius: 10px solid black; background-color: rgb(150,150,150);width: 242px;padding: 20px;">
                         <small>
-                           &nbsp;&nbsp; <img src="data:image/png;base64, {!! base64_encode(QrCode::size(50)->generate('eSIGNATURE : '.$store_signature.' www.edengardenresorts.bi')) !!} ">
+                           &nbsp;&nbsp; <img src="data:image/png;base64, {!! base64_encode(QrCode::size(50)->generate('MAGASIN EGR')) !!} ">
                         </small><br>
 
                         <small>
@@ -39,7 +33,7 @@
                     <br><br><br><br><br>
                     <br><br><br>
                     <div>
-                        <h2 style="text-align: center;text-decoration: underline;">FICHE DU PETIT STOCK DES BOISSONS</h2>
+                        <h2 style="text-align: center;text-decoration: underline;">FICHE DE MAGASIN EGR</h2>
                     </div>
                     <div>
                         <table style="border: 1px solid black;border-collapse: collapse;">
@@ -67,16 +61,16 @@
                                <tr>
                                     <td>{{ $loop->index+1 }}</td>
                                     <td>{{ \Carbon\Carbon::parse($data->date)->format('d/m/Y') }}</td>
-                                    <td>{{ $data->drink->name }} </td>
-                                    <td>{{ $data->drink->code }} </td>
+                                    <td>{{ $data->privateStoreItem->name }} </td>
+                                    <td>{{ $data->privateStoreItem->code }} </td>
                                     <td>{{ $data->quantity_stock_initial }} </td>
                                     @php
                                     $value_stock_initial = $data->quantity_stock_initial * $data->cump;
                                     @endphp
                                     <td>{{ number_format($value_stock_initial,0,',',' ') }}</td>
-                                    <td>@if($data->quantity_stockin){{ $data->quantity_stockin }} @elseif($data->quantity_reception) {{ $data->quantity_reception }} @elseif($data->quantity_transfer) {{ $data->quantity_transfer }} @elseif($data->quantity_inventory) {{ $data->quantity_inventory }} @endif </td>
+                                    <td>@if($data->quantity_stockin){{ $data->quantity_stockin }}@elseif($data->quantity_inventory) {{ $data->quantity_inventory }} @endif </td>
 
-                                    <td>@if($data->value_stockin){{ number_format($data->value_stockin,0,',',' ') }} @elseif($data->value_reception) {{ number_format($data->value_reception,0,',',' ') }} @elseif($data->value_transfer) {{ number_format($data->value_transfer,0,',',' ') }} @elseif($data->value_inventory) {{ number_format($data->value_inventory,0,',',' ') }} @endif</td>
+                                    <td>@if($data->value_stockin){{ number_format($data->value_stockin,0,',',' ') }} @elseif($data->value_inventory) {{ number_format($data->value_inventory,0,',',' ') }} @endif</td>
 
                                     <td>@if($data->quantity_stockout){{ $data->quantity_stockout }} @elseif($data->quantity_sold){{ $data->quantity_sold }}  @endif </td>
 
@@ -87,8 +81,8 @@
                                     @endphp
 
                                     <td>@if($data->value_stockout){{ number_format($value_stockout,0,',',' ') }} @elseif($data->value_sold){{ number_format($value_sold,0,',',' ') }} @endif </td>
-                                    <td>{{ ($data->quantity_stock_initial + $data->quantity_stockin + $data->quantity_reception + $data->quantity_transfer) - ($data->quantity_stockout + $data->quantity_sold) }} </td>
-                                    <td>{{ number_format((($data->quantity_stock_initial + $data->quantity_stockin + $data->quantity_reception + $data->quantity_transfer) - ($data->quantity_stockout + $data->quantity_sold))*$data->cump,0,',',' ') }}</td>
+                                    <td>{{ ($data->quantity_stock_initial + $data->quantity_stockin) - ($data->quantity_stockout + $data->quantity_sold) }} </td>
+                                    <td>{{ number_format((($data->quantity_stock_initial + $data->quantity_stockin) - ($data->quantity_stockout + $data->quantity_sold))*$data->cump,0,',',' ') }}</td>
                                     <td>{{ $data->created_by }} </td>
                                     <td>{{ $data->type_transaction }} </td>
                                     <td>{{ $data->document_no }} </td>

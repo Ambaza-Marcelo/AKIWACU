@@ -24,7 +24,7 @@
                 <h4 class="page-title pull-left">@lang('Recouvrement')</h4>
                 <ul class="breadcrumbs pull-left">
                     <li><a href="{{ route('admin.dashboard') }}">@lang('messages.dashboard')</a></li>
-                    <li><a href="{{ route('admin.credit-invoices.list') }}">@lang('messages.list')</a></li>
+                    <li><a href="{{ route('admin.private-factures.index') }}">@lang('messages.list')</a></li>
                     <li><span>@lang('Recouvrement')</span></li>
                 </ul>
             </div>
@@ -116,7 +116,7 @@
                         <div class="row" id="type_paiement">
                             <div class="col-md-4">
                                 <label for="reste_credit">Reste Credit</label>
-                                <input type="number" name="reste_credit" min="0"value="{{ $reste_credit }}" class="form-control" readonly required>
+                                <input type="number" name="reste_credit" min="0" value="{{ $reste_credit }}" class="form-control" readonly required>
                             </div>
                         </div>
                         <div class="row">
@@ -126,7 +126,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label for="nom_recouvrement">Nom Charge de recouvrement</label>
-                                <input type="text" name="nom_recouvrement" value="NIYONCUTI RAISSA" class="form-control" required>
+                                <input type="text" name="nom_recouvrement" value="{{ Auth::guard('admin')->user()->name }}" class="form-control" required>
                             </div>
                         </div>
                         <br>

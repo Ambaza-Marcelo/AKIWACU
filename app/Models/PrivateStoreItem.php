@@ -38,4 +38,8 @@ class PrivateStoreItem extends Model
     public function privateFactureDetail(){
         return $this->hasMany('App\Models\PrivateFactureDetail','private_store_item_id');
     }
+
+    public function privateStoreReport(){
+        return $this->hasMany('App\Models\PrivateStoreReport','private_store_item_id');
+    }
 }

@@ -408,7 +408,7 @@
                         </ul>
                     </li>
                     @endif
-                    @if ($usr->can('drink_extra_big_report.view') || $usr->can('drink_big_report.view') || $usr->can('drink_small_report.view') || $usr->can('food_extra_big_report.view') || $usr->can('food_big_report.view') || $usr->can('food_small_report.view') || $usr->can('material_extra_big_report.view') || $usr->can('material_big_report.view') || $usr->can('material_small_report.view') || $usr->can('barrist_report.view'))
+                    @if ($usr->can('drink_extra_big_report.view') || $usr->can('drink_big_report.view') || $usr->can('drink_small_report.view') || $usr->can('food_extra_big_report.view') || $usr->can('food_big_report.view') || $usr->can('food_small_report.view') || $usr->can('material_extra_big_report.view') || $usr->can('material_big_report.view') || $usr->can('material_small_report.view') || $usr->can('barrist_report.view') || $usr->can('private_drink_stockin.view'))
                     <li>
                         <a href="javascript:void(0)" aria-expanded="true"><i class="fa fa-bar-chart"></i><span>
                             @lang('messages.stock_report')
@@ -446,6 +446,9 @@
                                 @endif
                                 @if ($usr->can('barrist_report.view'))
                                 <li class=""><a href="{{ route('admin.barrist-drink-big-report.index') }}">@lang('Boissons vers Barrist ')</a></li>
+                                @endif
+                                @if ($usr->can('private_drink_stockin.view'))
+                                <li class=""><a href="{{ route('admin.private-store-report.index') }}">@lang('Magasin EGR')</a></li>
                                 @endif
                                 @if ($usr->can('invoice_drink.view'))
                                 <li class=""><a href="{{ route('admin.invoice-report.report') }}">@lang('Ventes')</a></li>

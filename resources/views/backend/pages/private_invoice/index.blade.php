@@ -117,13 +117,13 @@
                                          <a href="{{ route('admin.private-factures.voir-facture-a-credit', $facture->invoice_number) }}" class="btn btn-info">Valider avec Credit</a>
                                         @endif
                                         @endif
-
+                                        <!--
                                         @if (Auth::guard('admin')->user()->can('private_sales.validate'))
                                         @if($facture->etat == 01)
                                          <a href="{{ route('admin.private-factures.voir-facture-a-recouvrer', $facture->invoice_number) }}" class="btn btn-info">Recouvrement</a>
                                         @endif
                                         @endif
-                                    
+                                        -->
                                         @if (Auth::guard('admin')->user()->can('private_sales.reset'))
                                         @if($facture->etat == 0)
                                          <a href="#" class="btn btn-success">Annuler</a>
