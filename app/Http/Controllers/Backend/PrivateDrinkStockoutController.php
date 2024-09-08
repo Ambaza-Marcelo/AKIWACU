@@ -15,6 +15,7 @@ use App\Models\PrivateStoreItem;
 use App\Models\PrivateDrinkStockout;
 use App\Models\PrivateDrinkStockoutDetail;
 use App\Exports\PrivateStore\PrivateDrinkStockoutExport;
+use App\Models\PrivateStoreReport;
 use Carbon\Carbon;
 use App\Mail\PrivateStockoutMail;
 use PDF;
@@ -363,6 +364,7 @@ class PrivateDrinkStockoutController extends Controller
 
                 $valeurStockInitial = PrivateStoreItem::where('id', $data->private_store_item_id)->value('total_cump_value');
                 $quantityStockInitial = PrivateStoreItem::where('id', $data->private_store_item_id)->value('quantity');
+                $cump = PrivateStoreItem::where('id', $data->private_store_item_id)->value('cump');
                 $quantityRestante = $quantityStockInitial - $data->quantity;
 
                     $privateStore = array(
@@ -374,6 +376,24 @@ class PrivateDrinkStockoutController extends Controller
                         'status' => true,
                         'created_at' => \Carbon\Carbon::now()
                     );
+
+                    $reportStore = array(
+                    'private_store_item_id' => $data->private_store_item_id,
+                    'quantity_stock_initial' => $quantityStockInitial,
+                    'value_stock_initial' => $valeurStockInitial,
+                    'date' => $data->date,
+                    'quantity_stockout' => $data->quantity,
+                    'value_stockout' => $data->total_purchase_value,
+                    'quantity_stock_final' => $quantityStockInitial + $data->quantity,
+                    'value_stock_final' => $valeurStockInitial + $data->total_purchase_value,
+                    'type_transaction' => $data->item_movement_type,
+                    'cump' => $cump,
+                    'document_no' => $data->stockout_no,
+                    'created_by' => $this->user->name,
+                    'description' => $data->description,
+                    'created_at' => \Carbon\Carbon::now()
+                );
+                $reportStoreData[] = $reportStore;
 
 
                     if ($data->quantity <= $quantityStockInitial) {
@@ -419,6 +439,9 @@ class PrivateDrinkStockoutController extends Controller
   
         }
 
+
+        PrivateStoreReport::insert($reportStoreData);
+
         PrivateStoreItem::where('id','!=','')->update(['status' => false]);
 
         PrivateDrinkStockout::where('stockout_no', '=', $stockout_no)
@@ -429,7 +452,6 @@ class PrivateDrinkStockoutController extends Controller
             $email1 = 'ambazamarcellin2001@gmail.com';
             $email2 = 'frangiye@gmail.com';
             $email3 = 'khaembamartin@gmail.com';
-            //$email4 = 'munyembari_mp@yahoo.fr';
             $auteur = $this->user->name;
             $mailData = [
                     'title' => 'SORTIE DES ARTICLES AU MAGASIN EGR',
@@ -440,10 +462,9 @@ class PrivateDrinkStockoutController extends Controller
                     'totalValue' => $totalValue,
                     ];
          
-            Mail::to($email1)->send(new PrivateStockoutMail($mailData));
-            Mail::to($email2)->send(new PrivateStockoutMail($mailData));
-            Mail::to($email3)->send(new PrivateStockoutMail($mailData));
-            //Mail::to($email4)->send(new PrivateStockoutMail($mailData));
+            //Mail::to($email1)->send(new PrivateStockoutMail($mailData));
+            //Mail::to($email2)->send(new PrivateStockoutMail($mailData));
+            //Mail::to($email3)->send(new PrivateStockoutMail($mailData));
 
         DB::commit();
             session()->flash('success', 'Stockout has been done successfuly !');

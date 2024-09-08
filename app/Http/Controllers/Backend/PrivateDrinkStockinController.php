@@ -15,6 +15,7 @@ use App\Models\PrivateStoreItem;
 use App\Models\PrivateDrinkStockin;
 use App\Models\PrivateDrinkStockinDetail;
 use App\Exports\PrivateStore\PrivateDrinkStockinExport;
+use App\Models\PrivateStoreReport;
 use Carbon\Carbon;
 use App\Mail\PrivateStockinMail;
 use PDF;
@@ -357,7 +358,7 @@ class PrivateDrinkStockinController extends Controller
 
                 $valeurStockInitial = PrivateStoreItem::where('id', $data->private_store_item_id)->value('total_cump_value');
                 $quantityStockInitial = PrivateStoreItem::where('id', $data->private_store_item_id)->value('quantity');
-                $quantityTotalBigStore = $quantityStockInitial + $data->quantity;
+                $quantityTotalStore = $quantityStockInitial + $data->quantity;
 
 
                 $valeurAcquisition = $data->quantity * $data->purchase_price;
@@ -367,16 +368,38 @@ class PrivateDrinkStockinController extends Controller
 
                     $itemData = array(
                         'id' => $data->private_store_item_id,
-                        'quantity' => $quantityTotalBigStore,
-                        'total_purchase_value' => $quantityTotalBigStore * $data->purchase_price,
+                        'quantity' => $quantityTotalStore,
+                        'total_purchase_value' => $quantityTotalStore * $data->purchase_price,
                         'cump' => $cump,
-                        'total_cump_value' => $quantityTotalBigStore * $cump
+                        'total_cump_value' => $quantityTotalStore * $cump
                     );
+
+
+                    $reportStore = array(
+                    'private_store_item_id' => $data->private_store_item_id,
+                    'quantity_stock_initial' => $quantityStockInitial,
+                    'value_stock_initial' => $valeurStockInitial,
+                    'date' => $data->date,
+                    'quantity_stockin' => $data->quantity,
+                    'value_stockin' => $data->total_amount_purchase,
+                    'quantity_stock_final' => $quantityStockInitial + $data->quantity,
+                    'value_stock_final' => $valeurStockInitial + $data->total_amount_purchase,
+                    'type_transaction' => $data->item_movement_type,
+                    'cump' => $cump,
+                    'document_no' => $data->stockin_no,
+                    'created_by' => $this->user->name,
+                    'description' => $data->description,
+                    'created_at' => \Carbon\Carbon::now()
+                );
+                $reportStoreData[] = $reportStore;
 
 
                     PrivateStoreItem::where('id',$data->private_store_item_id)
                         ->update($itemData);
         }
+
+
+            PrivateStoreReport::insert($reportStoreData);
 
 
             PrivateDrinkStockin::where('stockin_no', '=', $stockin_no)
@@ -387,7 +410,6 @@ class PrivateDrinkStockinController extends Controller
             $email1 = 'ambazamarcellin2001@gmail.com';
             $email2 = 'frangiye@gmail.com';
             //$email3 = 'khaembamartin@gmail.com';
-            //$email4 = 'munyembari_mp@yahoo.fr';
             $auteur = $this->user->name;
             $mailData = [
                     'title' => 'ENTREE DES ARTICLES AU MAGASIN EGR',
@@ -398,10 +420,9 @@ class PrivateDrinkStockinController extends Controller
                     'totalValue' => $totalValue,
                     ];
          
-            Mail::to($email1)->send(new PrivateStockinMail($mailData));
-            Mail::to($email2)->send(new PrivateStockinMail($mailData));
+            //Mail::to($email1)->send(new PrivateStockinMail($mailData));
+            //Mail::to($email2)->send(new PrivateStockinMail($mailData));
             //Mail::to($email3)->send(new PrivateStockinMail($mailData));
-            //Mail::to($email4)->send(new PrivateStockinMail($mailData));
 
         DB::commit();
             session()->flash('success', 'Stockin has been done successfuly !');

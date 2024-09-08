@@ -19,6 +19,7 @@ use Validator;
 use App\Models\PrivateStoreItem;
 use App\Models\PrivateFacture;
 use App\Models\PrivateFactureDetail;
+use App\Models\PrivateStoreReport;
 
 class PrivatefactureController extends Controller
 {
@@ -238,6 +239,7 @@ class PrivatefactureController extends Controller
 
         foreach($datas as $data){
             $valeurStockInitial = PrivateStoreItem::where('id', $data->private_store_item_id)->value('total_cump_value');
+            $cump = PrivateStoreItem::where('id', $data->private_store_item_id)->value('cump');
             $quantityStockInitial = PrivateStoreItem::where('id', $data->private_store_item_id)->value('quantity');
 
             $quantityRestant = $quantityStockInitial - $data->item_quantity;
@@ -250,6 +252,24 @@ class PrivatefactureController extends Controller
                         'created_by' => $this->user->name,
                         'verified' => true
                     );
+
+                $reportStore = array(
+                    'private_store_item_id' => $data->private_store_item_id,
+                    'quantity_stock_initial' => $quantityStockInitial,
+                    'value_stock_initial' => $valeurStockInitial,
+                    'date' => $data->invoice_date,
+                    'quantity_sold' => $data->item_quantity,
+                    'value_sold' => $data->item_total_amount,
+                    'quantity_stock_final' => $quantityStockInitial + $data->item_quantity,
+                    'value_stock_final' => $valeurStockInitial + $data->item_total_amount,
+                    'type_transaction' => "SORTIE APRES VENTE",
+                    'cump' => $cump,
+                    'document_no' => $data->invoice_number,
+                    'created_by' => $this->user->name,
+                    'description' => $data->description,
+                    'created_at' => \Carbon\Carbon::now()
+                );
+                $reportStoreData[] = $reportStore;
                     
                     if ($data->item_quantity <= $quantityStockInitial) {
                         
@@ -288,6 +308,11 @@ class PrivatefactureController extends Controller
                         session()->flash('error', $this->user->name.' ,why do you want selling a quantity that you do not have!');
                         return redirect()->back();
                     }
+        }
+
+
+        if ($flag != 1) {
+            PrivateStoreReport::insert($reportStoreData);
         }
         
         PrivateStoreItem::where('id','!=','')->update(['verified' => false]);
@@ -330,6 +355,7 @@ class PrivatefactureController extends Controller
 
         foreach($datas as $data){
             $valeurStockInitial = PrivateStoreItem::where('id', $data->private_store_item_id)->value('total_cump_value');
+            $cump = PrivateStoreItem::where('id', $data->private_store_item_id)->value('cump');
             $quantityStockInitial = PrivateStoreItem::where('id', $data->private_store_item_id)->value('quantity');
 
             $quantityRestant = $quantityStockInitial - $data->item_quantity;
@@ -343,6 +369,24 @@ class PrivatefactureController extends Controller
                         'created_by' => $this->user->name,
                         'verified' => true
                     );
+
+                    $reportStore = array(
+                    'private_store_item_id' => $data->private_store_item_id,
+                    'quantity_stock_initial' => $quantityStockInitial,
+                    'value_stock_initial' => $valeurStockInitial,
+                    'date' => $data->invoice_date,
+                    'quantity_sold' => $data->item_quantity,
+                    'value_sold' => $data->item_total_amount,
+                    'quantity_stock_final' => $quantityStockInitial + $data->item_quantity,
+                    'value_stock_final' => $valeurStockInitial + $data->item_total_amount,
+                    'type_transaction' => "SORTIE APRES VENTE",
+                    'cump' => $cump,
+                    'document_no' => $data->invoice_number,
+                    'created_by' => $this->user->name,
+                    'description' => $data->description,
+                    'created_at' => \Carbon\Carbon::now()
+                );
+                $reportStoreData[] = $reportStore;
                     
                     if ($data->item_quantity <= $quantityStockInitial) {
                         
@@ -390,6 +434,10 @@ class PrivatefactureController extends Controller
             ->sum('item_total_amount');
         
         PrivateStoreItem::where('id','!=','')->update(['verified' => false]);
+
+        if ($flag != 1) {
+            PrivateStoreReport::insert($reportStoreData);
+        }
 
         PrivateFacture::where('invoice_number', '=', $invoice_number)
             ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','customer_name' => $customer_name,'validated_by' => $this->user->name]);
@@ -439,8 +487,6 @@ class PrivatefactureController extends Controller
              
             $email1 = 'ambazamarcellin2001@gmail.com';
             //$email2 = 'frangiye@gmail.com';
-            //$email3 = 'khaembamartin@gmail.com';
-            //$email4 = 'munyembari_mp@yahoo.fr';
             $auteur = $this->user->name;
             $mailData = [
                     'title' => 'Système de facturation électronique, Akiwacu',
@@ -449,11 +495,9 @@ class PrivatefactureController extends Controller
                     'cn_motif' => $cn_motif,
                     ];
          
-            Mail::to($email1)->send(new InvoiceResetedMail($mailData));
+            //Mail::to($email1)->send(new InvoiceResetedMail($mailData));
             //Mail::to($email2)->send(new InvoiceResetedMail($mailData));
-            //Mail::to($email3)->send(new InvoiceResetedMail($mailData));
-            //Mail::to($email4)->send(new InvoiceResetedMail($mailData));
-            
+
         DB::commit();
             session()->flash('success', 'La Facture  est annulée avec succés');
             return back();

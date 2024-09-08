@@ -15,6 +15,7 @@ use App\Models\PrivateStoreItem;
 use App\Models\PrivateDrinkInventory;
 use App\Models\PrivateDrinkInventoryDetail;
 use App\Exports\PrivateStoreInventoryExport;
+use App\Models\PrivateStoreReport;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Excel;
@@ -260,9 +261,21 @@ class PrivateDrinkInventoryController extends Controller
                         'total_cump_value' => $data->new_purchase_price * $data->new_quantity
                     );
 
+                $reportData = array(
+                        'private_store_item_id' => $data->private_store_item_id,
+                        'quantity_stock_initial' => $data->quantity,
+                        'value_stock_initial' => $data->purchase_price * $data->quantity,
+                        'quantity_inventory' => $data->new_quantity,
+                        'value_inventory' => $data->new_purchase_price * $data->new_quantity,
+                        'document_no' => $data->inventory_no,
+                        'created_by' => $this->user->name,
+                    );
+
 
                 PrivateStoreItem::where('id',$data->private_store_item_id)
                         ->update($item_calc);
+
+                PrivateStoreReport::insert($reportData);
      
         }
 
