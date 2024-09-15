@@ -77,7 +77,7 @@ class OrderKitchenController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to create any order !');
         }
 
-        $articles  = FoodItem::orderBy('name','asc')->get();
+        $articles  = FoodItem::where('selling_price','>',0)->orderBy('name','asc')->get();
         $employes  = Employe::orderBy('name','asc')->get();
         $accompagnements  = Accompagnement::orderBy('name','asc')->get();
         $table = Table::where('id',$table_id)->first();
@@ -125,12 +125,16 @@ class OrderKitchenController extends Controller
             $created_by = $this->user->name;
             //$accompagnement_id = $request->accompagnement_id;
 
+            $waiter_on_table = Table::where('id',$table_id)->value('waiter_name');
+
             $waiter_name = Employe::where('id',$employe_id)->value('name');
 
-            if ($waiter_name == $created_by) {
+            if (!empty($waiter_on_table) && $waiter_on_table == $waiter_name) {
+                $employe_id = $request->employe_id;
+            }elseif (empty($waiter_on_table) && $waiter_name == $created_by) {
                 $employe_id = $request->employe_id;
             }else{
-                session()->flash('error', 'Tu n\'es pas '.$waiter_name.'veuillez utiliser vos comptes s\'il vous plait!!');
+                session()->flash('error', 'Tu n\'es pas '.$waiter_name.', veuillez utiliser votre compte ou bien choisir une autre table s\'il vous plait!!');
                 return back();
             }
 

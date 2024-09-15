@@ -121,14 +121,20 @@ class BarristOrderController extends Controller
             $status = 0; 
             $created_by = $this->user->name;
 
+            $waiter_on_table = Table::where('id',$table_id)->value('waiter_name');
+
             $waiter_name = Employe::where('id',$employe_id)->value('name');
 
-            if ($waiter_name == $created_by) {
+            if (!empty($waiter_on_table) && $waiter_on_table == $waiter_name) {
+                $employe_id = $request->employe_id;
+            }elseif (empty($waiter_on_table) && $waiter_name == $created_by) {
                 $employe_id = $request->employe_id;
             }else{
-                session()->flash('error', 'Tu n\'es pas '.$waiter_name.'veuillez utiliser vos comptes s\'il vous plait!!');
+                session()->flash('error', 'Tu n\'es pas '.$waiter_name.', veuillez utiliser votre compte ou bien choisir une autre table s\'il vous plait!!');
                 return back();
             }
+
+            
 
             $latest = BarristOrder::orderBy('id','desc')->first();
             if ($latest) {
