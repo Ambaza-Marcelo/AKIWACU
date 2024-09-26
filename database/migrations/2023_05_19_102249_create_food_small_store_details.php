@@ -35,6 +35,7 @@ class CreateFoodSmallStoreDetails extends Migration
             $table->string('cost_price')->nullable(true);
             $table->string('cump')->nullable(true);
             $table->string('total_value')->nullable(true);
+            $table->string('total_value_bottle')->nullable(true);
             $table->string('total_purchase_value')->nullable(true);
             $table->string('total_purchase_value_portion')->nullable(true);
             $table->string('total_selling_value')->nullable(true);

@@ -43,7 +43,7 @@ class CreateFacturesTable extends Migration
             $table->string('cancelled_invoice_ref')->nullable(true);
             $table->string('cancelled_invoice')->nullable(true);
             $table->string('invoice_ref')->nullable(true);
-            $table->string('cn_motif')->nullable(true);
+            $table->text('cn_motif')->nullable(true);
             $table->string('invoice_currency')->nullable(true);
             $table->string('code_store')->nullable(true);
             $table->string('food_order_no')->nullable(true);

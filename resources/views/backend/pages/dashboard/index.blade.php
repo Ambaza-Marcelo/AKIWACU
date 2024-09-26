@@ -153,7 +153,7 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
                 @endif
     @if (Auth::guard('admin')->user()->can('drink_purchase.view') || Auth::guard('admin')->user()->can('food_purchase.view') || Auth::guard('admin')->user()->can('material_purchase.view') || Auth::guard('admin')->user()->can('drink_requisition.view'))
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="card">
                     <div class="seo-fact sbg3">
                         <a href="{{ route('admin.plan-purchase.choice') }}">
@@ -169,7 +169,7 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
                     </div>
                 </div><br>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="card">
                     <div class="seo-fact sbg3">
                         <a href="{{ route('admin.plan-purchase.choice') }}">
@@ -185,28 +185,12 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
                     </div>
                 </div><br>
             </div>
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="seo-fact sbg3">
-                        <a href="{{ route('admin.order-report.choose') }}">
-                            <div class="p-4 d-flex justify-content-between align-items-center">
-                                <div class="seofct-icon">
-                                    <img src="{{ asset('img/undraw_beer-006.svg') }}" width="100">
-                                </div>
-                                <h2>
-                                    @lang('Rapport de commandes') 
-                                </h2>
-                            </div>
-                        </a>
-                    </div>
-                </div><br>
-            </div>
         </div>
         @endif
-    @if (Auth::guard('admin')->user()->can('invoice_booking.view') || Auth::guard('admin')->user()->can('recouvrement.view') || Auth::guard('admin')->user()->can('invoice_kitchen.view') || Auth::guard('admin')->user()->can('invoice_kidness_space.view'))
+    @if (Auth::guard('admin')->user()->can('invoice_booking.view') || Auth::guard('admin')->user()->can('recouvrement.view') || Auth::guard('admin')->user()->can('invoice_kitchen.view') || Auth::guard('admin')->user()->can('invoice_kidness_space.view') || Auth::guard('admin')->user()->can('food_order_client.view') || Auth::guard('admin')->user()->can('drink_order_client.view'))
         <div class="row">
             @if (Auth::guard('admin')->user()->can('recouvrement.view'))
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="card">
                     <div class="seo-fact sbg3">
                         <a href="{{ route('admin.credit-invoices.list') }}">
@@ -223,7 +207,7 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
                 </div><br>
             </div>
             @endif
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <div class="card">
                     <div class="seo-fact sbg3">
                         <a href="{{ route('admin.voir-chiffre-affaires') }}">
@@ -233,6 +217,22 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
                                 </div>
                                 <h2>
                                     DOSSIER DES RAPPORTS
+                                </h2>
+                            </div>
+                        </a>
+                    </div>
+                </div><br>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="seo-fact sbg3">
+                        <a href="{{ route('admin.order-report.choose') }}">
+                            <div class="p-4 d-flex justify-content-between align-items-center">
+                                <div class="seofct-icon">
+                                    <img src="{{ asset('img/undraw_beer-006.svg') }}" width="100">
+                                </div>
+                                <h2>
+                                    @lang('Rapport de commandes') 
                                 </h2>
                             </div>
                         </a>

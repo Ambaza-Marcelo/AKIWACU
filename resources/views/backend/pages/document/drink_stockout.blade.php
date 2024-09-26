@@ -68,14 +68,14 @@
                                 </tr>
                                 @endforeach
                             </tbody>
-                            <!--
+                            
                             <tfoot>
                                 <tr>
                                     <th>Total</th>
                                     <th style="background-color: rgb(150,150,150);" colspan="5"></th>
                                     <th>{{ number_format($totalValue,0,',',' ') }}</th>
                                 </tr>
-                            </tfoot> -->
+                            </tfoot> 
                         </table>
                     </div>
                 </div>

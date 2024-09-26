@@ -29,6 +29,8 @@ use App\Models\FoodItem;
 use App\Models\Employe;
 use App\Models\EGRClient;
 use App\Models\Table;
+use App\Models\NoteCreditDetail;
+use App\Models\NoteCredit;
 use App\Mail\ReportFoodMail;
 use App\Exports\ChiffreAffaireExport;
 use App\Exports\FactureCreditExport;
@@ -58,7 +60,7 @@ class FactureRestaurantController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any invoice !');
         }
 
-        $factures = Facture::where('food_order_no','!=','')->take(200)->orderBy('id','desc')->get();
+        $factures = Facture::where('food_order_no','!=','')->take(300)->orderBy('id','desc')->get();
         return view('backend.pages.invoice_kitchen.index',compact('factures'));
     }
 
@@ -639,13 +641,20 @@ class FactureRestaurantController extends Controller
         $total_vat_credit = DB::table('facture_details')->where('food_order_no','!=','')->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->sum('vat');
         $total_item_price_nvat_credit = DB::table('facture_details')->where('food_order_no','!=','')->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_price_nvat');
 
+
+        $note_credits = NoteCreditDetail::select(
+                        DB::raw('id,client_id,service_id,food_item_id,drink_id,barrist_item_id,bartender_item_id,salle_id,swiming_pool_id,kidness_space_id,invoice_number,invoice_date,item_quantity,item_price,vat,item_price_nvat,cancelled_invoice_ref,customer_name,item_total_amount'))->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','service_id','invoice_date','invoice_number','item_quantity','item_price','vat','item_price_nvat','customer_name','cancelled_invoice_ref','client_id','food_item_id','drink_id','barrist_item_id','bartender_item_id','salle_id','swiming_pool_id','kidness_space_id','item_total_amount')->orderBy('id','asc')->get();
+            $total_amount_note_credit = DB::table('note_credit_details')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
+            $total_vat_note_credit = DB::table('note_credit_details')->whereBetween('invoice_date',[$start_date,$end_date])->sum('vat');
+            $total_item_price_nvat_note_credit = DB::table('note_credit_details')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_price_nvat');
+
         $setting = DB::table('settings')->orderBy('created_at','desc')->first();
         $currentTime = Carbon::now();
 
         $dateT =  $currentTime->toDateTimeString();
 
         $dateTime = str_replace([' ',':'], '_', $dateT);
-        $pdf = PDF::loadView('backend.pages.document.rapport_facture_restaurant',compact('datas','dateTime','setting','end_date','start_date','total_amount','total_amount_credit','credits','total_vat','total_item_price_nvat','total_vat_credit','total_item_price_nvat_credit'))->setPaper('a4', 'landscape');
+        $pdf = PDF::loadView('backend.pages.document.rapport_facture_restaurant',compact('datas','dateTime','setting','end_date','start_date','total_amount','total_amount_credit','credits','total_vat','total_item_price_nvat','total_vat_credit','total_item_price_nvat_credit','note_credits','total_vat_note_credit','total_item_price_nvat_note_credit','total_amount_note_credit'))->setPaper('a4', 'landscape');
         /*
             $email1 = 'ambazamarcellin2001@gmail.com';
             $email2 = 'frankirakoze77@gmail.com';

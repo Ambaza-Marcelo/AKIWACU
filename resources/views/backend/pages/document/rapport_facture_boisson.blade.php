@@ -39,6 +39,7 @@
                     <br>
                     <div>
                         <table style="border: 1px solid black;border-collapse: collapse;">
+                            <caption>LES CASH</caption>
                             <thead>
                                 <tr>
                                     <th width="5%">No</th>
@@ -83,6 +84,7 @@
                     <br>
                     <div>
                         <table style="border: 1px solid black;border-collapse: collapse;">
+                            <caption>LES CREDITS</caption>
                             <thead>
                                 <tr>
                                     <th width="5%">No</th>

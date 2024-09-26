@@ -50,14 +50,14 @@ class CreateFoodSmallReportsTable extends Migration
             $table->string('asker')->nullable();
             $table->string('unit')->nullable(true);
             $table->string('cump')->nullable(true);
-            $table->string('date')->nullable(true);
+            $table->date('date')->nullable(true);
             $table->string('created_by')->nullable(true);
             $table->string('updated_by')->nullable(true);
             $table->string('validated_by')->nullable(true);
             $table->string('confirmed_by')->nullable(true);
             $table->string('approuved_by')->nullable(true);
             $table->string('rejected_by')->nullable(true);
-            $table->string('description')->nullable(true);
+            $table->text('description')->nullable(true);
             $table->string('type_transaction')->nullable(true);
             $table->string('document_no')->nullable(true);
             $table->string('quantity_stock_initial_portion')->nullable(true);

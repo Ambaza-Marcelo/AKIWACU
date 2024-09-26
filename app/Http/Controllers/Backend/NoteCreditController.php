@@ -147,6 +147,23 @@ class NoteCreditController extends Controller
         return view('backend.pages.note_credit.create_food',compact('food_items','data','setting','datas','invoice_number','clients','total_amount'));
     }
 
+    public function noteCreditBooking($invoice_number)
+    {
+        if (is_null($this->user) || !$this->user->can('invoice_booking.create')) {
+            abort(403, 'Sorry !! You are Unauthorized to create any invoice !');
+        }
+
+        $setting = DB::table('settings')->orderBy('created_at','desc')->first();
+
+        $clients =  EGRClient::orderBy('customer_name','asc')->get();
+        $datas =  FactureDetail::where('invoice_number',$invoice_number)->orderBy('invoice_number','asc')->get();
+        $data =  facture::where('invoice_number',$invoice_number)->first();
+        $total_amount = DB::table('facture_details')
+            ->where('invoice_number',$invoice_number)
+            ->sum('item_total_amount');
+        return view('backend.pages.note_credit.create_booking',compact('data','setting','datas','invoice_number','clients','total_amount'));
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -1149,7 +1166,7 @@ class NoteCreditController extends Controller
             'auteur' => $this->user->name,
             'etat' => $etat,
             'invoice_signature_date'=> Carbon::now(),
-            'salle_id'=>$bartender_item_id[$count],
+            'salle_id'=>$salle_id[$count],
             'item_quantity'=>$item_quantity[$count],
             'item_price'=>$item_price[$count],
             'item_ct'=>$item_ct[$count],

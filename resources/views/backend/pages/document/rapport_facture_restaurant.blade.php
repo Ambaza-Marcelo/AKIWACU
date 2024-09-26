@@ -21,7 +21,7 @@
         <div>
             <div>
                <div>
-                   <img src="img/eden_logo.png" width="150" height="65">
+                   <img src="img/eden_logo.png" width="150" height="85">
                 </div>
                 <div>
                     <div style="float: left;">
@@ -39,6 +39,7 @@
                     <br>
                     <div>
                         <table style="border: 1px solid black;border-collapse: collapse;">
+                            <caption>LES CASH</caption>
                             <thead>
                                 <tr>
                                     <th width="5%">No</th>
@@ -82,6 +83,7 @@
                     <br>
                     <div>
                         <table style="border: 1px solid black;border-collapse: collapse;">
+                            <caption>LES CREDITS</caption>
                             <thead>
                                 <tr>
                                     <th width="5%">No</th>
@@ -119,6 +121,53 @@
                                     <th>{{ number_format($total_item_price_nvat_credit,3,',',' ') }}</th>
                                     <th>{{ number_format($total_vat_credit,3,',',' ') }}</th>
                                     <th>{{ number_format($total_amount_credit,3,',',' ') }}</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <br>
+                    <div>
+                        <table style="border: 1px solid black;border-collapse: collapse;">
+                            <caption>LES NOTES DE CREDIT</caption>
+                            <thead>
+                                <tr>
+                                    <th width="5%">No</th>
+                                    <th width="20%">Le numéro de la facture</th>
+                                    <th width="10%">Date de facturation</th>
+                                    <th width="30%">Nom du client</th>
+                                    <th width="10%">Reference fa. annulee</th>
+                                    <th width="10%">Motif Annulation</th>
+                                    <th width="10%">Libellé</th>
+                                    <th width="10%">Quantité</th>
+                                    <th width="10%">PV HTVA</th>
+                                    <th width="10%">TVA</th>
+                                    <th width="20%">TTC</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                @foreach($note_credits as $data)
+                               <tr>
+                                    <td>{{ $loop->index + 1 }}</td>
+                                    <td>{{ $data->invoice_number }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($data->invoice_date)->format('d/m/Y H:i:s') }}</td>
+                                    <td>@if($data->client_id){{ $data->client->customer_name }} @else {{ $data->customer_name }} @endif</td>
+                                    <td>{{ $data->cancelled_invoice_ref }}</td>
+                                    <td>@if($data->cn_motif == 1)<span class="badge badge-danger">Erreur sur la facture</span>@elseif($data->cn_motif == 2)<span class="badge badge-danger">Retour marchandises</span>@elseif($data->cn_motif == 3)<span class="badge badge-danger">Rabais</span>@else<span class="badge badge-danger">Reduction hors facture</span>@endif</td>
+                                    <td>@if($data->drink_id){{ $data->drink->name }}(BOISSONS) @elseif($data->food_item_id){{ $data->foodItem->name }}(NOURRITURES) @elseif($data->bartender_item_id){{ $data->bartenderItem->name }} (BARTENDER)@elseif($data->salle_id){{ $data->salle->name }}(SALLES) @elseif($data->service_id){{ $data->service->name }}(SERVICES)  @elseif($data->breakfast_id) {{ $data->breakFast->name }}(BREAKFAST) @elseif($data->swiming_pool_id) {{ $data->swimingPool->name }} (PISCINE)@elseif($data->kidness_space_id) {{ $data->kidnessSpace->name }}(JEUX ENFANT) @else {{ $data->barristItem->name }}(BARRISTA) @endif</td>
+                                    <td>{{ $data->item_quantity }}</td>
+                                    <td>{{ number_format($data->item_price_nvat,3,',',' ') }}</td>
+                                    <td>{{ number_format($data->vat,3,',',' ') }}</td>
+                                    <td>-{{ number_format($data->item_total_amount,0,',',' ') }}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="8">Total à déduire</th>
+                                    <th>-{{ number_format($total_item_price_nvat_note_credit,3,',',' ') }}</th>
+                                    <th>-{{ number_format($total_vat_note_credit,3,',',' ') }}</th>
+                                    <th>-{{ number_format($total_amount_note_credit,0,',',' ') }}</th>
                                 </tr>
                             </tfoot>
                         </table>

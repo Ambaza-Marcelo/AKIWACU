@@ -21,7 +21,7 @@
         <div>
             <div>
                <div>
-                   <img src="img/eden_logo.png" width="150" height="65">
+                   <img src="img/eden_logo.png" width="150" height="85">
                 </div>
                 <div>
                     <div style="float: left;">
@@ -39,6 +39,7 @@
                     <br>
                     <div>
                         <table style="border: 1px solid black;border-collapse: collapse;">
+                            <caption>LES CASH</caption>
                             <thead>
                                 <tr>
                                     <th width="5%">No</th>
@@ -82,6 +83,7 @@
                     <br>
                     <div>
                         <table style="border: 1px solid black;border-collapse: collapse;">
+                            <caption>LES CREDITS</caption>
                             <thead>
                                 <tr>
                                     <th width="5%">No</th>

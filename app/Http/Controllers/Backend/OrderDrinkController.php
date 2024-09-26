@@ -85,10 +85,7 @@ class OrderDrinkController extends Controller
 
     public function choose()
     {
-        if (is_null($this->user) || !$this->user->can('drink_order_client.view')) {
-            abort(403, 'Sorry !! You are Unauthorized to create any order !more information contact Marcellin');
-        }
-
+        
         return view('backend.pages.order_drink.choose');
     }
 

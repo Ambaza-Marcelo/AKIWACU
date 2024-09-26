@@ -83,7 +83,7 @@
                                     <td>{{ $loop->index+1}}</td>
                                     <td><a href="{{ route('admin.note-de-credit.show',$facture->invoice_number) }}">{{ $facture->invoice_number }}</a>&nbsp;@if($facture->etat === '01')<span class="badge badge-info">crédit</span>@elseif($facture->etat === '1')<span class="badge badge-info">cash</span>@endif</td>
                                     <td>{{ \Carbon\Carbon::parse($facture->invoice_date)->format('d/m/Y H:i:s') }}</td>
-                                    <td>{{ $facture->employe->name }}</td>
+                                    <td>@if($facture->employe_id){{ $facture->employe->name }}@endif</td>
                                     <td>@if($facture->client_id){{ $facture->client->customer_name }} @else {{ $facture->customer_name }} @endif</td>
                                     <td>{{ $facture->cancelled_invoice_ref }}</td>
                                     <td>@if($facture->cn_motif == 1)<span class="badge badge-danger">Erreur sur la facture</span>@elseif($facture->cn_motif == 2)<span class="badge badge-danger">Retour marchandises</span>@elseif($facture->cn_motif == 3)<span class="badge badge-danger">Rabais</span>@else<span class="badge badge-danger">Reduction hors facture</span>@endif</td>
@@ -100,7 +100,7 @@
                                         
                                         @if (Auth::guard('admin')->user()->can('note_credit.validate'))
                                         @if($facture->statut == 1)
-                                         <a class="btn btn-primary text-white" href="@if(!empty($facture->drink_order_no)){{ route('admin.boissons-note-de-credit.valider', $facture->invoice_number) }} @elseif(!empty($facture->food_order_no)){{ route('admin.nourritures-note-de-credit.valider', $facture->invoice_number) }} @elseif(!empty($facture->bartender_order_no)){{ route('admin.bartender-note-de-credit.valider', $facture->invoice_number) }} @elseif(!empty($facture->barrist_order_no)){{ route('admin.barrista-note-de-credit.valider', $facture->invoice_number) }} @elseif(!empty($facture->booking_no)){{ route('admin.booking-note-de-credit.valider', $facture->invoice_number) }} @endif"
+                                         <a class="btn btn-primary text-white" href="@if(!empty($facture->drink_order_no)){{ route('admin.boissons-note-de-credit.valider', $facture->invoice_number) }} @elseif(!empty($facture->food_order_no)){{ route('admin.nourritures-note-de-credit.valider', $facture->invoice_number) }} @elseif(!empty($facture->bartender_order_no)){{ route('admin.bartender-note-de-credit.valider', $facture->invoice_number) }} @elseif(!empty($facture->barrist_order_no)){{ route('admin.barrista-note-de-credit.valider', $facture->invoice_number) }} @else{{ route('admin.booking-note-de-credit.valider', $facture->invoice_number) }} @endif"
                                             onclick="event.preventDefault(); document.getElementById('validate-form-{{ $facture->invoice_number }}').submit();this.style.visibility='hidden';" ondblclick="this.style.visibility='hidden';">
                                                 Valider
                                             </a>

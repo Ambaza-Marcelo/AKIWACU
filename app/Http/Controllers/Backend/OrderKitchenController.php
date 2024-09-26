@@ -40,7 +40,7 @@ class OrderKitchenController extends Controller
 
     public function listAll()
     {
-        if (is_null($this->user) || !$this->user->can('drink_order_client.view')) {
+        if (is_null($this->user) || !$this->user->can('food_order_client.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view any order !');
         }
 

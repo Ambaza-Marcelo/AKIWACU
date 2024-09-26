@@ -20,6 +20,7 @@ use App\Models\PrivateStoreItem;
 use App\Models\PrivateFacture;
 use App\Models\PrivateFactureDetail;
 use App\Models\PrivateStoreReport;
+use App\Exports\PrivateStoreFactureExport;
 
 class PrivatefactureController extends Controller
 {
@@ -934,6 +935,14 @@ class PrivatefactureController extends Controller
         }
 
         
+    }
+
+    public function exportToExcel(Request $request)
+    {
+        $d1 = $request->query('start_date');
+        $d2 = $request->query('end_date');
+
+        return Excel::download(new PrivateStoreFactureExport, 'MAGASIN EGR CHIFFRE AFFAIRE DU '.$d1.' AU '.$d2.'.xlsx');
     }
    
     /**

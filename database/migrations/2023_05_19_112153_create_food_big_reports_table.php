@@ -28,6 +28,8 @@ class CreateFoodBigReportsTable extends Migration
             $table->string('stock_total')->nullable();
             $table->string('quantity_stockout')->nullable();
             $table->string('value_stockout')->nullable();
+            $table->string('quantity_sold')->nullable();
+            $table->string('value_sold')->nullable();
             $table->string('quantity_reception')->nullable();
             $table->string('value_reception')->nullable();
             $table->string('quantity_inventory')->nullable();
@@ -36,6 +38,7 @@ class CreateFoodBigReportsTable extends Migration
             $table->string('value_stock_final')->nullable();
             $table->string('stockin_no')->nullable();
             $table->string('reception_no')->nullable();
+            $table->string('origine_facture')->nullable();
             $table->string('stockout_no')->nullable();
             $table->string('invoice_no')->nullable();
             $table->string('transfer_no')->nullable();
@@ -44,8 +47,11 @@ class CreateFoodBigReportsTable extends Migration
             $table->string('destination')->nullable();
             $table->string('asker')->nullable();
             $table->string('unit')->nullable(true);
+            $table->string('commande_cuisine_no')->nullable(true);
+            $table->string('commande_boisson_no')->nullable(true);
+            $table->string('table_no')->nullable(true);
             $table->string('cump')->nullable(true);
-            $table->string('date')->nullable(true);
+            $table->date('date')->nullable(true);
             $table->string('created_by')->nullable(true);
             $table->string('updated_by')->nullable(true);
             $table->string('validated_by')->nullable(true);

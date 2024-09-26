@@ -47,7 +47,7 @@
                             <a class="btn btn-primary text-white" href="{{ route('admin.private-factures.create') }}">@lang('messages.new')</a>
                         @endif
                     </p>
-                <form action="" method="GET">
+                <form action="{{ route('admin.private-factures.export-to-excel') }}" method="GET">
                         <p class="float-right mb-2">
                             <button type="submit" value="pdf" class="btn btn-success">Exporter En Excel</button>
                         </p>

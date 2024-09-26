@@ -88,7 +88,7 @@ class FactureController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any invoice !');
         }
 
-        $factures = Facture::where('drink_order_no','!=','')->take(200)->orderBy('id','desc')->get();
+        $factures = Facture::where('drink_order_no','!=','')->take(300)->orderBy('id','desc')->get();
         return view('backend.pages.invoice.index',compact('factures'));
     }
 
@@ -305,6 +305,7 @@ class FactureController extends Controller
             'item_total_amount'=>$item_total_amount,
             'cump'=>$cump,
             'employe_id'=> $employe_id,
+            'created_at'=> Carbon::now(),
         );
           $data1[] = $data;
       }
@@ -347,6 +348,7 @@ class FactureController extends Controller
             $facture->employe_id = $employe_id;
             $facture->auteur = $this->user->name;
             $facture->invoice_signature_date = Carbon::now();
+            $facture->created_at = Carbon::now();
             $facture->save();
 
 
@@ -508,6 +510,7 @@ class FactureController extends Controller
             'item_price_wvat'=>$item_price_wvat,
             'item_total_amount'=>$item_total_amount,
             'employe_id'=> $employe_id,
+            'created_at'=> Carbon::now(),
         );
           $data1[] = $data;
       }
@@ -548,6 +551,7 @@ class FactureController extends Controller
             $facture->employe_id = $employe_id;
             $facture->auteur = $this->user->name;
             $facture->invoice_signature_date = Carbon::now();
+            $facture->created_at = Carbon::now();
             $facture->save();
 
             for( $count = 0; $count < count($barrist_item_id); $count++ )
@@ -707,6 +711,7 @@ class FactureController extends Controller
             'item_price_wvat'=>$item_price_wvat,
             'item_total_amount'=>$item_total_amount,
             'employe_id'=> $employe_id,
+            'created_at'=> Carbon::now(),
         );
           $data1[] = $data;
       }
@@ -746,6 +751,7 @@ class FactureController extends Controller
             $facture->employe_id = $employe_id;
             $facture->auteur = $this->user->name;
             $facture->invoice_signature_date = Carbon::now();
+            $facture->created_at = Carbon::now();
             $facture->save();
 
             for( $count = 0; $count < count($food_item_id); $count++ )
@@ -905,6 +911,7 @@ class FactureController extends Controller
             'item_price_wvat'=>$item_price_wvat,
             'item_total_amount'=>$item_total_amount,
             'employe_id'=> $employe_id,
+            'created_at'=> Carbon::now(),
         );
           $data1[] = $data;
       }
@@ -944,6 +951,7 @@ class FactureController extends Controller
             $facture->employe_id = $employe_id;
             $facture->auteur = $this->user->name;
             $facture->invoice_signature_date = Carbon::now();
+            $facture->created_at = Carbon::now();
             $facture->save();
 
             for( $count = 0; $count < count($bartender_item_id); $count++ )
@@ -1100,6 +1108,7 @@ class FactureController extends Controller
             'item_price_wvat'=>$item_price_wvat,
             'item_total_amount'=>$item_total_amount,
             'employe_id'=> $employe_id,
+            'created_at'=> Carbon::now(),
         );
           $data1[] = $data;
       }
@@ -1139,6 +1148,7 @@ class FactureController extends Controller
             $facture->employe_id = $employe_id;
             $facture->auteur = $this->user->name;
             $facture->invoice_signature_date = Carbon::now();
+            $facture->created_at = Carbon::now();
             $facture->save();
 
             BookingBooking::where('booking_no', '=', $request->booking_no)
@@ -1205,6 +1215,7 @@ class FactureController extends Controller
             'item_price_wvat'=>$item_price_wvat,
             'item_total_amount'=>$item_total_amount,
             'employe_id'=> $employe_id,
+            'created_at'=> Carbon::now(),
         );
           $data1[] = $data;
       }
@@ -1244,6 +1255,7 @@ class FactureController extends Controller
             $facture->employe_id = $employe_id;
             $facture->auteur = $this->user->name;
             $facture->invoice_signature_date = Carbon::now();
+            $facture->created_at = Carbon::now();
             $facture->save();
 
             BookingBooking::where('booking_no', '=', $request->booking_no)
@@ -1310,6 +1322,7 @@ class FactureController extends Controller
             'item_price_wvat'=>$item_price_wvat,
             'item_total_amount'=>$item_total_amount,
             'employe_id'=> $employe_id,
+            'created_at'=> Carbon::now(),
         );
           $data1[] = $data;
       }
@@ -1349,6 +1362,7 @@ class FactureController extends Controller
             $facture->employe_id = $employe_id;
             $facture->auteur = $this->user->name;
             $facture->invoice_signature_date = Carbon::now();
+            $facture->created_at = Carbon::now();
             $facture->save();
 
             BookingBooking::where('booking_no', '=', $request->booking_no)
@@ -1415,6 +1429,7 @@ class FactureController extends Controller
             'item_price_wvat'=>$item_price_wvat,
             'item_total_amount'=>$item_total_amount,
             'employe_id'=> $employe_id,
+            'created_at'=> Carbon::now(),
         );
           $data1[] = $data;
       }
@@ -1454,6 +1469,7 @@ class FactureController extends Controller
             $facture->employe_id = $employe_id;
             $facture->auteur = $this->user->name;
             $facture->invoice_signature_date = Carbon::now();
+            $facture->created_at = Carbon::now();
             $facture->save();
 
             BookingBooking::where('booking_no', '=', $request->booking_no)
@@ -1520,6 +1536,7 @@ class FactureController extends Controller
             'item_price_wvat'=>$item_price_wvat,
             'item_total_amount'=>$item_total_amount,
             'employe_id'=> $employe_id,
+            'created_at'=> Carbon::now(),
         );
           $data1[] = $data;
       }
@@ -1559,6 +1576,7 @@ class FactureController extends Controller
             $facture->employe_id = $employe_id;
             $facture->auteur = $this->user->name;
             $facture->invoice_signature_date = Carbon::now();
+            $facture->created_at = Carbon::now();
             $facture->save();
 
             BookingBooking::where('booking_no', '=', $request->booking_no)
@@ -1626,6 +1644,7 @@ class FactureController extends Controller
             'item_price_wvat'=>$item_price_wvat,
             'item_total_amount'=>$item_total_amount,
             'employe_id'=> $employe_id,
+            'created_at'=> Carbon::now(),
         );
           $data1[] = $data;
       }
@@ -1665,6 +1684,7 @@ class FactureController extends Controller
             $facture->employe_id = $employe_id;
             $facture->auteur = $this->user->name;
             $facture->invoice_signature_date = Carbon::now();
+            $facture->created_at = Carbon::now();
             $facture->save();
 
             BookingBooking::where('booking_no', '=', $request->booking_no)

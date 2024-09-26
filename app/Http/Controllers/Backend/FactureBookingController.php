@@ -27,6 +27,8 @@ use App\Models\KidnessSpace;
 use App\Models\EGRClient;
 use App\Models\BookingBookingDetail;
 use App\Models\BookingBooking;
+use App\Models\NoteCreditDetail;
+use App\Models\NoteCredit;
 
 class FactureBookingController extends Controller
 {
@@ -48,7 +50,7 @@ class FactureBookingController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any invoice !');
         }
 
-        $factures = FactureDetail::where('salle_id','!=','')->take(50)->orderBy('id','desc')->get();
+        $factures = FactureDetail::where('salle_id','!=','')->take(100)->orderBy('id','desc')->get();
         return view('backend.pages.invoice_booking.salle',compact('factures'));
     }
 
@@ -58,7 +60,7 @@ class FactureBookingController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any invoice !');
         }
 
-        $factures = FactureDetail::where('service_id','!=','')->take(50)->orderBy('id','desc')->get();
+        $factures = FactureDetail::where('service_id','!=','')->take(100)->orderBy('id','desc')->get();
         return view('backend.pages.invoice_booking.service',compact('factures'));
     }
 

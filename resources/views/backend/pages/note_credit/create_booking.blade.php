@@ -259,9 +259,27 @@
                             </tr>
                             @foreach($datas as $data)
                             <tr>  
-                                <td><select class="form-control" name="drink_id[]" id="drink_id">
-                                <option value="{{ $data->drink_id }}" class="form-control">{{ $data->drink->name }}</option>
-                                </select></td>  
+                                <td>@if($data->salle_id)<select class="form-control" name="salle_id[]" id="salle_id">
+                                <option value="{{ $data->salle_id }}" class="form-control">{{ $data->salle->name }}</option>
+                                </select>
+                                @elseif($data->service_id)
+                                <select class="form-control" name="service_id[]" id="service_id">
+                                <option value="{{ $data->service_id }}" class="form-control">{{ $data->service->name }}</option>
+                                </select>
+                                @elseif($data->breakfast_id)
+                                <select class="form-control" name="breakfast_id[]" id="breakfast_id">
+                                <option value="{{ $data->breakfast_id }}" class="form-control">{{ $data->breakFast->name }}</option>
+                                </select>
+                                @elseif($data->swiming_pool_id)
+                                <select class="form-control" name="swiming_pool_id[]" id="swiming_pool_id">
+                                <option value="{{ $data->swiming_pool_id }}" class="form-control">{{ $data->swimingPool->name }}</option>
+                                </select>
+                                @elseif($data->kidness_space_id)
+                                <select class="form-control" name="kidness_space_id[]" id="kidness_space_id">
+                                <option value="{{ $data->kidness_space_id }}" class="form-control">{{ $data->kidnessSpace->name }}</option>
+                                </select>
+                                @endif
+                            </td>  
                                 <td><input type="number" step='any' min='0' value="{{ $data->item_quantity }}" name="item_quantity[]" placeholder="Quantite" class="form-control" @if(Auth::guard('admin')->user()->can('note_credit.create')) @else readonly @endif /></td>  
                                 <td><input type="number" step='any' min='0' value="{{ $data->item_price }}" @if(Auth::guard('admin')->user()->can('note_credit.create')) @else readonly @endif name="item_price[]" placeholder="Prix" class="form-control" /></td>
                                 <td><input type="number" step='any' min='0' name="item_ct[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('note_credit.create')) @else readonly @endif/></td>   

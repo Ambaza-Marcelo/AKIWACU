@@ -138,22 +138,22 @@ class ChiffreAffaireExport implements FromCollection, WithMapping, WithHeadings
             $table = "";
         }
 
-        if ($data->cancelled_invoice == 1 && $data->invoice_number == $invoice_ref) {
-            $note_credit = "facture d'avoir ";
-            $item_price_nvat = -$data->item_price_nvat;
-            $vat = -$data->vat;
-            $item_total_amount = -$data->item_total_amount;
-        }else{
+        if ($data->invoice_number != $data->invoice_ref) {
             $note_credit = "Facture Normale";
             $item_price_nvat = $data->item_price_nvat;
             $vat = $data->vat;
             $item_total_amount = $data->item_total_amount;
+        }else{
+            $note_credit = "facture d'avoir ";
+            $item_price_nvat = -$data->item_price_nvat;
+            $vat = -$data->vat;
+            $item_total_amount = -$data->item_total_amount;
         }
 
         return [
             $data->id,
-            //$data->created_at,
-           //$data->updated_at,
+            //Carbon::parse($data->created_at)->format('d/m/Y H:i:s'),
+            Carbon::parse($data->updated_at)->format('d/m/Y H:i:s'),
             Carbon::parse($data->invoice_date)->format('d/m/Y'),
 			$data->invoice_number,
 			$order_no,
@@ -185,7 +185,7 @@ class ChiffreAffaireExport implements FromCollection, WithMapping, WithHeadings
         return [
             '#',
             //'Created at',
-            //'updated at ',
+            'updated at ',
             'Date de facturation',
             'No Facture',
             'No Commande',

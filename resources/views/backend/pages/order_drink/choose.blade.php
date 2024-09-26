@@ -42,6 +42,7 @@
                 <div class="card-body">
                     <h4 class="header-title">@lang('Thank You To Choose')</h4>
                     @include('backend.layouts.partials.messages')
+                    @if (Auth::guard('admin')->user()->can('drink_order_client.view') || Auth::guard('admin')->user()->can('food_order_client.view'))
                     <div class="row">
                         <div class="col-md-6 mb-3 mb-lg-0">
                             <div class="card">
@@ -76,7 +77,9 @@
                             </div><br>
                         </div>
                     </div>
+                    @endif
                     <div class="row">
+                        @if (Auth::guard('admin')->user()->can('drink_order_client.view'))
                         <div class="col-md-6 mb-3 mb-lg-0">
                             <div class="card">
                                 <div class="seo-fact sbg5">
@@ -92,8 +95,10 @@
                                     </a>
                                 </div>
                             </div><br>
+                            @endif
                         </div>
                         <div class="col-md-6 mb-3 mb-lg-0">
+                            @if (Auth::guard('admin')->user()->can('food_order_client.view'))
                             <div class="card">
                                 <div class="seo-fact sbg6">
                                     <a href="{{ route('admin.order_kitchens.listAll') }}">
@@ -108,6 +113,7 @@
                                     </a>
                                 </div>
                             </div><br>
+                            @endif
                         </div>
                     </div>
                 </div>

@@ -81,7 +81,7 @@
                                     <td>{{ $order->description }}</td>
                                     <td>{{ $order->created_by }}</td>
                                     <td>
-                                        @if (Auth::guard('admin')->user()->can('drink_order_client.delete'))
+                                        @if (Auth::guard('admin')->user()->can('drink_order_client.reject'))
                                         <a href="{{ route('admin.bartender-orders.generatepdf',$order->order_no) }}"><img src="{{ asset('img/ISSh.gif') }}" width="60" title="Télécharger d'abord le document et puis imprimer"></a>
                                         @endif
                                         @if (Auth::guard('admin')->user()->can('drink_order_client.validate'))

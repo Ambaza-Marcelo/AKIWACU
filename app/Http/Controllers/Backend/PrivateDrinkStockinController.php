@@ -47,7 +47,7 @@ class PrivateDrinkStockinController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any stockin !');
         }
 
-        $stockins = PrivateDrinkStockin::all();
+        $stockins = PrivateDrinkStockin::orderBy('id','desc')->get();
         return view('backend.pages.private_drink_stockin.index', compact('stockins'));
     }
 
