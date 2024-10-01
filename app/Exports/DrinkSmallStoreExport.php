@@ -32,11 +32,11 @@ class DrinkSmallStoreExport implements FromCollection, WithMapping, WithHeadings
             $data->drink->code,
             $data->quantity_bottle,
             $data->drink->unit,
-            $data->purchase_price,
+            //$data->purchase_price,
             $data->drink->cump,
             $data->selling_price,
-            ($data->purchase_price * $data->quantity_bottle),
-            ($data->selling_price * $data->quantity_bottle),
+            ($data->drink->cump * $data->quantity_bottle),
+            ($data->drink->selling_price * $data->quantity_bottle),
         ] ;
  
  
@@ -49,10 +49,10 @@ class DrinkSmallStoreExport implements FromCollection, WithMapping, WithHeadings
             'Code',
             'Quantite',
             'Unité',
-            'P.A',
+            //'P.A',
             'C.U.M.P',
             'P.V',
-            'Total P.A',
+            'Total CMP',
             'Total P.V'
         ] ;
     }

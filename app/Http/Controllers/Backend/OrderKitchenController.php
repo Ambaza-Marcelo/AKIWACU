@@ -157,6 +157,7 @@ class OrderKitchenController extends Controller
             $order->description = $description;
             $order->table_id = $table_id;
             $order->status = $status;
+            $order->created_at = Carbon::now();
             $order->save();
             //insert details of order No.
             for( $count = 0; $count < count($food_item_id); $count++ ){
@@ -176,6 +177,7 @@ class OrderKitchenController extends Controller
                     'order_no' => $order_no,
                     'order_signature' => $order_signature,
                     'employe_id' => $employe_id,
+                    'created_at'=> Carbon::now(),
                     //'accompagnement_id' => $accompagnement_id[$count],
 
                 );

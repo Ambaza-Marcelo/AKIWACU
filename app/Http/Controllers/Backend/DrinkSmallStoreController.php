@@ -146,11 +146,12 @@ class DrinkSmallStoreController extends Controller
         $dateT =  $currentTime->toDateTimeString();
 
         $totalPrixVente = DB::table('drink_small_store_details')->where('code',$code)->sum('total_selling_value');
+        $totalQuantity = DB::table('drink_small_store_details')->where('code',$code)->sum('quantity_bottle');
 
         $store_signature = DrinkSmallStoreDetail::where('code',$code)->value('store_signature');
 
         $dateTime = str_replace([' ',':'], '_', $dateT);
-        $pdf = PDF::loadView('backend.pages.document.drink_small_store_status',compact('datas','dateTime','setting','totalPrixAchat','totalPrixVente','store_signature'))->setPaper('a4', 'landscape');
+        $pdf = PDF::loadView('backend.pages.document.drink_small_store_status',compact('datas','dateTime','setting','totalPrixAchat','totalPrixVente','store_signature','currentTime','totalQuantity'))->setPaper('a4', 'landscape');
 
         Storage::put('public/drink_small_store/Etat_stock/'.'ETAT_DU_STOCK_'.$dateTime.'.pdf', $pdf->output());
 

@@ -190,6 +190,7 @@ class FoodStockinController extends Controller
             $stockin->status = 1;
             $stockin->item_movement_type = $item_movement_type;
             $stockin->description = $description;
+            $stockin->created_at = \Carbon\Carbon::now();
             $stockin->save();
 
             DB::commit();

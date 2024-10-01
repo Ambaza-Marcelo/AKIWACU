@@ -135,6 +135,7 @@ class MaterialRequisitionController extends Controller
             $requisition->type_store = $type_store;
             $requisition->created_by = $created_by;
             $requisition->description = $description;
+            $requisition->created_at = \Carbon\Carbon::now();
             $requisition->save();
             //insert details of requisition No.
             for( $count = 0; $count < count($material_id); $count++ ){
@@ -153,6 +154,7 @@ class MaterialRequisitionController extends Controller
                     'requisition_no' => $requisition_no,
                     'type_store' => $type_store,
                     'requisition_signature' => $requisition_signature,
+                    'created_at' => \Carbon\Carbon::now()
                 );
                 $insert_data[] = $data;
             }

@@ -196,6 +196,7 @@ class DrinkStockoutController extends Controller
             $stockout->created_by = $created_by;
             $stockout->status = 1;
             $stockout->description = $description;
+            $stockout->created_at = \Carbon\Carbon::now();
             $stockout->save();
 
 

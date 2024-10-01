@@ -209,6 +209,7 @@ class MaterialStockinController extends Controller
             $stockin->created_by = $created_by;
             $stockin->status = 1;
             $stockin->description = $description;
+            $stockin->created_at = \Carbon\Carbon::now();
             $stockin->save();
 
             DB::commit();
@@ -325,6 +326,7 @@ class MaterialStockinController extends Controller
             $stockin->created_by = $created_by;
             $stockin->status = 1;
             $stockin->description = $description;
+            $stockin->created_at = \Carbon\Carbon::now();
             $stockin->save();
 
             DB::commit();
@@ -442,6 +444,7 @@ class MaterialStockinController extends Controller
             $stockin->created_by = $created_by;
             $stockin->status = 1;
             $stockin->description = $description;
+            $stockin->created_at = \Carbon\Carbon::now();
             $stockin->save();
 
             DB::commit();
@@ -672,6 +675,9 @@ class MaterialStockinController extends Controller
                     'value_stockin' => $data->total_amount_purchase,
                     'quantity_stock_final' => $quantityStockInitialDestination + $data->quantity,
                     'value_stock_final' => $valeurStockInitialDestination + $data->total_amount_purchase,
+                    'document_no' => $stockin_no,
+                    'type_transaction' => $data->item_movement_type,
+                    'description' => $data->description,
                     'created_by' => $this->user->name,
                     'created_at' => \Carbon\Carbon::now()
                 );
@@ -734,6 +740,9 @@ class MaterialStockinController extends Controller
                     'value_stockin' => $data->total_amount_purchase,
                     'quantity_stock_final' => $quantityStockInitialDestination + $data->quantity,
                     'value_stock_final' => $valeurStockInitialDestination + $data->total_amount_purchase,
+                    'document_no' => $stockin_no,
+                    'type_transaction' => $data->item_movement_type,
+                    'description' => $data->description,
                     'created_by' => $this->user->name,
                     'created_at' => \Carbon\Carbon::now()
                 );
@@ -797,6 +806,9 @@ class MaterialStockinController extends Controller
                     'value_stockin' => $data->total_amount_purchase,
                     'quantity_stock_final' => $quantityStockInitialDestination + $data->quantity,
                     'value_stock_final' => $valeurStockInitialDestination + $data->total_amount_purchase,
+                    'document_no' => $stockin_no,
+                    'type_transaction' => $data->item_movement_type,
+                    'description' => $data->description,
                     'created_by' => $this->user->name,
                     'created_at' => \Carbon\Carbon::now()
                 );

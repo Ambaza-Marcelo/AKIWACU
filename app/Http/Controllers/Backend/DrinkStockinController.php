@@ -194,6 +194,7 @@ class DrinkStockinController extends Controller
             $stockin->created_by = $created_by;
             $stockin->status = 1;
             $stockin->description = $description;
+            $stockin->created_at = \Carbon\Carbon::now();
             $stockin->save();
 
             DB::commit();

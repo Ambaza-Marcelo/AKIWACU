@@ -203,6 +203,7 @@ class DrinkTransferController extends Controller
             $transfer->created_by = $created_by;
             $transfer->status = 1;
             $transfer->description = $description;
+            $transfer->created_at = \Carbon\Carbon::now();
             $transfer->save();
 
             DB::commit();

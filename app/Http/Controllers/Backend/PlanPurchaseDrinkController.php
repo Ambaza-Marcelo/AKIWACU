@@ -124,6 +124,7 @@ class PlanPurchaseDrinkController extends Controller
             $plan->plan_no = $plan_no;
             $plan->created_by = $created_by;
             $plan->description = $description;
+            $plan->created_at = \Carbon\Carbon::now();
             $plan->save();
             //insert details of plan No.
             for( $count = 0; $count < count($drink_id); $count++ ){
@@ -142,6 +143,7 @@ class PlanPurchaseDrinkController extends Controller
                     'created_by' => $created_by,
                     'plan_no' => $plan_no,
                     'plan_signature' => $plan_signature,
+                    'created_at' => \Carbon\Carbon::now()
                 );
                 $insert_data[] = $data;
             }

@@ -3376,6 +3376,13 @@ class FactureController extends Controller
         return view('backend.pages.invoice.reset', compact('facture','datas','clients'));
     }
 
+    public function voirFactureCash($invoice_number){
+        $facture = FactureDetail::where('invoice_number',$invoice_number)->first();
+        $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
+        $clients =  EGRClient::orderBy('customer_name','asc')->get();
+        return view('backend.pages.invoice.cash', compact('facture','datas','clients'));
+    }
+
     public function voirFactureCredit($invoice_number){
         $facture = FactureDetail::where('invoice_number',$invoice_number)->first();
         $datas = FactureDetail::where('invoice_number', $invoice_number)->get();

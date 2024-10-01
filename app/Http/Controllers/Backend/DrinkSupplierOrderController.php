@@ -156,6 +156,7 @@ class DrinkSupplierOrderController extends Controller
             $order->created_by = $created_by;
             $order->status = 1;
             $order->description = $description;
+            $order->created_at = \Carbon\Carbon::now();
             $order->save();
 
             DB::commit();

@@ -137,6 +137,7 @@ class DrinkRequisitionController extends Controller
             $requisition->requisition_no = $requisition_no;
             $requisition->created_by = $created_by;
             $requisition->description = $description;
+            $requisition->created_at = \Carbon\Carbon::now();
             $requisition->save();
             //insert details of requisition No.
             for( $count = 0; $count < count($drink_id); $count++ ){
@@ -155,6 +156,7 @@ class DrinkRequisitionController extends Controller
                     'created_by' => $created_by,
                     'requisition_no' => $requisition_no,
                     'requisition_signature' => $requisition_signature,
+                    'created_at' => \Carbon\Carbon::now()
                 );
                 $insert_data[] = $data;
             }

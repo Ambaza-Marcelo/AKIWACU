@@ -155,6 +155,7 @@ class BarristOrderController extends Controller
             $order->description = $description;
             $order->status = $status;
             $order->table_id = $table_id;
+            $order->created_at = Carbon::now();
             $order->save();
             //insert details of order No.
             for( $count = 0; $count < count($barrist_item_id); $count++ ){
@@ -174,6 +175,7 @@ class BarristOrderController extends Controller
                     'status' => $status,
                     'order_signature' => $order_signature,
                     'employe_id' => $employe_id,
+                    'created_at'=> Carbon::now(),
                     //'ingredient_id' => $ingredient_id[$count]
                 );
                 $insert_data[] = $data;

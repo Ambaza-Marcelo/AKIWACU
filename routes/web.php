@@ -63,7 +63,8 @@ Route::group(['prefix' => 'admin'], function () {
 
 
 
-    Route::get('EBMS/voir-facture-a-valider/{invoice_number}','Backend\FactureController@voirFactureCredit')->name('admin.voir-facture.credit');
+    Route::get('Akiwacu/voir-facture-a-valider-cash/{invoice_number}','Backend\FactureController@voirFactureCash')->name('admin.voir-facture.cash');
+    Route::get('Akiwacu/voir-facture-a-valider/{invoice_number}','Backend\FactureController@voirFactureCredit')->name('admin.voir-facture.credit');
 
     Route::put('eBms/facture-boisson/valider-facture-a-credit/{invoice_number}','Backend\FactureController@validerFactureBoissonCredit')->name('admin.facture-boisson.valider-credit');
     Route::put('eBms/facture-cuisine/valider-facture-a-credit/{invoice_number}','Backend\FactureController@validerFactureCuisineCredit')->name('admin.facture-cuisine.valider-credit');

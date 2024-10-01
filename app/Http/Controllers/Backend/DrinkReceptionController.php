@@ -231,6 +231,7 @@ class DrinkReceptionController extends Controller
             $reception->created_by = $created_by;
             $reception->status = 1;
             $reception->description = $description;
+            $reception->created_at = \Carbon\Carbon::now();
             $reception->save();
 
             DB::commit();

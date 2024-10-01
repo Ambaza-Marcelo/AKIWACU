@@ -233,6 +233,7 @@ class MaterialReceptionController extends Controller
             $reception->created_by = $created_by;
             $reception->status = 1;
             $reception->description = $description;
+            $reception->created_at = \Carbon\Carbon::now();
             $reception->save();
 
             DB::commit();
@@ -382,6 +383,7 @@ class MaterialReceptionController extends Controller
             $reception->created_by = $created_by;
             $reception->status = 1;
             $reception->description = $description;
+            $reception->created_at = \Carbon\Carbon::now();
             $reception->save();
 
             DB::commit();
@@ -709,6 +711,9 @@ class MaterialReceptionController extends Controller
                     'quantity_reception' => $data->quantity_received,
                     'value_reception' => $data->total_amount_received,
                     'quantity_stock_final' => $quantityStockInitialDestination - $data->quantity_received,
+                    'document_no' => $reception_no,
+                    'type_transaction' => 'ACHATS',
+                    'description' => $data->description,
                     'value_stock_final' => $valeurStockInitialDestination - $data->total_amount_received,
                     'created_by' => $this->user->name,
                     'created_at' => \Carbon\Carbon::now()

@@ -210,6 +210,7 @@ class MaterialStockoutController extends Controller
             $stockout->created_by = $created_by;
             $stockout->status = 1;
             $stockout->description = $description;
+            $stockout->created_at = \Carbon\Carbon::now();
             $stockout->save();
 
             DB::commit();
@@ -327,6 +328,7 @@ class MaterialStockoutController extends Controller
             $stockout->created_by = $created_by;
             $stockout->status = 1;
             $stockout->description = $description;
+            $stockout->created_at = \Carbon\Carbon::now();
             $stockout->save();
 
             DB::commit();
@@ -445,6 +447,7 @@ class MaterialStockoutController extends Controller
             $stockout->created_by = $created_by;
             $stockout->status = 1;
             $stockout->description = $description;
+            $stockout->created_at = \Carbon\Carbon::now();
             $stockout->save();
 
             DB::commit();
@@ -674,6 +677,9 @@ class MaterialStockoutController extends Controller
                     'value_stockout' => $data->total_purchase_value,
                     'quantity_stock_final' => $quantityStockInitial - $data->quantity,
                     'value_stock_final' => $valeurStockInitial - $data->total_purchase_value,
+                    'document_no' => $stockout_no,
+                    'type_transaction' => $data->item_movement_type,
+                    'description' => $data->description,
                     'created_by' => $this->user->name,
                     'created_at' => \Carbon\Carbon::now()
                 );
@@ -757,6 +763,9 @@ class MaterialStockoutController extends Controller
                     'value_stockout' => $data->value_stockout,
                     'quantity_stock_final' => $quantityStockInitial - $data->quantity,
                     'value_stock_final' => $valeurStockInitial - $data->total_purchase_value,
+                    'document_no' => $stockout_no,
+                    'type_transaction' => $data->item_movement_type,
+                    'description' => $data->description,
                     'created_by' => $this->user->name,
                     'created_at' => \Carbon\Carbon::now()
                 );
@@ -839,6 +848,9 @@ class MaterialStockoutController extends Controller
                     'value_stockout' => $data->value_stockout,
                     'quantity_stock_final' => $quantityStockInitial - $data->quantity,
                     'value_stock_final' => $valeurStockInitial - $data->total_purchase_value,
+                    'document_no' => $stockout_no,
+                    'type_transaction' => $data->item_movement_type,
+                    'description' => $data->description,
                     'created_by' => $this->user->name,
                     'created_at' => \Carbon\Carbon::now()
                 );

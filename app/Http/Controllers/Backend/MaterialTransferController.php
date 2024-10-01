@@ -194,6 +194,7 @@ class MaterialTransferController extends Controller
             $transfer->created_by = $created_by;
             $transfer->status = 1;
             $transfer->description = $description;
+            $transfer->created_at = \Carbon\Carbon::now();
             $transfer->save();
 
             DB::commit();
@@ -310,6 +311,7 @@ class MaterialTransferController extends Controller
             $transfer->created_by = $created_by;
             $transfer->status = 1;
             $transfer->description = $description;
+            $transfer->created_at = \Carbon\Carbon::now();
             $transfer->save();
 
             DB::commit();
@@ -555,6 +557,9 @@ class MaterialTransferController extends Controller
                     'value_transfer' => $data->total_value_transfered,
                     'quantity_stock_final' => $quantityStockInitialOrigine - $data->quantity_transfered,
                     'value_stock_final' => $valeurStockInitialOrigine - $data->total_value_transfered,
+                    'document_no' => $transfer_no,
+                    'type_transaction' => "SORTIE TRANSFERT",
+                    'description' => $data->description,
                     'created_by' => $this->user->name,
                     'created_at' => \Carbon\Carbon::now()
                 );
@@ -573,6 +578,9 @@ class MaterialTransferController extends Controller
                     'value_transfer' => $data->total_value_transfered,
                     'quantity_stock_final' => $quantityStockInitialDestination + $data->quantity_transfered,
                     'value_stock_final' => $valeurStockInitialDestination + $data->total_value_transfered,
+                    'document_no' => $transfer_no,
+                    'type_transaction' => "ENTREE TRANSFERT",
+                    'description' => $data->description,
                     'created_by' => $this->user->name,
                     'created_at' => \Carbon\Carbon::now()
                 );
@@ -682,6 +690,9 @@ class MaterialTransferController extends Controller
                     'value_transfer' => $data->total_value_transfered,
                     'quantity_stock_final' => $quantityStockInitialOrigine - $data->quantity_transfered,
                     'value_stock_final' => $valeurStockInitialOrigine - $data->total_value_transfered,
+                    'document_no' => $transfer_no,
+                    'type_transaction' => "SORTIE TRANSFERT",
+                    'description' => $data->description,
                     'created_by' => $this->user->name,
                     'created_at' => \Carbon\Carbon::now()
                 );
@@ -700,6 +711,9 @@ class MaterialTransferController extends Controller
                     'value_transfer' => $data->total_value_transfered,
                     'quantity_stock_final' => $quantityStockInitialDestination + $data->quantity_transfered,
                     'value_stock_final' => $valeurStockInitialDestination + $data->total_value_transfered,
+                    'document_no' => $transfer_no,
+                    'type_transaction' => "ENTREE TRANSFERT",
+                    'description' => $data->description,
                     'created_by' => $this->user->name,
                     'created_at' => \Carbon\Carbon::now()
                 );

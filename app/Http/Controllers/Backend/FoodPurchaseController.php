@@ -115,6 +115,7 @@ class FoodPurchaseController extends Controller
             $purchase->purchase_no = $purchase_no;
             $purchase->created_by = $created_by;
             $purchase->description = $description;
+            $purchase->created_at = \Carbon\Carbon::now();
             $purchase->save();
             //insert details of purchase No.
             for( $count = 0; $count < count($food_id); $count++ ){
@@ -132,6 +133,7 @@ class FoodPurchaseController extends Controller
                     'created_by' => $created_by,
                     'purchase_no' => $purchase_no,
                     'purchase_signature' => $purchase_signature,
+                    'created_at' => \Carbon\Carbon::now()
                 );
                 $insert_data[] = $data;
             }

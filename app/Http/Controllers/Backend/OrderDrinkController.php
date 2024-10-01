@@ -159,6 +159,7 @@ class OrderDrinkController extends Controller
             $order->description = $description;
             $order->table_id = $table_id;
             $order->status = $status;
+            $order->created_at = Carbon::now();
             $order->save();
 
             //insert details of order No.
@@ -179,6 +180,7 @@ class OrderDrinkController extends Controller
                     'status' => $status,
                     'order_signature' => $order_signature,
                     'employe_id' => $employe_id,
+                    'created_at'=> Carbon::now(),
                 );
                 $insert_data[] = $data;
             }

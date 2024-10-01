@@ -151,6 +151,7 @@ class BartenderOrderController extends Controller
             $order->description = $description;
             $order->status = $status;
             $order->table_id = $table_id;
+            $order->created_at = Carbon::now();
             $order->save();
             //insert details of order No.
             for( $count = 0; $count < count($bartender_item_id); $count++ ){
@@ -169,6 +170,7 @@ class BartenderOrderController extends Controller
                     'order_no' => $order_no,
                     'status' => $status,
                     'order_signature' => $order_signature,
+                    'created_at'=> Carbon::now(),
                     'employe_id' => $employe_id
                 );
                 $insert_data[] = $data;

@@ -111,6 +111,7 @@ class DrinkController extends Controller
         $drink->code = $reference.date("y").substr(number_format(time() * mt_rand(), 0, '', ''), 0, 6);
         $drink->unit = $request->unit;
         $drink->purchase_price = $request->purchase_price;
+        $drink->cump = $request->purchase_price;
         $drink->quantity_ml = $request->quantity_ml;
 
         $drink->vat = $request->vat;
@@ -155,6 +156,7 @@ class DrinkController extends Controller
                 $drink_in_big_store->vat = $vat;
                 $drink_in_big_store->brarudi_price = $brarudi_price;
                 $drink_in_big_store->purchase_price = $purchase_price;
+                $drink_in_big_store->cump = $purchase_price;
                 $drink_in_big_store->selling_price = $selling_price;
                 $drink_in_big_store->total_value_bottle = $quantity_bottle * $drink->purchase_price;
                 $drink_in_big_store->total_purchase_value = $quantity_bottle * $drink->purchase_price;
@@ -173,6 +175,7 @@ class DrinkController extends Controller
                 $drink_in_big_store->vat = $vat;
                 $drink_in_big_store->brarudi_price = $brarudi_price;
                 $drink_in_big_store->purchase_price = $purchase_price;
+                $drink_in_big_store->cump = $purchase_price;
                 $drink_in_big_store->selling_price = $selling_price;
                 $drink_in_big_store->total_value_bottle = $quantity_bottle * $drink->purchase_price;
                 $drink_in_big_store->total_purchase_value = $quantity_bottle * $drink->purchase_price;
@@ -205,6 +208,7 @@ class DrinkController extends Controller
                 $drink_in_small_store->vat = $vat;
                 $drink_in_small_store->brarudi_price = $brarudi_price;
                 $drink_in_small_store->purchase_price = $purchase_price;
+                $drink_in_small_store->cump = $purchase_price;
                 $drink_in_small_store->selling_price = $selling_price;
                 $drink_in_small_store->total_value_bottle = $quantity_bottle * $drink->purchase_price;
                 $drink_in_small_store->total_purchase_value = $quantity_bottle * $drink->purchase_price;
@@ -222,6 +226,7 @@ class DrinkController extends Controller
                 $drink_in_small_store->specification = $specification;
                 $drink_in_small_store->vat = $vat;
                 $drink_in_small_store->brarudi_price = $brarudi_price;
+                $drink_in_small_store->cump = $purchase_price;
                 $drink_in_small_store->purchase_price = $purchase_price;
                 $drink_in_small_store->selling_price = $selling_price;
                 $drink_in_small_store->total_value_bottle = $quantity_bottle * $drink->purchase_price;
@@ -244,6 +249,7 @@ class DrinkController extends Controller
                 $drink_in_extra_big_store->vat = $vat;
                 $drink_in_extra_big_store->brarudi_price = $brarudi_price;
                 $drink_in_extra_big_store->purchase_price = $purchase_price;
+                $drink_in_extra_big_store->cump = $purchase_price;
                 $drink_in_extra_big_store->selling_price = $selling_price;
                 $drink_in_extra_big_store->total_value_bottle = $quantity_bottle * $drink->purchase_price;
                 $drink_in_extra_big_store->total_purchase_value = $quantity_bottle * $drink->purchase_price;
@@ -262,6 +268,7 @@ class DrinkController extends Controller
                 $drink_in_extra_big_store->vat = $vat;
                 $drink_in_extra_big_store->brarudi_price = $brarudi_price;
                 $drink_in_extra_big_store->purchase_price = $purchase_price;
+                $drink_in_extra_big_store->cump = $purchase_price;
                 $drink_in_extra_big_store->selling_price = $selling_price;
                 $drink_in_extra_big_store->total_value_bottle = $quantity_bottle * $drink->purchase_price;
                 $drink_in_extra_big_store->total_purchase_value = $quantity_bottle * $drink->purchase_price;
@@ -361,6 +368,7 @@ class DrinkController extends Controller
         $drink->quantity_ml = $request->quantity_ml;
         $drink->unit = $request->unit;
         $drink->purchase_price = $request->purchase_price;
+        $drink->cump = $request->purchase_price;
         $drink->quantity_ml = $request->quantity_ml;
 
         $drink->vat = $request->vat;
@@ -403,6 +411,7 @@ class DrinkController extends Controller
                 $drink_in_big_store->quantity_ml = $quantity_ml;
                 $drink_in_big_store->threshold_quantity = $threshold_quantity;
                 $drink_in_big_store->purchase_price = $purchase_price;
+                $drink_in_big_store->cump = $purchase_price;
                 $drink_in_big_store->selling_price = $selling_price;
                 $drink_in_big_store->vat = $vat;
                 $drink_in_big_store->brarudi_price = $brarudi_price;
@@ -419,6 +428,7 @@ class DrinkController extends Controller
                 $drink_in_big_store->quantity_bottle = $quantity_bottle;
                 $drink_in_big_store->quantity_ml = $quantity_ml;
                 $drink_in_big_store->threshold_quantity = $threshold_quantity;
+                $drink_in_big_store->cump = $purchase_price;
                 $drink_in_big_store->purchase_price = $purchase_price;
                 $drink_in_big_store->selling_price = $selling_price;
                 $drink_in_big_store->vat = $vat;
@@ -439,6 +449,7 @@ class DrinkController extends Controller
                 $drink_in_small_store->quantity_bottle = $quantity_bottle;
                 $drink_in_small_store->quantity_ml = $quantity_ml;
                 $drink_in_small_store->threshold_quantity = $threshold_quantity;
+                $drink_in_small_store->cump = $purchase_price;
                 $drink_in_small_store->purchase_price = $purchase_price;
                 $drink_in_small_store->selling_price = $selling_price;
                 $drink_in_small_store->vat = $vat;
@@ -456,6 +467,7 @@ class DrinkController extends Controller
                 $drink_in_small_store->quantity_bottle = $quantity_bottle;
                 $drink_in_small_store->quantity_ml = $quantity_ml;
                 $drink_in_small_store->threshold_quantity = $threshold_quantity;
+                $drink_in_small_store->cump = $purchase_price;
                 $drink_in_small_store->purchase_price = $purchase_price;
                 $drink_in_small_store->selling_price = $selling_price;
                 $drink_in_small_store->vat = $vat;
@@ -477,6 +489,7 @@ class DrinkController extends Controller
                 $drink_in_extra_big_store->quantity_ml = $quantity_ml;
                 $drink_in_extra_big_store->threshold_quantity = $threshold_quantity;
                 $drink_in_extra_big_store->specification = $specification;
+                $drink_in_extra_big_store->cump = $purchase_price;
                 $drink_in_extra_big_store->purchase_price = $purchase_price;
                 $drink_in_extra_big_store->selling_price = $selling_price;
                 $drink_in_extra_big_store->vat = $vat;
@@ -495,6 +508,7 @@ class DrinkController extends Controller
                 $drink_in_extra_big_store->quantity_ml = $quantity_ml;
                 $drink_in_extra_big_store->threshold_quantity = $threshold_quantity;
                 $drink_in_extra_big_store->specification = $specification;
+                $drink_in_extra_big_store->cump = $purchase_price;
                 $drink_in_extra_big_store->purchase_price = $purchase_price;
                 $drink_in_extra_big_store->selling_price = $selling_price;
                 $drink_in_extra_big_store->vat = $vat;
