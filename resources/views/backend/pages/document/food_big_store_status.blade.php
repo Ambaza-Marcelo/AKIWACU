@@ -6,6 +6,8 @@
         tr,th,td{
              border: 1px solid black;
              text-align: center;
+             width: auto;
+             font-size: 12px;
         }
 
     </style>
@@ -16,7 +18,7 @@
         <div>
             <div>
                 <div>
-                   <img src="img/eden_logo.png" width="200" height="65">
+                   <img src="img/eden_logo.png" width="200" height="85">
                 </div>
                 <div>
                     <div style="float: left;">
@@ -40,7 +42,7 @@
                     <br><br><br><br><br>
                     <br><br><br>
                     <div>
-                        <h2 style="text-align: center;text-decoration: underline;">ETAT DU STOCK DES NOURRITURES (GRAND STOCK)</h2>
+                        <h2 style="text-align: center;text-decoration: underline;">ETAT DU STOCK INTERMEDIAIRE DES NOURRITURES</h2>
                     </div>
                     <div>
                         <table style="border: 1px solid black;border-collapse: collapse;">
@@ -52,44 +54,27 @@
                                     <th>Quantite</th>
                                     <th>Unité</th>
                                     <th>C.U.M.P</th>
-                                    <th>P.A</th>
-                                    <th>Total P.A</th>
-                                    <th>N. Qtes</th>
-                                    <th>N. Unité</th>
-                                    <th>N. C.U.M.P</th>
-                                    <th>N. P.A</th>
-                                    <th>N. Total P.A</th>
+                                    <th>Total CMP</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($datas as $data)
                                <tr>
-                                    <td>{{ $data->id }}</td>
+                                    <td>{{ $loop->index+1 }}</td>
                                     <td>{{ $data->food->name }}</td>
                                     <td>{{ $data->food->code }}</td>
                                     <td>{{ $data->quantity }}</td>
                                     <td>{{ $data->unit }}</td>
                                     <td>{{ number_format($data->cump,0,',',' ')}}</td>
-                                    <td>{{ number_format($data->purchase_price,0,',',' ')}}</td>
-                                    <td>{{ number_format($data->total_purchase_value,0,',',' ')}}</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td>{{ number_format(($data->cump * $data->quantity),0,',',' ')}}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
                             <tfoot>
                                 <tr>
                                     <th>Total</th>
-                                    <th style="background-color: rgb(150,150,150);" colspan="6"></th>
+                                    <th style="background-color: rgb(150,150,150);" colspan="5"></th>
                                     <th>{{ number_format($totalPrixAchat,0,',',' ')}}</th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <td></td>
                                 </tr>
                             </tfoot>
                         </table>

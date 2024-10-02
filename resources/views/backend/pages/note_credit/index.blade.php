@@ -92,12 +92,9 @@
                                     <td>{{ $facture->invoice_signature }}</td>
                                     <td>{{ $facture->invoice_signature_date }}</td>
                                     <td>
-                                        @if (Auth::guard('admin')->user()->can('note_credit.create'))
-                                        @if($facture->statut != '1' && $facture->statut != '2')
+                                        @if (Auth::guard('admin')->user()->can('note_credit.view'))
                                         <a href="{{ route('admin.note-de-credit.facture',$facture->invoice_number) }}"><img src="{{ asset('img/ISSh.gif') }}" width="60" title="Télécharger d'abord le document et puis imprimer"></a>
                                         @endif
-                                        @endif
-                                        
                                         @if (Auth::guard('admin')->user()->can('note_credit.validate'))
                                         @if($facture->statut == 1)
                                          <a class="btn btn-primary text-white" href="@if(!empty($facture->drink_order_no)){{ route('admin.boissons-note-de-credit.valider', $facture->invoice_number) }} @elseif(!empty($facture->food_order_no)){{ route('admin.nourritures-note-de-credit.valider', $facture->invoice_number) }} @elseif(!empty($facture->bartender_order_no)){{ route('admin.bartender-note-de-credit.valider', $facture->invoice_number) }} @elseif(!empty($facture->barrist_order_no)){{ route('admin.barrista-note-de-credit.valider', $facture->invoice_number) }} @else{{ route('admin.booking-note-de-credit.valider', $facture->invoice_number) }} @endif"

@@ -76,9 +76,9 @@ class FoodRequisitionController extends Controller
 
         $rules = array(
                 'food_id.*'  => 'required',
-                'date'  => 'required',
+                //'date'  => 'required',
                 'quantity_requisitioned.*'  => 'required',
-                'unit.*'  => 'required',
+                //'unit.*'  => 'required',
                 'description'  => 'required'
             );
 
@@ -92,7 +92,7 @@ class FoodRequisitionController extends Controller
 
             try {DB::beginTransaction();
             $food_id = $request->food_id;
-            $date = $request->date;
+            $date = \Carbon\Carbon::now();
             $quantity_requisitioned = $request->quantity_requisitioned;
             $unit = $request->unit;
             $description =$request->description; 
@@ -124,7 +124,7 @@ class FoodRequisitionController extends Controller
                     'food_id' => $food_id[$count],
                     'date' => $date,
                     'quantity_requisitioned' => $quantity_requisitioned[$count],
-                    'unit' => $unit[$count],
+                    //'unit' => $unit[$count],
                     'price' => $price,
                     'description' => $description,
                     'total_value_requisitioned' => $total_value_requisitioned,

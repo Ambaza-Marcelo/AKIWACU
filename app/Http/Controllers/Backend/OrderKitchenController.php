@@ -546,7 +546,7 @@ class OrderKitchenController extends Controller
 
     public function exportToExcel(Request $request)
     {
-        return Excel::download(new FoodOrderClientExport, 'RAPPORT_COMMANDE_CUISINE.xlsx');
+        return Excel::download(new FoodOrderClientExport, 'RAPPORT DES COMMANDES CLIENTS A LA CUISINE.xlsx');
     }
 
     /**

@@ -7,6 +7,7 @@
              border: 1px solid black;
              text-align: center;
              width: auto;
+             font-size: 12px;
         }
 
     </style>
@@ -17,7 +18,7 @@
         <div>
             <div>
                 <div>
-                   <img src="img/eden_logo.png" width="200" height="65">
+                   <img src="img/eden_logo.png" width="200" height="85">
                 </div>
                 <div>
                     <div style="float: left;">
@@ -51,11 +52,12 @@
                                     <th>Code</th>
                                     <th>Unité de Mesure</th>
                                     <th>Qté Actuelle</th>
-                                    <th>V.Unitaire Actuelle</th>
+                                    <th>PA Actuelle</th>
                                     <th style="background-color: rgb(150,150,150);">Valeur Stock Actuelle</th>
                                     <th>Nouvelle Qté</th>
-                                    <th>Nouvelle V.U</th>
+                                    <th>Nouveau PA</th>
                                     <th style="background-color: rgb(150,150,150);">Nouvelle V du stock</th>
+                                    <th>Relicat</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -71,16 +73,21 @@
                                     <td>{{ $data->new_quantity }}</td>
                                     <td>{{ number_format($data->new_purchase_price,0,',',' ' )}}</td>
                                     <td style="background-color: rgb(150,150,150);">{{ number_format($data->new_total_purchase_value,0,',',' ' )}}</td>
+                                    <td>{{ $data->quantity - $data->new_quantity }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
                              <tfoot>
                                 <tr>
                                     <th>Totaux</th>
-                                    <th style="background-color: rgb(150,150,150);" colspan="5"></th>
+                                    <th style="background-color: rgb(150,150,150);" colspan="3"></th>
+                                    <th>{{number_format($totalQuantitActuelle,0,',',' ')}}</th>
+                                    <th style="background-color: rgb(150,150,150);"></th>
                                     <th>{{number_format($totalValueActuelle,0,',',' ')}}</th>
-                                    <th style="background-color: rgb(150,150,150);" colspan="2"></th>
+                                    <th>{{ number_format($totalQuantitNew,0,',',' ') }}</th>
+                                    <th style="background-color: rgb(150,150,150);"></th>
                                     <th>{{ number_format($totalValueNew,0,',',' ') }}</th>
+                                    <th></th>
                                 </tr>
                             </tfoot>
                         </table>

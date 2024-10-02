@@ -83,7 +83,7 @@ class FoodSmallReportController extends Controller
         Storage::put('public/food_small_store_report/'.'RAPPORT__STOCK_NOURRITURE_'.$d1.'_'.$d2.'.pdf', $pdf->output());
 
         // download pdf file
-        return $pdf->download('RAPPORT__STOCK_NOURRITURE_'.$dateTime.'.pdf');
+        return $pdf->download('RAPPORT DU PETIT STOCK DES NOURRITURES'.$dateTime.'.pdf');
 
         
     }

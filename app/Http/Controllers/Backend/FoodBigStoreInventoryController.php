@@ -267,6 +267,13 @@ class FoodBigStoreInventoryController extends Controller
         $inventory_signature = FoodBigStoreInventory::where('inventory_no', $inventory_no)->value('inventory_signature');
         $datas = FoodBigStoreInventoryDetail::where('inventory_no', $inventory_no)->get();
 
+        $totalQuantitActuelle = DB::table('food_big_store_inventory_details')
+            ->where('inventory_no', '=', $inventory_no)
+            ->sum('quantity');
+         $totalQuantitNew = DB::table('food_big_store_inventory_details')
+            ->where('inventory_no', '=', $inventory_no)
+            ->sum('new_quantity');
+
         $totalValueActuelle = DB::table('food_big_store_inventory_details')
             ->where('inventory_no', '=', $inventory_no)
             ->sum('total_purchase_value');
@@ -274,17 +281,12 @@ class FoodBigStoreInventoryController extends Controller
             ->where('inventory_no', '=', $inventory_no)
             ->sum('new_total_purchase_value');
         $gestionnaire = FoodBigStoreInventory::where('inventory_no', $inventory_no)->value('created_by');
-        $pdf = PDF::loadView('backend.pages.document.food_big_store_inventory',compact('datas','inventory_no','totalValueActuelle','totalValueNew','gestionnaire','setting','title','description','date','inventory_signature'));//->setPaper('a4', 'landscape');
+        $pdf = PDF::loadView('backend.pages.document.food_big_store_inventory',compact('datas','inventory_no','totalValueActuelle','totalValueNew','gestionnaire','setting','title','description','date','inventory_signature','totalQuantitActuelle','totalQuantitNew'));//->setPaper('a4', 'landscape');
 
-        Storage::put('public/pdf/food_big_store_inventory/'.'BON_INVENTAIRE_'.$inventory_no.'.pdf', $pdf->output());
+        Storage::put('public/pdf/food_big_store_inventory/'.'BON INVENTAIRE INTERMEDIAIRE STOCK DES NOURRITURES'.$inventory_no.'.pdf', $pdf->output());
 
         // download pdf file
-        return $pdf->download('BON_INVENTAIRE_'.$inventory_no.'.pdf');
-    }
-
-    public function get_inventory_data()
-    {
-        return Excel::download(new InventoryExport, 'inventories.xlsx');
+        return $pdf->download('BON INVENTAIRE INTERMEDIAIRE STOCK DES NOURRITURES '.$inventory_no.'.pdf');
     }
 
 

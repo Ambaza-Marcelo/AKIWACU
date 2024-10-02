@@ -86,11 +86,11 @@ class FoodSmallStoreInventoryController extends Controller
             'date' => 'required|date',
             'title' => 'required',
             'quantity.*' => 'required',
-            'unit.*' => 'required',
+            //'unit.*' => 'required',
             'purchase_price.*' => 'required',
             'new_quantity.*' => 'required',
             'new_purchase_price.*' => 'required',
-            'new_unit.*' => 'required',
+            //'new_unit.*' => 'required',
             'description' => 'required',
             );
 
@@ -144,7 +144,7 @@ class FoodSmallStoreInventoryController extends Controller
                     'code_store' => $code_store,
                     'quantity' => $quantity[$count],
                     'quantity_portion' => $quantity_portion[$count],
-                    'unit' => $unit[$count],
+                    //'unit' => $unit[$count],
                     'purchase_price' => $purchase_price[$count],
                     'total_purchase_value' => $total_purchase_value,
                     'total_purchase_value_portion' => $total_purchase_value_portion,
@@ -153,7 +153,7 @@ class FoodSmallStoreInventoryController extends Controller
                     'new_purchase_price' => $new_purchase_price[$count],
                     'new_total_purchase_value' => $new_total_purchase_value,
                     'new_total_purchase_value_portion' => $new_total_purchase_value_portion,
-                    'new_unit' => $new_unit[$count],
+                    //'new_unit' => $new_unit[$count],
                     'relicat' => $relicat,
                     'relicat_portion' => $relicat_portion,
                     'inventory_no' => $inventory_no,
@@ -310,7 +310,7 @@ class FoodSmallStoreInventoryController extends Controller
                 $food_calc = array(
                         'purchase_price' => $data->new_purchase_price,
                         'cump' => $data->new_purchase_price,
-                        'unit' => $data->new_unit,
+                        //'unit' => $data->new_unit,
                         'quantity' => $data->new_quantity
                     );
 
@@ -322,7 +322,7 @@ class FoodSmallStoreInventoryController extends Controller
                         'food_id' => $data->food_id,
                         'quantity' => $data->new_quantity,
                         'quantity_portion' => $data->new_quantity_portion,
-                        'unit' => $data->new_unit,
+                        //'unit' => $data->new_unit,
                         'cump' => $data->new_purchase_price,
                         'purchase_price' => $data->new_purchase_price,
                         'total_purchase_value' => $data->new_purchase_price * $data->new_quantity,

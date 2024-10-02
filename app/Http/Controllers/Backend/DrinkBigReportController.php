@@ -91,7 +91,7 @@ class DrinkBigReportController extends Controller
         $d1 = $request->query('start_date');
         $d2 = $request->query('end_date');
         
-        return Excel::download(new DrinkMdStoreReportExport, 'RAPPORT_STOCK_INTERMEDIAIRE_DES_BOISSONSDU '.$d1.' AU '.$d2.'.xlsx');
+        return Excel::download(new DrinkMdStoreReportExport, 'RAPPORT DU STOCK INTERMEDIAIRE DES BOISSONS DU '.$d1.' AU '.$d2.'.xlsx');
     }
 
 }

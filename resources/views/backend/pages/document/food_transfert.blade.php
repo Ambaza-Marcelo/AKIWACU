@@ -71,7 +71,7 @@
                                     <td>{{ $data->food->code }}</td>
                                     <td>{{ $data->quantity_requisitioned }}</td>
                                     <td>{{ $data->quantity_transfered }}</td>
-                                    <td>{{ $data->unit }}</td>
+                                    <td>{{ $data->food->unit }}</td>
                                     <td>{{ number_format($data->price,0,',',' ' )}}</td>
                                     <td>{{ number_format($data->total_value_requisitioned,0,',',' ' )}}</td>
                                     <td>{{ number_format($data->total_value_transfered,0,',',' ' )}}</td>

@@ -104,7 +104,7 @@ class FoodTransferController extends Controller
         $rules = array(
                 'food_id.*'  => 'required',
                 'date'  => 'required',
-                'unit.*'  => 'required',
+                //'unit.*'  => 'required',
                 'quantity_requisitioned.*'  => 'required',
                 'price.*'  => 'required',
                 'quantity_transfered.*'  => 'required',
@@ -125,7 +125,7 @@ class FoodTransferController extends Controller
             try {DB::beginTransaction();
 
             $food_id = $request->food_id;
-            $date = $request->date;
+            $date = \Carbon\Carbon::now();
             $origin_store_id = $request->origin_store_id;
             $requisition_no = $request->requisition_no;
             $description =$request->description; 
@@ -153,10 +153,10 @@ class FoodTransferController extends Controller
                 $total_value_transfered = $quantity_transfered[$count] * $price[$count];
                 $data = array(
                     'food_id' => $food_id[$count],
-                    'date' => $date,
+                    //'date' => $date,
                     'quantity_requisitioned' => $quantity_requisitioned[$count],
                     'quantity_transfered' => $quantity_transfered[$count],
-                    'unit' => $unit[$count],
+                    //'unit' => $unit[$count],
                     'price' => $price[$count],
                     'total_value_requisitioned' => $total_value_requisitioned,
                     'total_value_transfered' => $total_value_transfered,
@@ -230,7 +230,7 @@ class FoodTransferController extends Controller
 
         $rules = array(
                 'food_id.*'  => 'required',
-                'date_portion'  => 'required',
+                //'date_portion'  => 'required',
                 'unit_portion.*'  => 'required',
                 'quantity_portion.*'  => 'required',
                 'price.*'  => 'required',
@@ -249,7 +249,7 @@ class FoodTransferController extends Controller
             try {DB::beginTransaction();
 
             $food_id = $request->food_id;
-            $date_portion = $request->date_portion;
+            $date_portion = \Carbon\Carbon::now();
             $origin_store_id = $request->origin_store_id;
             $description_portion =$request->description_portion; 
             $destination_store_id = $request->destination_store_id;

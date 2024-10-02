@@ -2,9 +2,14 @@
 
 namespace App\Exports;
 
+use Carbon\Carbon;
+use App\Models\FoodSmallStoreDetail;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithMapping;
 
-class FoodSmallStoreExport implements FromCollection
+class FoodSmallStoreExport implements FromCollection, WithMapping, WithHeadings
 {
     protected $code;
 
@@ -16,8 +21,8 @@ class FoodSmallStoreExport implements FromCollection
     */
     public function collection()
     {
-        return FoodBigStoreDetail::select(
-                        DB::raw('food_id,quantity,unit,purchase_price'))->where('food_id','!=','')->where('code',$this->code)->get();
+        return FoodSmallStoreDetail::select(
+                        DB::raw('food_id,quantity_portion,unit,purchase_price'))->where('food_id','!=','')->where('code',$this->code)->get();
     }
 
     public function map($data) : array {
@@ -25,10 +30,10 @@ class FoodSmallStoreExport implements FromCollection
             $data->id,
             $data->food->name,
             $data->food->code,
-            $data->quantity,
+            $data->quantity_portion,
             $data->food->unit,
             number_format($data->purchase_price,0,',',' '),
-            number_format(($data->purchase_price * $data->quantity),0,',',' '),
+            number_format(($data->purchase_price * $data->quantity_portion),0,',',' '),
         ] ;
  
  

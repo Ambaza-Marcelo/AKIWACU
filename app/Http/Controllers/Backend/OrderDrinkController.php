@@ -527,7 +527,7 @@ class OrderDrinkController extends Controller
 
     public function exportToExcel(Request $request)
     {
-        return Excel::download(new DrinkOrderClientExport, 'RAPPORT_COMMANDE_BOISSON.xlsx');
+        return Excel::download(new DrinkOrderClientExport, 'RAPPORT DES COMMANDES CLIENTS AUX BOISSONS.xlsx');
     }
     /**
      * Remove the specified resource from storage.

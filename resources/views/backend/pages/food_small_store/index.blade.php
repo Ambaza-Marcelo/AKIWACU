@@ -2,7 +2,7 @@
 @extends('backend.layouts.master')
 
 @section('title')
-@lang('Food Big Store') - @lang('messages.admin_panel')
+@lang('Food Small Store') - @lang('messages.admin_panel')
 @endsection
 
 @section('styles')
@@ -21,7 +21,7 @@
     <div class="row align-items-center">
         <div class="col-sm-6">
             <div class="breadcrumbs-area clearfix">
-                <h4 class="page-title pull-left">@lang('Food Big Store')</h4>
+                <h4 class="page-title pull-left">@lang('Food Small Store')</h4>
                 <ul class="breadcrumbs pull-left">
                     <li><a href="{{ route('admin.dashboard') }}">@lang('messages.dashboard')</a></li>
                     <li><span>@lang('messages.list')</span></li>

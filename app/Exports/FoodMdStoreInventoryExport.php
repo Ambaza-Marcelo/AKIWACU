@@ -39,6 +39,7 @@ class FoodMdStoreInventoryExport implements FromCollection, WithMapping, WithHea
             $data->new_quantity,
             $data->new_purchase_price,
             $data->new_total_purchase_value,
+            $data->quantity - $data->new_quantity,
         ] ;
  
  
@@ -51,11 +52,12 @@ class FoodMdStoreInventoryExport implements FromCollection, WithMapping, WithHea
             'Code',
             'Unite de Mesure',
             'Qté Actuelle',
-            'V.Unitaire Actuelle',
+            'PA Actuelle',
             'Valeur Stock Actuelle',
             'Nouvelle Qté',
-            'Nouvelle V.U',
-            'Nouvelle V du stock'
+            'Nouveau PA',
+            'Nouvelle V du stock',
+            'Relicat'
         ] ;
     }
 }

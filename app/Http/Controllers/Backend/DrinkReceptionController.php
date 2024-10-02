@@ -773,7 +773,7 @@ class DrinkReceptionController extends Controller
 
     public function exportToExcel(Request $request)
     {
-        return Excel::download(new DrinkReceptionExport, 'RAPPORT_ACHATS.xlsx');
+        return Excel::download(new DrinkReceptionExport, 'RAPPORT DES ACHATS DES BOISSONS.xlsx');
     }
 
     /**

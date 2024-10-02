@@ -155,8 +155,17 @@ class FactureRestaurantController extends Controller
         $start_date = $startDate.' 00:00:00';
         $end_date = $endDate.' 23:59:59';
 
-        $datas = FactureDetail::select(
-                        DB::raw('sum(item_total_amount) as item_total_amount,sum(item_price_nvat) as item_price_nvat,sum(vat) as vat'))->where('etat','!=','0')->where('etat','!=','-1')->whereBetween('invoice_date',[$start_date,$end_date])->get();
+        $ca = DB::table('facture_details')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
+        $cash = DB::table('facture_details')->where('etat','1')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
+
+        $credit = DB::table('facture_details')->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
+
+        $cancelled = DB::table('facture_details')->where('etat','-1')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
+
+        $pending = DB::table('facture_details')->where('etat','0')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
+
+        $note_credit = DB::table('facture_details')->whereColumn('invoice_number','invoice_ref')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
+
 
         $setting = DB::table('settings')->orderBy('created_at','desc')->first();
         $currentTime = Carbon::now();
@@ -164,7 +173,7 @@ class FactureRestaurantController extends Controller
         $dateT =  $currentTime->toDateTimeString();
 
         $dateTime = str_replace([' ',':'], '_', $dateT);
-        $pdf = PDF::loadView('backend.pages.document.chiffre_affaire',compact('datas','dateTime','setting','end_date','start_date'))->setPaper('a4', 'portrait');
+        $pdf = PDF::loadView('backend.pages.document.chiffre_affaire',compact('ca','note_credit','dateTime','setting','end_date','start_date','cash','credit','pending','cancelled'))->setPaper('a4', 'portrait');
 
         //Storage::put('public/journal_general/'.$d1.'_'.$d2.'.pdf', $pdf->output());
 
@@ -861,7 +870,7 @@ class FactureRestaurantController extends Controller
         $d1 = $request->query('start_date');
         $d2 = $request->query('end_date');
 
-        return Excel::download(new ChiffreAffaireExport, 'RAPPORT_CHIFFRE_AFFAIRE DU '.$d1.' AU '.$d2.'.xlsx');
+        return Excel::download(new ChiffreAffaireExport, 'RAPPORT DU CHIFFRE D AFFAIRES DU '.$d1.' AU '.$d2.'.xlsx');
     }
 
     public function creditExportToExcel(Request $request)
@@ -869,42 +878,42 @@ class FactureRestaurantController extends Controller
         $d1 = $request->query('start_date');
         $d2 = $request->query('end_date');
 
-        return Excel::download(new FactureArecouvreExport, 'RAPPORT_FACTURE_CREDIT DU '.$d1.' AU '.$d2.'.xlsx');
+        return Excel::download(new FactureArecouvreExport, 'RAPPORT DES FACTURES CREDIT DU '.$d1.' AU '.$d2.'.xlsx');
     }
 
     public function recouvrementExportToExcel(Request $request)
     {
         $d1 = $request->query('start_date');
         $d2 = $request->query('end_date');
-        return Excel::download(new FactureRecouvreExport, 'RAPPORT_FACTURE_RECOUVRE DU '.$d1.' AU '.$d2.'.xlsx');
+        return Excel::download(new FactureRecouvreExport, 'RAPPORT DE RECOUVREMENT DU '.$d1.' AU '.$d2.'.xlsx');
     }
 
     public function exporterCreditEnExcel(Request $request)
     {
         $d1 = $request->query('start_date');
         $d2 = $request->query('end_date');
-        return Excel::download(new FactureCreditExport, 'RAPPORT_FACTURE_CREDIT DU '.$d1.' AU '.$d2.'.xlsx');
+        return Excel::download(new FactureCreditExport, 'RAPPORT DES FACTURES CREDIT DU '.$d1.' AU '.$d2.'.xlsx');
     }
 
     public function exporterCashEnExcel(Request $request)
     {
         $d1 = $request->query('start_date');
         $d2 = $request->query('end_date');
-        return Excel::download(new FacturePayeExport, 'RAPPORT_FACTURE_PAYE DU '.$d1.' AU '.$d2.'.xlsx');
+        return Excel::download(new FacturePayeExport, 'RAPPORT DES FACTURES CASH DU '.$d1.' AU '.$d2.'.xlsx');
     }
 
     public function exporterFactureAnnule(Request $request)
     {
         $d1 = $request->query('start_date');
         $d2 = $request->query('end_date');
-        return Excel::download(new FactureAnnuleExport, 'RAPPORT_FACTURE_ANNULE DU '.$d1.' AU '.$d2.'.xlsx');
+        return Excel::download(new FactureAnnuleExport, 'RAPPORT DES FACTURES ANNULEES DU '.$d1.' AU '.$d2.'.xlsx');
     }
 
     public function exporterFactureEncours(Request $request)
     {
         $d1 = $request->query('start_date');
         $d2 = $request->query('end_date');
-        return Excel::download(new FactureEncoursExport, 'RAPPORT_FACTURE_ENCOURS DU '.$d1.' AU '.$d2.'.xlsx');
+        return Excel::download(new FactureEncoursExport, 'RAPPORT DES FACTURES ENCOURS DU '.$d1.' AU '.$d2.'.xlsx');
     }
 
     

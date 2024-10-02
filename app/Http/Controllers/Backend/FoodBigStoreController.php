@@ -157,7 +157,7 @@ class FoodBigStoreController extends Controller
         $datas = FoodBigStoreDetail::where('code',$code)->where('food_id','!=','')->get();
         $setting = DB::table('settings')->orderBy('created_at','desc')->first();
         $currentTime = Carbon::now();
-        $totalPrixAchat = DB::table('food_big_store_details')->where('code',$code)->sum('total_purchase_value');
+        $totalPrixAchat = DB::table('food_big_store_details')->where('code',$code)->sum('total_cump_value');
 
         $dateT =  $currentTime->toDateTimeString();
 
@@ -166,12 +166,12 @@ class FoodBigStoreController extends Controller
         $store_signature = FoodBigStoreDetail::where('code',$code)->value('store_signature');
 
         $dateTime = str_replace([' ',':'], '_', $dateT);
-        $pdf = PDF::loadView('backend.pages.document.food_big_store_status',compact('datas','dateTime','setting','totalPrixAchat','totalPrixVente','store_signature'))->setPaper('a4', 'landscape');
+        $pdf = PDF::loadView('backend.pages.document.food_big_store_status',compact('datas','dateTime','setting','totalPrixAchat','totalPrixVente','store_signature'));//->setPaper('a4', 'landscape');
 
         Storage::put('public/food_big_store/Etat_stock/'.'ETAT_DU_STOCK_'.$dateTime.'.pdf', $pdf->output());
 
         // download pdf file
-        return $pdf->download('ETAT_DU_STOCK_'.$dateTime.'.pdf');
+        return $pdf->download('ETA DE STOCK INTERMEDIAIRE DES NOURRITURES '.$dateTime.'.pdf');
     }
 
     /**
@@ -228,7 +228,7 @@ class FoodBigStoreController extends Controller
 
     public function exportToExcel(Request $request,$code)
     {
-        return Excel::download(new FoodBigStoreExport($code), 'etat_du_stock_grand_nourriture.xlsx');
+        return Excel::download(new FoodBigStoreExport($code), 'ETAT DE STOCK INTERMEDIAIRE DES NOURRITURES.xlsx');
     }
 
     /**

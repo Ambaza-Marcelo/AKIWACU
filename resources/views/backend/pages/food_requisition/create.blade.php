@@ -56,7 +56,7 @@
                             <tr class="">
                                 <th>@lang('messages.item')</th>
                                 <th>@lang('messages.quantity')</th>
-                                <th>@lang('messages.unit')</th>
+                                <!-- <th>@lang('messages.unit')</th> -->
                                 <th>Action</th>
                             </tr>
                             <tr class="">  
@@ -66,7 +66,7 @@
                                 <option value="{{ $food->id }}" class="form-control">{{$food->name}}/{{ $food->code }}</option>
                                 @endforeach
                                 </select></td>  
-                                <td><input type="number" name="quantity_requisitioned[]" placeholder="Enter quantity" class="form-control" min="0" step="any" /></td> 
+                                <td><input type="number" name="quantity_requisitioned[]" placeholder="Enter quantity" class="form-control" min="0" step="any" /></td> <!--
                                 <td><select class="form-control" name="unit[]" id="unit">
                                     <option disabled="disabled" selected="selected">Merci de choisir</option>
                                         <option value="pieces" class="form-control">Pieces</option>
@@ -82,7 +82,7 @@
                                         <option value="bouteilles" class="form-control">Bouteilles</option>
                                         <option value="sachets" class="form-control">Sachets</option>
                                         <option value="boites" class="form-control">Boites</option>
-                                </select></td>
+                                </select></td> -->
                                 <td><button type="button" name="add" id="add" class="btn btn-success">@lang('messages.addmore')</button></td>     
                             </tr>
                         </table> 
@@ -122,6 +122,7 @@
                         "<td>"+
                           "<input type='number' name='quantity_requisitioned[]' placeholder='Enter Quantity' class='form-control' min='0' stepe='any'/>"+
                         "</td>"+
+                        /*
                         "<td>"+
                           "<select class='form-control' name='unit[]' id='unit'>"+
                                 "<option disabled='disabled' selected='selected'>Merci de choisir</option>"+
@@ -139,7 +140,7 @@
                                 "<option value='sachets' class='form-control'>Sachets</option>"+
                                 "<option value='boites' class='form-control'>Boites</option>"+
                             "</select>"+
-                        "</td>"+
+                        "</td>"+*/
                         "<td>"+
                           "<button type='button' class='btn btn-danger remove-tr'>@lang('messages.delete')</button>"+
                         "</td>"+

@@ -85,6 +85,6 @@ class FoodBigReportController extends Controller
 
     public function exportToExcel(Request $request)
     {
-        return Excel::download(new FoodMdStoreReportExport, 'RAPPORT_STOCK_INTERMEDIAIRE_DES_NOURRITURES.xlsx');
+        return Excel::download(new FoodMdStoreReportExport, 'RAPPORT DE STOCK INTERMEDIAIRE DES NOURRITURES.xlsx');
     }
 }

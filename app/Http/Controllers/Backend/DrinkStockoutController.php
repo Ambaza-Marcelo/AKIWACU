@@ -812,7 +812,7 @@ class DrinkStockoutController extends Controller
 
     public function exportToExcel(Request $request)
     {
-        return Excel::download(new DrinkStockoutExport, 'RAPPORT_SORTIES.xlsx');
+        return Excel::download(new DrinkStockoutExport, 'RAPPORT DES SORTIES DES BOISSONS.xlsx');
     }
 
 

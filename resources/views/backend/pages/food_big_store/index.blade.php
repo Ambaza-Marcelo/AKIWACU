@@ -2,7 +2,7 @@
 @extends('backend.layouts.master')
 
 @section('title')
-@lang('Food Big Store') - @lang('messages.admin_panel')
+@lang('Food Medium Store') - @lang('messages.admin_panel')
 @endsection
 
 @section('styles')
@@ -21,7 +21,7 @@
     <div class="row align-items-center">
         <div class="col-sm-6">
             <div class="breadcrumbs-area clearfix">
-                <h4 class="page-title pull-left">@lang('Food Big Store')</h4>
+                <h4 class="page-title pull-left">@lang('Food Medium Store')</h4>
                 <ul class="breadcrumbs pull-left">
                     <li><a href="{{ route('admin.dashboard') }}">@lang('messages.dashboard')</a></li>
                     <li><span>@lang('messages.list')</span></li>
@@ -41,7 +41,7 @@
         <div class="col-12 mt-5">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="header-title float-left">@lang('Food big store')</h4>
+                    <h4 class="header-title float-left">@lang('Food Medium store')</h4>
                     <p class="float-right mb-2">
                         @if (Auth::guard('admin')->user()->can('food_big_store.create'))
                             <a class="btn btn-primary text-white" href="{{ route('admin.food-big-store.create') }}">@lang('messages.new')</a>

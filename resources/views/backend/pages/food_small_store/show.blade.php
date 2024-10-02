@@ -58,9 +58,8 @@
                                     <th width="10%">@lang('messages.item') @lang('messages.code')</th>
                                     <th width="10%">@lang('Code Store')</th>
                                     <th width="10%">@lang('messages.quantity')</th>
-                                    <th width="10%">@lang('messages.unit')</th>
+                                   <!-- <th width="10%">@lang('messages.unit')</th> -->
                                     <th width="10%">@lang('Min Store')</th>
-                                    <th width="10%">Quantite Portionnee</th>
                                     <th width="10%">@lang('messages.purchase_price')</th>
                                     <th width="10%">@lang('messages.total_purchase_amount')</th>
                                     <th width="15%">Action</th>
@@ -73,14 +72,14 @@
                                     <td>@if($food_small_store->food_id){{ $food_small_store->food->name }} @endif</td>
                                     <td>@if($food_small_store->food_id){{ $food_small_store->food->code }} @endif</td>
                                     <td>{{ $food_small_store->code }}</td>
-                                    @if($food_small_store->quantity <= $food_small_store->threshold_quantity)
-                                    <td>{{ $food_small_store->quantity }}<img src="{{ asset('img/warning.gif')}}" width="30"></td>
+                                    @if($food_small_store->quantity_portion <= $food_small_store->threshold_quantity)
+                                    <td>{{ $food_small_store->quantity_portion }}<img src="{{ asset('img/warning.gif')}}" width="30"></td>
                                     @else
-                                    <td>{{ $food_small_store->quantity }}</td>
-                                    @endif
-                                    <td>{{ $food_small_store->unit }}</td>
-                                    <td>{{ $food_small_store->threshold_quantity }}</td>
                                     <td>{{ $food_small_store->quantity_portion }}</td>
+                                    @endif
+                                    <!--
+                                    <td>{{ $food_small_store->unit }}</td> -->
+                                    <td>{{ $food_small_store->threshold_quantity }}</td>
                                     <td>{{ number_format($food_small_store->purchase_price,0,',',' ') }}</td>
                                     <td>{{ number_format($food_small_store->total_purchase_value,0,',',' ') }}</td>
                                     <td>

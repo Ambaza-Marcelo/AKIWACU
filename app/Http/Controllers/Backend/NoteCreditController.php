@@ -60,7 +60,7 @@ class NoteCreditController extends Controller
 
     public function index()
     {
-        if (is_null($this->user) || !$this->user->can('invoice_drink.view')) {
+        if (is_null($this->user) || !$this->user->can('note_credit.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view any invoice !');
         }
 
@@ -71,7 +71,7 @@ class NoteCreditController extends Controller
 
     public function noteCreditBoisson($invoice_number)
     {
-        if (is_null($this->user) || !$this->user->can('invoice_drink.create')) {
+        if (is_null($this->user) || !$this->user->can('note_credit.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any invoice !');
         }
 
@@ -92,7 +92,7 @@ class NoteCreditController extends Controller
 
     public function noteCreditBartender($invoice_number)
     {
-        if (is_null($this->user) || !$this->user->can('invoice_drink.create')) {
+        if (is_null($this->user) || !$this->user->can('note_credit.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any invoice !');
         }
 
@@ -111,7 +111,7 @@ class NoteCreditController extends Controller
 
     public function noteCreditBarrista($invoice_number)
     {
-        if (is_null($this->user) || !$this->user->can('invoice_drink.create')) {
+        if (is_null($this->user) || !$this->user->can('note_credit.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any invoice !');
         }
 
@@ -130,7 +130,7 @@ class NoteCreditController extends Controller
 
     public function noteCreditNourriture($invoice_number)
     {
-        if (is_null($this->user) || !$this->user->can('invoice_drink.create')) {
+        if (is_null($this->user) || !$this->user->can('note_credit.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any invoice !');
         }
 
@@ -172,7 +172,7 @@ class NoteCreditController extends Controller
      */
     public function storeDrink(Request  $request)
     {
-        if (is_null($this->user) || !$this->user->can('invoice_drink.create')) {
+        if (is_null($this->user) || !$this->user->can('note_credit.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any invoice !');
         }
 
@@ -403,7 +403,7 @@ class NoteCreditController extends Controller
 
     public function storeBarrista(Request  $request)
     {
-        if (is_null($this->user) || !$this->user->can('invoice_drink.create')) {
+        if (is_null($this->user) || !$this->user->can('note_credit.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any invoice !');
         }
 
@@ -613,7 +613,7 @@ class NoteCreditController extends Controller
 
     public function storeFood(Request  $request)
     {
-        if (is_null($this->user) || !$this->user->can('invoice_kitchen.create')) {
+        if (is_null($this->user) || !$this->user->can('note_credit.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any invoice !');
         }
 
@@ -821,7 +821,7 @@ class NoteCreditController extends Controller
 
     public function storeBartender(Request  $request)
     {
-        if (is_null($this->user) || !$this->user->can('invoice_drink.create')) {
+        if (is_null($this->user) || !$this->user->can('note_credit.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any invoice !');
         }
 
@@ -1029,7 +1029,7 @@ class NoteCreditController extends Controller
 
     public function storeBooking(Request  $request)
     {
-        if (is_null($this->user) || !$this->user->can('invoice_drink.create')) {
+        if (is_null($this->user) || !$this->user->can('note_credit.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any invoice !');
         }
 
@@ -1789,7 +1789,7 @@ class NoteCreditController extends Controller
 
     public function validerFactureDrink($invoice_number)
     {
-        if (is_null($this->user) || !$this->user->can('invoice_drink.validate')) {
+        if (is_null($this->user) || !$this->user->can('note_credit.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any invoice !');
         }
 
@@ -2003,7 +2003,7 @@ class NoteCreditController extends Controller
 
     public function validerFactureBarrista($invoice_number)
     {
-        if (is_null($this->user) || !$this->user->can('invoice_drink.validate')) {
+        if (is_null($this->user) || !$this->user->can('note_credit.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any invoice !');
         }
 
@@ -2086,7 +2086,7 @@ class NoteCreditController extends Controller
 
     public function validerFactureBartender($invoice_number)
     {
-        if (is_null($this->user) || !$this->user->can('invoice_drink.validate')) {
+        if (is_null($this->user) || !$this->user->can('note_credit.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any invoice !');
         }
 
@@ -2247,7 +2247,7 @@ class NoteCreditController extends Controller
 
     public function validerFactureBooking($invoice_number)
     {
-        if (is_null($this->user) || !$this->user->can('invoice_drink.validate')) {
+        if (is_null($this->user) || !$this->user->can('note_credit.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any invoice !');
         }
 
@@ -2594,7 +2594,7 @@ class NoteCreditController extends Controller
 
     public function facture($invoice_number)
     {
-        if (is_null($this->user) || !$this->user->can('invoice_drink.create')) {
+        if (is_null($this->user) || !$this->user->can('note_credit.create')) {
             abort(403, 'Sorry !! You are Unauthorized!');
         }
 
@@ -2625,11 +2625,12 @@ class NoteCreditController extends Controller
         $factures = NoteCredit::where('invoice_number', $invoice_number)->get();
 
         $datas = NoteCreditDetail::where('invoice_number', $invoice_number)->get();
-
+        /*
         NoteCredit::where('invoice_number', '=', $invoice_number)
                 ->update(['statut' => 1]);
             NoteCreditDetail::where('invoice_number', '=', $invoice_number)
                 ->update(['statut' => 1]);
+                */
 
             // download pdf file
         return $pdf->download('FACTURE_D_AVOIR_'.$invoice_number.'.pdf');
@@ -2820,7 +2821,7 @@ class NoteCreditController extends Controller
     public function show($invoice_number)
     {
         //
-        if (is_null($this->user) || !$this->user->can('invoice_drink.view')) {
+        if (is_null($this->user) || !$this->user->can('note_credit.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view any invoice !');
         }
 
@@ -2841,7 +2842,7 @@ class NoteCreditController extends Controller
 
     public function edit($drink_order_no)
     {
-        if (is_null($this->user) || !$this->user->can('invoice_drink.edit')) {
+        if (is_null($this->user) || !$this->user->can('note_credit.edit')) {
             abort(403, 'Sorry !! You are Unauthorized to edit any invoice !');
         }
 
@@ -2868,7 +2869,7 @@ class NoteCreditController extends Controller
     public function update(Request  $request,$invoice_number)
     {
 
-        if (is_null($this->user) || !$this->user->can('invoice_drink.edit')) {
+        if (is_null($this->user) || !$this->user->can('note_credit.edit')) {
             abort(403, 'Sorry !! You are Unauthorized to edit any invoice !');
         }
 
@@ -2878,7 +2879,7 @@ class NoteCreditController extends Controller
 
     public function rapportBoisson(Request $request)
     {
-        if (is_null($this->user) || !$this->user->can('invoice_drink.view')) {
+        if (is_null($this->user) || !$this->user->can('note_credit.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view any report !');
         }
 
@@ -2943,7 +2944,7 @@ class NoteCreditController extends Controller
      */
     public function destroy($invoice_number)
     {
-        if (is_null($this->user) || !$this->user->can('invoice_drink.delete')) {
+        if (is_null($this->user) || !$this->user->can('note_credit.delete')) {
             abort(403, 'Sorry !! You are Unauthorized to delete any invoice !');
         }
 

@@ -688,7 +688,7 @@ class FoodReceptionController extends Controller
 
     public function exportToExcel(Request $request)
     {
-        return Excel::download(new FoodReceptionExport, 'RAPPORT_ACHATS.xlsx');
+        return Excel::download(new FoodReceptionExport, 'RAPPORT DES ACHATS DES NOURRITURES.xlsx');
     }
 
 

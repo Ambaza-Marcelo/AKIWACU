@@ -448,7 +448,7 @@ class BartenderOrderController extends Controller
 
     public function exportToExcel(Request $request)
     {
-        return Excel::download(new BartenderOrderClientExport, 'RAPPORT_COMMANDE_BARTENDER.xlsx');
+        return Excel::download(new BartenderOrderClientExport, 'RAPPORT DES COMMANDES CLIENTS AU BARTENDER.xlsx');
     }
 
     /**

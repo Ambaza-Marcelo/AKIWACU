@@ -831,7 +831,7 @@ class DrinkStockinController extends Controller
 
     public function exportToExcel(Request $request)
     {
-        return Excel::download(new DrinkStockinExport, 'RAPPORT_ENTEES.xlsx');
+        return Excel::download(new DrinkStockinExport, 'RAPPORT DES ENTREES DES BOISSONS.xlsx');
     }
 
 

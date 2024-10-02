@@ -6,6 +6,7 @@
         tr,th,td{
              border: 1px solid black;
              width: auto;
+             font-size: 12px;
              text-align: center;
         }
         .signature{
@@ -37,29 +38,33 @@
                     @endphp
                     <div>
                         <h5>Date de tirage : Le {{ Carbon\Carbon::parse($date)->format('d/m/Y') }} à {{Carbon\Carbon::parse($date)->format('H:i:s') }}</h5>
-                        <h5 style="text-decoration: underline;">CA DU {{ \Carbon\Carbon::parse($start_date)->format('d/m/Y') }} AU {{ \Carbon\Carbon::parse($end_date)->format('d/m/Y') }}(Cash/Credit) </h5>
+                        <h5 style="text-decoration: underline;">CA DU {{ \Carbon\Carbon::parse($start_date)->format('d/m/Y') }} AU {{ \Carbon\Carbon::parse($end_date)->format('d/m/Y') }} </h5>
                     </div>
                     <br>
                     <div>
                         <table style="border: 1px solid black;border-collapse: collapse;">
                             <thead>
                                 <tr>
-                                    <th width="5%">No</th>
-                                    <th width="10%">PV HTVA</th>
-                                    <th width="10%">TVA</th>
-                                    <th width="20%">TTC</th>
+                                    <th width="10%">TOTAL C.A</th>
+                                    <th width="20%">TOTAL ENCOURS</th>
+                                    <th width="20%">TOTAL NOTE DE CREDIT</th>
+                                    <th width="20%">TOTAL ANNULE</th>
+                                    <th width="10%">TOTAL CASH</th>
+                                    <th width="20%">TOTAL CREDIT</th>
+                                    <th width="20%">TOTAL CASH&CREDIT</th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                @foreach($datas as $data)
                                <tr>
-                                    <td>{{ $loop->index + 1 }}</td>
-                                   <td>{{ number_format($data->item_price_nvat,3,',',' ') }}</td>
-                                    <td>{{ number_format($data->vat,3,',',' ') }}</td>
-                                   <td>{{ number_format($data->item_total_amount,0,',',' ') }}</td>
+                                   <td>{{ number_format($ca,0,',',' ') }}</td>
+                                   <td>-{{ number_format($pending,0,',',' ') }}</td>
+                                   <td>-{{ number_format($note_credit,0,',',' ') }}</td>
+                                   <td>-{{ number_format($cancelled,0,',',' ') }}</td>
+                                   <td>{{ number_format($cash,0,',',' ') }}</td>
+                                   <td>{{ number_format($credit,0,',',' ') }}</td>
+                                   <td>{{ number_format($ca-($pending+$note_credit+$cancelled),0,',',' ') }}</td>
                                 </tr>
-                                @endforeach
                             </tbody>
                         </table>
                     </div>

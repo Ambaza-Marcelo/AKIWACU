@@ -236,7 +236,7 @@ class DrinkBigStoreController extends Controller
         $dateT =  $currentTime->toDateTimeString();
         $dateTime = str_replace([' ',':'], '_', $dateT);
 
-        return Excel::download(new DrinkBigStoreExport($code), 'etat_du_stock_intermediaire_boissons_'.$dateTime.'.xlsx');
+        return Excel::download(new DrinkBigStoreExport($code), 'ETAT DE STOCK INTERMEDIAIRE DES BOISSONS DU '.$dateTime.'.xlsx');
     }
 
     public function virtualExportToExcel(Request $request)
@@ -245,7 +245,7 @@ class DrinkBigStoreController extends Controller
         $dateT =  $currentTime->toDateTimeString();
         $dateTime = str_replace([' ',':'], '_', $dateT);
 
-        return Excel::download(new VirtualDrinkMdStoreExport(), 'etat_du_stock_intermediaire_boissons_'.$dateTime.'.xlsx');
+        return Excel::download(new VirtualDrinkMdStoreExport(), 'ETAT DE STOCK INTERMEDIAIRE DES BOISSONS DU '.$dateTime.'.xlsx');
     }
 
 

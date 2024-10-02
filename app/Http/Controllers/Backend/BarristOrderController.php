@@ -472,7 +472,7 @@ class BarristOrderController extends Controller
 
     public function exportToExcel(Request $request)
     {
-        return Excel::download(new BarristOrderClientExport, 'RAPPORT_COMMANDE_BARRISTA.xlsx');
+        return Excel::download(new BarristOrderClientExport, 'RAPPORT DES COMMANDES CLIENTS AU BARRISTA.xlsx');
     }
 
     /**
