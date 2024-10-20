@@ -352,7 +352,7 @@ class FoodRequisitionController extends Controller
 
     public function demande_requisition($requisition_no)
     {
-        if (is_null($this->user) || !$this->user->can('food_requisition.create')) {
+        if (is_null($this->user) || !$this->user->can('food_requisition.view')) {
             abort(403, 'Sorry !! You are Unauthorized!');
         }
 

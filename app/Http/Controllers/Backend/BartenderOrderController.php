@@ -72,7 +72,7 @@ class BartenderOrderController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to create any order !');
         }
 
-        $articles  = BartenderItem::orderBy('name','asc')->get();
+        $articles  = BartenderItem::where('selling_price','>',0)->orderBy('name','asc')->get();
         $employes  = Employe::orderBy('name','asc')->get();
         $table = Table::where('id',$table_id)->first();
         $table_id = $table->id;

@@ -114,7 +114,7 @@
                           "</select>"+
                         "</td>"+
                         "<td>"+
-                          "<input type='number' name='quantity[]' placeholder='Enter Quantity' class='form-control' min='0'/>"+
+                          "<input type='number' name='quantity[]' placeholder='Enter Quantity' class='form-control' step='any' min='0'/>"+
                         "</td>"+
                         "<td>"+
                           "<select class='form-control' name='unit[]' id='unit'>"+

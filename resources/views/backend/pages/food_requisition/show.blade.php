@@ -71,7 +71,7 @@
                                     <td>{{ $requisition->food->name }}</td>
                                     <td>{{ $requisition->food->code }}</td>
                                     <td>{{ $requisition->quantity_requisitioned }}</td>
-                                    <td>{{ $requisition->unit }}</td>
+                                    <td>{{ $requisition->food->unit }}</td>
                                     <td>{{ number_format($requisition->price,0,',',' ') }}</td>
                                     <td>{{ number_format($requisition->total_value_requisitioned,0,',',' ') }}</td>
                                     <td>{{ $requisition->description }}</td>

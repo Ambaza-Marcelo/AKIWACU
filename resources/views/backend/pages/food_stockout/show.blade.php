@@ -51,10 +51,10 @@
                                     <td>{{ $stockout->date }}</td>
                                     <td>{{ $stockout->stockout_no }}</td>
                                     <td>{{ $stockout->asker }}</td>
-                                    <td>{{ $stockout->origin_sm_store_id }}</td>
+                                    <td>@if($stockout->origin_sm_store_id)PETIT STOCK @elseif($stockout->origin_bg_store_id) STOCK INTERMEDIAIRE @else GRAND STOCK @endif</td>
                                     <td>{{ $stockout->food->name }}</td>
-                                    <td>{{ $stockout->quantity }}</td>
-                                    <td>{{ $stockout->unit }}</td>
+                                    <td>@if($stockout->quantity_portion){{ $stockout->quantity_portion }} @else {{ $stockout->quantity }} @endif</td>
+                                    <td>@if($stockout->quantity_portion){{ $stockout->unit }} @else {{ $stockout->food->unit }} @endif</td>
                                     <td>{{ $stockout->destination }}</td>
                                     <td>{{ number_format($stockout->purchase_price,0,',',' ' ) }}</td>
                                     <td>{{ number_format($stockout->selling_price,0,',',' ' ) }}</td>

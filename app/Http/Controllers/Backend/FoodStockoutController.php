@@ -332,13 +332,25 @@ class FoodStockoutController extends Controller
        if (is_null($this->user) || !$this->user->can('food_stockout.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any stockout !');
         }
+
+        try{DB::beginTransaction();
             FoodStockout::where('stockout_no', '=', $stockout_no)
                 ->update(['status' => 2,'validated_by' => $this->user->name]);
             FoodStockoutDetail::where('stockout_no', '=', $stockout_no)
                 ->update(['status' => 2,'validated_by' => $this->user->name]);
 
-        session()->flash('success', 'stockout has been validated !!');
-        return back();
+            DB::commit();
+            session()->flash('success', 'stockout has been validated !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     public function reject($stockout_no)
@@ -347,13 +359,25 @@ class FoodStockoutController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to reject any stockout !');
         }
 
+        try{DB::beginTransaction();
+
         FoodStockout::where('stockout_no', '=', $stockout_no)
                 ->update(['status' => -1,'rejected_by' => $this->user->name]);
         FoodStockoutDetail::where('stockout_no', '=', $stockout_no)
                 ->update(['status' => -1,'rejected_by' => $this->user->name]);
 
-        session()->flash('success', 'Stockout has been rejected !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Stockout has been rejected !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     public function reset($stockout_no)
@@ -377,13 +401,25 @@ class FoodStockoutController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to confirm any stockout !');
         }
 
+        try{DB::beginTransaction();
+
         FoodStockout::where('stockout_no', '=', $stockout_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
             FoodStockoutDetail::where('stockout_no', '=', $stockout_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
 
-        session()->flash('success', 'Stockout has been confirmed !!');
-        return back();
+        DB::commit();
+            session()->flash('success', 'Stockout has been confirmed !!');
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     public function approuve($stockout_no)
@@ -392,15 +428,20 @@ class FoodStockoutController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to confirm any stockout !');
         }
 
+        try{DB::beginTransaction();
 
         $datas = FoodStockoutDetail::where('stockout_no', $stockout_no)->get();
 
-        $data = FoodStockoutDetail::where('stockout_no', $stockout_no)->first();
+
+        $stockout = FoodStockoutDetail::where('stockout_no', $stockout_no)->first();
 
         foreach($datas as $data){
 
+            $code_store_origin = FoodBigStore::where('id',$data->origin_bg_store_id)->value('code');
+
+            $cump = FoodBigStoreDetail::where('code',$code_store_origin)->where('food_id','!=', '')->where('food_id', $data->food_id)->value('cump');
+
             if ($data->store_type === '1') {
-                $code_store_origin = FoodBigStore::where('id',$data->origin_bg_store_id)->value('code');
 
                 $valeurStockInitial = FoodBigStoreDetail::where('code',$code_store_origin)->where('food_id','!=', '')->where('food_id', $data->food_id)->value('total_cump_value');
                 $quantityStockInitial = FoodBigStoreDetail::where('code',$code_store_origin)->where('food_id','!=', '')->where('food_id', $data->food_id)->value('quantity');
@@ -414,13 +455,14 @@ class FoodStockoutController extends Controller
                     'code_store_origin' => $code_store_origin,
                     'stockout_no' => $data->stockout_no,
                     'date' => $data->date,
+                    'cump' => $cump,
                     'quantity_stockout' => $data->quantity,
                     'value_stockout' => $data->value_stockout,
                     'quantity_stock_final' => $quantityStockInitial - $data->quantity,
                     'value_stock_final' => $valeurStockInitial - $data->total_selling_value,
                     'created_by' => $this->user->name,
                     'type_transaction' => $data->item_movement_type,
-                    'documen_no' => $data->stockout_no,
+                    'document_no' => $data->stockout_no,
                     'description' => $data->description,
                     'created_at' => \Carbon\Carbon::now()
                 );
@@ -498,16 +540,18 @@ class FoodStockoutController extends Controller
                     'code_store_origin' => $code_store_origin,
                     'stockout_no' => $data->stockout_no,
                     'date' => $data->date,
-                    'quantity_stockout' => $data->quantity,
+                    'cump' => $cump,
+                    'quantity_stockout' => $data->quantity_portion,
                     'value_stockout' => $data->value_stockout,
                     'quantity_stock_final' => $quantityStockInitial - $data->quantity_portion,
                     'value_stock_final' => $valeurStockInitial - $data->total_selling_value,
                     'created_by' => $this->user->name,
                     'type_transaction' => $data->item_movement_type,
-                    'documen_no' => $data->stockout_no,
+                    'document_no' => $data->stockout_no,
                     'description' => $data->description,
                     'created_at' => \Carbon\Carbon::now()
                 );
+
                 $reportSmallStoreData[] = $reportSmallStore;
 
                     $smallStore = array(
@@ -590,7 +634,7 @@ class FoodStockoutController extends Controller
                     'value_stock_final' => $valeurStockInitial - $data->total_selling_value,
                     'created_by' => $this->user->name,
                     'type_transaction' => $data->item_movement_type,
-                    'documen_no' => $data->stockout_no,
+                    'document_no' => $data->stockout_no,
                     'description' => $data->description,
                     'created_at' => \Carbon\Carbon::now()
                 );
@@ -661,9 +705,9 @@ class FoodStockoutController extends Controller
         }
 
 
-        if($data->store_type == 1 && $flag != 1){
+        if($stockout->store_type == 1 && $flag != 1){
             FoodBigReport::insert($reportBigStoreData);
-        }elseif ($data->store_type == 2 && $flag != 1) {
+        }elseif ($stockout->store_type == 2 && $flag != 1) {
             FoodSmallReport::insert($reportSmallStoreData);
         }else{
             FoodExtraBigReport::insert($reportExtraBigStoreData);
@@ -678,8 +722,18 @@ class FoodStockoutController extends Controller
             FoodStockoutDetail::where('stockout_no', '=', $stockout_no)
                 ->update(['status' => 4,'approuved_by' => $this->user->name]);
 
-        session()->flash('success', 'Stockout has been done successfuly !, from '.$code_store_origin);
-        return back();
+            DB::commit();
+            session()->flash('success', 'Stockout has been done successfuly !, from '.$code_store_origin);
+            return back();
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
 

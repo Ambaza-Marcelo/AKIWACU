@@ -115,7 +115,7 @@
                     </form><br>
                     <form action="{{ route('admin.exporter-chiffre-affaire')}}" method="GET">
                         <p class="float-right mb-2">
-                            <button type="submit" value="pdf" class="btn btn-warning">Exporter Synthese C.A CREDIT/CASH</button>
+                            <button type="submit" value="pdf" class="btn btn-success">Exporter Synthese C.A </button>
                         </p>
                         <p class="float-right mb-2">
                             <div class="row">

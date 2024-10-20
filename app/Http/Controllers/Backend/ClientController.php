@@ -223,12 +223,12 @@ class ClientController extends Controller
 
         $request->validate([
             'customer_name' => 'required|max:100',
-            'tp_type' => 'required|min:10',
+            //'tp_type' => 'required|min:10',
             'telephone' => 'required',
         ]);
 
         $client->date = $request->date;
-        $client->tp_type = $request->tp_type;
+        //$client->tp_type = $request->tp_type;
         $client->customer_name = $request->customer_name;
         $client->telephone = $request->telephone;
         $client->mail = $request->mail;

@@ -108,7 +108,7 @@ class WelcomeController extends Controller
                     ->where('name', 'LIKE', '%'. $request->get('search'). '%')
                     ->get();
         }
-    	$services = BookingService::orderBy('name')->get();
+    	$services = BookingService::where('selling_price','>',0)->orderBy('name','asc')->get();
 
     	return view('eden',compact('services'));
     }

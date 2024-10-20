@@ -84,7 +84,7 @@
                                 <td> <select class="form-control" name="material_id[]" id="material_id">
                                 <option value="{{ $data->material_id }}" class="form-control">{{ $data->material->name }}/{{ $data->material->code }}</option>
                                 </select></td>  
-                                <td><input type="number" name="quantity[]" value="{{ $data->quantity }}" class="form-control" min="{{ $data->quantity }}" max="{{ $data->quantity }}" /></td>  
+                                <td><input type="number" name="quantity[]" value="{{ $data->quantity }}" class="form-control" min="{{ $data->quantity }}" max="{{ $data->quantity }}" step="any" /></td>  
                                 <td>
                                     <select class="form-control" name="unit[]" id="unit">
                                         <option disabled="disabled" selected="selected">Merci de choisir</option>
@@ -136,7 +136,7 @@
                           "</select>"+
                         "</td>"+
                         "<td>"+
-                          "<input type='number' name='quantity[]' placeholder='Enter Quantity' class='form-control' />"+
+                          "<input type='number' name='quantity[]' placeholder='Enter Quantity' class='form-control' step='any' />"+
                         "</td>"+
                         "<td>"+
                           "<select class='form-control' name='unit[]' id='unit'>"+

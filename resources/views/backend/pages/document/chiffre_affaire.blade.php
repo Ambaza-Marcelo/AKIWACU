@@ -6,7 +6,7 @@
         tr,th,td{
              border: 1px solid black;
              width: auto;
-             font-size: 12px;
+             font-size: 16px;
              text-align: center;
         }
         .signature{
@@ -21,7 +21,7 @@
         <div>
             <div>
                <div>
-                   <img src="img/eden_logo.png" width="150" height="65">
+                   <img src="img/eden_logo.png" width="200" height="85">
                 </div>
                 <div>
                     <div style="float: left;">
@@ -45,25 +45,32 @@
                         <table style="border: 1px solid black;border-collapse: collapse;">
                             <thead>
                                 <tr>
-                                    <th width="10%">TOTAL C.A</th>
-                                    <th width="20%">TOTAL ENCOURS</th>
-                                    <th width="20%">TOTAL NOTE DE CREDIT</th>
-                                    <th width="20%">TOTAL ANNULE</th>
+                                    <th width="10%">TOTAL C.A(TTC)</th>
+                                    <th width="20%">PVHTVA</th>
+                                    <th width="20%">TVA</th>
+                                    <!--
                                     <th width="10%">TOTAL CASH</th>
                                     <th width="20%">TOTAL CREDIT</th>
-                                    <th width="20%">TOTAL CASH&CREDIT</th>
+                                    -->
+                                    <th width="20%">TOTAL NOTE DE CREDIT</th>
                                 </tr>
                             </thead>
 
                             <tbody>
                                <tr>
-                                   <td>{{ number_format($ca,0,',',' ') }}</td>
-                                   <td>-{{ number_format($pending,0,',',' ') }}</td>
-                                   <td>-{{ number_format($note_credit,0,',',' ') }}</td>
-                                   <td>-{{ number_format($cancelled,0,',',' ') }}</td>
+                                @php
+                                    $chiffre_affaire=$ca-($note_credit*2);
+                                    $pvhtva = ($chiffre_affaire * 100)/110;
+                                    $tva = ($pvhtva*10)/100;
+                                @endphp
+                                   <td>{{ number_format($chiffre_affaire,0,',',' ') }}</td>
+                                   <td>{{ number_format($pvhtva,0,',',' ') }}</td>
+                                   <td>{{ number_format($tva,0,',',' ') }}</td>
+                                   <!--
                                    <td>{{ number_format($cash,0,',',' ') }}</td>
                                    <td>{{ number_format($credit,0,',',' ') }}</td>
-                                   <td>{{ number_format($ca-($pending+$note_credit+$cancelled),0,',',' ') }}</td>
+                                -->
+                                   <td>{{ number_format($note_credit,0,',',' ') }}</td>
                                 </tr>
                             </tbody>
                         </table>

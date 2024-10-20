@@ -6,6 +6,8 @@
         tr,th,td{
              border: 1px solid black;
              text-align: center;
+             width: auto;
+             font-size: 12px;
         }
 
     </style>
@@ -16,7 +18,7 @@
         <div>
             <div>
                 <div>
-                   <img src="img/eden_logo.png" width="200" height="65">
+                   <img src="img/eden_logo.png" width="200" height="85">
                 </div>
                 <div>
                     <div style="float: left;">
@@ -38,7 +40,7 @@
                     <br><br><br><br><br>
                     <br><br><br>
                     <div>
-                        <h2 style="text-align: center;text-decoration: underline;">RAPPORT DU STOCK DES NOURRITURES (PETIT STOCK)</h2>
+                        <h2 style="text-align: center;text-decoration: underline;">RAPPORT DU PETIT STOCK DES NOURRITURES</h2>
                     </div>
                     <div>
                         <table style="border: 1px solid black;border-collapse: collapse;">
@@ -49,13 +51,12 @@
                                     <th width="10%">@lang('messages.item')</th>
                                     <th width="10%">@lang('messages.code')</th>
                                     <th width="10%">Q. S. Initial/Portion</th>
-                                    <th width="10%">V. S. Initial/Portion</th>
                                     <th width="10%">Q. Entree/Portion</th>
-                                    <th width="10%">V. Entree/Portion</th>
                                     <th width="10%">Q. Sortie/Portion</th>
-                                    <th width="10%">V. Sortie/Portion</th>
                                     <th width="10%">Q. S. Final/Portion</th>
-                                    <th width="10%">V. S. Final/Portion</th>
+                                    <th width="10%">Type Transaction</th>
+                                    <th width="10%">No Document</th>
+                                    <th width="10%">Auteur</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -66,20 +67,12 @@
                                     <td>{{ $data->food->name }} </td>
                                     <td>{{ $data->food->code }} </td>
                                     <td>{{ $data->quantity_stock_initial }}/{{ $data->quantity_stock_initial_portion }} </td>
-                                    @php
-                                        $value_stock_initial = $data->quantity_stock_initial * $data->food->cump;
-                                    @endphp
-                                    <td>{{ number_format($value_stock_initial,0,',',' ') }} </td>
                                     <td>@if($data->quantity_stockin){{ $data->quantity_stockin }} @elseif($data->quantity_reception) {{ $data->quantity_reception }} @elseif($data->quantity_transfer) {{ $data->quantity_transfer }} @elseif($data->quantity_inventory) {{ $data->quantity_inventory }} @endif / @if($data->quantity_portion){{ $data->quantity_portion }} @elseif($data->inventory_quantity_portion){{ $data->inventory_quantity_portion }} @endif</td>
-                                    <td>@if($data->value_stockin){{ number_format($data->value_stockin,0,',',' ') }} @elseif($data->value_reception) {{ number_format($data->value_reception,0,',',' ') }} @elseif($data->value_transfer) {{ number_format($data->value_transfer,0,',',' ') }} @elseif($data->value_inventory) {{ number_format($data->value_inventory,0,',',' ') }} @endif</td>
-                                    <td>@if($data->quantity_stockout){{ $data->quantity_stockout }} @endif /</td>
-                                    <td>@if($data->value_stockout){{ number_format($data->value_stockout,0,',',' ') }} @endif /</td>
+                                    <td>{{ $data->quantity_stockout }}</td>
                                     <td>@if($data->quantity_stockin || $data->quantity_stockout || $data->quantity_transfer || $data->quantity_reception){{ ($data->quantity_stock_initial + $data->quantity_stockin + $data->quantity_reception + $data->quantity_transfer) - ($data->quantity_stockout) }} @endif/@if($data->quantity_portion){{ ($data->quantity_stock_initial_portion + $data->quantity_portion) }} @elseif($data->inventory_quantity_portion) {{ $data->inventory_quantity_portion }} @endif</td>
-
-                                    @php
-                                        $value_inventory = $data->quantity_inventory * $data->food->cump;
-                                    @endphp
-                                    <td>@if($data->value_inventory){{ number_format($value_inventory,0,',',' ')  }} @else {{ number_format((($data->quantity_stock_initial + $data->quantity_stockin + $data->quantity_reception + $data->quantity_transfer) - ($data->quantity_stockout))*$data->food->cump,0,',',' ') }} @endif</td>
+                                    <td>{{ $data->type_transaction }}</td>
+                                    <td>{{ $data->document_no }}</td>
+                                    <td>@if($data->created_portion_by){{ $data->created_portion_by }} @else {{ $data->created_by }} @endif</td>
                                 </tr>
                                 @endforeach
                             </tbody>

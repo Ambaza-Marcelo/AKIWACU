@@ -73,7 +73,7 @@ class BarristOrderController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to create any order !');
         }
 
-        $articles  = BarristItem::orderBy('name','asc')->get();
+        $articles  = BarristItem::where('selling_price','>',0)->orderBy('name','asc')->get();
         $employes  = Employe::orderBy('name','asc')->get();
         $ingredients  = Ingredient::orderBy('name','asc')->get();
         $table = Table::where('id',$table_id)->first();

@@ -104,7 +104,7 @@
                                         @if (Auth::guard('admin')->user()->can('food_transfer.approuve'))
                                         @if($transfer->status == 3)
                                             <a class="btn btn-primary text-white" href="{{ route('admin.food-transfers.approuve', $transfer->transfer_no) }}"
-                                            onclick="event.preventDefault(); document.getElementById('approuve-form-{{ $transfer->transfer_no }}').submit();">
+                                            onclick="event.preventDefault(); document.getElementById('approuve-form-{{ $transfer->transfer_no }}').submit();this.style.visibility='hidden';" ondblclick="this.style.visibility='hidden';">
                                                 Approuver
                                             </a>
 
@@ -134,7 +134,7 @@
                                         @if (Auth::guard('admin')->user()->can('food_transfer.validatePortion'))
                                             @if($transfer->status == 4 && $transfer->status_portion == 1)
                                             <a class="btn btn-primary text-white" href="{{ route('admin.food-transfers.validatePortion', $transfer->transfer_no) }}"
-                                            onclick="event.preventDefault(); document.getElementById('validatePortion-form-{{ $transfer->transfer_no }}').submit();">
+                                            onclick="event.preventDefault(); document.getElementById('validatePortion-form-{{ $transfer->transfer_no }}').submit();this.style.visibility='hidden';" ondblclick="this.style.visibility='hidden';">
                                                 Valider Portion
                                             </a>
                                             @endif
@@ -172,7 +172,7 @@
                                             </form>
                                             @endif
                                         @endif
-                                        @if (Auth::guard('admin')->user()->can('food_transfer.create'))
+                                        @if (Auth::guard('admin')->user()->can('food_transfer.view'))
                                         
                                         <a href="{{ route('admin.food-transfers.bonTransfert',$transfer->transfer_no) }}"><img src="{{ asset('img/ISSh.gif') }}" width="60" title="Télécharger d'abord le document et puis imprimer"></a>
                                         

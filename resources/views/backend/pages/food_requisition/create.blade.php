@@ -120,7 +120,7 @@
                           "</select>"+
                         "</td>"+
                         "<td>"+
-                          "<input type='number' name='quantity_requisitioned[]' placeholder='Enter Quantity' class='form-control' min='0' stepe='any'/>"+
+                          "<input type='number' name='quantity_requisitioned[]' placeholder='Enter Quantity' class='form-control' min='0' step='any'/>"+
                         "</td>"+
                         /*
                         "<td>"+

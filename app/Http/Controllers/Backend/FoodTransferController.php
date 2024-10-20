@@ -75,7 +75,7 @@ class FoodTransferController extends Controller
 
     public function portion($transfer_no)
     {
-        if (is_null($this->user) || !$this->user->can('food_transfer.create')) {
+        if (is_null($this->user) || !$this->user->can('food_transfer.portion')) {
             abort(403, 'Sorry !! You are Unauthorized to create any transfer !');
         }
 
@@ -103,7 +103,7 @@ class FoodTransferController extends Controller
 
         $rules = array(
                 'food_id.*'  => 'required',
-                'date'  => 'required',
+                //'date'  => 'required',
                 //'unit.*'  => 'required',
                 'quantity_requisitioned.*'  => 'required',
                 'price.*'  => 'required',
@@ -125,7 +125,7 @@ class FoodTransferController extends Controller
             try {DB::beginTransaction();
 
             $food_id = $request->food_id;
-            $date = \Carbon\Carbon::now();
+            $date = Carbon::now();
             $origin_store_id = $request->origin_store_id;
             $requisition_no = $request->requisition_no;
             $description =$request->description; 
@@ -153,7 +153,7 @@ class FoodTransferController extends Controller
                 $total_value_transfered = $quantity_transfered[$count] * $price[$count];
                 $data = array(
                     'food_id' => $food_id[$count],
-                    //'date' => $date,
+                    'date' => $date,
                     'quantity_requisitioned' => $quantity_requisitioned[$count],
                     'quantity_transfered' => $quantity_transfered[$count],
                     //'unit' => $unit[$count],
@@ -224,7 +224,7 @@ class FoodTransferController extends Controller
 
     public function storePortion(Request $request, $transfer_no)
     {
-        if (is_null($this->user) || !$this->user->can('food_transfer.edit')) {
+        if (is_null($this->user) || !$this->user->can('food_transfer.portion')) {
             abort(403, 'Sorry !! You are Unauthorized to portion any food !');
         }
 

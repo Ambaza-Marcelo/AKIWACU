@@ -86,7 +86,7 @@
                                     <td>{{ $requisition->description }}</td>
                                     <td>{{ $requisition->created_by }}</td>
                                     <td>
-                                        @if (Auth::guard('admin')->user()->can('food_requisition.create'))
+                                        @if (Auth::guard('admin')->user()->can('food_requisition.view'))
                                         @if($requisition->status == 2|| $requisition->status == 3 || $requisition->status == 4 || $requisition->status == 5)
                                         <a href="{{ route('admin.food-requisitions.generatepdf',$requisition->requisition_no) }}"><img src="{{ asset('img/ISSh.gif') }}" width="60" title="Télécharger d'abord le document et puis imprimer"></a>
                                         @endif
@@ -154,7 +154,7 @@
                                                 @csrf
                                             </form>
                                         @endif
-                                        @if (Auth::guard('admin')->user()->can('food_requisition.create'))
+                                        @if (Auth::guard('admin')->user()->can('food_transfer.create'))
                                         @if($requisition->status == 4)
                                         <a href="{{ route('admin.food-transfers.create',$requisition->requisition_no)}}" class="btn btn-primary">Transferer</a>
                                         @endif

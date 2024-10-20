@@ -132,6 +132,7 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
                         </div>
                         @endif
                         @if (Auth::guard('admin')->user()->can('consomation_maison.view'))
+                        <!--
                         <div class="col-md-6 mb-3 mb-lg-0">
                             <div class="card">
                                 <div class="seo-fact sbg3">
@@ -147,7 +148,7 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
                                     </a>
                                 </div>
                             </div><br>
-                        </div>
+                        </div> -->
                         @endif
                     </div>
                 @endif

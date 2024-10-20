@@ -155,8 +155,11 @@ class FactureRestaurantController extends Controller
         $start_date = $startDate.' 00:00:00';
         $end_date = $endDate.' 23:59:59';
 
-        $ca = DB::table('facture_details')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
+        $ca = DB::table('facture_details')->where('etat','!=','-1')->where('etat','!=','0')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
         $cash = DB::table('facture_details')->where('etat','1')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
+
+        $total_vat = DB::table('facture_details')->where('etat','!=','-1')->where('etat','!=','0')->whereBetween('invoice_date',[$start_date,$end_date])->sum('vat');
+        $total_item_price_nvat = DB::table('facture_details')->where('etat','!=','-1')->where('etat','!=','0')->where('invoice_ref',)->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_price_nvat');
 
         $credit = DB::table('facture_details')->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
 
@@ -173,12 +176,12 @@ class FactureRestaurantController extends Controller
         $dateT =  $currentTime->toDateTimeString();
 
         $dateTime = str_replace([' ',':'], '_', $dateT);
-        $pdf = PDF::loadView('backend.pages.document.chiffre_affaire',compact('ca','note_credit','dateTime','setting','end_date','start_date','cash','credit','pending','cancelled'))->setPaper('a4', 'portrait');
+        $pdf = PDF::loadView('backend.pages.document.chiffre_affaire',compact('ca','note_credit','dateTime','setting','end_date','start_date','cash','credit','pending','cancelled','total_vat','total_item_price_nvat'))->setPaper('a4', 'portrait');
 
         //Storage::put('public/journal_general/'.$d1.'_'.$d2.'.pdf', $pdf->output());
 
         // download pdf file
-        return $pdf->download("chiffre_affaire".$dateTime.'.pdf');
+        return $pdf->download("SYNTESE DU CHIFFRE AFFAIRE ".$dateTime.'.pdf');
 
         
     }

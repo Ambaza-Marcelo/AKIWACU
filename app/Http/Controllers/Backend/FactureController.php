@@ -1868,7 +1868,7 @@ class FactureController extends Controller
 
         DB::commit();
             session()->flash('success', 'La Facture  est validée avec succés');
-            return back();
+            return redirect()->route('ebms_api.invoices.index');
         } catch (\Exception $e) {
             // An error occured; cancel the transaction...
 
@@ -2161,7 +2161,7 @@ class FactureController extends Controller
 
         DB::commit();
             session()->flash('success', 'La Facture  est validée avec succés');
-            return back();
+            return redirect()->route('admin.barrist-invoices.index');
         } catch (\Exception $e) {
             // An error occured; cancel the transaction...
 
@@ -2420,7 +2420,7 @@ class FactureController extends Controller
 
         DB::commit();
             session()->flash('success', 'La Facture  est validée avec succés');
-            return back();
+            return redirect()->route('admin.bartender-invoices.index');
         } catch (\Exception $e) {
             // An error occured; cancel the transaction...
 
@@ -2602,7 +2602,7 @@ class FactureController extends Controller
 
         DB::commit();
             session()->flash('success', 'La Facture  est validée avec succés');
-            return back();
+            return redirect()->route('admin.booking-invoices.choose');
         } catch (\Exception $e) {
             // An error occured; cancel the transaction...
 
@@ -2646,7 +2646,7 @@ class FactureController extends Controller
 
         DB::commit();
             session()->flash('success', 'La Facture  est validée avec succés');
-            return back();
+            return redirect()->route('admin.booking-invoices.choose');
         } catch (\Exception $e) {
             // An error occured; cancel the transaction...
 
@@ -2820,7 +2820,7 @@ class FactureController extends Controller
 
         DB::commit();
             session()->flash('success', 'La Facture  est validée avec succés');
-            return back();
+            return redirect()->route('admin.invoice-kitchens.index');
         } catch (\Exception $e) {
             // An error occured; cancel the transaction...
 

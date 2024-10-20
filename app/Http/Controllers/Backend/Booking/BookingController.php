@@ -109,7 +109,7 @@ class BookingController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to create any booking !');
         }
 
-        $articles  = BookingSalle::orderBy('name','asc')->get();
+        $articles  = BookingSalle::where('selling_price','>',0)->orderBy('name','asc')->get();
         $techniques  = BookingTechnique::orderBy('name','asc')->get();
         $clients  = BookingClient::orderBy('customer_name','asc')->get();
         return view('backend.pages.booking.booking.create_salle', compact('articles','techniques','clients'));
@@ -121,7 +121,7 @@ class BookingController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to create any booking !');
         }
 
-        $articles  = BookingService::orderBy('name','asc')->get();
+        $articles  = BookingService::where('selling_price','>',0)->orderBy('name','asc')->get();
         $clients  = BookingClient::orderBy('customer_name','asc')->get();
         return view('backend.pages.booking.booking.create_service', compact('articles','clients'));
     }
@@ -155,7 +155,7 @@ class BookingController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to create any booking !');
         }
 
-        $articles  = KidnessSpace::orderBy('name','asc')->get();
+        $articles  = KidnessSpace::where('selling_price','>',0)->orderBy('name','asc')->get();
         $techniques  = BookingTechnique::orderBy('name','asc')->get();
         $clients  = BookingClient::orderBy('customer_name','asc')->get();
         return view('backend.pages.booking.booking.create_kidness_space', compact('articles','techniques','clients'));
@@ -167,7 +167,7 @@ class BookingController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to create any booking !');
         }
 
-        $articles  = SwimingPool::orderBy('name','asc')->get();
+        $articles  = SwimingPool::where('selling_price','>',0)->orderBy('name','asc')->get();
         $techniques  = BookingTechnique::orderBy('name','asc')->get();
         $clients  = BookingClient::orderBy('customer_name','asc')->get();
         return view('backend.pages.booking.booking.create_swiming_pool', compact('articles','techniques','clients'));

@@ -364,11 +364,11 @@ class FoodController extends Controller
                 $food_in_big_store->save();
             }
         }elseif($store_type == '2'){
-            $drink_small_store_code = FoodSmallStoreDetail::where('code',$code_store)->value('code');
+            $food_in_small_store = FoodSmallStoreDetail::where('code',$code_store)->value('code');
             $food_in_small_store = FoodSmallStoreDetail::where('code',$code_store)->where('food_id',$food_id)->first();
             if (!empty($food_in_small_store)) {
                 $food_in_small_store->food_id = $food_id;
-                $food_in_small_store->quantity = $quantity;
+                $food_in_small_store->quantity_portion = $quantity;
                 $food_in_small_store->threshold_quantity = $threshold_quantity;
                 $food_in_small_store->purchase_price = $purchase_price;
                 $food_in_small_store->cump = $purchase_price;
@@ -383,7 +383,7 @@ class FoodController extends Controller
             }else{
                 $food_in_small_store = new FoodSmallStoreDetail();
                 $food_in_small_store->food_id = $food_id;
-                $food_in_small_store->quantity = $quantity;
+                $food_in_small_store->quantity_portion = $quantity;
                 $food_in_small_store->threshold_quantity = $threshold_quantity;
                 $food_in_small_store->purchase_price = $purchase_price;
                 $food_in_small_store->cump = $purchase_price;

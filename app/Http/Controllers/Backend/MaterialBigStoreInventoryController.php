@@ -127,7 +127,7 @@ class MaterialBigStoreInventoryController extends Controller
             $inventory_signature = config('app.tin_number_company').Carbon::parse(Carbon::now())->format('YmdHis')."/".$inventory_no;
 
             $created_by = $this->user->name;
-            $description =$request->description; 
+            $description = $request->description; 
 
             for( $count = 0; $count < count($material_id); $count++ ){
                 $total_purchase_value = $quantity[$count] * $purchase_price[$count];
@@ -298,7 +298,7 @@ class MaterialBigStoreInventoryController extends Controller
                 $material_calc = array(
                         'purchase_price' => $data->new_purchase_price,
                         'cump' => $data->new_purchase_price,
-                        'unit' => $data->new_unit,
+                        //'unit' => $data->new_unit,
                         'quantity' => $data->new_quantity
                     );
 
@@ -309,11 +309,11 @@ class MaterialBigStoreInventoryController extends Controller
                     $sto = array(
                         'material_id' => $data->material_id,
                         'quantity' => $data->new_quantity,
-                        'unit' => $data->new_unit,
+                        //'unit' => $data->new_unit,
                         'cump' => $data->new_purchase_price,
                         'purchase_price' => $data->new_purchase_price,
                         'total_purchase_value' => $data->new_purchase_price * $data->new_quantity,
-                        'updated_by' => $this->user->name,
+                        //'updated_by' => $this->user->name,
                     );
 
                     $reportData = array(
@@ -323,7 +323,10 @@ class MaterialBigStoreInventoryController extends Controller
                         'quantity_inventory' => $data->new_quantity,
                         'value_inventory' => $data->new_purchase_price * $data->new_quantity,
                         'inventory_no' => $data->inventory_no,
+                        'type_transaction' => "INVENTAIRE",
+                        'document_no' => $data->inventory_no,
                         'code_store' => $data->code_store,
+                        'description' => $data->description,
                         'created_by' => $this->user->name,
                     );
 
