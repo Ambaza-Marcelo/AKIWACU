@@ -19,6 +19,7 @@ use App\Models\MaterialBigReport;
 use Carbon\Carbon;
 use Excel;
 use App\Models\Setting;
+use App\Exports\MaterialMdStoreInventoryExport;
 use App\Mail\DeleteInventoryMail;
 use PDF;
 use Mail;
@@ -411,6 +412,11 @@ class MaterialBigStoreInventoryController extends Controller
             throw $e;
         }
 
+    }
+
+    public function exportToExcel(Request $request,$code)
+    {
+        return Excel::download(new MaterialMdStoreInventoryExport($code), 'INVENTAIRE A L INTERMEDIAIRE STOCK DES MATERIELS.xlsx');
     }
 
     /**

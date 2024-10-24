@@ -125,7 +125,7 @@
                                 <td><select class="form-control" name="service_id[]" id="service_id">
                                 <option disabled="disabled" selected="selected">merci de choisir</option>
                                 @foreach($articles as $article)
-                                <option value="{{ $article->id }}" class="form-control">{{ $article->name }}</option>
+                                <option value="{{ $article->id }}" class="form-control">{{ $article->name }}/{{number_format($article->selling_price,0,',',' ') }}</option>
                                 @endforeach
                                 </select></td>  
                                 <td><input type="number" name="quantity[]" min="0" placeholder="Entrer quantite" class="form-control" /></td>
@@ -161,7 +161,7 @@
                          "<select class='form-control' name='service_id[]'"+
                             "<option>merci de choisir</option>"+
                              "@foreach($articles as $article)"+
-                                 "<option value='{{ $article->id }}'>{{ $article->name }}</option>"+
+                                 "<option value='{{ $article->id }}'>{{ $article->name }}/{{number_format($article->selling_price,0,',',' ') }}</option>"+
                              "@endforeach>"+
                           "</select>"+
                         "</td>"+

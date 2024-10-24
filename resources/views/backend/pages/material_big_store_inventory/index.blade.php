@@ -140,7 +140,10 @@
                                             @endif
                                         @endif
                                         @if (Auth::guard('admin')->user()->can('material_big_inventory.view'))
-                                        <a href="{{ route('admin.material-big-store-inventory.generatePdf', $inventory->inventory_no) }}"><img src="{{ asset('img/ISSh.gif') }}" width="60" title="Télécharger d'abord le document et puis imprimer"></a>
+                                        <a class="btn btn-success" href="{{ route('admin.material-md-store-inventory.export-to-excel', $inventory->inventory_no) }}">Exporter en Excel</a>
+                                        @endif
+                                        @if (Auth::guard('admin')->user()->can('material_big_inventory.view'))
+                                        <a href="{{ route('admin.material-md-store-inventory.export-to-excel', $inventory->inventory_no) }}"><img src="{{ asset('img/ISSh.gif') }}" width="60" title="Télécharger d'abord le document et puis imprimer"></a>
                                         @endif
                                     </td>
                                 </tr>

@@ -477,7 +477,7 @@ class DrinkBigStoreInventoryController extends Controller
 
     public function exportToExcel(Request $request,$code)
     {
-        return Excel::download(new DrinkMdStoreInventoryExport($code), 'inventaire_stock_intermediaire.xlsx');
+        return Excel::download(new DrinkMdStoreInventoryExport($code), 'INVENTAIRE A L INTERMEDIAIRE STOCK DES BOISSONS.xlsx');
     }
 
     /**

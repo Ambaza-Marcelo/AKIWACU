@@ -854,6 +854,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::delete('EBMS/material-big-store-inventory/destroy/{id}', 'Backend\MaterialBigStoreInventoryController@destroy')->name('admin.material-big-store-inventory.destroy');
 
     Route::get('EBMS/material-big-store-inventory/generatePdf/{inventory_no}','Backend\MaterialBigStoreInventoryController@bon_inventaire')->name('admin.material-big-store-inventory.generatePdf');
+    Route::get('EBMS/material-md-store-inventory/export-to-excel/{inventory_no}','Backend\MaterialBigStoreInventoryController@exportToExcel')->name('admin.material-md-store-inventory.export-to-excel');
     Route::put('EBMS/material-big-store-inventory/validate/{inventory_no}','Backend\MaterialBigStoreInventoryController@validateInventory')->name('admin.material-big-store-inventory.validate');
     Route::put('EBMS/material-big-store-inventory/reject/{inventory_no}','Backend\MaterialBigStoreInventoryController@rejectInventory')->name('admin.material-big-store-inventory.reject');
     Route::put('EBMS/material-big-store-inventory/reset/{inventory_no}','Backend\MaterialBigStoreInventoryController@resetInventory')->name('admin.material-big-store-inventory.reset');
