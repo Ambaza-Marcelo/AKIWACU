@@ -327,6 +327,7 @@ class ClientController extends Controller
 
         session()->flash('success', 'Client has been updated !!');
         return redirect()->route('admin.clients.index');
+       }
     }
 
     /**
