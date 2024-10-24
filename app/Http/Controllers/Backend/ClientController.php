@@ -303,7 +303,7 @@ class ClientController extends Controller
             $client->vat_customer_payer = $request->vat_customer_payer;
             $client->company = $request->company;
             $client->save();
-            session()->flash('success', 'Le client a été créé avec succés !!, OBR Message : '.$msg.'('.$tp_name.')');
+            session()->flash('success', 'Le client a été modifié avec succés !!, OBR Message : '.$msg.'('.$tp_name.')');
             return redirect()->route('admin.clients.index');
         }elseif ($success == false && $request->vat_customer_payer == 1) {
 
@@ -325,7 +325,7 @@ class ClientController extends Controller
             $client->company = $request->company;
             $client->save();
 
-        session()->flash('success', 'Client has been updated !!');
+        session()->flash('success', 'Le client a été modifié avec succés !!');
         return redirect()->route('admin.clients.index');
        }
     }
