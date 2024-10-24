@@ -51,9 +51,22 @@
                         <div class="row">
                         <div class="col-md-6">
                         <div class="form-group">
-                            <label for="customer_name">Nom du Client</label>
-                            <input type="text" class="form-control" id="customer_name" name="customer_name" value="{{ $client->customer_name }}">
+                            <label for="tp_type">Type de contribuable</label>
+                            <select name="tp_type" id="tp_type" class="form-control">
+                                <option disabled selected>merci de choisir</option>
+                                <option value="1">Personne Physique</option>
+                                <option value="2">société locale</option>
+                                <option value="3">société étrangère</option>
+                            </select>
                         </div>
+                        </div>
+                        <div class="col-md-6" id="customer_TIN">
+                            
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6" id="customer_name">
+
                         </div>
                         <div class="col-md-6">
                         <div class="form-group">
@@ -65,14 +78,14 @@
                     <div class="row">
                         <div class="col-md-6">
                         <div class="form-group">
-                            <label for="customer_TIN">NIF du Client</label>
-                            <input type="text" class="form-control" id="customer_TIN" name="customer_TIN" value="{{ $client->customer_TIN }}">
+                            <label for="customer_address">Adresse du Client</label>
+                            <input type="text" class="form-control" id="customer_address" name="customer_address" value="{{ $client->customer_address }}">
                         </div>
                         </div>
                         <div class="col-md-6">
                         <div class="form-group">
-                            <label for="customer_address">Adresse du Client</label>
-                            <input type="text" class="form-control" id="customer_address" name="customer_address" value="{{ $client->customer_address }}">
+                            <label for="mail">E-mail du Client</label>
+                            <input type="text" class="form-control" id="mail" name="mail" value="{{ $client->mail }}">
                         </div>
                         </div>
                     </div>
@@ -81,10 +94,10 @@
                                 <label for="vat_customer_payer">Client est assujetti a la TVA?</label>
                                 <div class="form-group">
                                     <label class="text">Non Assujetti
-                                    <input type="checkbox" name="vat_customer_payer" value="0" checked="checked" class="form-control">
+                                    <input type="checkbox" name="vat_customer_payer" value="0" @if($client->vat_customer_payer == '0') checked="checked" @endif class="form-control">
                                     </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <label class="text">Assujetti
-                                    <input type="checkbox" name="vat_customer_payer" value="1" class="form-control">
+                                    <input type="checkbox" name="vat_customer_payer" value="1" @if($client->vat_customer_payer == '1') checked="checked" @endif class="form-control">
                                     </label>
                                 </div>
                             </div>
@@ -119,6 +132,42 @@
 
     }
     })
+
+    $('#tp_type').change(function () { 
+    if ($(this).val() === '2'){
+
+        var customer_TIN = "<div class='form-group'>"+
+                            "<label for='customer_TIN'>NIF du Client<strong style='color: red;'>*</strong></label>"+
+                                "<input type='text' class='form-control' name='customer_TIN' placeholder='Entrer le NIF du Client' required>"+
+                        "</div>";
+        
+        $("#customer_TIN").append(customer_TIN);
+        $("#customer_name").hidden();
+
+    }
+
+    if ($(this).val() === '1'){
+
+        var customer_name = "<div class='form-group'>"+
+                            "<label for='customer_name'>Nom du Client<strong style='color: red;'>*</strong></label>"+
+                                "<input type='text' class='form-control' name='customer_name' placeholder='Entrer le NIF du Client' required>"+
+                        "</div>";
+        
+        $("#customer_name").append(customer_name);
+    }
+
+    if ($(this).val() === '3'){
+
+        var customer_name = "<div class='form-group'>"+
+                            "<label for='customer_name'>Nom du Client<strong style='color: red;'>*</strong></label>"+
+                                "<input type='text' class='form-control' name='customer_name' placeholder='Entrer le NIF du Client' required>"+
+                        "</div>";
+        
+        $("#customer_name").append(customer_name);
+    }
+
+    })
+    .trigger( "change" );
 
 </script>
 @endsection
