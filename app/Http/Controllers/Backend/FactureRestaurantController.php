@@ -159,7 +159,7 @@ class FactureRestaurantController extends Controller
         $cash = DB::table('facture_details')->where('etat','1')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
 
         $total_vat = DB::table('facture_details')->where('etat','!=','-1')->where('etat','!=','0')->whereBetween('invoice_date',[$start_date,$end_date])->sum('vat');
-        $total_item_price_nvat = DB::table('facture_details')->where('etat','!=','-1')->where('etat','!=','0')->where('invoice_ref',)->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_price_nvat');
+        $total_item_price_nvat = DB::table('facture_details')->where('etat','!=','-1')->where('etat','!=','0')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_price_nvat');
 
         $credit = DB::table('facture_details')->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
 
@@ -169,6 +169,10 @@ class FactureRestaurantController extends Controller
 
         $note_credit = DB::table('facture_details')->whereColumn('invoice_number','invoice_ref')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
 
+        $note_credit_tva = DB::table('facture_details')->whereColumn('invoice_number','invoice_ref')->whereBetween('invoice_date',[$start_date,$end_date])->sum('vat');
+
+        $note_credit_pvhtva = DB::table('facture_details')->whereColumn('invoice_number','invoice_ref')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_price_nvat');
+
 
         $setting = DB::table('settings')->orderBy('created_at','desc')->first();
         $currentTime = Carbon::now();
@@ -176,7 +180,7 @@ class FactureRestaurantController extends Controller
         $dateT =  $currentTime->toDateTimeString();
 
         $dateTime = str_replace([' ',':'], '_', $dateT);
-        $pdf = PDF::loadView('backend.pages.document.chiffre_affaire',compact('ca','note_credit','dateTime','setting','end_date','start_date','cash','credit','pending','cancelled','total_vat','total_item_price_nvat'))->setPaper('a4', 'portrait');
+        $pdf = PDF::loadView('backend.pages.document.chiffre_affaire',compact('ca','note_credit','dateTime','setting','end_date','start_date','cash','credit','pending','cancelled','total_vat','total_item_price_nvat','note_credit_pvhtva','note_credit_tva'))->setPaper('a4', 'portrait');
 
         //Storage::put('public/journal_general/'.$d1.'_'.$d2.'.pdf', $pdf->output());
 

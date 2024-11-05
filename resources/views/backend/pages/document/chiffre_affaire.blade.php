@@ -60,8 +60,8 @@
                                <tr>
                                 @php
                                     $chiffre_affaire=$ca-($note_credit*2);
-                                    $pvhtva = ($chiffre_affaire * 100)/110;
-                                    $tva = ($pvhtva*10)/100;
+                                    $pvhtva = $total_item_price_nvat-($note_credit_pvhtva*2);
+                                    $tva = $total_vat-($note_credit_tva*2);
                                 @endphp
                                    <td>{{ number_format($chiffre_affaire,0,',',' ') }}</td>
                                    <td>{{ number_format($pvhtva,0,',',' ') }}</td>

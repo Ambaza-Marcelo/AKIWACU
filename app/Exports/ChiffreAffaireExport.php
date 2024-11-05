@@ -38,6 +38,11 @@ class ChiffreAffaireExport implements FromCollection, WithMapping, WithHeadings
             $type = "BOISSONS";
             $pa = $data->cump;
             $cump = $data->cump;
+            if ($cump <= 0) {
+                $cump = $data->drink->cump;
+            }else{
+                $cump = $data->cump;
+            }
     	}elseif (!empty($data->food_item_id)) {
     		$libelle = $data->foodItem->name;
             $type = "CUISINE";

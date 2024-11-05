@@ -717,14 +717,14 @@ class FoodStockoutController extends Controller
         FoodSmallStoreDetail::where('food_id','!=','')->update(['verified' => false]);
         FoodExtraBigStoreDetail::where('food_id','!=','')->update(['verified' => false]);
 
-            FoodStockout::where('stockout_no', '=', $stockout_no)
+        FoodStockout::where('stockout_no', '=', $stockout_no)
                 ->update(['status' => 4,'approuved_by' => $this->user->name]);
-            FoodStockoutDetail::where('stockout_no', '=', $stockout_no)
+        FoodStockoutDetail::where('stockout_no', '=', $stockout_no)
                 ->update(['status' => 4,'approuved_by' => $this->user->name]);
 
-            DB::commit();
-            session()->flash('success', 'Stockout has been done successfuly !, from '.$code_store_origin);
-            return back();
+        DB::commit();
+        session()->flash('success', 'Stockout has been done successfuly !, from '.$code_store_origin);
+        return back();
         } catch (\Exception $e) {
             // An error occured; cancel the transaction...
 
