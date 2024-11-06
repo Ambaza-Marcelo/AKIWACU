@@ -11,6 +11,7 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use App\Models\Material;
 use App\Models\MaterialCategory;
+use App\Models\MaterialMeasurement;
 use App\Models\MaterialBigStore;
 use App\Models\MaterialSmallStore;
 use App\Models\MaterialBigStoreDetail;
@@ -58,11 +59,12 @@ class MaterialController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to create any material !');
         }
         $categories = MaterialCategory::all();
+        $material_measurements = MaterialMeasurement::all();
         $material_extra_big_stores = MaterialExtraBigStore::all();
         $material_big_stores = MaterialBigStore::all();
         $material_small_stores = MaterialSmallStore::all();
         return view('backend.pages.material.create', compact(
-            'categories','material_big_stores','material_small_stores','material_extra_big_stores'));
+            'categories','material_measurements','material_big_stores','material_small_stores','material_extra_big_stores'));
     }
 
     /**
@@ -80,9 +82,9 @@ class MaterialController extends Controller
         // Validation Data
         $request->validate([
             'name' => 'required|max:255',
-            'unit' => 'required|max:20',
+            'material_measurement_id' => 'required|max:20',
             'purchase_price' => 'required',
-            'quantity' => 'required',
+            //'quantity' => 'required',
             'store_type' => 'required',
             'code_store' => 'required',
         ]);
@@ -94,10 +96,10 @@ class MaterialController extends Controller
         // Create New Item
         $material = new Material();
         $material->name = $request->name;
-        $material->quantity = $request->quantity;
+        $material->quantity = 0;
         $reference = strtoupper(substr($request->name, 0, 3));
         $material->code = $reference.date("y").substr(number_format(time() * mt_rand(), 0, '', ''), 0, 6);
-        $material->unit = $request->unit;
+        $material->material_measurement_id = $request->material_measurement_id;
         $material->purchase_price = $request->purchase_price;
         
         $material->specification = $request->specification;
@@ -248,12 +250,14 @@ class MaterialController extends Controller
 
         $material = Material::find($id);
         $categories = MaterialCategory::all();
+        $material_measurements = MaterialMeasurement::all();
         $material_extra_big_stores = MaterialExtraBigStore::all();
         $material_big_stores = MaterialBigStore::all();
         $material_small_stores = MaterialSmallStore::all();
         return view('backend.pages.material.edit', compact(
             'material', 
             'categories',
+            'material_measurements',
             'material_big_stores',
             'material_small_stores',
             'material_extra_big_stores'));
@@ -278,7 +282,7 @@ class MaterialController extends Controller
             'name' => 'required|max:255',
             'unit' => 'required|max:20',
             'purchase_price' => 'required',
-            'quantity' => 'required',
+            //'quantity' => 'required',
             'store_type' => 'required',
             'code_store' => 'required',
         ]);
@@ -291,7 +295,7 @@ class MaterialController extends Controller
         $material = Material::where('id',$id)->first();
 
         $material->name = $request->name;
-        $material->quantity = $request->quantity;
+        //$material->quantity = $request->quantity;
         $material->unit = $request->unit;
         $material->purchase_price = $request->purchase_price;
         

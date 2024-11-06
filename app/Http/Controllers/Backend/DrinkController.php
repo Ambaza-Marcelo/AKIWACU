@@ -11,6 +11,7 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use App\Models\Drink;
 use App\Models\DrinkCategory;
+use App\Models\DrinkMeasurement;
 use App\Models\DrinkBigStore;
 use App\Models\DrinkSmallStore;
 use App\Models\DrinkBigStoreDetail;
@@ -58,11 +59,12 @@ class DrinkController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to create any drink !');
         }
         $categories = DrinkCategory::all();
+        $drink_measurements = DrinkMeasurement::all();
         $drink_extra_big_stores = DrinkExtraBigStore::all();
         $drink_big_stores = DrinkBigStore::all();
         $drink_small_stores = DrinkSmallStore::all();
         return view('backend.pages.drink.create', compact(
-            'categories','drink_big_stores','drink_extra_big_stores','drink_small_stores'));
+            'categories','drink_measurements','drink_big_stores','drink_extra_big_stores','drink_small_stores'));
     }
 
     public function autocomplete(Request $request)
@@ -89,10 +91,10 @@ class DrinkController extends Controller
         // Validation Data
         $request->validate([
             'name' => 'required|max:255',
-            'unit' => 'required|max:50',
+            'drink_measurement_id' => 'required',
             'purchase_price' => 'required',
             'selling_price' => 'required',
-            'quantity_bottle' => 'required',
+            'dcategory_id' => 'required',
             'store_type' => 'required',
             'code_store' => 'required',
         ]);
@@ -105,11 +107,11 @@ class DrinkController extends Controller
             
         $drink = new Drink();
         $drink->name = $request->name;
-        $drink->quantity_bottle = $request->quantity_bottle;
+        $drink->quantity_bottle = 0;
         $drink->quantity_ml = $request->quantity_ml;
         $reference = strtoupper(substr($request->name, 0, 3));
         $drink->code = $reference.date("y").substr(number_format(time() * mt_rand(), 0, '', ''), 0, 6);
-        $drink->unit = $request->unit;
+        $drink->drink_measurement_id = $request->drink_measurement_id;
         $drink->purchase_price = $request->purchase_price;
         $drink->cump = $request->purchase_price;
         $drink->quantity_ml = $request->quantity_ml;
@@ -321,12 +323,14 @@ class DrinkController extends Controller
 
         $drink = Drink::find($id);
         $categories = DrinkCategory::all();
+        $drink_measurements = DrinkMeasurement::all();
         $drink_extra_big_stores = DrinkExtraBigStore::all();
         $drink_big_stores = DrinkBigStore::all();
         $drink_small_stores = DrinkSmallStore::all();
         return view('backend.pages.drink.edit', compact(
             'drink', 
             'categories',
+            'drink_measurements',
             'drink_big_stores',
             'drink_small_stores',
             'drink_extra_big_stores'));
@@ -349,9 +353,9 @@ class DrinkController extends Controller
 
         $request->validate([
             'name' => 'required|max:255',
-            'unit' => 'required|max:20',
+            'drink_measurement_id' => 'required',
             'purchase_price' => 'required',
-            'quantity_bottle' => 'required',
+            'dcategory_id' => 'required',
             'store_type' => 'required',
             'code_store' => 'required',
         ]);
@@ -364,9 +368,9 @@ class DrinkController extends Controller
         $drink = Drink::where('id',$id)->first();
 
         $drink->name = $request->name;
-        $drink->quantity_bottle = $request->quantity_bottle;
+        //$drink->quantity_bottle = $request->quantity_bottle;
         $drink->quantity_ml = $request->quantity_ml;
-        $drink->unit = $request->unit;
+        $drink->drink_measurement_id = $request->drink_measurement_id;
         $drink->purchase_price = $request->purchase_price;
         $drink->cump = $request->purchase_price;
         $drink->quantity_ml = $request->quantity_ml;

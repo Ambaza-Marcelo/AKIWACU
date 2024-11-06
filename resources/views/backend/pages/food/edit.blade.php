@@ -56,23 +56,12 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="unit">@lang('messages.unit')<strong style="color: red;">*</strong></label>
-                                    <select class="form-control" name="unit" id="unit">
+                                    <label for="food_measurement_id">@lang('messages.unit')<strong style="color: red;">*</strong></label>
+                                    <select class="form-control" name="food_measurement_id" id="food_measurement_id">
                                         <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                        <option value="pieces" {{ $food->unit == 'pieces' ? 'selected' : '' }} class="form-control">Pieces</option>
-                                        <option value="portions" {{ $food->unit == 'portions' ? 'selected' : '' }} class="form-control">Portions</option>
-                                        <option value="kg" {{ $food->unit == 'kg' ? 'selected' : '' }} class="form-control">Kilogrammes</option>
-                                        <option value="mg" {{ $food->unit == 'mg' ? 'selected' : '' }} class="form-control">Milligrammes</option>
-                                        <option value="ml" {{ $food->unit == 'ml' ? 'selected' : '' }} class="form-control">MilliLitres</option>
-                                        <option value="litres" {{ $food->unit == 'litres' ? 'selected' : '' }} class="form-control">Litres</option>
-                                        <option value="paquets" {{ $food->unit == 'paquets' ? 'selected' : '' }} class="form-control">Paquets</option>
-                                        <option value="botts" {{ $food->unit == 'botts' ? 'selected' : '' }} class="form-control">Botts</option>
-                                        <option value="grammes" {{ $food->unit == 'grammes' ? 'selected' : '' }} class="form-control">Grammes</option>
-                                        <option value="bidons" {{ $food->unit == 'bidons' ? 'selected' : '' }} class="form-control">Bidons</option>
-                                        <option value="rouleau" {{ $food->unit == 'rouleau' ? 'selected' : '' }} class="form-control">Rouleau</option>
-                                        <option value="bouteilles" {{ $food->unit == 'bouteilles' ? 'selected' : '' }} class="form-control">Bouteilles</option>
-                                        <option value="sachets" {{ $food->unit == 'sachets' ? 'selected' : '' }} class="form-control">Sachets</option>
-                                        <option value="boites" {{ $food->unit == 'boites' ? 'selected' : '' }} class="form-control">Boites</option>
+                                        @foreach($food_measurements as $food_measurement)
+                                        <option value="{{ $food_measurement->id }}" {{ $food->food_measurement_id == $food_measurement->id ? 'selected' : '' }} class="form-control">{{ $food_measurement->purchase_unit }}-{{ $food_measurement->stockout_unit }}-{{ $food_measurement->production_unit }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>

@@ -2,7 +2,7 @@
 @extends('backend.layouts.master')
 
 @section('title')
-@lang('messages.category') - @lang('messages.admin_panel')
+@lang('liste des unités de mesure') - @lang('messages.admin_panel')
 @endsection
 
 @section('styles')
@@ -21,7 +21,7 @@
     <div class="row align-items-center">
         <div class="col-sm-6">
             <div class="breadcrumbs-area clearfix">
-                <h4 class="page-title pull-left">@lang('messages.category')</h4>
+                <h4 class="page-title pull-left">@lang('liste des unités de mesure')</h4>
                 <ul class="breadcrumbs pull-left">
                     <li><a href="{{ route('admin.dashboard') }}">@lang('messages.dashboard')</a></li>
                     <li><span>@lang('messages.list')</span></li>
@@ -41,10 +41,10 @@
         <div class="col-12 mt-5">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="header-title float-left">Category List</h4>
+                    <h4 class="header-title float-left">liste des unités de mesure</h4>
                     <p class="float-right mb-2">
-                        @if (Auth::guard('admin')->user()->can('material_category.create'))
-                            <a class="btn btn-primary text-white" href="{{ route('admin.material-category.create') }}">@lang('messages.new')</a>
+                        @if (Auth::guard('admin')->user()->can('food_category.create'))
+                            <a class="btn btn-primary text-white" href="{{ route('admin.food-measurement.create') }}">@lang('messages.new')</a>
                         @endif
                     </p>
                     <div class="clearfix"></div>
@@ -54,27 +54,33 @@
                             <thead class="bg-light text-capitalize">
                                 <tr>
                                     <th width="5%">#</th>
-                                    <th width="30%">Category</th>
+                                    <th width="30%">Unité d'achat</th>
+                                    <th width="30%">Unité de sortie</th>
+                                    <th width="30%">Unité de production</th>
+                                    <th width="30%">Valeur équivalente</th>
                                     <th width="15%">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                               @foreach ($categories as $category)
+                               @foreach ($food_measurements as $food_measurement)
                                <tr>
                                     <td>{{ $loop->index+1 }}</td>
-                                    <td>{{ $category->name }}</td>
+                                    <td>{{ $food_measurement->purchase_unit }}</td>
+                                    <td>{{ $food_measurement->stockout_unit }}</td>
+                                    <td>{{ $food_measurement->production_unit }}</td>
+                                    <td>{{ $food_measurement->equivalent }}</td>
                                     <td>
-                                        @if (Auth::guard('admin')->user()->can('material_category.edit'))
-                                            <a class="btn btn-success text-white" href="{{ route('admin.material-category.edit', $category->id) }}">Edit</a>
+                                        @if (Auth::guard('admin')->user()->can('food_category.edit'))
+                                            <a class="btn btn-success text-white" href="{{ route('admin.food-measurement.edit', $food_measurement->id) }}">Edit</a>
                                         @endif
 
-                                        @if (Auth::guard('admin')->user()->can('material_category.delete'))
-                                            <a class="btn btn-danger text-white" href="{{ route('admin.material-category.destroy', $category->id) }}"
-                                            onclick="event.preventDefault(); document.getElementById('delete-form-{{ $category->id }}').submit();">
+                                        @if (Auth::guard('admin')->user()->can('food_category.delete'))
+                                            <a class="btn btn-danger text-white" href="{{ route('admin.food-measurement.destroy', $food_measurement->id) }}"
+                                            onclick="event.preventDefault(); document.getElementById('delete-form-{{ $food_measurement->id }}').submit();">
                                                 Delete
                                             </a>
 
-                                            <form id="delete-form-{{ $category->id }}" action="{{ route('admin.material-category.destroy', $category->id) }}" method="POST" style="display: none;">
+                                            <form id="delete-form-{{ $food_measurement->id }}" action="{{ route('admin.food-measurement.destroy', $food_measurement->id) }}" method="POST" style="display: none;">
                                                 @method('DELETE')
                                                 @csrf
                                             </form>

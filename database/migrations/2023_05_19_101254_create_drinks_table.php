@@ -43,12 +43,18 @@ class CreateDrinksTable extends Migration
             $table->string('updated_by')->nullable(true);
             $table->string('created_by')->nullable(true);
             $table->string('image')->nullable(true);
-            $table->bigInteger('dcategory_id')->unsigned()->nullable(true);
+            $table->bigInteger('dcategory_id')->unsigned();
             $table->foreign('dcategory_id')
                     ->references('id')
                     ->on('drink_categories')
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
+            $table->bigInteger('drink_measurement_id')->unsigned();
+            $table->foreign('drink_measurement_id')
+                    ->references('id')
+                    ->on('drink_measurements')
+                    ->onUpdate('cascade')
+                    ->onDelete('cascade');      
             $table->timestamps();
         });
     }

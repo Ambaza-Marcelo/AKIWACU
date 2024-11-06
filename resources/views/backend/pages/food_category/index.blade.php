@@ -68,7 +68,7 @@
                                             <a class="btn btn-success text-white" href="{{ route('admin.food-category.edit', $category->id) }}">Edit</a>
                                         @endif
 
-                                        @if (Auth::guard('admin')->user()->can('food_category.edit'))
+                                        @if (Auth::guard('admin')->user()->can('food_category.delete'))
                                             <a class="btn btn-danger text-white" href="{{ route('admin.food-category.destroy', $category->id) }}"
                                             onclick="event.preventDefault(); document.getElementById('delete-form-{{ $category->id }}').submit();">
                                                 Delete

@@ -11,6 +11,7 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use App\Models\Food;
 use App\Models\FoodCategory;
+use App\Models\FoodMeasurement;
 use App\Models\FoodBigStore;
 use App\Models\FoodSmallStore;
 use App\Models\FoodBigStoreDetail;
@@ -43,7 +44,7 @@ class FoodController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any food !');
         }
 
-        $foods = DB::table('foods')->get();
+        $foods = Food::orderBy('name')->get();
         return view('backend.pages.food.index', compact('foods'));
     }
 
@@ -58,11 +59,12 @@ class FoodController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to create any food !');
         }
         $categories = FoodCategory::all();
+        $food_measurements = FoodMeasurement::all();
         $food_extra_big_stores = FoodExtraBigStore::all();
         $food_big_stores = FoodBigStore::all();
         $food_small_stores = FoodSmallStore::all();
         return view('backend.pages.food.create', compact(
-            'categories','food_big_stores','food_small_stores','food_extra_big_stores'));
+            'categories','food_measurements','food_big_stores','food_small_stores','food_extra_big_stores'));
     }
 
     /**
@@ -80,9 +82,9 @@ class FoodController extends Controller
         // Validation Data
         $request->validate([
             'name' => 'required|max:255',
-            'unit' => 'required|max:20',
+            'food_measurement_id' => 'required',
             'purchase_price' => 'required',
-            'quantity' => 'required',
+            'fcategory_id' => 'required',
             'store_type' => 'required',
             'code_store' => 'required',
         ]);
@@ -94,10 +96,10 @@ class FoodController extends Controller
         // Create New Item
         $food = new Food();
         $food->name = $request->name;
-        $food->quantity = $request->quantity;
+        $food->quantity = 0;
         $reference = strtoupper(substr($request->name, 0, 3));
         $food->code = $reference.date("y").substr(number_format(time() * mt_rand(), 0, '', ''), 0, 6);
-        $food->unit = $request->unit;
+        $food->food_measurement_id = $request->food_measurement_id;
         $food->purchase_price = $request->purchase_price;
         $food->cump = $request->purchase_price;
         $food->specification = $request->specification;
@@ -265,12 +267,14 @@ class FoodController extends Controller
 
         $food = Food::find($id);
         $categories = FoodCategory::all();
+        $food_measurements = FoodMeasurement::all();
         $food_extra_big_stores = FoodExtraBigStore::all();
         $food_big_stores = FoodBigStore::all();
         $food_small_stores = FoodSmallStore::all();
         return view('backend.pages.food.edit', compact(
             'food', 
             'categories',
+            'food_measurements',
             'food_big_stores',
             'food_small_stores',
             'food_extra_big_stores'));
@@ -293,9 +297,9 @@ class FoodController extends Controller
 
         $request->validate([
             'name' => 'required|max:255',
-            'unit' => 'required|max:20',
+            'food_measurement_id' => 'required',
             'purchase_price' => 'required',
-            'quantity' => 'required',
+            'fcategory_id' => 'required',
             'store_type' => 'required',
             'code_store' => 'required',
         ]);
@@ -308,8 +312,8 @@ class FoodController extends Controller
         $food = Food::where('id',$id)->first();
 
         $food->name = $request->name;
-        $food->quantity = $request->quantity;
-        $food->unit = $request->unit;
+        //$food->quantity = $request->quantity;
+        $food->food_measurement_id = $request->food_measurement_id;
         $food->purchase_price = $request->purchase_price;
         
         $food->specification = $request->specification;

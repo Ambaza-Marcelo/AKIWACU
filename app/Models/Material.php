@@ -23,10 +23,15 @@ class Material extends Model
         'updated_by',
         'created_by',
         'mcategory_id',
+        'material_measurement_id'
     ];
 
     public function materialCategory(){
         return $this->belongsTo('App\Models\MaterialCategory');
+    }
+
+    public function materialMeasurement(){
+        return $this->belongsTo('App\Models\MaterialMeasurement');
     }
 
 

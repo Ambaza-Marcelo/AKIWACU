@@ -25,10 +25,15 @@ class Food extends Model
         'updated_by',
         'created_by',
         'fcategory_id',
+        'food_measurement_id'
     ];
 
     public function foodCategory(){
         return $this->belongsTo('App\Models\FoodCategory');
+    }
+
+    public function foodMeasurement(){
+        return $this->belongsTo('App\Models\FoodMeasurement');
     }
 
 

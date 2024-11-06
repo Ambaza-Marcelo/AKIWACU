@@ -24,10 +24,15 @@ class Drink extends Model
         'updated_by',
         'created_by',
         'dcategory_id',
+        'drink_measurement_id'
     ];
 
     public function drinkCategory(){
         return $this->belongsTo('App\Models\DrinkCategory');
+    }
+
+    public function drinkMeasurement(){
+        return $this->belongsTo('App\Models\DrinkMeasurement');
     }
 
     public function drinkBigStore(){

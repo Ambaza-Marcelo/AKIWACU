@@ -71,7 +71,7 @@
                                     <td>{{ $food->code }}</td>
                                     <td>{{ $food->code_store }}</td>
                                     <td>{{ $food->quantity }}</td>
-                                    <td>{{ $food->unit }}</td>
+                                    <td>{{ $food->foodMeasurement->purchase_unit }}{{ $food->foodMeasurement->stockout_unit }}-{{ $food->foodMeasurement->production_unit }}</td>
                                     <td>{{ number_format($food->purchase_price,0,',',' ') }}</td>
                                     <td>
                                         @if (Auth::guard('admin')->user()->can('food.edit'))

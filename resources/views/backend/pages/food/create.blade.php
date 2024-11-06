@@ -55,23 +55,12 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="unit">@lang('messages.unit')<strong style="color: red;">*</strong></label>
-                                    <select class="form-control" name="unit" id="unit">
+                                    <label for="food_measurement_id">@lang('messages.unit')<strong style="color: red;">*</strong></label>
+                                    <select class="form-control" name="food_measurement_id" id="food_measurement_id">
                                         <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                        <option value="pieces" class="form-control">Pieces</option>
-                                        <option value="portions" class="form-control">Portions</option>
-                                        <option value="kg" class="form-control">Kilogrammes</option>
-                                        <option value="mg" class="form-control">Milligrames</option>
-                                        <option value="ml" class="form-control">MilliLitres</option>
-                                        <option value="litres" class="form-control">Litres</option>
-                                        <option value="paquets" class="form-control">Paquets</option>
-                                        <option value="botts" class="form-control">Botts</option>
-                                        <option value="grammes" class="form-control">Grammes</option>
-                                        <option value="bidons" class="form-control">Bidons</option>
-                                        <option value="rouleau" class="form-control">Rouleau</option>
-                                        <option value="bouteilles" class="form-control">Bouteilles</option>
-                                        <option value="sachets" class="form-control">Sachets</option>
-                                        <option value="boites" class="form-control">Boites</option>
+                                        @foreach($food_measurements as $food_measurement)
+                                        <option value="{{ $food_measurement->id }}" class="form-control">{{ $food_measurement->purchase_unit }}-{{ $food_measurement->stockout_unit }}-{{ $food_measurement->production_unit }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>

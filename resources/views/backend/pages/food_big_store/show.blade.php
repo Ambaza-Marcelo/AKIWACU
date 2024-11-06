@@ -77,7 +77,7 @@
                                     @else
                                     <td>{{ $food_big_store->quantity }}</td>
                                     @endif
-                                    <td>{{ $food_big_store->unit }}</td>
+                                    <td>{{ $food_big_store->food->foodMeasurement->purchase_unit }}</td>
                                     <td>{{ $food_big_store->threshold_quantity }}</td>
                                     <td>{{ number_format($food_big_store->purchase_price,0,',',' ') }}</td>
                                     <td>{{ number_format($food_big_store->total_purchase_value,0,',',' ') }}</td>

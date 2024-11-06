@@ -400,6 +400,30 @@ Route::group(['prefix' => 'admin'], function () {
     Route::put('EBMS/food-category/update/{id}', 'Backend\FoodCategoryController@update')->name('admin.food-category.update');
     Route::delete('EBMS/food-category/destroy/{id}', 'Backend\FoodCategoryController@destroy')->name('admin.food-category.destroy');
 
+    //drink-measurement routes
+    Route::get('Akiwacu/drink-measurement/index', 'Backend\DrinkMeasurementController@index')->name('admin.drink-measurement.index');
+    Route::get('Akiwacu/drink-measurement/create', 'Backend\DrinkMeasurementController@create')->name('admin.drink-measurement.create');
+    Route::post('Akiwacu/drink-measurement/store', 'Backend\DrinkMeasurementController@store')->name('admin.drink-measurement.store');
+    Route::get('Akiwacu/drink-measurement/edit/{id}', 'Backend\DrinkMeasurementController@edit')->name('admin.drink-measurement.edit');
+    Route::put('Akiwacu/drink-measurement/update/{id}', 'Backend\DrinkMeasurementController@update')->name('admin.drink-measurement.update');
+    Route::delete('Akiwacu/drink-measurement/destroy/{id}', 'Backend\DrinkMeasurementController@destroy')->name('admin.drink-measurement.destroy');
+
+    //food-measurement routes
+    Route::get('Akiwacu/food-measurement/index', 'Backend\FoodMeasurementController@index')->name('admin.food-measurement.index');
+    Route::get('Akiwacu/food-measurement/create', 'Backend\FoodMeasurementController@create')->name('admin.food-measurement.create');
+    Route::post('Akiwacu/food-measurement/store', 'Backend\FoodMeasurementController@store')->name('admin.food-measurement.store');
+    Route::get('Akiwacu/food-measurement/edit/{id}', 'Backend\FoodMeasurementController@edit')->name('admin.food-measurement.edit');
+    Route::put('Akiwacu/food-measurement/update/{id}', 'Backend\FoodMeasurementController@update')->name('admin.food-measurement.update');
+    Route::delete('Akiwacu/food-measurement/destroy/{id}', 'Backend\FoodMeasurementController@destroy')->name('admin.food-measurement.destroy');
+
+    //material-measurement routes
+    Route::get('Akiwacu/material-measurement/index', 'Backend\MaterialMeasurementController@index')->name('admin.material-measurement.index');
+    Route::get('Akiwacu/material-measurement/create', 'Backend\MaterialMeasurementController@create')->name('admin.material-measurement.create');
+    Route::post('Akiwacu/material-measurement/store', 'Backend\MaterialMeasurementController@store')->name('admin.material-measurement.store');
+    Route::get('Akiwacu/material-measurement/edit/{id}', 'Backend\MaterialMeasurementController@edit')->name('admin.material-measurement.edit');
+    Route::put('Akiwacu/material-measurement/update/{id}', 'Backend\MaterialMeasurementController@update')->name('admin.material-measurement.update');
+    Route::delete('Akiwacu/material-measurement/destroy/{id}', 'Backend\MaterialMeasurementController@destroy')->name('admin.material-measurement.destroy');
+
     //barrist stock routes
     Route::get('EBMS/barrist-production-store/index', 'Backend\BarristProductionStoreController@index')->name('admin.barrist-production-store.index');
     Route::delete('EBMS/barrist-production-store/destroy/{id}', 'Backend\BarristProductionStoreController@destroy')->name('admin.barrist-production-store.destroy');

@@ -46,7 +46,7 @@
                                 @if($usr->can('supplier.view'))
                                 <li class=""><a href="{{ route('admin.suppliers.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('messages.suppliers')</a></li>
                                 @endif
-                                @if($usr->can('booking_client.view'))
+                                @if($usr->can('client.view'))
                                 <li class=""><a href="{{ route('admin.clients.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Clients')</a></li>
                                 @endif
                                 @if($usr->can('table.view'))
@@ -54,6 +54,15 @@
                                 @endif
                                 @if($usr->can('drink_category.view'))
                                 <li class=""><a href="{{ route('admin.drink-category.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Categorie Boisson')</a></li>
+                                @endif
+                                @if($usr->can('drink_category.view'))
+                                <li class=""><a href="{{ route('admin.drink-measurement.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('unités de mesure Boisson')</a></li>
+                                @endif
+                                @if($usr->can('food_category.view'))
+                                <li class=""><a href="{{ route('admin.food-measurement.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('unités de mesure Nourriture')</a></li>
+                                @endif
+                                @if($usr->can('material_category.view'))
+                                <li class=""><a href="{{ route('admin.material-measurement.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('unités de mesure materiel')</a></li>
                                 @endif
                                 @if($usr->can('food_category.view'))
                                 <li class=""><a href="{{ route('admin.food-category.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Categorie Nourriture')</a></li>

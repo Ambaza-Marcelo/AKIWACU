@@ -36,10 +36,16 @@ class CreateFoodsTable extends Migration
             $table->string('store_type')->nullable(true);
             $table->string('updated_by')->nullable(true);
             $table->string('created_by')->nullable(true);
-            $table->bigInteger('fcategory_id')->unsigned()->nullable(true);
+            $table->bigInteger('fcategory_id')->unsigned();
             $table->foreign('fcategory_id')
                     ->references('id')
                     ->on('food_categories')
+                    ->onUpdate('cascade')
+                    ->onDelete('cascade');
+            $table->bigInteger('food_measurement_id')->unsigned();
+            $table->foreign('food_measurement_id')
+                    ->references('id')
+                    ->on('food_measurements')
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
             $table->timestamps();
