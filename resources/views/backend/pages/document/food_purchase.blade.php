@@ -7,6 +7,7 @@
              border: 1px solid black;
              text-align: center;
              width: auto;
+             font-size: 12px;
         }
 
     </style>
@@ -17,7 +18,7 @@
         <div>
             <div>
                 <div>
-                   <img src="img/eden_logo.png" width="200" height="65">
+                   <img src="img/eden_logo.png" width="200" height="85">
                 </div>
                 <div>
                     <div style="float: left;">
@@ -50,7 +51,7 @@
                                     <th>Article</th>
                                     <th>Code</th>
                                     <th>Specification</th>
-                                    <th>Quantite Demandee</th>
+                                    <th>Quantité Demandée</th>
                                     <th>Unité</th>
                                     <th>P.A SYS.</th>
                                     <th>P.A Saisie</th>
@@ -65,8 +66,8 @@
                                     <td>{{ $data->food->code }}</td>
                                     <td>{{ $data->food->specification }}</td>
                                     <td>{{ $data->quantity }}</td>
-                                    <td>{{ $data->unit }}</td>
-                                    <td>{{ number_format($data->food->price,0,',',' ') }}</td>
+                                    <td>{{ $data->food->foodMeasurement->purchase_unit }}</td>
+                                    <td>{{ number_format($data->food->purchase_price,0,',',' ') }}</td>
                                     <td>{{ number_format($data->price,0,',',' ') }}</td>
                                     <td>{{ number_format($data->total_value,0,',',' ') }}</td>
                                 </tr>

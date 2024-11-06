@@ -37,8 +37,6 @@
                                     <th width="10%">@lang('messages.unit')</th>
                                     <th width="10%">Destination</th>
                                     <th width="10%">@lang('messages.purchase_price')</th>
-                                    <th width="10%">@lang('messages.selling_price')</th>
-                                    <th width="10%">@lang('messages.total_amount_selling')</th>
                                     <th width="20%">@lang('messages.description')</th>
                                     <th width="10%">@lang('messages.created_by')</th>
                                     <th width="15%">Action</th>
@@ -54,11 +52,9 @@
                                     <td>@if($stockout->origin_sm_store_id)PETIT STOCK @elseif($stockout->origin_bg_store_id) STOCK INTERMEDIAIRE @else GRAND STOCK @endif</td>
                                     <td>{{ $stockout->food->name }}</td>
                                     <td>@if($stockout->quantity_portion){{ $stockout->quantity_portion }} @else {{ $stockout->quantity }} @endif</td>
-                                    <td>@if($stockout->quantity_portion){{ $stockout->unit }} @else {{ $stockout->food->unit }} @endif</td>
+                                    <td>@if($stockout->quantity_portion){{ $stockout->food->foodMeasurement->production_unit }} @else {{ $stockout->food->foodMeasurement->purchase_unit }} @endif</td>
                                     <td>{{ $stockout->destination }}</td>
                                     <td>{{ number_format($stockout->purchase_price,0,',',' ' ) }}</td>
-                                    <td>{{ number_format($stockout->selling_price,0,',',' ' ) }}</td>
-                                    <td>{{ number_format($stockout->total_selling_value,0,',',' ' ) }}</td>
                                     <td>{{ $stockout->description }}</td>
                                     <td>{{ $stockout->created_by }}</td>
                                     <td>

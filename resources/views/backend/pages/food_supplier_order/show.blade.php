@@ -50,7 +50,7 @@
                                     <td>{{ $order->purchase_no }}</td>
                                     <td>{{ $order->food->name }}</td>
                                     <td>{{ $order->quantity }}</td>
-                                    <td>{{ $order->unit }}</td>
+                                    <td>{{ $order->food->foodMeasurement->purchase_unit }}</td>
                                     <td>{{ number_format($order->price,0,',',' ' ) }}</td>
                                     <td>{{ number_format($order->total_value,0,',',' ' ) }}</td>
                                     <td>{{ $order->description }}</td>

@@ -91,7 +91,7 @@ class FoodStockinController extends Controller
         $rules = array(
                 'food_id.*'  => 'required',
                 'date'  => 'required',
-                'unit.*'  => 'required',
+                //'unit.*'  => 'required',
                 'quantity.*'  => 'required',
                 'purchase_price.*'  => 'required',
                 'handingover'  => 'required',
@@ -149,7 +149,7 @@ class FoodStockinController extends Controller
                     'date' => $date,
                     'store_type' => $store_type,
                     'quantity' => $quantity[$count],
-                    'unit' => $unit[$count],
+                    //'unit' => $unit[$count],
                     'purchase_price' => $purchase_price[$count],
                     'total_amount_purchase' => $total_amount_purchase,
                     'receptionist' => $receptionist,
@@ -407,7 +407,7 @@ class FoodStockinController extends Controller
                     $code_store_destination = FoodSmallStore::where('id',$data->destination_sm_store_id)->value('code');
 
                 $valeurStockInitialDestination = FoodSmallStoreDetail::where('code',$code_store_destination)->where('food_id','!=', '')->where('food_id', $data->food_id)->value('total_cump_value');
-                $quantityStockInitialDestination = FoodSmallStoreDetail::where('code',$code_store_destination)->where('food_id','!=', '')->where('food_id', $data->food_id)->value('quantity');
+                $quantityStockInitialDestination = FoodSmallStoreDetail::where('code',$code_store_destination)->where('food_id','!=', '')->where('food_id', $data->food_id)->value('quantity_portion');
                 $quantityTotalBigStore = $quantityStockInitialDestination + $data->quantity;
 
 
@@ -438,7 +438,7 @@ class FoodStockinController extends Controller
 
                     $smallStore = array(
                         'food_id' => $data->food_id,
-                        'quantity' => $quantityTotalBigStore,
+                        'quantity_portion' => $quantityTotalBigStore,
                         'purchase_price' => $data->purchase_price,
                         'total_purchase_value' => $quantityTotalBigStore * $data->purchase_price,
                         'cump' => $cump,
@@ -451,7 +451,7 @@ class FoodStockinController extends Controller
 
                     $foodData = array(
                         'id' => $data->food_id,
-                        'quantity' => $quantityTotalBigStore,
+                        'quantity_portion' => $quantityTotalBigStore,
                         'cump' => $cump,
                         'purchase_price' => $data->purchase_price,
                     );

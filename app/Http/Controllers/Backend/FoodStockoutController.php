@@ -91,7 +91,7 @@ class FoodStockoutController extends Controller
         $rules = array(
                 'food_id.*'  => 'required',
                 'date'  => 'required',
-                'unit.*'  => 'required',
+                //'unit.*'  => 'required',
                 'quantity.*'  => 'required',
                 'asker'  => 'required',
                 'destination'  => 'required',
@@ -117,7 +117,7 @@ class FoodStockoutController extends Controller
             $description =$request->description; 
             $origin_bg_store_id = $request->origin_bg_store_id;
             $origin_extra_store_id = $request->origin_extra_store_id;
-            $unit = $request->unit;
+            //$unit = $request->unit;
             $quantity = $request->quantity;
             $store_type = $request->store_type;
             $item_movement_type = $request->item_movement_type;
@@ -146,7 +146,7 @@ class FoodStockoutController extends Controller
                         'food_id' => $food_id[$count],
                         'date' => $date,
                         'quantity' => $quantity[$count],
-                        'unit' => $unit[$count],
+                        //'unit' => $unit[$count],
                         'purchase_price' => $purchase_price,
                         'total_purchase_value' => $total_purchase_value,
                         'asker' => $asker,
@@ -174,7 +174,7 @@ class FoodStockoutController extends Controller
                         'food_id' => $food_id[$count],
                         'date' => $date,
                         'quantity_portion' => $quantity[$count],
-                        'unit_portion' => $unit[$count],
+                        //'unit_portion' => $unit[$count],
                         'purchase_price' => $purchase_price,
                         'total_purchase_value' => $total_purchase_value,
                         'asker' => $asker,
@@ -202,7 +202,7 @@ class FoodStockoutController extends Controller
                         'food_id' => $food_id[$count],
                         'date' => $date,
                         'quantity' => $quantity[$count],
-                        'unit' => $unit[$count],
+                        //'unit' => $unit[$count],
                         'purchase_price' => $purchase_price,
                         'total_purchase_value' => $total_purchase_value,
                         'asker' => $asker,
@@ -532,6 +532,7 @@ class FoodStockoutController extends Controller
                 $quantityStockInitial = FoodSmallStoreDetail::where('code',$code_store_origin)->where('food_id','!=', '')->where('food_id', $data->food_id)->value('quantity_portion');
                 $quantityRestantSmallStore = $quantityStockInitial - $data->quantity_portion;
 
+                $cump = $cump/$data->food->foodMeasurement->equivalent;
                 $reportSmallStore = array(
                     'food_id' => $data->food_id,
                     'quantity_stock_initial' => $quantityStockInitial,
@@ -557,9 +558,8 @@ class FoodStockoutController extends Controller
                     $smallStore = array(
                         'food_id' => $data->food_id,
                         'quantity_portion' => $quantityRestantSmallStore,
-                        'total_selling_value' => $quantityRestantSmallStore * $data->purchase_price,
-                        'total_purchase_value' => $quantityRestantSmallStore * $data->purchase_price,
-                        'total_cump_value' => $quantityRestantSmallStore * $data->purchase_price,
+                        'total_purchase_value' => $quantityRestantSmallStore * $cump,
+                        'total_cump_value' => $quantityRestantSmallStore * $cump,
                         'created_by' => $this->user->name,
                         'verified' => true,
                         'created_at' => \Carbon\Carbon::now()

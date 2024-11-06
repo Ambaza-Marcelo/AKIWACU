@@ -69,7 +69,7 @@
                                     <td>{{ $loop->index+1 }}</td>
                                     <td>{{ \Carbon\Carbon::parse($purchase->date)->format('d/m/Y') }}</td>
                                     <td><a href="{{ route('admin.food-purchases.show',$purchase->purchase_no) }}">{{ $purchase->purchase_no }}</a></td>
-                                    <td>{{ $purchase->requisition_signature }}</td>
+                                    <td>{{ $purchase->purchase_signature }}</td>
                                     @if($purchase->status == 2)
                                     <td><span  class="badge badge-success">Validé</span></td>
                                     @elseif($purchase->status == -1)

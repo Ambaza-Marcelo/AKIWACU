@@ -103,7 +103,7 @@ class FoodReceptionController extends Controller
         $rules = array(
                 'food_id.*'  => 'required',
                 'date'  => 'required',
-                'unit.*'  => 'required',
+                //'unit.*'  => 'required',
                 'quantity_ordered.*'  => 'required',
                 'purchase_price.*'  => 'required',
                 'quantity_received.*'  => 'required',
@@ -136,7 +136,7 @@ class FoodReceptionController extends Controller
             $invoice_no = $request->invoice_no;
             $description =$request->description; 
             $destination_store_id = $request->destination_store_id;
-            $unit = $request->unit;
+            //$unit = $request->unit;
             $quantity_ordered = $request->quantity_ordered;
             $purchase_price = $request->purchase_price;
             $quantity_received = $request->quantity_received;
@@ -177,7 +177,7 @@ class FoodReceptionController extends Controller
                     'quantity_ordered' => $quantity_ordered[$count],
                     'quantity_received' => $quantity_received[$count],
                     'quantity_remaining' => $quantity_ordered[$count] - $quantity_received[$count],
-                    'unit' => $unit[$count],
+                    //'unit' => $unit[$count],
                     'purchase_price' => $purchase_price[$count],
                     'total_amount_ordered' => $total_amount_ordered,
                     'total_amount_received' => $total_amount_received,
@@ -251,7 +251,7 @@ class FoodReceptionController extends Controller
         $rules = array(
                 'food_id.*'  => 'required',
                 'date'  => 'required',
-                'unit.*'  => 'required',
+                //'unit.*'  => 'required',
                 'quantity_ordered.*'  => 'required',
                 'purchase_price.*'  => 'required',
                 'quantity_received.*'  => 'required',
@@ -325,7 +325,7 @@ class FoodReceptionController extends Controller
                     'quantity_ordered' => $quantity_ordered[$count],
                     'quantity_received' => $quantity_received[$count],
                     'quantity_remaining' => $quantity_ordered[$count] - $quantity_received[$count],
-                    'unit' => $unit[$count],
+                    //'unit' => $unit[$count],
                     'purchase_price' => $purchase_price[$count],
                     'total_amount_ordered' => $total_amount_ordered,
                     'total_amount_received' => $total_amount_received,

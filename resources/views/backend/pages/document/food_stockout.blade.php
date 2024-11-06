@@ -62,7 +62,7 @@
                                     <td>{{ $data->food->name }}</td>
                                     <td>{{ $data->food->code }}</td>
                                     <td>@if($data->quantity_portion){{ $data->quantity_portion }} @else {{ $data->quantity }} @endif</td>
-                                    <td>{{ $data->unit }}</td>
+                                    <td>@if($data->quantity_portion){{ $data->food->foodMeasurement->purchase_unit }} @else {{ $data->food->foodMeasurement->purchase_unit }} @endif</td>
                                     <td>{{ number_format($data->purchase_price,0,',',' ' )}}</td>
                                     <td>{{ number_format($data->total_purchase_value,0,',',' ' )}}</td>
                                 </tr>

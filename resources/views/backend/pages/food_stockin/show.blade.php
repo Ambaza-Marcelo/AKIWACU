@@ -53,7 +53,7 @@
                                     <td>{{ $stockin->destination_store_id }}</td>
                                     <td>{{ $stockin->food->name }}</td>
                                     <td>{{ $stockin->quantity }}</td>
-                                    <td>{{ $stockin->unit }}</td>
+                                    <td>{{ $stockin->food->foodMeasurement->purchase_unit }}</td>
                                     <td>{{ number_format($stockin->purchase_price,0,',',' ' ) }}</td>
                                     <td>{{ $stockin->description }}</td>
                                     <td>{{ $stockin->created_by }}</td>

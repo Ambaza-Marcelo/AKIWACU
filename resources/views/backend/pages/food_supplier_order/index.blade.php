@@ -67,7 +67,7 @@
                                     <td><a href="{{ route('admin.food-supplier-orders.show',$order->order_no)}}">{{ $order->order_no }}</a></td>
                                     <td>{{ $order->order_signature }}</td>
                                     <td><a href="@if($order->purchase_no){{ route('admin.food-purchases.show',$order->purchase_no)}}@endif">{{ $order->purchase_no }}</a></td>
-                                    <td>@if($order->status == 1)<img src="{{ asset('img/warning3.gif')}}" width="35">@elseif($order->status == 1)<span class="badge badge-warning">Encours</span> @elseif($order->status == 2)<span class="badge badge-warning">Validé</span> @elseif($order->status == 3)<span class="badge badge-warning">Confirmé</span> @elseif($order->status == 4)<span class="badge badge-info">Approuvé</span> @elseif($order->status == -1)<span class="badge badge-danger">Rejeté</span> @else<span class="badge badge-success">Receptionné</span>@endif</td>
+                                    <td>@if($order->status == 1)<span class="badge badge-warning">Encours</span> @elseif($order->status == 2)<span class="badge badge-info">Validé</span> @elseif($order->status == 3)<span class="badge badge-primary">Confirmé</span> @elseif($order->status == 4)<span class="badge badge-success">Approuvé</span> @elseif($order->status == -1)<span class="badge badge-danger">Rejeté</span> @else<span class="badge badge-success">Receptionné</span>@endif</td>
                                     <td>{{ $order->description }}</td>
                                     <td>{{ $order->created_by }}</td>
                                     <td>

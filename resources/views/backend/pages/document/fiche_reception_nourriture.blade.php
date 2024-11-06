@@ -59,8 +59,8 @@
                                     <th>No</th>
                                     <th>Article</th>
                                     <th>Code</th>
-                                    <th>Quantite Cmdee</th>
-                                    <th>Quantite Recu</th>
+                                    <th>Quantité Commandée</th>
+                                    <th>Quantité Reçu</th>
                                     <th>Unité</th>
                                     <th>Prix Unitaire</th>
                                     <th>Prix HTVA</th>
@@ -77,7 +77,7 @@
                                     <td>{{ $data->food->code }}</td>
                                     <td>{{ $data->quantity_ordered }}</td>
                                     <td>{{ $data->quantity_received }}</td>
-                                    <td>{{ $data->unit }}</td>
+                                    <td>{{ $data->food->foodMeasurement->purchase_unit }}</td>
                                     <td>{{ number_format($data->purchase_price,0,',',' ' )}}</td>
                                     <td>{{ number_format($data->price_nvat,0,',',' ' )}}</td>
                                     <td>{{ number_format($data->vat,0,',',' ' )}}</td>

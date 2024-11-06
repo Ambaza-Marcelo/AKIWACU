@@ -42,7 +42,6 @@
                                     <th width="10%">@lang('messages.quantity_ordered')</th>
                                     <th width="10%">@lang('messages.unit_price')</th>
                                     <th width="10%">@lang('messages.quantity_received')</th>
-                                    <th width="10%">@lang('messages.selling_price')</th>
                                     <th width="10%">@lang('messages.unit')</th>
                                     <th width="10%">@lang('messages.total_value')</th>
                                     <th width="20%">@lang('messages.description')</th>
@@ -68,8 +67,7 @@
                                     <td>{{ $reception->quantity_ordered }}</td>
                                     <td>{{ number_format($reception->purchase_price,0,',',' ' ) }}</td>
                                     <td>{{ $reception->quantity_received }}</td>
-                                    <td>{{ number_format($reception->selling_price,0,',',' ' ) }}</td>
-                                    <td>{{ $reception->unit }}</td>
+                                    <td>{{ $reception->food->foodMeasurement->purchase_unit }}</td>
                                     <td>{{ number_format($reception->total_amount_received,0,',',' ' ) }}</td>
                                     <td>{{ $reception->description }}</td>
                                     <td>{{ $reception->created_by }}</td>

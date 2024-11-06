@@ -71,7 +71,7 @@
                                     <td>{{ $purchase->food->name }}</td>
                                     <td>{{ $purchase->food->code }}</td>
                                     <td>{{ $purchase->quantity }}</td>
-                                    <td>{{ $purchase->unit }}</td>
+                                    <td>{{ $purchase->food->foodMeasurement->purchase_unit }}</td>
                                     <td>{{ number_format($purchase->price,0,',',' ') }}</td>
                                     <td>{{ number_format($purchase->total_value,0,',',' ') }}</td>
                                     <td>{{ $purchase->description }}</td>

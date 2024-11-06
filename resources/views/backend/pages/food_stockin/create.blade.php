@@ -112,7 +112,6 @@
                             <tr>
                                 <th>@lang('messages.item')</th>
                                 <th>@lang('messages.quantity')</th>
-                                <th>@lang('messages.unit')</th>
                                 <th>@lang('messages.purchase_price')</th>
                                 <th>Action</th>
                             </tr>
@@ -120,26 +119,10 @@
                                 <td> <select class="form-control" name="food_id[]" id="food_id">
                                 <option disabled="disabled" selected="selected">merci de choisir</option>
                             @foreach ($foods as $food)
-                                <option value="{{ $food->id }}" class="form-control">{{ $food->name }}</option>
+                                <option value="{{ $food->id }}" class="form-control">{{ $food->foodMeasurement->purchase_unit }}</option>
                             @endforeach
                             </select></td>  
                                 <td><input type="number" name="quantity[]" placeholder="Enter quantity" class="form-control"  step="any" min="0"/></td>  
-                                <td><select class="form-control" name="unit[]" id="unit">
-                                    <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                    <option value="pieces" class="form-control">Pieces</option>
-                                        <option value="portions" class="form-control">Portions</option>
-                                        <option value="kg" class="form-control">Kilogrammes</option>
-                                        <option value="mg" class="form-control">Milligrames</option>
-                                        <option value="litres" class="form-control">Litres</option>
-                                        <option value="paquets" class="form-control">Paquets</option>
-                                        <option value="botts" class="form-control">Botts</option>
-                                        <option value="grammes" class="form-control">Grammes</option>
-                                        <option value="bidons" class="form-control">Bidons</option>
-                                        <option value="rouleau" class="form-control">Rouleau</option>
-                                        <option value="bouteilles" class="form-control">Bouteilles</option>
-                                        <option value="sachets" class="form-control">Sachets</option>
-                                        <option value="boites" class="form-control">Boites</option>
-                                </select></td>
                                 <td><input type="number" name="purchase_price[]" placeholder="Enter purchase price" class="form-control"  step="any" min="0"/></td>     
                                 <td><button type="button" name="add" id="add" class="btn btn-success">@lang('messages.addmore')</button></td>  
                             </tr>  
@@ -172,30 +155,12 @@
                          "<select class='form-control' name='food_id[]'"+
                             "<option>merci de choisir</option>"+
                              "@foreach($foods as $food)"+
-                                 "<option value='{{ $food->id }}'>{{ $food->name }}</option>"+
+                                 "<option value='{{ $food->id }}'>{{ $food->name }}/{{ $food->foodMeasurement->purchase_unit }}</option>"+
                              "@endforeach>"+
                           "</select>"+
                         "</td>"+
                         "<td>"+
                           "<input type='number' name='quantity[]' step='any' placeholder='Enter Quantity' min='0' class='form-control' />"+
-                        "</td>"+
-                        "<td>"+
-                          "<select class='form-control' name='unit[]' id='unit'>"+
-                                "<option disabled='disabled' selected='selected'>merci de choisir</option>"+
-                                "<option value='pieces' class='form-control'>Pieces</option>"+
-                                "<option value='portions' class='form-control'>Portions</option>"+
-                                "<option value='kg' class='form-control'>Kilogrammes</option>"+
-                                "<option value='mg' class='form-control'>Milligrames</option>"+
-                                "<option value='litres' class='form-control'>Litres</option>"+
-                                "<option value='paquets' class='form-control'>Paquets</option>"+
-                                "<option value='botts' class='form-control'>Botts</option>"+
-                                "<option value='grammes' class='form-control'>Grammes</option>"+
-                                "<option value='bidons' class='form-control'>Bidons</option>"+
-                                "<option value='rouleau' class='form-control'>Rouleau</option>"+
-                                "<option value='bouteilles' class='form-control'>Bouteilles</option>"+
-                                "<option value='sachets' class='form-control'>Sachets</option>"+
-                                "<option value='boites' class='form-control'>Boites</option>"+
-                                "</select>"+
                         "</td>"+
                         "<td>"+
                         "<input type='number' step='any' name='purchase_price[]' placeholder='Enter purchase price' class='form-control' />"+

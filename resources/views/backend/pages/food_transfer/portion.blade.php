@@ -87,7 +87,6 @@
                             <tr>
                                 <th>@lang('messages.item')</th>
                                 <th>@lang('messages.quantity')</th>
-                                <th>@lang('messages.unit')</th>
                                 <th>@lang('messages.unit_price')</th>
                                 <th>@lang('portioned Quantity')</th>
                                 <th>@lang('portioned unit')</th>
@@ -97,21 +96,12 @@
                             @foreach($datas as $data)
                             <tr>  
                                 <td> <select class="form-control" name="food_id[]" id="food_id">
-                                <option value="{{ $data->food_id }}" class="form-control">{{ $data->food->name }}/{{ $data->food->code }}</option>
+                                <option value="{{ $data->food_id }}" class="form-control">{{ $data->food->name }}/{{ $data->food->foodMeasurement->production_unit }}</option>
                                 </select></td>  
                                 <td><input type="number" name="quantity_transfered[]" value="{{ $data->quantity_transfered }}" class="form-control" step="any"  readonly /></td>  
                                 <td><input type="text" name="unit[]" value="{{$data->unit}}" class="form-control"  readonly /></td>
                                 <td><input type="number" name="price[]" value="{{$data->price}}" class="form-control" step="any" min="0" readonly /></td>
                                 <td><input type="number" name="quantity_portion[]" value="{{ $data->quantity_transfered }}" class="form-control" min="1" step="any" /></td>  
-                                <td>
-                                    <select class="form-control" name="unit_portion[]" id="unit_portion">
-                                        <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                        <option value="pieces" {{ $data->unit == 'pieces' ? 'selected' : '' }} class="form-control">Pieces</option>
-                                        <option value="portions" {{ $data->unit == 'portions' ? 'selected' : '' }} class="form-control">Portions</option>
-                                        <option value="kg" {{ $data->unit == 'kg' ? 'selected' : '' }} class="form-control">Kilogrammes</option>
-                                        <option value="mg" {{ $data->unit == 'mg' ? 'selected' : '' }} class="form-control">Milligrammes</option>
-                                    </select>
-                                </td>
                                 <td><input type="number" name="price[]" value="{{$data->price}}" class="form-control" step="any" min="0"/></td>
                                 <td><button type='button' class='btn btn-danger remove-tr'>@lang('messages.delete')</button></td>  
                             </tr> 
@@ -154,12 +144,6 @@
                         "</td>"+
                         "<td>"+
                           "<input type='number' name='quantity[]' placeholder='Enter Quantity' class='form-control' />"+
-                        "</td>"+
-                        "<td>"+
-                          "<select class='form-control' name='unit[]' id='unit'>"+
-                                "<option disabled='disabled' selected='selected'>Merci de choisir</option>"+
-                                "<option value='pieces' class='form-control'>Pieces</option>"+
-                                "</select>"+
                         "</td>"+
                         "<td>"+
                         "<input type='number' name='unit_price[]' placeholder='Enter Unit price' class='form-control' />"+
