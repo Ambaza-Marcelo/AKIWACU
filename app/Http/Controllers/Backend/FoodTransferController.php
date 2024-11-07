@@ -231,7 +231,7 @@ class FoodTransferController extends Controller
         $rules = array(
                 'food_id.*'  => 'required',
                 //'date_portion'  => 'required',
-                'unit_portion.*'  => 'required',
+                //'unit_portion.*'  => 'required',
                 'quantity_portion.*'  => 'required',
                 'price.*'  => 'required',
                 'quantity_transfered.*'  => 'required',
@@ -253,7 +253,7 @@ class FoodTransferController extends Controller
             $origin_store_id = $request->origin_store_id;
             $description_portion =$request->description_portion; 
             $destination_store_id = $request->destination_store_id;
-            $unit_portion = $request->unit_portion;
+            //$unit_portion = $request->unit_portion;
             $quantity_portion = $request->quantity_portion;
             $price = $request->price;
             $quantity_transfered = $request->quantity_transfered;
@@ -267,7 +267,7 @@ class FoodTransferController extends Controller
                     'food_id' => $food_id[$count],
                     'date_portion' => $date_portion,
                     'quantity_portion' => $quantity_portion[$count],
-                    'unit_portion' => $unit_portion[$count],
+                    //'unit_portion' => $unit_portion[$count],
                     'value_portion' => $value_portion,
                     'portioned_by' => $portioned_by,
                     'description_portion' => $description_portion,

@@ -262,6 +262,7 @@ class FoodStockinController extends Controller
         $setting = DB::table('settings')->orderBy('created_at','desc')->first();
         $stockin_no = FoodStockin::where('stockin_no', $stockin_no)->value('stockin_no');
         $datas = FoodStockinDetail::where('stockin_no', $stockin_no)->get();
+        $data = FoodStockinDetail::where('stockin_no', $stockin_no)->first();
         $receptionist = FoodStockin::where('stockin_no', $stockin_no)->value('receptionist');
         $description = FoodStockin::where('stockin_no', $stockin_no)->value('description');
         $origin = FoodStockin::where('stockin_no', $stockin_no)->value('origin');
@@ -271,7 +272,7 @@ class FoodStockinController extends Controller
         $totalValue = DB::table('food_stockin_details')
             ->where('stockin_no', '=', $stockin_no)
             ->sum('total_amount_purchase');
-        $pdf = PDF::loadView('backend.pages.document.food_stockin',compact('datas','stockin_no','totalValue','receptionist','description','origin','handingover','setting','date','stockin_signature'));
+        $pdf = PDF::loadView('backend.pages.document.food_stockin',compact('datas','stockin_no','totalValue','receptionist','description','origin','handingover','setting','date','data','stockin_signature'));
 
         Storage::put('public/pdf/food_stockin/'.$stockin_no.'.pdf', $pdf->output());
 
@@ -451,7 +452,7 @@ class FoodStockinController extends Controller
 
                     $foodData = array(
                         'id' => $data->food_id,
-                        'quantity_portion' => $quantityTotalBigStore,
+                        'quantity' => $quantityTotalBigStore,
                         'cump' => $cump,
                         'purchase_price' => $data->purchase_price,
                     );

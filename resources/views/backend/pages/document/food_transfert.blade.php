@@ -60,7 +60,6 @@
                                     <th>Quantite Transferée</th>
                                     <th>Unité</th>
                                     <th>Prix Unitaire</th>
-                                    <th>Unité</th>
                                     <th>Prix Total Requisitionné</th>
                                     <th>Prix Total Transferé</th>
                                 </tr>

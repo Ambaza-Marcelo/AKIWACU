@@ -32,11 +32,13 @@
                                     <th width="10%">Transfer No</th>
                                     <th width="10%">Requisition No</th>
                                     <th width="10%">@lang('messages.item')</th>
-                                    <th width="10%">@lang('messages.quantity_requisitioned')</th>
+                                    <th width="10%">@lang('Quantité requisitionée')</th>
                                     <th width="10%">@lang('messages.unit_price')</th>
-                                    <th width="10%">@lang('messages.quantity_transfered')</th>
+                                    <th width="10%">@lang('Quantité Transferée')</th>
                                     <th width="10%">@lang('messages.unit')</th>
                                     <th width="10%">@lang('messages.total_value')</th>
+                                    <th width="10%">@lang('Quantité Portionnée')</th>
+                                    <th width="10%">@lang('messages.unit')</th>
                                     <th width="20%">@lang('messages.description')</th>
                                     <th width="10%">@lang('messages.created_by')</th>
                                     <th width="15%">Action</th>
@@ -55,6 +57,8 @@
                                     <td>{{ $transfer->quantity_transfered }}</td>
                                     <td>{{ $transfer->food->foodMeasurement->purchase_unit }}</td>
                                     <td>{{ number_format($transfer->total_value_transfered,0,',',' ' ) }}</td>
+                                    <td>{{ $transfer->quantity_portion }}</td>
+                                    <td>{{ $transfer->food->foodMeasurement->production_unit }}</td>
                                     <td>{{ $transfer->description }}</td>
                                     <td>{{ $transfer->created_by }}</td>
                                     <td>

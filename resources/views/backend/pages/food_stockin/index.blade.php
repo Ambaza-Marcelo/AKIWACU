@@ -60,6 +60,7 @@
                                     <th width="5%">@lang('messages.status')</th>
                                     <th width="10%">@lang('messages.receptionist')</th>
                                     <th width="10%">Remettant</th>
+                                    <th width="10%">Destination</th>
                                     <th width="10%">@lang('messages.created_by')</th>
                                     <th width="20%">@lang('messages.description')</th>
                                     <th width="15%">Action</th>
@@ -75,6 +76,7 @@
                                     <td>@if($stockin->status == 1)<img src="{{ asset('img/warning3.gif')}}" width="35">@elseif($stockin->status == 1)<span class="badge badge-info">Encours</span> @elseif($stockin->status == 2)<span class="badge badge-info">Validé</span> @elseif($stockin->status == 3)<span class="badge badge-info">Confirmé</span> @elseif($stockin->status == 4)<span class="badge badge-info">Approuvé</span>@endif</td>
                                     <td>{{ $stockin->receptionist }}</td>
                                     <td>{{ $stockin->handingover }}</td>
+                                    <td>@if($stockin->destination_sm_store_id)PETIT STOCK @elseif($stockin->destination_bg_store_id) STOCK INTERMEDIAIRE @else GRAND STOCK @endif</td>
                                     <td>{{ $stockin->created_by }}</td>
                                     <td>{{ $stockin->description }}</td>
                                     <td>

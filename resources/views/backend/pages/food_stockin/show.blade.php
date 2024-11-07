@@ -50,7 +50,7 @@
                                     <td>{{ $stockin->stockin_no }}</td>
                                     <td>{{ $stockin->handingover }}</td>
                                     <td>{{ $stockin->receptionist }}</td>
-                                    <td>{{ $stockin->destination_store_id }}</td>
+                                    <td>@if($stockin->destination_sm_store_id)PETIT STOCK @elseif($stockin->destination_bg_store_id) STOCK INTERMEDIAIRE @else GRAND STOCK @endif</td>
                                     <td>{{ $stockin->food->name }}</td>
                                     <td>{{ $stockin->quantity }}</td>
                                     <td>{{ $stockin->food->foodMeasurement->purchase_unit }}</td>

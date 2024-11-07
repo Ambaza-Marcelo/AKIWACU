@@ -89,7 +89,6 @@
                                 <th>@lang('messages.quantity')</th>
                                 <th>@lang('messages.unit_price')</th>
                                 <th>@lang('portioned Quantity')</th>
-                                <th>@lang('portioned unit')</th>
                                 <th>@lang('portioned Price')</th>
                                 <th>Action</th>
                             </tr>
@@ -99,9 +98,8 @@
                                 <option value="{{ $data->food_id }}" class="form-control">{{ $data->food->name }}/{{ $data->food->foodMeasurement->production_unit }}</option>
                                 </select></td>  
                                 <td><input type="number" name="quantity_transfered[]" value="{{ $data->quantity_transfered }}" class="form-control" step="any"  readonly /></td>  
-                                <td><input type="text" name="unit[]" value="{{$data->unit}}" class="form-control"  readonly /></td>
                                 <td><input type="number" name="price[]" value="{{$data->price}}" class="form-control" step="any" min="0" readonly /></td>
-                                <td><input type="number" name="quantity_portion[]" value="{{ $data->quantity_transfered }}" class="form-control" min="1" step="any" /></td>  
+                                <td><input type="number" name="quantity_portion[]" value="{{ $data->quantity_transfered * $data->food->foodMeasurement->equivalent }}" class="form-control" min="1" step="any" /></td>  
                                 <td><input type="number" name="price[]" value="{{$data->price}}" class="form-control" step="any" min="0"/></td>
                                 <td><button type='button' class='btn btn-danger remove-tr'>@lang('messages.delete')</button></td>  
                             </tr> 
@@ -113,7 +111,7 @@
                         <div class="col-lg-12">
                             <label for="description">@lang('messages.description')</label>
                             <textarea class="form-control" name="description_portion" id="description" placeholder="Enter Desccription">
-                                
+                                PORTIONNAGE
                             </textarea>
                         </div>
                         <div style="margin-top: 15px;margin-left: 15px;">

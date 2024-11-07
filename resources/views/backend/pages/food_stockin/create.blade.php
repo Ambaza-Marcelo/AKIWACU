@@ -119,7 +119,7 @@
                                 <td> <select class="form-control" name="food_id[]" id="food_id">
                                 <option disabled="disabled" selected="selected">merci de choisir</option>
                             @foreach ($foods as $food)
-                                <option value="{{ $food->id }}" class="form-control">{{ $food->foodMeasurement->purchase_unit }}</option>
+                                <option value="{{ $food->id }}" class="form-control">{{ $food->name }}/{{ number_format($food->cump,0,',',' ') }}/{{ $food->foodMeasurement->purchase_unit }}</option>
                             @endforeach
                             </select></td>  
                                 <td><input type="number" name="quantity[]" placeholder="Enter quantity" class="form-control"  step="any" min="0"/></td>  
@@ -155,7 +155,7 @@
                          "<select class='form-control' name='food_id[]'"+
                             "<option>merci de choisir</option>"+
                              "@foreach($foods as $food)"+
-                                 "<option value='{{ $food->id }}'>{{ $food->name }}/{{ $food->foodMeasurement->purchase_unit }}</option>"+
+                                 "<option value='{{ $food->id }}'>{{ $food->name }}/{{ number_format($food->cump,0,',',' ') }}/{{ $food->foodMeasurement->purchase_unit }}</option>"+
                              "@endforeach>"+
                           "</select>"+
                         "</td>"+

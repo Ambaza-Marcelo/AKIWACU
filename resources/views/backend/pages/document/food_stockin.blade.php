@@ -41,6 +41,10 @@
                            &nbsp;&nbsp;Origine: {{ $origin }}
                         </small><br>
                         <small>
+                            &nbsp;&nbsp;Destination : 
+                            @if($data->destination_sm_store_id)PETIT STOCK @elseif($data->destination_bg_store_id) STOCK INTERMEDIAIRE @else GRAND STOCK @endif
+                        </small><br>
+                        <small>
                            &nbsp;&nbsp;Receptionniste: {{ $receptionist }}
                         </small><br>
                         <small>
@@ -48,7 +52,7 @@
                         </small>
                     </div>
                     <br><br><br><br><br>
-                    <br><br><br>
+                    <br><br><br><br><br><br>
                     <div>
                         <h3 style="text-align: center;text-decoration: underline;"> BON D'ENTREE DES ARTICLES</h3>
                     </div>
