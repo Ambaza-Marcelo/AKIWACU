@@ -125,16 +125,17 @@ class FoodController extends Controller
         if ($store_type == '1') {
             $food_big_store_code = FoodBigStoreDetail::where('code',$code_store)->value('code');
             $food_in_big_store = FoodBigStoreDetail::where('code',$code_store)->where('food_id',$food_id)->first();
+            $quantity = FoodBigStoreDetail::where('code',$code_store)->where('food_id',$food_id)->value('quantity');
             if (!empty($food_in_big_store)) {
                 $food_in_big_store->food_id = $food_id;
-                $food_in_big_store->quantity = $quantity;
+                $food_in_big_store->quantity = $food_in_big_store->quantity;
                 $food_in_big_store->threshold_quantity = $threshold_quantity;
                 $food_in_big_store->purchase_price = $purchase_price;
                 $food_in_big_store->cum = $purchase_price;
                 $food_in_big_store->selling_price = $selling_price;
-                //$food_in_big_store->total_cump_value = $quantity * $food->purchase_price;
-                $food_in_big_store->total_purchase_value = $quantity * $food->purchase_price;
-                $food_in_big_store->total_selling_value = $quantity * $food->selling_price;
+                $food_in_big_store->total_cump_value = $food_in_big_store->quantity * $food->purchase_price;
+                $food_in_big_store->total_purchase_value = $food_in_big_store->quantity * $food->purchase_price;
+                $food_in_big_store->total_selling_value = $food_in_big_store->quantity * $food->selling_price;
                 $food_in_big_store->unit = $unit;
                 $food_in_big_store->code = $code_store;
                 $food_in_big_store->created_by = $this->user->name;
@@ -158,6 +159,7 @@ class FoodController extends Controller
         }elseif($store_type == '2'){
             $drink_small_store_code = FoodSmallStoreDetail::where('code',$code_store)->value('code');
             $food_in_small_store = FoodSmallStoreDetail::where('code',$code_store)->where('food_id',$food_id)->first();
+            $quantity = FoodSmallStoreDetail::where('code',$code_store)->where('food_id',$food_id)->value('quantity');
             if (!empty($food_in_small_store)) {
                 $food_in_small_store->food_id = $food_id;
                 $food_in_small_store->quantity = $quantity;
@@ -175,7 +177,7 @@ class FoodController extends Controller
             }else{
                 $food_in_small_store = new FoodSmallStoreDetail();
                 $food_in_small_store->food_id = $food_id;
-                $food_in_small_store->quantity = $quantity;
+                $food_in_small_store->quantity = 0;
                 $food_in_small_store->threshold_quantity = $threshold_quantity;
                 $food_in_small_store->purchase_price = $purchase_price;
                 $food_in_small_store->cump = $purchase_price;
@@ -191,6 +193,7 @@ class FoodController extends Controller
         }else{
             $food_big_store_code = FoodExtraBigStoreDetail::where('code',$code_store)->value('code');
             $food_in_big_store = FoodExtraBigStoreDetail::where('code',$code_store)->where('food_id',$food_id)->first();
+            $quantity = FoodExtraBigStoreDetail::where('code',$code_store)->where('food_id',$food_id)->value('quantity');
             if (!empty($food_in_big_store)) {
                 $food_in_big_store->food_id = $food_id;
                 $food_in_big_store->quantity = $quantity;
@@ -208,7 +211,7 @@ class FoodController extends Controller
             }else{
                 $food_in_big_store = new FoodExtraBigStoreDetail();
                 $food_in_big_store->food_id = $food_id;
-                $food_in_big_store->quantity = $quantity;
+                $food_in_big_store->quantity = 0;
                 $food_in_big_store->threshold_quantity = $threshold_quantity;
                 $food_in_big_store->purchase_price = $purchase_price;
                 $food_in_big_store->cump = $purchase_price;

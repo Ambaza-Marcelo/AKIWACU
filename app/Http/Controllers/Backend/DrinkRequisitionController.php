@@ -99,7 +99,7 @@ class DrinkRequisitionController extends Controller
                 'drink_id.*'  => 'required',
                 'date'  => 'required',
                 'quantity_requisitioned.*'  => 'required',
-                'unit.*'  => 'required',
+                //'unit.*'  => 'required',
                 'description'  => 'required|max:490'
             );
 
@@ -117,7 +117,7 @@ class DrinkRequisitionController extends Controller
             $date = $request->date;
             $type_store = $request->type_store;
             $quantity_requisitioned = $request->quantity_requisitioned;
-            $unit = $request->unit;
+            //$unit = $request->unit;
             $description =$request->description; 
             $latest = DrinkRequisition::latest()->first();
             if ($latest) {
@@ -149,7 +149,7 @@ class DrinkRequisitionController extends Controller
                     'date' => $date,
                     'type_store' => $type_store,
                     'quantity_requisitioned' => $quantity_requisitioned[$count],
-                    'unit' => $unit[$count],
+                    //'unit' => $unit[$count],
                     'price' => $price,
                     'description' => $description,
                     'total_value_requisitioned' => $total_value_requisitioned,

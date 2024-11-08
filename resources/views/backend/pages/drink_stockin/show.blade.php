@@ -55,7 +55,7 @@
                                     <td>{{ $stockin->destination_store_id }}</td>
                                     <td>{{ $stockin->drink->name }}</td>
                                     <td>{{ $stockin->quantity }}</td>
-                                    <td>{{ $stockin->unit }}</td>
+                                    <td>{{ $stockin->drink->drinkMeasurement->purchase_unit }}</td>
                                     <td>{{ number_format($stockin->purchase_price,0,',',' ' ) }}</td>
                                     <td>{{ number_format($stockin->selling_price,0,',',' ' ) }}</td>
                                     <td>{{ number_format($stockin->total_amount_selling,0,',',' ' ) }}</td>

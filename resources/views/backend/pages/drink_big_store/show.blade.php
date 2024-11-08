@@ -81,7 +81,7 @@
                                     @else
                                     <td>{{ $drink_big_store->quantity_bottle }}</td>
                                     @endif
-                                    <td>{{ $drink_big_store->unit }}</td>
+                                    <td>{{ $drink_big_store->drink->drinkMeasurement->purchase_unit }}</td>
                                     <td>{{ $drink_big_store->threshold_quantity }}</td>
                                     <td>{{ number_format($drink_big_store->drink->cump,0,',',' ') }}</td>
                                     <td>{{ number_format(($drink_big_store->drink->cump * $drink_big_store->quantity_bottle),0,',',' ') }}</td>

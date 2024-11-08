@@ -7,6 +7,7 @@
              border: 1px solid black;
              text-align: center;
              width: auto;
+             font-size: 12px;
         }
 
     </style>
@@ -17,7 +18,7 @@
         <div>
             <div>
                 <div>
-                   <img src="img/eden_logo.png" width="200" height="65">
+                   <img src="img/eden_logo.png" width="200" height="85">
                 </div>
                 <div>
                     <div style="float: left;">
@@ -62,7 +63,7 @@
                                     <td>{{ $data->drink->name }}</td>
                                     <td>{{ $data->drink->code }}</td>
                                     <td>{{ $data->quantity }}</td>
-                                    <td>{{ $data->unit }}</td>
+                                    <td>{{ $data->drink->drinkMeasurement->purchase_unit }}</td>
                                     <td>{{ number_format($data->purchase_price,0,',',' ' )}}</td>
                                     <td>{{ number_format($data->total_amount_purchase,0,',',' ' )}}</td>
                                 </tr>

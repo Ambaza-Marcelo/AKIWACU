@@ -54,13 +54,9 @@
                                     <th width="10%">@lang('messages.item')</th>
                                     <th width="10%">@lang('Item Code')</th>
                                     <th width="10%">@lang('messages.quantity')</th>
-                                    <th width="10%">@lang('Nbre Godets')</th>
                                     <th width="10%">@lang('messages.new_quantity')</th>
                                     <th width="10%">@lang('PV')</th>
-                                    <th width="10%">@lang('N. Nbre Godets')</th>
-                                    <th width="10%">@lang('PV Godets')</th>
                                     <th width="10%">Relicat</th>
-                                    <th width="10%">Relicat Godet</th>
                                     <th width="10%">@lang('messages.description')</th>
                                     <th width="10%">@lang('messages.created_by')</th>
                                     <th width="15%">Action</th>
@@ -75,14 +71,9 @@
                                     <td>{{ $inventory->drink->name }}</td>
                                     <td>{{ $inventory->drink->code }}</td>
                                     <td>{{ $inventory->quantity }}</td>
-                                    <td>{{ $inventory->quantity_ml }}</td>
                                     <td>{{ $inventory->new_quantity }}</td>
                                     <td>{{ number_format($inventory->selling_price,0,',','.') }}</td>
-                                    
-                                    <td>{{ $inventory->new_quantity_ml }}</td>
-                                    <td>{{ number_format($inventory->new_selling_price_ml,0,',','.') }}</td>
                                     <td>{{ $inventory->relicat }} </td>
-                                    <td>{{ $inventory->relicat_ml }} </td>
                                     <td>{{ $inventory->description }}</td>
                                     <td>{{ $inventory->created_by }}</td>
                                     <td>

@@ -103,7 +103,7 @@
                                     <td><a href="{{ route('admin.drink-receptions.show',$reception->reception_no)}}">{{ $reception->reception_no }}</a></td>
                                     <td>{{ $reception->reception_signature }}</td>
                                     <td><a href="@if($reception->order_no){{ route('admin.drink-supplier-orders.show',$reception->order_no)}}@endif">{{ $reception->order_no }}</a></td>
-                                    <td>@if($reception->status == 1)<img src="{{ asset('img/warning3.gif')}}" width="35">@elseif($reception->status == 1)<span class="badge badge-warning">Encours</span> @elseif($reception->status == 2)<span class="badge badge-warning">Validé</span> @elseif($reception->status == 3)<span class="badge badge-warning">Confirmé</span> @elseif($reception->status == 4)<span class="badge badge-success">Approuvé</span> @else <span class="badge badge-danger">Rejeté</span>@endif</td>
+                                    <td>@if($reception->status == 1)<span class="badge badge-warning">Encours</span> @elseif($reception->status == 2)<span class="badge badge-primary">Validé</span> @elseif($reception->status == 3)<span class="badge badge-info">Confirmé</span> @elseif($reception->status == 4)<span class="badge badge-success">Approuvé</span> @else <span class="badge badge-danger">Rejeté</span>@endif</td>
                                     <td>{{ $reception->invoice_no }}</td>
                                     <td>{{ $reception->invoice_currency }}</td>
                                     <td>{{ $reception->handingover }}</td>

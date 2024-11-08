@@ -109,7 +109,7 @@ class DrinkTransferController extends Controller
         $rules = array(
                 'drink_id.*'  => 'required',
                 'date'  => 'required',
-                'unit.*'  => 'required',
+                //'unit.*'  => 'required',
                 'quantity_requisitioned.*'  => 'required',
                 'quantity_transfered.*'  => 'required',
                 //'origin_store_id'  => 'required',
@@ -137,7 +137,7 @@ class DrinkTransferController extends Controller
             $description =$request->description; 
             $destination_store_id = $request->destination_store_id;
             $destination_bg_store_id = $request->destination_bg_store_id;
-            $unit = $request->unit;
+            //$unit = $request->unit;
             $quantity_requisitioned = $request->quantity_requisitioned;
             $quantity_transfered = $request->quantity_transfered;
             
@@ -164,7 +164,7 @@ class DrinkTransferController extends Controller
                     'date' => $date,
                     'quantity_requisitioned' => $quantity_requisitioned[$count],
                     'quantity_transfered' => $quantity_transfered[$count],
-                    'unit' => $unit[$count],
+                    //'unit' => $unit[$count],
                     'price' => $price,
                     'total_value_requisitioned' => $total_value_requisitioned,
                     'total_value_transfered' => $total_value_transfered,

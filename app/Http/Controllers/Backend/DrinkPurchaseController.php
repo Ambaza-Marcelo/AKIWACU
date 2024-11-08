@@ -78,7 +78,7 @@ class DrinkPurchaseController extends Controller
                 'date'  => 'required',
                 'quantity.*'  => 'required',
                 'price.*'  => 'required',
-                'unit.*'  => 'required',
+                //'unit.*'  => 'required',
                 'description'  => 'required|max:490'
             );
 
@@ -96,7 +96,7 @@ class DrinkPurchaseController extends Controller
             $date = $request->date;
             $quantity = $request->quantity;
             $price = $request->price;
-            $unit = $request->unit;
+            //$unit = $request->unit;
             $description =$request->description; 
             $latest = DrinkPurchase::latest()->first();
             if ($latest) {
@@ -126,7 +126,7 @@ class DrinkPurchaseController extends Controller
                     'drink_id' => $drink_id[$count],
                     'date' => $date,
                     'quantity' => $quantity[$count],
-                    'unit' => $unit[$count],
+                    //'unit' => $unit[$count],
                     'price' => $price[$count],
                     'description' => $description,
                     'total_value' => $total_value,
@@ -221,7 +221,7 @@ class DrinkPurchaseController extends Controller
                 'date'  => 'required',
                 'quantity.*'  => 'required',
                 'price.*'  => 'required',
-                'unit.*'  => 'required',
+                //'unit.*'  => 'required',
                 'description'  => 'required'
             );
 
@@ -239,7 +239,7 @@ class DrinkPurchaseController extends Controller
             $date = $request->date;
             $quantity = $request->quantity;
             $price = $request->price;
-            $unit = $request->unit;
+            //$unit = $request->unit;
             $description =$request->description; 
 
             $purchase = DrinkPurchase::where('purchase_no',$purchase_no)->first();
@@ -257,7 +257,7 @@ class DrinkPurchaseController extends Controller
                     'drink_id' => $drink_id[$count],
                     'date' => $date,
                     'quantity' => $quantity[$count],
-                    'unit' => $unit[$count],
+                    //'unit' => $unit[$count],
                     'price' => $price[$count],
                     'description' => $description,
                     'total_value' => $total_value,

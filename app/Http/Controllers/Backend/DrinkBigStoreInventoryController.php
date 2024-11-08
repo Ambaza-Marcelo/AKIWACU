@@ -90,13 +90,13 @@ class DrinkBigStoreInventoryController extends Controller
             'date' => 'required|date',
             'title' => 'required',
             'quantity.*' => 'required',
-            'unit.*' => 'required',
+            //'unit.*' => 'required',
             'purchase_price.*' => 'required',
             'selling_price.*' => 'required',
             'new_quantity.*' => 'required',
             'new_purchase_price.*' => 'required',
             'new_selling_price.*' => 'required',
-            'new_unit.*' => 'required',
+            //'new_unit.*' => 'required',
             'description' => 'required',
             );
 
@@ -112,7 +112,7 @@ class DrinkBigStoreInventoryController extends Controller
 
             $drink_id = $request->drink_id;
             $date = $request->date;
-            $unit = $request->unit;
+            //$unit = $request->unit;
             $quantity = $request->quantity;
             $purchase_price = $request->purchase_price;
             $selling_price = $request->selling_price;
@@ -122,7 +122,7 @@ class DrinkBigStoreInventoryController extends Controller
             $code_store = $request->code_store;
             $new_purchase_price = $request->new_purchase_price;
             $new_selling_price = $request->new_selling_price; 
-            $new_unit = $request->new_unit; 
+            //$new_unit = $request->new_unit; 
 
             $latest = DrinkBigStoreInventory::latest()->first();
             if ($latest) {
@@ -148,7 +148,7 @@ class DrinkBigStoreInventoryController extends Controller
                     'title' => $title,
                     'code_store' => $code_store,
                     'quantity' => $quantity[$count],
-                    'unit' => $unit[$count],
+                    //'unit' => $unit[$count],
                     'purchase_price' => $purchase_price[$count],
                     'selling_price' => $selling_price[$count],
                     'total_purchase_value' => $total_purchase_value,
@@ -158,7 +158,7 @@ class DrinkBigStoreInventoryController extends Controller
                     'new_selling_price' => $new_selling_price[$count],
                     'new_total_purchase_value' => $new_total_purchase_value,
                     'new_total_selling_value' => $new_total_selling_value,
-                    'new_unit' => $new_unit[$count],
+                    //'new_unit' => $new_unit[$count],
                     'relicat' => $relicat,
                     'inventory_no' => $inventory_no,
                     'inventory_signature' => $inventory_signature,
@@ -329,7 +329,7 @@ class DrinkBigStoreInventoryController extends Controller
                         'purchase_price' => $data->new_purchase_price,
                         'cump' => $data->new_purchase_price,
                         'selling_price' => $data->new_selling_price,
-                        'unit' => $data->new_unit,
+                        //'unit' => $data->new_unit,
                         'quantity_bottle' => $data->new_quantity
                     );
 
@@ -340,7 +340,7 @@ class DrinkBigStoreInventoryController extends Controller
                     $sto = array(
                         'drink_id' => $data->drink_id,
                         'quantity_bottle' => $data->new_quantity,
-                        'unit' => $data->new_unit,
+                        //'unit' => $data->new_unit,
                         'cump' => $data->new_purchase_price,
                         'purchase_price' => $data->new_purchase_price,
                         'selling_price' => $data->new_selling_price,

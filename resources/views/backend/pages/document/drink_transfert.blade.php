@@ -7,6 +7,7 @@
              border: 1px solid black;
              text-align: center;
              width: auto;
+             font-size: 12px;
         }
 
     </style>
@@ -17,7 +18,7 @@
         <div>
             <div>
                 <div>
-                   <img src="img/eden_logo.png" width="200" height="65">
+                   <img src="img/eden_logo.png" width="200" height="85">
                 </div>
                 <div>
                     <div style="float: left;">
@@ -55,12 +56,12 @@
                                     <th>No</th>
                                     <th>Article</th>
                                     <th>Code</th>
-                                    <th>Quantite requisitionee</th>
-                                    <th>Quantite Transferee</th>
+                                    <th>Quantité requisitionée</th>
+                                    <th>Quantité Transferée</th>
                                     <th>Unité</th>
                                     <th>Prix Unitaire</th>
-                                    <th>Prix Total Requisitionnee</th>
-                                    <th>Prix Total Transferee</th>
+                                    <th>Prix Total Requisitionnée</th>
+                                    <th>Prix Total Transferée</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -71,7 +72,7 @@
                                     <td>{{ $data->drink->code }}</td>
                                     <td>{{ $data->quantity_requisitioned }}</td>
                                     <td>{{ $data->quantity_transfered }}</td>
-                                    <td>{{ $data->unit }}</td>
+                                    <td>{{ $data->drink->drinkMeasurement->purchase_unit }}</td>
                                     <td>{{ number_format($data->price,0,',',' ' )}}</td>
                                     <td>{{ number_format($data->total_value_requisitioned,0,',',' ' )}}</td>
                                     <td>{{ number_format($data->total_value_transfered,0,',',' ' )}}</td>

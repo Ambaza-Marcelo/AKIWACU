@@ -24,7 +24,7 @@
                 <h4 class="page-title pull-left">@lang('messages.inventory')</h4>
                 <ul class="breadcrumbs pull-left">
                     <li><a href="{{ route('admin.dashboard') }}">@lang('messages.dashboard')</a></li>
-                    <li><a href="{{ route('admin.drink-big-store-inventory.index') }}">@lang('messages.list')</a></li>
+                    <li><a href="{{ route('admin.drink-small-store-inventory.index') }}">@lang('messages.list')</a></li>
                     <li><span>@lang('messages.inventory')</span></li>
                 </ul>
             </div>
@@ -74,9 +74,7 @@
                                 <th>Action</th>
                             </tr>
                             @foreach($datas as $data)
-                            <tr class="">
-                                <input type="hidden" name="unit[]" value="{{ $data->unit }}"> 
-                                <input type="hidden" name="new_unit[]" value="{{ $data->unit }}"> 
+                            <tr class=""> 
                                 <input type="hidden" name="selling_price_ml[]" value="0"> <td>{{ $loop->index+1 }}</td>
                                 <td> <select class="form-control" name="drink_id[]" id="drink_id">
                                 <option value="{{ $data->drink_id }}" selected="selected" class="form-control">{{ $data->drink->name }}/{{ $data->drink->code }}</option>

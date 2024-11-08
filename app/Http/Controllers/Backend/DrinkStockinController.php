@@ -94,7 +94,7 @@ class DrinkStockinController extends Controller
         $rules = array(
                 'drink_id.*'  => 'required',
                 'date'  => 'required',
-                'unit.*'  => 'required',
+                //'unit.*'  => 'required',
                 'quantity.*'  => 'required',
                 'purchase_price.*'  => 'required',
                 'handingover'  => 'required',
@@ -128,7 +128,7 @@ class DrinkStockinController extends Controller
             $destination_sm_store_id = $request->destination_sm_store_id;
             $destination_extra_store_id = $request->destination_extra_store_id;
             $item_movement_type = $request->item_movement_type;
-            $unit = $request->unit;
+            //$unit = $request->unit;
             $quantity = $request->quantity;
             $purchase_price = $request->purchase_price;
             
@@ -152,7 +152,7 @@ class DrinkStockinController extends Controller
                     'drink_id' => $drink_id[$count],
                     'date' => $date,
                     'quantity' => $quantity[$count],
-                    'unit' => $unit[$count],
+                    //'unit' => $unit[$count],
                     'purchase_price' => $purchase_price[$count],
                     'total_amount_purchase' => $total_amount_purchase,
                     'receptionist' => $receptionist,

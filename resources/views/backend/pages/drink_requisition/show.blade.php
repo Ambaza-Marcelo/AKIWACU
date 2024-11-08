@@ -70,7 +70,7 @@
                                     <td>{{ $requisition->drink->name }}</td>
                                     <td>{{ $requisition->drink->code }}</td>
                                     <td>{{ $requisition->quantity_requisitioned }}</td>
-                                    <td>{{ $requisition->unit }}</td>
+                                    <td>{{ $requisition->drink->drinkMeasurement->purchase_unit }}</td>
                                     <td>{{ $requisition->price }}</td>
                                     <td>{{ number_format($requisition->total_value_requisitioned,0,',',' ') }}</td>
                                     <td>{{ $requisition->description }}</td>

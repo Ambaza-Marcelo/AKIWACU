@@ -54,7 +54,7 @@
                                     <td>{{ $stockout->origin_sm_store_id }}</td>
                                     <td>{{ $stockout->drink->name }}</td>
                                     <td>{{ $stockout->quantity }}</td>
-                                    <td>{{ $stockout->unit }}</td>
+                                    <td>{{ $stockout->drink->drinkMeasurement->purchase_unit }}</td>
                                     <td>{{ $stockout->destination }}</td>
                                     <td>{{ number_format($stockout->purchase_price,0,',',' ' ) }}</td>
                                     <td>{{ number_format($stockout->selling_price,0,',',' ' ) }}</td>

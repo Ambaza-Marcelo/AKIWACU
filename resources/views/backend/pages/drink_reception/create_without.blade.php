@@ -133,10 +133,8 @@
                             <tr>
                                 <th>@lang('messages.item')</th>
                                 <th>@lang('Ordered quantity')</th>
-                                <th>@lang('messages.unit')</th>
                                 <th>@lang('messages.unit_price')</th>
                                 <th>@lang('Reception Quantity')</th>
-                                <th>@lang('unit')</th>
                                 <th>@lang('Purchase Price')</th>
                                 <th>@lang('Selling Price')</th>
                                 <th>Action</th>
@@ -144,21 +142,11 @@
                             @foreach($datas as $data)
                             <tr>  
                                 <td> <select class="form-control" name="drink_id[]" id="drink_id">
-                                <option value="{{ $data->drink_id }}" class="form-control">{{ $data->drink->name }}/{{ $data->drink->code }}</option>
+                                <option value="{{ $data->drink_id }}" class="form-control">{{$drink->name}}/{{ number_format($drink->cump,0,',',' ') }}/{{ $drink->drinkMeasurement->purchase_unit }}</option>
                                 </select></td>  
                                 <td><input type="number" name="quantity_ordered[]" value="{{ $data->quantity }}" class="form-control"  readonly step="any" /></td>  
-                                <td><input type="text" name="unit[]" value="{{$data->unit}}" class="form-control"  readonly /></td>
                                 <td><input type="number" name="" value="{{$data->price}}" class="form-control" step="any" min="0" readonly /></td>
                                 <td><input type="number" name="quantity_received[]" value="{{ $data->quantity }}" class="form-control" min="0" step="any" /></td> 
-                                <td>
-                                    <select class="form-control" name="unit[]" id="unit">
-                                        <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                        <option value="bouteilles" {{ $data->unit == 'bouteilles' ? 'selected' : '' }} class="form-control">Bouteilles</option>
-                                        <option value="pcs" {{ $data->unit == 'pcs' ? 'selected' : '' }} class="form-control">Pcs</option>
-                                        <option value="cartons" {{ $data->unit == 'cartons' ? 'selected' : '' }} class="form-control">Cartons</option>
-                                        <option value="millilitres" {{ $data->unit == 'millilitres' ? 'selected' : '' }} class="form-control">Millilitres</option>
-                                    </select>
-                                </td>
                                 <td><input type="number" name="purchase_price[]" value="{{$data->price}}" class="form-control" step="any" min="0"/></td>
                                 <td><input type="number" name="selling_price[]" value="{{$data->price}}" class="form-control" step="any" min="{{$data->price}}"/></td>
                                 <td>
@@ -197,18 +185,12 @@
                          "<select class='form-control' name='drink_id[]'"+
                             "<option value='0'>Merci de choisir</option>"+
                              "@foreach($drinks as $drink)"+
-                                 "<option value='{{ $drink->id }}'>{{ $drink->name }}/{{ $drink->code }}</option>"+
+                                 "<option value='{{ $drink->id }}'>{{$drink->name}}/{{ number_format($drink->cump,0,',',' ') }}/{{ $drink->drinkMeasurement->purchase_unit }}</option>"+
                              "@endforeach>"+
                           "</select>"+
                         "</td>"+
                         "<td>"+
                           "<input type='number' name='quantity[]' placeholder='Enter Quantity' class='form-control' />"+
-                        "</td>"+
-                        "<td>"+
-                          "<select class='form-control' name='unit[]' id='unit'>"+
-                                "<option disabled='disabled' selected='selected'>Merci de choisir</option>"+
-                                "<option value='pieces' class='form-control'>Pieces</option>"+
-                                "</select>"+
                         "</td>"+
                         "<td>"+
                         "<input type='number' name='unit_price[]' placeholder='Enter Unit price' class='form-control' />"+

@@ -69,7 +69,7 @@
                                     <td>{{ number_format($reception->purchase_price,0,',',' ' ) }}</td>
                                     <td>{{ $reception->quantity_received }}</td>
                                     <td>{{ number_format($reception->selling_price,0,',',' ' ) }}</td>
-                                    <td>{{ $reception->unit }}</td>
+                                    <td>{{ $reception->drink->drinkMeasurement->purchase_unit }}</td>
                                     <td>{{ number_format($reception->total_amount_received,0,',',' ' ) }}</td>
                                     <td>{{ $reception->description }}</td>
                                     <td>{{ $reception->created_by }}</td>

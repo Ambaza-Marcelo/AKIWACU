@@ -71,7 +71,7 @@
                                     <td>{{ $purchase->drink->name }}</td>
                                     <td>{{ $purchase->drink->code }}</td>
                                     <td>{{ $purchase->quantity }}</td>
-                                    <td>{{ $purchase->unit }}</td>
+                                    <td>{{ $purchase->drink->drinkMeasurement->purchase_unit }}</td>
                                     <td>{{ $purchase->price }}</td>
                                     <td>{{ number_format($purchase->total_value,0,',',' ') }}</td>
                                     <td>{{ $purchase->description }}</td>

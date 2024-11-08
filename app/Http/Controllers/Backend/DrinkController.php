@@ -409,9 +409,10 @@ class DrinkController extends Controller
         if ($store_type == '1') {
             $drink_big_store_code = DrinkBigStoreDetail::where('code',$code_store)->value('code');
             $drink_in_big_store = DrinkBigStoreDetail::where('code',$code_store)->where('drink_id',$drink_id)->first();
+            $quantity_bottle = DrinkBigStoreDetail::where('code',$code_store)->where('drink_id',$drink_id)->value('quantity_bottle');
             if (!empty($drink_in_big_store)) {
                 $drink_in_big_store->drink_id = $drink_id;
-                $drink_in_big_store->quantity_bottle = $quantity_bottle;
+                $drink_in_big_store->quantity_bottle = $drink_in_big_store->quantity_bottle;
                 $drink_in_big_store->quantity_ml = $quantity_ml;
                 $drink_in_big_store->threshold_quantity = $threshold_quantity;
                 $drink_in_big_store->purchase_price = $purchase_price;
@@ -429,7 +430,7 @@ class DrinkController extends Controller
             }else{
                 $drink_in_big_store = new DrinkBigStoreDetail();
                 $drink_in_big_store->drink_id = $drink_id;
-                $drink_in_big_store->quantity_bottle = $quantity_bottle;
+                $drink_in_big_store->quantity_bottle = 0;
                 $drink_in_big_store->quantity_ml = $quantity_ml;
                 $drink_in_big_store->threshold_quantity = $threshold_quantity;
                 $drink_in_big_store->cump = $purchase_price;
@@ -448,9 +449,10 @@ class DrinkController extends Controller
         }elseif($store_type == '2'){
             $drink_small_store_code = DrinkSmallStoreDetail::where('code',$code_store)->value('code');
             $drink_in_small_store = DrinkSmallStoreDetail::where('code',$code_store)->where('drink_id',$drink_id)->first();
+            $quantity_bottle = DrinkSmallStoreDetail::where('code',$code_store)->where('drink_id',$drink_id)->value('quantity_bottle');
             if (!empty($drink_in_small_store)) {
                 $drink_in_small_store->drink_id = $drink_id;
-                $drink_in_small_store->quantity_bottle = $quantity_bottle;
+                $drink_in_small_store->quantity_bottle = $drink_in_small_store->quantity_bottle;
                 $drink_in_small_store->quantity_ml = $quantity_ml;
                 $drink_in_small_store->threshold_quantity = $threshold_quantity;
                 $drink_in_small_store->cump = $purchase_price;
@@ -468,7 +470,7 @@ class DrinkController extends Controller
             }else{
                 $drink_in_small_store = new DrinkSmallStoreDetail();
                 $drink_in_small_store->drink_id = $drink_id;
-                $drink_in_small_store->quantity_bottle = $quantity_bottle;
+                $drink_in_small_store->quantity_bottle = 0;
                 $drink_in_small_store->quantity_ml = $quantity_ml;
                 $drink_in_small_store->threshold_quantity = $threshold_quantity;
                 $drink_in_small_store->cump = $purchase_price;
@@ -487,9 +489,10 @@ class DrinkController extends Controller
         }else{
             $drink_extra_big_store_code = DrinkExtraBigStoreDetail::where('code',$code_store)->value('code');
             $drink_in_extra_big_store = DrinkExtraBigStoreDetail::where('code',$code_store)->where('drink_id',$drink_id)->first();
+            $quantity = DrinkExtraBigStoreDetail::where('code',$code_store)->where('drink_id',$drink_id)->value('quantity');
             if (!empty($drink_in_extra_big_store)) {
                 $drink_in_extra_big_store->drink_id = $drink_id;
-                $drink_in_extra_big_store->quantity = $quantity_bottle;
+                $drink_in_extra_big_store->quantity = $drink_in_extra_big_store->quantity;
                 $drink_in_extra_big_store->quantity_ml = $quantity_ml;
                 $drink_in_extra_big_store->threshold_quantity = $threshold_quantity;
                 $drink_in_extra_big_store->specification = $specification;
@@ -498,9 +501,9 @@ class DrinkController extends Controller
                 $drink_in_extra_big_store->selling_price = $selling_price;
                 $drink_in_extra_big_store->vat = $vat;
                 $drink_in_extra_big_store->brarudi_price = $brarudi_price;
-                $drink_in_extra_big_store->total_value_bottle = $quantity_bottle * $drink->purchase_price;
-                $drink_in_extra_big_store->total_purchase_value = $quantity_bottle * $drink->purchase_price;
-                $drink_in_extra_big_store->total_selling_value = $quantity_bottle * $drink->selling_price;
+                $drink_in_extra_big_store->total_value_bottle = $quantity * $drink->purchase_price;
+                $drink_in_extra_big_store->total_purchase_value = $quantity * $drink->purchase_price;
+                $drink_in_extra_big_store->total_selling_value = $quantity * $drink->selling_price;
                 $drink_in_extra_big_store->unit = $unit;
                 $drink_in_extra_big_store->code = $code_store;
                 $drink_in_extra_big_store->created_by = $this->user->name;
@@ -508,7 +511,7 @@ class DrinkController extends Controller
             }else{
                 $drink_in_extra_big_store = new DrinkExtraBigStoreDetail();
                 $drink_in_extra_big_store->drink_id = $drink_id;
-                $drink_in_extra_big_store->quantity = $quantity_bottle;
+                $drink_in_extra_big_store->quantity = 0;
                 $drink_in_extra_big_store->quantity_ml = $quantity_ml;
                 $drink_in_extra_big_store->threshold_quantity = $threshold_quantity;
                 $drink_in_extra_big_store->specification = $specification;
@@ -517,9 +520,9 @@ class DrinkController extends Controller
                 $drink_in_extra_big_store->selling_price = $selling_price;
                 $drink_in_extra_big_store->vat = $vat;
                 $drink_in_extra_big_store->brarudi_price = $brarudi_price;
-                $drink_in_extra_big_store->total_value_bottle = $quantity_bottle * $drink->purchase_price;
-                $drink_in_extra_big_store->total_purchase_value = $quantity_bottle * $drink->purchase_price;
-                $drink_in_extra_big_store->total_selling_value = $quantity_bottle * $drink->selling_price;
+                $drink_in_extra_big_store->total_value_bottle = $quantity * $drink->purchase_price;
+                $drink_in_extra_big_store->total_purchase_value = $quantity * $drink->purchase_price;
+                $drink_in_extra_big_store->total_selling_value = $quantity * $drink->selling_price;
                 $drink_in_extra_big_store->unit = $unit;
                 $drink_in_extra_big_store->code = $code_store;
                 $drink_in_extra_big_store->created_by = $this->user->name;

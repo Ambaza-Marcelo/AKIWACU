@@ -66,11 +66,9 @@
                                 <th>#</th>
                                 <th>@lang('messages.item')</th>
                                 <th>@lang('messages.quantity')</th>
-                                <th>@lang('messages.unit')</th>
                                 <th>@lang('messages.purchase_price')</th>
                                 <th>@lang('messages.selling_price')</th>
                                 <th>@lang('messages.new_quantity')</th>
-                                <th>@lang('New unit')</th>
                                 <th>@lang('messages.purchase_price')</th>
                                 <th>@lang('messages.selling_price')</th>
                                 <th>Action</th>
@@ -79,30 +77,12 @@
                             <tr class=""> 
                                 <td>{{ $loop->index+1 }}</td> 
                                 <td> <select class="form-control" name="drink_id[]" id="drink_id">
-                                <option value="{{ $data->drink_id }}" selected="selected" class="form-control">{{ $data->drink->name }}/{{ $data->drink->code }}</option>
+                                <option value="{{ $data->drink_id }}" selected="selected" class="form-control">{{ $data->drink->name }}/{{ $data->drink->drinkMeasurement->purchase_unit }}</option>
                                 </select></td>  
                                 <td><input type="text" name="quantity[]" value="{{$data->quantity_bottle }}" class="form-control" readonly="readonly" /></td>  
-                                <td>
-                                    <select class="form-control" name="unit[]" id="unit">
-                                        <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                        <option value="bouteilles" {{ $data->unit == 'bouteilles' ? 'selected' : '' }} class="form-control">Bouteilles</option>
-                                        <option value="pcs" {{ $data->unit == 'pcs' ? 'selected' : '' }} class="form-control">Pcs</option>
-                                        <option value="cartons" {{ $data->unit == 'cartons' ? 'selected' : '' }} class="form-control">Cartons</option>
-                                        <option value="millilitres" {{ $data->unit == 'millilitres' ? 'selected' : '' }} class="form-control">Millilitres</option>
-                                    </select>
-                                </td>
                                 <td><input type="text" name="purchase_price[]" value="{{ $data->purchase_price }}" class="form-control" readonly="readonly"/></td>  
                                 <td><input type="text" name="selling_price[]" value="{{ $data->selling_price }}" class="form-control" readonly="readonly"/></td> 
                                 <td><input type="number" name="new_quantity[]" value="{{ $data->quantity_bottle }}" class="form-control" step="any" min="0" /></td>
-                                <td>
-                                    <select class="form-control" name="new_unit[]" id="new_unit">
-                                        <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                        <option value="bouteilles" {{ $data->unit == 'bouteilles' ? 'selected' : '' }} class="form-control">Bouteilles</option>
-                                        <option value="pcs" {{ $data->unit == 'pcs' ? 'selected' : '' }} class="form-control">Pcs</option>
-                                        <option value="cartons" {{ $data->unit == 'cartons' ? 'selected' : '' }} class="form-control">Cartons</option>
-                                        <option value="millilitres" {{ $data->unit == 'millilitres' ? 'selected' : '' }} class="form-control">Millilitres</option>
-                                    </select>
-                                </td>
                                 <td><input type="number" name="new_purchase_price[]" value="{{ $data->purchase_price }}" class="form-control" step="any" min="0" /></td> 
                                 <td><input type="number" name="new_selling_price[]" value="{{ $data->selling_price }}" class="form-control" step="any" min="0" /></td>
                                 <td><button type="button" class="btn btn-danger remove-tr"><i class="fa fa-trash-o" aria-hidden='false'></i>&nbsp;Supprimer</button></td>   
@@ -144,12 +124,6 @@
                         "</td>"+
                         "<td>"+
                           "<input type='number' name='quantity[]' placeholder='Quantity' class='form-control' min='0' />"+
-                        "</td>"+
-                        "<td>"+
-                          "<select class='form-control' name='unit[]'"+
-                            "<option value='0'>Select unit</option>"+
-                                 "<option value=''>unit</option>"+
-                          "</select>"+
                         "</td>"+
                         "<td>"+
                           "<input type='text' name='purchase_price[]' class='form-control' min='0' />"+

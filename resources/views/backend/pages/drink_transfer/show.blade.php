@@ -53,7 +53,7 @@
                                     <td>{{ $transfer->quantity_requisitioned }}</td>
                                     <td>{{ number_format($transfer->price,0,',',' ' ) }}</td>
                                     <td>{{ $transfer->quantity_transfered }}</td>
-                                    <td>{{ $transfer->unit }}</td>
+                                    <td>{{ $transfer->drink->drinkMeasurement->purchase_unit }}</td>
                                     <td>{{ number_format($transfer->total_value_transfered,0,',',' ' ) }}</td>
                                     <td>{{ $transfer->description }}</td>
                                     <td>{{ $transfer->created_by }}</td>

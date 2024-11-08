@@ -83,7 +83,7 @@ class DrinkSupplierOrderController extends Controller
         $rules = array(
                 'drink_id.*'  => 'required',
                 'date'  => 'required',
-                'unit.*'  => 'required',
+                //'unit.*'  => 'required',
                 'quantity.*'  => 'required',
                 'purchase_price.*'  => 'required',
                 'purchase_no'  => 'required',
@@ -128,7 +128,7 @@ class DrinkSupplierOrderController extends Controller
                     'date' => $date,
                     'quantity' => $quantity[$count],
                     'quantity' => $quantity[$count],
-                    'unit' => $unit[$count],
+                    //'unit' => $unit[$count],
                     'purchase_price' => $purchase_price[$count],
                     'total_value' => $total_value,
                     'purchase_no' => $purchase_no,

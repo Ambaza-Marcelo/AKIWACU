@@ -113,7 +113,6 @@
                             <tr>
                                 <th>@lang('messages.item')</th>
                                 <th>@lang('messages.quantity')</th>
-                                <th>@lang('messages.unit')</th>
                                 <th>@lang('messages.purchase_price')</th>
                                 <th>Action</th>
                             </tr>
@@ -121,17 +120,10 @@
                                 <td> <select class="form-control" name="drink_id[]" id="drink_id">
                                 <option disabled="disabled" selected="selected">merci de choisir</option>
                             @foreach ($drinks as $drink)
-                                <option value="{{ $drink->id }}" class="form-control">{{ $drink->name }}</option>
+                                <option value="{{ $drink->id }}" class="form-control">{{$drink->name}}/{{ number_format($drink->cump,0,',',' ') }}/{{ $drink->drinkMeasurement->purchase_unit }}</option>
                             @endforeach
                             </select></td>  
                                 <td><input type="number" name="quantity[]" placeholder="Enter quantity" class="form-control" /></td>  
-                                <td><select class="form-control" name="unit[]" id="unit">
-                                    <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                    <option value="bouteilles" class="form-control">Bouteilles</option>
-                                    <option value="pcs" class="form-control">Pcs</option>
-                                    <option value="cartons" class="form-control">Cartons</option>
-                                    <option value="millilitres" class="form-control">Millilitres</option>
-                                </select></td>
                                 <td><input type="number" name="purchase_price[]" placeholder="Enter purchase price" class="form-control" /></td>     
                                 <td><button type="button" name="add" id="add" class="btn btn-success">@lang('messages.addmore')</button></td>  
                             </tr>  
@@ -164,21 +156,12 @@
                          "<select class='form-control' name='drink_id[]'"+
                             "<option>merci de choisir</option>"+
                              "@foreach($drinks as $drink)"+
-                                 "<option value='{{ $drink->id }}'>{{ $drink->name }}</option>"+
+                                 "<option value='{{ $drink->id }}'>{{$drink->name}}/{{ number_format($drink->cump,0,',',' ') }}/{{ $drink->drinkMeasurement->purchase_unit }}</option>"+
                              "@endforeach>"+
                           "</select>"+
                         "</td>"+
                         "<td>"+
                           "<input type='number' name='quantity[]' placeholder='Enter Quantity' class='form-control' />"+
-                        "</td>"+
-                        "<td>"+
-                          "<select class='form-control' name='unit[]' id='unit'>"+
-                                "<option disabled='disabled' selected='selected'>merci de choisir</option>"+
-                                "<option value='bouteilles' class='form-control'>Bouteilles</option>"+
-                                "<option value='pcs' class='form-control'>Pieces</option>"+
-                                "<option value='cartons' class='form-control'>Cartons</option>"+
-                                "<option value='millilitres' class='form-control'>Millilitres</option>"+
-                                "</select>"+
                         "</td>"+
                         "<td>"+
                         "<input type='number' name='purchase_price[]' placeholder='Enter purchase price' class='form-control' />"+

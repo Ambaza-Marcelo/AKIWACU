@@ -105,7 +105,7 @@ class DrinkReceptionController extends Controller
         $rules = array(
                 'drink_id.*'  => 'required',
                 'date'  => 'required',
-                'unit.*'  => 'required',
+                //'unit.*'  => 'required',
                 'quantity_ordered.*'  => 'required',
                 'purchase_price.*'  => 'required',
                 //'selling_price.*'  => 'required',
@@ -140,7 +140,7 @@ class DrinkReceptionController extends Controller
             $invoice_no = $request->invoice_no;
             $description =$request->description; 
             $destination_store_id = $request->destination_store_id;
-            $unit = $request->unit;
+            //$unit = $request->unit;
             $quantity_ordered = $request->quantity_ordered;
             $purchase_price = $request->purchase_price;
             $selling_price = $request->selling_price;
@@ -183,7 +183,7 @@ class DrinkReceptionController extends Controller
                     'quantity_ordered' => $quantity_ordered[$count],
                     'quantity_received' => $quantity_received[$count],
                     'quantity_remaining' => $quantity_received[$count] - $quantity_ordered[$count],
-                    'unit' => $unit[$count],
+                    //'unit' => $unit[$count],
                     'purchase_price' => $purchase_price[$count],
                     //'selling_price' => $selling_price[$count],
                     'total_amount_ordered' => $total_amount_ordered,
@@ -260,7 +260,7 @@ class DrinkReceptionController extends Controller
         $rules = array(
                 'drink_id.*'  => 'required',
                 'date'  => 'required',
-                'unit.*'  => 'required',
+                //'unit.*'  => 'required',
                 'quantity_ordered.*'  => 'required',
                 'purchase_price.*'  => 'required',
                // 'selling_price.*'  => 'required',
@@ -295,7 +295,7 @@ class DrinkReceptionController extends Controller
             $invoice_no = $request->invoice_no;
             $description =$request->description; 
             $destination_store_id = $request->destination_store_id;
-            $unit = $request->unit;
+            //$unit = $request->unit;
             $quantity_ordered = $request->quantity_ordered;
             $purchase_price = $request->purchase_price;
             $selling_price = $request->selling_price;
@@ -337,7 +337,7 @@ class DrinkReceptionController extends Controller
                     'quantity_ordered' => $quantity_ordered[$count],
                     'quantity_received' => $quantity_received[$count],
                     'quantity_remaining' => $quantity_received[$count] - $quantity_ordered[$count],
-                    'unit' => $unit[$count],
+                    //'unit' => $unit[$count],
                     'purchase_price' => $purchase_price[$count],
                     //'selling_price' => $selling_price[$count],
                     'total_amount_ordered' => $total_amount_ordered,

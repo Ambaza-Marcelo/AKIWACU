@@ -55,14 +55,12 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="unit">@lang('messages.unit')<strong style="color: red;">*</strong></label>
-                                    <select class="form-control" name="unit" id="unit" required>
+                                    <label for="drink_measurement_id">@lang('messages.unit')<strong style="color: red;">*</strong></label>
+                                    <select class="form-control" name="drink_measurement_id" id="drink_measurement_id" required>
                                         <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                        <option value="bouteilles" class="form-control">Bouteilles</option>
-                                        <option value="mesurettes" class="form-control">Mesurettes</option>
-                                        <option value="pcs" class="form-control">Pcs</option>
-                                        <option value="cartons" class="form-control">Cartons</option>
-                                        <option value="millilitres" class="form-control">Millilitres</option>
+                                        @foreach($drink_measurements as $drink_measurement)
+                                        <option value="{{ $drink_measurement->id }}" class="form-control">{{ $drink_measurement->purchase_unit }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>
@@ -71,7 +69,7 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label for="quantity_bottle">@lang('messages.quantity')</label>
-                                    <input type="number" class="form-control" id="quantity_bottle" name="quantity_bottle" placeholder="Enter Quantity" min="0" required>
+                                    <input type="number" class="form-control" id="quantity_bottle" name="quantity_bottle" placeholder="Enter Quantity" min="0">
                                 </div>
                             </div>
                             <div class="col-md-6">

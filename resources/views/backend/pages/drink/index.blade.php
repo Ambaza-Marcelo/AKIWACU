@@ -78,7 +78,7 @@
                                     <td>{{ $drink->code }}</td>
                                     <td>{{ $drink->code_store }}</td>
                                     <td>{{ $drink->quantity_bottle }}</td>
-                                    <td>{{ $drink->unit }}</td>
+                                    <td>{{ $drink->drinkMeasurement->purchase_unit }}</td>
                                     <td>{{ $drink->threshold_quantity }}</td>
                                     <td>{{ number_format($drink->purchase_price,0,',',' ') }}</td>
                                     <td>{{ number_format($drink->brarudi_price,0,',',' ') }}</td>

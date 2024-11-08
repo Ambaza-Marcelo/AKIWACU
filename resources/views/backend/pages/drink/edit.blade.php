@@ -56,14 +56,12 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="unit">@lang('messages.unit')<strong style="color: red;">*</strong></label>
-                                    <select class="form-control" name="unit" id="unit">
+                                    <label for="drink_measurement_id">@lang('messages.unit')<strong style="color: red;">*</strong></label>
+                                    <select class="form-control" name="drink_measurement_id" id="drink_measurement_id">
                                         <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                        <option value="bouteilles" {{ $drink->unit == 'bouteilles' ? 'selected' : '' }} class="form-control">Bouteilles</option>
-                                        <option value="mesurettes" {{ $drink->unit == 'mesurettes' ? 'selected' : '' }} class="form-control">Mesurettes</option>
-                                        <option value="pcs" {{ $drink->unit == 'pcs' ? 'selected' : '' }} class="form-control">Pcs</option>
-                                        <option value="cartons" {{ $drink->unit == 'cartons' ? 'selected' : '' }} class="form-control">Cartons</option>
-                                        <option value="millilitres" {{ $drink->unit == 'millilitres' ? 'selected' : '' }} class="form-control">Millilitres</option>
+                                        @foreach($drink_measurements as $drink_measurement)
+                                        <option value="{{ $drink_measurement->id }}" {{ $drink->drink_measurement_id == $drink_measurement->id ? 'selected' : '' }} class="form-control">{{ $drink_measurement->purchase_unit }}</option>
+                                        @endforeach
                                     </select>
                                 </div>
                             </div>

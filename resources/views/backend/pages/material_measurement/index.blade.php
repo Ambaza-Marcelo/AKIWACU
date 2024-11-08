@@ -60,7 +60,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                               @foreach ($drink_measurements as $material_measurement)
+                               @foreach ($material_measurements as $material_measurement)
                                <tr>
                                     <td>{{ $loop->index+1 }}</td>
                                     <td>{{ $material_measurement->purchase_unit }}</td>
