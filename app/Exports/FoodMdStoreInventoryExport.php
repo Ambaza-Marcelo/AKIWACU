@@ -32,7 +32,7 @@ class FoodMdStoreInventoryExport implements FromCollection, WithMapping, WithHea
             $data->id,
             $data->food->name,
             $data->food->code,
-            $data->food->unit,
+            $data->food->foodMeasurement->purchase_unit,
             $data->quantity,
             $data->purchase_price,
             $data->total_purchase_value,

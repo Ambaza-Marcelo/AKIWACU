@@ -19,6 +19,7 @@ use App\Models\FoodSmallStore;
 use App\Models\FoodRequisitionDetail;
 use App\Models\FoodRequisition;
 use App\Models\FoodSmallReport;
+use App\Exports\FoodSmStoreReportExport;
 use Carbon\Carbon;
 use PDF;
 use Validator;
@@ -44,7 +45,7 @@ class FoodSmallReportController extends Controller
             abort(403, 'Muradutunge !! Ntaburenganzira mufise bwo kuraba raporo,mufise ico mubaza murashobora guhamagara kuri 122 !');
         }
             $datas = FoodSmallReport::select(
-                        DB::raw('created_at,food_id,quantity_stock_initial,quantity_stock_initial_portion,value_stock_initial,value_stock_initial_portion,quantity_stockin,value_stockin,quantity_portion,value_portion,quantity_inventory,value_inventory,quantity_inventory_portion,value_inventory_portion,quantity_reception,value_reception,quantity_transfer,value_transfer,quantity_stockout,value_stockout,quantity_stock_final,value_stock_final'))->groupBy('created_at','food_id','quantity_stock_initial','quantity_stock_initial_portion','value_stock_initial','value_stock_initial_portion','quantity_stockin','quantity_portion','value_portion','quantity_inventory','value_inventory','quantity_inventory_portion','value_inventory_portion','value_stockin','quantity_reception','value_reception','quantity_transfer','value_transfer','quantity_stockout','value_stockout','quantity_stock_final','value_stock_final')->get();
+                        DB::raw('id,created_at,food_id,quantity_stock_initial,quantity_stock_initial_portion,value_stock_initial,value_stock_initial_portion,quantity_stockin,value_stockin,quantity_portion,value_portion,quantity_inventory,value_inventory,quantity_inventory_portion,value_inventory_portion,quantity_transfer,value_transfer,quantity_stockout,value_stockout,quantity_stock_final,quantity_stock_final_portion'))->groupBy('id','created_at','food_id','quantity_stock_initial','quantity_stock_initial_portion','value_stock_initial','value_stock_initial_portion','quantity_stockin','quantity_portion','value_portion','quantity_inventory','value_inventory','quantity_inventory_portion','value_inventory_portion','value_stockin','quantity_transfer','value_transfer','quantity_stockout','value_stockout','quantity_stock_final','quantity_stock_final_portion')->orderBy('id','desc')->take(500)->get();
 
             $stores = FoodSmallStore::all();
 
@@ -70,7 +71,7 @@ class FoodSmallReportController extends Controller
         $end_date = $endDate.' 23:59:59';
 
         $datas = FoodSmallReport::select(
-                        DB::raw('created_at,food_id,quantity_stock_initial,quantity_stock_initial_portion,value_stock_initial,value_stock_initial_portion,quantity_stockin,value_stockin,quantity_portion,value_portion,quantity_inventory,value_inventory,quantity_inventory_portion,value_inventory_portion,quantity_reception,value_reception,quantity_transfer,value_transfer,quantity_stockout,value_stockout,quantity_stock_final,value_stock_final,type_transaction,document_no,created_portion_by,created_by'))->groupBy('created_at','food_id','quantity_stock_initial','quantity_stock_initial_portion','value_stock_initial','value_stock_initial_portion','quantity_stockin','quantity_portion','value_portion','quantity_inventory','value_inventory','quantity_inventory_portion','value_inventory_portion','value_stockin','quantity_reception','value_reception','quantity_transfer','value_transfer','quantity_stockout','value_stockout','quantity_stock_final','value_stock_final','type_transaction','document_no','created_portion_by','created_by')->orderBy('created_at')->get();
+                        DB::raw('id,created_at,food_id,quantity_stock_initial,quantity_stock_initial_portion,value_stock_initial,value_stock_initial_portion,quantity_stockin,value_stockin,quantity_portion,value_portion,quantity_inventory,value_inventory,quantity_inventory_portion,value_inventory_portion,quantity_transfer,value_transfer,quantity_stockout,value_stockout,quantity_stock_final,quantity_stock_final_portion,type_transaction,document_no,created_portion_by,created_by'))->whereBetween('created_at',[$start_date,$end_date])->groupBy('id','created_at','food_id','quantity_stock_initial','quantity_stock_initial_portion','value_stock_initial','value_stock_initial_portion','quantity_stockin','quantity_portion','value_portion','quantity_inventory','value_inventory','quantity_inventory_portion','value_inventory_portion','value_stockin','quantity_transfer','value_transfer','quantity_stockout','value_stockout','quantity_stock_final','quantity_stock_final_portion','type_transaction','document_no','created_portion_by','created_by')->orderBy('id')->get();
 
         $setting = DB::table('settings')->orderBy('created_at','desc')->first();
         $currentTime = Carbon::now();
@@ -86,5 +87,10 @@ class FoodSmallReportController extends Controller
         return $pdf->download('RAPPORT DU PETIT STOCK DES NOURRITURES'.$dateTime.'.pdf');
 
         
+    }
+
+    public function exportToExcel(Request $request)
+    {
+        return Excel::download(new FoodSmStoreReportExport, 'RAPPORT DU PETIT STOCK DES NOURRITURES.xlsx');
     }
 }

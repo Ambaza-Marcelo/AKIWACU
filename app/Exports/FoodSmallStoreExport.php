@@ -22,7 +22,7 @@ class FoodSmallStoreExport implements FromCollection, WithMapping, WithHeadings
     public function collection()
     {
         return FoodSmallStoreDetail::select(
-                        DB::raw('food_id,quantity_portion,unit,purchase_price'))->where('food_id','!=','')->where('code',$this->code)->get();
+                        DB::raw('id,food_id,quantity,unit,purchase_price,cump'))->where('food_id','!=','')->where('code',$this->code)->get();
     }
 
     public function map($data) : array {
@@ -31,7 +31,7 @@ class FoodSmallStoreExport implements FromCollection, WithMapping, WithHeadings
             $data->food->name,
             $data->food->code,
             $data->quantity_portion,
-            $data->food->unit,
+            $data->food->foodMeasurement->production_unit,
             number_format($data->purchase_price,0,',',' '),
             number_format(($data->purchase_price * $data->quantity_portion),0,',',' '),
         ] ;

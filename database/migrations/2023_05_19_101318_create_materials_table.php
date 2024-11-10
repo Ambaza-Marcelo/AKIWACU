@@ -33,13 +33,13 @@ class CreateMaterialsTable extends Migration
             $table->string('store_type')->nullable(true);
             $table->string('updated_by')->nullable(true);
             $table->string('created_by')->nullable(true);
-            $table->bigInteger('mcategory_id')->unsigned();
+            $table->bigInteger('mcategory_id')->unsigned()->nullable(true);
             $table->foreign('mcategory_id')
                     ->references('id')
                     ->on('material_categories')
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
-            $table->bigInteger('material_measurement_id')->unsigned();
+            $table->bigInteger('material_measurement_id')->unsigned()->nullable(true);
             $table->foreign('material_measurement_id')
                     ->references('id')
                     ->on('material_measurements')

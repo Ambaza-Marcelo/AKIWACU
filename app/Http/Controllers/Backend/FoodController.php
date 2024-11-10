@@ -340,6 +340,7 @@ class FoodController extends Controller
         if ($store_type == '1') {
             $food_big_store_code = FoodBigStoreDetail::where('code',$code_store)->value('code');
             $food_in_big_store = FoodBigStoreDetail::where('code',$code_store)->where('food_id',$food_id)->first();
+            $quantity = FoodBigStoreDetail::where('code',$code_store)->where('food_id',$food_id)->value('quantity');
             if (!empty($food_in_big_store)) {
                 $food_in_big_store->food_id = $food_id;
                 $food_in_big_store->quantity = $quantity;
@@ -373,6 +374,7 @@ class FoodController extends Controller
         }elseif($store_type == '2'){
             $food_in_small_store = FoodSmallStoreDetail::where('code',$code_store)->value('code');
             $food_in_small_store = FoodSmallStoreDetail::where('code',$code_store)->where('food_id',$food_id)->first();
+            $quantity = FoodSmallStoreDetail::where('code',$code_store)->where('food_id',$food_id)->value('quantity');
             if (!empty($food_in_small_store)) {
                 $food_in_small_store->food_id = $food_id;
                 $food_in_small_store->quantity_portion = $quantity;
@@ -406,6 +408,7 @@ class FoodController extends Controller
         }else{
             $food_big_store_code = FoodExtraBigStoreDetail::where('code',$code_store)->value('code');
             $food_in_big_store = FoodExtraBigStoreDetail::where('code',$code_store)->where('food_id',$food_id)->first();
+            $quantity = FoodExtraBigStoreDetail::where('code',$code_store)->where('food_id',$food_id)->value('quantity');
             if (!empty($food_in_big_store)) {
                 $food_in_big_store->food_id = $food_id;
                 $food_in_big_store->quantity = $quantity;

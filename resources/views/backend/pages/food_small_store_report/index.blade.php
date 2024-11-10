@@ -107,35 +107,39 @@
                                     <th width="10%">@lang('messages.date')</th>
                                     <th width="10%">@lang('messages.item')</th>
                                     <th width="10%">@lang('messages.code')</th>
-                                    <th width="10%">Q. S. Initial/Portion</th>
-                                    <th width="10%">V. S. Initial</th>
-                                    <th width="10%">Q. Entree/Reception</th>
-                                    <th width="10%">V. Entree/Reception</th>
-                                    <th width="10%">Q. Sortie</th>
-                                    <th width="10%">V. Sortie</th>
-                                    <th width="10%">Q. S. Final/Portion</th>
-                                    <th width="10%">V. S. Final</th>
-                                    <th width="10%">Action</th>
+                                    <th width="10%">Stock Initial</th>
+                                    <th width="10%">Unité de mesure</th>
+                                    <th width="10%">C.U.M.P</th>
+                                    <th width="10%">Entrée Transfert</th>
+                                    <th width="10%">Entrée Autre</th>
+                                    <th width="10%">Portionnage</th>
+                                    <th width="10%">Quantité Sortie</th>
+                                    <th width="10%">Stock Final</th>
+                                    <th width="10%">Type Transaction</th>
+                                    <th width="10%">No Document</th>
+                                    <th width="10%">Auteur</th>
                                 </tr>
                             </thead>
                             <tbody>
-                               @foreach($datas as $data)
+                                @foreach($datas as $data)
                                <tr>
                                     <td>{{ $loop->index+1 }}</td>
                                     <td>{{ \Carbon\Carbon::parse($data->created_at)->format('d/m/Y') }}</td>
                                     <td>{{ $data->food->name }} </td>
                                     <td>{{ $data->food->code }} </td>
-                                    <td>{{ $data->quantity_stock_initial }}/{{ $data->quantity_stock_initial_portion }} </td>
-                                    <td>{{ number_format($data->value_stock_initial,0,',',' ') }} </td>
-                                    <td>@if($data->quantity_stockin){{ $data->quantity_stockin }} @elseif($data->quantity_reception) {{ $data->quantity_reception }} @elseif($data->quantity_transfer) {{ $data->quantity_transfer }} @elseif($data->quantity_inventory) {{ $data->quantity_inventory }} @endif / @if($data->quantity_inventory_portion) {{ $data->quantity_inventory_portion }} @endif  </td>
-                                    <td>@if($data->value_stockin){{ number_format($data->value_stockin,0,',',' ') }} @elseif($data->value_reception) {{ number_format($data->value_reception,0,',',' ') }} @elseif($data->value_transfer) {{ number_format($data->value_transfer,0,',',' ') }} @elseif($data->value_inventory) {{ number_format($data->value_inventory,0,',',' ') }} @endif</td>
-                                    <td>@if($data->quantity_stockout){{ $data->quantity_stockout }}  @endif </td>
-                                    <td>@if($data->value_stockout){{ $data->value_stockout }} @endif </td>
-                                    <td>{{ ($data->quantity_stock_initial + $data->quantity_stockin + $data->quantity_reception + $data->quantity_transfer) - ($data->quantity_stockout + $data->quantity_sold) }} / {{ ($data->quantity_stock_initial_portion + $data->quantity_portion + $data->quantity_inventory_portion) - ($data->quantity_stockout + $data->quantity_sold) }} </td>
-                                    <td>{{ number_format((($data->quantity_stock_initial + $data->quantity_stockin + $data->quantity_reception + $data->quantity_transfer) - ($data->quantity_stockout + $data->quantity_sold))*$data->food->purchase_price,0,',',' ') }}</td>
-                                    <td></td>
+                                    <td>{{ $data->quantity_stock_initial_portion }} </td>
+                                    <td>{{ $data->food->foodMeasurement->production_unit }}</td>
+                                    <td>{{ $data->cump }}</td>
+                                    <td>{{ $data->quantity_transfer }}</td>
+                                    <td>{{ $data->quantity_stockin }}</td>
+                                    <td>{{ $data->quantity_portion }}</td>
+                                    <td>{{ $data->quantity_stockout }}</td>
+                                    <td>{{ $data->quantity_stock_final_portion }}</td>
+                                    <td>{{ $data->type_transaction }}</td>
+                                    <td>{{ $data->document_no }}</td>
+                                    <td>@if($data->created_portion_by){{ $data->created_portion_by }} @else {{ $data->created_by }} @endif</td>
                                 </tr>
-                               @endforeach
+                                @endforeach
                             </tbody>
                         </table>
                     </div>

@@ -201,9 +201,9 @@ class FoodSmallStoreController extends Controller
         return redirect()->route('admin.food-small-store.index');
     }
 
-    public function exportToExcel(Request $request)
+    public function exportToExcel(Request $request,$code)
     {
-        return Excel::download(new FoodSmallStoreExport, 'ETAT DU PETIT STOCK DES NOURRITURES.xlsx');
+        return Excel::download(new FoodSmallStoreExport($code), 'ETAT DU PETIT STOCK DES NOURRITURES.xlsx');
     }
 
     /**

@@ -654,6 +654,8 @@ class FoodTransferController extends Controller
 
                 $cump = FoodSmallStoreDetail::where('code',$code_store)->where('food_id','!=', '')->where('food_id', $data->food_id)->value('cump');
 
+                $cump = $cump / $data->food->foodMeasurement->equivalent;
+
 
                 $transitStore = array(
                             'food_id' => $data->food_id,

@@ -31,7 +31,7 @@ class FoodBigStoreExport implements FromCollection, WithMapping, WithHeadings
             $data->food->name,
             $data->food->code,
             $data->quantity,
-            $data->food->unit,
+            $data->food->foodMeasurement->purchase_unit,
             $data->cump,
             $data->purchase_price,
             ($data->purchase_price * $data->quantity),

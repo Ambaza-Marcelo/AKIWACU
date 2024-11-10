@@ -36,13 +36,13 @@ class CreateFoodsTable extends Migration
             $table->string('store_type')->nullable(true);
             $table->string('updated_by')->nullable(true);
             $table->string('created_by')->nullable(true);
-            $table->bigInteger('fcategory_id')->unsigned();
+            $table->bigInteger('fcategory_id')->unsigned()->nullable(true);
             $table->foreign('fcategory_id')
                     ->references('id')
                     ->on('food_categories')
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
-            $table->bigInteger('food_measurement_id')->unsigned();
+            $table->bigInteger('food_measurement_id')->unsigned()->nullable(true);
             $table->foreign('food_measurement_id')
                     ->references('id')
                     ->on('food_measurements')
@@ -59,6 +59,8 @@ class CreateFoodsTable extends Migration
      */
     public function down()
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
         Schema::dropIfExists('foods');
+        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

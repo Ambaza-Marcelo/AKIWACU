@@ -73,7 +73,7 @@
                                     <td>{{ $food_small_store->manager }}</td>
                                     <td>
                                         <a href="{{ route('admin.food-small-store.storeStatus',$food_small_store->code) }}"><img src="{{ asset('img/ISSh.gif') }}" width="60" title="Télécharger d'abord le document et puis imprimer"></a>
-                                        <a href="{{ route('admin.food-big-store.exportToExcel',$food_small_store->code) }}" class="btn btn-primary">Excel</a>
+                                        <a href="{{ route('admin.food-small-store.exportToExcel',$food_small_store->code) }}" class="btn btn-primary">Excel</a>
                                         @if (Auth::guard('admin')->user()->can('food_small_store.edit'))
                                             <a class="btn btn-success text-white" href="{{ route('admin.food-small-store.edit', $food_small_store->code) }}">@lang('messages.edit')</a>
                                         @endif

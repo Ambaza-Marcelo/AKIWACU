@@ -50,10 +50,14 @@
                                     <th width="10%">@lang('messages.date')</th>
                                     <th width="10%">@lang('messages.item')</th>
                                     <th width="10%">@lang('messages.code')</th>
-                                    <th width="10%">Q. S. Initial/Portion</th>
-                                    <th width="10%">Q. Entree/Portion</th>
-                                    <th width="10%">Q. Sortie/Portion</th>
-                                    <th width="10%">Q. S. Final/Portion</th>
+                                    <th width="10%">Stock Initial</th>
+                                    <th width="10%">Unité de mesure</th>
+                                    <th width="10%">C.U.M.P</th>
+                                    <th width="10%">Entrée Transfert</th>
+                                    <th width="10%">Entrée Autre</th>
+                                    <th width="10%">Portionnage</th>
+                                    <th width="10%">Quantité Sortie</th>
+                                    <th width="10%">Stock Final</th>
                                     <th width="10%">Type Transaction</th>
                                     <th width="10%">No Document</th>
                                     <th width="10%">Auteur</th>
@@ -66,10 +70,14 @@
                                     <td>{{ \Carbon\Carbon::parse($data->created_at)->format('d/m/Y') }}</td>
                                     <td>{{ $data->food->name }} </td>
                                     <td>{{ $data->food->code }} </td>
-                                    <td>{{ $data->quantity_stock_initial }}/{{ $data->quantity_stock_initial_portion }} </td>
-                                    <td>@if($data->quantity_stockin){{ $data->quantity_stockin }} @elseif($data->quantity_reception) {{ $data->quantity_reception }} @elseif($data->quantity_transfer) {{ $data->quantity_transfer }} @elseif($data->quantity_inventory) {{ $data->quantity_inventory }} @endif / @if($data->quantity_portion){{ $data->quantity_portion }} @elseif($data->inventory_quantity_portion){{ $data->inventory_quantity_portion }} @endif</td>
+                                    <td>{{ $data->quantity_stock_initial_portion }} </td>
+                                    <td>{{ $data->food->foodMeasurement->production_unit }}</td>
+                                    <td>{{ $data->cump }}</td>
+                                    <td>{{ $data->quantity_transfer }}</td>
+                                    <td>{{ $data->quantity_stockin }}</td>
+                                    <td>{{ $data->quantity_portion }}</td>
                                     <td>{{ $data->quantity_stockout }}</td>
-                                    <td>@if($data->quantity_stockin || $data->quantity_stockout || $data->quantity_transfer || $data->quantity_reception){{ ($data->quantity_stock_initial + $data->quantity_stockin + $data->quantity_reception + $data->quantity_transfer) - ($data->quantity_stockout) }} @endif/@if($data->quantity_portion){{ ($data->quantity_stock_initial_portion + $data->quantity_portion) }} @elseif($data->inventory_quantity_portion) {{ $data->inventory_quantity_portion }} @endif</td>
+                                    <td>{{ $data->quantity_stock_final_portion }}</td>
                                     <td>{{ $data->type_transaction }}</td>
                                     <td>{{ $data->document_no }}</td>
                                     <td>@if($data->created_portion_by){{ $data->created_portion_by }} @else {{ $data->created_by }} @endif</td>

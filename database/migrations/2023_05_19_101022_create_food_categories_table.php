@@ -28,6 +28,8 @@ class CreateFoodCategoriesTable extends Migration
      */
     public function down()
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
         Schema::dropIfExists('food_categories');
+        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }
