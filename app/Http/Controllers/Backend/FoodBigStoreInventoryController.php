@@ -87,11 +87,9 @@ class FoodBigStoreInventoryController extends Controller
             'date' => 'required|date',
             'title' => 'required',
             'quantity.*' => 'required',
-            'unit.*' => 'required',
             'purchase_price.*' => 'required',
             'new_quantity.*' => 'required',
             'new_purchase_price.*' => 'required',
-            'new_unit.*' => 'required',
             'description' => 'required',
             );
 
@@ -107,7 +105,7 @@ class FoodBigStoreInventoryController extends Controller
 
             $food_id = $request->food_id;
             $date = $request->date;
-            $unit = $request->unit;
+            //$unit = $request->unit;
             $quantity = $request->quantity;
             $purchase_price = $request->purchase_price;
             $new_quantity = $request->new_quantity;
@@ -115,7 +113,7 @@ class FoodBigStoreInventoryController extends Controller
             $title = $request->title;
             $code_store = $request->code_store;
             $new_purchase_price = $request->new_purchase_price;
-            $new_unit = $request->new_unit; 
+            //$new_unit = $request->new_unit; 
 
             $latest = FoodBigStoreInventory::latest()->first();
             if ($latest) {
@@ -139,13 +137,13 @@ class FoodBigStoreInventoryController extends Controller
                     'title' => $title,
                     'code_store' => $code_store,
                     'quantity' => $quantity[$count],
-                    'unit' => $unit[$count],
+                    //'unit' => $unit[$count],
                     'purchase_price' => $purchase_price[$count],
                     'total_purchase_value' => $total_purchase_value,
                     'new_quantity' => $new_quantity[$count],
                     'new_purchase_price' => $new_purchase_price[$count],
                     'new_total_purchase_value' => $new_total_purchase_value,
-                    'new_unit' => $new_unit[$count],
+                    //'new_unit' => $new_unit[$count],
                     'relicat' => $relicat,
                     'inventory_no' => $inventory_no,
                     'inventory_signature' => $inventory_signature,
@@ -305,7 +303,7 @@ class FoodBigStoreInventoryController extends Controller
                 $food_calc = array(
                         'purchase_price' => $data->new_purchase_price,
                         'cump' => $data->new_purchase_price,
-                        'unit' => $data->new_unit,
+                        //'unit' => $data->new_unit,
                         'quantity' => $data->new_quantity
                     );
 
@@ -316,7 +314,7 @@ class FoodBigStoreInventoryController extends Controller
                     $sto = array(
                         'food_id' => $data->food_id,
                         'quantity' => $data->new_quantity,
-                        'unit' => $data->new_unit,
+                        //'unit' => $data->new_unit,
                         'cump' => $data->new_purchase_price,
                         'purchase_price' => $data->new_purchase_price,
                         'total_purchase_value' => $data->new_purchase_price * $data->new_quantity,
@@ -420,7 +418,7 @@ class FoodBigStoreInventoryController extends Controller
 
     public function exportToExcel(Request $request,$code)
     {
-        return Excel::download(new FoodMdStoreInventoryExport($code), 'inventaire_du_stock_nourriture.xlsx');
+        return Excel::download(new FoodMdStoreInventoryExport($code), 'INVENTAIRE AU STOCK INTERMEDIAIRE DES NOURRITURES.xlsx');
     }
 
     /**

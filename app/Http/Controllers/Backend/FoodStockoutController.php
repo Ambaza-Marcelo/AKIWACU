@@ -50,10 +50,17 @@ class FoodStockoutController extends Controller
     {
         if (is_null($this->user) || !$this->user->can('food_stockout.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view any stockout !');
+        }elseif ($this->user->can('food_stockout.view') && $this->user->can('food_small_inventory.view') && $this->user->can('food_big_inventory.view')) {
+            $stockouts = FoodStockout::orderBy('id','desc')->take(1000)->get();
+            return view('backend.pages.food_stockout.index', compact('stockouts'));
+        }elseif ($this->user->can('food_stockout.view') && $this->user->can('food_big_inventory.view')) {
+            $stockouts = FoodStockout::where('origin_bg_store_id','!=','')->orderBy('id','desc')->take(200)->get();
+            return view('backend.pages.food_stockout.index', compact('stockouts'));
+        }elseif ($this->user->can('food_stockout.view') && $this->user->can('food_small_inventory.view')) {
+            $stockouts = FoodStockout::where('origin_sm_store_id','!=','')->orderBy('id','desc')->take(200)->get();
+            return view('backend.pages.food_stockout.index', compact('stockouts'));
         }
 
-        $stockouts = FoodStockout::orderBy('id','desc')->take(200)->get();
-        return view('backend.pages.food_stockout.index', compact('stockouts'));
     }
 
     /**
@@ -137,7 +144,7 @@ class FoodStockoutController extends Controller
 
             for( $count = 0; $count < count($food_id); $count++ ){
                 if ($store_type == 1) {
-                    $purchase_price = Food::where('id', $food_id[$count])->value('purchase_price');
+                    $purchase_price = FoodBigStoreDetail::where('food_id', $food_id[$count])->value('cump');
 
                     $total_value = $quantity[$count] * $purchase_price;
                     $total_purchase_value = $quantity[$count] * $purchase_price;
@@ -166,7 +173,7 @@ class FoodStockoutController extends Controller
                     );
                     $insert_data[] = $data;
                 }elseif($store_type == 2){
-                    $purchase_price = Food::where('id', $food_id[$count])->value('purchase_price');
+                    $purchase_price = FoodSmallStoreDetail::where('food_id', $food_id[$count])->value('cump');
 
                     $total_purchase_value = $quantity[$count] * $purchase_price;
 
@@ -194,7 +201,7 @@ class FoodStockoutController extends Controller
                     $insert_data[] = $data;
                 }else{
                     $cump = Food::where('id', $food_id[$count])->value('cump');
-                    $purchase_price = Food::where('id', $food_id[$count])->value('purchase_price');
+                    $purchase_price = Food::where('id', $food_id[$count])->value('cump');
 
                     $total_purchase_value = $quantity[$count] * $purchase_price;
 
@@ -439,7 +446,13 @@ class FoodStockoutController extends Controller
 
             $code_store_origin = FoodBigStore::where('id',$data->origin_bg_store_id)->value('code');
 
-            $cump = FoodBigStoreDetail::where('code',$code_store_origin)->where('food_id','!=', '')->where('food_id', $data->food_id)->value('cump');
+            $cump = FoodBigStoreDetail::where('food_id','!=', '')->where('food_id', $data->food_id)->value('cump');
+            $purchase_price = FoodBigStoreDetail::where('food_id','!=', '')->where('food_id', $data->food_id)->value('purchase_price');
+            if ($cump <= 0) {
+                $cump = $purchase_price;
+            }else{
+                $cump = $cump;
+            }
 
             if ($data->store_type === '1') {
 

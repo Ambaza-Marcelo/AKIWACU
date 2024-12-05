@@ -16,6 +16,7 @@ use App\Models\Drink;
 use App\Models\DrinkReception;
 use App\Models\DrinkReceptionDetail;
 use App\Models\DrinkBigStoreDetail;
+use App\Models\DrinkSmallStoreDetail;
 use App\Models\DrinkBigStore;
 use App\Models\DrinkSupplierOrderDetail;
 use App\Models\DrinkSupplierOrder;
@@ -650,13 +651,20 @@ class DrinkReceptionController extends Controller
 
                     $drinkData = array(
                         'id' => $data->drink_id,
-                        'quantity_bottle' => $quantityTotalBigStore,
                         'cump' => $cump,
-                        'purchase_price' => $data->purchase_price,
+                        'purchase_price' => $cump,
+                    );
+
+                    $drinkSmallData = array(
+                        'cump' => $cump,
+                        'purchase_price' => $cump,
                     );
 
                         Drink::where('id',$data->drink_id)
                         ->update($drinkData);
+
+                        DrinkSmallStoreDetail::where('drink_id',$data->drink_id)
+                        ->update($drinkSmallData);
 
                         $drink = DrinkBigStoreDetail::where('code',$code_store_destination)->where("drink_id",$data->drink_id)->value('drink_id');
 

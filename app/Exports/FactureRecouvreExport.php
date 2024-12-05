@@ -28,7 +28,7 @@ class FactureRecouvreExport implements FromCollection, WithMapping, WithHeadings
         $end_date = $endDate.' 23:59:59';
 
         return FactureDetail::select(
-                        DB::raw('id,food_item_id,drink_id,barrist_item_id,bartender_item_id,salle_id,service_id,invoice_number,invoice_date,item_quantity,customer_name,client_id,drink_order_no,food_order_no,bartender_order_no,barrist_order_no,booking_no,item_total_amount,vat,item_price_nvat,confirmed_by,approuved_by'))->where('statut_paied','!=','0')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','drink_id','food_item_id','bartender_item_id','barrist_item_id','salle_id','service_id','invoice_date','invoice_number','item_quantity','drink_order_no','food_order_no','bartender_order_no','barrist_order_no','booking_no','customer_name','client_id','item_total_amount','vat','item_price_nvat','confirmed_by','approuved_by')->orderBy('client_id','asc')->get();
+                        DB::raw('id,food_item_id,drink_id,barrist_item_id,bartender_item_id,salle_id,service_id,invoice_number,invoice_ref,invoice_date,item_quantity,customer_name,client_id,drink_order_no,food_order_no,bartender_order_no,barrist_order_no,booking_no,item_total_amount,vat,item_price_nvat,confirmed_by,approuved_by'))->where('statut_paied','!=','0')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','drink_id','food_item_id','bartender_item_id','barrist_item_id','salle_id','service_id','invoice_date','invoice_number','invoice_ref','item_quantity','drink_order_no','food_order_no','bartender_order_no','barrist_order_no','booking_no','customer_name','client_id','item_total_amount','vat','item_price_nvat','confirmed_by','approuved_by')->orderBy('client_id','asc')->get();
     }
 
     public function map($data) : array {
@@ -67,6 +67,18 @@ class FactureRecouvreExport implements FromCollection, WithMapping, WithHeadings
     		$order_no = $data->booking_no;
     	}else{
             $order_no = "";
+        }
+
+        if ($data->invoice_number != $data->invoice_ref) {
+            $note_credit = "Facture Normale";
+            $item_price_nvat = $data->item_price_nvat;
+            $vat = $data->vat;
+            $item_total_amount = $data->item_total_amount;
+        }else{
+            $note_credit = "facture d'avoir ";
+            $item_price_nvat = -$data->item_price_nvat;
+            $vat = -$data->vat;
+            $item_total_amount = -$data->item_total_amount;
         }
 
         return [

@@ -28,7 +28,7 @@ class FactureCreditExport implements FromCollection, WithMapping, WithHeadings
         $end_date = $endDate.' 23:59:59';
 
         return FactureDetail::select(
-                        DB::raw('id,food_item_id,drink_id,barrist_item_id,bartender_item_id,salle_id,service_id,breakfast_id,swiming_pool_id,kidness_space_id,invoice_number,invoice_date,item_quantity,customer_name,client_id,drink_order_no,food_order_no,bartender_order_no,barrist_order_no,booking_no,item_total_amount,vat,item_price_nvat,cump'))->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','drink_id','food_item_id','bartender_item_id','barrist_item_id','salle_id','service_id','breakfast_id','swiming_pool_id','kidness_space_id','invoice_date','invoice_number','item_quantity','drink_order_no','food_order_no','bartender_order_no','barrist_order_no','booking_no','customer_name','client_id','item_total_amount','vat','item_price_nvat','cump')->orderBy('customer_name','asc')->get();
+                        DB::raw('id,food_item_id,drink_id,barrist_item_id,bartender_item_id,salle_id,service_id,breakfast_id,swiming_pool_id,kidness_space_id,invoice_number,invoice_ref,invoice_date,item_quantity,customer_name,client_id,drink_order_no,food_order_no,bartender_order_no,barrist_order_no,booking_no,item_total_amount,vat,item_price_nvat,cump'))->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','drink_id','food_item_id','bartender_item_id','barrist_item_id','salle_id','service_id','breakfast_id','swiming_pool_id','kidness_space_id','invoice_date','invoice_number','invoice_ref','item_quantity','drink_order_no','food_order_no','bartender_order_no','barrist_order_no','booking_no','customer_name','client_id','item_total_amount','vat','item_price_nvat','cump')->orderBy('customer_name','asc')->get();
     }
 
     public function map($data) : array {
@@ -103,7 +103,8 @@ class FactureCreditExport implements FromCollection, WithMapping, WithHeadings
             $cump,
 			$data->item_price_nvat,
 			$data->vat,
-			$data->item_total_amount
+			$data->item_total_amount,
+            $data->invoice_ref,
         ] ;
  
  
@@ -122,7 +123,8 @@ class FactureCreditExport implements FromCollection, WithMapping, WithHeadings
             'CMP',
             'PV HTVA',
             'TVA',
-            'TTC'
+            'TTC',
+            'Reference Note de Crédit'
         ] ;
     }
 }

@@ -434,7 +434,7 @@ class DrinkTransferController extends Controller
                 $quantityStockInitialDestination = DrinkSmallStoreDetail::where('code',$code_store_destination)->where('drink_id','!=', '')->where('drink_id', $data->drink_id)->value('quantity_bottle');
                 $quantityRestantSmallStore = $quantityStockInitialDestination + $data->quantity_transfered;
 
-                $cump = DrinkBigStoreDetail::where('code',$code_store_origin)->where('drink_id','!=', '')->where('drink_id', $data->drink_id)->value('cump');
+                $cump = DrinkBigStoreDetail::where('drink_id','!=', '')->where('drink_id', $data->drink_id)->value('cump');
 
                 $valeurAcquisition = $data->quantity_transfered * $data->price;
 

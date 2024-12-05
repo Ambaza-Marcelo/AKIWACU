@@ -38,6 +38,6 @@ class MaterialMdStoreTask extends Command
      */
     public function handle()
     {
-        DB::insert("insert into virtual_material_md_stores(date,code,manager,emplacement,store_signature,material_id,quantity,unit,purchase_price,cump) select getdate(),code,manager,emplacement,store_signature,material_id,quantity,unit,purchase_price,cump from material_big_store_details where material_id != '' ");
+        DB::insert("insert into virtual_material_md_stores(date,code,manager,emplacement,store_signature,material_id,quantity,unit,purchase_price,cump) select updated_at,code,manager,emplacement,store_signature,material_id,quantity,unit,purchase_price,cump from material_big_store_details where material_id != '' ");
     }
 }

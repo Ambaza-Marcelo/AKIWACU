@@ -14,6 +14,7 @@ use App\Models\Food;
 use App\Models\FoodReception;
 use App\Models\FoodReceptionDetail;
 use App\Models\FoodBigStoreDetail;
+use App\Models\FoodSmallStoreDetail;
 use App\Models\FoodBigStore;
 use App\Models\FoodSupplierOrderDetail;
 use App\Models\FoodSupplierOrder;
@@ -636,11 +637,19 @@ class FoodReceptionController extends Controller
                         'id' => $data->food_id,
                         'quantity' => $quantityTotalBigStore,
                         'cump' => $cump,
-                        'purchase_price' => $data->purchase_price,
+                        'purchase_price' => $cump,
+                    );
+
+                    $foodSmallData = array(
+                        'cump' => $cump,
+                        'purchase_price' => $cump,
                     );
 
                     Food::where('id',$data->food_id)
                         ->update($foodData);
+
+                    FoodSmallStoreDetail::where('food_id',$data->food_id)
+                        ->update($foodSmallData);
 
                         $food = FoodBigStoreDetail::where('code',$code_store_destination)->where("food_id",$data->food_id)->value('food_id');
 

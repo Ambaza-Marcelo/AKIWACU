@@ -30,7 +30,7 @@ class DrinkSmStoreReportExport implements FromCollection, WithMapping, WithHeadi
         $end_date = $endDate.' 23:59:59';
 
         return DrinkSmallReport::select(
-                        DB::raw('id,date,created_at,created_by,cump,type_transaction,document_no,drink_id,quantity_stock_initial,value_stock_initial,quantity_stockin,value_stockin,quantity_transfer,value_reception,quantity_sold,value_transfer,quantity_stockout,value_stockout,quantity_stock_final,value_stock_final,description'))->whereBetween('date',[$start_date,$end_date])/*->where('code_store',$code_store)*/->groupBy('id','date','created_by','type_transaction','cump','document_no','created_at','drink_id','quantity_stock_initial','value_stock_initial','quantity_stockin','value_stockin','quantity_transfer','value_reception','quantity_sold','value_transfer','quantity_stockout','value_stockout','quantity_stock_final','value_stock_final','description')->orderBy('id','asc')->get();
+                        DB::raw('id,date,created_at,created_by,cump,type_transaction,document_no,drink_id,quantity_stock_initial,value_stock_initial,quantity_stockin,value_stockin,quantity_transfer,value_reception,quantity_sold,value_transfer,quantity_stockout,value_stockout,quantity_stock_final,value_stock_final,description'))->whereBetween('date',[$start_date,$end_date])/*->where('code_store',$code_store)*/->groupBy('id','date','created_by','type_transaction','cump','document_no','created_at','drink_id','quantity_stock_initial','value_stock_initial','quantity_stockin','value_stockin','quantity_transfer','value_reception','quantity_sold','value_transfer','quantity_stockout','value_stockout','quantity_stock_final','value_stock_final','description')->orderBy('date','asc')->get();
     }
 
     public function map($data) : array {
@@ -72,7 +72,7 @@ class DrinkSmStoreReportExport implements FromCollection, WithMapping, WithHeadi
 
         return [
             $data->id,
-            Carbon::parse($data->created_at)->format('d/m/Y'),
+            Carbon::parse($data->created_at)->format('d/m/Y H:i:s'),
             Carbon::parse($data->date)->format('d/m/Y'),
             $data->drink->name,
             $data->drink->code,

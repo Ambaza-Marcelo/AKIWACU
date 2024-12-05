@@ -580,7 +580,13 @@ class FactureRestaurantController extends Controller
         $total_vat_service = DB::table('facture_details')->where('etat','01')->where('booking_no','!=','')->where('client_id',$client_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('vat');
         $item_total_nvat_service = DB::table('facture_details')->where('etat','01')->where('booking_no','!=','')->where('client_id',$client_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_price_nvat');
 
-        $montant_total_global = ($item_total_amount_drink + $item_total_amount_kitchen + $item_total_amount_barrista + $item_total_amount_bartender + $item_total_amount_service);
+        $note_credit = DB::table('facture_details')->where('client_id',$client_id)->whereColumn('invoice_number','invoice_ref')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
+
+        $note_credit_tva = DB::table('facture_details')->where('client_id',$client_id)->whereColumn('invoice_number','invoice_ref')->whereBetween('invoice_date',[$start_date,$end_date])->sum('vat');
+
+        $note_credit_pvhtva = DB::table('facture_details')->where('client_id',$client_id)->whereColumn('invoice_number','invoice_ref')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_price_nvat');
+
+        $montant_total_global = ($item_total_amount_drink + $item_total_amount_kitchen + $item_total_amount_barrista + $item_total_amount_bartender + $item_total_amount_service) - ($note_credit * 2);
 
         $montant_total_global_en_lettre = $this->numberToWord($montant_total_global);
 
@@ -623,7 +629,11 @@ class FactureRestaurantController extends Controller
         'item_total_amount_service',
         'total_vat_service',
         'item_total_nvat_service',
-        'montant_total_global_en_lettre'
+        'montant_total_global_en_lettre',
+        'note_credit',
+        'note_credit_tva',
+        'note_credit_pvhtva'
+
         ));//->setPaper('a4', 'landscape');
 
         return $pdf->download("FACTURE_GLOBALE".$customer_name.'.pdf');
@@ -690,7 +700,7 @@ class FactureRestaurantController extends Controller
         Storage::put('public/rapport_facture_restaurant/'.$d1.'_'.$d2.'.pdf', $pdf->output());
 
         // download pdf file
-        return $pdf->download("rapport_facture_restaurant_".$dateTime.'.pdf');
+        return $pdf->download("CHIFFRE D AFFAIRE CUISINE ".$dateTime.'.pdf');
 
         
     }

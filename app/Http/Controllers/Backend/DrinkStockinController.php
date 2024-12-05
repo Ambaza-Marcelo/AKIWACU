@@ -51,12 +51,20 @@ class DrinkStockinController extends Controller
      */
     public function index()
     {
+
         if (is_null($this->user) || !$this->user->can('drink_stockin.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view any stockin !');
+        }elseif ($this->user->can('drink_stockin.view') && $this->user->can('drink_small_inventory.view') && $this->user->can('drink_big_inventory.view')) {
+            $stockins = DrinkStockin::orderBy('id','desc')->take(1000)->get();
+            return view('backend.pages.drink_stockin.index', compact('stockins'));
+        }elseif ($this->user->can('drink_stockin.view') && $this->user->can('drink_big_inventory.view')) {
+            $stockins = DrinkStockin::where('destination_bg_store_id','!=','')->orderBy('id','desc')->take(200)->get();
+            return view('backend.pages.drink_stockin.index', compact('stockins'));
+        }elseif ($this->user->can('drink_stockin.view') && $this->user->can('drink_small_inventory.view')) {
+            $stockins = DrinkStockin::where('destination_sm_store_id','!=','')->orderBy('id','desc')->take(200)->get();
+            return view('backend.pages.drink_stockin.index', compact('stockins'));
         }
 
-        $stockins = DrinkStockin::orderBy('id','desc')->take(200)->get();
-        return view('backend.pages.drink_stockin.index', compact('stockins'));
     }
 
     /**
@@ -454,13 +462,19 @@ class DrinkStockinController extends Controller
 
                     $drinkData = array(
                         'id' => $data->drink_id,
-                        'quantity_bottle' => $quantityTotalBigStore,
                         'cump' => $cump,
-                        'purchase_price' => $data->purchase_price,
+                        'purchase_price' => $cump,
+                    );
+
+                    $drinkSmallData = array(
+                        'cump' => $cump,
+                        'purchase_price' => $cump,
                     );
 
                         Drink::where('id',$data->drink_id)
                         ->update($drinkData);
+                        DrinkSmallStoreDetail::where('drink_id',$data->drink_id)
+                        ->update($drinkSmallData);
 
                     $bigStoreData[] = $bigStore;
 
@@ -546,7 +560,7 @@ class DrinkStockinController extends Controller
                 $valeurAcquisition = $data->quantity * $data->purchase_price;
 
                 $valeurTotalUnite = $data->quantity + $quantityStockInitialDestination;
-                $cump = ($valeurStockInitialDestination + $valeurAcquisition) / $valeurTotalUnite;
+                $cump = DrinkBigStoreDetail::where('drink_id','!=', '')->where('drink_id', $data->drink_id)->value('cump');
 
                 $reportSmallStore = array(
                     'drink_id' => $data->drink_id,

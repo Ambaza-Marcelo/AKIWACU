@@ -26,7 +26,7 @@ class DrinkBigStoreExport implements FromCollection, WithMapping, WithHeadings
     {
         //$code_store = request()->input('code');
         return DrinkBigStoreDetail::select(
-                        DB::raw('drink_id,quantity_bottle,unit,purchase_price,cump,selling_price'))->where('drink_id','!=','')->where('code',$this->code)->get();
+                        DB::raw('id,drink_id,quantity_bottle,unit,purchase_price,cump,selling_price'))->where('drink_id','!=','')->where('code',$this->code)->get();
     }
 
     public function map($data) : array {
@@ -35,7 +35,7 @@ class DrinkBigStoreExport implements FromCollection, WithMapping, WithHeadings
             $data->drink->name,
             $data->drink->code,
             $data->quantity_bottle,
-            $data->drink->unit,
+            $data->drink->drinkMeasurement->purchase_unit,
             //$data->purchase_price,
             $data->drink->cump,
             $data->selling_price,

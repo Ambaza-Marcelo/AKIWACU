@@ -50,10 +50,16 @@ class FoodStockinController extends Controller
     {
         if (is_null($this->user) || !$this->user->can('food_stockin.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view any stockin !');
+        }elseif ($this->user->can('food_stockin.view') && $this->user->can('food_small_inventory.view') && $this->user->can('food_big_inventory.view')) {
+            $stockins = FoodStockin::orderBy('id','desc')->take(1000)->get();
+            return view('backend.pages.food_stockin.index', compact('stockins'));
+        }elseif ($this->user->can('food_stockin.view') && $this->user->can('food_big_inventory.view')) {
+            $stockins = FoodStockin::where('destination_bg_store_id','!=','')->orderBy('id','desc')->take(200)->get();
+            return view('backend.pages.food_stockin.index', compact('stockins'));
+        }elseif ($this->user->can('food_stockin.view') && $this->user->can('food_small_inventory.view')) {
+            $stockins = FoodStockin::where('destination_sm_store_id','!=','')->orderBy('id','desc')->take(200)->get();
+            return view('backend.pages.food_stockin.index', compact('stockins'));
         }
-
-        $stockins = FoodStockin::orderBy('id','desc')->take(200)->get();
-        return view('backend.pages.food_stockin.index', compact('stockins'));
     }
 
     /**

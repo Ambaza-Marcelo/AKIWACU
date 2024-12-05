@@ -30,7 +30,7 @@ class FoodSmStoreReportExport implements FromCollection, WithMapping, WithHeadin
         $end_date = $endDate.' 23:59:59';
 
         return FoodSmallReport::select(
-                        DB::raw('id,created_at,food_id,quantity_stock_initial,quantity_stock_initial_portion,value_stock_initial,value_stock_initial_portion,quantity_stockin,value_stockin,quantity_portion,cump,quantity_inventory,value_inventory,quantity_inventory_portion,value_inventory_portion,quantity_reception,value_reception,quantity_transfer,value_transfer,quantity_stockout,value_stockout,quantity_stock_final,quantity_stock_final_portion,type_transaction,document_no,created_portion_by,created_by,description'))->whereBetween('created_at',[$start_date,$end_date])->groupBy('created_at','food_id','quantity_stock_initial','quantity_stock_initial_portion','value_stock_initial','value_stock_initial_portion','quantity_stockin','quantity_portion','cump','quantity_inventory','value_inventory','quantity_inventory_portion','value_inventory_portion','value_stockin','quantity_reception','value_reception','quantity_transfer','value_transfer','quantity_stockout','value_stockout','quantity_stock_final','quantity_stock_final_portion','type_transaction','document_no','created_portion_by','created_by','id','description')->orderBy('id')->get();
+                        DB::raw('id,date,created_at,food_id,quantity_stock_initial,quantity_stock_initial_portion,value_stock_initial,value_stock_initial_portion,quantity_stockin,value_stockin,quantity_portion,cump,quantity_inventory,value_inventory,quantity_inventory_portion,value_inventory_portion,quantity_reception,value_reception,quantity_transfer,value_transfer,quantity_stockout,value_stockout,quantity_stock_final,quantity_stock_final_portion,type_transaction,document_no,created_portion_by,created_by,description'))->whereBetween('date',[$start_date,$end_date])->groupBy('created_at','date','food_id','quantity_stock_initial','quantity_stock_initial_portion','value_stock_initial','value_stock_initial_portion','quantity_stockin','quantity_portion','cump','quantity_inventory','value_inventory','quantity_inventory_portion','value_inventory_portion','value_stockin','quantity_reception','value_reception','quantity_transfer','value_transfer','quantity_stockout','value_stockout','quantity_stock_final','quantity_stock_final_portion','type_transaction','document_no','created_portion_by','created_by','id','description')->orderBy('date')->get();
     }
 
     public function map($data) : array {
@@ -60,7 +60,7 @@ class FoodSmStoreReportExport implements FromCollection, WithMapping, WithHeadin
         }
         return [
             $data->id,
-            Carbon::parse($data->created_at)->format('d/m/Y'),
+            Carbon::parse($data->created_at)->format('d/m/Y H:i:s'),
             Carbon::parse($data->date)->format('d/m/Y'),
             $data->food->name,
             $data->food->code,

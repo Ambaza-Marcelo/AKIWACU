@@ -53,10 +53,16 @@ class DrinkStockoutController extends Controller
     {
         if (is_null($this->user) || !$this->user->can('drink_stockout.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view any stockout !');
+        }elseif ($this->user->can('drink_stockout.view') && $this->user->can('drink_small_inventory.view') && $this->user->can('drink_big_inventory.view')) {
+            $stockouts = DrinkStockout::orderBy('id','desc')->take(1000)->get();
+            return view('backend.pages.drink_stockout.index', compact('stockouts'));
+        }elseif ($this->user->can('drink_stockout.view') && $this->user->can('drink_big_inventory.view')) {
+            $stockouts = DrinkStockout::where('origin_bg_store_id','!=','')->orderBy('id','desc')->take(200)->get();
+            return view('backend.pages.drink_stockout.index', compact('stockouts'));
+        }elseif ($this->user->can('drink_stockout.view') && $this->user->can('drink_small_inventory.view')) {
+            $stockouts = DrinkStockout::where('origin_sm_store_id','!=','')->orderBy('id','desc')->take(200)->get();
+            return view('backend.pages.drink_stockout.index', compact('stockouts'));
         }
-
-        $stockouts = DrinkStockout::orderBy('id','desc')->take(200)->get();
-        return view('backend.pages.drink_stockout.index', compact('stockouts'));
     }
 
     /**
@@ -537,7 +543,7 @@ class DrinkStockoutController extends Controller
                 $valeurStockInitial = DrinkSmallStoreDetail::where('code',$code_store_origin)->where('drink_id','!=', '')->where('drink_id', $data->drink_id)->value('total_cump_value');
                 $quantityStockInitial = DrinkSmallStoreDetail::where('code',$code_store_origin)->where('drink_id','!=', '')->where('drink_id', $data->drink_id)->value('quantity_bottle');
 
-                $cump = DrinkSmallStoreDetail::where('code',$code_store_origin)->where('drink_id','!=', '')->where('drink_id', $data->drink_id)->value('cump');
+                $cump = DrinkBigStoreDetail::where('drink_id','!=', '')->where('drink_id', $data->drink_id)->value('cump');
 
                 $quantityRestantSmallStore = $quantityStockInitial - $data->quantity;
 

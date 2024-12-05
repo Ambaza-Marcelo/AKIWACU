@@ -30,13 +30,13 @@ class FoodMdStoreReportExport implements FromCollection, WithMapping, WithHeadin
         $end_date = $endDate.' 23:59:59';
 
         return FoodBigReport::select(
-                        DB::raw('id,created_at,created_by,food_id,date,document_no,type_transaction,quantity_stock_initial,cump,value_stock_initial,quantity_stockin,value_stockin,quantity_reception,value_reception,quantity_transfer,value_transfer,transfer_no,quantity_stockout,value_stockout,quantity_stock_final,value_stock_final'))->whereBetween('created_at',[$start_date,$end_date])/*->where('code_store',$code_store)*/->groupBy('id','created_at','created_by','document_no','date','type_transaction','food_id','quantity_stock_initial','cump','value_stock_initial','quantity_stockin','value_stockin','quantity_reception','value_reception','quantity_transfer','transfer_no','value_transfer','quantity_stockout','value_stockout','quantity_stock_final','value_stock_final')->orderBy('id','asc')->get();
+                        DB::raw('id,created_at,date,created_by,food_id,date,document_no,type_transaction,quantity_stock_initial,cump,value_stock_initial,quantity_stockin,value_stockin,quantity_reception,value_reception,quantity_transfer,value_transfer,transfer_no,quantity_stockout,value_stockout,quantity_stock_final,value_stock_final'))->whereBetween('date',[$start_date,$end_date])/*->where('code_store',$code_store)*/->groupBy('id','created_at','date','created_by','document_no','date','type_transaction','food_id','quantity_stock_initial','cump','value_stock_initial','quantity_stockin','value_stockin','quantity_reception','value_reception','quantity_transfer','transfer_no','value_transfer','quantity_stockout','value_stockout','quantity_stock_final','value_stock_final')->orderBy('date','asc')->get();
     }
 
     public function map($data) : array {
         return [
             $data->id,
-            Carbon::parse($data->created_at)->format('d/m/Y'),
+            Carbon::parse($data->created_at)->format('d/m/Y H:i:s'),
             Carbon::parse($data->date)->format('d/m/Y'),
             $data->food->name,
             $data->food->code,

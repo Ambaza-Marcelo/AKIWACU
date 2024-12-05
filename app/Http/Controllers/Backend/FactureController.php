@@ -36,6 +36,7 @@ use App\Models\FoodItem;
 use App\Models\FoodItemDetail;
 use App\Models\BartenderItem;
 use App\Models\Employe;
+use App\Models\DrinkBigStoreDetail;
 use App\Models\DrinkSmallStore;
 use App\Models\DrinkSmallStoreDetail;
 use App\Models\DrinkSmallReport;
@@ -226,7 +227,7 @@ class FactureController extends Controller
         {
             $taux_tva = Drink::where('id', $drink_id[$count])->value('vat');
             $brarudi_price = Drink::where('id', $drink_id[$count])->value('brarudi_price');
-            $cump = Drink::where('id', $drink_id[$count])->value('cump');
+            $cump = DrinkBigStoreDetail::where('drink_id', $drink_id[$count])->value('cump');
 
             if($request->vat_taxpayer == 1){
 

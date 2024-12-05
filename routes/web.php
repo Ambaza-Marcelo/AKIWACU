@@ -851,6 +851,7 @@ Route::group(['prefix' => 'admin'], function () {
     Route::put('EBMS/food-small-store-inventory/validate/{inventory_no}','Backend\FoodSmallStoreInventoryController@validateInventory')->name('admin.food-small-store-inventory.validate');
     Route::put('EBMS/food-small-store-inventory/reject/{inventory_no}','Backend\FoodSmallStoreInventoryController@rejectInventory')->name('admin.food-small-store-inventory.reject');
     Route::put('EBMS/food-small-store-inventory/reset/{inventory_no}','Backend\FoodSmallStoreInventoryController@resetInventory')->name('admin.food-small-store-inventory.reset');
+    Route::get('EBMS/food-small-store-inventory/export-to-excel/{inventory_no}','Backend\FoodSmallStoreInventoryController@exportToExcel')->name('admin.food-small-store-inventory.export-to-excel');
 
     //Extra Grand Stock Des Materiels
     Route::get('EBMS/material-extra-big-store-inventory/index', 'Backend\MaterialExtraBigStoreInventoryController@index')->name('admin.material-extra-big-store-inventory.index');

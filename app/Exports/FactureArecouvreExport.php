@@ -28,7 +28,7 @@ class FactureArecouvreExport implements FromCollection, WithMapping, WithHeading
         $end_date = $endDate.' 23:59:59';
 
         return Facture::select(
-                        DB::raw('id,invoice_number,statut_paied,etat_recouvrement,montant_total_credit,montant_recouvre,reste_credit,bank_name,cheque_no,date_recouvrement,nom_recouvrement,note_recouvrement,invoice_date,customer_name,client_id,drink_order_no,food_order_no,bartender_order_no,barrist_order_no,booking_no,updated_at'))->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','statut_paied','etat_recouvrement','montant_total_credit','montant_recouvre','reste_credit','bank_name','cheque_no','date_recouvrement','nom_recouvrement','note_recouvrement','invoice_date','invoice_number','drink_order_no','food_order_no','bartender_order_no','barrist_order_no','booking_no','customer_name','client_id','updated_at')->orderBy('id','asc')->get();
+                        DB::raw('id,invoice_number,invoice_ref,statut_paied,etat_recouvrement,montant_total_credit,montant_recouvre,reste_credit,bank_name,cheque_no,date_recouvrement,nom_recouvrement,note_recouvrement,invoice_date,customer_name,client_id,drink_order_no,food_order_no,bartender_order_no,barrist_order_no,booking_no,updated_at'))->where('etat','01')->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','statut_paied','etat_recouvrement','montant_total_credit','montant_recouvre','reste_credit','bank_name','cheque_no','date_recouvrement','nom_recouvrement','note_recouvrement','invoice_date','invoice_number','invoice_ref','drink_order_no','food_order_no','bartender_order_no','barrist_order_no','booking_no','customer_name','client_id','updated_at')->orderBy('id','asc')->get();
     }
 
     public function map($data) : array {
@@ -116,7 +116,8 @@ class FactureArecouvreExport implements FromCollection, WithMapping, WithHeading
             $date_recouvrement,
             $updated_at,
             $data->nom_recouvrement,
-            $data->note_recouvrement
+            $data->note_recouvrement,
+            $data->invoice_ref,
         ] ;
  
  
@@ -140,7 +141,8 @@ class FactureArecouvreExport implements FromCollection, WithMapping, WithHeading
             'Date Recouvrement',
             'Date de saisie',
             'Nom chargé de Recouvrement',
-            'Note de recouvrement'
+            'Note de recouvrement',
+            'Reference Note de Crédit'
         ] ;
     }
 }

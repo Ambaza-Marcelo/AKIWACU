@@ -38,6 +38,6 @@ class FoodMdStoreTask extends Command
      */
     public function handle()
     {
-        DB::insert("insert into virtual_food_md_stores(date,code,manager,emplacement,store_signature,food_id,quantity,unit,purchase_price,cump) select getdate(),code,manager,emplacement,store_signature,food_id,quantity,unit,purchase_price,cump from food_big_store_details where food_id != '' ");
+        DB::insert("insert into virtual_food_md_stores(date,code,manager,emplacement,store_signature,food_id,quantity,unit,purchase_price,cump) select updated_at,code,manager,emplacement,store_signature,food_id,quantity,unit,purchase_price,cump from food_big_store_details where food_id != '' ");
     }
 }

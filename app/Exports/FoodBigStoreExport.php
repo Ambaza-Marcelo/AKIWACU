@@ -34,7 +34,7 @@ class FoodBigStoreExport implements FromCollection, WithMapping, WithHeadings
             $data->food->foodMeasurement->purchase_unit,
             $data->cump,
             $data->purchase_price,
-            ($data->purchase_price * $data->quantity),
+            ($data->cump * $data->quantity),
         ] ;
  
  
@@ -49,7 +49,7 @@ class FoodBigStoreExport implements FromCollection, WithMapping, WithHeadings
             'Unité',
             'C.U.M.P',
             'P.A',
-            'Total P.A',
+            'Total CMP',
         ] ;
     }
 }

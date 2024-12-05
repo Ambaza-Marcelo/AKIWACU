@@ -102,9 +102,9 @@ class PrivatefactureController extends Controller
 
             $latest = PrivateFacture::orderBy('id','desc')->first();
             if ($latest) {
-               $invoice_number = 'FN' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
+               $invoice_number = 'BE' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{
-               $invoice_number = 'FN' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
+               $invoice_number = 'BE' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
             }
             
 
@@ -215,7 +215,7 @@ class PrivatefactureController extends Controller
             $facture->save();
 
             DB::commit();
-            session()->flash('success', 'Le vente est fait avec succés!!');
+            session()->flash('success', 'La sortie par bon expedition est faite avec succés!!');
             return redirect()->route('admin.private-factures.index');
         } catch (\Exception $e) {
             // An error occured; cancel the transaction...
@@ -323,7 +323,7 @@ class PrivatefactureController extends Controller
             ->update(['etat' => 1,'statut_paied' => '0','validated_by' => $this->user->name]);
 
         DB::commit();
-            session()->flash('success', 'La Facture  est validée avec succés');
+            session()->flash('success', 'La sortie par bon expedition  est validée avec succés');
             return back();
         } catch (\Exception $e) {
             // An error occured; cancel the transaction...
@@ -446,7 +446,7 @@ class PrivatefactureController extends Controller
             ->update(['etat' => '01','etat_recouvrement' => '0','montant_total_credit' => $item_total_amount,'statut_paied' => '0','customer_name' => $customer_name,'validated_by' => $this->user->name]);
 
         DB::commit();
-            session()->flash('success', 'La Facture  est validée avec succés');
+            session()->flash('success', 'La sortie par bon expedition  est validée avec succés');
             return redirect()->route('admin.private-factures.index');
         } catch (\Exception $e) {
             // An error occured; cancel the transaction...
@@ -555,7 +555,7 @@ class PrivatefactureController extends Controller
                 ->update(['statut' => 1]);
 
             // download pdf file
-        return $pdf->download('FACTURE_'.$invoice_number.'.pdf');
+        return $pdf->download('BON D EXPEDITION '.$invoice_number.'.pdf');
 
         
     }

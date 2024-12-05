@@ -3,13 +3,13 @@
 namespace App\Exports;
 
 use Carbon\Carbon;
-use App\Models\FoodBigStoreInventoryDetail;
+use App\Models\FoodSmallStoreInventoryDetail;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
-class FoodMdStoreInventoryExport implements FromCollection, WithMapping, WithHeadings
+class FoodSmStoreInventoryExport implements FromCollection, WithMapping, WithHeadings
 {
 
     protected $code;
@@ -24,7 +24,7 @@ class FoodMdStoreInventoryExport implements FromCollection, WithMapping, WithHea
     public function collection()
     {
         //$code_store = request()->input('code');
-        return FoodBigStoreInventoryDetail::where('inventory_no',$this->code)->get();
+        return FoodSmallStoreInventoryDetail::where('inventory_no',$this->code)->get();
     }
 
     public function map($data) : array {
@@ -32,7 +32,7 @@ class FoodMdStoreInventoryExport implements FromCollection, WithMapping, WithHea
             $data->id,
             $data->food->name,
             $data->food->code,
-            $data->food->foodMeasurement->purchase_unit,
+            $data->food->foodMeasurement->production_unit,
             $data->quantity,
             $data->purchase_price,
             $data->total_purchase_value,

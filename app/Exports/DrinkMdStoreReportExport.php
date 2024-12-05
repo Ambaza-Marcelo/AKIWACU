@@ -29,7 +29,7 @@ class DrinkMdStoreReportExport implements FromCollection, WithMapping, WithHeadi
         $end_date = $endDate.' 23:59:59';
 
         return DrinkBigReport::select(
-                        DB::raw('id,date,type_transaction,cump,purchase_price,document_no,created_by,created_at,drink_id,quantity_stock_initial,value_stock_initial,quantity_stockin,value_stockin,quantity_reception,value_reception,quantity_transfer,value_transfer,quantity_stockout,value_stockout,quantity_stock_final,value_stock_final,description'))->whereBetween('date',[$start_date,$end_date])->where('code_store',$code_store)->groupBy('id','date','type_transaction','cump','purchase_price','document_no','created_by','description','created_at','drink_id','quantity_stock_initial','value_stock_initial','quantity_stockin','value_stockin','quantity_reception','value_reception','quantity_transfer','value_transfer','quantity_stockout','value_stockout','quantity_stock_final','value_stock_final')->orderBy('id','asc')->get();
+                        DB::raw('id,date,type_transaction,cump,purchase_price,document_no,created_by,created_at,drink_id,quantity_stock_initial,value_stock_initial,quantity_stockin,value_stockin,quantity_reception,value_reception,quantity_transfer,value_transfer,quantity_stockout,value_stockout,quantity_stock_final,value_stock_final,description'))->whereBetween('date',[$start_date,$end_date])->where('code_store',$code_store)->groupBy('id','date','type_transaction','cump','purchase_price','document_no','created_by','description','created_at','drink_id','quantity_stock_initial','value_stock_initial','quantity_stockin','value_stockin','quantity_reception','value_reception','quantity_transfer','value_transfer','quantity_stockout','value_stockout','quantity_stock_final','value_stock_final')->orderBy('date','asc')->get();
     }
 
     public function map($data) : array {
@@ -61,7 +61,7 @@ class DrinkMdStoreReportExport implements FromCollection, WithMapping, WithHeadi
 
         return [
             $data->id,
-            Carbon::parse($data->created_at)->format('d/m/Y'),
+            Carbon::parse($data->created_at)->format('d/m/Y H:i:s'),
             Carbon::parse($data->date)->format('d/m/Y'),
             $data->drink->name,
             $data->drink->code,
