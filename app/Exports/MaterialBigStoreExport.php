@@ -33,9 +33,9 @@ class MaterialBigStoreExport implements FromCollection, WithMapping, WithHeading
             $data->material->code,
             //$data->material->materialCategory->name,
             $data->quantity,
-            $data->material->unit,
-            number_format($data->purchase_price,0,',',' '),
-            number_format(($data->purchase_price * $data->quantity),0,',',' '),
+            $data->material->materialMeasurement->purchase_unit,
+            $data->purchase_price,
+            $data->purchase_price * $data->quantity,
         ] ;
  
  

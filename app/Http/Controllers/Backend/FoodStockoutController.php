@@ -144,7 +144,7 @@ class FoodStockoutController extends Controller
 
             for( $count = 0; $count < count($food_id); $count++ ){
                 if ($store_type == 1) {
-                    $purchase_price = FoodBigStoreDetail::where('food_id', $food_id[$count])->value('cump');
+                    $purchase_price = Food::where('id', $food_id[$count])->value('cump');
 
                     $total_value = $quantity[$count] * $purchase_price;
                     $total_purchase_value = $quantity[$count] * $purchase_price;
@@ -173,7 +173,7 @@ class FoodStockoutController extends Controller
                     );
                     $insert_data[] = $data;
                 }elseif($store_type == 2){
-                    $purchase_price = FoodSmallStoreDetail::where('food_id', $food_id[$count])->value('cump');
+                    $purchase_price = Food::where('id', $food_id[$count])->value('cump');
 
                     $total_purchase_value = $quantity[$count] * $purchase_price;
 
@@ -446,8 +446,8 @@ class FoodStockoutController extends Controller
 
             $code_store_origin = FoodBigStore::where('id',$data->origin_bg_store_id)->value('code');
 
-            $cump = FoodBigStoreDetail::where('food_id','!=', '')->where('food_id', $data->food_id)->value('cump');
-            $purchase_price = FoodBigStoreDetail::where('food_id','!=', '')->where('food_id', $data->food_id)->value('purchase_price');
+            $cump = Food::where('id', $data->food_id)->value('cump');
+            $purchase_price = Food::where('id', $data->food_id)->value('purchase_price');
             if ($cump <= 0) {
                 $cump = $purchase_price;
             }else{
@@ -549,6 +549,7 @@ class FoodStockoutController extends Controller
                 $reportSmallStore = array(
                     'food_id' => $data->food_id,
                     'quantity_stock_initial' => $quantityStockInitial,
+                    'quantity_stock_initial_portion' => $quantityStockInitial,
                     'value_stock_initial' => $valeurStockInitial,
                     'code_store' => $code_store_origin,
                     'code_store_origin' => $code_store_origin,

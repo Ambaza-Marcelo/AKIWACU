@@ -1167,6 +1167,7 @@ class BookingController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to delete any order !');
         }
 
+        /*
         try {DB::beginTransaction();
 
         $order = BookingBooking::where('booking_no',$booking_no)->first();
@@ -1189,5 +1190,6 @@ class BookingController extends Controller
 
             throw $e;
         }
+        */
     }
 }

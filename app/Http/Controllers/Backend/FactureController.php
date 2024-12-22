@@ -1765,7 +1765,7 @@ class FactureController extends Controller
                         DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id',$data->drink_id)
                         ->update($donnees);
                         $flag = 0;
-                        /*
+                        
                         $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
                         $response = Http::post($theUrl, [
                             'username'=> config('app.obr_test_username'),
@@ -1781,20 +1781,20 @@ class FactureController extends Controller
                         $response = Http::withHeaders([
                         'Authorization' => 'Bearer '.$token,
                         'Accept' => 'application/json'])->post($theUrl, [
-                            'system_or_device_id'=> "wsconfig('app.tin_number_company')00565",
+                            'system_or_device_id'=> config('app.obr_test_username'),
                             'item_code'=> $data->drink->code,
                             'item_designation'=>$data->drink->name,
                             'item_quantity'=>$data->item_quantity,
-                            'item_measurement_unit'=>$data->drink->unit,
-                            'item_purchase_or_sale_price'=>$data->drink->purchase_price,
+                            'item_measurement_unit'=>$data->drink->drinkMeasurement->purchase_unit,
+                            'item_purchase_or_sale_price'=>$data->cump,
                             'item_purchase_or_sale_currency'=> "BIF",
                             'item_movement_type'=> 'SN',
                             'item_movement_invoice_ref'=> "",
                             'item_movement_description'=> 'SORTIES NORMALES DE VENTE DES MARCHANDISE',
-                            'item_movement_date'=> Carbon::parse($data->updated_at)->format('Y-m-d H:i:s'),
+                            'item_movement_date'=> $data->invoice_date,
 
                         ]);
-                        */
+                        
                         
                     }else{
 
@@ -1943,7 +1943,7 @@ class FactureController extends Controller
                         DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id',$data->drink_id)
                         ->update($donnees);
                         $flag = 0;
-                        /*
+                        
                         $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
                         $response = Http::post($theUrl, [
                             'username'=> config('app.obr_test_username'),
@@ -1959,20 +1959,19 @@ class FactureController extends Controller
                         $response = Http::withHeaders([
                         'Authorization' => 'Bearer '.$token,
                         'Accept' => 'application/json'])->post($theUrl, [
-                            'system_or_device_id'=> "wsconfig('app.tin_number_company')00565",
+                            'system_or_device_id'=> config('app.obr_test_username'),
                             'item_code'=> $data->drink->code,
                             'item_designation'=>$data->drink->name,
                             'item_quantity'=>$data->item_quantity,
-                            'item_measurement_unit'=>$data->drink->unit,
-                            'item_purchase_or_sale_price'=>$data->drink->purchase_price,
+                            'item_measurement_unit'=>$data->drink->drinkMeasurement->purchase_unit,
+                            'item_purchase_or_sale_price'=>$data->cump,
                             'item_purchase_or_sale_currency'=> "BIF",
                             'item_movement_type'=> 'SN',
                             'item_movement_invoice_ref'=> "",
-                            'item_movement_description'=> 'SORTIES NORMALES DE VENTE DES MARCHANDISE',
-                            'item_movement_date'=> Carbon::parse($data->updated_at)->format('Y-m-d H:i:s'),
+                            'item_movement_description'=> 'SORTIES NORMALES DE VENTE DES MARCHANDISES',
+                            'item_movement_date'=> $data->invoice_date,
 
                         ]);
-                        */
                         
                     }else{
 
@@ -2345,37 +2344,6 @@ class FactureController extends Controller
                         BartenderProductionStore::where('bartender_item_id',$data->bartender_item_id)
                         ->update($donnees);
 
-                        /*
-                        $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
-                        $response = Http::post($theUrl, [
-                            'username'=> config('app.obr_test_username'),
-                            'password'=> config('app.obr_test_pwd')
-
-                        ]);
-                        $data1 =  json_decode($response);
-                        $data2 = ($data1->result);       
-    
-                        $token = $data2->token;
-
-                        $theUrl = config('app.guzzle_test_url').'/ebms_api/AddStockMovement';  
-                        $response = Http::withHeaders([
-                        'Authorization' => 'Bearer '.$token,
-                        'Accept' => 'application/json'])->post($theUrl, [
-                            'system_or_device_id'=> "wsconfig('app.tin_number_company')00565",
-                            'item_code'=> $data->bartenderItem->code,
-                            'item_designation'=>$data->bartenderItem->name,
-                            'item_quantity'=>$data->item_quantity,
-                            'item_measurement_unit'=>$data->bartenderItem->unit,
-                            'item_purchase_or_sale_price'=> "",
-                            'item_purchase_or_sale_currency'=> "BIF",
-                            'item_movement_type'=> 'SN',
-                            'item_movement_invoice_ref'=> "",
-                            'item_movement_description'=> 'SORTIES NORMALES DE VENTE DES MARCHANDISES',
-                            'item_movement_date'=> Carbon::parse($data->updated_at)->format('Y-m-d H:i:s'),
-
-                        ]);
-
-                    */
                         
                     }else{
                         session()->flash('error', $this->user->name.' ,why do you want selling a quantity that you do not have!');
@@ -2491,38 +2459,6 @@ class FactureController extends Controller
                         
                         BartenderProductionStore::where('bartender_item_id',$data->bartender_item_id)
                         ->update($donnees);
-
-                        /*
-                        $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
-                        $response = Http::post($theUrl, [
-                            'username'=> config('app.obr_test_username'),
-                            'password'=> config('app.obr_test_pwd')
-
-                        ]);
-                        $data1 =  json_decode($response);
-                        $data2 = ($data1->result);       
-    
-                        $token = $data2->token;
-
-                        $theUrl = config('app.guzzle_test_url').'/ebms_api/AddStockMovement';  
-                        $response = Http::withHeaders([
-                        'Authorization' => 'Bearer '.$token,
-                        'Accept' => 'application/json'])->post($theUrl, [
-                            'system_or_device_id'=> "wsconfig('app.tin_number_company')00565",
-                            'item_code'=> $data->bartenderItem->code,
-                            'item_designation'=>$data->bartenderItem->name,
-                            'item_quantity'=>$data->item_quantity,
-                            'item_measurement_unit'=>$data->bartenderItem->unit,
-                            'item_purchase_or_sale_price'=> "",
-                            'item_purchase_or_sale_currency'=> "BIF",
-                            'item_movement_type'=> 'SN',
-                            'item_movement_invoice_ref'=> "",
-                            'item_movement_description'=> 'SORTIES NORMALES DE VENTE DES MARCHANDISES',
-                            'item_movement_date'=> Carbon::parse($data->updated_at)->format('Y-m-d H:i:s'),
-
-                        ]);
-
-                    */
                         
                     }else{
                         session()->flash('error', $this->user->name.' ,why do you want selling a quantity that you do not have!');
@@ -3037,10 +2973,44 @@ class FactureController extends Controller
 
         $invoice_signature = Facture::where('invoice_number', $invoice_number)->value('invoice_signature');
         
+            $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
+                $response = Http::post($theUrl, [
+                    'username'=> config('app.obr_test_username'),
+                    'password'=> config('app.obr_test_pwd')
+
+                ]);
+
+            $data =  json_decode($response);
+            $data2 = ($data->result);
+        
+    
+            $token = $data2->token;
+
+            $theUrl = config('app.guzzle_test_url').'/ebms_api/cancelInvoice';      
+
+            $response = Http::withHeaders([
+                'Authorization' => 'Bearer '.$token,
+                'Accept' => 'application/json'])->post($theUrl, [
+                'invoice_signature'=>$invoice_signature,
+                'cn_motif'=>$cn_motif 
+            ]); 
+
+            $data =  json_decode($response);
+            $done = ($data->success);
+            $msg = ($data->msg);
+
+
+        if ($done == true) {
+
+            Facture::where('invoice_number', '=', $invoice_number)
+                ->update(['etat' => -1,'statut' => -1,'cn_motif' => $cn_motif,'reseted_by' => $this->user->name]);
+            FactureDetail::where('invoice_number', '=', $invoice_number)
+                ->update(['etat' => -1,'statut' => -1,'cn_motif' => $cn_motif,'reseted_by' => $this->user->name]);
+               
             $email1 = 'ambazamarcellin2001@gmail.com';
             $email2 = 'frangiye@gmail.com';
             //$email3 = 'khaembamartin@gmail.com';
-            $email4 = 'munyembari_mp@yahoo.fr';
+            $email4 = 'audacen@musumba-holding.bi';
             $auteur = $this->user->name;
             $mailData = [
                     'title' => 'Système de facturation électronique, Akiwacu',
@@ -3054,15 +3024,14 @@ class FactureController extends Controller
             //Mail::to($email3)->send(new InvoiceResetedMail($mailData));
             Mail::to($email4)->send(new InvoiceResetedMail($mailData));
             
-        
-            Facture::where('invoice_number', '=', $invoice_number)
-                ->update(['etat' => -1,'statut' => -1,'cn_motif' => $cn_motif,'reseted_by' => $this->user->name]);
-            FactureDetail::where('invoice_number', '=', $invoice_number)
-                ->update(['etat' => -1,'statut' => -1,'cn_motif' => $cn_motif,'reseted_by' => $this->user->name]);
-               
             DB::commit();
-            session()->flash('success', 'La Facture  est annulée avec succés');
+            session()->flash('success', 'La Facture  est annulée');
             return back();
+
+            }else{
+                return $response->json();
+            } 
+
         } catch (\Exception $e) {
             // An error occured; cancel the transaction...
 
@@ -3135,31 +3104,16 @@ class FactureController extends Controller
         $factures = Facture::where('invoice_number', $invoice_number)->get();
 
         $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
-
-        Facture::where('invoice_number', '=', $invoice_number)
-                ->update(['statut' => 1]);
-            FactureDetail::where('invoice_number', '=', $invoice_number)
-                ->update(['statut' => 1]);
-
-            
-            
-            // download pdf file
-        DB::commit();
-
-        return view('backend.pages.document.facture',compact('datas','invoice_number','totalValue','item_total_amount','client','setting','date','data','invoice_signature','facture','totalVat'));
             
 
-        //return $pdf->download('FACTURE_'.$invoice_number.'.pdf');
-
-        /*
         $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
         $response = Http::post($theUrl, [
             'username'=> config('app.obr_test_username'),
             'password'=> config('app.obr_test_pwd')
 
         ]);
-        $data =  json_decode($response);
-        $data2 = ($data->result);
+        $dataObr =  json_decode($response);
+        $data2 = ($dataObr->result);
         
     
         $token = $data2->token;
@@ -3292,9 +3246,9 @@ class FactureController extends Controller
             'tp_activity_sector'=>$facture->tp_activity_sector,
             'tp_legal_form'=>$facture->tp_legal_form,
             'payment_type'=>$facture->payment_type,
-            'customer_name'=>$facture->customer_name,
-            'customer_TIN'=>$facture->customer_TIN,
-            'customer_address'=>$facture->customer_address,
+            'customer_name'=>$facture->client->customer_name,
+            'customer_TIN'=>$facture->client->customer_TIN,
+            'customer_address'=>$facture->client->customer_address,
             'invoice_signature'=> $facture->invoice_signature,
             'invoice_currency'=> $facture->invoice_currency,
             'cancelled_invoice_ref'=> $facture->cancelled_invoice_ref,
@@ -3307,9 +3261,9 @@ class FactureController extends Controller
 
         }
 
-        $data =  json_decode($response);
-        $done = $data->success;
-        $msg = $data->msg;
+        $dataObr =  json_decode($response);
+        $done = $dataObr->success;
+        $msg = $dataObr->msg;
 
 
         if ($done == true) {
@@ -3318,13 +3272,18 @@ class FactureController extends Controller
             FactureDetail::where('invoice_number', '=', $invoice_number)
                 ->update(['statut' => 1]);
 
+            
+            DB::commit();
+
+            return view('backend.pages.document.facture',compact('datas','invoice_number','totalValue','item_total_amount','client','setting','date','data','invoice_signature','facture','totalVat'));
+
             // download pdf file
-        return $pdf->download('FACTURE_'.$invoice_number.'.pdf');
+        //return $pdf->download('FACTURE_'.$invoice_number.'.pdf');
 
         }else{
             return $response->json();
         }
-        */
+        
         } catch (\Exception $e) {
             // An error occured; cancel the transaction...
 
@@ -3847,7 +3806,7 @@ class FactureController extends Controller
         if (is_null($this->user) || !$this->user->can('invoice_drink.delete')) {
             abort(403, 'Sorry !! You are Unauthorized to delete any invoice !');
         }
-
+        /*
         try {DB::beginTransaction();
 
         $facture = Facture::where('invoice_number',$invoice_number)->first();
@@ -3879,6 +3838,7 @@ class FactureController extends Controller
 
             throw $e;
         }
+        */
     }
     
 }

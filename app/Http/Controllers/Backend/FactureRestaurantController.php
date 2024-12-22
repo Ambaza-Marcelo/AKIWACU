@@ -192,7 +192,7 @@ class FactureRestaurantController extends Controller
 
     public function chiffreAffaire()
     {
-        if (is_null($this->user) || !$this->user->can('invoice_drink.view')) {
+        if (is_null($this->user) || !$this->user->can('invoice_kitchen.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view this ! more information,contact Marcellin');
         }
 

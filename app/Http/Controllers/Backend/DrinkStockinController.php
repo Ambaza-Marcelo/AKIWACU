@@ -574,7 +574,7 @@ class DrinkStockinController extends Controller
                     'quantity_stock_final' => $quantityStockInitialDestination + $data->quantity,
                     'value_stock_final' => $valeurStockInitialDestination + $data->total_amount_purchase,
                     'type_transaction' => $data->item_movement_type,
-                    //'cump' => $cump,
+                    'cump' => $cump,
                     //'purchase_price' => $data->purchase_price,
                     'document_no' => $data->stockin_no,
                     'created_by' => $this->user->name,
@@ -588,7 +588,7 @@ class DrinkStockinController extends Controller
                         'quantity_bottle' => $quantityTotalSmallStore,
                         //'purchase_price' => $data->purchase_price,
                         'total_purchase_value' => $quantityTotalSmallStore * $data->purchase_price,
-                        //'cump' => $cump,
+                        'cump' => $cump,
                         'total_cump_value' => $quantityTotalSmallStore * $cump,
                         'created_by' => $this->user->name,
                         'verified' => true
@@ -597,7 +597,7 @@ class DrinkStockinController extends Controller
                     $drinkData = array(
                         'id' => $data->drink_id,
                         'quantity_bottle' => $quantityTotalSmallStore,
-                        //'cump' => $cump,
+                        'cump' => $cump,
                         //'purchase_price' => $data->purchase_price,
                     );
 
@@ -631,8 +631,8 @@ class DrinkStockinController extends Controller
                                 'quantity_bottle' => $quantityRestantSmallStore,
                                 //'purchase_price' => $data->purchase_price,
                                 //'total_purchase_value' => $quantityRestantSmallStore * $data->purchase_price,
-                                //'cump' => $cump,
-                                //'total_cump_value' => $quantityRestantSmallStore * $cump,
+                                'cump' => $cump,
+                                'total_cump_value' => $quantityRestantSmallStore * $cump,
                                 'created_by' => $this->user->name,
                                 'verified' => false
                             );
@@ -648,11 +648,11 @@ class DrinkStockinController extends Controller
                             session()->flash('error', 'this item is not saved in the stock');
                             return back();
                         }
-                        /*
+                        
                         $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
                         $response = Http::post($theUrl, [
-                            'username'=> "wsconfig('app.tin_number_company')00565",
-                            'password'=> "5VS(GO:p"
+                            'username'=> config('app.obr_test_username'),
+                            'password'=> config('app.obr_test_pwd')
 
                         ]);
                         $data1 =  json_decode($response);
@@ -664,20 +664,20 @@ class DrinkStockinController extends Controller
                         $response = Http::withHeaders([
                         'Authorization' => 'Bearer '.$token,
                         'Accept' => 'application/json'])->post($theUrl, [
-                            'system_or_device_id'=> "wsconfig('app.tin_number_company')00565",
+                            'system_or_device_id'=> config('app.obr_test_username'),
                             'item_code'=> $data->drink->code,
                             'item_designation'=>$data->drink->name,
                             'item_quantity'=>$data->quantity,
-                            'item_measurement_unit'=>$data->unit,
-                            'item_purchase_or_sale_price'=>$data->purchase_price,
+                            'item_measurement_unit'=>$data->drink->drinkMeasurement->purchase_unit,
+                            'item_purchase_or_sale_price'=>$cump,
                             'item_purchase_or_sale_currency'=> "BIF",
                             'item_movement_type'=> $data->item_movement_type,
                             'item_movement_invoice_ref'=> "",
                             'item_movement_description'=>$data->description,
-                            'item_movement_date'=> Carbon::parse($data->updated_at)->format('Y-m-d H:i:s'),
+                            'item_movement_date'=> $data->date,
 
                         ]); 
-                        */                        
+                                                
             }else{
                 $code_store_destination = DrinkExtraBigStore::where('id',$data->destination_extra_store_id)->value('code');
 

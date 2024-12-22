@@ -552,7 +552,7 @@ class DrinkTransferController extends Controller
                         ->update(['status' => 5]);
 
                         $flag = 0;
-                        /*
+                        
                         $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
                         $response = Http::post($theUrl, [
                             'username'=> config('app.obr_test_username'),
@@ -568,21 +568,21 @@ class DrinkTransferController extends Controller
                         $response = Http::withHeaders([
                         'Authorization' => 'Bearer '.$token,
                         'Accept' => 'application/json'])->post($theUrl, [
-                            'system_or_device_id'=> "wsconfig('app.tin_number_company')00565",
+                            'system_or_device_id'=> config('app.obr_test_username'),
                             'item_code'=> $data->drink->code,
                             'item_designation'=>$data->drink->name,
                             'item_quantity'=>$data->quantity_transfered,
-                            'item_measurement_unit'=>$data->unit,
+                            'item_measurement_unit'=>$data->drink->drinkMeasurement->purchase_unit,
                             'item_purchase_or_sale_price'=>$cump,
                             'item_purchase_or_sale_currency'=> "BIF",
                             'item_movement_type'=>"ET",
                             'item_movement_invoice_ref'=>"",
                             'item_movement_description'=>$data->description,
-                            'item_movement_date'=> Carbon::parse($data->updated_at)->format('Y-m-d H:i:s'),
+                            'item_movement_date'=> $data->date,
 
                         ]); 
 
-                        */
+                        
                     }else{
 
                         foreach ($datas as $data) {

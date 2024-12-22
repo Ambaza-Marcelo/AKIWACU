@@ -540,6 +540,7 @@ class OrderDrinkController extends Controller
         if (is_null($this->user) || !$this->user->can('drink_order_client.delete')) {
             abort(403, 'Sorry !! You are Unauthorized to delete any order !');
         }
+        /*
 
         try {DB::beginTransaction();
 
@@ -561,5 +562,6 @@ class OrderDrinkController extends Controller
 
             throw $e;
         }
+        */
     }
 }

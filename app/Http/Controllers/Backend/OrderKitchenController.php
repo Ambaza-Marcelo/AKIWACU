@@ -560,7 +560,7 @@ class OrderKitchenController extends Controller
         if (is_null($this->user) || !$this->user->can('food_order_client.delete')) {
             abort(403, 'Sorry !! You are Unauthorized to delete any order !');
         }
-
+        /*
         try {DB::beginTransaction();
 
         $order = OrderKitchen::where('order_no',$order_no)->first();
@@ -581,5 +581,6 @@ class OrderKitchenController extends Controller
 
             throw $e;
         }
+        */
     }
 }

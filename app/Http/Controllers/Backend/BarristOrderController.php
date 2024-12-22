@@ -487,6 +487,8 @@ class BarristOrderController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to delete any order !');
         }
 
+        /*
+
         try {DB::beginTransaction();
 
         $order = BarristOrder::where('order_no',$order_no)->first();
@@ -506,6 +508,7 @@ class BarristOrderController extends Controller
 
             throw $e;
         }
+        */
     }
 }
 

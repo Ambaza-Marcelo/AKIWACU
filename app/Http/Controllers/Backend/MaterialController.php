@@ -82,7 +82,7 @@ class MaterialController extends Controller
         // Validation Data
         $request->validate([
             'name' => 'required|max:255',
-            'material_measurement_id' => 'required|max:20',
+            'material_measurement_id' => 'required',
             'purchase_price' => 'required',
             //'quantity' => 'required',
             'store_type' => 'required',
@@ -280,7 +280,7 @@ class MaterialController extends Controller
 
         $request->validate([
             'name' => 'required|max:255',
-            'unit' => 'required|max:20',
+            'material_measurement_id' => 'required',
             'purchase_price' => 'required',
             //'quantity' => 'required',
             'store_type' => 'required',
@@ -294,9 +294,13 @@ class MaterialController extends Controller
 
         $material = Material::where('id',$id)->first();
 
+        $reference = strtoupper(substr($request->name, 0, 3));
+        $material->code = $reference.date("y").substr(number_format(time() * mt_rand(), 0, '', ''), 0, 6);
+
         $material->name = $request->name;
         //$material->quantity = $request->quantity;
         $material->unit = $request->unit;
+        $material->material_measurement_id = $request->material_measurement_id;
         $material->purchase_price = $request->purchase_price;
         
         $material->specification = $request->specification;
@@ -320,6 +324,7 @@ class MaterialController extends Controller
         if ($store_type == '1') {
             $food_big_store_code = MaterialBigStoreDetail::where('code',$code_store)->value('code');
             $food_in_big_store = MaterialBigStoreDetail::where('code',$code_store)->where('material_id',$material_id)->first();
+            $quantity = MaterialBigStoreDetail::where('code',$code_store)->where('material_id',$material_id)->value('quantity');
             if (!empty($food_in_big_store)) {
                 $food_in_big_store->material_id = $material_id;
                 $food_in_big_store->quantity = $quantity;
@@ -335,7 +340,7 @@ class MaterialController extends Controller
             }else{
                 $food_in_big_store = new MaterialBigStoreDetail();
                 $food_in_big_store->material_id = $material_id;
-                $food_in_big_store->quantity = $quantity;
+                $food_in_big_store->quantity = 0;
                 $food_in_big_store->threshold_quantity = $threshold_quantity;
                 $food_in_big_store->purchase_price = $purchase_price;
                 $food_in_big_store->selling_price = $selling_price;
