@@ -66,7 +66,7 @@ class BookingBookingDetail extends Model
         return $this->belongsTo('App\Models\KidnessSpace');
     }
 
-    public function client(){
-        return $this->belongsTo('App\Models\BookingClient');
+    public function room(){
+        return $this->belongsTo('App\Models\BookingRoom');
     }
 }

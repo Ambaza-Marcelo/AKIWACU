@@ -1565,6 +1565,17 @@ class RolePermissionSeeder extends Seeder
                 ]
             ],
             [
+                'group_name' => 'booking_room',
+                'permissions' => [
+                    // booking_room Permissions
+                    'booking_room.create',
+                    'booking_room.view',
+                    'booking_room.show',
+                    'booking_room.edit',
+                    'booking_room.delete',
+                ]
+            ],
+            [
                 'group_name' => 'booking_breakfast',
                 'permissions' => [
                     // booking_breakfast Permissions

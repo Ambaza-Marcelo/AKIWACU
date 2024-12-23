@@ -13,8 +13,9 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\BookingBooking;
 use App\Models\BookingBookingDetail;
 use App\Models\BookingSalle;
+use App\Models\BookingRoom;
 use App\Models\BookingService;
-use App\Models\BookingClient;
+use App\Models\EGRClient;
 use App\Models\BookingTechnique;
 use App\Models\BookingTechniqueDetail;
 use App\Models\BookingTable;
@@ -46,6 +47,16 @@ class BookingController extends Controller
 
         $bookings = BookingBookingDetail::where('salle_id','!=','')->take(200)->orderBy('id','desc')->get();
         return view('backend.pages.booking.booking.index_salle', compact('bookings'));
+    }
+
+    public function indexRoom()
+    {
+        if (is_null($this->user) || !$this->user->can('booking.view')) {
+            abort(403, 'Sorry !! You are Unauthorized to view any booking !');
+        }
+
+        $bookings = BookingBookingDetail::where('room_id','!=','')->take(200)->orderBy('id','desc')->get();
+        return view('backend.pages.booking.booking.index_room', compact('bookings'));
     }
 
     public function indexService()
@@ -111,8 +122,19 @@ class BookingController extends Controller
 
         $articles  = BookingSalle::where('selling_price','>',0)->orderBy('name','asc')->get();
         $techniques  = BookingTechnique::orderBy('name','asc')->get();
-        $clients  = BookingClient::orderBy('customer_name','asc')->get();
+        $clients  = EGRClient::orderBy('customer_name','asc')->get();
         return view('backend.pages.booking.booking.create_salle', compact('articles','techniques','clients'));
+    }
+
+    public function createRoom()
+    {
+        if (is_null($this->user) || !$this->user->can('booking.create')) {
+            abort(403, 'Sorry !! You are Unauthorized to create any booking !');
+        }
+
+        $articles  = BookingRoom::where('selling_price','>',0)->orderBy('name','asc')->get();
+        $clients  = EGRClient::orderBy('customer_name','asc')->get();
+        return view('backend.pages.booking.booking.create_room', compact('articles','clients'));
     }
 
     public function createService()
@@ -122,7 +144,7 @@ class BookingController extends Controller
         }
 
         $articles  = BookingService::where('selling_price','>',0)->orderBy('name','asc')->get();
-        $clients  = BookingClient::orderBy('customer_name','asc')->get();
+        $clients  = EGRClient::orderBy('customer_name','asc')->get();
         return view('backend.pages.booking.booking.create_service', compact('articles','clients'));
     }
 
@@ -133,7 +155,7 @@ class BookingController extends Controller
         }
 
         $articles  = BookingTable::orderBy('name','asc')->get();
-        $clients  = BookingClient::orderBy('customer_name','asc')->get();
+        $clients  = EGRClient::orderBy('customer_name','asc')->get();
         return view('backend.pages.booking.booking.create_table', compact('articles','clients'));
     }
 
@@ -145,7 +167,7 @@ class BookingController extends Controller
 
         $articles  = BreakFast::orderBy('name','asc')->get();
         $techniques  = BookingTechnique::orderBy('name','asc')->get();
-        $clients  = BookingClient::orderBy('customer_name','asc')->get();
+        $clients  = EGRClient::orderBy('customer_name','asc')->get();
         return view('backend.pages.booking.booking.create_breakfast', compact('articles','techniques','clients'));
     }
 
@@ -157,7 +179,7 @@ class BookingController extends Controller
 
         $articles  = KidnessSpace::where('selling_price','>',0)->orderBy('name','asc')->get();
         $techniques  = BookingTechnique::orderBy('name','asc')->get();
-        $clients  = BookingClient::orderBy('customer_name','asc')->get();
+        $clients  = EGRClient::orderBy('customer_name','asc')->get();
         return view('backend.pages.booking.booking.create_kidness_space', compact('articles','techniques','clients'));
     }
 
@@ -169,7 +191,7 @@ class BookingController extends Controller
 
         $articles  = SwimingPool::where('selling_price','>',0)->orderBy('name','asc')->get();
         $techniques  = BookingTechnique::orderBy('name','asc')->get();
-        $clients  = BookingClient::orderBy('customer_name','asc')->get();
+        $clients  = EGRClient::orderBy('customer_name','asc')->get();
         return view('backend.pages.booking.booking.create_swiming_pool', compact('articles','techniques','clients'));
     }
 
@@ -199,7 +221,7 @@ class BookingController extends Controller
                 'nombre_personnes'  => 'required',
                 'date_debut'  => 'required',
                 'date_fin'  => 'required',
-                //'booking_client_id'  => 'required',
+                //'client_id'  => 'required',
             );
 
             $error = Validator::make($request->all(),$rules);
@@ -231,7 +253,7 @@ class BookingController extends Controller
             $technique_id = $request->technique_id;
             $salle_id = $request->salle_id;
             $service_id =$request->service_id; 
-            $booking_client_id =$request->booking_client_id; 
+            $client_id =$request->client_id; 
             $created_by = $this->user->name;
 
 
@@ -261,7 +283,7 @@ class BookingController extends Controller
             $booking->nombre_personnes = $nombre_personnes;
             $booking->date_debut = $date_debut;
             $booking->date_fin = $date_fin;
-            $booking->booking_client_id = $booking_client_id;
+            $booking->client_id = $client_id;
             $booking->created_by = $created_by;
             $booking->save();
             //insert details of booking No.
@@ -287,7 +309,7 @@ class BookingController extends Controller
                     'nombre_personnes' => $nombre_personnes,
                     'date_debut' => $date_debut,
                     'date_fin' => $date_fin,
-                    'booking_client_id' => $booking_client_id,
+                    'client_id' => $client_id,
                     'total_amount_selling' => $total_amount_selling,
                     'created_by' => $created_by,
                     'booking_no' => $booking_no,
@@ -315,6 +337,138 @@ class BookingController extends Controller
             DB::commit();
             session()->flash('success', 'Booking has been sent successfuly!!');
             return redirect()->route('admin.booking-salles.index');
+
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+    }
+
+
+    public function storeRoom(Request $request)
+    {
+        if (is_null($this->user) || !$this->user->can('booking.create')) {
+            abort(403, 'Sorry !! You are Unauthorized to create any booking !');
+        }
+
+        $rules = array(
+                'room_id.*'  => 'required',
+                'quantity.*'  => 'required',
+                'description'  => 'required',
+                'nom_referent'  => 'required',
+                'telephone_referent'  => 'required',
+                //'courriel_referent'  => 'required',
+                //'type_evenement'  => 'required',
+                //'nombre_personnes'  => 'required',
+                'date_debut'  => 'required',
+                'date_fin'  => 'required',
+                //'client_id'  => 'required',
+            );
+
+            $error = Validator::make($request->all(),$rules);
+
+            if($error->fails()){
+                return response()->json([
+                    'error' => $error->errors()->all(),
+                ]);
+            }
+
+            try {DB::beginTransaction();
+
+            $date = Carbon::now();
+            $booking_no = $request->booking_no;
+            $booking_signature = $request->booking_signature;
+            $description = $request->description;
+            $statut_demandeur =$request->statut_demandeur; 
+            $nom_demandeur = $request->nom_demandeur;
+            $adresse_demandeur = $request->adresse_demandeur;
+            $telephone_demandeur = $request->telephone_demandeur;
+            $nom_referent =$request->nom_referent; 
+            $telephone_referent = $request->telephone_referent;
+            $quantity = $request->quantity;
+            $courriel_referent = $request->courriel_referent;
+            $type_evenement = $request->type_evenement;
+            $nombre_personnes = $request->nombre_personnes;
+            $date_debut =$request->date_debut; 
+            $date_fin = $request->date_fin;
+            $room_id = $request->room_id;
+            $service_id =$request->service_id; 
+            $client_id =$request->client_id; 
+            $created_by = $this->user->name;
+
+
+            $latest = BookingBooking::orderBy('id','desc')->first();
+            if ($latest) {
+               $booking_no = 'CHA' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
+            }else{
+               $booking_no = 'CHA' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
+            }
+
+            $order_signature = config('app.tin_number_company').Carbon::parse(Carbon::now())->format('YmdHis')."/".$booking_no;
+
+            //create booking
+            $booking = new BookingBooking();
+            $booking->date = $date;
+            $booking->booking_no = $booking_no;
+            $booking->booking_signature = $booking_signature;
+            $booking->description = $description;
+            $booking->statut_demandeur = $statut_demandeur;
+            $booking->nom_demandeur = $nom_demandeur;
+            $booking->adresse_demandeur = $adresse_demandeur;
+            $booking->telephone_demandeur = $telephone_demandeur;
+            $booking->nom_referent = $nom_referent;
+            $booking->telephone_referent = $telephone_referent;
+            $booking->courriel_referent = $courriel_referent;
+            $booking->type_evenement = $type_evenement;
+            $booking->nombre_personnes = $nombre_personnes;
+            $booking->date_debut = $date_debut;
+            $booking->date_fin = $date_fin;
+            $booking->client_id = $client_id;
+            $booking->created_by = $created_by;
+            $booking->save();
+            //insert details of booking No.
+            for( $count = 0; $count < count($room_id); $count++ ){
+
+                $selling_price = BookingRoom::where('id', $room_id[$count])->value('selling_price');
+                $total_amount_selling = $quantity[$count] * $selling_price;
+                $data = array(
+                    'room_id' => $room_id[$count],
+                    'quantity' => $quantity[$count],
+                    'selling_price' => $selling_price,
+                    'booking_no' => $booking_no,
+                    'date' => $date,
+                    'description' => $description,
+                    'statut_demandeur' => $statut_demandeur,
+                    'nom_demandeur' => $nom_demandeur,
+                    'adresse_demandeur' => $adresse_demandeur,
+                    'telephone_demandeur' => $telephone_demandeur,
+                    'nom_referent' => $nom_referent,
+                    'telephone_referent' => $telephone_referent,
+                    'courriel_referent' => $courriel_referent,
+                    'type_evenement' => $type_evenement,
+                    'nombre_personnes' => $nombre_personnes,
+                    'date_debut' => $date_debut,
+                    'date_fin' => $date_fin,
+                    'client_id' => $client_id,
+                    'total_amount_selling' => $total_amount_selling,
+                    'created_by' => $created_by,
+                    'booking_no' => $booking_no,
+                    'booking_signature' => $booking_signature
+
+                );
+                $insert_data[] = $data;
+            }
+
+            BookingBookingDetail::insert($insert_data);
+
+            DB::commit();
+            session()->flash('success', 'Booking has been sent successfuly!!');
+            return redirect()->route('admin.booking-rooms.index');
 
         } catch (\Exception $e) {
             // An error occured; cancel the transaction...
@@ -1043,6 +1197,14 @@ class BookingController extends Controller
             BookingBookingDetail::where('booking_no', '=', $booking_no)
                 ->update(['status' => 1,'validated_by' => $this->user->name]);
             BookingService::where('id', '=', $swiming_pool_id)
+                ->update(['status' => 1]);
+        }elseif(!empty($data->room_id)){
+            $room_id = BookingBookingDetail::where('booking_no',$booking_no)->value('room_id');
+            BookingBooking::where('booking_no', '=', $booking_no)
+                ->update(['status' => 1,'validated_by' => $this->user->name]);
+            BookingBookingDetail::where('booking_no', '=', $booking_no)
+                ->update(['status' => 1,'validated_by' => $this->user->name]);
+            BookingRoom::where('id', '=', $room_id)
                 ->update(['status' => 1]);
         }else{
             $table_id = BookingBookingDetail::where('booking_no',$booking_no)->value('table_id');

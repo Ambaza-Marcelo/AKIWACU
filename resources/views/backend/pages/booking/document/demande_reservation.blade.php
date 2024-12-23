@@ -16,7 +16,7 @@
         <div>
             <div>
                 <div>
-                   <img src="img/eden_logo.png" width="200" height="65">
+                   <img src="img/eden_logo.png" width="200" height="85">
                 </div>
                 <div>
                     <div style="float: left;">
@@ -116,7 +116,7 @@
                             <tbody>
                                 @foreach($datas as $data)
                                <tr>
-                                    <td>@if($data->salle_id){{ $data->salle->name }} @elseif($data->service_id){{ $data->service->name }} @elseif($data->swiming_pool_id) {{ $data->swimingPool->name }} @elseif($data->kidness_space_id) {{ $data->kidnessSpace->name }} @endif</td>
+                                    <td>@if($data->salle_id){{ $data->salle->name }} @elseif($data->service_id){{ $data->service->name }} @elseif($data->swiming_pool_id) {{ $data->swimingPool->name }} @elseif($data->kidness_space_id) {{ $data->kidnessSpace->name }} @elseif($data->room_id) {{ $data->room->name }} @endif</td>
                                     <td>{{ $data->quantity }}........................................{{ number_format($data->selling_price,2,',',' ') }}</td>
                                 </tr>
                                 @endforeach

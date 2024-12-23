@@ -104,14 +104,14 @@
                                     <th>MONTANT TVA</th>
                                     <th>PV. U</th>
                                 -->
-                                    <th>TTC</th>
+                                    <th>TVAC</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach($datas as $data)
                                <tr>
                                     <td>{{ $loop->index + 1 }}</td>
-                                    <td>@if($data->drink_id){{ $data->drink->name }} @elseif($data->food_item_id){{ $data->foodItem->name }} @elseif($data->bartender_item_id){{ $data->bartenderItem->name }} @elseif($data->salle_id){{ $data->salle->name }} @elseif($data->service){{ $data->service->name }}  @elseif($data->breakfast_id) {{ $data->breakFast->name }} @elseif($data->swiming_pool_id) {{ $data->swimingPool->name }} @elseif($data->kidness_space_id) {{ $data->kidnessSpace->name }} @else {{ $data->barristItem->name }} @endif</td>
+                                    <td>@if($data->drink_id){{ $data->drink->name }} @elseif($data->food_item_id){{ $data->foodItem->name }} @elseif($data->bartender_item_id){{ $data->bartenderItem->name }} @elseif($data->salle_id){{ $data->salle->name }} @elseif($data->service){{ $data->service->name }}  @elseif($data->breakfast_id) {{ $data->breakFast->name }} @elseif($data->swiming_pool_id) {{ $data->swimingPool->name }} @elseif($data->kidness_space_id) {{ $data->kidnessSpace->name }} @elseif($data->room_id) {{ $data->room->name }} @else {{ $data->barristItem->name }} @endif</td>
                                     <td>{{ $data->item_quantity }}</td>
                                     
                                     <td>{{ number_format($data->item_price,0,',',' ' )}}</td>
@@ -122,7 +122,7 @@
                                     <td>{{ number_format($data->vat,0,',',' ' )}}</td>
                                     <td>{{ number_format($data->item_price_wvat,0,',',' ' )}}</td>
                                 -->
-                                    <td>{{ number_format($data->item_total_amount,0,',',' ' )}}</td>
+                                    <td>{{ number_format($data->item_price_wvat,0,',',' ' )}}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -136,7 +136,13 @@
                            &nbsp;&nbsp;TVA : {{ number_format($totalVat,3,',',' ' )}}
                         </small><br>
                         <small><strong>
-                           &nbsp;&nbsp;Total à payer : {{ number_format($item_total_amount,0,',',' ' )}}</strong>
+                           &nbsp;&nbsp;TVAC : {{ number_format($item_total_amount,0,',',' ' )}}</strong>
+                        </small><br>
+                        <small>
+                           &nbsp;&nbsp;TC : {{ number_format($total_tsce_tax,3,',',' ' )}}
+                        </small><br>
+                        <small><strong>
+                           &nbsp;&nbsp;Total à payer : {{ number_format(($item_total_amount + $total_tsce_tax),0,',',' ' )}}</strong>
                         </small>
                         </div>
                     </div><br><br><br><br>

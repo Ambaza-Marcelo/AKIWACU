@@ -383,6 +383,9 @@
                             @if ($usr->can('booking_salle.view'))
                                 <li class=""><a href="{{ route('admin.salles.index') }}"><i class="fa fa-user"></i>&nbsp;@lang('Salles')</a></li>
                             @endif
+                            @if ($usr->can('booking_room.view'))
+                                <li class=""><a href="{{ route('admin.rooms.index') }}"><i class="fa fa-user"></i>&nbsp;@lang('Chambres')</a></li>
+                            @endif
                             @if ($usr->can('booking_service.view'))
                                 <li class=""><a href="{{ route('admin.services.index') }}"><i class="fa fa-user"></i>&nbsp;@lang('Services')</a></li>
                             @endif
@@ -401,6 +404,9 @@
 
                             @if ($usr->can('booking_salle.view'))
                                 <li class=""><a href="{{ route('admin.booking-salles.index') }}"><i class="fa fa-user"></i>&nbsp;@lang('Reservation Salles')</a></li>
+                            @endif
+                            @if ($usr->can('booking_room.view'))
+                                <li class=""><a href="{{ route('admin.booking-rooms.index') }}"><i class="fa fa-user"></i>&nbsp;@lang('Reservation Chambres')</a></li>
                             @endif
                             @if ($usr->can('booking_service.view'))
                                 <li class=""><a href="{{ route('admin.booking-services.index') }}"><i class="fa fa-user"></i>&nbsp;@lang('Reservation Services')</a></li>

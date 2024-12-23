@@ -59,8 +59,8 @@ class FactureDetail extends Model
         return $this->belongsTo('\App\Models\EGRClient');
     }
 
-    public function bookingClient(){
-        return $this->belongsTo('\App\Models\BookingClient');
+    public function room(){
+        return $this->belongsTo('\App\Models\BookingRoom');
     }
 
     public function barristItem(){

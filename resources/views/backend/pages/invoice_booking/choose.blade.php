@@ -126,6 +126,22 @@
                             </div><br>
                         </div>
                         @endif
+                        @if (Auth::guard('admin')->user()->can('invoice_booking.view'))
+                        <div class="col-md-4 mb-3 mb-lg-0">
+                            <div class="card">
+                            <div class="seo-fact sbg3">
+                                <a href="{{ route('admin.booking-room-invoices.index') }}">
+                                    <div class="p-4 d-flex justify-content-between align-items-center">
+                                        <div class="seofct-icon">
+                                            <img src="{{ asset('img/undraw_relaxing-at-home_vmps.svg') }}" width="100">
+
+                                    @lang('Chambre')</div>
+                                    </div>
+                                </a>
+                            </div>
+                            </div><br>
+                        </div>
+                        @endif
                     </div>
                 </div>
             </div>

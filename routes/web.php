@@ -241,6 +241,14 @@ Route::group(['prefix' => 'admin'], function () {
     Route::put('EBMS/salles/update/{id}', 'Backend\Booking\SalleController@update')->name('admin.salles.update');
     Route::delete('EBMS/salles/destroy/{id}', 'Backend\Booking\SalleController@destroy')->name('admin.salles.destroy');
 
+    //rooms routes
+    Route::get('EBMS/rooms/index', 'Backend\Booking\RoomController@index')->name('admin.rooms.index');
+    Route::get('EBMS/rooms/create', 'Backend\Booking\RoomController@create')->name('admin.rooms.create');
+    Route::post('EBMS/rooms/store', 'Backend\Booking\RoomController@store')->name('admin.rooms.store');
+    Route::get('EBMS/rooms/edit/{id}', 'Backend\Booking\RoomController@edit')->name('admin.rooms.edit');
+    Route::put('EBMS/rooms/update/{id}', 'Backend\Booking\RoomController@update')->name('admin.rooms.update');
+    Route::delete('EBMS/rooms/destroy/{id}', 'Backend\Booking\RoomController@destroy')->name('admin.rooms.destroy');
+
     //swiming-pools routes
     Route::get('EBMS/swiming-pools/index', 'Backend\Booking\SwimingPoolController@index')->name('admin.swiming-pools.index');
     Route::get('EBMS/swiming-pools/create', 'Backend\Booking\SwimingPoolController@create')->name('admin.swiming-pools.create');
@@ -293,8 +301,11 @@ Route::group(['prefix' => 'admin'], function () {
 
     //bookings routes
     Route::get('EBMS/booking-salles/index', 'Backend\Booking\BookingController@indexSalle')->name('admin.booking-salles.index');
+    Route::get('EBMS/booking-rooms/index', 'Backend\Booking\BookingController@indexRoom')->name('admin.booking-rooms.index');
     Route::get('EBMS/booking-salles/create', 'Backend\Booking\BookingController@createSalle')->name('admin.booking-salles.create');
+    Route::get('EBMS/booking-rooms/create', 'Backend\Booking\BookingController@createRoom')->name('admin.booking-rooms.create');
     Route::post('EBMS/booking-salles/store', 'Backend\Booking\BookingController@storeSalle')->name('admin.booking-salles.store');
+    Route::post('EBMS/booking-rooms/store', 'Backend\Booking\BookingController@storeRoom')->name('admin.booking-rooms.store');
 
     Route::get('EBMS/booking-services/index', 'Backend\Booking\BookingController@indexService')->name('admin.booking-services.index');
     Route::get('EBMS/booking-services/create', 'Backend\Booking\BookingController@createService')->name('admin.booking-services.create');
@@ -582,6 +593,7 @@ Route::group(['prefix' => 'admin'], function () {
     //invoice booking routes
     Route::get('EBMS/booking-invoices/index', 'Backend\FactureBookingController@index')->name('admin.booking-invoices.index');
     Route::get('EBMS/booking-salle-invoices/index', 'Backend\FactureBookingController@indexSalle')->name('admin.booking-salle-invoices.index');
+    Route::get('EBMS/booking-room-invoices/index', 'Backend\FactureBookingController@indexRoom')->name('admin.booking-room-invoices.index');
     Route::get('EBMS/booking-breakfast-invoices/index', 'Backend\FactureBookingController@indexBreakFast')->name('admin.booking-breakfast-invoices.index');
     Route::get('EBMS/booking-service-invoices/index', 'Backend\FactureBookingController@indexService')->name('admin.booking-service-invoices.index');
     Route::get('EBMS/booking-swiming-pool-invoices/index', 'Backend\FactureBookingController@indexSwimingPool')->name('admin.booking-swiming-pool-invoices.index');

@@ -54,6 +54,16 @@ class FactureBookingController extends Controller
         return view('backend.pages.invoice_booking.salle',compact('factures'));
     }
 
+    public function indexRoom()
+    {
+        if (is_null($this->user) || !$this->user->can('invoice_booking.view')) {
+            abort(403, 'Sorry !! You are Unauthorized to view any invoice !');
+        }
+
+        $factures = FactureDetail::where('room_id','!=','')->take(100)->orderBy('id','desc')->get();
+        return view('backend.pages.invoice_booking.room',compact('factures'));
+    }
+
     public function indexService()
     {
         if (is_null($this->user) || !$this->user->can('invoice_booking.view')) {

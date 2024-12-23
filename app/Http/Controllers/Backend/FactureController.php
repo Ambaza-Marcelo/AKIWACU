@@ -53,6 +53,7 @@ use App\Models\FoodSmallReport;
 use App\Models\BookingBooking;
 use App\Models\BookingBookingDetail;
 use App\Models\BookingSalle;
+use App\Models\BookingRoom;
 use App\Models\BookingService;
 use App\Models\BookingEGRClient;
 use App\Models\EGRClient;
@@ -1027,6 +1028,7 @@ class FactureController extends Controller
             $breakfast_id = $request->breakfast_id;
             $swiming_pool_id = $request->swiming_pool_id;
             $kidness_space_id = $request->kidness_space_id;
+            $room_id = $request->room_id;
             $item_quantity = $request->item_quantity;
             $item_price = $request->item_price;
             $item_ct = $request->item_ct;
@@ -1541,6 +1543,121 @@ class FactureController extends Controller
             'item_price'=>$item_price[$count],
             'item_ct'=>$item_ct[$count],
             'item_tl'=>$item_tl[$count],
+            'item_price_nvat'=>$item_price_nvat,
+            'vat'=>$vat,
+            'item_price_wvat'=>$item_price_wvat,
+            'item_total_amount'=>$item_total_amount,
+            'employe_id'=> $employe_id,
+            'created_at'=> Carbon::now(),
+        );
+          $data1[] = $data;
+      }
+
+
+        FactureDetail::insert($data1);
+
+
+            //create facture
+            $facture = new Facture();
+            $facture->invoice_date = $invoice_date;
+            $facture->invoice_number = $invoice_number;
+            $facture->tp_type = $request->tp_type;
+            $facture->tp_name = $request->tp_name;
+            $facture->tp_TIN = $request->tp_TIN;
+            $facture->tp_trade_number = $request->tp_trade_number;
+            $facture->tp_phone_number = $request->tp_phone_number;
+            $facture->tp_address_province = $request->tp_address_province;
+            $facture->tp_address_commune = $request->tp_address_commune;
+            $facture->tp_address_quartier = $request->tp_address_quartier;
+            $facture->booking_no = $request->booking_no;
+            $facture->vat_taxpayer = $request->vat_taxpayer;
+            $facture->ct_taxpayer = $request->ct_taxpayer;
+            $facture->tl_taxpayer = $request->tl_taxpayer;
+            $facture->tp_fiscal_center = $request->tp_fiscal_center;
+            $facture->tp_activity_sector = $request->tp_activity_sector;
+            $facture->tp_legal_form = $request->tp_legal_form;
+            $facture->invoice_currency = $request->invoice_currency;
+            $facture->payment_type = $request->payment_type;
+            $facture->client_id = $request->client_id;
+            $facture->customer_TIN = $client->customer_TIN;
+            $facture->customer_address = $client->customer_address;
+            $facture->vat_customer_payer = $client->vat_customer_payer;
+            $facture->invoice_signature = $invoice_signature;
+            $facture->cancelled_invoice_ref = $request->cancelled_invoice_ref;
+            $facture->cancelled_invoice = $request->cancelled_invoice;
+            $facture->invoice_ref = $request->invoice_ref;
+            $facture->employe_id = $employe_id;
+            $facture->auteur = $this->user->name;
+            $facture->invoice_signature_date = Carbon::now();
+            $facture->created_at = Carbon::now();
+            $facture->save();
+
+            BookingBooking::where('booking_no', '=', $request->booking_no)
+                ->update(['status' => 2]);
+            BookingBookingDetail::where('booking_no', '=', $request->booking_no)
+                ->update(['status' => 2]);
+
+        }elseif(!empty($room_id)){
+            for( $count = 0; $count < count($room_id); $count++ )
+        {
+            $taux_tva = BookingRoom::where('id', $room_id[$count])->value('vat');
+            $item_tsce_tax = BookingRoom::where('id', $room_id[$count])->value('item_tsce_tax');
+
+            if($request->vat_taxpayer == 1){
+                $item_total_amount = ($item_price[$count]*$item_quantity[$count]);
+                $item_price_nvat = ($item_total_amount * 100)/110;
+                $vat = ($item_price_nvat * $taux_tva)/100;
+                $item_price_wvat = ($item_price_nvat + $vat);
+                $item_tsce_tax = ($item_total_amount * $taux_tva)/100;
+                $item_total_amount = ($item_price_nvat + $vat + $item_tsce_tax);
+
+            }else{
+                $item_price_nvat = ($item_price[$count]*$item_quantity[$count])+$item_ct[$count];
+                $vat = 0;
+                $item_price_wvat = ($item_price_nvat + $vat);
+                $item_total_amount = $item_price_wvat + $item_tl[$count];
+                $item_tsce_tax = ($item_total_amount * $taux_tva)/100;
+                $item_total_amount = ($item_price_nvat + $vat + $item_tsce_tax);
+            }
+
+          $data = array(
+            'invoice_number'=>$invoice_number,
+            'invoice_date'=> $invoice_date,
+            'tp_type'=>$request->tp_type,
+            'tp_name'=>$request->tp_name,
+            'tp_TIN'=>$request->tp_TIN,
+            'tp_trade_number'=>$request->tp_trade_number,
+            'tp_phone_number'=>$request->tp_phone_number,
+            'tp_address_province'=>$request->tp_address_province,
+            'tp_address_commune'=>$request->tp_address_commune,
+            'tp_address_quartier'=>$request->tp_address_quartier,
+            'tp_address_avenue'=>$request->tp_address_avenue,
+            'tp_address_rue'=>$request->tp_address_rue,
+            'vat_taxpayer'=>$request->vat_taxpayer,
+            'ct_taxpayer'=>$request->ct_taxpayer,
+            'tl_taxpayer'=>$request->tl_taxpayer,
+            'tp_fiscal_center'=>$request->tp_fiscal_center,
+            'tp_activity_sector'=>$request->tp_activity_sector,
+            'tp_legal_form'=>$request->tp_legal_form,
+            'payment_type'=>$request->payment_type,
+            'client_id'=>$request->client_id,
+            'customer_TIN'=>$client->customer_TIN,
+            'customer_address'=>$client->customer_address,
+            'vat_customer_payer'=>$client->vat_customer_payer,
+            'invoice_signature'=> $invoice_signature,
+            'booking_no'=>$request->booking_no,
+            'cancelled_invoice_ref'=>$request->cancelled_invoice_ref,
+            'cancelled_invoice'=>$request->cancelled_invoice,
+            'invoice_currency'=>$request->invoice_currency,
+            'auteur' => $this->user->name,
+            'invoice_ref'=>$request->invoice_ref,
+            'invoice_signature_date'=> Carbon::now(),
+            'room_id'=>$room_id[$count],
+            'item_quantity'=>$item_quantity[$count],
+            'item_price'=>$item_price[$count],
+            'item_ct'=>$item_ct[$count],
+            'item_tl'=>$item_tl[$count],
+            'item_tsce_tax'=>$item_tsce_tax,
             'item_price_nvat'=>$item_price_nvat,
             'vat'=>$vat,
             'item_price_wvat'=>$item_price_wvat,
@@ -3102,13 +3219,19 @@ class FactureController extends Controller
         $item_total_amount = DB::table('facture_details')
             ->where('invoice_number', '=', $invoice_number)
             ->sum('item_total_amount');
+
         $totalVat = DB::table('facture_details')
             ->where('invoice_number', '=', $invoice_number)
             ->sum('vat');
+
+        $total_tsce_tax = DB::table('facture_details')
+            ->where('invoice_number', '=', $invoice_number)
+            ->sum('item_tsce_tax');
+
         $client = Facture::where('invoice_number', $invoice_number)->value('customer_name');
         $date = Facture::where('invoice_number', $invoice_number)->value('invoice_date');
        
-        $pdf = PDF::loadView('backend.pages.document.facture',compact('datas','invoice_number','totalValue','item_total_amount','client','setting','date','data','invoice_signature','facture','totalVat'))->setPaper('a6', 'portrait');
+        $pdf = PDF::loadView('backend.pages.document.facture',compact('datas','invoice_number','totalValue','item_total_amount','client','setting','date','data','invoice_signature','facture','totalVat','total_tsce_tax'))->setPaper('a6', 'portrait');
 
         Storage::put('public/factures/'.$invoice_number.'.pdf', $pdf->output());
 
@@ -3201,6 +3324,21 @@ class FactureController extends Controller
                 );
 
                 $factureDetail[] = $invoice_items;
+            }elseif(!empty($data->room_id)){
+                $invoice_items = array(
+                'item_designation'=>$data->salle->name,
+                'item_quantity'=>$data->item_quantity,
+                'item_price'=>$data->item_price,
+                'item_ct'=>$data->item_ct,
+                'item_tl'=>$data->item_tl,
+                'item_tsce_tax'=>$data->item_tsce_tax,
+                'item_price_nvat'=>$data->item_price_nvat,
+                'vat'=>$data->vat,
+                'item_price_wvat'=>$data->item_price_wvat,
+                'item_total_amount'=>$data->item_total_amount + $data->item_tsce_tax
+                );
+
+                $factureDetail[] = $invoice_items;
             }elseif(!empty($data->service_id)){
                 $invoice_items = array(
                 'item_designation'=>$data->service->name,
@@ -3288,7 +3426,7 @@ class FactureController extends Controller
             
             DB::commit();
 
-            return view('backend.pages.document.facture',compact('datas','invoice_number','totalValue','item_total_amount','client','setting','date','data','invoice_signature','facture','totalVat'));
+            return view('backend.pages.document.facture',compact('datas','invoice_number','totalValue','item_total_amount','client','setting','date','data','invoice_signature','facture','totalVat','total_tsce_tax'));
 
             // download pdf file
         //return $pdf->download('FACTURE_'.$invoice_number.'.pdf');
@@ -3330,10 +3468,14 @@ class FactureController extends Controller
         $totalVat = DB::table('facture_details')
             ->where('invoice_number', '=', $invoice_number)
             ->sum('vat');
+        $total_tsce_tax = DB::table('facture_details')
+            ->where('invoice_number', '=', $invoice_number)
+            ->sum('item_tsce_tax');
+
         $client = Facture::where('invoice_number', $invoice_number)->value('customer_name');
         $date = Facture::where('invoice_number', $invoice_number)->value('invoice_date');
         
-        return view('backend.pages.document.facture',compact('datas','invoice_number','totalValue','item_total_amount','client','setting','date','data','invoice_signature','facture','totalVat'));
+        return view('backend.pages.document.facture',compact('datas','invoice_number','totalValue','item_total_amount','client','setting','date','data','invoice_signature','facture','totalVat','total_tsce_tax'));
         
         //$pdf = PDF::loadView('backend.pages.document.facture',compact('datas','invoice_number','totalValue','item_total_amount','client','setting','date','data','invoice_signature','facture','totalVat'))->setPaper('a6', 'portrait');
 

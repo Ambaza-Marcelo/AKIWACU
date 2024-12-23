@@ -179,6 +179,12 @@ class CreateFactureDetailsTable extends Migration
                     ->on('hr_banques')
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
+            $table->bigInteger('room_id')->unsigned()->nullable(true);
+            $table->foreign('room_id')
+                    ->references('id')
+                    ->on('rooms')
+                    ->onUpdate('cascade')
+                    ->onDelete('cascade');
             $table->timestamps();
         });
     }
