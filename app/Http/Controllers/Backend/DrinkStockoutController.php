@@ -619,6 +619,7 @@ class DrinkStockoutController extends Controller
 
                         ]);
                         
+                        $dataObr =  json_decode($response);
                         
                     }else{
                         foreach ($datas as $data) {
