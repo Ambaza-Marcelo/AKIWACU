@@ -3326,7 +3326,7 @@ class FactureController extends Controller
                 $factureDetail[] = $invoice_items;
             }elseif(!empty($data->room_id)){
                 $invoice_items = array(
-                'item_designation'=>$data->salle->name,
+                'item_designation'=>$data->room->name,
                 'item_quantity'=>$data->item_quantity,
                 'item_price'=>$data->item_price,
                 'item_ct'=>$data->item_ct,
