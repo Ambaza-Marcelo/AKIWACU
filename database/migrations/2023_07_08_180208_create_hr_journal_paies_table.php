@@ -15,8 +15,8 @@ class CreateHrJournalPaiesTable extends Migration
     {
         Schema::create('hr_journal_paies', function (Blueprint $table) {
             $table->id();
-            $table->string('date_debut')->nullable(true);
-            $table->string('date_fin')->nullable(true);
+            $table->dateTime('date_debut')->nullable(true);
+            $table->dateTime('date_fin')->nullable(true);
             $table->string('title')->nullable(true);
             $table->string('etat')->nullable(true);
             $table->string('code')->nullable(true);

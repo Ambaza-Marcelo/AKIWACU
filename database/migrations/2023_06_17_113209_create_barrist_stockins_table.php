@@ -15,7 +15,7 @@ class CreateBarristStockinsTable extends Migration
     {
         Schema::create('barrist_stockins', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
+            $table->dateTime('date');
             $table->string('stockin_no');
             $table->unique('stockin_no');
             $table->string('stockin_signature')->nullable(true);

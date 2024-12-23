@@ -15,7 +15,7 @@ class CreateDrinkSupplierOrderDetails extends Migration
     {
         Schema::create('drink_supplier_order_details', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
+            $table->dateTime('date');
             $table->string('quantity');
             $table->string('unit')->nullable('true');
             $table->string('purchase_price')->nullable(true);

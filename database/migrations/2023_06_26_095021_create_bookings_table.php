@@ -15,7 +15,7 @@ class CreateBookingsTable extends Migration
     {
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
+            $table->dateTime('date');
             $table->string('booking_no');
             $table->unique('booking_no');
             $table->string('booking_signature')->nullable(true);
@@ -44,12 +44,6 @@ class CreateBookingsTable extends Migration
             $table->text('rej_motif')->nullable(true);
             $table->text('cn_motif')->nullable(true);
             $table->string('type_space')->nullable(true);
-            $table->bigInteger('booking_client_id')->unsigned()->nullable(true);
-            $table->foreign('booking_client_id')
-                    ->references('id')
-                    ->on('booking_clients')
-                    ->onUpdate('cascade')
-                    ->onDelete('cascade');
             $table->bigInteger('client_id')->unsigned()->nullable(true);
             $table->foreign('client_id')
                     ->references('id')

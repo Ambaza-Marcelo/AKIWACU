@@ -50,8 +50,8 @@ class CreateFoodBigReportsTable extends Migration
             $table->string('commande_cuisine_no')->nullable(true);
             $table->string('commande_boisson_no')->nullable(true);
             $table->string('table_no')->nullable(true);
-            $table->string('cump')->nullable(true);
-            $table->date('date')->nullable(true);
+            $table->double('cump')->nullable(true);
+            $table->dateTime('date')->nullable(true);
             $table->string('created_by')->nullable(true);
             $table->string('updated_by')->nullable(true);
             $table->string('validated_by')->nullable(true);

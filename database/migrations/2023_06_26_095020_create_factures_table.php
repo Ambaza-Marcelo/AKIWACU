@@ -69,9 +69,9 @@ class CreateFacturesTable extends Migration
             $table->timestamp('invoice_signature_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->string('invoice_signature')->nullable(true);
             $table->string('invoice_identifier')->nullable(true);
-            $table->string('montant_total_credit')->nullable(true);
-            $table->string('montant_recouvre')->nullable(true);
-            $table->string('reste_credit')->nullable(true);
+            $table->double('montant_total_credit')->nullable(true);
+            $table->double('montant_recouvre')->nullable(true);
+            $table->double('reste_credit')->nullable(true);
             $table->string('bank_name')->nullable(true);
             $table->string('cheque_no')->nullable(true);
             $table->string('bordereau_no')->nullable(true);
@@ -99,16 +99,16 @@ class CreateFacturesTable extends Migration
                     ->on('clients')
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
-            $table->bigInteger('booking_client_id')->unsigned()->nullable(true);
-            $table->foreign('booking_client_id')
-                    ->references('id')
-                    ->on('booking_clients')
-                    ->onUpdate('cascade')
-                    ->onDelete('cascade');
             $table->bigInteger('table_id')->unsigned()->nullable(true);
             $table->foreign('table_id')
                     ->references('id')
                     ->on('tables')
+                    ->onUpdate('cascade')
+                    ->onDelete('cascade');
+            $table->bigInteger('banque_id')->unsigned()->nullable(true);
+            $table->foreign('banque_id')
+                    ->references('id')
+                    ->on('hr_banques')
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
             $table->timestamps();

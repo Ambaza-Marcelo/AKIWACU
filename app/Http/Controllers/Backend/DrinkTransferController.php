@@ -129,7 +129,7 @@ class DrinkTransferController extends Controller
             try {DB::beginTransaction();
 
             $drink_id = $request->drink_id;
-            $date = $request->date;
+            $date = Carbon::now();
             $origin_store_id = $request->origin_store_id;
             $origin_extra_store_id = $request->origin_extra_store_id;
             $requisition_no = $request->requisition_no;

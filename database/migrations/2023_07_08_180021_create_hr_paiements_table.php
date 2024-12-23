@@ -17,8 +17,8 @@ class CreateHrPaiementsTable extends Migration
             $table->id();
             $table->bigInteger('employe_id')->unsigned()->nullable(true);
             $table->string('mois')->nullable(true);
-            $table->string('date_debut')->nullable(true);
-            $table->string('date_fin')->nullable(true);
+            $table->dateTime('date_debut')->nullable(true);
+            $table->dateTime('date_fin')->nullable(true);
             $table->string('etat')->nullable(true);
             $table->string('code')->nullable(true);
             $table->string('statut_matrimonial')->nullable(true);
@@ -88,8 +88,6 @@ class CreateHrPaiementsTable extends Migration
      */
     public function down()
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
         Schema::dropIfExists('hr_paiements');
-        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

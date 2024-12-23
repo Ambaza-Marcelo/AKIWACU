@@ -15,7 +15,7 @@ class CreateFoodTransferDetails extends Migration
     {
         Schema::create('food_transfer_details', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
+            $table->dateTime('date');
             $table->string('quantity_requisitioned')->nullable(true);
             $table->string('quantity_transfered')->nullable(true);
             $table->string('remaining_quantity')->nullable(true);

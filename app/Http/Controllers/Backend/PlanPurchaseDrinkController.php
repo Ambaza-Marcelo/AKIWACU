@@ -100,8 +100,8 @@ class PlanPurchaseDrinkController extends Controller
             try {DB::beginTransaction();
 
             $drink_id = $request->drink_id;
-            $start_date = $request->start_date;
-            $end_date = $request->end_date;
+            $start_date = Carbon::now();
+            $end_date = Carbon::now();
             $quantity = $request->quantity;
             $purchase_price = $request->purchase_price;
             $unit = $request->unit;

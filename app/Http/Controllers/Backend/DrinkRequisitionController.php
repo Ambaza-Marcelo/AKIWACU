@@ -114,7 +114,7 @@ class DrinkRequisitionController extends Controller
             try {DB::beginTransaction();
 
             $drink_id = $request->drink_id;
-            $date = $request->date;
+            $date = Carbon::now();
             $type_store = $request->type_store;
             $quantity_requisitioned = $request->quantity_requisitioned;
             //$unit = $request->unit;

@@ -139,7 +139,7 @@ class MaterialStockoutController extends Controller
             try {DB::beginTransaction();
 
             $material_id = $request->material_id;
-            $date = $request->date;
+            $date = Carbon::now();
             $asker = $request->asker;
             $destination = $request->destination;
             $description =$request->description; 

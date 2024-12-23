@@ -18,7 +18,7 @@ class CreateDrinkSmallStoreInventoryDetailsTable extends Migration
             $table->string('inventory_no')->nullable(true);
             $table->string('code_store')->nullable();
             $table->string('inventory_signature')->nullable(true);
-            $table->string('date')->nullable(true);
+            $table->dateTime('date')->nullable(true);
             $table->string('title')->nullable(true);
             $table->string('quantity')->nullable(true);
             $table->string('quantity_ml')->nullable(true);

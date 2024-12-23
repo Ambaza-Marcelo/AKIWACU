@@ -15,8 +15,8 @@ class CreatePlanPurchaseMaterialsTable extends Migration
     {
         Schema::create('plan_purchase_materials', function (Blueprint $table) {
             $table->id();
-            $table->date('start_date');
-            $table->date('end_date');
+            $table->dateTime('start_date');
+            $table->dateTime('end_date');
             $table->string('plan_no');
             $table->unique('plan_no');
             $table->string('plan_signature')->nullable(true);

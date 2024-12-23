@@ -15,7 +15,7 @@ class CreateMaterialPurchasesTable extends Migration
     {
         Schema::create('material_purchases', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
+            $table->dateTime('date');
             $table->string('purchase_no');
             $table->unique('purchase_no');
             $table->string('purchase_signature')->nullable(true);

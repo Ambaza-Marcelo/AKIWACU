@@ -15,7 +15,7 @@ class CreateMaterialStockoutsTable extends Migration
     {
         Schema::create('material_stockouts', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
+            $table->dateTime('date');
             $table->string('stockout_no');
             $table->unique('stockout_no');
             $table->string('stockout_signature')->nullable(true);

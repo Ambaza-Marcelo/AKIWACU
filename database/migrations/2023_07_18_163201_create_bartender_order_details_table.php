@@ -15,7 +15,7 @@ class CreateBartenderOrderDetailsTable extends Migration
     {
         Schema::create('bartender_order_details', function (Blueprint $table) {
             $table->id();
-            $table->string('date');
+            $table->dateTime('date');
             $table->string('order_no');
             $table->string('order_signature')->nullable(true);
             $table->string('quantity')->nullable(true);

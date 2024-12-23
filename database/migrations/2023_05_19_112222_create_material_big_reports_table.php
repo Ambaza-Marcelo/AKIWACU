@@ -44,8 +44,8 @@ class CreateMaterialBigReportsTable extends Migration
             $table->string('destination')->nullable();
             $table->string('asker')->nullable();
             $table->string('unit')->nullable(true);
-            $table->string('cump')->nullable(true);
-            $table->string('date')->nullable(true);
+            $table->double('cump')->nullable(true);
+            $table->dateTime('date')->nullable(true);
             $table->string('created_by')->nullable(true);
             $table->string('updated_by')->nullable(true);
             $table->string('validated_by')->nullable(true);

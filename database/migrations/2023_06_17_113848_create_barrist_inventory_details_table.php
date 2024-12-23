@@ -17,7 +17,7 @@ class CreateBarristInventoryDetailsTable extends Migration
             $table->id();
             $table->string('inventory_no')->nullable(true);
             $table->string('inventory_signature')->nullable(true);
-            $table->string('date')->nullable(true);
+            $table->dateTime('date')->nullable(true);
             $table->string('title')->nullable(true);
             $table->string('quantity')->nullable(true);
             $table->string('unit')->nullable(true);

@@ -111,7 +111,7 @@ class DrinkBigStoreInventoryController extends Controller
             try {DB::beginTransaction();
 
             $drink_id = $request->drink_id;
-            $date = $request->date;
+            $date = Carbon::now();
             //$unit = $request->unit;
             $quantity = $request->quantity;
             $purchase_price = $request->purchase_price;

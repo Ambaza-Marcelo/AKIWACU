@@ -128,7 +128,7 @@ class FoodReceptionController extends Controller
             try {DB::beginTransaction();
 
             $food_id = $request->food_id;
-            $date = $request->date;
+            $date = Carbon::now();
             $vat_supplier_payer = $request->vat_supplier_payer;
             $invoice_currency = $request->invoice_currency;
             $handingover = $request->handingover;
@@ -276,7 +276,7 @@ class FoodReceptionController extends Controller
             try {DB::beginTransaction();
 
             $food_id = $request->food_id;
-            $date = $request->date;
+            $date = Carbon::now();
             $vat_supplier_payer = $request->vat_supplier_payer;
             $invoice_currency = $request->invoice_currency;
             $handingover = $request->handingover;

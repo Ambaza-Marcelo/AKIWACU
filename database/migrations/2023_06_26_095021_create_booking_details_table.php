@@ -16,7 +16,7 @@ class CreateBookingDetailsTable extends Migration
         if(Schema::hasTable('booking_details')) return;  
         Schema::create('booking_details', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
+            $table->dateTime('date');
             $table->string('booking_no');
             $table->string('booking_signature')->nullable(true);
             $table->string('quantity')->nullable(true);
@@ -89,12 +89,6 @@ class CreateBookingDetailsTable extends Migration
             $table->foreign('breakfast_id')
                     ->references('id')
                     ->on('breakfasts')
-                    ->onUpdate('cascade')
-                    ->onDelete('cascade');
-            $table->bigInteger('booking_client_id')->unsigned()->nullable(true);
-            $table->foreign('booking_client_id')
-                    ->references('id')
-                    ->on('booking_clients')
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
             $table->bigInteger('client_id')->unsigned()->nullable(true);

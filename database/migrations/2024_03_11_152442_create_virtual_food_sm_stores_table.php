@@ -15,7 +15,7 @@ class CreateVirtualFoodSmStoresTable extends Migration
     {
         Schema::create('virtual_food_sm_stores', function (Blueprint $table) {
             $table->id();
-            $table->timestamp('date')->nullable(true);
+            $table->timestamp('date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->string('quantity')->nullable(true);
             $table->string('name')->nullable(true);
             $table->string('code')->nullable(true);

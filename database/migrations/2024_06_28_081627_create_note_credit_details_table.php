@@ -58,15 +58,17 @@ class CreateNoteCreditDetailsTable extends Migration
             $table->timestamp('invoice_signature_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->string('invoice_signature')->nullable(true);
             $table->string('item_designation')->nullable(true);
-            $table->string('item_quantity')->nullable(true);
-            $table->string('item_price')->nullable(true);
-            $table->string('item_ct')->nullable(true);
-            $table->string('item_tl')->nullable(true);
-            $table->string('item_price_nvat')->nullable(true);
-            $table->string('brarudi_purchase_price')->nullable(true);
-            $table->string('vat')->nullable(true);
-            $table->string('item_price_wvat')->nullable(true);
-            $table->string('item_total_amount')->nullable(true);
+            $table->double('item_quantity')->nullable(true);
+            $table->double('item_price')->nullable(true);
+            $table->double('item_ct')->nullable(true);
+            $table->double('item_tl')->nullable(true);
+            $table->double('item_tsce_tax')->nullable(true);
+            $table->double('item_ott_tax')->nullable(true);
+            $table->double('item_price_nvat')->nullable(true);
+            $table->double('brarudi_purchase_price')->nullable(true);
+            $table->double('vat')->nullable(true);
+            $table->double('item_price_wvat')->nullable(true);
+            $table->double('item_total_amount')->nullable(true);
             $table->string('auteur')->nullable(true);
             $table->string('validated_by')->nullable(true);
             $table->string('confirmed_by')->nullable(true);
@@ -78,29 +80,16 @@ class CreateNoteCreditDetailsTable extends Migration
             $table->string('paid_either')->nullable(true);
             $table->string('statut')->nullable(true);
             $table->string('statut_paied')->nullable(true);
-            $table->string('montant_total_credit')->nullable(true);
-            $table->string('montant_recouvre')->nullable(true);
-            $table->string('reste_credit')->nullable(true);
-            $table->string('etat_recouvrement')->nullable(true);
-            $table->string('bank_name')->nullable(true);
-            $table->string('cheque_no')->nullable(true);
-            $table->string('bordereau_no')->nullable(true);
-            $table->string('date_recouvrement')->nullable(true);
-            $table->string('nom_recouvrement')->nullable(true);
             $table->string('taux_reduction')->nullable(true);
             $table->string('montant_reduction')->nullable(true);
             $table->string('montant_total_reduction')->nullable(true);
             $table->text('note_reduction')->nullable(true);
             $table->text('note_credit')->nullable(true);
-            $table->text('note_recouvrement')->nullable(true);
             $table->text('description')->nullable(true);
-            $table->string('cump')->nullable(true);
-            $table->string('total_cump_value')->nullable(true);
+            $table->double('cump')->nullable(true);
+            $table->double('total_cump_value')->nullable(true);
             $table->text('invoice_identifier')->nullable(true);
             $table->string('type_space')->nullable(true);
-            $table->string('taux_majoration')->nullable(true);
-            $table->string('montant_majoration')->nullable(true);
-            $table->string('montant_total_majoration')->nullable(true);
             $table->bigInteger('employe_id')->unsigned()->nullable(true);
             $table->foreign('employe_id')
                     ->references('id')
@@ -167,16 +156,16 @@ class CreateNoteCreditDetailsTable extends Migration
                     ->on('breakfasts')
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
-            $table->bigInteger('booking_client_id')->unsigned()->nullable(true);
-            $table->foreign('booking_client_id')
-                    ->references('id')
-                    ->on('booking_clients')
-                    ->onUpdate('cascade')
-                    ->onDelete('cascade');
             $table->bigInteger('table_id')->unsigned()->nullable(true);
             $table->foreign('table_id')
                     ->references('id')
                     ->on('tables')
+                    ->onUpdate('cascade')
+                    ->onDelete('cascade');
+            $table->bigInteger('banque_id')->unsigned()->nullable(true);
+            $table->foreign('banque_id')
+                    ->references('id')
+                    ->on('hr_banques')
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
             $table->timestamps();

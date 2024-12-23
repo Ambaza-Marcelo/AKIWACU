@@ -93,8 +93,8 @@ class PlanPurchaseFoodController extends Controller
             try {DB::beginTransaction();
 
             $food_id = $request->food_id;
-            $start_date = $request->start_date;
-            $end_date = $request->end_date;
+            $start_date = Carbon::now();
+            $end_date = Carbon::now();
             $quantity = $request->quantity;
             $unit = $request->unit;
             $description =$request->description; 

@@ -117,7 +117,7 @@ class FoodStockoutController extends Controller
             try {DB::beginTransaction();
 
             $food_id = $request->food_id;
-            $date = $request->date;
+            $date = Carbon::now();
             $asker = $request->asker;
             $destination = $request->destination;
             $origin_sm_store_id = $request->origin_sm_store_id;

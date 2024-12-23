@@ -131,7 +131,7 @@ class DrinkReceptionController extends Controller
             try {DB::beginTransaction();
 
             $drink_id = $request->drink_id;
-            $date = $request->date;
+            $date = Carbon::now();
             $vat_supplier_payer = $request->vat_supplier_payer;
             $origin_store_id = $request->origin_store_id;
             $invoice_currency = $request->invoice_currency;
@@ -286,7 +286,7 @@ class DrinkReceptionController extends Controller
             try {DB::beginTransaction();
 
             $drink_id = $request->drink_id;
-            $date = $request->date;
+            $date = Carbon::now();
             $vat_supplier_payer = $request->vat_supplier_payer;
             $origin_store_id = $request->origin_store_id;
             $invoice_currency = $request->invoice_currency;

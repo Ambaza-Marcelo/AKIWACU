@@ -15,8 +15,8 @@ class CreatePlanPurchaseDrinkDetailsTable extends Migration
     {
         Schema::create('plan_purchase_drink_details', function (Blueprint $table) {
             $table->id();
-            $table->date('start_date');
-            $table->date('end_date');
+            $table->dateTime('start_date');
+            $table->dateTime('end_date');
             $table->string('quantity')->nullable(true);
             $table->string('unit')->nullable(true);
             $table->string('purchase_price')->nullable(true);

@@ -103,7 +103,7 @@ class MaterialSupplierOrderController extends Controller
             try {DB::beginTransaction();
 
             $material_id = $request->material_id;
-            $date = $request->date;
+            $date = Carbon::now();
             $purchase_no = $request->purchase_no;
             $description =$request->description; 
             $supplier_id =$request->supplier_id; 

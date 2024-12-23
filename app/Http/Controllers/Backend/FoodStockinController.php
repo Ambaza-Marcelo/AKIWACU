@@ -119,7 +119,7 @@ class FoodStockinController extends Controller
             try {DB::beginTransaction();
 
             $food_id = $request->food_id;
-            $date = $request->date;
+            $date = Carbon::now();
             $invoice_currency = $request->invoice_currency;
             $handingover = $request->handingover;
             $receptionist = $request->receptionist;

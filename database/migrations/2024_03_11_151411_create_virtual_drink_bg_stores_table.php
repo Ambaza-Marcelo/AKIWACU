@@ -15,7 +15,7 @@ class CreateVirtualDrinkBgStoresTable extends Migration
     {
         Schema::create('virtual_drink_bg_stores', function (Blueprint $table) {
             $table->id();
-            $table->timestamp('date')->nullable(true);
+            $table->timestamp('date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->string('quantity_bottle')->nullable(true);
             $table->string('name')->nullable(true);
             $table->string('code')->nullable(true);

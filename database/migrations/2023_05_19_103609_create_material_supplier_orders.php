@@ -15,7 +15,7 @@ class CreateMaterialSupplierOrders extends Migration
     {
         Schema::create('material_supplier_orders', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
+            $table->dateTime('date');
             $table->string('order_no');
             $table->unique('order_no');
             $table->string('order_signature')->nullable(true);

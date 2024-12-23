@@ -141,7 +141,7 @@ class MaterialStockinController extends Controller
             try {DB::beginTransaction();
 
             $material_id = $request->material_id;
-            $date = $request->date;
+            $date = Carbon::now();
             $invoice_currency = $request->invoice_currency;
             $handingover = $request->handingover;
             $receptionist = $request->receptionist;

@@ -18,7 +18,7 @@ class CreateBartenderInventoriesTable extends Migration
             $table->string('inventory_no')->nullable(true);
             $table->unique('inventory_no');
             $table->string('inventory_signature')->nullable(true);
-            $table->string('date');
+            $table->dateTime('date');
             $table->string('title')->nullable(true);
             $table->text('description');
             $table->string('status')->nullable(true);

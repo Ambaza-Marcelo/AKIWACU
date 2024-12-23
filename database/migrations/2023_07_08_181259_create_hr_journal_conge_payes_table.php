@@ -18,8 +18,8 @@ class CreateHrJournalCongePayesTable extends Migration
             $table->string('etat')->nullable(true);
             $table->string('code')->nullable(true);
             $table->string('session')->nullable(true);
-            $table->string('date_heure_debut')->nullable(true);
-            $table->string('date_heure_fin')->nullable(true);
+            $table->dateTime('date_heure_debut')->nullable(true);
+            $table->dateTime('date_heure_fin')->nullable(true);
             $table->string('nbre_jours_conge_paye')->nullable(true);
             $table->string('nbre_jours_conge_sollicite')->nullable(true);
             $table->string('nbre_jours_conge_pris')->nullable(true);
@@ -53,8 +53,6 @@ class CreateHrJournalCongePayesTable extends Migration
      */
     public function down()
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
         Schema::dropIfExists('hr_journal_conge_payes');
-        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

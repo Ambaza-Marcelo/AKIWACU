@@ -212,7 +212,7 @@ class BookingController extends Controller
 
             try {DB::beginTransaction();
 
-            $date = $request->date;
+            $date = Carbon::now();
             $booking_no = $request->booking_no;
             $booking_signature = $request->booking_signature;
             $description = $request->description;
@@ -352,7 +352,7 @@ class BookingController extends Controller
 
             try {DB::beginTransaction();
 
-            $date = $request->date;
+            $date = Carbon::now();
             $booking_no = $request->booking_no;
             $booking_signature = $request->booking_signature;
             $description = $request->description;
@@ -480,7 +480,7 @@ class BookingController extends Controller
 
             try {DB::beginTransaction();
 
-            $date = $request->date;
+            $date = Carbon::now();
             $booking_no = $request->booking_no;
             $booking_signature = $request->booking_signature;
             $description = $request->description;
@@ -597,7 +597,7 @@ class BookingController extends Controller
 
             try {DB::beginTransaction();
 
-            $date = $request->date;
+            $date = Carbon::now();
             $booking_no = $request->booking_no;
             $booking_signature = $request->booking_signature;
             $description = $request->description;
@@ -720,7 +720,7 @@ class BookingController extends Controller
 
             try {DB::beginTransaction();
 
-            $date = $request->date;
+            $date = Carbon::now();
             $booking_no = $request->booking_no;
             $booking_signature = $request->booking_signature;
             $description = $request->description;
@@ -844,7 +844,7 @@ class BookingController extends Controller
 
             try {DB::beginTransaction();
 
-            $date = $request->date;
+            $date = Carbon::now();
             $booking_no = $request->booking_no;
             $booking_signature = $request->booking_signature;
             $description = $request->description;

@@ -15,7 +15,7 @@ class CreateFoodReceptions extends Migration
     {
         Schema::create('food_receptions', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
+            $table->dateTime('date');
             $table->string('reception_no');
             $table->unique('reception_no');
             $table->string('reception_signature')->nullable(true);

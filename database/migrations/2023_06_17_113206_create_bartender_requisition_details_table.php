@@ -15,7 +15,7 @@ class CreateBartenderRequisitionDetailsTable extends Migration
     {
         Schema::create('bartender_requisition_details', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
+            $table->dateTime('date');
             $table->string('quantity_requisitioned')->nullable(true);
             $table->string('quantity_received')->nullable(true);
             $table->string('unit')->nullable('true');

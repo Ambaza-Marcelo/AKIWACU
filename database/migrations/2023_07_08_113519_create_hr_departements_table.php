@@ -29,8 +29,6 @@ class CreateHrDepartementsTable extends Migration
      */
     public function down()
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
         Schema::dropIfExists('hr_departements');
-        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

@@ -15,7 +15,7 @@ class CreateMaterialTransferDetails extends Migration
     {
         Schema::create('material_transfer_details', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
+            $table->dateTime('date');
             $table->string('quantity_requisitioned')->nullable(true);
             $table->string('quantity_transfered')->nullable(true);
             $table->string('remaining_quantity')->nullable(true);

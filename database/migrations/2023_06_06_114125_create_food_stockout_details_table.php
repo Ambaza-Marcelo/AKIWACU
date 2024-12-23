@@ -15,7 +15,7 @@ class CreateFoodStockoutDetailsTable extends Migration
     {
         Schema::create('food_stockout_details', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
+            $table->dateTime('date');
             $table->string('quantity')->nullable(true);
             $table->string('quantity_portion')->nullable(true);
             $table->string('unit_portion')->nullable(true);

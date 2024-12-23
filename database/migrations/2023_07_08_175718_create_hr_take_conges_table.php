@@ -15,8 +15,8 @@ class CreateHrTakeCongesTable extends Migration
     {
         Schema::create('hr_take_conges', function (Blueprint $table) {
             $table->id();
-            $table->string('date_heure_debut')->nullable(true);
-            $table->string('date_heure_fin')->nullable(true);
+            $table->dateTime('date_heure_debut')->nullable(true);
+            $table->dateTime('date_heure_fin')->nullable(true);
             $table->string('nbre_jours_conge_pris')->nullable(true);
             $table->string('nbre_heures_conge_pris')->nullable(true);
             $table->string('etat')->nullable(true);
@@ -59,8 +59,6 @@ class CreateHrTakeCongesTable extends Migration
      */
     public function down()
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
         Schema::dropIfExists('hr_take_conges');
-        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

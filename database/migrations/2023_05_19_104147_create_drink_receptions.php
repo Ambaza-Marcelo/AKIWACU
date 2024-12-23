@@ -15,7 +15,7 @@ class CreateDrinkReceptions extends Migration
     {
         Schema::create('drink_receptions', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
+            $table->dateTime('date');
             $table->string('reception_no');
             $table->unique('reception_no');
             $table->string('reception_signature')->nullable(true);

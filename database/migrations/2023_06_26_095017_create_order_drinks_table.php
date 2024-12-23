@@ -15,7 +15,7 @@ class CreateOrderDrinksTable extends Migration
     {
         Schema::create('order_drinks', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
+            $table->dateTime('date');
             $table->string('order_no');
             $table->unique('order_no');
             $table->string('order_signature')->nullable(true);

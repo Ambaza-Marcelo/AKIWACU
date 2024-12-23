@@ -66,14 +66,6 @@ class CreateNoteCreditsTable extends Migration
             $table->timestamp('invoice_signature_date')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->string('invoice_signature')->nullable(true);
             $table->string('invoice_identifier')->nullable(true);
-            $table->string('montant_total_credit')->nullable(true);
-            $table->string('montant_recouvre')->nullable(true);
-            $table->string('reste_credit')->nullable(true);
-            $table->string('bank_name')->nullable(true);
-            $table->string('cheque_no')->nullable(true);
-            $table->string('bordereau_no')->nullable(true);
-            $table->string('date_recouvrement')->nullable(true);
-            $table->string('nom_recouvrement')->nullable(true);
             $table->text('note_reduction')->nullable(true);
             $table->text('note_credit')->nullable(true);
             $table->text('note_recouvrement')->nullable(true);
@@ -83,7 +75,6 @@ class CreateNoteCreditsTable extends Migration
             $table->string('paid_either')->nullable(true);
             $table->string('statut')->nullable(true);
             $table->string('statut_paied')->nullable(true);
-            $table->string('etat_recouvrement')->nullable(true);
             $table->bigInteger('employe_id')->unsigned()->nullable(true);
             $table->foreign('employe_id')
                     ->references('id')
@@ -96,16 +87,16 @@ class CreateNoteCreditsTable extends Migration
                     ->on('clients')
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
-            $table->bigInteger('booking_client_id')->unsigned()->nullable(true);
-            $table->foreign('booking_client_id')
-                    ->references('id')
-                    ->on('booking_clients')
-                    ->onUpdate('cascade')
-                    ->onDelete('cascade');
             $table->bigInteger('table_id')->unsigned()->nullable(true);
             $table->foreign('table_id')
                     ->references('id')
                     ->on('tables')
+                    ->onUpdate('cascade')
+                    ->onDelete('cascade');
+            $table->bigInteger('banque_id')->unsigned()->nullable(true);
+            $table->foreign('banque_id')
+                    ->references('id')
+                    ->on('hr_banques')
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
             $table->timestamps();

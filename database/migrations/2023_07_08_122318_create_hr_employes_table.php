@@ -26,7 +26,7 @@ class CreateHrEmployesTable extends Migration
             $table->string('fathername')->nullable(true);
             $table->string('mothername')->nullable(true);
             $table->string('cni')->nullable(true);
-            $table->string('birthdate')->nullable(true);
+            $table->date('birthdate')->nullable(true);
             $table->string('bloodgroup')->nullable(true);
             $table->string('pays')->nullable(true);
             $table->string('province')->nullable(true);
@@ -46,8 +46,8 @@ class CreateHrEmployesTable extends Migration
             $table->string('code_departement')->nullable(true);
             $table->string('code_service')->nullable(true);
             $table->string('document')->nullable(true);
-            $table->string('date_debut')->nullable(true);
-            $table->string('date_fin')->nullable(true);
+            $table->dateTime('date_debut')->nullable(true);
+            $table->dateTime('date_fin')->nullable(true);
             $table->string('etat')->default('0');
             $table->string('somme_salaire_base')->nullable(true);
             $table->string('somme_salaire_net')->nullable(true);
@@ -112,8 +112,6 @@ class CreateHrEmployesTable extends Migration
      */
     public function down()
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
         Schema::dropIfExists('hr_employes');
-        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

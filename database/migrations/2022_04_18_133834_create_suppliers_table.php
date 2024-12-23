@@ -29,11 +29,17 @@ class CreateSuppliersTable extends Migration
             $table->string('company')->nullable(true);
             $table->string('etat')->nullable(true);
             $table->string('autre')->nullable(true);
-            $table->string('total_amount_paied')->nullable(true);
-            $table->string('total_amount_credit')->nullable(true);
-            $table->string('avalise_par')->nullable(true);
+            $table->string('bank_account_number')->nullable(true);
+            $table->string('bank_branch_name')->nullable(true);
+            $table->string('currency')->nullable(true);
             $table->string('date')->nullable(true);
             $table->string('points')->nullable(true);
+            $table->bigInteger('banque_id')->unsigned()->nullable(true);
+            $table->foreign('banque_id')
+                    ->references('id')
+                    ->on('hr_banques')
+                    ->onUpdate('cascade')
+                    ->onDelete('cascade');
             $table->timestamps();
         });
     }

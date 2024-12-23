@@ -27,9 +27,9 @@ class CreateTablesTable extends Migration
             $table->string('flag')->default('0');
             $table->string('opened_by')->nullable(true);
             $table->string('closed_by')->nullable(true);
-            $table->string('total_amount_paying')->nullable(true);
-            $table->string('total_amount_paid')->nullable(true);
-            $table->string('total_amount_remaining')->nullable(true);
+            $table->double('total_amount_paying')->nullable(true);
+            $table->double('total_amount_paid')->nullable(true);
+            $table->double('total_amount_remaining')->nullable(true);
             $table->timestamps();
         });
     }

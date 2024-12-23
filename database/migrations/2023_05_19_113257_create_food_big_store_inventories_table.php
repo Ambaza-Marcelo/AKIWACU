@@ -19,7 +19,7 @@ class CreateFoodBigStoreInventoriesTable extends Migration
             $table->unique('inventory_no');
             $table->string('code_store')->nullable();
             $table->string('inventory_signature')->nullable(true);
-            $table->string('date');
+            $table->dateTime('date');
             $table->string('title')->nullable(true);
             $table->text('description');
             $table->string('status')->nullable(true);

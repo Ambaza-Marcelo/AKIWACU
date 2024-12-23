@@ -22,7 +22,7 @@ class CreateHrStagiairesTable extends Migration
             $table->string('fathername')->nullable(true);
             $table->string('mothername')->nullable(true);
             $table->string('cni')->nullable(true);
-            $table->string('birthdate')->nullable(true);
+            $table->date('birthdate')->nullable(true);
             $table->string('bloodgroup')->nullable(true);
             $table->string('province')->nullable(true);
             $table->string('commune')->nullable(true);
@@ -37,8 +37,8 @@ class CreateHrStagiairesTable extends Migration
             $table->string('quartier_residence_actuel')->nullable(true);
             $table->string('avenue_residence_actuel')->nullable(true);
             $table->string('numero')->nullable(true);
-            $table->string('date_debut')->nullable(true);
-            $table->string('date_fin')->nullable(true);
+            $table->dateTime('date_debut')->nullable(true);
+            $table->dateTime('date_fin')->nullable(true);
             $table->string('somme_prime')->nullable(true);
             $table->string('auteur')->nullable(true);
             $table->bigInteger('departement_id')->unsigned()->nullable(true);
@@ -94,8 +94,6 @@ class CreateHrStagiairesTable extends Migration
      */
     public function down()
     {
-        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
         Schema::dropIfExists('hr_stagiaires');
-        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

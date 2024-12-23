@@ -15,7 +15,7 @@ class CreateDrinkReceptionDetails extends Migration
     {
         Schema::create('drink_reception_details', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
+            $table->dateTime('date');
             $table->string('quantity_ordered')->nullable(true);
             $table->string('quantity_received')->nullable(true);
             $table->string('quantity_remaining')->nullable(true);

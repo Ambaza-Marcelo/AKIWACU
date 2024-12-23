@@ -15,7 +15,7 @@ class CreateBarristStockinDetailsTable extends Migration
     {
         Schema::create('barrist_stockin_details', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
+            $table->dateTime('date');
             $table->string('quantity')->nullable(true);
             $table->string('unit')->nullable(true);
             $table->string('price_nvat')->nullable(true);

@@ -15,7 +15,7 @@ class CreateBarristRequisitionsTable extends Migration
     {
         Schema::create('barrist_requisitions', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
+            $table->dateTime('date');
             $table->string('requisition_no');
             $table->unique('requisition_no');
             $table->string('requisition_signature')->nullable(true);
