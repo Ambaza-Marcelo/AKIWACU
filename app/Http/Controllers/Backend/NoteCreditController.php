@@ -2765,6 +2765,7 @@ class NoteCreditController extends Controller
             'payment_type'=>$facture->payment_type,
             'customer_name'=>$facture->client->customer_name,
             'customer_TIN'=>$facture->client->customer_TIN,
+            'vat_customer_payer'=>$facture->client->vat_customer_payer,
             'customer_address'=>$facture->client->customer_address,
             'invoice_signature'=> $facture->invoice_signature,
             'invoice_currency'=> $facture->invoice_currency,
