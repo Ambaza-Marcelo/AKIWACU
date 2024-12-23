@@ -22,11 +22,11 @@ class CreateSettingsTable extends Migration
             $table->unique('nif');
             $table->string('rc');
             $table->unique('rc');
-            $table->string('vat_taxpayer');
-            $table->string('ct_taxpayer');
-            $table->string('tl_taxpayer');
-            $table->string('item_tsce_tax');
-            $table->string('item_ott_tax');
+            $table->boolean('vat_taxpayer')->default(0);
+            $table->boolean('ct_taxpayer')->default(0);
+            $table->boolean('tl_taxpayer')->default(0);
+            $table->boolean('item_tsce_tax')->default(0);
+            $table->boolean('item_ott_tax')->default(0);
             $table->string('tp_fiscal_center');
             $table->string('tp_activity_sector');
             $table->string('tp_legal_form')->nullable(true);
@@ -40,7 +40,7 @@ class CreateSettingsTable extends Migration
             $table->string('telephone2')->nullable(true);
             $table->string('email')->nullable(true);
             $table->unique('email');
-            $table->string('max_line');
+            $table->double('max_line')->default(500);
             $table->string('logo')->nullable(true);
             $table->string('developpeur')->nullable(true);
             $table->timestamps();
