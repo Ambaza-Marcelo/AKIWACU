@@ -231,29 +231,11 @@ class FactureController extends Controller
 
             if($request->vat_taxpayer == 1){
 
-                if (!empty($brarudi_price) || $brarudi_price != 0) {
-                    $d_prix_tva = $item_price[$count] - $brarudi_price;
-                    if ($d_prix_tva <= 0) {
-                        $item_total_amount = ($item_price[$count]*$item_quantity[$count]);
-                        $vat = 0;
-                        $item_price_nvat = ($item_total_amount - $vat);
-                        $item_price_wvat = ($item_price_nvat + $vat);
-                    }else{
-                        $item_total_amount = ($item_price[$count]*$item_quantity[$count]);
-                        $item_total_amount_brarudi = ($d_prix_tva*$item_quantity[$count]);
-                        $item_price_nvat2 = ($item_total_amount_brarudi * 100)/110;
-                        $vat = ($item_price_nvat2 * $taux_tva)/100;
-                        $item_price_nvat = ($item_total_amount - $vat);
-                        $item_price_wvat = ($item_price_nvat + $vat);
-                    } 
-                }else{
-
-                    $item_total_amount = ($item_price[$count]*$item_quantity[$count]);
+                $item_total_amount = ($item_price[$count]*$item_quantity[$count]);
                     
-                    $item_price_nvat = ($item_total_amount* 100)/110;
-                    $vat = ($item_price_nvat * $taux_tva)/100;
-                    $item_price_wvat = ($item_price_nvat + $vat); 
-                }
+                $item_price_nvat = ($item_total_amount* 100)/110;
+                $vat = ($item_price_nvat * $taux_tva)/100;
+                $item_price_wvat = ($item_price_nvat + $vat); 
 
             }else{
                 $item_price_nvat = ($item_price[$count]*$item_quantity[$count])+$item_ct[$count];
