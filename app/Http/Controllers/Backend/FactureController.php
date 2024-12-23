@@ -170,7 +170,7 @@ class FactureController extends Controller
                 'tp_phone_number' => 'required|max:20|min:6',
                 'tp_address_commune' => 'required|max:50|min:5',
                 'tp_address_quartier' => 'required|max:50|min:5',
-                //'client_id' => 'required|max:100|min:3',
+                'client_id' => 'required',
                 //'customer_TIN' => 'required|max:30|min:4',
                 //'customer_address' => 'required|max:100|min:5',
                 //'invoice_signature' => 'required|max:90|min:10',
@@ -223,6 +223,8 @@ class FactureController extends Controller
 
             $invoice_signature = $request->tp_TIN."/".config('app.obr_test_username')."/".Carbon::parse($invoice_date)->format('YmdHis')."/".$invoice_number;
 
+        $client = EGRClient::where('id',$request->client_id)->first();
+
         for( $count = 0; $count < count($drink_id); $count++ )
         {
             $taux_tva = Drink::where('id', $drink_id[$count])->value('vat');
@@ -266,8 +268,9 @@ class FactureController extends Controller
             'tp_legal_form'=>$request->tp_legal_form,
             'payment_type'=>$request->payment_type,
             'client_id'=>$request->client_id,
-            'customer_TIN'=>$request->customer_TIN,
-            'customer_address'=>$request->customer_address,
+            'customer_TIN'=>$client->customer_TIN,
+            'customer_address'=>$client->customer_address,
+            'vat_customer_payer'=>$client->vat_customer_payer,
             'invoice_signature'=> $invoice_signature,
             'drink_order_no'=>$request->drink_order_no[$count],
             'cancelled_invoice_ref'=>$request->cancelled_invoice_ref,
@@ -321,8 +324,9 @@ class FactureController extends Controller
             $facture->invoice_currency = $request->invoice_currency;
             $facture->payment_type = $request->payment_type;
             $facture->client_id = $request->client_id;
-            $facture->customer_TIN = $request->customer_TIN;
-            $facture->customer_address = $request->customer_address;
+            $facture->customer_TIN = $client->customer_TIN;
+            $facture->customer_address = $client->customer_address;
+            $facture->vat_customer_payer = $client->vat_customer_payer;
             $facture->invoice_signature = $invoice_signature;
             $facture->cancelled_invoice_ref = $request->cancelled_invoice_ref;
             $facture->cancelled_invoice = $request->cancelled_invoice;
@@ -381,7 +385,7 @@ class FactureController extends Controller
                 'tp_phone_number' => 'required|max:20|min:6',
                 'tp_address_commune' => 'required|max:50|min:5',
                 'tp_address_quartier' => 'required|max:50|min:5',
-                //'client_id' => 'required|max:100|min:3',
+                'client_id' => 'required',
                 //'customer_TIN' => 'required|max:30|min:4',
                 //'customer_address' => 'required|max:100|min:5',
                 //'invoice_signature' => 'required|max:90|min:10',
@@ -433,6 +437,8 @@ class FactureController extends Controller
 
             $invoice_signature = $request->tp_TIN."/".config('app.obr_test_username')."/".Carbon::parse($invoice_date)->format('YmdHis')."/".$invoice_number;
 
+            $client = EGRClient::where('id',$request->client_id)->first();
+
         for( $count = 0; $count < count($barrist_item_id); $count++ )
         {
             $taux_tva = BarristItem::where('id', $barrist_item_id[$count])->value('vat');
@@ -473,8 +479,9 @@ class FactureController extends Controller
             'tp_legal_form'=>$request->tp_legal_form,
             'payment_type'=>$request->payment_type,
             'client_id'=>$request->client_id,
-            'customer_TIN'=>$request->customer_TIN,
-            'customer_address'=>$request->customer_address,
+            'customer_TIN'=>$client->customer_TIN,
+            'customer_address'=>$client->customer_address,
+            'vat_customer_payer'=>$client->vat_customer_payer,
             'invoice_signature'=> $invoice_signature,
             'barrist_order_no'=>$request->barrist_order_no[$count],
             'cancelled_invoice_ref'=>$request->cancelled_invoice_ref,
@@ -525,8 +532,9 @@ class FactureController extends Controller
             $facture->invoice_currency = $request->invoice_currency;
             $facture->payment_type = $request->payment_type;
             $facture->client_id = $request->client_id;
-            $facture->customer_TIN = $request->customer_TIN;
-            $facture->customer_address = $request->customer_address;
+            $facture->customer_TIN = $client->customer_TIN;
+            $facture->customer_address = $client->customer_address;
+            $facture->vat_customer_payer = $client->vat_customer_payer;
             $facture->invoice_signature = $invoice_signature;
             $facture->cancelled_invoice_ref = $request->cancelled_invoice_ref;
             $facture->cancelled_invoice = $request->cancelled_invoice;
@@ -582,7 +590,7 @@ class FactureController extends Controller
                 'tp_phone_number' => 'required|max:20|min:6',
                 'tp_address_commune' => 'required|max:50|min:5',
                 'tp_address_quartier' => 'required|max:50|min:5',
-                //'client_id' => 'required|max:100|min:3',
+                'client_id' => 'required',
                 //'customer_TIN' => 'required|max:30|min:4',
                 //'customer_address' => 'required|max:100|min:5',
                 //'invoice_signature' => 'required|max:90|min:10',
@@ -634,6 +642,8 @@ class FactureController extends Controller
 
             $invoice_signature = $request->tp_TIN."/".config('app.obr_test_username')."/".Carbon::parse($invoice_date)->format('YmdHis')."/".$invoice_number;
 
+            $client = EGRClient::where('id',$request->client_id)->first();
+
         for( $count = 0; $count < count($food_item_id); $count++ )
         {
             $taux_tva = FoodItem::where('id', $food_item_id[$count])->value('vat');
@@ -674,8 +684,9 @@ class FactureController extends Controller
             'tp_legal_form'=>$request->tp_legal_form,
             'payment_type'=>$request->payment_type,
             'client_id'=>$request->client_id,
-            'customer_TIN'=>$request->customer_TIN,
-            'customer_address'=>$request->customer_address,
+            'customer_TIN'=>$client->customer_TIN,
+            'customer_address'=>$client->customer_address,
+            'vat_customer_payer'=>$client->vat_customer_payer,
             'invoice_signature'=> $invoice_signature,
             'food_order_no'=>$request->food_order_no[$count],
             'cancelled_invoice_ref'=>$request->cancelled_invoice_ref,
@@ -725,8 +736,9 @@ class FactureController extends Controller
             $facture->invoice_currency = $request->invoice_currency;
             $facture->payment_type = $request->payment_type;
             $facture->client_id = $request->client_id;
-            $facture->customer_TIN = $request->customer_TIN;
-            $facture->customer_address = $request->customer_address;
+            $facture->customer_TIN = $client->customer_TIN;
+            $facture->customer_address = $client->customer_address;
+            $facture->vat_customer_payer = $client->vat_customer_payer;
             $facture->invoice_signature = $invoice_signature;
             $facture->cancelled_invoice_ref = $request->cancelled_invoice_ref;
             $facture->cancelled_invoice = $request->cancelled_invoice;
@@ -782,7 +794,7 @@ class FactureController extends Controller
                 'tp_phone_number' => 'required|max:20|min:6',
                 'tp_address_commune' => 'required|max:50|min:5',
                 'tp_address_quartier' => 'required|max:50|min:5',
-                //'client_id' => 'required|max:100|min:3',
+                'client_id' => 'required',
                 //'customer_TIN' => 'required|max:30|min:4',
                 //'customer_address' => 'required|max:100|min:5',
                 //'invoice_signature' => 'required|max:90|min:10',
@@ -834,6 +846,8 @@ class FactureController extends Controller
 
             $invoice_signature = $request->tp_TIN."/".config('app.obr_test_username')."/".Carbon::parse($invoice_date)->format('YmdHis')."/".$invoice_number;
 
+            $client = EGRClient::where('id',$request->client_id)->first();
+
         for( $count = 0; $count < count($bartender_item_id); $count++ )
         {
             $taux_tva = BartenderItem::where('id', $bartender_item_id[$count])->value('vat');
@@ -874,8 +888,9 @@ class FactureController extends Controller
             'tp_legal_form'=>$request->tp_legal_form,
             'payment_type'=>$request->payment_type,
             'client_id'=>$request->client_id,
-            'customer_TIN'=>$request->customer_TIN,
-            'customer_address'=>$request->customer_address,
+            'customer_TIN'=>$client->customer_TIN,
+            'customer_address'=>$client->customer_address,
+            'vat_customer_payer'=>$client->vat_customer_payer,
             'invoice_signature'=> $invoice_signature,
             'bartender_order_no'=>$request->bartender_order_no[$count],
             'cancelled_invoice_ref'=>$request->cancelled_invoice_ref,
@@ -925,8 +940,9 @@ class FactureController extends Controller
             $facture->invoice_currency = $request->invoice_currency;
             $facture->payment_type = $request->payment_type;
             $facture->client_id = $request->client_id;
-            $facture->customer_TIN = $request->customer_TIN;
-            $facture->customer_address = $request->customer_address;
+            $facture->customer_TIN = $client->customer_TIN;
+            $facture->customer_address = $client->customer_address;
+            $facture->vat_customer_payer = $client->vat_customer_payer;
             $facture->invoice_signature = $invoice_signature;
             $facture->cancelled_invoice_ref = $request->cancelled_invoice_ref;
             $facture->cancelled_invoice = $request->cancelled_invoice;
@@ -982,7 +998,7 @@ class FactureController extends Controller
                 'tp_phone_number' => 'required|max:20|min:6',
                 'tp_address_commune' => 'required|max:50|min:5',
                 'tp_address_quartier' => 'required|max:50|min:5',
-                //'client_id' => 'required|max:100|min:3',
+                'client_id' => 'required',
                 //'customer_TIN' => 'required|max:30|min:4',
                 //'customer_address' => 'required|max:100|min:5',
                 //'invoice_signature' => 'required|max:90|min:10',
@@ -1031,6 +1047,8 @@ class FactureController extends Controller
 
             $invoice_signature = $request->tp_TIN."/".config('app.obr_test_username')."/".Carbon::parse($invoice_date)->format('YmdHis')."/".$invoice_number;
 
+            $client = EGRClient::where('id',$request->client_id)->first();
+
         if (!empty($salle_id)) {
             for( $count = 0; $count < count($salle_id); $count++ )
         {
@@ -1071,8 +1089,9 @@ class FactureController extends Controller
             'tp_legal_form'=>$request->tp_legal_form,
             'payment_type'=>$request->payment_type,
             'client_id'=>$request->client_id,
-            'customer_TIN'=>$request->customer_TIN,
-            'customer_address'=>$request->customer_address,
+            'customer_TIN'=>$client->customer_TIN,
+            'customer_address'=>$client->customer_address,
+            'vat_customer_payer'=>$client->vat_customer_payer,
             'invoice_signature'=> $invoice_signature,
             'booking_no'=>$request->booking_no,
             'cancelled_invoice_ref'=>$request->cancelled_invoice_ref,
@@ -1122,8 +1141,9 @@ class FactureController extends Controller
             $facture->invoice_currency = $request->invoice_currency;
             $facture->payment_type = $request->payment_type;
             $facture->client_id = $request->client_id;
-            $facture->customer_TIN = $request->customer_TIN;
-            $facture->customer_address = $request->customer_address;
+            $facture->customer_TIN = $client->customer_TIN;
+            $facture->customer_address = $client->customer_address;
+            $facture->vat_customer_payer = $client->vat_customer_payer;
             $facture->invoice_signature = $invoice_signature;
             $facture->cancelled_invoice_ref = $request->cancelled_invoice_ref;
             $facture->cancelled_invoice = $request->cancelled_invoice;
@@ -1178,8 +1198,9 @@ class FactureController extends Controller
             'tp_legal_form'=>$request->tp_legal_form,
             'payment_type'=>$request->payment_type,
             'client_id'=>$request->client_id,
-            'customer_TIN'=>$request->customer_TIN,
-            'customer_address'=>$request->customer_address,
+            'customer_TIN'=>$client->customer_TIN,
+            'customer_address'=>$client->customer_address,
+            'vat_customer_payer'=>$client->vat_customer_payer,
             'invoice_signature'=> $invoice_signature,
             'booking_no'=>$request->booking_no,
             'cancelled_invoice_ref'=>$request->cancelled_invoice_ref,
@@ -1229,8 +1250,9 @@ class FactureController extends Controller
             $facture->invoice_currency = $request->invoice_currency;
             $facture->payment_type = $request->payment_type;
             $facture->client_id = $request->client_id;
-            $facture->customer_TIN = $request->customer_TIN;
-            $facture->customer_address = $request->customer_address;
+            $facture->customer_TIN = $client->customer_TIN;
+            $facture->customer_address = $client->customer_address;
+            $facture->vat_customer_payer = $client->vat_customer_payer;
             $facture->invoice_signature = $invoice_signature;
             $facture->cancelled_invoice_ref = $request->cancelled_invoice_ref;
             $facture->cancelled_invoice = $request->cancelled_invoice;
@@ -1285,8 +1307,9 @@ class FactureController extends Controller
             'tp_legal_form'=>$request->tp_legal_form,
             'payment_type'=>$request->payment_type,
             'client_id'=>$request->client_id,
-            'customer_TIN'=>$request->customer_TIN,
-            'customer_address'=>$request->customer_address,
+            'customer_TIN'=>$client->customer_TIN,
+            'customer_address'=>$client->customer_address,
+            'vat_customer_payer'=>$client->vat_customer_payer,
             'invoice_signature'=> $invoice_signature,
             'booking_no'=>$request->booking_no,
             'cancelled_invoice_ref'=>$request->cancelled_invoice_ref,
@@ -1336,8 +1359,9 @@ class FactureController extends Controller
             $facture->invoice_currency = $request->invoice_currency;
             $facture->payment_type = $request->payment_type;
             $facture->client_id = $request->client_id;
-            $facture->customer_TIN = $request->customer_TIN;
-            $facture->customer_address = $request->customer_address;
+            $facture->customer_TIN = $client->customer_TIN;
+            $facture->customer_address = $client->customer_address;
+            $facture->vat_customer_payer = $client->vat_customer_payer;
             $facture->invoice_signature = $invoice_signature;
             $facture->cancelled_invoice_ref = $request->cancelled_invoice_ref;
             $facture->cancelled_invoice = $request->cancelled_invoice;
@@ -1392,8 +1416,9 @@ class FactureController extends Controller
             'tp_legal_form'=>$request->tp_legal_form,
             'payment_type'=>$request->payment_type,
             'client_id'=>$request->client_id,
-            'customer_TIN'=>$request->customer_TIN,
-            'customer_address'=>$request->customer_address,
+            'customer_TIN'=>$client->customer_TIN,
+            'customer_address'=>$client->customer_address,
+            'vat_customer_payer'=>$client->vat_customer_payer,
             'invoice_signature'=> $invoice_signature,
             'booking_no'=>$request->booking_no,
             'cancelled_invoice_ref'=>$request->cancelled_invoice_ref,
@@ -1443,8 +1468,9 @@ class FactureController extends Controller
             $facture->invoice_currency = $request->invoice_currency;
             $facture->payment_type = $request->payment_type;
             $facture->client_id = $request->client_id;
-            $facture->customer_TIN = $request->customer_TIN;
-            $facture->customer_address = $request->customer_address;
+            $facture->customer_TIN = $client->customer_TIN;
+            $facture->customer_address = $client->customer_address;
+            $facture->vat_customer_payer = $client->vat_customer_payer;
             $facture->invoice_signature = $invoice_signature;
             $facture->cancelled_invoice_ref = $request->cancelled_invoice_ref;
             $facture->cancelled_invoice = $request->cancelled_invoice;
@@ -1499,8 +1525,9 @@ class FactureController extends Controller
             'tp_legal_form'=>$request->tp_legal_form,
             'payment_type'=>$request->payment_type,
             'client_id'=>$request->client_id,
-            'customer_TIN'=>$request->customer_TIN,
-            'customer_address'=>$request->customer_address,
+            'customer_TIN'=>$client->customer_TIN,
+            'customer_address'=>$client->customer_address,
+            'vat_customer_payer'=>$client->vat_customer_payer,
             'invoice_signature'=> $invoice_signature,
             'booking_no'=>$request->booking_no,
             'cancelled_invoice_ref'=>$request->cancelled_invoice_ref,
@@ -1550,8 +1577,9 @@ class FactureController extends Controller
             $facture->invoice_currency = $request->invoice_currency;
             $facture->payment_type = $request->payment_type;
             $facture->client_id = $request->client_id;
-            $facture->customer_TIN = $request->customer_TIN;
-            $facture->customer_address = $request->customer_address;
+            $facture->customer_TIN = $client->customer_TIN;
+            $facture->customer_address = $client->customer_address;
+            $facture->vat_customer_payer = $client->vat_customer_payer;
             $facture->invoice_signature = $invoice_signature;
             $facture->cancelled_invoice_ref = $request->cancelled_invoice_ref;
             $facture->cancelled_invoice = $request->cancelled_invoice;
@@ -1607,8 +1635,9 @@ class FactureController extends Controller
             'tp_legal_form'=>$request->tp_legal_form,
             'payment_type'=>$request->payment_type,
             'client_id'=>$request->client_id,
-            'customer_TIN'=>$request->customer_TIN,
-            'customer_address'=>$request->customer_address,
+            'customer_TIN'=>$client->customer_TIN,
+            'customer_address'=>$client->customer_address,
+            'vat_customer_payer'=>$client->vat_customer_payer,
             'invoice_signature'=> $invoice_signature,
             'booking_no'=>$request->booking_no,
             'cancelled_invoice_ref'=>$request->cancelled_invoice_ref,
@@ -1658,8 +1687,9 @@ class FactureController extends Controller
             $facture->invoice_currency = $request->invoice_currency;
             $facture->payment_type = $request->payment_type;
             $facture->client_id = $request->client_id;
-            $facture->customer_TIN = $request->customer_TIN;
-            $facture->customer_address = $request->customer_address;
+            $facture->customer_TIN = $client->customer_TIN;
+            $facture->customer_address = $client->customer_address;
+            $facture->vat_customer_payer = $client->vat_customer_payer;
             $facture->invoice_signature = $invoice_signature;
             $facture->cancelled_invoice_ref = $request->cancelled_invoice_ref;
             $facture->cancelled_invoice = $request->cancelled_invoice;
