@@ -110,7 +110,7 @@ class DrinkSmallStoreInventoryController extends Controller
             try {DB::beginTransaction();
 
             $drink_id = $request->drink_id;
-            $date = $request->date;
+            $date = Carbon::now();
             //$unit = $request->unit;
             $quantity = $request->quantity;
             $quantity_ml = $request->quantity_ml;
@@ -378,12 +378,12 @@ class DrinkSmallStoreInventoryController extends Controller
                 ->update(['verified' => true]);
 
                 DrinkSmallReport::insert($reportData);
-        /*
+        
         
         $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
         $response = Http::post($theUrl, [
-            'username'=> "wsconfig('app.tin_number_company')00565",
-            'password'=> "5VS(GO:p"
+            'username'=> config('app.obr_test_username'),
+            'password'=> config('app.obr_test_pwd')
 
         ]);
         $data1 =  json_decode($response);
@@ -395,20 +395,22 @@ class DrinkSmallStoreInventoryController extends Controller
         $response = Http::withHeaders([
         'Authorization' => 'Bearer '.$token,
         'Accept' => 'application/json'])->post($theUrl, [
-            'system_or_device_id'=> "wsconfig('app.tin_number_company')00565",
+            'system_or_device_id'=> config('app.obr_test_username'),
             'item_code'=> $data->drink->code,
             'item_designation'=>$data->drink->name,
             'item_quantity'=>$data->new_quantity,
-            'item_measurement_unit'=>$data->new_unit,
+            'item_measurement_unit'=>$data->drink->drinkMeasurement->purchase_unit,
             'item_purchase_or_sale_price'=>$data->new_purchase_price,
             'item_purchase_or_sale_currency'=> "BIF",
             'item_movement_type'=>"EI",
             'item_movement_invoice_ref'=>"",
             'item_movement_description'=>$data->description,
-            'item_movement_date'=> Carbon::parse($data->updated_at)->format('Y-m-d H:i:s'),
+            'item_movement_date'=> $data->date,
 
         ]); 
-        */
+
+        $dataObr =  json_decode($response);
+        
      
     }
         DrinkSmallStoreInventory::where('inventory_no', '=', $inventory_no)

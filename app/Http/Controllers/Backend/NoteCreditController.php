@@ -1890,13 +1890,14 @@ class NoteCreditController extends Controller
                         DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id',$data->drink_id)
                         ->update($donnees);
                         $flag = 0;
-                        /*
+                        
                         $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
                         $response = Http::post($theUrl, [
-                            'username'=> "wsconfig('app.tin_number_company')00565",
-                            'password'=> "5VS(GO:p"
+                            'username'=> config('app.obr_test_username'),
+                            'password'=> config('app.obr_test_pwd')
 
                         ]);
+
                         $data1 =  json_decode($response);
                         $data2 = ($data1->result);       
     
@@ -1906,20 +1907,22 @@ class NoteCreditController extends Controller
                         $response = Http::withHeaders([
                         'Authorization' => 'Bearer '.$token,
                         'Accept' => 'application/json'])->post($theUrl, [
-                            'system_or_device_id'=> "wsconfig('app.tin_number_company')00565",
+                            'system_or_device_id'=> config('app.obr_test_username'),
                             'item_code'=> $data->drink->code,
                             'item_designation'=>$data->drink->name,
                             'item_quantity'=>$data->item_quantity,
-                            'item_measurement_unit'=>$data->drink->unit,
-                            'item_purchase_or_sale_price'=>$data->drink->purchase_price,
+                            'item_measurement_unit'=>$data->drink->drinkMeasurement->purchase_unit,
+                            'item_purchase_or_sale_price'=>$data->cump,
                             'item_purchase_or_sale_currency'=> "BIF",
-                            'item_movement_type'=> 'SN',
+                            'item_movement_type'=> 'ER',
                             'item_movement_invoice_ref'=> "",
-                            'item_movement_description'=> 'SORTIES NORMALES DE VENTE DES MARCHANDISE',
-                            'item_movement_date'=> Carbon::parse($data->updated_at)->format('Y-m-d H:i:s'),
+                            'item_movement_description'=> 'NOTE DE CREDIT OU FACTURE AVOIR',
+                            'item_movement_date'=> $data->invoice_date,
 
                         ]);
-                        */
+                        
+
+                        $dataObr =  json_decode($response);
                         
             }else{
 
@@ -2616,34 +2619,18 @@ class NoteCreditController extends Controller
             ->sum('vat');
         $client = NoteCredit::where('invoice_number', $invoice_number)->value('customer_name');
         $date = NoteCredit::where('invoice_number', $invoice_number)->value('invoice_date');
-       
-        $pdf = PDF::loadView('backend.pages.note_credit.facture',compact('datas','invoice_number','totalValue','item_total_amount','client','setting','date','data','invoice_signature','facture','totalVat'))->setPaper('a4', 'portrait');
-
-        Storage::put('public/note_credit/'.$invoice_number.'.pdf', $pdf->output());
-
 
         $factures = NoteCredit::where('invoice_number', $invoice_number)->get();
 
-        $datas = NoteCreditDetail::where('invoice_number', $invoice_number)->get();
-        /*
-        NoteCredit::where('invoice_number', '=', $invoice_number)
-                ->update(['statut' => 1]);
-            NoteCreditDetail::where('invoice_number', '=', $invoice_number)
-                ->update(['statut' => 1]);
-                */
 
-            // download pdf file
-        return $pdf->download('FACTURE_D_AVOIR_'.$invoice_number.'.pdf');
-
-        /*
         $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
         $response = Http::post($theUrl, [
-            'username'=> "wsconfig('app.tin_number_company')00565",
-            'password'=> "5VS(GO:p"
+            'username'=> config('app.obr_test_username'),
+            'password'=> config('app.obr_test_pwd')
 
         ]);
-        $data =  json_decode($response);
-        $data2 = ($data->result);
+        $dataObr =  json_decode($response);
+        $data2 = ($dataObr->result);
         
     
         $token = $data2->token;
@@ -2776,9 +2763,9 @@ class NoteCreditController extends Controller
             'tp_activity_sector'=>$facture->tp_activity_sector,
             'tp_legal_form'=>$facture->tp_legal_form,
             'payment_type'=>$facture->payment_type,
-            'customer_name'=>$facture->customer_name,
-            'customer_TIN'=>$facture->customer_TIN,
-            'customer_address'=>$facture->customer_address,
+            'customer_name'=>$facture->client->customer_name,
+            'customer_TIN'=>$facture->client->customer_TIN,
+            'customer_address'=>$facture->client->customer_address,
             'invoice_signature'=> $facture->invoice_signature,
             'invoice_currency'=> $facture->invoice_currency,
             'cancelled_invoice_ref'=> $facture->cancelled_invoice_ref,
@@ -2791,24 +2778,33 @@ class NoteCreditController extends Controller
 
         }
 
-        $data =  json_decode($response);
-        $done = $data->success;
-        $msg = $data->msg;
+        $dataObr =  json_decode($response);
+        $done = $dataObr->success;
+        $msg = $dataObr->msg;
 
+       
+        $pdf = PDF::loadView('backend.pages.note_credit.facture',compact('datas','invoice_number','totalValue','item_total_amount','client','setting','date','data','invoice_signature','facture','totalVat'))->setPaper('a4', 'portrait');
+
+        Storage::put('public/note_credit/'.$invoice_number.'.pdf', $pdf->output());
+
+
+        $factures = NoteCredit::where('invoice_number', $invoice_number)->get();
+
+        $datas = NoteCreditDetail::where('invoice_number', $invoice_number)->get();
 
         if ($done == true) {
-            Facture::where('invoice_number', '=', $invoice_number)
+            NoteCredit::where('invoice_number', '=', $invoice_number)
                 ->update(['statut' => 1]);
-            FactureDetail::where('invoice_number', '=', $invoice_number)
+            NoteCreditDetail::where('invoice_number', '=', $invoice_number)
                 ->update(['statut' => 1]);
 
             // download pdf file
-        return $pdf->download('FACTURE_'.$invoice_number.'.pdf');
+        return $pdf->download('FACTURE_D_AVOIR_'.$invoice_number.'.pdf');
 
         }else{
             return $response->json();
         }
-        */
+        
     }
 
 

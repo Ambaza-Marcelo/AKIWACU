@@ -12,6 +12,8 @@ use Spatie\Permission\Models\Permission;
 use App\Models\Address;
 use App\Models\Supplier;
 use App\Exports\SupplierExport;
+use Illuminate\Support\Facades\Http;
+use GuzzleHttp\Client;
 use Excel;
 
 class SupplierController extends Controller
@@ -71,23 +73,91 @@ class SupplierController extends Controller
 
         // Validation Data
         $request->validate([
-            'name' => 'required|max:100',
-            'mail' => 'required|min:10',
-            'phone_no' => 'required',
-            //'category' => 'required'
+            'tp_type' => 'required',
+            'telephone' => 'required',
         ]);
 
-        // Create New Supplier
-        $supplier = new Supplier();
-        $supplier->name = $request->name;
-        $supplier->mail = $request->mail;
-        $supplier->phone_no = $request->phone_no;
-        $supplier->address_id = $request->address_id;
-        $supplier->category = $request->category;
-        $supplier->vat_taxpayer = $request->vat_taxpayer;
-        $supplier->tin_number = $request->tin_number;
-        $supplier->created_by = $this->user->name;
-        $supplier->save();
+        $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
+        $response = Http::post($theUrl, [
+            'username'=> config('app.obr_test_username'),
+            'password'=> config('app.obr_test_pwd')
+
+        ]);
+
+        $data =  json_decode($response);
+        $data2 = ($data->result);
+        
+    
+        $token = $data2->token;
+
+        $tp_TIN = $request->supplier_TIN;
+
+        if (empty($tp_TIN) && $request->vat_supplier_payer == 1) {
+            session()->flash('error', 'Le NIF du fournisseur est obligatoire');
+            return redirect()->back();
+        }elseif (!empty($tp_TIN) && strlen($tp_TIN) < 10) {
+            session()->flash('error', 'Le NIF du fournisseur n\'existe pas');
+            return redirect()->back();
+        }
+
+        $theUrl = config('app.guzzle_test_url').'/ebms_api/checkTIN/';
+        $response = Http::withHeaders([
+        'Authorization' => 'Bearer '.$token,
+        'Accept' => 'application/json'])->post($theUrl, [
+            'tp_TIN'=>$tp_TIN,
+
+        ]); 
+
+        $data =  json_decode($response);
+        $data2 = ($data->result);
+        
+    
+        $success = $data->success;
+        $msg = $data->msg;
+
+        
+        if ($request->vat_supplier_payer == 1 && $request->tp_type == 2) {
+
+            $data3 = ($data2->taxpayer);
+
+            $index_one = ($data3['0']);
+
+            $tp_name = $index_one->tp_name;
+
+            $supplier = new Supplier();
+            $supplier->date = $request->date;
+            $supplier->supplier_name = $tp_name;
+            $supplier->tp_type = $request->tp_type;
+            $supplier->telephone = $request->telephone;
+            $supplier->mail = $request->mail;
+            $supplier->supplier_TIN = $request->supplier_TIN;
+            $supplier->supplier_address = $request->supplier_address;
+            $supplier->vat_supplier_payer = $request->vat_supplier_payer;
+            $supplier->company = $request->company;
+            $supplier->save();
+            session()->flash('success', 'Le fournisseur a été créé avec succés !!, OBR Message : '.$msg.'('.$tp_name.')');
+            return redirect()->route('admin.suppliers.index');
+        }elseif ($success == false && $request->vat_customer_payer == 1) {
+
+            session()->flash('error', 'Le NIF du Contribuable inconnu');
+            return redirect()->back();
+        }elseif ($success == false && !empty($tp_TIN) && $request->vat_customer_payer == 0) {
+
+            session()->flash('error', 'Le NIF du Contribuable inconnu');
+            return redirect()->back();
+        }else{
+            $supplier = new Supplier();
+            $supplier->date = $request->date;
+            $supplier->supplier_name = $request->supplier_name;
+            $supplier->tp_type = $request->tp_type;
+            $supplier->telephone = $request->telephone;
+            $supplier->mail = $request->mail;
+            $supplier->supplier_TIN = $request->supplier_TIN;
+            $supplier->supplier_address = $request->supplier_address;
+            $supplier->vat_supplier_payer = $request->vat_supplier_payer;
+            $supplier->company = $request->company;
+            $supplier->save();
+        }
 
         session()->flash('success', 'Supplier has been created !!');
         return redirect()->route('admin.suppliers.index');
@@ -136,26 +206,95 @@ class SupplierController extends Controller
 
         $supplier = Supplier::find($id);
 
+        // Validation Data
         $request->validate([
-            'name' => 'required|max:100',
-            'mail' => 'required|min:10',
-            'phone_no' => 'required',
-            'address_id' => 'required'
+            'tp_type' => 'required',
+            'telephone' => 'required',
         ]);
 
-        // update Supplier
-        $supplier->name = $request->name;
-        $supplier->mail = $request->mail;
-        $supplier->phone_no = $request->phone_no;
-        $supplier->address_id = $request->address_id;
-        $supplier->category = $request->category;
-        $supplier->vat_taxpayer = $request->vat_taxpayer;
-        $supplier->tin_number = $request->tin_number;
-        $supplier->created_by = $this->user->name;
-        $supplier->save();
+        $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
+        $response = Http::post($theUrl, [
+            'username'=> config('app.obr_test_username'),
+            'password'=> config('app.obr_test_pwd')
+
+        ]);
+
+        $data =  json_decode($response);
+        $data2 = ($data->result);
+        
+    
+        $token = $data2->token;
+
+        $tp_TIN = $request->supplier_TIN;
+
+        if (empty($tp_TIN) && $request->vat_supplier_payer == 1) {
+            session()->flash('error', 'Le NIF du fournisseur est obligatoire');
+            return redirect()->back();
+        }elseif (!empty($tp_TIN) && strlen($tp_TIN) < 10) {
+            session()->flash('error', 'Le NIF du fournisseur n\'existe pas');
+            return redirect()->back();
+        }
+
+        $theUrl = config('app.guzzle_test_url').'/ebms_api/checkTIN/';
+        $response = Http::withHeaders([
+        'Authorization' => 'Bearer '.$token,
+        'Accept' => 'application/json'])->post($theUrl, [
+            'tp_TIN'=>$tp_TIN,
+
+        ]); 
+
+        $data =  json_decode($response);
+        $data2 = ($data->result);
+        
+    
+        $success = $data->success;
+        $msg = $data->msg;
+
+        
+        if ($request->vat_supplier_payer == 1 && $request->tp_type == 2) {
+
+            $data3 = ($data2->taxpayer);
+
+            $index_one = ($data3['0']);
+
+            $tp_name = $index_one->tp_name;
+
+            $supplier->date = $request->date;
+            $supplier->supplier_name = $tp_name;
+            $supplier->tp_type = $request->tp_type;
+            $supplier->telephone = $request->telephone;
+            $supplier->mail = $request->mail;
+            $supplier->supplier_TIN = $request->supplier_TIN;
+            $supplier->supplier_address = $request->supplier_address;
+            $supplier->vat_supplier_payer = $request->vat_supplier_payer;
+            $supplier->company = $request->company;
+            $supplier->save();
+            session()->flash('success', 'Le fournisseur a été modifié avec succés !!, OBR Message : '.$msg.'('.$tp_name.')');
+            return redirect()->route('admin.suppliers.index');
+        }elseif ($success == false && $request->vat_customer_payer == 1) {
+
+            session()->flash('error', 'Le NIF du Contribuable inconnu');
+            return redirect()->back();
+        }elseif ($success == false && !empty($tp_TIN) && $request->vat_customer_payer == 0) {
+
+            session()->flash('error', 'Le NIF du Contribuable inconnu');
+            return redirect()->back();
+        }else{
+
+            $supplier->date = $request->date;
+            $supplier->supplier_name = $request->supplier_name;
+            $supplier->tp_type = $request->tp_type;
+            $supplier->telephone = $request->telephone;
+            $supplier->mail = $request->mail;
+            $supplier->supplier_TIN = $request->supplier_TIN;
+            $supplier->supplier_address = $request->supplier_address;
+            $supplier->vat_supplier_payer = $request->vat_supplier_payer;
+            $supplier->company = $request->company;
+            $supplier->save();
+        }
 
         session()->flash('success', 'Supplier has been updated !!');
-        return back();
+        return redirect()->route('admin.suppliers.index');
     }
 
 

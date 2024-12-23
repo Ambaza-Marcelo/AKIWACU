@@ -15,21 +15,25 @@ class CreateSuppliersTable extends Migration
     {
         Schema::create('suppliers', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->unique('name');
+            $table->string('supplier_name')->nullable(true);
+            $table->unique('supplier_name');
+            $table->string('telephone')->nullable(true);
+            $table->unique('telephone');
             $table->string('mail')->nullable(true);
-            $table->string('phone_no')->nullable(true);
-            $table->string('tin_number')->nullable(true);
-            $table->string('vat_taxpayer')->nullable(true);
-            $table->string('type')->nullable(true);
-            $table->string('category')->nullable(true);
-            $table->string('created_by');
-            $table->bigInteger('address_id')->unsigned()->nullable(true);
-            $table->foreign('address_id')
-                    ->references('id')
-                    ->on('addresses')
-                    ->onUpdate('cascade')
-                    ->onDelete('cascade');
+            $table->unique('mail');
+            $table->string('supplier_TIN')->nullable(true);
+            $table->unique('supplier_TIN');
+            $table->string('tp_type')->nullable(true);
+            $table->string('supplier_address')->nullable(true);
+            $table->string('vat_supplier_payer')->nullable(true);
+            $table->string('company')->nullable(true);
+            $table->string('etat')->nullable(true);
+            $table->string('autre')->nullable(true);
+            $table->string('total_amount_paied')->nullable(true);
+            $table->string('total_amount_credit')->nullable(true);
+            $table->string('avalise_par')->nullable(true);
+            $table->string('date')->nullable(true);
+            $table->string('points')->nullable(true);
             $table->timestamps();
         });
     }

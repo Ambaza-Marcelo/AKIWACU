@@ -8,13 +8,19 @@ class Supplier extends Model
 {
     //
     protected $fillable=[
-    	'name',
-    	'mail',
-    	'phone_no',
-    	'address_id',
-        'tin_number',
-        'vat_taxpayer',
-        'category',
+    	'supplier_name',
+        'telephone',
+        'mail',
+        'supplier_TIN',
+        'supplier_address',
+        'vat_supplier_payer',
+        'company',
+        'etat',
+        'autre',
+        'total_amount_paied',
+        'total_amount_credit',
+        'avalise_par',
+        'date',
     ];
 
     public function address(){

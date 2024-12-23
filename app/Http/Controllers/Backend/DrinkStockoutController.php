@@ -119,7 +119,7 @@ class DrinkStockoutController extends Controller
             try {DB::beginTransaction();
 
             $drink_id = $request->drink_id;
-            $date = $request->date;
+            $date = Carbon::now();
             $invoice_currency = $request->invoice_currency;
             $asker = $request->asker;
             $destination = $request->destination;
