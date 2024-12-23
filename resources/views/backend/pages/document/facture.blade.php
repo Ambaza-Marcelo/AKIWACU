@@ -75,19 +75,19 @@
                     <div>
                           <small>NIF : {{$setting->nif}}</small><br>
                           <small>RC : {{$setting->rc}}</small><br>
-                          <small>Centre Fiscal : DMC</small><br>
-                          <small>Secteur d'activite : HOTELERIE</small><br>
-                          <small> Forme Juridique : SPRL</small><br>
+                          <small>Centre Fiscal : {{ $setting->tp_fiscal_center }}</small><br>
+                          <small>Secteur d'activite : {{ $setting->tp_activity_sector }}</small><br>
+                          <small> Forme Juridique : {{ $setting->tp_legal_form }}</small><br>
                           <small> Adresse : {{$setting->commune}}-{{$setting->zone}}</small><br>
                           <small>Telephone : {{$setting->telephone1}}/{{$setting->telephone2}}</small><br>
-                          <small>Assujetti a la TVA : |oui<input type="checkbox" checked="checked">|Non<input type="checkbox"></small>
+                          <small>Assujetti a la TVA : |oui<input type="checkbox" @if($setting->vat_taxpayer == '1') checked="checked" @endif>|Non<input type="checkbox" @if($setting->vat_taxpayer == '0') checked="checked" @endif></small>
                           <hr> 
                     </div>               
                     <div>
-                        <small>Nom et Prenom :@if($data->client_id){{ $data->client->customer_name }} @elseif($data->booking_client_id) {{ $data->bookingClient->customer_name }} @else {{ $data->customer_name }} @endif</small> <br>
-                        <small>NIF : @if($data->client_id){{ $data->client->customer_TIN }} @elseif($data->booking_client_id) {{ $data->bookingClient->customer_TIN }} @else {{ $data->customer_TIN }} @endif</small> <br>
-                        <small>Adresse : @if($data->client_id){{ $data->client->customer_address }} @elseif($data->booking_client_id) {{ $data->bookingClient->customer_address }} @else {{ $data->customer_address }} @endif / @if($data->client_id){{ $data->client->telephone }} @elseif($data->booking_client_id) {{ $data->bookingClient->telephone }} @else {{ $data->telephone }} @endif</small> <br>
-                        <small>Assujetti a la TVA : |oui<input type="checkbox">|Non<input type="checkbox"></small><br>
+                        <small>Nom et Prenom :@if($data->client_id){{ $data->client->customer_name }} @else {{ $data->customer_name }} @endif</small> <br>
+                        <small>NIF : @if($data->client_id){{ $data->client->customer_TIN }} @else {{ $data->customer_TIN }} @endif</small> <br>
+                        <small>Adresse : @if($data->client_id){{ $data->client->customer_address }} @else {{ $data->customer_address }} @endif / @if($data->client_id){{ $data->client->telephone }} @else {{ $data->telephone }} @endif</small> <br>
+                        <small>Assujetti a la TVA : |oui<input type="checkbox" @if($data->client->vat_customer_payer == '1') checked="checked" @endif>|Non<input type="checkbox" @if($data->client->vat_customer_payer == '0') checked="checked" @endif></small><br>
                     </div>
                     <div>
                         <table style="border: 1px solid black;border-collapse: collapse;">
