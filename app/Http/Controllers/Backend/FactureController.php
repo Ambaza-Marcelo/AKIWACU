@@ -1789,7 +1789,7 @@ class FactureController extends Controller
                             'item_purchase_or_sale_price'=>$data->cump,
                             'item_purchase_or_sale_currency'=> "BIF",
                             'item_movement_type'=> 'SN',
-                            'item_movement_invoice_ref'=> "",
+                            'item_movement_invoice_ref'=> $data->invoice_number,
                             'item_movement_description'=> 'SORTIES NORMALES DE VENTE DES MARCHANDISE',
                             'item_movement_date'=> $data->invoice_date,
 
@@ -1967,7 +1967,7 @@ class FactureController extends Controller
                             'item_purchase_or_sale_price'=>$data->cump,
                             'item_purchase_or_sale_currency'=> "BIF",
                             'item_movement_type'=> 'SN',
-                            'item_movement_invoice_ref'=> "",
+                            'item_movement_invoice_ref'=> $data->invoice_number,
                             'item_movement_description'=> 'SORTIES NORMALES DE VENTE DES MARCHANDISES',
                             'item_movement_date'=> $data->invoice_date,
 
