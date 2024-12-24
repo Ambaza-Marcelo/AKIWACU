@@ -1798,6 +1798,18 @@ class NoteCreditController extends Controller
         $datas = NoteCreditDetail::where('invoice_number', $invoice_number)->get();
 
 
+        $facture = NoteCreditDetail::where('invoice_number', $invoice_number)->first();
+
+        if ($facture->cn_motif == '1' ) {
+            $cn_motif = "Erreur sur la facture";
+        }elseif ($facture->cn_motif == '2' ){
+            $cn_motif = "Retour marchandises";
+        }elseif ($facture->cn_motif == '3' ){
+            $cn_motif = "Rabais";
+        }elseif ($facture->cn_motif == '4' ){
+           $cn_motif = "Reduction hors facture"; 
+        }
+
         foreach($datas as $data){
 
             $date = Facture::where('invoice_number',$data->cancelled_invoice_ref)->value('invoice_date');
@@ -1916,7 +1928,7 @@ class NoteCreditController extends Controller
                             'item_purchase_or_sale_currency'=> "BIF",
                             'item_movement_type'=> 'ER',
                             'item_movement_invoice_ref'=> "",
-                            'item_movement_description'=> 'NOTE DE CREDIT OU FACTURE AVOIR',
+                            'item_movement_description'=> $cn_motif,
                             'item_movement_date'=> $data->invoice_date,
 
                         ]);
@@ -2706,6 +2718,21 @@ class NoteCreditController extends Controller
                 );
 
                 $factureDetail[] = $invoice_items;
+            }elseif(!empty($data->room_id)){
+                $invoice_items = array(
+                'item_designation'=>$data->room->name,
+                'item_quantity'=>$data->item_quantity,
+                'item_price'=>$data->item_price,
+                'item_ct'=>$data->item_ct,
+                'item_tl'=>$data->item_tl,
+                'item_tsce_tax'=>0,
+                'item_price_nvat'=>$data->item_price_nvat,
+                'vat'=>$data->vat,
+                'item_price_wvat'=>$data->item_price_wvat,
+                'item_total_amount'=>$data->item_total_amount
+                );
+
+                $factureDetail[] = $invoice_items;
             }elseif(!empty($data->service_id)){
                 $invoice_items = array(
                 'item_designation'=>$data->service->name,
@@ -2746,6 +2773,7 @@ class NoteCreditController extends Controller
         'Accept' => 'application/json'])->post($theUrl, [
             'invoice_number'=>$facture->invoice_number,
             'invoice_date'=> $facture->invoice_date,
+            'invoice_type'=> "FA",
             'tp_type'=>$facture->tp_type,
             'tp_name'=>$facture->tp_name,
             'tp_TIN'=>$facture->tp_TIN,
@@ -2754,12 +2782,12 @@ class NoteCreditController extends Controller
             'tp_address_province'=>$facture->tp_address_province,
             'tp_address_commune'=>$facture->tp_address_commune,
             'tp_address_quartier'=>$facture->tp_address_quartier,
-            'tp_address_avenue'=>$facture->tp_address_avenue,
+            'tp_address_avenue'=>$facture->tp_address_rue,
             'tp_address_rue'=>$facture->tp_address_rue,
             'vat_taxpayer'=>$facture->vat_taxpayer,
-            'ct_taxpayer'=>$facture->ct_taxpayer,
-            'tl_taxpayer'=>$facture->tl_taxpayer,
-            'tp_fiscal_center'=>$facture->tp_fiscal_center,
+            'ct_taxpayer'=>1,
+            'tl_taxpayer'=>0,
+            'tp_fiscal_center'=>$setting->tp_fiscal_center,
             'tp_activity_sector'=>$facture->tp_activity_sector,
             'tp_legal_form'=>$facture->tp_legal_form,
             'payment_type'=>$facture->payment_type,
@@ -2771,7 +2799,7 @@ class NoteCreditController extends Controller
             'invoice_currency'=> $facture->invoice_currency,
             'cancelled_invoice_ref'=> $facture->cancelled_invoice_ref,
             'cancelled_invoice'=> $facture->cancelled_invoice,
-            'invoice_ref'=> $facture->invoice_ref,
+            'invoice_ref'=> $facture->cancelled_invoice_ref,
             'invoice_signature_date'=> $facture->invoice_signature_date,
             'invoice_items' => $factureDetail,
 

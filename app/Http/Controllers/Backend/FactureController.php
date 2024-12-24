@@ -1605,10 +1605,11 @@ class FactureController extends Controller
 
             if($request->vat_taxpayer == 1){
                 $item_total_amount = ($item_price[$count]*$item_quantity[$count]);
-                $item_price_nvat = ($item_total_amount * 100)/110;
-                $vat = ($item_price_nvat * $taux_tva)/100;
-                $item_price_wvat = ($item_price_nvat + $vat);
-                $item_tsce_tax = ($item_total_amount * $taux_tva)/100;
+                $item_price_nvat1 = ($item_total_amount * 100)/110;
+                $item_price_nvat = ($item_price_nvat1 * 100)/105;
+                $item_tsce_tax = ($item_price_nvat * $item_tsce_tax)/105;
+                $vat = ($item_price_nvat1 * $taux_tva)/100;
+                $item_price_wvat = ($item_price_nvat + $vat + $item_tsce_tax);
                 $item_total_amount = ($item_price_nvat + $vat + $item_tsce_tax);
 
             }else{
@@ -1655,9 +1656,9 @@ class FactureController extends Controller
             'room_id'=>$room_id[$count],
             'item_quantity'=>$item_quantity[$count],
             'item_price'=>$item_price[$count],
-            'item_ct'=>$item_ct[$count],
+            'item_ct'=> $item_tsce_tax,
             'item_tl'=>$item_tl[$count],
-            'item_tsce_tax'=>$item_tsce_tax,
+            'item_tsce_tax'=> 0,
             'item_price_nvat'=>$item_price_nvat,
             'vat'=>$vat,
             'item_price_wvat'=>$item_price_wvat,
@@ -3226,7 +3227,7 @@ class FactureController extends Controller
 
         $total_tsce_tax = DB::table('facture_details')
             ->where('invoice_number', '=', $invoice_number)
-            ->sum('item_tsce_tax');
+            ->sum('item_ct');
 
         $client = Facture::where('invoice_number', $invoice_number)->value('customer_name');
         $date = Facture::where('invoice_number', $invoice_number)->value('invoice_date');
@@ -3331,11 +3332,11 @@ class FactureController extends Controller
                 'item_price'=>$data->item_price,
                 'item_ct'=>$data->item_ct,
                 'item_tl'=>$data->item_tl,
-                'item_tsce_tax'=>$data->item_tsce_tax,
+                'item_tsce_tax'=>0,
                 'item_price_nvat'=>$data->item_price_nvat,
                 'vat'=>$data->vat,
                 'item_price_wvat'=>$data->item_price_wvat,
-                'item_total_amount'=>$data->item_total_amount + $data->item_tsce_tax
+                'item_total_amount'=>$data->item_total_amount
                 );
 
                 $factureDetail[] = $invoice_items;
@@ -3387,12 +3388,12 @@ class FactureController extends Controller
             'tp_address_province'=>$facture->tp_address_province,
             'tp_address_commune'=>$facture->tp_address_commune,
             'tp_address_quartier'=>$facture->tp_address_quartier,
-            'tp_address_avenue'=>$facture->tp_address_avenue,
+            'tp_address_avenue'=>$facture->tp_address_rue,
             'tp_address_rue'=>$facture->tp_address_rue,
             'vat_taxpayer'=>$facture->vat_taxpayer,
-            'ct_taxpayer'=>$facture->ct_taxpayer,
-            'tl_taxpayer'=>$facture->tl_taxpayer,
-            'tp_fiscal_center'=>$facture->tp_fiscal_center,
+            'ct_taxpayer'=>1,
+            'tl_taxpayer'=>0,
+            'tp_fiscal_center'=>$setting->tp_fiscal_center,
             'tp_activity_sector'=>$facture->tp_activity_sector,
             'tp_legal_form'=>$facture->tp_legal_form,
             'payment_type'=>$facture->payment_type,
@@ -3470,7 +3471,7 @@ class FactureController extends Controller
             ->sum('vat');
         $total_tsce_tax = DB::table('facture_details')
             ->where('invoice_number', '=', $invoice_number)
-            ->sum('item_tsce_tax');
+            ->sum('item_ct');
 
         $client = Facture::where('invoice_number', $invoice_number)->value('customer_name');
         $date = Facture::where('invoice_number', $invoice_number)->value('invoice_date');

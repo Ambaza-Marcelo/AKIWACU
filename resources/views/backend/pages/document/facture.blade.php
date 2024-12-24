@@ -96,7 +96,7 @@
                                     <th>No</th>
                                     <th>DESIGNATION</th>
                                     <th>Qtes</th>
-                                    <th>PV. U</th>
+                                    <th>PVU TTC</th>
                                     <!--
                                     <th>TC</th>
                                     <th>PFL</th>
@@ -104,7 +104,7 @@
                                     <th>MONTANT TVA</th>
                                     <th>PV. U</th>
                                 -->
-                                    <th>TVAC</th>
+                                    <th>TTC</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -122,7 +122,7 @@
                                     <td>{{ number_format($data->vat,0,',',' ' )}}</td>
                                     <td>{{ number_format($data->item_price_wvat,0,',',' ' )}}</td>
                                 -->
-                                    <td>{{ number_format($data->item_price_wvat,0,',',' ' )}}</td>
+                                    <td>{{ number_format($data->item_total_amount,0,',',' ' )}}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -130,19 +130,16 @@
                         <br>
                         <div style="float: right;border: 1px solid black;">
                         <small>
-                           &nbsp;&nbsp;TOTAL : {{ number_format($totalValue,3,',',' ' )}}
+                           &nbsp;&nbsp;PVT HTT : {{ number_format($totalValue,3,',',' ' )}}
+                        </small><br>
+                        <small>
+                           &nbsp;&nbsp;TC : {{ number_format($total_tsce_tax,3,',',' ' )}}
                         </small><br>
                         <small>
                            &nbsp;&nbsp;TVA : {{ number_format($totalVat,3,',',' ' )}}
                         </small><br>
                         <small><strong>
-                           &nbsp;&nbsp;TVAC : {{ number_format($item_total_amount,0,',',' ' )}}</strong>
-                        </small><br>
-                        <small>
-                           &nbsp;&nbsp;TC : {{ number_format($total_tsce_tax,3,',',' ' )}}
-                        </small><br>
-                        <small><strong>
-                           &nbsp;&nbsp;Total à payer : {{ number_format(($item_total_amount + $total_tsce_tax),0,',',' ' )}}</strong>
+                           &nbsp;&nbsp;Total à payer : {{ number_format(($item_total_amount),0,',',' ' )}}</strong>
                         </small>
                         </div>
                     </div><br><br><br><br>

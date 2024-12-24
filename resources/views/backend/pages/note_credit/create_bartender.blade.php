@@ -88,10 +88,10 @@
                                 <label for="tp_type">Type Contribuable</label>
                                 <div class="form-group">
                                     <label class="text">Personne Physique
-                                    <input type="checkbox" name="tp_type" value="1" class="form-control">
+                                    <input type="checkbox" name="tp_type" value="1" @if($setting->tp_type == '1') checked="checked" @endif class="form-control">
                                     </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <label class="text">Société
-                                    <input type="checkbox" checked="checked" name="tp_type" value="2" class="form-control">
+                                    <input type="checkbox" name="tp_type" value="2" @if($setting->tp_type == '2') checked="checked" @endif class="form-control">
                                     </label>
                                 </div>
                             </div>
@@ -99,10 +99,10 @@
                                 <label for="vat_taxpayer">Assujetti à la TVA</label>
                                 <div class="form-group">
                                     <label class="text">Non Assujetti
-                                    <input type="checkbox" name="vat_taxpayer" value="0" class="form-control">
+                                    <input type="checkbox" name="vat_taxpayer" value="0" @if($setting->vat_taxpayer == '0') checked="checked" @endif class="form-control">
                                     </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <label class="text">Assujetti
-                                    <input type="checkbox" name="vat_taxpayer" value="1" checked="checked" class="form-control">
+                                    <input type="checkbox" name="vat_taxpayer" value="1" @if($setting->vat_taxpayer == '1') checked="checked" @endif class="form-control">
                                     </label>
                                 </div>
                             </div>
@@ -157,16 +157,16 @@
                             </div>
                             <div class="col-sm-4">
                                 <label for="tp_address_number">Numero</label>
-                                <input type="text" value="00" name="tp_address_number" class="form-control">
+                                <input type="text" value="0" name="tp_address_number" class="form-control">
                             </div>
                             <div class="col-sm-4">
                                 <label for="ct_taxpayer">Assujetti à la taxe de conso.</label>
                                 <div class="form-group">
                                     <label class="text">Non Assujetti
-                                    <input type="checkbox" name="ct_taxpayer" value="0" checked="checked" class="form-control">
+                                    <input type="checkbox" name="ct_taxpayer" value="0" @if($setting->ct_taxpayer == '0') checked="checked" @endif  class="form-control">
                                     </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <label class="text">Assujetti
-                                    <input type="checkbox" name="ct_taxpayer" value="1" class="form-control">
+                                    <input type="checkbox" name="ct_taxpayer" value="1" @if($setting->ct_taxpayer == '1') checked="checked" @endif class="form-control">
                                     </label>
                                 </div>
                             </div>
@@ -177,10 +177,10 @@
                                 <label for="tl_taxpayer">Assujetti au PFL</label>
                                 <div class="form-group">
                                     <label class="text">Non Assujetti
-                                    <input type="checkbox" name="tl_taxpayer" value="0" checked="checked" class="form-control">
+                                    <input type="checkbox" name="tl_taxpayer" value="0" @if($setting->tl_taxpayer == '0') checked="checked" @endif class="form-control">
                                     </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <label class="text">Assujetti
-                                    <input type="checkbox" name="tl_taxpayer" value="1" class="form-control">
+                                    <input type="checkbox" name="tl_taxpayer" value="1" @if($setting->tl_taxpayer == '1') checked="checked" @endif class="form-control">
                                     </label>
                                 </div>
                             </div>
@@ -188,25 +188,25 @@
                                 <label for="tp_fiscal_center">Centre Fiscale</label>
                                 <div class="form-group">
                                     <label class="text">DGC
-                                    <input type="checkbox" name="tp_fiscal_center" value="DGC" class="form-control">
+                                    <input type="checkbox" name="tp_fiscal_center" value="DGC" @if($setting->tp_fiscal_center == 'DGC') checked="checked" @endif class="form-control">
                                     </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <label class="text">DMC
-                                    <input type="checkbox" checked="checked" name="tp_fiscal_center" value="DMC" class="form-control">
+                                    <input type="checkbox" name="tp_fiscal_center" value="DMC" @if($setting->tp_fiscal_center == 'DMC') checked="checked" @endif class="form-control">
                                     </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <label class="text">DPMC
-                                    <input type="checkbox" name="tp_fiscal_center" value="DPMC" class="form-control">
+                                    <input type="checkbox" name="tp_fiscal_center" value="DPMC" @if($setting->tp_fiscal_center == 'DPMC') checked="checked" @endif class="form-control">
                                     </label>
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <label for="tp_activity_sector">Secteur d'activité</label>
-                                <input type="text" name="tp_activity_sector" class="form-control" value="HOTELERIE">
+                                <input type="text" name="tp_activity_sector" class="form-control" value="{{ $setting->tp_activity_sector }}">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-4">
                                 <label for="tp_legal_form">Forme Juridique</label>
-                                <input type="text" value="SA" name="tp_legal_form" class="form-control">
+                                <input type="text" name="tp_legal_form" value="{{ $setting->tp_legal_form }}" class="form-control">
                             </div>
                             <div class="col-sm-4">
                                 <label for="payment_type">Type de Paiement</label>
