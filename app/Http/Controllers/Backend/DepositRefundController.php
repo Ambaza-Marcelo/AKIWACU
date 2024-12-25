@@ -1859,7 +1859,7 @@ class DepositRefundController extends Controller
                     'created_by' => $this->user->name,
                     'employe_id' => $data->employe_id,
                     'origine_facture' => 'BOISSON',
-                    'description' => "RETOUR DES MARCHANDISES",
+                    'description' => "REMBOURSEMENT CAUTION",
                     'created_at' => \Carbon\Carbon::now()
                 );
                 $report[] = $reportData;
@@ -1959,7 +1959,6 @@ class DepositRefundController extends Controller
         }
             DrinkSmallReport::insert($report);
 
-        //FactureDetail::insert($DepositRefund);
 
         DrinkSmallStoreDetail::where('drink_id','!=','')->update(['verified' => false]);
         DepositRefund::where('invoice_number', '=', $invoice_number)
@@ -2252,7 +2251,7 @@ class DepositRefundController extends Controller
 
 
         foreach($factures as $facture){
-        $theUrl = config('app.guzzle_test_url').'/ebms_api/addInvoice';  
+        $theUrl = config('app.guzzle_test_url').'/ebms_api/addInvoice_confirm';  
         $response = Http::withHeaders([
         'Authorization' => 'Bearer '.$token,
         'Accept' => 'application/json'])->post($theUrl, [
@@ -2282,6 +2281,7 @@ class DepositRefundController extends Controller
             'vat_customer_payer'=>$facture->client->vat_customer_payer,
             'customer_address'=>$facture->client->customer_address,
             'invoice_signature'=> $facture->invoice_signature,
+            'invoice_identifier'=> $facture->invoice_signature,
             'invoice_currency'=> $facture->invoice_currency,
             'cancelled_invoice_ref'=> $facture->cancelled_invoice_ref,
             'cancelled_invoice'=> $facture->cancelled_invoice,
@@ -2296,11 +2296,6 @@ class DepositRefundController extends Controller
         $dataObr =  json_decode($response);
         $done = $dataObr->success;
         $msg = $dataObr->msg;
-
-        dd($dataObr);
-
-        //$electronic_signature = $dataObr->electronic_signature;
-
        
         $pdf = PDF::loadView('backend.pages.remboursement_caution.facture',compact('datas','invoice_number','totalValue','item_total_amount','client','setting','date','data','invoice_signature','facture','totalVat'))->setPaper('a4', 'portrait');
 
@@ -2312,6 +2307,8 @@ class DepositRefundController extends Controller
         $datas = DepositRefundDetail::where('invoice_number', $invoice_number)->get();
 
         if ($done == true) {
+
+            $electronic_signature = $dataObr->electronic_signature;
             DepositRefund::where('invoice_number', '=', $invoice_number)
                 ->update(['statut' => 1,'electronic_signature' => $electronic_signature]);
             DepositRefundDetail::where('invoice_number', '=', $invoice_number)

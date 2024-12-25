@@ -93,7 +93,8 @@
                                     <th width="10%">P.V</th>
                                     <th width="10%">TTC</th>
                                     <th width="30%">Auteur</th>
-                                    <th width="10%">Description</th>
+                                    <th></th>
+                                    <th width="10%">Motif</th>
                                     <th width="10%">Action</th>
                                 </tr>
                             </thead>
@@ -118,7 +119,12 @@
                                     <td>{{ number_format($facture->item_price,0,',',' ') }}</td>
                                     <td>{{ number_format($facture->item_total_amount ,0,',',' ')}}</td>
                                     <td>{{ $facture->auteur }}</td>
-                                    <td>{{ $facture->description }}</td>
+                                    <td>
+                                        @if($facture->electronic_signature)
+                                        {!! QrCode::size(300)->backgroundColor(255,255,255)->generate('electronic signature: '.$facture->electronic_signature.' www.edengardenresorts.bi, Designed by www.ambazamarcellin.netlify.app' ) !!}
+                                        @endif
+                                    </td>
+                                    <td><span class="badge badge-danger">{{ $facture->cn_motif }}</span> ;Référence Facture : <span class="badge badge-warning">{{ $facture->invoice_ref }}</span></td>
                                     <td>
                                         @if (Auth::guard('admin')->user()->can('invoice_breakfast.create'))
                                         @if($facture->statut != '1')

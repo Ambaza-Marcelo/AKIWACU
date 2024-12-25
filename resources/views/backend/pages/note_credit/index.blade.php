@@ -74,6 +74,7 @@
                                     <th width="30%">Auteur</th>
                                     <th width="10%">Signature Facture </th>
                                     <th width="10%">Date Signature Facture</th>
+                                    <th></th>
                                     <th width="10%">Action</th>
                                 </tr>
                             </thead>
@@ -91,6 +92,11 @@
                                     <td>{{ $facture->auteur }}</td>
                                     <td>{{ $facture->invoice_signature }}</td>
                                     <td>{{ $facture->invoice_signature_date }}</td>
+                                    <td>
+                                        @if($facture->electronic_signature)
+                                        {!! QrCode::size(300)->backgroundColor(255,255,255)->generate('electronic signature: '.$facture->electronic_signature.' www.edengardenresorts.bi, Designed by www.ambazamarcellin.netlify.app' ) !!}
+                                        @endif
+                                    </td>
                                     <td>
                                         @if (Auth::guard('admin')->user()->can('note_credit.view'))
                                         <a href="{{ route('admin.note-de-credit.facture',$facture->invoice_number) }}"><img src="{{ asset('img/ISSh.gif') }}" width="60" title="Télécharger d'abord le document et puis imprimer"></a>

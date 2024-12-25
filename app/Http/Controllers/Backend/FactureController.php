@@ -312,7 +312,6 @@ class FactureController extends Controller
           $data1[] = $data;
       }
 
-
         FactureDetail::insert($data1);
 
             $order_no = FactureDetail::where('invoice_number',$invoice_number)->value('drink_order_no');
@@ -3399,7 +3398,7 @@ class FactureController extends Controller
 
 
         foreach($factures as $facture){
-        $theUrl = config('app.guzzle_test_url').'/ebms_api/addInvoice';  
+        $theUrl = config('app.guzzle_test_url').'/ebms_api/addInvoice_confirm';  
         $response = Http::withHeaders([
         'Authorization' => 'Bearer '.$token,
         'Accept' => 'application/json'])->post($theUrl, [
@@ -3416,8 +3415,8 @@ class FactureController extends Controller
             'tp_address_avenue'=>$facture->tp_address_rue,
             'tp_address_rue'=>$facture->tp_address_rue,
             'vat_taxpayer'=>$facture->vat_taxpayer,
-            'ct_taxpayer'=>1,
-            'tl_taxpayer'=>0,
+            'ct_taxpayer'=>$facture->ct_taxpayer,
+            'tl_taxpayer'=>$facture->tl_taxpayer,
             'tp_fiscal_center'=>$setting->tp_fiscal_center,
             'tp_activity_sector'=>$facture->tp_activity_sector,
             'tp_legal_form'=>$facture->tp_legal_form,
@@ -3428,6 +3427,7 @@ class FactureController extends Controller
             'vat_customer_payer'=>$facture->client->vat_customer_payer,
             'customer_address'=>$facture->client->customer_address,
             'invoice_signature'=> $facture->invoice_signature,
+            'invoice_identifier'=> $facture->invoice_signature,
             'invoice_currency'=> $facture->invoice_currency,
             'cancelled_invoice_ref'=> $facture->cancelled_invoice_ref,
             'cancelled_invoice'=> $facture->cancelled_invoice,

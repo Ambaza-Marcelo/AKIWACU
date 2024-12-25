@@ -109,8 +109,12 @@
                                     <td>{{ $facture->auteur }}</td>
                                     <td>{{ $facture->invoice_signature }}</td>
                                     <td>{{ $facture->invoice_signature_date }}</td>
-                                    <td>{{ $facture->electronic_signature }}</td>
-                                    <td>@if($facture->cancelled_invoice == 1 || $facture->etat == -1)<span class="badge badge-danger">{{ $facture->cn_motif }}</span> ;Référence Facture : <span class="badge badge-warning">{{ $facture->invoice_ref }}</span> @endif</td>
+                                    <td>
+                                        @if($facture->electronic_signature)
+                                        {!! QrCode::size(300)->backgroundColor(255,255,255)->generate('electronic signature: '.$facture->electronic_signature.' www.edengardenresorts.bi, Designed by www.ambazamarcellin.netlify.app' ) !!}
+                                        @endif
+                                    </td>
+                                    <td><span class="badge badge-danger">{{ $facture->cn_motif }}</span> ;Référence Facture : <span class="badge badge-warning">{{ $facture->invoice_ref }}</span></td>
                                     <td>
                                         @if (Auth::guard('admin')->user()->can('invoice_drink.create'))
                                         @if($facture->statut != '1')

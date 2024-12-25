@@ -2316,7 +2316,7 @@ class NoteCreditController extends Controller
 
 
         foreach($factures as $facture){
-        $theUrl = config('app.guzzle_test_url').'/ebms_api/addInvoice';  
+        $theUrl = config('app.guzzle_test_url').'/ebms_api/addInvoice_confirm';  
         $response = Http::withHeaders([
         'Authorization' => 'Bearer '.$token,
         'Accept' => 'application/json'])->post($theUrl, [
@@ -2334,8 +2334,8 @@ class NoteCreditController extends Controller
             'tp_address_avenue'=>$facture->tp_address_rue,
             'tp_address_rue'=>$facture->tp_address_rue,
             'vat_taxpayer'=>$facture->vat_taxpayer,
-            'ct_taxpayer'=>1,
-            'tl_taxpayer'=>0,
+            'ct_taxpayer'=>$facture->ct_taxpayer,
+            'tl_taxpayer'=>$facture->tl_taxpayer,
             'tp_fiscal_center'=>$setting->tp_fiscal_center,
             'tp_activity_sector'=>$facture->tp_activity_sector,
             'tp_legal_form'=>$facture->tp_legal_form,
@@ -2346,6 +2346,7 @@ class NoteCreditController extends Controller
             'vat_customer_payer'=>$facture->client->vat_customer_payer,
             'customer_address'=>$facture->client->customer_address,
             'invoice_signature'=> $facture->invoice_signature,
+            'invoice_identifier'=> $facture->invoice_signature,
             'invoice_currency'=> $facture->invoice_currency,
             'cancelled_invoice_ref'=> $facture->cancelled_invoice_ref,
             'cancelled_invoice'=> $facture->cancelled_invoice,
@@ -2361,8 +2362,6 @@ class NoteCreditController extends Controller
         $done = $dataObr->success;
         $msg = $dataObr->msg;
 
-        $electronic_signature = $dataObr->electronic_signature;
-
        
         $pdf = PDF::loadView('backend.pages.note_credit.facture',compact('datas','invoice_number','totalValue','item_total_amount','client','setting','date','data','invoice_signature','facture','totalVat'))->setPaper('a4', 'portrait');
 
@@ -2374,6 +2373,8 @@ class NoteCreditController extends Controller
         $datas = NoteCreditDetail::where('invoice_number', $invoice_number)->get();
 
         if ($done == true) {
+
+            $electronic_signature = $dataObr->electronic_signature;
             NoteCredit::where('invoice_number', '=', $invoice_number)
                 ->update(['statut' => 1,'electronic_signature' => $electronic_signature]);
             NoteCreditDetail::where('invoice_number', '=', $invoice_number)

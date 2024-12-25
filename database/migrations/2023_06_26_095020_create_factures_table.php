@@ -64,7 +64,7 @@ class CreateFacturesTable extends Migration
             $table->string('reseted_by')->nullable(true);
             $table->string('rejected_by')->nullable(true);
             $table->string('cancelled_by')->nullable(true);
-            $table->string('electronic_signature')->nullable(true);
+            $table->text('electronic_signature')->nullable(true);
             $table->string('invoice_registered_number')->nullable(true);
             $table->string('invoice_registered_date')->nullable(true);
             $table->timestamp('invoice_signature_date')->default(DB::raw('CURRENT_TIMESTAMP'));

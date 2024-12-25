@@ -51,7 +51,7 @@ class CreateFactureDetailsTable extends Migration
             $table->string('bartender_order_no')->nullable(true);
             $table->string('booking_no')->nullable(true);
             $table->string('invoice_currency')->nullable(true);
-            $table->string('electronic_signature')->nullable(true);
+            $table->text('electronic_signature')->nullable(true);
             $table->string('invoice_registered_number')->nullable(true);
             $table->string('invoice_registered_date')->nullable(true);
             $table->timestamp('invoice_signature_date')->default(DB::raw('CURRENT_TIMESTAMP'));
