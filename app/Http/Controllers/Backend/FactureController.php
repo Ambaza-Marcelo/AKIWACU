@@ -1623,7 +1623,7 @@ class FactureController extends Controller
                     $item_total_amount = ($item_price[$count]*$item_quantity[$count]);
                     $item_price_nvat1 = ($item_total_amount * 100)/110;
                     $item_price_nvat = ($item_price_nvat1 * 100)/105;
-                    $item_tsce_tax = ($item_price_nvat * $item_tsce_tax)/105;
+                    $item_tsce_tax = ($item_price_nvat * $item_tsce_tax)/100;
                     $vat = ($item_price_nvat1 * $taux_tva)/100;
                     $item_price_wvat = ($item_price_nvat + $vat + $item_tsce_tax);
                     $item_total_amount = ($item_price_nvat + $vat + $item_tsce_tax);
