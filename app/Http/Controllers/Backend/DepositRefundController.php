@@ -19,8 +19,8 @@ use Validator;
 //use GuzzleHttp\Client;
 use App\Models\Facture;
 use App\Models\FactureDetail;
-use App\Models\NoteCredit;
-use App\Models\NoteCreditDetail;
+use App\Models\DepositRefund;
+use App\Models\DepositRefundDetail;
 use App\Models\Setting;
 use App\Models\Drink;
 use App\Models\BarristItem;
@@ -44,9 +44,8 @@ use App\Mail\DeleteFactureMail;
 use App\Mail\InvoiceResetedMail;
 use App\Mail\ReportDrinkMail;
 
-class NoteCreditController extends Controller
+class DepositRefundController extends Controller
 {
-    //
     public $user;
 
     public function __construct()
@@ -60,18 +59,18 @@ class NoteCreditController extends Controller
 
     public function index()
     {
-        if (is_null($this->user) || !$this->user->can('note_credit.view')) {
+        if (is_null($this->user) || !$this->user->can('remboursement_caution.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view any invoice !');
         }
 
-        $factures = NoteCredit::orderBy('id','desc')->get();
-        return view('backend.pages.note_credit.index',compact('factures'));
+        $factures = DepositRefund::orderBy('id','desc')->get();
+        return view('backend.pages.remboursement_caution.index',compact('factures'));
     }
 
 
-    public function noteCreditBoisson($invoice_number)
+    public function depositRefundBoisson($invoice_number)
     {
-        if (is_null($this->user) || !$this->user->can('note_credit.create')) {
+        if (is_null($this->user) || !$this->user->can('remboursement_caution.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any invoice !');
         }
 
@@ -82,17 +81,17 @@ class NoteCreditController extends Controller
         $drink_small_stores = DrinkSmallStore::all();
         $clients =  EGRClient::orderBy('customer_name','asc')->get();
 
-        $data =  facture::where('invoice_number',$invoice_number)->first();
+        $data =  Facture::where('invoice_number',$invoice_number)->first();
         $total_amount = DB::table('facture_details')
             ->where('invoice_number',$invoice_number)
             ->sum('item_total_amount');
 
-        return view('backend.pages.note_credit.create_drink',compact('drinks','data','setting','datas','invoice_number','drink_small_stores','clients','total_amount'));
+        return view('backend.pages.remboursement_caution.create_drink',compact('drinks','data','setting','datas','invoice_number','drink_small_stores','clients','total_amount'));
     }
 
-    public function noteCreditBartender($invoice_number)
+    public function depositRefundBartender($invoice_number)
     {
-        if (is_null($this->user) || !$this->user->can('note_credit.create')) {
+        if (is_null($this->user) || !$this->user->can('remboursement_caution.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any invoice !');
         }
 
@@ -101,17 +100,17 @@ class NoteCreditController extends Controller
         $bartender_items =  BartenderItem::orderBy('name','asc')->get();
         $clients =  EGRClient::orderBy('customer_name','asc')->get();
         $datas =  FactureDetail::where('invoice_number',$invoice_number)->orderBy('invoice_number','asc')->get();
-        $data =  facture::where('invoice_number',$invoice_number)->first();
+        $data =  Facture::where('invoice_number',$invoice_number)->first();
         $total_amount = DB::table('facture_details')
             ->where('invoice_number',$invoice_number)
             ->sum('item_total_amount');
 
-        return view('backend.pages.note_credit.create_bartender',compact('bartender_items','data','setting','datas','invoice_number','clients','total_amount'));
+        return view('backend.pages.remboursement_caution.create_bartender',compact('bartender_items','data','setting','datas','invoice_number','clients','total_amount'));
     }
 
-    public function noteCreditBarrista($invoice_number)
+    public function depositRefundBarrista($invoice_number)
     {
-        if (is_null($this->user) || !$this->user->can('note_credit.create')) {
+        if (is_null($this->user) || !$this->user->can('remboursement_caution.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any invoice !');
         }
 
@@ -120,17 +119,17 @@ class NoteCreditController extends Controller
         $barrista_items =  BarristItem::orderBy('name','asc')->get();
         $clients =  EGRClient::orderBy('customer_name','asc')->get();
         $datas =  FactureDetail::where('invoice_number',$invoice_number)->orderBy('invoice_number','asc')->get();
-        $data =  facture::where('invoice_number',$invoice_number)->first();
+        $data =  Facture::where('invoice_number',$invoice_number)->first();
         $total_amount = DB::table('facture_details')
             ->where('invoice_number',$invoice_number)
             ->sum('item_total_amount');
 
-        return view('backend.pages.note_credit.create_barrista',compact('barrista_items','data','setting','datas','invoice_number','clients','total_amount'));
+        return view('backend.pages.remboursement_caution.create_barrista',compact('barrista_items','data','setting','datas','invoice_number','clients','total_amount'));
     }
 
-    public function noteCreditNourriture($invoice_number)
+    public function depositRefundNourriture($invoice_number)
     {
-        if (is_null($this->user) || !$this->user->can('note_credit.create')) {
+        if (is_null($this->user) || !$this->user->can('remboursement_caution.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any invoice !');
         }
 
@@ -139,15 +138,15 @@ class NoteCreditController extends Controller
         $food_items =  FoodItem::orderBy('name','asc')->get();
         $clients =  EGRClient::orderBy('customer_name','asc')->get();
         $datas =  FactureDetail::where('invoice_number',$invoice_number)->orderBy('invoice_number','asc')->get();
-        $data =  facture::where('invoice_number',$invoice_number)->first();
+        $data =  Facture::where('invoice_number',$invoice_number)->first();
         $total_amount = DB::table('facture_details')
             ->where('invoice_number',$invoice_number)
             ->sum('item_total_amount');
 
-        return view('backend.pages.note_credit.create_food',compact('food_items','data','setting','datas','invoice_number','clients','total_amount'));
+        return view('backend.pages.remboursement_caution.create_food',compact('food_items','data','setting','datas','invoice_number','clients','total_amount'));
     }
 
-    public function noteCreditBooking($invoice_number)
+    public function depositRefundBooking($invoice_number)
     {
         if (is_null($this->user) || !$this->user->can('invoice_booking.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any invoice !');
@@ -157,11 +156,11 @@ class NoteCreditController extends Controller
 
         $clients =  EGRClient::orderBy('customer_name','asc')->get();
         $datas =  FactureDetail::where('invoice_number',$invoice_number)->orderBy('invoice_number','asc')->get();
-        $data =  facture::where('invoice_number',$invoice_number)->first();
+        $data =  Facture::where('invoice_number',$invoice_number)->first();
         $total_amount = DB::table('facture_details')
             ->where('invoice_number',$invoice_number)
             ->sum('item_total_amount');
-        return view('backend.pages.note_credit.create_booking',compact('data','setting','datas','invoice_number','clients','total_amount'));
+        return view('backend.pages.remboursement_caution.create_booking',compact('data','setting','datas','invoice_number','clients','total_amount'));
     }
 
     /**
@@ -172,7 +171,7 @@ class NoteCreditController extends Controller
      */
     public function storeDrink(Request  $request)
     {
-        if (is_null($this->user) || !$this->user->can('note_credit.create')) {
+        if (is_null($this->user) || !$this->user->can('remboursement_caution.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any invoice !');
         }
 
@@ -237,11 +236,11 @@ class NoteCreditController extends Controller
             $drink_order_no = $request->drink_order_no;
 
             
-            $latest = NoteCredit::orderBy('id','desc')->first();
+            $latest = DepositRefund::orderBy('id','desc')->first();
             if ($latest) {
-               $invoice_number = 'FA' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
+               $invoice_number = 'RC' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{
-               $invoice_number = 'FA' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
+               $invoice_number = 'RC' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
             }
             
 
@@ -343,12 +342,12 @@ class NoteCreditController extends Controller
       }
 
 
-        NoteCreditDetail::insert($data1);
+        DepositRefundDetail::insert($data1);
 
-            $order_no = NoteCreditDetail::where('invoice_number',$invoice_number)->value('drink_order_no');
+            $order_no = DepositRefundDetail::where('invoice_number',$invoice_number)->value('drink_order_no');
 
             //create facture
-            $facture = new NoteCredit();
+            $facture = new DepositRefund();
             $facture->invoice_date = $invoice_date;
             $facture->invoice_number = $invoice_number;
             $facture->drink_order_no = $order_no;
@@ -391,8 +390,8 @@ class NoteCreditController extends Controller
                 ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif_detail,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
 
         DB::commit();
-            session()->flash('success', 'La note de credit est faite avec succés!!');
-            return redirect()->route('admin.note-de-credit.index');
+            session()->flash('success', 'Le remboursement caution est fait avec succés!!');
+            return redirect()->route('admin.remboursement-caution.index');
         } catch (\Exception $e) {
             // An error occured; cancel the transaction...
 
@@ -406,7 +405,7 @@ class NoteCreditController extends Controller
 
     public function storeBarrista(Request  $request)
     {
-        if (is_null($this->user) || !$this->user->can('note_credit.create')) {
+        if (is_null($this->user) || !$this->user->can('remboursement_caution.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any invoice !');
         }
 
@@ -471,11 +470,11 @@ class NoteCreditController extends Controller
             $barrist_order_no = $request->barrist_order_no;
 
             
-            $latest = NoteCredit::orderBy('id','desc')->first();
+            $latest = DepositRefund::orderBy('id','desc')->first();
             if ($latest) {
-               $invoice_number = 'FA' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
+               $invoice_number = 'RC' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{
-               $invoice_number = 'FA' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
+               $invoice_number = 'RC' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
             }
             
 
@@ -555,12 +554,12 @@ class NoteCreditController extends Controller
       }
 
 
-        NoteCreditDetail::insert($data1);
+        DepositRefundDetail::insert($data1);
 
-            $order_no = NoteCreditDetail::where('invoice_number',$invoice_number)->value('barrist_order_no');
+            $order_no = DepositRefundDetail::where('invoice_number',$invoice_number)->value('barrist_order_no');
 
             //create facture
-            $facture = new NoteCredit();
+            $facture = new DepositRefund();
             $facture->invoice_date = $invoice_date;
             $facture->invoice_number = $invoice_number;
             $facture->barrist_order_no = $order_no;
@@ -602,8 +601,8 @@ class NoteCreditController extends Controller
                 ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif_detail,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
 
         DB::commit();
-            session()->flash('success', 'La note de credit est faite avec succés!!');
-            return redirect()->route('admin.note-de-credit.index');
+            session()->flash('success', 'Le remboursement caution est fait avec succés!!');
+            return redirect()->route('admin.remboursement-caution.index');
         } catch (\Exception $e) {
             // An error occured; cancel the transaction...
 
@@ -618,7 +617,7 @@ class NoteCreditController extends Controller
 
     public function storeFood(Request  $request)
     {
-        if (is_null($this->user) || !$this->user->can('note_credit.create')) {
+        if (is_null($this->user) || !$this->user->can('remboursement_caution.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any invoice !');
         }
 
@@ -682,11 +681,11 @@ class NoteCreditController extends Controller
             $food_order_no = $request->food_order_no;
 
             
-            $latest = NoteCredit::orderBy('id','desc')->first();
+            $latest = DepositRefund::orderBy('id','desc')->first();
             if ($latest) {
-               $invoice_number = 'FA' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
+               $invoice_number = 'RC' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{
-               $invoice_number = 'FA' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
+               $invoice_number = 'RC' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
             }
             
 
@@ -766,12 +765,12 @@ class NoteCreditController extends Controller
       }
 
 
-        NoteCreditDetail::insert($data1);
+        DepositRefundDetail::insert($data1);
 
-            $order_no = NoteCreditDetail::where('invoice_number',$invoice_number)->value('food_order_no');
+            $order_no = DepositRefundDetail::where('invoice_number',$invoice_number)->value('food_order_no');
 
             //create facture
-            $facture = new NoteCredit();
+            $facture = new DepositRefund();
             $facture->invoice_date = $invoice_date;
             $facture->invoice_number = $invoice_number;
             $facture->food_order_no = $order_no;
@@ -813,8 +812,8 @@ class NoteCreditController extends Controller
                 ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif_detail,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
 
             DB::commit();
-            session()->flash('success', 'La note de credit est faite avec succés!!');
-            return redirect()->route('admin.note-de-credit.index');
+            session()->flash('success', 'Le remboursement caution est fait avec succés!!');
+            return redirect()->route('admin.remboursement-caution.index');
         } catch (\Exception $e) {
             // An error occured; cancel the transaction...
 
@@ -828,7 +827,7 @@ class NoteCreditController extends Controller
 
     public function storeBartender(Request  $request)
     {
-        if (is_null($this->user) || !$this->user->can('note_credit.create')) {
+        if (is_null($this->user) || !$this->user->can('remboursement_caution.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any invoice !');
         }
 
@@ -892,11 +891,11 @@ class NoteCreditController extends Controller
             $bartender_order_no = $request->bartender_order_no;
 
             
-            $latest = NoteCredit::orderBy('id','desc')->first();
+            $latest = DepositRefund::orderBy('id','desc')->first();
             if ($latest) {
-               $invoice_number = 'FA' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
+               $invoice_number = 'RC' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{
-               $invoice_number = 'FA' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
+               $invoice_number = 'RC' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
             }
             
 
@@ -976,12 +975,12 @@ class NoteCreditController extends Controller
       }
 
 
-        NoteCreditDetail::insert($data1);
+        DepositRefundDetail::insert($data1);
 
-            $order_no = NoteCreditDetail::where('invoice_number',$invoice_number)->value('bartender_order_no');
+            $order_no = DepositRefundDetail::where('invoice_number',$invoice_number)->value('bartender_order_no');
 
             //create facture
-            $facture = new NoteCredit();
+            $facture = new DepositRefund();
             $facture->invoice_date = $invoice_date;
             $facture->invoice_number = $invoice_number;
             $facture->bartender_order_no = $order_no;
@@ -1023,8 +1022,8 @@ class NoteCreditController extends Controller
                 ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif_detail,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
 
             DB::commit();
-            session()->flash('success', 'La note de credit est faite avec succés!!');
-            return redirect()->route('admin.note-de-credit.index');
+            session()->flash('success', 'Le remboursement caution est fait avec succés!!');
+            return redirect()->route('admin.remboursement-caution.index');
         } catch (\Exception $e) {
             // An error occured; cancel the transaction...
 
@@ -1038,7 +1037,7 @@ class NoteCreditController extends Controller
 
     public function storeBooking(Request  $request)
     {
-        if (is_null($this->user) || !$this->user->can('note_credit.create')) {
+        if (is_null($this->user) || !$this->user->can('remboursement_caution.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any invoice !');
         }
 
@@ -1105,11 +1104,11 @@ class NoteCreditController extends Controller
             $booking_no = $request->booking_no;
 
             
-            $latest = NoteCredit::orderBy('id','desc')->first();
+            $latest = DepositRefund::orderBy('id','desc')->first();
             if ($latest) {
-               $invoice_number = 'FA' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
+               $invoice_number = 'RC' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{
-               $invoice_number = 'FA' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
+               $invoice_number = 'RC' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
             }
             
 
@@ -1189,12 +1188,12 @@ class NoteCreditController extends Controller
       }
 
 
-        NoteCreditDetail::insert($data1);
+        DepositRefundDetail::insert($data1);
 
-            $order_no = NoteCreditDetail::where('invoice_number',$invoice_number)->value('booking_no');
+            $order_no = DepositRefundDetail::where('invoice_number',$invoice_number)->value('booking_no');
 
             //create facture
-            $facture = new NoteCredit();
+            $facture = new DepositRefund();
             $facture->invoice_date = $invoice_date;
             $facture->invoice_number = $invoice_number;
             $facture->booking_no = $order_no;
@@ -1302,12 +1301,12 @@ class NoteCreditController extends Controller
       }
 
 
-        NoteCreditDetail::insert($data1);
+        DepositRefundDetail::insert($data1);
 
-            $order_no = NoteCreditDetail::where('invoice_number',$invoice_number)->value('booking_no');
+            $order_no = DepositRefundDetail::where('invoice_number',$invoice_number)->value('booking_no');
 
             //create facture
-            $facture = new NoteCredit();
+            $facture = new DepositRefund();
             $facture->invoice_date = $invoice_date;
             $facture->invoice_number = $invoice_number;
             $facture->booking_no = $order_no;
@@ -1415,12 +1414,12 @@ class NoteCreditController extends Controller
       }
 
 
-        NoteCreditDetail::insert($data1);
+        DepositRefundDetail::insert($data1);
 
-            $order_no = NoteCreditDetail::where('invoice_number',$invoice_number)->value('booking_no');
+            $order_no = DepositRefundDetail::where('invoice_number',$invoice_number)->value('booking_no');
 
             //create facture
-            $facture = new NoteCredit();
+            $facture = new DepositRefund();
             $facture->invoice_date = $invoice_date;
             $facture->invoice_number = $invoice_number;
             $facture->booking_no = $order_no;
@@ -1528,12 +1527,12 @@ class NoteCreditController extends Controller
       }
 
 
-        NoteCreditDetail::insert($data1);
+        DepositRefundDetail::insert($data1);
 
-            $order_no = NoteCreditDetail::where('invoice_number',$invoice_number)->value('booking_no');
+            $order_no = DepositRefundDetail::where('invoice_number',$invoice_number)->value('booking_no');
 
             //create facture
-            $facture = new NoteCredit();
+            $facture = new DepositRefund();
             $facture->invoice_date = $invoice_date;
             $facture->invoice_number = $invoice_number;
             $facture->booking_no = $order_no;
@@ -1641,12 +1640,12 @@ class NoteCreditController extends Controller
       }
 
 
-        NoteCreditDetail::insert($data1);
+        DepositRefundDetail::insert($data1);
 
-            $order_no = NoteCreditDetail::where('invoice_number',$invoice_number)->value('booking_no');
+            $order_no = DepositRefundDetail::where('invoice_number',$invoice_number)->value('booking_no');
 
             //create facture
-            $facture = new NoteCredit();
+            $facture = new DepositRefund();
             $facture->invoice_date = $invoice_date;
             $facture->invoice_number = $invoice_number;
             $facture->booking_no = $order_no;
@@ -1755,12 +1754,12 @@ class NoteCreditController extends Controller
       }
 
 
-        NoteCreditDetail::insert($data1);
+        DepositRefundDetail::insert($data1);
 
-            $order_no = NoteCreditDetail::where('invoice_number',$invoice_number)->value('booking_no');
+            $order_no = DepositRefundDetail::where('invoice_number',$invoice_number)->value('booking_no');
 
             //create facture
-            $facture = new NoteCredit();
+            $facture = new DepositRefund();
             $facture->invoice_date = $invoice_date;
             $facture->invoice_number = $invoice_number;
             $facture->booking_no = $order_no;
@@ -1804,8 +1803,8 @@ class NoteCreditController extends Controller
         }
 
             DB::commit();
-            session()->flash('success', 'La note de credit est faite avec succés!!');
-            return redirect()->route('admin.note-de-credit.index');
+            session()->flash('success', 'Le remboursement caution est fait avec succés!!');
+            return redirect()->route('admin.remboursement-caution.index');
         } catch (\Exception $e) {
             // An error occured; cancel the transaction...
 
@@ -1819,32 +1818,23 @@ class NoteCreditController extends Controller
 
     public function validerFactureDrink($invoice_number)
     {
-        if (is_null($this->user) || !$this->user->can('note_credit.validate')) {
+        if (is_null($this->user) || !$this->user->can('remboursement_caution.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any invoice !');
         }
 
         try {DB::beginTransaction();
 
-        $datas = NoteCreditDetail::where('invoice_number', $invoice_number)->get();
+        $datas = DepositRefundDetail::where('invoice_number', $invoice_number)->get();
 
 
-        $facture = NoteCreditDetail::where('invoice_number', $invoice_number)->first();
+        $facture = DepositRefundDetail::where('invoice_number', $invoice_number)->first();
 
-        if ($facture->cn_motif == '1' ) {
-            $cn_motif = "Erreur sur la facture";
-        }elseif ($facture->cn_motif == '2' ){
-            $cn_motif = "Retour marchandises";
-        }elseif ($facture->cn_motif == '3' ){
-            $cn_motif = "Rabais";
-        }elseif ($facture->cn_motif == '4' ){
-           $cn_motif = "Reduction hors facture"; 
-        }
+        $cn_motif = "Remboursement Caution"; 
 
         foreach($datas as $data){
 
             $date = Facture::where('invoice_number',$data->cancelled_invoice_ref)->value('invoice_date');
 
-            if ($data->cn_motif == 2) {
                 $valeurStockInitial = DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id', $data->drink_id)->value('total_cump_value');
                 $quantityStockInitial = DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id', $data->drink_id)->value('quantity_bottle');
                 $cump = Drink::where('id', $data->drink_id)->value('cump');
@@ -1863,7 +1853,7 @@ class NoteCreditController extends Controller
                     'invoice_no' => $data->invoice_number,
                     'date' => $data->invoice_date,
                     'commande_boisson_no' => $data->drink_order_no,
-                    'type_transaction' => 'NOTE DE CREDIT',
+                    'type_transaction' => 'REMBOURSEMENT CAUTION',
                     'document_no' => $data->invoice_number,
                     'cump' => $cump,
                     'created_by' => $this->user->name,
@@ -1882,7 +1872,7 @@ class NoteCreditController extends Controller
                         'verified' => true
                     );
 
-                    $noteCreditdata = array(
+                    $DepositRefunddata = array(
                         'drink_id' => $data->drink_id,
                         'invoice_number'=>$data->invoice_number,
                         'invoice_date'=> $date,
@@ -1927,7 +1917,7 @@ class NoteCreditController extends Controller
                         'employe_id'=> $data->employe_id,
                     );
 
-                    $noteCredit[] = $noteCreditdata;
+                    $DepositRefund[] = $DepositRefunddata;
                         
                         DrinkSmallStoreDetail::where('code',$data->code_store)->where('drink_id',$data->drink_id)
                         ->update($donnees);
@@ -1966,69 +1956,15 @@ class NoteCreditController extends Controller
 
                         $dataObr =  json_decode($response);
                         
-            }else{
-
-                    $noteCreditdata = array(
-                        'drink_id' => $data->drink_id,
-                        'invoice_number'=>$data->invoice_number,
-                        'invoice_date'=> $date,
-                        'tp_type'=>$data->tp_type,
-                        'tp_name'=>$data->tp_name,
-                        'tp_TIN'=>$data->tp_TIN,
-                        'tp_trade_number'=>$data->tp_trade_number,
-                        'tp_phone_number'=>$data->tp_phone_number,
-                        'tp_address_province'=>$data->tp_address_province,
-                        'tp_address_commune'=>$data->tp_address_commune,
-                        'tp_address_quartier'=>$data->tp_address_quartier,
-                        'tp_address_avenue'=>$data->tp_address_avenue,
-                        'tp_address_rue'=>$data->tp_address_rue,
-                        'vat_taxpayer'=>$data->vat_taxpayer,
-                        'ct_taxpayer'=>$data->ct_taxpayer,
-                        'tl_taxpayer'=>$data->tl_taxpayer,
-                        'tp_fiscal_center'=>$data->tp_fiscal_center,
-                        'tp_activity_sector'=>$data->tp_activity_sector,
-                        'tp_legal_form'=>$data->tp_legal_form,
-                        'payment_type'=>$data->payment_type,
-                        'client_id'=>$data->client_id,
-                        'customer_TIN'=>$data->customer_TIN,
-                        'customer_address'=>$data->customer_address,
-                        'invoice_signature'=> $data->invoice_signature,
-                        'drink_order_no'=>$data->drink_order_no,
-                        'cancelled_invoice_ref'=>$data->cancelled_invoice_ref,
-                        'cn_motif'=>$data->cn_motif,
-                        'invoice_currency'=>$data->invoice_currency,
-                        'invoice_ref'=>$data->invoice_ref,
-                        'auteur' => $this->user->name,
-                        'etat' => $data->etat,
-                        'invoice_signature_date'=> Carbon::now(),
-                        //'table_id'=>$data->table_id,
-                        'item_quantity'=>$data->item_quantity,
-                        'item_price'=>$data->item_price,
-                        'item_ct'=>$data->item_ct,
-                        'item_tl'=>$data->item_tl,
-                        'item_price_nvat'=>$data->item_price_nvat,
-                        'vat'=>$data->vat,
-                        'item_price_wvat'=>$data->item_price_wvat,
-                        'item_total_amount'=>$data->item_total_amount,
-                        'employe_id'=> $data->employe_id,
-                    );
-
-                    $noteCredit[] = $noteCreditdata;
-
-                $flag = 1;
-            }
         }
-
-        if ($flag != 1) {
             DrinkSmallReport::insert($report);
-        }
 
-        //FactureDetail::insert($noteCredit);
+        //FactureDetail::insert($DepositRefund);
 
         DrinkSmallStoreDetail::where('drink_id','!=','')->update(['verified' => false]);
-        NoteCredit::where('invoice_number', '=', $invoice_number)
+        DepositRefund::where('invoice_number', '=', $invoice_number)
             ->update(['statut' => 2,'validated_by' => $this->user->name]);
-        NoteCreditDetail::where('invoice_number', '=', $invoice_number)
+        DepositRefundDetail::where('invoice_number', '=', $invoice_number)
             ->update(['statut' => 2,'validated_by' => $this->user->name]);
 
         DB::commit();
@@ -2048,15 +1984,15 @@ class NoteCreditController extends Controller
 
     public function validerFactureBarrista($invoice_number)
     {
-        if (is_null($this->user) || !$this->user->can('note_credit.validate')) {
+        if (is_null($this->user) || !$this->user->can('remboursement_caution.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any invoice !');
         }
 
         try {DB::beginTransaction();
 
-        NoteCredit::where('invoice_number', '=', $invoice_number)
+        DepositRefund::where('invoice_number', '=', $invoice_number)
             ->update(['statut' => 2,'validated_by' => $this->user->name]);
-        NoteCreditDetail::where('invoice_number', '=', $invoice_number)
+        DepositRefundDetail::where('invoice_number', '=', $invoice_number)
             ->update(['statut' => 2,'validated_by' => $this->user->name]);
 
         DB::commit();
@@ -2075,15 +2011,15 @@ class NoteCreditController extends Controller
 
     public function validerFactureBartender($invoice_number)
     {
-        if (is_null($this->user) || !$this->user->can('note_credit.validate')) {
+        if (is_null($this->user) || !$this->user->can('remboursement_caution.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any invoice !');
         }
 
         try {DB::beginTransaction();
 
-        NoteCredit::where('invoice_number', '=', $invoice_number)
+        DepositRefund::where('invoice_number', '=', $invoice_number)
             ->update(['statut' => 2,'validated_by' => $this->user->name]);
-        NoteCreditDetail::where('invoice_number', '=', $invoice_number)
+        DepositRefundDetail::where('invoice_number', '=', $invoice_number)
             ->update(['statut' => 2,'validated_by' => $this->user->name]);
 
         DB::commit();
@@ -2103,15 +2039,15 @@ class NoteCreditController extends Controller
 
     public function validerFactureBooking($invoice_number)
     {
-        if (is_null($this->user) || !$this->user->can('note_credit.validate')) {
+        if (is_null($this->user) || !$this->user->can('remboursement_caution.validate')) {
             abort(403, 'Sorry !! You are Unauthorized to validate any invoice !');
         }
 
         try {DB::beginTransaction();
 
-        NoteCredit::where('invoice_number', '=', $invoice_number)
+        DepositRefund::where('invoice_number', '=', $invoice_number)
             ->update(['statut' => 2,'validated_by' => $this->user->name]);
-        NoteCreditDetail::where('invoice_number', '=', $invoice_number)
+        DepositRefundDetail::where('invoice_number', '=', $invoice_number)
             ->update(['statut' => 2,'validated_by' => $this->user->name]);
 
         DB::commit();
@@ -2136,9 +2072,9 @@ class NoteCreditController extends Controller
 
         try {DB::beginTransaction();
 
-        NoteCredit::where('invoice_number', '=', $invoice_number)
+        DepositRefund::where('invoice_number', '=', $invoice_number)
             ->update(['statut' => 2,'validated_by' => $this->user->name]);
-        NoteCreditDetail::where('invoice_number', '=', $invoice_number)
+        DepositRefundDetail::where('invoice_number', '=', $invoice_number)
             ->update(['statut' => 2,'validated_by' => $this->user->name]);
 
         DB::commit();
@@ -2158,30 +2094,30 @@ class NoteCreditController extends Controller
 
     public function facture($invoice_number)
     {
-        if (is_null($this->user) || !$this->user->can('note_credit.create')) {
+        if (is_null($this->user) || !$this->user->can('remboursement_caution.create')) {
             abort(403, 'Sorry !! You are Unauthorized!');
         }
 
 
         $setting = DB::table('settings')->orderBy('created_at','desc')->first();
 
-        $datas = NoteCreditDetail::where('invoice_number', $invoice_number)->get();
-        $facture = NoteCredit::where('invoice_number', $invoice_number)->first();
-        $invoice_signature = NoteCredit::where('invoice_number', $invoice_number)->value('invoice_signature');
-        $data = NoteCredit::where('invoice_number', $invoice_number)->first();
-        $totalValue = DB::table('note_credit_details')
+        $datas = DepositRefundDetail::where('invoice_number', $invoice_number)->get();
+        $facture = DepositRefund::where('invoice_number', $invoice_number)->first();
+        $invoice_signature = DepositRefund::where('invoice_number', $invoice_number)->value('invoice_signature');
+        $data = DepositRefund::where('invoice_number', $invoice_number)->first();
+        $totalValue = DB::table('deposit_refund_details')
             ->where('invoice_number', '=', $invoice_number)
             ->sum('item_price_nvat');
-        $item_total_amount = DB::table('note_credit_details')
+        $item_total_amount = DB::table('deposit_refund_details')
             ->where('invoice_number', '=', $invoice_number)
             ->sum('item_total_amount');
-        $totalVat = DB::table('note_credit_details')
+        $totalVat = DB::table('deposit_refund_details')
             ->where('invoice_number', '=', $invoice_number)
             ->sum('vat');
-        $client = NoteCredit::where('invoice_number', $invoice_number)->value('customer_name');
-        $date = NoteCredit::where('invoice_number', $invoice_number)->value('invoice_date');
+        $client = DepositRefund::where('invoice_number', $invoice_number)->value('customer_name');
+        $date = DepositRefund::where('invoice_number', $invoice_number)->value('invoice_date');
 
-        $factures = NoteCredit::where('invoice_number', $invoice_number)->get();
+        $factures = DepositRefund::where('invoice_number', $invoice_number)->get();
 
 
         $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
@@ -2334,8 +2270,8 @@ class NoteCreditController extends Controller
             'tp_address_avenue'=>$facture->tp_address_rue,
             'tp_address_rue'=>$facture->tp_address_rue,
             'vat_taxpayer'=>$facture->vat_taxpayer,
-            'ct_taxpayer'=>1,
-            'tl_taxpayer'=>0,
+            'ct_taxpayer'=>$facture->ct_taxpayer,
+            'tl_taxpayer'=>$facture->tl_taxpayer,
             'tp_fiscal_center'=>$setting->tp_fiscal_center,
             'tp_activity_sector'=>$facture->tp_activity_sector,
             'tp_legal_form'=>$facture->tp_legal_form,
@@ -2361,26 +2297,28 @@ class NoteCreditController extends Controller
         $done = $dataObr->success;
         $msg = $dataObr->msg;
 
-        $electronic_signature = $dataObr->electronic_signature;
+        dd($dataObr);
+
+        //$electronic_signature = $dataObr->electronic_signature;
 
        
-        $pdf = PDF::loadView('backend.pages.note_credit.facture',compact('datas','invoice_number','totalValue','item_total_amount','client','setting','date','data','invoice_signature','facture','totalVat'))->setPaper('a4', 'portrait');
+        $pdf = PDF::loadView('backend.pages.remboursement_caution.facture',compact('datas','invoice_number','totalValue','item_total_amount','client','setting','date','data','invoice_signature','facture','totalVat'))->setPaper('a4', 'portrait');
 
-        Storage::put('public/note_credit/'.$invoice_number.'.pdf', $pdf->output());
+        Storage::put('public/remboursement_caution/'.$invoice_number.'.pdf', $pdf->output());
 
 
-        $factures = NoteCredit::where('invoice_number', $invoice_number)->get();
+        $factures = DepositRefund::where('invoice_number', $invoice_number)->get();
 
-        $datas = NoteCreditDetail::where('invoice_number', $invoice_number)->get();
+        $datas = DepositRefundDetail::where('invoice_number', $invoice_number)->get();
 
         if ($done == true) {
-            NoteCredit::where('invoice_number', '=', $invoice_number)
+            DepositRefund::where('invoice_number', '=', $invoice_number)
                 ->update(['statut' => 1,'electronic_signature' => $electronic_signature]);
-            NoteCreditDetail::where('invoice_number', '=', $invoice_number)
+            DepositRefundDetail::where('invoice_number', '=', $invoice_number)
                 ->update(['statut' => 1,'electronic_signature' => $electronic_signature]);
 
             // download pdf file
-        return $pdf->download('FACTURE D AVOIR '.$invoice_number.'.pdf');
+        return $pdf->download('EMBOURSEMENT CAUTION '.$invoice_number.'.pdf');
 
         }else{
             return $response->json();
@@ -2398,16 +2336,16 @@ class NoteCreditController extends Controller
     public function show($invoice_number)
     {
         //
-        if (is_null($this->user) || !$this->user->can('note_credit.view')) {
+        if (is_null($this->user) || !$this->user->can('remboursement_caution.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view any invoice !');
         }
 
-        $factureDetails = NoteCreditDetail::where('invoice_number',$invoice_number)->get();
-        $facture = NoteCredit::with('employe')->where('invoice_number',$invoice_number)->first();
-        $total_amount = DB::table('note_credit_details')
+        $factureDetails = DepositRefundDetail::where('invoice_number',$invoice_number)->get();
+        $facture = DepositRefund::with('employe')->where('invoice_number',$invoice_number)->first();
+        $total_amount = DB::table('deposit_refund_details')
             ->where('invoice_number', '=', $invoice_number)
             ->sum('item_total_amount');
-        return view('backend.pages.note_credit.show',compact('facture','factureDetails','total_amount'));
+        return view('backend.pages.remboursement_caution.show',compact('facture','factureDetails','total_amount'));
     }
 
     /**
@@ -2419,7 +2357,7 @@ class NoteCreditController extends Controller
 
     public function edit($drink_order_no)
     {
-        if (is_null($this->user) || !$this->user->can('note_credit.edit')) {
+        if (is_null($this->user) || !$this->user->can('remboursement_caution.edit')) {
             abort(403, 'Sorry !! You are Unauthorized to edit any invoice !');
         }
 
@@ -2446,7 +2384,7 @@ class NoteCreditController extends Controller
     public function update(Request  $request,$invoice_number)
     {
 
-        if (is_null($this->user) || !$this->user->can('note_credit.edit')) {
+        if (is_null($this->user) || !$this->user->can('remboursement_caution.edit')) {
             abort(403, 'Sorry !! You are Unauthorized to edit any invoice !');
         }
 
@@ -2456,7 +2394,7 @@ class NoteCreditController extends Controller
 
     public function rapportBoisson(Request $request)
     {
-        if (is_null($this->user) || !$this->user->can('note_credit.view')) {
+        if (is_null($this->user) || !$this->user->can('remboursement_caution.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view any report !');
         }
 
@@ -2521,7 +2459,7 @@ class NoteCreditController extends Controller
      */
     public function destroy($invoice_number)
     {
-        if (is_null($this->user) || !$this->user->can('note_credit.delete')) {
+        if (is_null($this->user) || !$this->user->can('remboursement_caution.delete')) {
             abort(403, 'Sorry !! You are Unauthorized to delete any invoice !');
         }
 

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFactureDetailsTable extends Migration
+class CreateDepositRefundDetailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,16 @@ class CreateFactureDetailsTable extends Migration
      */
     public function up()
     {
-        Schema::create('facture_details', function (Blueprint $table) {
+        Schema::create('deposit_refund_details', function (Blueprint $table) {
             $table->id();
             $table->string('invoice_number')->nullable(true);
             $table->timestamp('invoice_date')->nullable(true);
+            $table->timestamp('sale_date')->nullable(true);
+            $table->string('type_facture')->nullable(true);
             $table->string('tp_type')->nullable(true);
             $table->string('tp_name')->nullable(true);
             $table->string('tp_TIN')->nullable(true);
-            $table->string('invoice_type')->default('FN');
+            $table->string('invoice_type')->default('RC');
             $table->string('tp_trade_number')->nullable(true);
             $table->string('tp_phone_number')->nullable(true);
             $table->string('tp_address_province')->nullable(true);
@@ -43,7 +45,7 @@ class CreateFactureDetailsTable extends Migration
             $table->string('cancelled_invoice_ref')->nullable(true);
             $table->string('cancelled_invoice')->nullable(true);
             $table->string('invoice_ref')->nullable(true);
-            $table->text('cn_motif')->nullable(true);
+            $table->string('cn_motif')->nullable(true);
             $table->string('code_store')->nullable(true);
             $table->string('food_order_no')->nullable(true);
             $table->string('drink_order_no')->nullable(true);
@@ -79,29 +81,16 @@ class CreateFactureDetailsTable extends Migration
             $table->string('paid_either')->nullable(true);
             $table->string('statut')->nullable(true);
             $table->string('statut_paied')->nullable(true);
-            $table->double('montant_total_credit')->nullable(true);
-            $table->double('montant_recouvre')->nullable(true);
-            $table->double('reste_credit')->nullable(true);
-            $table->string('etat_recouvrement')->nullable(true);
-            $table->string('bank_name')->nullable(true);
-            $table->string('cheque_no')->nullable(true);
-            $table->string('bordereau_no')->nullable(true);
-            $table->string('date_recouvrement')->nullable(true);
-            $table->string('nom_recouvrement')->nullable(true);
             $table->string('taux_reduction')->nullable(true);
-            $table->double('montant_reduction')->nullable(true);
-            $table->double('montant_total_reduction')->nullable(true);
+            $table->string('montant_reduction')->nullable(true);
+            $table->string('montant_total_reduction')->nullable(true);
             $table->text('note_reduction')->nullable(true);
             $table->text('note_credit')->nullable(true);
-            $table->text('note_recouvrement')->nullable(true);
             $table->text('description')->nullable(true);
             $table->double('cump')->nullable(true);
             $table->double('total_cump_value')->nullable(true);
             $table->text('invoice_identifier')->nullable(true);
             $table->string('type_space')->nullable(true);
-            $table->string('taux_majoration')->nullable(true);
-            $table->double('montant_majoration')->nullable(true);
-            $table->double('montant_total_majoration')->nullable(true);
             $table->bigInteger('employe_id')->unsigned()->nullable(true);
             $table->foreign('employe_id')
                     ->references('id')
@@ -180,12 +169,6 @@ class CreateFactureDetailsTable extends Migration
                     ->on('hr_banques')
                     ->onUpdate('cascade')
                     ->onDelete('cascade');
-            $table->bigInteger('room_id')->unsigned()->nullable(true);
-            $table->foreign('room_id')
-                    ->references('id')
-                    ->on('rooms')
-                    ->onUpdate('cascade')
-                    ->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -197,6 +180,6 @@ class CreateFactureDetailsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('facture_details');
+        Schema::dropIfExists('deposit_refund_details');
     }
 }

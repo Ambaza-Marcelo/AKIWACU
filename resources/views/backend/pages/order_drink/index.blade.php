@@ -145,7 +145,7 @@
                                             <a class="btn btn-success text-white" href="{{ route('admin.order_drinks.edit', $order->order_no) }}">@lang('messages.edit')</a>
                                         @endif
                                         @endif
-                                        @if($order->status == 1 || $order->status == -3 && $order->flag == 0)
+                                        @if($order->status == 1 && $order->flag == 1)
                                         @if (Auth::guard('admin')->user()->can('invoice_drink.create'))
                                             <a class="btn btn-success text-white" href="{{ route('ebms_api.invoices.create', $order->order_no) }}">@lang('Facturation')</a>
                                         @endif

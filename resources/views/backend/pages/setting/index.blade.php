@@ -71,6 +71,7 @@
                                     <th width="10%">Telephone 1</th>
                                     <th width="10%">Telephone 2</th>
                                     <th width="10%">Email</th>
+                                    <th width="10%">Nbre de lignes</th>
                                     <th width="10%">Devloppeur</th>
                                     <th width="15%">Action</th>
                                 </tr>
@@ -98,6 +99,7 @@
                                     <td>{{ $setting->telephone1 }}</td>
                                     <td>{{ $setting->telephone2 }}</td>
                                     <td>{{ $setting->email }}</td>
+                                    <td>{{ $setting->max_line }}</td>
                                     <td>{{ $setting->developpeur }}</td>
                                     <td>
                                         @if (Auth::guard('admin')->user()->can('setting.edit'))

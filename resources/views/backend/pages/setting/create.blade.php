@@ -48,7 +48,7 @@
                     <form action="{{ route('admin.settings.store') }}" method="POST"  enctype="multipart/form-data">
                         @csrf
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <label for="tp_type">Type Contribuable</label>
                                 <div class="form-group">
                                     <label class="text">Personne Physique
@@ -59,7 +59,7 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-6">
                                 <label for="vat_taxpayer">Assujetti à la TVA</label>
                                 <div class="form-group">
                                     <label class="text">Non Assujetti
@@ -70,7 +70,20 @@
                                     </label>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="ct_taxpayer">Assujetti à la taxe de conso.</label>
+                                <div class="form-group">
+                                    <label class="text">Non Assujetti
+                                    <input type="checkbox" name="ct_taxpayer" value="0" checked="checked" class="form-control">
+                                    </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <label class="text">Assujetti
+                                    <input type="checkbox" name="ct_taxpayer" value="1" class="form-control">
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
                                 <label for="tl_taxpayer">Assujetti au PF</label>
                                 <div class="form-group">
                                     <label class="text">Non Assujetti
@@ -104,9 +117,17 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-4">
-                                    <div class="form-group has-feedback">
-                                        <label for="tp_fiscal_center">Centre Fiscal<span class="text-danger"></span></label>
-                                        <input autofocus type="text" class="form-control" name="tp_fiscal_center" placeholder="Entrer Centre Fiscal " required minlength="2" maxlength="255">
+                                    <label for="tp_fiscal_center">Centre Fiscale</label>
+                                    <div class="form-group">
+                                    <label class="text">DGC
+                                        <input type="checkbox" name="tp_fiscal_center" value="DGC" class="form-control">
+                                        </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <label class="text">DMC
+                                        <input type="checkbox" checked="checked" name="tp_fiscal_center" value="DMC" class="form-control">
+                                        </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <label class="text">DPMC
+                                        <input type="checkbox" name="tp_fiscal_center" value="DPMC" class="form-control">
+                                    </label>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -183,16 +204,22 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-group has-feedback">
                                         <label for="logo">Logo<span class="text-danger"></span></label>
                                         <input type="file" class="form-control" name="logo" required>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <div class="form-group has-feedback">
                                         <label for="developpeur">Developpeur<span class="text-danger"></span></label>
                                         <input autofocus type="text" class="form-control" name="developpeur" placeholder="Entrer Developpeur">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group has-feedback">
+                                        <label for="max_line">Nbre des lignes<span class="text-danger">*</span></label>
+                                        <input autofocus type="number" min="1" class="form-control" name="max_line" placeholder="Entrer Nbre des lignes">
                                     </div>
                                 </div>
                             </div>
@@ -205,24 +232,98 @@
         
     </div>
 </div>
-<script type="text/javascript">
-    var token = $('input[name = _token]').val();
-    function backup() {
-        $.ajax({
-            type: "POST",
-            url: 'admin.system.dbBackup',
-            data: {
-                _token: token,
-            },
-            success: function (result) {
-              alert("ok")
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript">
+    //one checked box in checkbox group of tp_type
 
-            },
-            error: function (errors) {
-
-               alert("error");
-            }
-        });
+    var group_=(el,callback)=>{
+        el.forEach((checkbox)=>{
+        callback(checkbox)
+        })
     }
+
+    group_(document.getElementsByName('tp_type'),(item)=>{
+    item.onclick=(e)=>{
+    group_(document.getElementsByName('tp_type'),(item)=>{
+    item.checked=false;
+    })
+    e.target.checked=true;
+
+    }
+    })
+
+    //one checked box in checkbox group of assujeti a la taxe de consommation
+
+    var group_=(el,callback)=>{
+        el.forEach((checkbox)=>{
+        callback(checkbox)
+        })
+    }
+
+    group_(document.getElementsByName('ct_taxpayer'),(item)=>{
+    item.onclick=(e)=>{
+    group_(document.getElementsByName('ct_taxpayer'),(item)=>{
+    item.checked=false;
+    })
+    e.target.checked=true;
+
+    }
+    })
+
+    //one checked box in checkbox group of assujeti au PF
+
+    var group_=(el,callback)=>{
+        el.forEach((checkbox)=>{
+        callback(checkbox)
+        })
+    }
+
+    group_(document.getElementsByName('tl_taxpayer'),(item)=>{
+    item.onclick=(e)=>{
+    group_(document.getElementsByName('tl_taxpayer'),(item)=>{
+    item.checked=false;
+    })
+    e.target.checked=true;
+
+    }
+    })
+
+    //one checked box in checkbox group of tp_fiscal_center
+
+    var group_=(el,callback)=>{
+        el.forEach((checkbox)=>{
+        callback(checkbox)
+        })
+    }
+
+    group_(document.getElementsByName('tp_fiscal_center'),(item)=>{
+    item.onclick=(e)=>{
+    group_(document.getElementsByName('tp_fiscal_center'),(item)=>{
+    item.checked=false;
+    })
+    e.target.checked=true;
+
+    }
+    })
+
+    //one checked box in checkbox group of vat_taxpayer
+
+    var group_=(el,callback)=>{
+        el.forEach((checkbox)=>{
+        callback(checkbox)
+        })
+    }
+
+    group_(document.getElementsByName('vat_taxpayer'),(item)=>{
+    item.onclick=(e)=>{
+    group_(document.getElementsByName('vat_taxpayer'),(item)=>{
+    item.checked=false;
+    })
+    e.target.checked=true;
+
+    }
+    })
+
+
 </script>
 @endsection

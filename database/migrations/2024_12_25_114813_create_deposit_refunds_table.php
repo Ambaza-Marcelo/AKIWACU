@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateNoteCreditsTable extends Migration
+class CreateDepositRefundsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateNoteCreditsTable extends Migration
      */
     public function up()
     {
-        Schema::create('note_credits', function (Blueprint $table) {
+        Schema::create('deposit_refunds', function (Blueprint $table) {
             $table->id();
             $table->string('invoice_number')->nullable(true);
             $table->unique('invoice_number');
@@ -23,7 +23,7 @@ class CreateNoteCreditsTable extends Migration
             $table->string('tp_type')->nullable(true);
             $table->string('tp_name')->nullable(true);
             $table->string('tp_TIN')->nullable(true);
-            $table->string('invoice_type')->default('FA');
+            $table->string('invoice_type')->default('RC');
             $table->string('tp_trade_number')->nullable(true);
             $table->string('tp_phone_number')->nullable(true);
             $table->string('tp_address_province')->nullable(true);
@@ -111,6 +111,6 @@ class CreateNoteCreditsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('note_credits');
+        Schema::dropIfExists('deposit_refunds');
     }
 }

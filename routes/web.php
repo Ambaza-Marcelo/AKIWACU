@@ -148,6 +148,38 @@ Route::group(['prefix' => 'admin'], function () {
     Route::put('eBMS-booking-note-de-credit/valider/{invoice_number}', 'Backend\NoteCreditController@validerFactureBooking')->name('admin.booking-note-de-credit.valider');
 
 
+    //remboursement caution
+
+    Route::get('eBMS-remboursement-caution/index', 'Backend\DepositRefundController@index')->name('admin.remboursement-caution.index');
+
+    Route::get('eBMS-remboursement-caution/show/{invoice_number}', 'Backend\DepositRefundController@show')->name('admin.remboursement-caution.show');
+
+    Route::get('EBMS/boissons-faire-remboursement-caution/{invoice_number}','Backend\DepositRefundController@depositRefundBoisson')->name('admin.boissons-remboursement-caution.create');
+    Route::get('EBMS/nourritures-faire-remboursement-caution/{invoice_number}','Backend\DepositRefundController@depositRefundNourriture')->name('admin.nourritures-remboursement-caution.create');
+    Route::get('EBMS/barrista-faire-remboursement-caution/{invoice_number}','Backend\DepositRefundController@depositRefundBarrista')->name('admin.barrista-remboursement-caution.create');
+    Route::get('EBMS/bartender-faire-remboursement-caution/{invoice_number}','Backend\DepositRefundController@depositRefundBartender')->name('admin.bartender-remboursement-caution.create');
+    Route::get('EBMS/booking-faire-remboursement-caution/{invoice_number}','Backend\DepositRefundController@depositRefundBooking')->name('admin.booking-remboursement-caution.create');
+
+
+    Route::get('EBMS/remboursement-caution/{invoice_number}','Backend\DepositRefundController@facture')->name('admin.remboursement-caution.facture');
+
+
+    Route::post('eBMS-boissons-remboursement-caution/store', 'Backend\DepositRefundController@storeDrink')->name('admin.boissons-remboursement-caution.store');
+    Route::post('eBMS-barrista-remboursement-caution/store', 'Backend\DepositRefundController@storeBarrist')->name('admin.barrista-remboursement-caution.store');
+    Route::post('eBMS-bartender-remboursement-caution/store', 'Backend\DepositRefundController@storeBartender')->name('admin.bartender-remboursement-caution.store');
+    Route::post('eBMS-nourritures-remboursement-caution/store', 'Backend\DepositRefundController@storeFood')->name('admin.nourritures-remboursement-caution.store');
+    Route::post('eBMS-booking-remboursement-caution/store', 'Backend\DepositRefundController@storeBooking')->name('admin.booking-remboursement-caution.store');
+
+
+
+    Route::put('eBMS-boissons-remboursement-caution/valider/{invoice_number}', 'Backend\DepositRefundController@validerFactureDrink')->name('admin.boissons-remboursement-caution.valider');
+    Route::put('eBMS-barrista-remboursement-caution/valider/{invoice_number}', 'Backend\DepositRefundController@validerFactureBarrista')->name('admin.barrista-remboursement-caution.valider');
+    Route::put('eBMS-bartender-remboursement-caution/valider/{invoice_number}', 'Backend\DepositRefundController@validerFactureBartender')->name('admin.bartender-remboursement-caution.store');
+    Route::put('eBMS-nourritures-remboursement-caution/valider/{invoice_number}', 'Backend\DepositRefundController@validerFactureNourriture')->name('admin.nourritures-remboursement-caution.valider');
+    Route::put('eBMS-booking-remboursement-caution/valider/{invoice_number}', 'Backend\DepositRefundController@validerFactureBooking')->name('admin.booking-remboursement-caution.valider');
+
+
+
 
     // Login Routes
     Route::get('/login', 'Backend\Auth\LoginController@showLoginForm')->name('admin.login');

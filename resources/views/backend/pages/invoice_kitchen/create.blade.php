@@ -68,10 +68,10 @@
                                     <input type="checkbox" name="invoice_type" value="FN" checked="checked" class="form-control">
                                     </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <label class="text">R. Caution
-                                    <input type="checkbox" name="invoice_type" value="RC" class="form-control">
+                                    <input type="checkbox" disabled name="invoice_type" value="RC" class="form-control">
                                     </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <label class="text">Reduction HF
-                                    <input type="checkbox" name="invoice_type" value="RHF" class="form-control">
+                                    <input type="checkbox" disabled name="invoice_type" value="RHF" class="form-control">
                                     </label>
                                 </div>
                             </div>

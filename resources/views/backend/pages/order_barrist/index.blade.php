@@ -143,7 +143,7 @@
                                             <a class="btn btn-success text-white" href="{{ route('admin.barrist-orders.edit', $order->id) }}">@lang('messages.edit')</a>
                                         @endif
                                         @endif
-                                        @if($order->status == 1)
+                                        @if($order->status == 1 && $order->flag == 1)
                                         @if (Auth::guard('admin')->user()->can('invoice_drink.create'))
                                             <a class="btn btn-success text-white" href="{{ route('admin.barrist-invoices.create', $order->order_no) }}">@lang('Facturation')</a>
                                         @endif

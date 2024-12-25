@@ -218,12 +218,6 @@ class FoodSmallStoreController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to delete any food store !');
         }
 
-        $food_small_store = FoodSmallStoreDetail::find($id);
-        if (!is_null($food_small_store)) {
-            $food_small_store->delete();
-        }
-
-        session()->flash('success', 'Food Small Store has been deleted !!');
-        return back();
+        
     }
 }

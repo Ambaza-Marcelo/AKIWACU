@@ -261,12 +261,6 @@ class DrinkBigStoreController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to delete any drink store !');
         }
 
-        $drink_big_store = DrinkBigStore::find($id);
-        if (!is_null($drink_big_store)) {
-            $drink_big_store->delete();
-        }
-
-        session()->flash('success', 'Drink Big Store has been deleted !!');
-        return back();
+        
     }
 }

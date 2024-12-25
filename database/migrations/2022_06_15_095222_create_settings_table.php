@@ -35,6 +35,7 @@ class CreateSettingsTable extends Migration
             $table->string('commune');
             $table->string('zone');
             $table->string('quartier');
+            $table->string('evenue')->nullable(true);
             $table->string('rue')->nullable(true);
             $table->string('telephone1')->nullable(true);
             $table->string('telephone2')->nullable(true);

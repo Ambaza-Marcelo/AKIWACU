@@ -22,6 +22,7 @@ class CreateNoteCreditDetailsTable extends Migration
             $table->string('tp_type')->nullable(true);
             $table->string('tp_name')->nullable(true);
             $table->string('tp_TIN')->nullable(true);
+            $table->string('invoice_type')->default('FA');
             $table->string('tp_trade_number')->nullable(true);
             $table->string('tp_phone_number')->nullable(true);
             $table->string('tp_address_province')->nullable(true);

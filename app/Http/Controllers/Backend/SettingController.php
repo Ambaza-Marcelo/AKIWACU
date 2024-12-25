@@ -34,7 +34,7 @@ class SettingController extends Controller
 
             'tp_type' => 'required',
             'vat_taxpayer' => 'required',
-            //'ct_taxpayer' => 'required',
+            'ct_taxpayer' => 'required',
             'tl_taxpayer' => 'required',
             'tp_fiscal_center' => 'required',
             'tp_activity_sector' => 'required',
@@ -42,6 +42,7 @@ class SettingController extends Controller
             'postal_number' => 'required',
             'quartier' => 'required',
             'rue' => 'required',
+            'max_line' => 'required',
             'logo' => 'required|mimes:jpeg,jpg,png,svg|max:2048',
 
         ]);
@@ -94,7 +95,7 @@ class SettingController extends Controller
 
             'tp_type' => 'required',
             'vat_taxpayer' => 'required',
-            //'ct_taxpayer' => 'required',
+            'ct_taxpayer' => 'required',
             'tl_taxpayer' => 'required',
             'tp_fiscal_center' => 'required',
             'tp_activity_sector' => 'required',
@@ -102,6 +103,8 @@ class SettingController extends Controller
             'postal_number' => 'required',
             'quartier' => 'required',
             'rue' => 'required',
+            'max_line' => 'required',
+            'logo' => 'required|mimes:jpeg,jpg,png,svg|max:2048',
 
         ]);
 

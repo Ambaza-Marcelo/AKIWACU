@@ -55,7 +55,7 @@ class OrderDrinkController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any order !');
         }
 
-        $orders = OrderDrink::where('table_id',$table_id)->take(20)->orderBy('id','desc')->get();
+        $orders = OrderDrink::where('table_id',$table_id)->take(50)->orderBy('id','desc')->get();
         $table = Table::where('id',$table_id)->first();
 
         $table_id = $table->id;

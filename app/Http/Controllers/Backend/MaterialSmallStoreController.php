@@ -235,12 +235,6 @@ class MaterialSmallStoreController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to delete any material store !');
         }
 
-        $material_small_store = MaterialSmallStoreDetail::find($id);
-        if (!is_null($material_small_store)) {
-            $material_small_store->delete();
-        }
-
-        session()->flash('success', 'Material Small Store has been deleted !!');
-        return back();
+        
     }
 }

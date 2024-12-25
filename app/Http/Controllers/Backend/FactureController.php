@@ -172,10 +172,6 @@ class FactureController extends Controller
                 'tp_address_commune' => 'required|max:50|min:5',
                 'tp_address_quartier' => 'required|max:50|min:5',
                 'client_id' => 'required',
-                //'customer_TIN' => 'required|max:30|min:4',
-                //'customer_address' => 'required|max:100|min:5',
-                //'invoice_signature' => 'required|max:90|min:10',
-                //'invoice_signature_date' => 'required|max: |min:',
                 'code_store' => 'required',
                 'drink_id.*'  => 'required',
                 'drink_order_no.*'  => 'required',
@@ -234,11 +230,29 @@ class FactureController extends Controller
 
             if($request->vat_taxpayer == 1){
 
-                $item_total_amount = ($item_price[$count]*$item_quantity[$count]);
+                if ($request->tl_taxpayer == 1) {
+                    $d_prix_tva = $item_price[$count] - $brarudi_price;
+                    if ($d_prix_tva <= 0) {
+                        $item_total_amount = ($item_price[$count]*$item_quantity[$count]);
+                        $vat = 0;
+                        $item_price_nvat = ($item_total_amount - $vat);
+                        $item_price_wvat = ($item_price_nvat + $vat);
+                    }else{
+                        $item_total_amount = ($item_price[$count]*$item_quantity[$count]);
+                        $item_total_amount_brarudi = ($d_prix_tva*$item_quantity[$count]);
+                        $item_price_nvat2 = ($item_total_amount_brarudi * 100)/110;
+                        $vat = ($item_price_nvat2 * $taux_tva)/100;
+                        $item_price_nvat = ($item_total_amount - $vat);
+                        $item_price_wvat = ($item_price_nvat + $vat);
+                    } 
+                }else{
+
+                    $item_total_amount = ($item_price[$count]*$item_quantity[$count]);
                     
-                $item_price_nvat = ($item_total_amount* 100)/110;
-                $vat = ($item_price_nvat * $taux_tva)/100;
-                $item_price_wvat = ($item_price_nvat + $vat); 
+                    $item_price_nvat = ($item_total_amount* 100)/110;
+                    $vat = ($item_price_nvat * $taux_tva)/100;
+                    $item_price_wvat = ($item_price_nvat + $vat); 
+                }
 
             }else{
                 $item_price_nvat = ($item_price[$count]*$item_quantity[$count])+$item_ct[$count];
@@ -268,6 +282,7 @@ class FactureController extends Controller
             'tp_activity_sector'=>$request->tp_activity_sector,
             'tp_legal_form'=>$request->tp_legal_form,
             'payment_type'=>$request->payment_type,
+            'invoice_type'=>$request->invoice_type,
             'client_id'=>$request->client_id,
             'customer_TIN'=>$client->customer_TIN,
             'customer_address'=>$client->customer_address,
@@ -324,6 +339,7 @@ class FactureController extends Controller
             $facture->tp_legal_form = $request->tp_legal_form;
             $facture->invoice_currency = $request->invoice_currency;
             $facture->payment_type = $request->payment_type;
+            $facture->invoice_type = $request->invoice_type;
             $facture->client_id = $request->client_id;
             $facture->customer_TIN = $client->customer_TIN;
             $facture->customer_address = $client->customer_address;
@@ -387,10 +403,6 @@ class FactureController extends Controller
                 'tp_address_commune' => 'required|max:50|min:5',
                 'tp_address_quartier' => 'required|max:50|min:5',
                 'client_id' => 'required',
-                //'customer_TIN' => 'required|max:30|min:4',
-                //'customer_address' => 'required|max:100|min:5',
-                //'invoice_signature' => 'required|max:90|min:10',
-                //'invoice_signature_date' => 'required|max: |min:',
                 'barrist_order_no.*'  => 'required',
                 'barrist_item_id.*'  => 'required',
                 'item_quantity.*'  => 'required',
@@ -479,6 +491,7 @@ class FactureController extends Controller
             'tp_activity_sector'=>$request->tp_activity_sector,
             'tp_legal_form'=>$request->tp_legal_form,
             'payment_type'=>$request->payment_type,
+            'invoice_type'=>$request->invoice_type,
             'client_id'=>$request->client_id,
             'customer_TIN'=>$client->customer_TIN,
             'customer_address'=>$client->customer_address,
@@ -532,6 +545,7 @@ class FactureController extends Controller
             $facture->tp_legal_form = $request->tp_legal_form;
             $facture->invoice_currency = $request->invoice_currency;
             $facture->payment_type = $request->payment_type;
+            $facture->invoice_type = $request->invoice_type;
             $facture->client_id = $request->client_id;
             $facture->customer_TIN = $client->customer_TIN;
             $facture->customer_address = $client->customer_address;
@@ -592,10 +606,6 @@ class FactureController extends Controller
                 'tp_address_commune' => 'required|max:50|min:5',
                 'tp_address_quartier' => 'required|max:50|min:5',
                 'client_id' => 'required',
-                //'customer_TIN' => 'required|max:30|min:4',
-                //'customer_address' => 'required|max:100|min:5',
-                //'invoice_signature' => 'required|max:90|min:10',
-                //'invoice_signature_date' => 'required|max: |min:',
                 'food_order_no.*'  => 'required',
                 'food_item_id.*'  => 'required',
                 'item_quantity.*'  => 'required',
@@ -684,6 +694,7 @@ class FactureController extends Controller
             'tp_activity_sector'=>$request->tp_activity_sector,
             'tp_legal_form'=>$request->tp_legal_form,
             'payment_type'=>$request->payment_type,
+            'invoice_type'=>$request->invoice_type,
             'client_id'=>$request->client_id,
             'customer_TIN'=>$client->customer_TIN,
             'customer_address'=>$client->customer_address,
@@ -736,6 +747,7 @@ class FactureController extends Controller
             $facture->tp_legal_form = $request->tp_legal_form;
             $facture->invoice_currency = $request->invoice_currency;
             $facture->payment_type = $request->payment_type;
+            $facture->invoice_type = $request->invoice_type;
             $facture->client_id = $request->client_id;
             $facture->customer_TIN = $client->customer_TIN;
             $facture->customer_address = $client->customer_address;
@@ -796,10 +808,6 @@ class FactureController extends Controller
                 'tp_address_commune' => 'required|max:50|min:5',
                 'tp_address_quartier' => 'required|max:50|min:5',
                 'client_id' => 'required',
-                //'customer_TIN' => 'required|max:30|min:4',
-                //'customer_address' => 'required|max:100|min:5',
-                //'invoice_signature' => 'required|max:90|min:10',
-                //'invoice_signature_date' => 'required|max: |min:',
                 'bartender_order_no.*'  => 'required',
                 'bartender_item_id.*'  => 'required',
                 'item_quantity.*'  => 'required',
@@ -888,6 +896,7 @@ class FactureController extends Controller
             'tp_activity_sector'=>$request->tp_activity_sector,
             'tp_legal_form'=>$request->tp_legal_form,
             'payment_type'=>$request->payment_type,
+            'invoice_type'=>$request->invoice_type,
             'client_id'=>$request->client_id,
             'customer_TIN'=>$client->customer_TIN,
             'customer_address'=>$client->customer_address,
@@ -940,6 +949,7 @@ class FactureController extends Controller
             $facture->tp_legal_form = $request->tp_legal_form;
             $facture->invoice_currency = $request->invoice_currency;
             $facture->payment_type = $request->payment_type;
+            $facture->invoice_type = $request->invoice_type;
             $facture->client_id = $request->client_id;
             $facture->customer_TIN = $client->customer_TIN;
             $facture->customer_address = $client->customer_address;
@@ -1000,11 +1010,6 @@ class FactureController extends Controller
                 'tp_address_commune' => 'required|max:50|min:5',
                 'tp_address_quartier' => 'required|max:50|min:5',
                 'client_id' => 'required',
-                //'customer_TIN' => 'required|max:30|min:4',
-                //'customer_address' => 'required|max:100|min:5',
-                //'invoice_signature' => 'required|max:90|min:10',
-                //'invoice_signature_date' => 'required|max: |min:',
-                //'salle_id.*'  => 'required',
                 'item_quantity.*'  => 'required',
                 'item_price.*'  => 'required',
                 'item_ct.*'  => 'required',
@@ -1090,6 +1095,7 @@ class FactureController extends Controller
             'tp_activity_sector'=>$request->tp_activity_sector,
             'tp_legal_form'=>$request->tp_legal_form,
             'payment_type'=>$request->payment_type,
+            'invoice_type'=>$request->invoice_type,
             'client_id'=>$request->client_id,
             'customer_TIN'=>$client->customer_TIN,
             'customer_address'=>$client->customer_address,
@@ -1142,6 +1148,7 @@ class FactureController extends Controller
             $facture->tp_legal_form = $request->tp_legal_form;
             $facture->invoice_currency = $request->invoice_currency;
             $facture->payment_type = $request->payment_type;
+            $facture->invoice_type = $request->invoice_type;
             $facture->client_id = $request->client_id;
             $facture->customer_TIN = $client->customer_TIN;
             $facture->customer_address = $client->customer_address;
@@ -1199,6 +1206,7 @@ class FactureController extends Controller
             'tp_activity_sector'=>$request->tp_activity_sector,
             'tp_legal_form'=>$request->tp_legal_form,
             'payment_type'=>$request->payment_type,
+            'invoice_type'=>$request->invoice_type,
             'client_id'=>$request->client_id,
             'customer_TIN'=>$client->customer_TIN,
             'customer_address'=>$client->customer_address,
@@ -1251,6 +1259,7 @@ class FactureController extends Controller
             $facture->tp_legal_form = $request->tp_legal_form;
             $facture->invoice_currency = $request->invoice_currency;
             $facture->payment_type = $request->payment_type;
+            $facture->invoice_type = $request->invoice_type;
             $facture->client_id = $request->client_id;
             $facture->customer_TIN = $client->customer_TIN;
             $facture->customer_address = $client->customer_address;
@@ -1308,6 +1317,7 @@ class FactureController extends Controller
             'tp_activity_sector'=>$request->tp_activity_sector,
             'tp_legal_form'=>$request->tp_legal_form,
             'payment_type'=>$request->payment_type,
+            'invoice_type'=>$request->invoice_type,
             'client_id'=>$request->client_id,
             'customer_TIN'=>$client->customer_TIN,
             'customer_address'=>$client->customer_address,
@@ -1360,6 +1370,7 @@ class FactureController extends Controller
             $facture->tp_legal_form = $request->tp_legal_form;
             $facture->invoice_currency = $request->invoice_currency;
             $facture->payment_type = $request->payment_type;
+            $facture->invoice_type = $request->invoice_type;
             $facture->client_id = $request->client_id;
             $facture->customer_TIN = $client->customer_TIN;
             $facture->customer_address = $client->customer_address;
@@ -1417,6 +1428,7 @@ class FactureController extends Controller
             'tp_activity_sector'=>$request->tp_activity_sector,
             'tp_legal_form'=>$request->tp_legal_form,
             'payment_type'=>$request->payment_type,
+            'invoice_type'=>$request->invoice_type,
             'client_id'=>$request->client_id,
             'customer_TIN'=>$client->customer_TIN,
             'customer_address'=>$client->customer_address,
@@ -1469,6 +1481,7 @@ class FactureController extends Controller
             $facture->tp_legal_form = $request->tp_legal_form;
             $facture->invoice_currency = $request->invoice_currency;
             $facture->payment_type = $request->payment_type;
+            $facture->invoice_type = $request->invoice_type;
             $facture->client_id = $request->client_id;
             $facture->customer_TIN = $client->customer_TIN;
             $facture->customer_address = $client->customer_address;
@@ -1526,6 +1539,7 @@ class FactureController extends Controller
             'tp_activity_sector'=>$request->tp_activity_sector,
             'tp_legal_form'=>$request->tp_legal_form,
             'payment_type'=>$request->payment_type,
+            'invoice_type'=>$request->invoice_type,
             'client_id'=>$request->client_id,
             'customer_TIN'=>$client->customer_TIN,
             'customer_address'=>$client->customer_address,
@@ -1578,6 +1592,7 @@ class FactureController extends Controller
             $facture->tp_legal_form = $request->tp_legal_form;
             $facture->invoice_currency = $request->invoice_currency;
             $facture->payment_type = $request->payment_type;
+            $facture->invoice_type = $request->invoice_type;
             $facture->client_id = $request->client_id;
             $facture->customer_TIN = $client->customer_TIN;
             $facture->customer_address = $client->customer_address;
@@ -1604,14 +1619,20 @@ class FactureController extends Controller
             $item_tsce_tax = BookingRoom::where('id', $room_id[$count])->value('item_tsce_tax');
 
             if($request->vat_taxpayer == 1){
-                $item_total_amount = ($item_price[$count]*$item_quantity[$count]);
-                $item_price_nvat1 = ($item_total_amount * 100)/110;
-                $item_price_nvat = ($item_price_nvat1 * 100)/105;
-                $item_tsce_tax = ($item_price_nvat * $item_tsce_tax)/105;
-                $vat = ($item_price_nvat1 * $taux_tva)/100;
-                $item_price_wvat = ($item_price_nvat + $vat + $item_tsce_tax);
-                $item_total_amount = ($item_price_nvat + $vat + $item_tsce_tax);
-
+                if ($request->ct_taxpayer == 1) {
+                    $item_total_amount = ($item_price[$count]*$item_quantity[$count]);
+                    $item_price_nvat1 = ($item_total_amount * 100)/110;
+                    $item_price_nvat = ($item_price_nvat1 * 100)/105;
+                    $item_tsce_tax = ($item_price_nvat * $item_tsce_tax)/105;
+                    $vat = ($item_price_nvat1 * $taux_tva)/100;
+                    $item_price_wvat = ($item_price_nvat + $vat + $item_tsce_tax);
+                    $item_total_amount = ($item_price_nvat + $vat + $item_tsce_tax);
+                }else{
+                    $item_total_amount = ($item_price[$count]*$item_quantity[$count]);
+                    $item_price_nvat = ($item_total_amount * 100)/110;
+                    $vat = ($item_price_nvat * $taux_tva)/100;
+                    $item_price_wvat = ($item_price_nvat + $vat);
+                }
             }else{
                 $item_price_nvat = ($item_price[$count]*$item_quantity[$count])+$item_ct[$count];
                 $vat = 0;
@@ -1641,6 +1662,7 @@ class FactureController extends Controller
             'tp_activity_sector'=>$request->tp_activity_sector,
             'tp_legal_form'=>$request->tp_legal_form,
             'payment_type'=>$request->payment_type,
+            'invoice_type'=>$request->invoice_type,
             'client_id'=>$request->client_id,
             'customer_TIN'=>$client->customer_TIN,
             'customer_address'=>$client->customer_address,
@@ -1694,6 +1716,7 @@ class FactureController extends Controller
             $facture->tp_legal_form = $request->tp_legal_form;
             $facture->invoice_currency = $request->invoice_currency;
             $facture->payment_type = $request->payment_type;
+            $facture->invoice_type = $request->invoice_type;
             $facture->client_id = $request->client_id;
             $facture->customer_TIN = $client->customer_TIN;
             $facture->customer_address = $client->customer_address;
@@ -1752,6 +1775,7 @@ class FactureController extends Controller
             'tp_activity_sector'=>$request->tp_activity_sector,
             'tp_legal_form'=>$request->tp_legal_form,
             'payment_type'=>$request->payment_type,
+            'invoice_type'=>$request->invoice_type,
             'client_id'=>$request->client_id,
             'customer_TIN'=>$client->customer_TIN,
             'customer_address'=>$client->customer_address,
@@ -1804,6 +1828,7 @@ class FactureController extends Controller
             $facture->tp_legal_form = $request->tp_legal_form;
             $facture->invoice_currency = $request->invoice_currency;
             $facture->payment_type = $request->payment_type;
+            $facture->invoice_type = $request->invoice_type;
             $facture->client_id = $request->client_id;
             $facture->customer_TIN = $client->customer_TIN;
             $facture->customer_address = $client->customer_address;
@@ -3397,6 +3422,7 @@ class FactureController extends Controller
             'tp_activity_sector'=>$facture->tp_activity_sector,
             'tp_legal_form'=>$facture->tp_legal_form,
             'payment_type'=>$facture->payment_type,
+            'invoice_type'=>$facture->invoice_type,
             'customer_name'=>$facture->client->customer_name,
             'customer_TIN'=>$facture->client->customer_TIN,
             'vat_customer_payer'=>$facture->client->vat_customer_payer,
@@ -3414,15 +3440,19 @@ class FactureController extends Controller
         }
 
         $dataObr =  json_decode($response);
+
         $done = $dataObr->success;
         $msg = $dataObr->msg;
 
 
         if ($done == true) {
+
+            $electronic_signature = $dataObr->electronic_signature;
+
             Facture::where('invoice_number', '=', $invoice_number)
-                ->update(['statut' => 1]);
+                ->update(['statut' => 1,'electronic_signature' => $electronic_signature]);
             FactureDetail::where('invoice_number', '=', $invoice_number)
-                ->update(['statut' => 1]);
+                ->update(['statut' => 1,'electronic_signature' => $electronic_signature]);
 
             
             DB::commit();

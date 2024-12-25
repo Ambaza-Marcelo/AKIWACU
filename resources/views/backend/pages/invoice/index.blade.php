@@ -82,6 +82,7 @@
                                     <th width="30%">Auteur</th>
                                     <th width="10%">Signature Facture </th>
                                     <th width="10%">Date Signature Facture</th>
+                                    <th width="10%">Obr Signature electronique</th>
                                     <th width="30%">Motif</th>
                                     <th width="10%">Action</th>
                                 </tr>
@@ -108,6 +109,7 @@
                                     <td>{{ $facture->auteur }}</td>
                                     <td>{{ $facture->invoice_signature }}</td>
                                     <td>{{ $facture->invoice_signature_date }}</td>
+                                    <td>{{ $facture->electronic_signature }}</td>
                                     <td>@if($facture->cancelled_invoice == 1 || $facture->etat == -1)<span class="badge badge-danger">{{ $facture->cn_motif }}</span> ;Référence Facture : <span class="badge badge-warning">{{ $facture->invoice_ref }}</span> @endif</td>
                                     <td>
                                         @if (Auth::guard('admin')->user()->can('invoice_drink.create'))
@@ -134,7 +136,14 @@
                                          <a href="{{ route('admin.boissons-note-de-credit.create', $facture->invoice_number) }}" class="btn btn-success">Facture d'Avoir</a>
                                         @endif
                                         @endif
-                                        @endif 
+                                        @endif
+                                        @if (Auth::guard('admin')->user()->can('remboursement_caution.create'))
+                                        @if($facture->etat == 1 || $facture->etat == 01)
+                                        @if($facture->cancelled_invoice != 1)
+                                         <a href="{{ route('admin.boissons-remboursement-caution.create', $facture->invoice_number) }}" class="btn btn-success">Remboursement Caution</a>
+                                        @endif
+                                        @endif
+                                        @endif  
                                         @if (Auth::guard('admin')->user()->can('invoice_drink.reset'))
                                         @if($facture->etat == 0)
                                          <a href="{{ route('admin.voir-facture.reset', $facture->invoice_number) }}" class="btn btn-success">Annuler</a>

@@ -144,6 +144,13 @@
                                         @endif
                                         @endif
                                         @endif 
+                                        @if (Auth::guard('admin')->user()->can('remboursement_caution.create'))
+                                        @if($facture->etat == 1 || $facture->etat == 01)
+                                        @if($facture->cancelled_invoice != 1)
+                                         <a href="{{ route('admin.booking-remboursement-caution.create', $facture->invoice_number) }}" class="btn btn-success">Remboursement Caution</a>
+                                        @endif
+                                        @endif
+                                        @endif 
                                         @if (Auth::guard('admin')->user()->can('invoice_booking.reset'))
                                         @if($facture->etat != 1 || $facture->etat != 2)
                                          <a href="{{ route('admin.voir-facture.reset', $facture->invoice_number) }}" class="btn btn-success">Annuler</a>

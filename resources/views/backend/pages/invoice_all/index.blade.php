@@ -94,7 +94,7 @@
                                     <th width="10%">NIF du client</th>
                                     <th width="10%">Adresse du client</th>
                                     <th width="10%">Signature Facture </th>
-                                    <th width="10%">Date Signature Facture</th>
+                                    <th width="10%">Obr Signature electronique</th>
                                     <th width="30%">Motif</th>
                                     <th width="10%">Action</th>
                                 </tr>
@@ -117,7 +117,7 @@
                                     <td>@if($facture->client_id){{ $facture->client->customer_TIN }} @endif</td>
                                     <td>@if($facture->client_id){{ $facture->client->customer_address }} @endif</td>
                                     <td>{{ $facture->invoice_signature }}</td>
-                                    <td>{{ $facture->invoice_signature_date }}</td>
+                                    <td>{{ $facture->electronic_signature }}</td>
                                     <td>@if($facture->cancelled_invoice == 1 || $facture->etat == -1)<span class="badge badge-danger">{{ $facture->cn_motif }}</span> ;Référence Facture : <span class="badge badge-warning">{{ $facture->invoice_ref }}</span> @endif</td>
                                     <td>
                                                                              

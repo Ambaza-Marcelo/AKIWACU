@@ -2,7 +2,7 @@
 @extends('backend.layouts.master')
 
 @section('title')
-@lang('factures Boissons') - @lang('messages.admin_panel')
+@lang('Nouveau remboursement caution') - @lang('messages.admin_panel')
 @endsection
 
 @section('styles')
@@ -21,11 +21,11 @@
     <div class="row align-items-center">
         <div class="col-sm-6">
             <div class="breadcrumbs-area clearfix">
-                <h4 class="page-title pull-left">@lang('factures Boissons')</h4>
+                <h4 class="page-title pull-left">@lang('Nouveau remboursement caution')</h4>
                 <ul class="breadcrumbs pull-left">
                     <li><a href="{{ route('admin.dashboard') }}">@lang('messages.dashboard')</a></li>
-                    <li><a href="{{ route('ebms_api.invoices.index') }}">@lang('messages.list')</a></li>
-                    <li><span>@lang('factures Boissons')</span></li>
+                    <li><a href="{{ route('admin.remboursement-caution.index') }}">@lang('messages.list')</a></li>
+                    <li><span>@lang('Nouveau remboursement caution')</span></li>
                 </ul>
             </div>
         </div>
@@ -40,23 +40,25 @@
         <div class="col-12 mt-5">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="header-title">Nouveau Facture</h4>
+                    <h4 class="header-title">Nouveau remboursement caution</h4>
                     @include('backend.layouts.partials.messages')
                     
-                    <form action="{{ route('ebms_api-facture-boisson.store') }}" method="POST">
+                    <form action="{{ route('admin.barrista-remboursement-caution.store') }}" method="POST">
                         @csrf
+                        <input type="hidden" name="invoice_number" value="{{ $invoice_number }}">
+                        <input type="hidden" name="etat" value="{{ $data->etat }}">
                         <div class="row">
-                            @if($table_id)
-                            <div class="col-md-6">
-                                <label for="table_id">Table : {{ $data->table->name }}</label>
-                                <input type="number" name="table_id" class="form-control" value="{{ $table_id }}" readonly>
-                            </div>
-                            @endif
                             <div class="col-md-6">
                                 <label for="employe_id">Serveur</label>
                                 <select class="form-control" name="employe_id" id="employe_id">
                                 <option disabled="disabled">Merci de choisir un Serveur</option>
                                 <option value="{{$data->employe_id}}" selected="selected">{{$data->employe->name}}</option>
+                            </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="cn_motif">Remboursement Caution</label>
+                                <select class="form-control" name="cn_motif" id="cn_motif">
+                                <option value="Remboursement Caution" selected>Remboursement Caution</option>
                             </select>
                             </div>
                         </div>
@@ -65,13 +67,13 @@
                                 <label for="invoice_type">Type Facture</label>
                                 <div class="form-group">
                                     <label class="text">F. Normale
-                                    <input type="checkbox" name="invoice_type" value="FN" checked="checked" class="form-control">
+                                    <input type="checkbox" disabled name="invoice_type" value="FN" class="form-control">
+                                    </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <label class="text">facture d'Avoir
+                                    <input type="checkbox" disabled name="invoice_type" value="FA" class="form-control">
                                     </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <label class="text">R. Caution
-                                    <input type="checkbox" disabled name="invoice_type" value="RC" class="form-control">
-                                    </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <label class="text">Reduction HF
-                                    <input type="checkbox" name="invoice_type" disabled value="RHF" class="form-control">
+                                    <input type="checkbox" checked name="invoice_type" value="RC" class="form-control">
                                     </label>
                                 </div>
                             </div>
@@ -238,19 +240,10 @@
                                 <select class="form-control" name="client_id">
                                 <option disabled="disabled" selected="selected">Merci de choisir client</option>
                                 @foreach ($clients as $client)
-                                <option value="{{ $client->id }}" {{ $client->mail == 'clientcash@gmail.com' ? 'selected' : '' }} class="form-control">{{ $client->customer_name }}/{{ $client->telephone }}</option>
+                                <option value="{{ $client->id }}" {{ $data->client_id === $client->id ? 'selected' : '' }} class="form-control">{{ $client->customer_name }}/{{ $client->telephone }}</option>
                                 @endforeach
                                 </select>
                             </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label for="code_store">Stock Boisson</label>
-                                <select class="form-control" name="code_store" id="code_store" required>
-                                <option disabled="disabled" selected="selected">Merci de choisir un stock</option>
-                                @foreach($drink_small_stores as $drink_small_store)
-                                <option value="{{$drink_small_store->code}}">{{$drink_small_store->name}}/{{ $drink_small_store->code }}</option>
-                                @endforeach
-                                </select>
                             </div>
                         </div>
                         <br>
@@ -264,16 +257,16 @@
                                 <th>Commande No</th>
                                 <th>Action</th>
                             </tr>
-                            @foreach($orders as $order)
+                            @foreach($datas as $data)
                             <tr>  
-                                <td><select class="form-control" name="drink_id[]" id="drink_id">
-                                <option value="{{ $order->drink_id }}" class="form-control">{{ $order->drink->name }}</option>
+                                <td><select class="form-control" name="barrist_item_id[]" id="barrist_item_id">
+                                <option value="{{ $data->barrist_item_id }}" class="form-control">{{ $data->barristItem->name }}</option>
                                 </select></td>  
-                                <td><input type="number" step='any' min='0' value="{{ $order->quantity }}" name="item_quantity[]" placeholder="Quantite" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_drink.delete')) @else readonly @endif /></td>  
-                                <td><input type="number" step='any' min='0' value="{{ $order->selling_price }}" @if(Auth::guard('admin')->user()->can('invoice_drink.delete')) @else readonly @endif name="item_price[]" placeholder="Prix" class="form-control" /></td>
-                                <td><input type="number" step='any' min='0' name="item_ct[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_drink.delete')) @else readonly @endif/></td>   
-                                <td><input type="number" step='any' min='0' name="item_tl[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_drink.delete')) @else readonly @endif/></td>
-                                <td><input type="text" value="{{ $order->order_no }}" name="drink_order_no[]" class="form-control" readonly /></td>
+                                <td><input type="number" step='any' min='0' value="{{ $data->item_quantity }}" name="item_quantity[]" placeholder="Quantite" class="form-control" @if(Auth::guard('admin')->user()->can('note_credit.create')) @else readonly @endif /></td>  
+                                <td><input type="number" step='any' min='0' value="{{ $data->item_price }}" @if(Auth::guard('admin')->user()->can('note_credit.create')) @else readonly @endif name="item_price[]" placeholder="Prix" class="form-control" /></td>
+                                <td><input type="number" step='any' min='0' name="item_ct[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('note_credit.create')) @else readonly @endif/></td>   
+                                <td><input type="number" step='any' min='0' name="item_tl[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('note_credit.create')) @else readonly @endif/></td>
+                                <td><input type="text" value="{{ $data->barrist_order_no }}" name="barrist_order_no[]" class="form-control" readonly /></td>
                                 <td><button type='button' class='btn btn-danger remove-tr'><i class='fa fa-trash-o' title='Supprimer la ligne' aria-hidden='false'></i></button></td> 
                             </tr> 
                             @endforeach
@@ -304,12 +297,7 @@
 
          var markup = "<tr>"+
                         "<td>"+
-                          "<select class='form-control' name='drink_id[]'"+
-                            "<option>merci de choisir</option>"+
-                             "@foreach($drinks as $drink)"+
-                                 "<option value='{{ $drink->id }}'>{{ $drink->name }}</option>"+
-                             "@endforeach>"+
-                          "</select>"+
+                          
                         "</td>"+
                         "<td>"+
                         "<input type='number' step='any' min='0' name='item_quantity[]' placeholder='Quantite' class='form-control' />"+

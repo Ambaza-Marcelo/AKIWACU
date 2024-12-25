@@ -20,7 +20,7 @@
                 </div>
                 <div>
                         <small>
-                           <strong style="text-decoration: underline;">Facture D'Avoir {{ $invoice_number }} du {{ \Carbon\Carbon::parse($data->invoice_date)->format('d/m/Y H:i:s') }}</strong>
+                           <strong style="text-decoration: underline;">Remboursement Caution {{ $invoice_number }} du {{ \Carbon\Carbon::parse($data->invoice_date)->format('d/m/Y H:i:s') }}</strong>
                         </small><br>
                     </div>
                     <div>
@@ -48,12 +48,7 @@
                                     <th>DESIGNATION</th>
                                     <th>Qtes</th>
                                     <th>PV. U</th>
-                                    <th>TC</th>
-                                    <th>PFL</th>
-                                    <th>PRIX HTVA</th>
-                                    <th>MONTANT TVA</th>
-                                    <th>PV. T</th>
-                                    <th>TTC</th>
+                                    <th>Montant Total</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -63,11 +58,6 @@
                                     <td>@if($data->drink_id){{ $data->drink->name }} @elseif($data->food_item_id){{ $data->foodItem->name }} @elseif($data->bartender_item_id){{ $data->bartenderItem->name }} @elseif($data->salle_id){{ $data->salle->name }} @elseif($data->service_id){{ $data->service->name }}  @elseif($data->breakfast_id) {{ $data->breakFast->name }} @elseif($data->swiming_pool_id) {{ $data->swimingPool->name }} @elseif($data->kidness_space_id) {{ $data->kidnessSpace->name }} @else {{ $data->barristItem->name }} @endif</td>
                                     <td>{{ $data->item_quantity }}</td>
                                     <td>{{ number_format($data->item_price,0,',',' ' )}}</td>
-                                    <td>{{ number_format($data->item_ct,0,',',' ' )}}</td>
-                                    <td>{{ number_format($data->item_tl,0,',',' ' )}}</td>
-                                    <td>{{ number_format($data->item_price_nvat,0,',',' ' )}}</td>
-                                    <td>{{ number_format($data->vat,0,',',' ' )}}</td>
-                                    <td>{{ number_format($data->item_price_wvat,0,',',' ' )}}</td>
                                     <td>{{ number_format($data->item_total_amount,0,',',' ' )}}</td>
                                 </tr>
                                 @endforeach
@@ -75,12 +65,6 @@
                         </table>
                         <br>
                         <div style="float: right;border: 1px solid black;">
-                        <small>
-                           &nbsp;&nbsp;TOTAL : -{{ number_format($totalValue,3,',',' ' )}}
-                        </small><br>
-                        <small>
-                           &nbsp;&nbsp;TVA : -{{ number_format($totalVat,3,',',' ' )}}
-                        </small><br>
                         <small><strong>
                            &nbsp;&nbsp;Montant total à déduire : -{{ number_format($item_total_amount,0,',',' ' )}}</strong>
                         </small>

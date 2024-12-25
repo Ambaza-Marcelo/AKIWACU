@@ -1147,6 +1147,20 @@ class RolePermissionSeeder extends Seeder
                 ]
             ],
             [
+                'group_name' => 'invoice_room',
+                'permissions' => [
+                    // invoice_room Permissions
+                    'invoice_room.view',
+                    'invoice_room.create',
+                    'invoice_room.edit',
+                    'invoice_room.show',
+                    'invoice_room.delete',
+                    'invoice_room.validate',
+                    'invoice_room.reset',
+                    'invoice_room.reject',
+                ]
+            ],
+            [
                 'group_name' => 'recouvrement',
                 'permissions' => [
                     // recouvrement Permissions
@@ -1172,6 +1186,21 @@ class RolePermissionSeeder extends Seeder
                     'note_credit.approuve',
                     'note_credit.reset',
                     'note_credit.reject',
+                ]
+            ],
+            [
+                'group_name' => 'remboursement_caution',
+                'permissions' => [
+                    // remboursement_caution Permissions
+                    'remboursement_caution.view',
+                    'remboursement_caution.create',
+                    'remboursement_caution.edit',
+                    'remboursement_caution.show',
+                    'remboursement_caution.validate',
+                    'remboursement_caution.confirm',
+                    'remboursement_caution.approuve',
+                    'remboursement_caution.reset',
+                    'remboursement_caution.reject',
                 ]
             ],
             [

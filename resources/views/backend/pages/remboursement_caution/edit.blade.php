@@ -2,7 +2,7 @@
 @extends('backend.layouts.master')
 
 @section('title')
-@lang('factures Boissons') - @lang('messages.admin_panel')
+@lang('modifier factures Boissons') - @lang('messages.admin_panel')
 @endsection
 
 @section('styles')
@@ -21,11 +21,11 @@
     <div class="row align-items-center">
         <div class="col-sm-6">
             <div class="breadcrumbs-area clearfix">
-                <h4 class="page-title pull-left">@lang('factures Boissons')</h4>
+                <h4 class="page-title pull-left">@lang('modifier factures Boissons')</h4>
                 <ul class="breadcrumbs pull-left">
                     <li><a href="{{ route('admin.dashboard') }}">@lang('messages.dashboard')</a></li>
                     <li><a href="{{ route('ebms_api.invoices.index') }}">@lang('messages.list')</a></li>
-                    <li><span>@lang('factures Boissons')</span></li>
+                    <li><span>@lang('modifier factures Boissons')</span></li>
                 </ul>
             </div>
         </div>
@@ -40,19 +40,22 @@
         <div class="col-12 mt-5">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="header-title">Nouveau Facture</h4>
+                    <h4 class="header-title">Modifier Facture</h4>
                     @include('backend.layouts.partials.messages')
                     
-                    <form action="{{ route('ebms_api-facture-boisson.store') }}" method="POST">
+                    <form action="{{ route('ebms_api-facture-boisson.update',$invoice_number) }}" method="POST">
                         @csrf
+                        @method('PUT')
                         <div class="row">
-                            @if($table_id)
-                            <div class="col-md-6">
-                                <label for="table_id">Table : {{ $data->table->name }}</label>
-                                <input type="number" name="table_id" class="form-control" value="{{ $table_id }}" readonly>
+                            <div class="col-md-4">
+                                <label for="invoice_date">Date Facture</label>
+                                <input type="date" value="{{ $data->invoice_date }}" name="invoice_date" class="form-control">
                             </div>
-                            @endif
-                            <div class="col-md-6">
+                            <div class="col-md-4">
+                                <label for="drink_order_no">Commande No</label>
+                                <input type="text" name="drink_order_no" class="form-control" value="{{ $data->drink_order_no }}" readonly>
+                            </div>
+                            <div class="col-md-4">
                                 <label for="employe_id">Serveur</label>
                                 <select class="form-control" name="employe_id" id="employe_id">
                                 <option disabled="disabled">Merci de choisir un Serveur</option>
@@ -68,10 +71,10 @@
                                     <input type="checkbox" name="invoice_type" value="FN" checked="checked" class="form-control">
                                     </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <label class="text">R. Caution
-                                    <input type="checkbox" disabled name="invoice_type" value="RC" class="form-control">
+                                    <input type="checkbox" name="invoice_type" value="RC" class="form-control">
                                     </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <label class="text">Reduction HF
-                                    <input type="checkbox" name="invoice_type" disabled value="RHF" class="form-control">
+                                    <input type="checkbox" name="invoice_type" value="RHF" class="form-control">
                                     </label>
                                 </div>
                             </div>
@@ -79,10 +82,10 @@
                                 <label for="tp_type">Type Contribuable</label>
                                 <div class="form-group">
                                     <label class="text">Personne Physique
-                                    <input type="checkbox" name="tp_type" value="1" @if($setting->tp_type == '1') checked="checked" @endif class="form-control">
+                                    <input type="checkbox" name="tp_type" value="1" class="form-control">
                                     </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <label class="text">Société
-                                    <input type="checkbox" name="tp_type" value="2" @if($setting->tp_type == '2') checked="checked" @endif class="form-control">
+                                    <input type="checkbox" checked="checked" name="tp_type" value="2" class="form-control">
                                     </label>
                                 </div>
                             </div>
@@ -90,10 +93,10 @@
                                 <label for="vat_taxpayer">Assujetti à la TVA</label>
                                 <div class="form-group">
                                     <label class="text">Non Assujetti
-                                    <input type="checkbox" name="vat_taxpayer" value="0" @if($setting->vat_taxpayer == '0') checked="checked" @endif class="form-control">
+                                    <input type="checkbox" name="vat_taxpayer" value="0" class="form-control">
                                     </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <label class="text">Assujetti
-                                    <input type="checkbox" name="vat_taxpayer" value="1" @if($setting->vat_taxpayer == '1') checked="checked" @endif class="form-control">
+                                    <input type="checkbox" name="vat_taxpayer" value="1" checked="checked" class="form-control">
                                     </label>
                                 </div>
                             </div>
@@ -148,16 +151,16 @@
                             </div>
                             <div class="col-sm-4">
                                 <label for="tp_address_number">Numero</label>
-                                <input type="text" value="0" name="tp_address_number" class="form-control">
+                                <input type="text" value="00" name="tp_address_number" class="form-control">
                             </div>
                             <div class="col-sm-4">
                                 <label for="ct_taxpayer">Assujetti à la taxe de conso.</label>
                                 <div class="form-group">
                                     <label class="text">Non Assujetti
-                                    <input type="checkbox" name="ct_taxpayer" value="0" @if($setting->ct_taxpayer == '0') checked="checked" @endif  class="form-control">
+                                    <input type="checkbox" name="ct_taxpayer" value="0" checked="checked" class="form-control">
                                     </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <label class="text">Assujetti
-                                    <input type="checkbox" name="ct_taxpayer" value="1" @if($setting->ct_taxpayer == '1') checked="checked" @endif class="form-control">
+                                    <input type="checkbox" name="ct_taxpayer" value="1" class="form-control">
                                     </label>
                                 </div>
                             </div>
@@ -168,10 +171,10 @@
                                 <label for="tl_taxpayer">Assujetti au PFL</label>
                                 <div class="form-group">
                                     <label class="text">Non Assujetti
-                                    <input type="checkbox" name="tl_taxpayer" value="0" @if($setting->tl_taxpayer == '0') checked="checked" @endif class="form-control">
+                                    <input type="checkbox" name="tl_taxpayer" value="0" checked="checked" class="form-control">
                                     </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <label class="text">Assujetti
-                                    <input type="checkbox" name="tl_taxpayer" value="1" @if($setting->tl_taxpayer == '1') checked="checked" @endif class="form-control">
+                                    <input type="checkbox" name="tl_taxpayer" value="1" class="form-control">
                                     </label>
                                 </div>
                             </div>
@@ -179,25 +182,25 @@
                                 <label for="tp_fiscal_center">Centre Fiscale</label>
                                 <div class="form-group">
                                     <label class="text">DGC
-                                    <input type="checkbox" name="tp_fiscal_center" value="DGC" @if($setting->tp_fiscal_center == 'DGC') checked="checked" @endif class="form-control">
+                                    <input type="checkbox" name="tp_fiscal_center" value="DGC" class="form-control">
                                     </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <label class="text">DMC
-                                    <input type="checkbox" name="tp_fiscal_center" value="DMC" @if($setting->tp_fiscal_center == 'DMC') checked="checked" @endif class="form-control">
+                                    <input type="checkbox" checked="checked" name="tp_fiscal_center" value="DMC" class="form-control">
                                     </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <label class="text">DPMC
-                                    <input type="checkbox" name="tp_fiscal_center" value="DPMC" @if($setting->tp_fiscal_center == 'DPMC') checked="checked" @endif class="form-control">
+                                    <input type="checkbox" name="tp_fiscal_center" value="DPMC" class="form-control">
                                     </label>
                                 </div>
                             </div>
                             <div class="col-sm-4">
                                 <label for="tp_activity_sector">Secteur d'activité</label>
-                                <input type="text" name="tp_activity_sector" class="form-control" value="{{ $setting->tp_activity_sector }}">
+                                <input type="text" name="tp_activity_sector" class="form-control" value="HOTELERIE">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-4">
                                 <label for="tp_legal_form">Forme Juridique</label>
-                                <input type="text" name="tp_legal_form" value="{{ $setting->tp_legal_form }}" class="form-control">
+                                <input type="text" value="SA" name="tp_legal_form" class="form-control">
                             </div>
                             <div class="col-sm-4">
                                 <label for="payment_type">Type de Paiement</label>
@@ -238,7 +241,7 @@
                                 <select class="form-control" name="client_id">
                                 <option disabled="disabled" selected="selected">Merci de choisir client</option>
                                 @foreach ($clients as $client)
-                                <option value="{{ $client->id }}" {{ $client->mail == 'clientcash@gmail.com' ? 'selected' : '' }} class="form-control">{{ $client->customer_name }}/{{ $client->telephone }}</option>
+                                <option value="{{ $client->id }}" {{ $data->client_id === $client->id ? 'selected' : '' }} class="form-control">{{ $client->customer_name }}/{{ $client->telephone }}</option>
                                 @endforeach
                                 </select>
                             </div>
@@ -248,7 +251,7 @@
                                 <select class="form-control" name="code_store" id="code_store" required>
                                 <option disabled="disabled" selected="selected">Merci de choisir un stock</option>
                                 @foreach($drink_small_stores as $drink_small_store)
-                                <option value="{{$drink_small_store->code}}">{{$drink_small_store->name}}/{{ $drink_small_store->code }}</option>
+                                <option value="{{$drink_small_store->code}}" {{ $data->code_store === $drink_small_store->code ? 'selected' : '' }}>{{$drink_small_store->name}}/{{ $drink_small_store->code }}</option>
                                 @endforeach
                                 </select>
                             </div>
@@ -261,30 +264,26 @@
                                 <th>Prix Unitaire</th>
                                 <th>TC</th>
                                 <th>PFL</th>
-                                <th>Commande No</th>
                                 <th>Action</th>
                             </tr>
-                            @foreach($orders as $order)
+                            @foreach($datas as $data)
                             <tr>  
                                 <td><select class="form-control" name="drink_id[]" id="drink_id">
-                                <option value="{{ $order->drink_id }}" class="form-control">{{ $order->drink->name }}</option>
+                                <option value="{{ $data->drink_id }}" class="form-control">{{ $data->drink->name }}</option>
                                 </select></td>  
-                                <td><input type="number" step='any' min='0' value="{{ $order->quantity }}" name="item_quantity[]" placeholder="Quantite" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_drink.delete')) @else readonly @endif /></td>  
-                                <td><input type="number" step='any' min='0' value="{{ $order->selling_price }}" @if(Auth::guard('admin')->user()->can('invoice_drink.delete')) @else readonly @endif name="item_price[]" placeholder="Prix" class="form-control" /></td>
+                                <td><input type="number" step='any' min='0' value="{{ $data->quantity }}" name="item_quantity[]" value="{{ $data->quantity }}" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_drink.delete')) @else readonly @endif /></td>  
+                                <td><input type="number" step='any' min='0' value="{{ $data->selling_price }}" @if(Auth::guard('admin')->user()->can('invoice_drink.delete')) @else readonly @endif name="item_price[]" class="form-control" /></td>
                                 <td><input type="number" step='any' min='0' name="item_ct[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_drink.delete')) @else readonly @endif/></td>   
                                 <td><input type="number" step='any' min='0' name="item_tl[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_drink.delete')) @else readonly @endif/></td>
-                                <td><input type="text" value="{{ $order->order_no }}" name="drink_order_no[]" class="form-control" readonly /></td>
-                                <td><button type='button' class='btn btn-danger remove-tr'><i class='fa fa-trash-o' title='Supprimer la ligne' aria-hidden='false'></i></button></td> 
+                                <td>@if(Auth::guard('admin')->user()->can('invoice_drink.delete'))
+                                    <button type='button' class='btn btn-danger remove-tr'><i class='fa fa-trash-o' title='Supprimer la ligne' aria-hidden='false'></i></button>
+                                    @endif
+                                </td> 
                             </tr> 
                             @endforeach
                         </table> 
-                        <div class="col-md-2 pull-right">
-                            <input type="text" class="form-control" value="{{ number_format($total_amount,0,',',' ')}}" readonly>
-                        </div>
-                    <!--
                         <button type="button" name="add" id="add" class="btn btn-success"><i class="fa fa-plus-square" title="Ajouter Plus" aria-hidden="false"></i></button>
-                    -->
-                        <button type="submit" onclick="this.style.visibility='hidden';" ondblclick="this.style.visibility='hidden';" class="btn btn-primary">Enregistrer</button>
+                        <button type="submit" onclick="this.style.visibility='hidden';" ondblclick="this.style.visibility='hidden';" class="btn btn-primary">Modifier</button>
                     </form>
                 </div>
 
@@ -315,7 +314,7 @@
                         "<input type='number' step='any' min='0' name='item_quantity[]' placeholder='Quantite' class='form-control' />"+
                         "</td>"+
                         "<td>"+
-                        "<input type='number' step='any' min='0' name='item_price[]' placeholder='Prix' class='form-control' />"+
+                        "<input type='hidden' step='any' min='0' name='item_price[]' placeholder='Prix' class='form-control' />"+
                         "</td>"+
                         "<td>"+
                           "<input type='number' step='any' min='0' name='item_ct[]' value='0' class='form-control'/>"+

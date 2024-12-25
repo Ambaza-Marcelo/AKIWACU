@@ -145,7 +145,7 @@
                                             <a class="btn btn-success text-white" href="{{ route('admin.order_kitchens.edit', $order->order_no) }}">@lang('messages.edit')</a>
                                         @endif
                                         @endif
-                                        @if($order->status == 1 || $order->status == -3 && $order->flag === 0)
+                                        @if($order->status == 1 && $order->flag == 1)
                                         @if (Auth::guard('admin')->user()->can('invoice_kitchen.create'))
                                             <a class="btn btn-success text-white" href="{{ route('admin.invoice-kitchens.create', $order->order_no) }}">@lang('Facturation')</a>
                                         @endif

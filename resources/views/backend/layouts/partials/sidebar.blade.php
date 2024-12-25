@@ -314,6 +314,9 @@
                                 @if ($usr->can('note_credit.view'))
                                 <li class=""><a href="{{ route('admin.note-de-credit.index')}}"><i class="fa fa-first-order"></i>&nbsp;@lang('Note de Credit')</a></li>
                                 @endif
+                                @if ($usr->can('remboursement_caution.view'))
+                                <li class=""><a href="{{ route('admin.remboursement-caution.index')}}"><i class="fa fa-first-order"></i>&nbsp;@lang('Remboursement Caution')</a></li>
+                                @endif
                                 
                         </ul>
                     </li>

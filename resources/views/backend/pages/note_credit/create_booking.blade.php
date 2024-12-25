@@ -64,16 +64,13 @@
                                 <label for="invoice_type">Type Facture</label>
                                 <div class="form-group">
                                     <label class="text">F. Normale
-                                    <input type="checkbox" name="invoice_type" value="FN" class="form-control">
+                                    <input type="checkbox" disabled name="invoice_type" value="FN" class="form-control">
                                     </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <label class="text">facture d'Avoir
                                     <input type="checkbox" name="invoice_type" value="FA" checked="checked" class="form-control">
                                     </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <label class="text">R. Caution
-                                    <input type="checkbox" name="invoice_type" value="RC" class="form-control">
-                                    </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <label class="text">Reduction HF
-                                    <input type="checkbox" name="invoice_type" value="RHF" class="form-control">
+                                    <input type="checkbox" disabled name="invoice_type" value="RC" class="form-control">
                                     </label>
                                 </div>
                             </div>
