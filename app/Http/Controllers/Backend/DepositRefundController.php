@@ -216,18 +216,7 @@ class DepositRefundController extends Controller
 
             $invoice_date = Carbon::now();
 
-            if ($cn_motif == 1) {
-                $cn_motif_detail = "Erreur sur la facture";
-            }elseif ($cn_motif == 2) {
-                $cn_motif_detail = "Retour marchandises";
-            }elseif ($cn_motif == 3) {
-                $cn_motif_detail = "Rabais";
-            }elseif ($cn_motif == 4) {
-                $cn_motif_detail = "Reduction hors facture";
-            }else{
-                $cn_motif_detail = "Erreur sur la facture";
-            }
-
+            $cn_motif = "Remboursement Caution";
 
 
 
@@ -260,32 +249,13 @@ class DepositRefundController extends Controller
 
             if($request->vat_taxpayer == 1){
 
-                if (!empty($brarudi_price) || $brarudi_price != 0) {
-                    $d_prix_tva = $item_price[$count] - $brarudi_price;
-                    if ($d_prix_tva <= 0) {
-                        $item_total_amount = ($item_price[$count]*$item_quantity[$count]);
-                        $vat = 0;
-                        $item_price_nvat = ($item_total_amount - $vat);
-                        $item_price_wvat = ($item_price_nvat + $vat);
-                    }else{
-                        $item_total_amount = ($item_price[$count]*$item_quantity[$count]);
-                        $item_total_amount_brarudi = ($d_prix_tva*$item_quantity[$count]);
-                        $item_price_nvat2 = ($item_total_amount_brarudi * 100)/110;
-                        $vat = ($item_price_nvat2 * $taux_tva)/100;
-                        $item_price_nvat = ($item_total_amount - $vat);
-                        $item_price_wvat = ($item_price_nvat + $vat);
-                    } 
-                }else{
-
-                    $item_total_amount = ($item_price[$count]*$item_quantity[$count]);
-                    
-                    $item_price_nvat = ($item_total_amount* 100)/110;
-                    $vat = ($item_price_nvat * $taux_tva)/100;
-                    $item_price_wvat = ($item_price_nvat + $vat); 
-                }
+                $item_price_nvat = ($item_price[$count]*$item_quantity[$count]);
+                $vat = 0;
+                $item_price_wvat = ($item_price_nvat + $vat);
+                $item_total_amount = $item_price_wvat + $item_tl[$count];
 
             }else{
-                $item_price_nvat = ($item_price[$count]*$item_quantity[$count])+$item_ct[$count];
+                $item_price_nvat = ($item_price[$count]*$item_quantity[$count]);
                 $vat = 0;
                 $item_price_wvat = ($item_price_nvat + $vat);
                 $item_total_amount = $item_price_wvat + $item_tl[$count];
@@ -385,9 +355,9 @@ class DepositRefundController extends Controller
             $facture->save();
 
             Facture::where('invoice_number', '=', $cancelled_invoice_ref)
-                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif_detail,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
+                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
             FactureDetail::where('invoice_number', '=', $cancelled_invoice_ref)
-                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif_detail,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
+                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
 
         DB::commit();
             session()->flash('success', 'Le remboursement caution est fait avec succés!!');
@@ -450,17 +420,7 @@ class DepositRefundController extends Controller
 
             $invoice_date = Carbon::now();
 
-            if ($cn_motif == 1) {
-                $cn_motif_detail = "Erreur sur la facture";
-            }elseif ($cn_motif == 2) {
-                $cn_motif_detail = "Retour marchandises";
-            }elseif ($cn_motif == 3) {
-                $cn_motif_detail = "Rabais";
-            }elseif ($cn_motif == 4) {
-                $cn_motif_detail = "Reduction hors facture";
-            }else{
-                $cn_motif_detail = "Erreur sur la facture";
-            }
+            $cn_motif = "Remboursement Caution";
 
 
 
@@ -492,14 +452,13 @@ class DepositRefundController extends Controller
 
             if($request->vat_taxpayer == 1){
 
-                    $item_total_amount = ($item_price[$count]*$item_quantity[$count]);
-                    
-                    $item_price_nvat = ($item_total_amount* 100)/110;
-                    $vat = ($item_price_nvat * $taux_tva)/100;
-                    $item_price_wvat = ($item_price_nvat + $vat); 
+                $item_price_nvat = ($item_price[$count]*$item_quantity[$count]);
+                $vat = 0;
+                $item_price_wvat = ($item_price_nvat + $vat);
+                $item_total_amount = $item_price_wvat + $item_tl[$count]; 
 
             }else{
-                $item_price_nvat = ($item_price[$count]*$item_quantity[$count])+$item_ct[$count];
+                $item_price_nvat = ($item_price[$count]*$item_quantity[$count]);
                 $vat = 0;
                 $item_price_wvat = ($item_price_nvat + $vat);
                 $item_total_amount = $item_price_wvat + $item_tl[$count];
@@ -596,9 +555,9 @@ class DepositRefundController extends Controller
             $facture->save();
 
             Facture::where('invoice_number', '=', $cancelled_invoice_ref)
-                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif_detail,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
+                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
             FactureDetail::where('invoice_number', '=', $cancelled_invoice_ref)
-                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif_detail,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
+                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
 
         DB::commit();
             session()->flash('success', 'Le remboursement caution est fait avec succés!!');
@@ -661,19 +620,7 @@ class DepositRefundController extends Controller
 
             $invoice_date = Carbon::now();
 
-            if ($cn_motif == 1) {
-                $cn_motif_detail = "Erreur sur la facture";
-            }elseif ($cn_motif == 2) {
-                $cn_motif_detail = "Retour marchandises";
-            }elseif ($cn_motif == 3) {
-                $cn_motif_detail = "Rabais";
-            }elseif ($cn_motif == 4) {
-                $cn_motif_detail = "Reduction hors facture";
-            }else{
-                $cn_motif_detail = "Erreur sur la facture";
-            }
-
-
+            $cn_motif = "Remboursement Caution";
 
 
             $cancelled_invoice_ref = $request->invoice_number;
@@ -703,14 +650,13 @@ class DepositRefundController extends Controller
 
             if($request->vat_taxpayer == 1){
 
-                    $item_total_amount = ($item_price[$count]*$item_quantity[$count]);
-                    
-                    $item_price_nvat = ($item_total_amount* 100)/110;
-                    $vat = ($item_price_nvat * $taux_tva)/100;
-                    $item_price_wvat = ($item_price_nvat + $vat); 
+                $item_price_nvat = ($item_price[$count]*$item_quantity[$count]);
+                $vat = 0;
+                $item_price_wvat = ($item_price_nvat + $vat);
+                $item_total_amount = $item_price_wvat + $item_tl[$count]; 
 
             }else{
-                $item_price_nvat = ($item_price[$count]*$item_quantity[$count])+$item_ct[$count];
+                $item_price_nvat = ($item_price[$count]*$item_quantity[$count]);
                 $vat = 0;
                 $item_price_wvat = ($item_price_nvat + $vat);
                 $item_total_amount = $item_price_wvat + $item_tl[$count];
@@ -807,9 +753,9 @@ class DepositRefundController extends Controller
             $facture->save();
 
             Facture::where('invoice_number', '=', $cancelled_invoice_ref)
-                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif_detail,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
+                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
             FactureDetail::where('invoice_number', '=', $cancelled_invoice_ref)
-                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif_detail,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
+                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
 
             DB::commit();
             session()->flash('success', 'Le remboursement caution est fait avec succés!!');
@@ -871,20 +817,7 @@ class DepositRefundController extends Controller
 
             $invoice_date = Carbon::now();
 
-            if ($cn_motif == 1) {
-                $cn_motif_detail = "Erreur sur la facture";
-            }elseif ($cn_motif == 2) {
-                $cn_motif_detail = "Retour marchandises";
-            }elseif ($cn_motif == 3) {
-                $cn_motif_detail = "Rabais";
-            }elseif ($cn_motif == 4) {
-                $cn_motif_detail = "Reduction hors facture";
-            }else{
-                $cn_motif_detail = "Erreur sur la facture";
-            }
-
-
-
+            $cn_motif = "Remboursement Caution";
 
             $cancelled_invoice_ref = $request->invoice_number;
 
@@ -913,14 +846,13 @@ class DepositRefundController extends Controller
 
             if($request->vat_taxpayer == 1){
 
-                    $item_total_amount = ($item_price[$count]*$item_quantity[$count]);
-                    
-                    $item_price_nvat = ($item_total_amount* 100)/110;
-                    $vat = ($item_price_nvat * $taux_tva)/100;
-                    $item_price_wvat = ($item_price_nvat + $vat); 
+                $item_price_nvat = ($item_price[$count]*$item_quantity[$count]);
+                $vat = 0;
+                $item_price_wvat = ($item_price_nvat + $vat);
+                $item_total_amount = $item_price_wvat + $item_tl[$count]; 
 
             }else{
-                $item_price_nvat = ($item_price[$count]*$item_quantity[$count])+$item_ct[$count];
+                $item_price_nvat = ($item_price[$count]*$item_quantity[$count]);
                 $vat = 0;
                 $item_price_wvat = ($item_price_nvat + $vat);
                 $item_total_amount = $item_price_wvat + $item_tl[$count];
@@ -1017,9 +949,9 @@ class DepositRefundController extends Controller
             $facture->save();
 
             Facture::where('invoice_number', '=', $cancelled_invoice_ref)
-                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif_detail,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
+                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
             FactureDetail::where('invoice_number', '=', $cancelled_invoice_ref)
-                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif_detail,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
+                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
 
             DB::commit();
             session()->flash('success', 'Le remboursement caution est fait avec succés!!');
@@ -1086,17 +1018,7 @@ class DepositRefundController extends Controller
 
             $invoice_date = Carbon::now();
 
-            if ($cn_motif == 1) {
-                $cn_motif_detail = "Erreur sur la facture";
-            }elseif ($cn_motif == 2) {
-                $cn_motif_detail = "Retour marchandises";
-            }elseif ($cn_motif == 3) {
-                $cn_motif_detail = "Rabais";
-            }elseif ($cn_motif == 4) {
-                $cn_motif_detail = "Reduction hors facture";
-            }else{
-                $cn_motif_detail = "Erreur sur la facture";
-            }
+            $cn_motif = "Remboursement Caution";
 
 
             $cancelled_invoice_ref = $request->invoice_number;
@@ -1126,14 +1048,14 @@ class DepositRefundController extends Controller
             $taux_tva = BookingSalle::where('id', $salle_id[$count])->value('vat');
 
             if($request->vat_taxpayer == 1){
-                $item_total_amount = ($item_price[$count]*$item_quantity[$count]);
-                
-                $item_price_nvat = ($item_total_amount * 100)/110;
-                $vat = ($item_price_nvat * $taux_tva)/100;
+
+                $item_price_nvat = ($item_price[$count]*$item_quantity[$count]);
+                $vat = 0;
                 $item_price_wvat = ($item_price_nvat + $vat);
+                $item_total_amount = $item_price_wvat + $item_tl[$count]; 
 
             }else{
-                $item_price_nvat = ($item_price[$count]*$item_quantity[$count])+$item_ct[$count];
+                $item_price_nvat = ($item_price[$count]*$item_quantity[$count]);
                 $vat = 0;
                 $item_price_wvat = ($item_price_nvat + $vat);
                 $item_total_amount = $item_price_wvat + $item_tl[$count];
@@ -1230,9 +1152,9 @@ class DepositRefundController extends Controller
             $facture->save();
 
             Facture::where('invoice_number', '=', $cancelled_invoice_ref)
-                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif_detail,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
+                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
             FactureDetail::where('invoice_number', '=', $cancelled_invoice_ref)
-                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif_detail,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
+                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
 
         }elseif(!empty($service_id)){
             for( $count = 0; $count < count($service_id); $count++ )
@@ -1240,13 +1162,14 @@ class DepositRefundController extends Controller
             $taux_tva = BookingService::where('id', $service_id[$count])->value('vat');
 
             if($request->vat_taxpayer == 1){
-                $item_total_amount = ($item_price[$count]*$item_quantity[$count]);
-                $item_price_nvat = ($item_total_amount * 100)/110;
-                $vat = ($item_price_nvat * $taux_tva)/100;
+
+                $item_price_nvat = ($item_price[$count]*$item_quantity[$count]);
+                $vat = 0;
                 $item_price_wvat = ($item_price_nvat + $vat);
+                $item_total_amount = $item_price_wvat + $item_tl[$count]; 
 
             }else{
-                $item_price_nvat = ($item_price[$count]*$item_quantity[$count])+$item_ct[$count];
+                $item_price_nvat = ($item_price[$count]*$item_quantity[$count]);
                 $vat = 0;
                 $item_price_wvat = ($item_price_nvat + $vat);
                 $item_total_amount = $item_price_wvat + $item_tl[$count];
@@ -1343,9 +1266,9 @@ class DepositRefundController extends Controller
             $facture->save();
 
             Facture::where('invoice_number', '=', $cancelled_invoice_ref)
-                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif_detail,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
+                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
             FactureDetail::where('invoice_number', '=', $cancelled_invoice_ref)
-                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif_detail,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
+                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
 
         }elseif(!empty($kidness_space_id)){
             for( $count = 0; $count < count($kidness_space_id); $count++ )
@@ -1456,9 +1379,9 @@ class DepositRefundController extends Controller
             $facture->save();
 
             Facture::where('invoice_number', '=', $cancelled_invoice_ref)
-                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif_detail,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
+                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
             FactureDetail::where('invoice_number', '=', $cancelled_invoice_ref)
-                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif_detail,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
+                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
 
         }elseif(!empty($swiming_pool_id)){
             for( $count = 0; $count < count($swiming_pool_id); $count++ )
@@ -1466,13 +1389,14 @@ class DepositRefundController extends Controller
             $taux_tva = SwimingPool::where('id', $swiming_pool_id[$count])->value('vat');
 
             if($request->vat_taxpayer == 1){
-                $item_total_amount = ($item_price[$count]*$item_quantity[$count]);
-                $item_price_nvat = ($item_total_amount * 100)/110;
-                $vat = ($item_price_nvat * $taux_tva)/100;
+
+                $item_price_nvat = ($item_price[$count]*$item_quantity[$count]);
+                $vat = 0;
                 $item_price_wvat = ($item_price_nvat + $vat);
+                $item_total_amount = $item_price_wvat + $item_tl[$count]; 
 
             }else{
-                $item_price_nvat = ($item_price[$count]*$item_quantity[$count])+$item_ct[$count];
+                $item_price_nvat = ($item_price[$count]*$item_quantity[$count]);
                 $vat = 0;
                 $item_price_wvat = ($item_price_nvat + $vat);
                 $item_total_amount = $item_price_wvat + $item_tl[$count];
@@ -1569,9 +1493,9 @@ class DepositRefundController extends Controller
             $facture->save();
 
             Facture::where('invoice_number', '=', $cancelled_invoice_ref)
-                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif_detail,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
+                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
             FactureDetail::where('invoice_number', '=', $cancelled_invoice_ref)
-                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif_detail,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
+                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
 
         }elseif(!empty($breakfast_id)){
             for( $count = 0; $count < count($breakfast_id); $count++ )
@@ -1579,13 +1503,14 @@ class DepositRefundController extends Controller
             $taux_tva = BreakFast::where('id', $breakfast_id[$count])->value('vat');
 
             if($request->vat_taxpayer == 1){
-                $item_total_amount = ($item_price[$count]*$item_quantity[$count]);
-                $item_price_nvat = ($item_total_amount * 100)/110;
-                $vat = ($item_price_nvat * $taux_tva)/100;
+
+                $item_price_nvat = ($item_price[$count]*$item_quantity[$count]);
+                $vat = 0;
                 $item_price_wvat = ($item_price_nvat + $vat);
+                $item_total_amount = $item_price_wvat + $item_tl[$count]; 
 
             }else{
-                $item_price_nvat = ($item_price[$count]*$item_quantity[$count])+$item_ct[$count];
+                $item_price_nvat = ($item_price[$count]*$item_quantity[$count]);
                 $vat = 0;
                 $item_price_wvat = ($item_price_nvat + $vat);
                 $item_total_amount = $item_price_wvat + $item_tl[$count];
@@ -1682,9 +1607,9 @@ class DepositRefundController extends Controller
             $facture->save();
 
             Facture::where('invoice_number', '=', $cancelled_invoice_ref)
-                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif_detail,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
+                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
             FactureDetail::where('invoice_number', '=', $cancelled_invoice_ref)
-                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif_detail,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
+                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
 
         }elseif(!empty($table_id)){
             for( $count = 0; $count < count($table_id); $count++ )
@@ -1692,14 +1617,14 @@ class DepositRefundController extends Controller
             $taux_tva = BookingTable::where('id', $table_id[$count])->value('vat');
 
             if($request->vat_taxpayer == 1){
-                $item_total_amount = ($item_price[$count]*$item_quantity[$count]);
-                
-                $item_price_nvat = ($item_total_amount * 100)/110;
-                $vat = ($item_price_nvat * $taux_tva)/100;
+
+                $item_price_nvat = ($item_price[$count]*$item_quantity[$count]);
+                $vat = 0;
                 $item_price_wvat = ($item_price_nvat + $vat);
+                $item_total_amount = $item_price_wvat + $item_tl[$count]; 
 
             }else{
-                $item_price_nvat = ($item_price[$count]*$item_quantity[$count])+$item_ct[$count];
+                $item_price_nvat = ($item_price[$count]*$item_quantity[$count]);
                 $vat = 0;
                 $item_price_wvat = ($item_price_nvat + $vat);
                 $item_total_amount = $item_price_wvat + $item_tl[$count];
@@ -1796,9 +1721,9 @@ class DepositRefundController extends Controller
             $facture->save();
 
             Facture::where('invoice_number', '=', $cancelled_invoice_ref)
-                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif_detail,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
+                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
             FactureDetail::where('invoice_number', '=', $cancelled_invoice_ref)
-                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif_detail,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
+                ->update(['cancelled_invoice' => 1,'cn_motif' => $cn_motif,'invoice_ref' => $invoice_ref,'reseted_by' => $this->user->name]);
 
         }
 

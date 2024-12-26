@@ -247,11 +247,18 @@ class FactureController extends Controller
                     } 
                 }else{
 
-                    $item_total_amount = ($item_price[$count]*$item_quantity[$count]);
+                    if ($taux_tva <= 0) {
+                        $item_price_nvat = ($item_price[$count]*$item_quantity[$count])+$item_ct[$count];
+                        $vat = 0;
+                        $item_price_wvat = ($item_price_nvat + $vat);
+                        $item_total_amount = $item_price_wvat + $item_tl[$count];
+                    }else{
+                        $item_total_amount = ($item_price[$count]*$item_quantity[$count]);
                     
-                    $item_price_nvat = ($item_total_amount* 100)/110;
-                    $vat = ($item_price_nvat * $taux_tva)/100;
-                    $item_price_wvat = ($item_price_nvat + $vat); 
+                        $item_price_nvat = ($item_total_amount* 100)/110;
+                        $vat = ($item_price_nvat * $taux_tva)/100;
+                        $item_price_wvat = ($item_price_nvat + $vat); 
+                    }
                 }
 
             }else{
@@ -672,6 +679,18 @@ class FactureController extends Controller
                 $item_total_amount = $item_price_wvat + $item_tl[$count];
             }
 
+            $code = FoodItemDetail::where('id', $food_item_id[$count])->value('code');
+            $foods = FoodItemDetail::where('code', $code)->get();
+            $i = 0;
+            foreach($foods as $food){
+                $cump = array(
+                    'cump' => DB::table('food_small_store_details')->where('food_id','!=', '')->where('food_id', $food->food_id)->value('cump'),
+                );
+                $cumpData[] = $cump;
+            }
+              $cmp = collect($cumpData)->sum('cump');
+              $cmp = $cmp * $item_quantity[$count];
+
           $data = array(
             'invoice_number'=>$invoice_number,
             'invoice_date'=> $invoice_date,
@@ -715,6 +734,7 @@ class FactureController extends Controller
             'vat'=>$vat,
             'item_price_wvat'=>$item_price_wvat,
             'item_total_amount'=>$item_total_amount,
+            'cump'=> $cmp,
             'employe_id'=> $employe_id,
             'created_at'=> Carbon::now(),
         );
@@ -3443,7 +3463,6 @@ class FactureController extends Controller
 
         $done = $dataObr->success;
         $msg = $dataObr->msg;
-
 
         if ($done == true) {
 

@@ -38,15 +38,10 @@ class ChiffreAffaireExport implements FromCollection, WithMapping, WithHeadings
             $type = "BOISSONS";
             $pa = $data->cump;
             $cump = $data->cump;
-            if ($cump <= 0) {
-                $cump = $data->drink->cump;
-            }else{
-                $cump = $data->cump;
-            }
     	}elseif (!empty($data->food_item_id)) {
     		$libelle = $data->foodItem->name;
             $type = "CUISINE";
-            $cump = 0;
+            $cump = $data->cump;
             $pa = FoodItemDetail::where('code',$data->code)->value('purchase_price');
     	}elseif (!empty($data->barrist_item_id)) {
     		$libelle = $data->barristItem->name;
@@ -81,6 +76,16 @@ class ChiffreAffaireExport implements FromCollection, WithMapping, WithHeadings
         }elseif (!empty($data->kidness_space_id)) {
             $libelle = $data->kidnessSpace->name;
             $type = "JEUX ENFANT";
+            $cump = 0;
+            $pa = 0;
+        }elseif (!empty($data->room_id)) {
+            $libelle = $data->room->name;
+            $type = "CHAMBRE";
+            $cump = 0;
+            $pa = 0;
+        }else {
+            $libelle = "";
+            $type = "";
             $cump = 0;
             $pa = 0;
         }
