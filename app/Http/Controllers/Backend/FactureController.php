@@ -689,7 +689,6 @@ class FactureController extends Controller
                 $cumpData[] = $cump;
             }
               $cmp = collect($cumpData)->sum('cump');
-              $cmp = $cmp * $item_quantity[$count];
 
           $data = array(
             'invoice_number'=>$invoice_number,

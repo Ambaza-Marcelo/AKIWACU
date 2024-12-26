@@ -42,7 +42,7 @@ class ChiffreAffaireExport implements FromCollection, WithMapping, WithHeadings
     		$libelle = $data->foodItem->name;
             $type = "CUISINE";
             $cump = $data->cump;
-            $pa = FoodItemDetail::where('code',$data->code)->value('purchase_price');
+            $pa = $data->cump;
     	}elseif (!empty($data->barrist_item_id)) {
     		$libelle = $data->barristItem->name;
             $type = "BARRIST(COFFEE BAR)";
@@ -174,7 +174,7 @@ class ChiffreAffaireExport implements FromCollection, WithMapping, WithHeadings
             $type,
             $data->item_quantity,
             $cump,
-            $pa * $data->item_quantity,
+            $cump * $data->item_quantity,
 			$item_price_nvat,
 			$vat,
 			$item_total_amount,
