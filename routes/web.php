@@ -1275,9 +1275,9 @@ Route::group(['prefix' => 'admin'], function () {
     //material receptions routes
     Route::get('EBMS/material-receptions/index', 'Backend\MaterialReceptionController@index')->name('admin.material-receptions.index');
     Route::get('EBMS/material-receptions/create/{order_no}', 'Backend\MaterialReceptionController@create')->name('admin.material-receptions.create');
-    Route::get('EBMS/material-reception-without-order/create/{purchase_no}', 'Backend\MaterialReceptionController@createWithoutOrder')->name('admin.material-reception-without-order.create');
+    Route::get('EBMS/material-reception-without-remaining/create/{purchase_no}', 'Backend\MaterialReceptionController@createWithoutRemaining')->name('admin.material-reception-without-remaining.create');
     Route::post('EBMS/material-receptions/store', 'Backend\MaterialReceptionController@store')->name('admin.material-receptions.store');
-    Route::post('EBMS/material-reception-without-order/store', 'Backend\MaterialReceptionController@storeWithoutOrder')->name('admin.material-reception-without-order.store');
+    Route::post('EBMS/material-reception-without-remaining/store', 'Backend\MaterialReceptionController@storeWithoutRemaining')->name('admin.material-reception-without-remaining.store');
     Route::get('EBMS/material-receptions/edit/{reception_no}', 'Backend\MaterialReceptionController@edit')->name('admin.material-receptions.edit');
     Route::put('EBMS/material-receptions/update/{reception_no}', 'Backend\MaterialReceptionController@update')->name('admin.material-receptions.update');
     Route::delete('EBMS/material-receptions/destroy/{reception_no}', 'Backend\MaterialReceptionController@destroy')->name('admin.material-receptions.destroy');
@@ -1295,9 +1295,9 @@ Route::group(['prefix' => 'admin'], function () {
     //drink receptions routes
     Route::get('EBMS/drink-receptions/index', 'Backend\DrinkReceptionController@index')->name('admin.drink-receptions.index');
     Route::get('EBMS/drink-receptions/create/{order_no}', 'Backend\DrinkReceptionController@create')->name('admin.drink-receptions.create');
-    Route::get('EBMS/drink-reception-without-order/create/{purchase_no}', 'Backend\DrinkReceptionController@createWithoutOrder')->name('admin.drink-reception-without-order.create');
+    Route::get('EBMS/drink-reception-without-remaining/create/{purchase_no}', 'Backend\DrinkReceptionController@createWithoutRemaining')->name('admin.drink-reception-without-remaining.create');
     Route::post('EBMS/drink-receptions/store', 'Backend\DrinkReceptionController@store')->name('admin.drink-receptions.store');
-    Route::post('EBMS/drink-reception-without-order/store', 'Backend\DrinkReceptionController@storeWithoutOrder')->name('admin.drink-reception-without-order.store');
+    Route::post('EBMS/drink-reception-without-remaining/store', 'Backend\DrinkReceptionController@storeWithoutRemaining')->name('admin.drink-reception-without-remaining.store');
     Route::get('EBMS/drink-receptions/edit/{reception_no}', 'Backend\DrinkReceptionController@edit')->name('admin.drink-receptions.edit');
     Route::put('EBMS/drink-receptions/update/{reception_no}', 'Backend\DrinkReceptionController@update')->name('admin.drink-receptions.update');
     Route::delete('EBMS/drink-receptions/destroy/{reception_no}', 'Backend\DrinkReceptionController@destroy')->name('admin.drink-receptions.destroy');
@@ -1315,9 +1315,9 @@ Route::group(['prefix' => 'admin'], function () {
     //food receptions routes
     Route::get('EBMS/food-receptions/index', 'Backend\FoodReceptionController@index')->name('admin.food-receptions.index');
     Route::get('EBMS/food-receptions/create/{order_no}', 'Backend\FoodReceptionController@create')->name('admin.food-receptions.create');
-    Route::get('EBMS/food-reception-without-order/create/{purchase_no}', 'Backend\FoodReceptionController@createWithoutOrder')->name('admin.food-reception-without-order.create');
+    Route::get('EBMS/food-reception-without-remaining/create/{purchase_no}', 'Backend\FoodReceptionController@createWithoutRemaining')->name('admin.food-reception-without-remaining.create');
     Route::post('EBMS/food-receptions/store', 'Backend\FoodReceptionController@store')->name('admin.food-receptions.store');
-    Route::post('EBMS/food-reception-without-order/store', 'Backend\FoodReceptionController@storeWithoutOrder')->name('admin.food-reception-without-order.store');
+    Route::post('EBMS/food-reception-without-remaining/store', 'Backend\FoodReceptionController@storeWithoutRemaining')->name('admin.food-reception-without-remaining.store');
     Route::get('EBMS/food-receptions/edit/{reception_no}', 'Backend\FoodReceptionController@edit')->name('admin.food-receptions.edit');
     Route::put('EBMS/food-receptions/update/{reception_no}', 'Backend\FoodReceptionController@update')->name('admin.food-receptions.update');
     Route::delete('EBMS/food-receptions/destroy/{reception_no}', 'Backend\FoodReceptionController@destroy')->name('admin.food-receptions.destroy');

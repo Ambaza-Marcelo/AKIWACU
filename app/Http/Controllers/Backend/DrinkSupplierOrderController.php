@@ -61,7 +61,7 @@ class DrinkSupplierOrderController extends Controller
         }
 
         $drinks  = Drink::orderBy('name','asc')->get();
-        $suppliers  = Supplier::orderBy('name','asc')->get();
+        $suppliers  = Supplier::orderBy('supplier_name','asc')->get();
         $datas = DrinkPurchaseDetail::where('purchase_no', $purchase_no)->get();
         return view('backend.pages.drink_supplier_order.create', compact('drinks','purchase_no','datas','suppliers'));
     }
@@ -83,7 +83,7 @@ class DrinkSupplierOrderController extends Controller
         $rules = array(
                 'drink_id.*'  => 'required',
                 'date'  => 'required',
-                //'unit.*'  => 'required',
+                'supplier_id'  => 'required',
                 'quantity.*'  => 'required',
                 'purchase_price.*'  => 'required',
                 'purchase_no'  => 'required',
@@ -104,7 +104,7 @@ class DrinkSupplierOrderController extends Controller
             $date = Carbon::now();
             $purchase_no = $request->purchase_no;
             $description =$request->description; 
-            $unit = $request->unit;
+            $supplier_id = $request->supplier_id;
             $quantity = $request->quantity;
             $purchase_price = $request->purchase_price;
             
@@ -128,7 +128,7 @@ class DrinkSupplierOrderController extends Controller
                     'date' => $date,
                     'quantity' => $quantity[$count],
                     'quantity' => $quantity[$count],
-                    //'unit' => $unit[$count],
+                    'supplier_id' => $supplier_id,
                     'purchase_price' => $purchase_price[$count],
                     'total_value' => $total_value,
                     'purchase_no' => $purchase_no,
@@ -153,6 +153,7 @@ class DrinkSupplierOrderController extends Controller
             $order->order_no = $order_no;
             $order->order_signature = $order_signature;
             $order->purchase_no = $purchase_no;
+            $order->supplier_id = $supplier_id;
             $order->created_by = $created_by;
             $order->status = 1;
             $order->description = $description;
@@ -387,10 +388,10 @@ class DrinkSupplierOrderController extends Controller
            $datas = DrinkSupplierOrderDetail::where('order_no', $order_no)->get();
            $pdf = PDF::loadView('backend.pages.document.drink_supplier_order',compact('datas','order_no','setting','description','date','order_signature','totalValue','data'));
 
-           Storage::put('public/pdf/drink_supplier_order/'.'FICHE_COMMANDE_'.$order_no.'.pdf', $pdf->output());
+           Storage::put('public/pdf/drink_supplier_order/'.'BON DE COMMANDE FOURNISSEUR '.$order_no.'.pdf', $pdf->output());
 
            // download pdf file
-           return $pdf->download('FICHE_COMMANDE_'.$order_no.'.pdf'); 
+           return $pdf->download('BON DE COMMANDE FOURNISSEUR '.$order_no.'.pdf'); 
            
         }else if ($stat == -1) {
             session()->flash('error', 'Order has been rejected !!');

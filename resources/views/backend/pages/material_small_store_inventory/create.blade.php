@@ -65,37 +65,19 @@
                             <tr class="bg-secondary">
                                 <th>@lang('messages.item')</th>
                                 <th>@lang('messages.quantity')</th>
-                                <th>@lang('messages.unit')</th>
                                 <th>@lang('messages.purchase_price')</th>
                                 <th>@lang('messages.new_quantity')</th>
-                                <th>@lang('New unit')</th>
                                 <th>@lang('messages.purchase_price')</th>
                                 <th>Action</th>
                             </tr>
                             @foreach($datas as $data)
                             <tr class="">  
                                 <td> <select class="form-control" name="material_id[]" id="material_id">
-                                <option value="{{ $data->material_id }}" selected="selected" class="form-control">{{ $data->material->name }}/{{ $data->material->code }}</option>
+                                <option value="{{ $data->material_id }}" selected="selected" class="form-control">{{$data->material->name}}/{{ number_format($data->material->cump,0,',',' ') }}/{{ $data->material->materialMeasurement->purchase_unit }}</option>
                                 </select></td>  
                                 <td><input type="text" name="quantity[]" value="{{$data->quantity }}" class="form-control" readonly="readonly" /></td>  
-                                <td>
-                                    <select class="form-control" name="unit[]" id="unit">
-                                        <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                        <option value="pcs" {{ $data->unit == 'pcs' ? 'selected' : '' }} class="form-control">Pieces</option>
-                                        <option value="paire" {{ $data->unit == 'paire' ? 'selected' : '' }} class="form-control">PAIRE</option>
-                                        <option value="litres" {{ $data->unit == 'litres' ? 'selected' : '' }} class="form-control">Litres</option>
-                                    </select>
-                                </td>
                                 <td><input type="text" name="purchase_price[]" value="{{ $data->purchase_price }}" class="form-control" readonly="readonly"/></td>  
                                 <td><input type="number" name="new_quantity[]" value="{{ $data->quantity }}" class="form-control" step="any" min="0" /></td>
-                                <td>
-                                    <select class="form-control" name="new_unit[]" id="new_unit">
-                                        <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                        <option value="pcs" {{ $data->unit == 'pcs' ? 'selected' : '' }} class="form-control">Pieces</option>
-                                        <option value="paire" {{ $data->unit == 'paire' ? 'selected' : '' }} class="form-control">PAIRE</option>
-                                        <option value="litres" {{ $data->unit == 'litres' ? 'selected' : '' }} class="form-control">Litres</option>
-                                    </select>
-                                </td>
                                 <td><input type="number" name="new_purchase_price[]" value="{{ $data->purchase_price }}" class="form-control" step="any" min="0" /></td> 
                                 <td><button type="button" class="btn btn-danger remove-tr"><i class="fa fa-trash-o" aria-hidden='false'></i>&nbsp;Supprimer</button></td>   
                             </tr> 

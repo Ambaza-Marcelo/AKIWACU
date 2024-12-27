@@ -120,7 +120,6 @@ class MaterialStockoutController extends Controller
         $rules = array(
                 'material_id.*'  => 'required',
                 'date'  => 'required',
-                'unit.*'  => 'required',
                 'quantity.*'  => 'required',
                 'asker'  => 'required',
                 'origin_bg_store_id'  => 'required',
@@ -144,7 +143,6 @@ class MaterialStockoutController extends Controller
             $destination = $request->destination;
             $description =$request->description; 
             $origin_bg_store_id = $request->origin_bg_store_id;
-            $unit = $request->unit;
             $quantity = $request->quantity;
             $store_type = $request->store_type;
             
@@ -174,7 +172,6 @@ class MaterialStockoutController extends Controller
                     'material_id' => $material_id[$count],
                     'date' => $date,
                     'quantity' => $quantity[$count],
-                    'unit' => $unit[$count],
                     'purchase_price' => $purchase_price,
                     'selling_price' => $selling_price,
                     'total_purchase_value' => $total_purchase_value,
@@ -238,7 +235,6 @@ class MaterialStockoutController extends Controller
         $rules = array(
                 'material_id.*'  => 'required',
                 'date'  => 'required',
-                'unit.*'  => 'required',
                 'quantity.*'  => 'required',
                 'asker'  => 'required',
                 'origin_extra_store_id'  => 'required',
@@ -262,7 +258,6 @@ class MaterialStockoutController extends Controller
             $destination = $request->destination;
             $description =$request->description; 
             $origin_extra_store_id = $request->origin_extra_store_id;
-            $unit = $request->unit;
             $quantity = $request->quantity;
             $store_type = $request->store_type;
             
@@ -292,7 +287,6 @@ class MaterialStockoutController extends Controller
                     'material_id' => $material_id[$count],
                     'date' => $date,
                     'quantity' => $quantity[$count],
-                    'unit' => $unit[$count],
                     'purchase_price' => $purchase_price,
                     'selling_price' => $selling_price,
                     'total_purchase_value' => $total_purchase_value,
@@ -357,7 +351,6 @@ class MaterialStockoutController extends Controller
         $rules = array(
                 'material_id.*'  => 'required',
                 'date'  => 'required',
-                'unit.*'  => 'required',
                 'quantity.*'  => 'required',
                 'asker'  => 'required',
                 'origin_sm_store_id'  => 'required',
@@ -381,7 +374,6 @@ class MaterialStockoutController extends Controller
             $destination = $request->destination;
             $origin_sm_store_id = $request->origin_sm_store_id;
             $description =$request->description; 
-            $unit = $request->unit;
             $quantity = $request->quantity;
             $store_type = $request->store_type;
             
@@ -411,7 +403,6 @@ class MaterialStockoutController extends Controller
                     'material_id' => $material_id[$count],
                     'date' => $date,
                     'quantity' => $quantity[$count],
-                    'unit' => $unit[$count],
                     'purchase_price' => $purchase_price,
                     'selling_price' => $selling_price,
                     'total_purchase_value' => $total_purchase_value,

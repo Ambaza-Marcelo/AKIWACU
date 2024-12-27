@@ -35,7 +35,10 @@
                            &nbsp;&nbsp;Reception No: {{ $code }}
                         </small><br>
                         <small>
-                           &nbsp;&nbsp;@if($data->order_no) Order No: {{ $data->order_no }} @else Purchase No : {{ $data->purchase_no }} @endif
+                           &nbsp;&nbsp;@if($data->order_no)Commande No: {{ $data->order_no }} @endif
+                        </small><br>
+                        <small>
+                           &nbsp;&nbsp;Fournisseur: {{ $data->supplier->supplier_name }}
                         </small><br>
                         <small>
                            &nbsp;&nbsp;Monaie: {{ $invoice_currency }}
@@ -44,11 +47,12 @@
                            &nbsp;&nbsp;Facture No: @if($data->invoice_no) {{ $data->invoice_no }} @endif
                         </small><br>
                         <small>
-                           &nbsp;&nbsp; Date : Le {{ \Carbon\Carbon::parse($date)->format('d/m/Y') }}
+                           &nbsp;&nbsp; Date : Le {{ \Carbon\Carbon::parse($date)->format('d/m/Y H:i:s') }}
                         </small>
                     </div>
                     <br><br><br><br><br>
-                    <br><br><br>
+                    <br><br><br><br><br>
+                    <br><br><br><br><br>
                     <div>
                         <h3 style="text-align: center;text-decoration: underline;">FICHE DE RECEPTION DES ARTICLES</h3>
                     </div>
@@ -59,12 +63,13 @@
                                     <th>No</th>
                                     <th>Article</th>
                                     <th>Code</th>
-                                    <th>Quantite Cmdee</th>
-                                    <th>Quantite Recu</th>
+                                    <th>Quantité commandée</th>
+                                    <th>Quantité reçu</th>
                                     <th>Unité</th>
                                     <th>Prix Unitaire</th>
                                     <th>Prix HTVA</th>
                                     <th>TVA</th>
+                                    <th>Taux TVA</th>
                                     <th>Prix TVAC</th>
                                     <th>Prix Total</th>
                                 </tr>
@@ -81,6 +86,7 @@
                                     <td>{{ number_format($data->purchase_price,0,',',' ' )}}</td>
                                     <td>{{ number_format($data->price_nvat,0,',',' ' )}}</td>
                                     <td>{{ number_format($data->vat,0,',',' ' )}}</td>
+                                    <td>{{ $data->vat_rate }}%</td>
                                     <td>{{ number_format($data->price_wvat,0,',',' ' )}}</td>
                                     <td>{{ number_format($data->total_amount_purchase,0,',',' ' )}}</td>
                                 </tr>
@@ -89,7 +95,7 @@
                             <tfoot>
                                 <tr>
                                     <th>Total</th>
-                                    <th style="background-color: rgb(150,150,150);" colspan="8"></th>
+                                    <th style="background-color: rgb(150,150,150);" colspan="9"></th>
                                     <th>{{ number_format($total_wvat,0,',',' ') }}</th>
                                     <th>{{ number_format($totalValue,0,',',' ') }}</th>
                                 </tr>

@@ -63,7 +63,7 @@ class MaterialSupplierOrderController extends Controller
         }
 
         $materials  = Material::orderBy('name','asc')->get();
-        $suppliers  = Supplier::orderBy('name','asc')->get();
+        $suppliers  = Supplier::orderBy('supplier_name','asc')->get();
         $datas = MaterialPurchaseDetail::where('purchase_no', $purchase_no)->get();
         return view('backend.pages.material_supplier_order.create', compact('materials','purchase_no','datas','suppliers'));
     }
@@ -85,7 +85,6 @@ class MaterialSupplierOrderController extends Controller
         $rules = array(
                 'material_id.*'  => 'required',
                 'date'  => 'required',
-                'unit.*'  => 'required',
                 'quantity.*'  => 'required',
                 'purchase_price.*'  => 'required',
                 'purchase_no'  => 'required',
@@ -107,7 +106,6 @@ class MaterialSupplierOrderController extends Controller
             $purchase_no = $request->purchase_no;
             $description =$request->description; 
             $supplier_id =$request->supplier_id; 
-            $unit = $request->unit;
             $quantity = $request->quantity;
             $purchase_price = $request->purchase_price;
             
@@ -131,7 +129,6 @@ class MaterialSupplierOrderController extends Controller
                     'date' => $date,
                     'quantity' => $quantity[$count],
                     'quantity' => $quantity[$count],
-                    'unit' => $unit[$count],
                     'purchase_price' => $purchase_price[$count],
                     'total_value' => $total_value,
                     'purchase_no' => $purchase_no,

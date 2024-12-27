@@ -80,7 +80,6 @@ class MaterialPurchaseController extends Controller
                 'date'  => 'required',
                 'quantity.*'  => 'required',
                 'price.*'  => 'required',
-                'unit.*'  => 'required',
                 'description'  => 'required|max:490'
             );
 
@@ -98,7 +97,6 @@ class MaterialPurchaseController extends Controller
             $date = $request->date;
             $quantity = $request->quantity;
             $price = $request->price;
-            $unit = $request->unit;
             $description =$request->description; 
             $latest = MaterialPurchase::latest()->first();
             if ($latest) {
@@ -128,7 +126,6 @@ class MaterialPurchaseController extends Controller
                     'material_id' => $material_id[$count],
                     'date' => $date,
                     'quantity' => $quantity[$count],
-                    'unit' => $unit[$count],
                     'price' => $price[$count],
                     'description' => $description,
                     'total_value' => $total_value,

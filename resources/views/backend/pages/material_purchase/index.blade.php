@@ -176,11 +176,6 @@
                                         <a href="{{ route('admin.material-supplier-orders.create',$purchase->purchase_no)}}" class="btn btn-primary">Commander</a>
                                         @endif
                                         @endif
-                                        @if (Auth::guard('admin')->user()->can('material_purchase.create'))
-                                        @if($purchase->status == 4)
-                                        <a href="{{ route('admin.material-reception-without-order.create',$purchase->purchase_no)}}" class="btn btn-success">Receptionner Sans Bon de Commande</a>
-                                        @endif
-                                        @endif
                                         @if($purchase->status == 1 || $purchase->status == 0 || $purchase->status == 2 || $purchase->status == 3 || $purchase->status == 4)
                                         @if (Auth::guard('admin')->user()->can('material_purchase.edit'))
                                             <a class="btn btn-success text-white" href="{{ route('admin.material-purchases.edit', $purchase->purchase_no) }}">@lang('messages.edit')</a>

@@ -41,6 +41,8 @@ class CreateFoodReceptions extends Migration
             $table->string('rejected_by')->nullable(true);
             $table->string('reseted_by')->nullable(true);
             $table->string('status')->default('1');
+            $table->string('type_reception')->default('1');
+            $table->double('vat_rate')->default('0');
             $table->bigInteger('supplier_id')->unsigned()->nullable(true);
             $table->foreign('supplier_id')
                     ->references('id')

@@ -35,11 +35,14 @@
                            &nbsp;&nbsp;Order Number: {{ $order_no }}
                         </small><br>
                         <small>
-                           &nbsp;&nbsp; Date : Le {{ \Carbon\Carbon::parse($date)->format('d/m/Y') }}
+                           &nbsp;&nbsp;@if($data->supplier_id)Supplier: {{ $data->supplier->supplier_name }}@endif
+                        </small><br>
+                        <small>
+                           &nbsp;&nbsp; Date : Le {{ \Carbon\Carbon::parse($date)->format('d/m/Y H:i:s') }}
                         </small>
                     </div>
                     <br><br><br><br><br>
-                    <br><br><br>
+                    <br><br><br><br><br>
                     <div>
                         <h3 style="text-align: center;text-decoration: underline;">BON DE COMMANDE DES ARTICLES</h3>
                     </div>
@@ -50,7 +53,7 @@
                                     <th>No</th>
                                     <th>Article</th>
                                     <th>Code</th>
-                                    <th>Quantite Commandee</th>
+                                    <th>Quantité Commandée</th>
                                     <th>Unité</th>
                                     <th>Prix Unitaire</th>
                                     <th>Prix Total</th>

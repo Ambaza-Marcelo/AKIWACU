@@ -86,11 +86,9 @@ class MaterialExtraBigStoreInventoryController extends Controller
             'date' => 'required|date',
             'title' => 'required',
             'quantity.*' => 'required',
-            'unit.*' => 'required',
             'purchase_price.*' => 'required',
             'new_quantity.*' => 'required',
             'new_purchase_price.*' => 'required',
-            'new_unit.*' => 'required',
             'description' => 'required',
             );
 
@@ -106,7 +104,6 @@ class MaterialExtraBigStoreInventoryController extends Controller
 
             $material_id = $request->material_id;
             $date = $request->date;
-            $unit = $request->unit;
             $quantity = $request->quantity;
             $purchase_price = $request->purchase_price;
             $new_quantity = $request->new_quantity;
@@ -114,7 +111,6 @@ class MaterialExtraBigStoreInventoryController extends Controller
             $title = $request->title;
             $code_store = $request->code_store;
             $new_purchase_price = $request->new_purchase_price; 
-            $new_unit = $request->new_unit; 
 
             $latest = MaterialExtraBigStoreInventory::latest()->first();
             if ($latest) {
@@ -138,13 +134,11 @@ class MaterialExtraBigStoreInventoryController extends Controller
                     'title' => $title,
                     'code_store' => $code_store,
                     'quantity' => $quantity[$count],
-                    'unit' => $unit[$count],
                     'purchase_price' => $purchase_price[$count],
                     'total_purchase_value' => $total_purchase_value,
                     'new_quantity' => $new_quantity[$count],
                     'new_purchase_price' => $new_purchase_price[$count],
                     'new_total_purchase_value' => $new_total_purchase_value,
-                    'new_unit' => $new_unit[$count],
                     'relicat' => $relicat,
                     'inventory_no' => $inventory_no,
                     'inventory_signature' => $inventory_signature,

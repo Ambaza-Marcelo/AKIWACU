@@ -2,7 +2,7 @@
 @extends('backend.layouts.master')
 
 @section('title')
-@lang('messages.reception') - @lang('messages.admin_panel')
+@lang('reception totale') - @lang('messages.admin_panel')
 @endsection
 
 @section('styles')
@@ -19,11 +19,11 @@
     <div class="row align-items-center">
         <div class="col-sm-6">
             <div class="breadcrumbs-area clearfix">
-                <h4 class="page-title pull-left">@lang('messages.reception')</h4>
+                <h4 class="page-title pull-left">@lang('reception totale')</h4>
                 <ul class="breadcrumbs pull-left">
                     <li><a href="{{ route('admin.dashboard') }}">@lang('messages.dashboard')</a></li>
                     <li><a href="{{ route('admin.material-receptions.index') }}">@lang('messages.list')</a></li>
-                    <li><span>@lang('messages.reception')</span></li>
+                    <li><span>@lang('reception totale')</span></li>
                 </ul>
             </div>
         </div>
@@ -44,6 +44,7 @@
                     
                     <form action="{{ route('admin.material-reception-without-order.store') }}" method="POST">
                         @csrf
+                    <input type="hidden" name="type_reception" value="1">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -53,8 +54,8 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="purchase_no">Purchase Request No</label>
-                                <input type="text" class="form-control" id="purchase_no" name="purchase_no" value="{{$purchase_no}}" readonly="readonly">
+                                <label for="order_no">Commande No</label>
+                                <input type="text" class="form-control" id="order_no" name="order_no" value="{{$order_no}}" readonly="readonly">
                             </div>
                         </div>
                     </div>
@@ -76,92 +77,79 @@
                             <div class="col-md-4">
                             <div class="form-group">
                                 <label for="supplier_id">@lang('Fournisseur')</label>
-                                <select class="form-control" name="supplier_id" id="supplier_id">
+                                <select class="form-control" name="supplier_id" id="supplier_id" required>
                                  <option disabled="disabled" selected="selected">Merci de choisir</option>
                                 @foreach($suppliers as $supplier)
-                                    <option value="{{$supplier->id}}">{{$supplier->name}}</option>
+                                    <option value="{{$supplier->id}}">{{$supplier->supplier_name}}</option>
                                 @endforeach
                              </select>
                             </div>
                         </div>
-                            <div class="col-md-4">
-                                <label for="vat_supplier_payer">Fournisseur est assujetti TVA?</label>
-                                <div class="form-group">
-                                    <label class="text">Non Assujetti
-                                    <input type="checkbox" name="vat_supplier_payer" value="0" checked="checked" class="form-control">
-                                    </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                                    <label class="text">Assujetti
-                                    <input type="checkbox" name="vat_supplier_payer" value="1" class="form-control">
-                                    </label>
-                                </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="vat_supplier_payer">@lang('assujetti à la tva?')</label>
+                                <select class="form-control" name="vat_supplier_payer" id="vat_supplier_payer" required>
+                                 <option disabled="disabled" selected="selected">Merci de choisir</option>
+                                    <option value="0">Non assujetti</option>
+                                    <option value="1">Assujetti</option>
+                             </select>
                             </div>
+                        </div>
                     </div>
                     <div class="row">
+                        <div class="col-md-4" id="vat_rate">
+                            
+                        </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="receptionist">@lang('messages.receptionist')</label>
-                                <input type="text" class="form-control" id="receptionist" name="receptionist" placeholder="Enter receptionist" required>
+                                <label for="receptionist">@lang('Receptionniste')</label>
+                                <input type="text" class="form-control" id="receptionist" name="receptionist" placeholder="Entrer le nom du Receptionniste" required>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="handingover">@lang('messages.handingover')</label>
-                                <input type="text" class="form-control" id="handingover" name="handingover" placeholder="Enter handingover" required>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="invoice_no">@lang('messages.invoice_number')</label>
-                                <input type="text" class="form-control" id="invoice_no" name="invoice_no" placeholder="Enter invoice number">
+                                <label for="handingover">@lang('Remettant')</label>
+                                <input type="text" class="form-control" id="handingover" name="handingover" placeholder="Entrer le nom du Remettant" required>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="store_type">@lang('Type Stock')<strong style="color: red;">*</strong></label>
-                                    <select class="form-control" name="store_type" id="store_type">
-                                        <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                        <option value="0" class="form-control">GRAND STOCK</option>
-                                        <option value="1" class="form-control">STOCK INTERMEDIAIRE</option>
-                                    </select>
-                                </div>
+                            <div class="form-group">
+                                <label for="invoice_no">@lang('No facture')</label>
+                                <input type="text" class="form-control" id="invoice_no" name="invoice_no" placeholder="Entrer No facture" required>
+                            </div>
                         </div>
-                        <div class="col-md-6" id="dynamic_big_store">
-                                
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="destination_store_id">@lang('Stock Destination')</label>
+                                <select class="form-control" name="destination_store_id" id="destination_store_id">
+                                 <option disabled="disabled" selected="selected">Merci de choisir</option>
+                                @foreach($destination_stores as $destination_store)
+                                    <option value="{{$destination_store->id}}">{{$destination_store->name}}</option>
+                                @endforeach
+                             </select>
+                            </div>
                         </div>
                     </div>
                          <table class="table table-bordered" id="dynamicTable">  
                             <tr>
                                 <th>@lang('messages.item')</th>
-                                <th>@lang('Ordered quantity')</th>
-                                <th>@lang('messages.unit')</th>
+                                <th>@lang('Quantité commandée')</th>
                                 <th>@lang('messages.unit_price')</th>
-                                <th>@lang('Reception Quantity')</th>
-                                <th>@lang('unit')</th>
-                                <th>@lang('Purchase Price')</th>
+                                <th>@lang('Quantité receptionnée')</th>
+                                <th>@lang('Prix Unitaire')</th>
                                 <th>Action</th>
                             </tr>
                             @foreach($datas as $data)
                             <tr>  
                                 <td> <select class="form-control" name="material_id[]" id="material_id">
-                                <option value="{{ $data->material_id }}" class="form-control">{{ $data->material->name }}/{{ $data->material->code }}</option>
+                                <option value="{{ $data->material_id }}" class="form-control">{{$data->material->name}}/{{ number_format($data->material->cump,0,',',' ') }}/{{ $data->material->materialMeasurement->purchase_unit }}</option>
                                 </select></td>  
                                 <td><input type="number" name="quantity_ordered[]" value="{{ $data->quantity }}" step="any" class="form-control"  readonly /></td>  
-                                <td><input type="text" name="unit[]" value="{{$data->unit}}" class="form-control"  readonly /></td>
-                                <td><input type="number" name="purchase_price[]" value="{{$data->price}}" class="form-control" step="any" min="0" readonly /></td>
-                                <td><input type="number" name="quantity_received[]" value="{{ $data->quantity }}" step="any" class="form-control" min="0"/></td> 
-                                <td>
-                                    <select class="form-control" name="unit[]" id="unit">
-                                        <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                        <option value="pcs" {{ $data->unit == 'pcs' ? 'selected' : '' }} class="form-control">Pieces</option>
-                                        <option value="boites" {{ $data->unit == 'boites' ? 'selected' : '' }} class="form-control">Boites</option>
-                                        <option value="kg" {{ $data->unit == 'kg' ? 'selected' : '' }} class="form-control">KG</option>
-                                        <option value="paire" {{ $data->unit == 'paire' ? 'selected' : '' }} class="form-control">PAIRE</option>
-                                        <option value="litres" {{ $data->unit == 'litres' ? 'selected' : '' }} class="form-control">Litres</option>
-                                    </select>
-                                </td>
-                                <td><input type="number" name="purchase_price[]" value="{{$data->price}}" class="form-control" step="any" min="0"/></td>
+                                <td><input type="number" name="" value="{{$data->purchase_price}}" class="form-control" step="any" min="0" readonly /></td>
+                                <td><input type="number" name="quantity_received[]" value="{{ $data->quantity }}" class="form-control" min="{{ $data->quantity }}" step="any" /></td> 
+                                <td><input type="number" name="purchase_price[]" value="{{$data->purchase_price}}" class="form-control" step="any" min="0"/></td>
                                 <td>
                                 <button type='button' class='btn btn-danger remove-tr'>@lang('messages.delete')</button></td>  
                             </tr> 
@@ -245,23 +233,21 @@
     }
     })
 
-    //one checked box in checkbox group of vat_supplier_payer
+    $('#vat_supplier_payer').change(function () { 
+    if ($(this).val() === '1'){
 
-    var group_=(el,callback)=>{
-        el.forEach((checkbox)=>{
-        callback(checkbox)
-        })
+                var vat_rate = "<label for='vat_rate'>merci de choisir<strong style='color: red;'>*</strong></label>"+
+                            "<select name='vat_rate' required class='form-control'>"+
+                                "<option selected disabled>merci de choisir</option>"+
+                                "<option value='0'>0%</option>"+
+                                "<option value='10'>10%</option>"+
+                                "<option value='18'>18%</option>";
+        
+        $("#vat_rate").append([vat_rate]);
     }
 
-    group_(document.getElementsByName('vat_supplier_payer'),(item)=>{
-    item.onclick=(e)=>{
-    group_(document.getElementsByName('vat_supplier_payer'),(item)=>{
-    item.checked=false;
     })
-    e.target.checked=true;
-
-    }
-    })
+    .trigger( "change" );
 
 
     $('#store_type').change(function () { 

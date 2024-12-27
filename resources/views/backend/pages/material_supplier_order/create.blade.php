@@ -75,26 +75,15 @@
                             <tr>
                                 <th>@lang('messages.item')</th>
                                 <th>@lang('messages.quantity')</th>
-                                <th>@lang('messages.unit')</th>
                                 <th>@lang('messages.unit_price')</th>
                                 <th>Action</th>
                             </tr>
                             @foreach($datas as $data)
                             <tr>  
                                 <td> <select class="form-control" name="material_id[]" id="material_id">
-                                <option value="{{ $data->material_id }}" class="form-control">{{ $data->material->name }}/{{ $data->material->code }}</option>
+                                <option value="{{ $data->material_id }}" class="form-control">{{$data->material->name}}/{{ number_format($data->material->cump,0,',',' ') }}/{{ $data->material->materialMeasurement->purchase_unit }}</option>
                                 </select></td>  
                                 <td><input type="number" name="quantity[]" value="{{ $data->quantity }}" class="form-control" min="{{ $data->quantity }}" max="{{ $data->quantity }}" step="any" /></td>  
-                                <td>
-                                    <select class="form-control" name="unit[]" id="unit">
-                                        <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                        <option value="pcs" {{ $data->unit == 'pcs' ? 'selected' : '' }} class="form-control">Pieces</option>
-                                        <option value="boites" {{ $data->unit == 'boites' ? 'selected' : '' }} class="form-control">Boites</option>
-                                        <option value="kg" {{ $data->unit == 'kg' ? 'selected' : '' }} class="form-control">KG</option>
-                                        <option value="paire" {{ $data->unit == 'paire' ? 'selected' : '' }} class="form-control">PAIRE</option>
-                                        <option value="litres" {{ $data->unit == 'litres' ? 'selected' : '' }} class="form-control">Litres</option>
-                                    </select>
-                                </td>
                                 <td><input type="number" name="purchase_price[]" value="{{$data->price}}" class="form-control" step="any" min="{{$data->price}}"/></td>
                                 <td><button type='button' class='btn btn-danger remove-tr'>@lang('messages.delete')</button></td>  
                             </tr> 
@@ -131,18 +120,12 @@
                          "<select class='form-control' name='material_id[]'"+
                             "<option value='0'>Merci de choisir</option>"+
                              "@foreach($materials as $material)"+
-                                 "<option value='{{ $material->id }}'>{{ $material->name }}/{{ $material->code }}</option>"+
+                                 "<option value='{{ $material->id }}'>{{$material->name}}/{{ number_format($material->cump,0,',',' ') }}/{{ $material->materialMeasurement->purchase_unit }}</option>"+
                              "@endforeach>"+
                           "</select>"+
                         "</td>"+
                         "<td>"+
                           "<input type='number' name='quantity[]' placeholder='Enter Quantity' class='form-control' step='any' />"+
-                        "</td>"+
-                        "<td>"+
-                          "<select class='form-control' name='unit[]' id='unit'>"+
-                                "<option disabled='disabled' selected='selected'>Merci de choisir</option>"+
-                                "<option value='pieces' class='form-control'>Pieces</option>"+
-                                "</select>"+
                         "</td>"+
                         "<td>"+
                         "<input type='number' name='purchase_price[]' placeholder='Enter Unit price' class='form-control' step='any' min='0' />"+

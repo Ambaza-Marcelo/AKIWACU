@@ -61,7 +61,7 @@ class FoodSupplierOrderController extends Controller
         }
 
         $foods  = Food::orderBy('name','asc')->get();
-        $suppliers  = Supplier::orderBy('name','asc')->get();
+        $suppliers  = Supplier::orderBy('supplier_name','asc')->get();
         $datas = FoodPurchaseDetail::where('purchase_no', $purchase_no)->get();
         return view('backend.pages.food_supplier_order.create', compact('foods','purchase_no','datas','suppliers'));
     }

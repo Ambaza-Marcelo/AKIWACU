@@ -72,11 +72,20 @@ class DrinkReceptionController extends Controller
         $drinks  = Drink::orderBy('name','asc')->get();
         $destination_stores = DrinkBigStore::all();
         $suppliers = Supplier::all();
-        $datas = DrinkSupplierOrderDetail::where('order_no', $order_no)->get();
-        return view('backend.pages.drink_reception.create', compact('drinks','order_no','datas','destination_stores','suppliers'));
+        $data = DrinkSupplierOrder::where('order_no', $order_no)->first();
+        if ($data->status == -5) {
+            $reception = DrinkReception::where('order_no',$order_no)->orderBy('reception_no','desc')->first();
+            $datas = DrinkReceptionDetail::where('reception_no', $reception->reception_no)->get();
+        }elseif ($data->status == 4) {
+            $datas = DrinkSupplierOrderDetail::where('order_no', $order_no)->get();
+        }else{
+            abort(403, 'Sorry !! You are Unauthorized!');
+        }
+
+        return view('backend.pages.drink_reception.create', compact('drinks','order_no','datas','destination_stores','suppliers','data'));
     }
 
-    public function createWithoutOrder($purchase_no)
+    public function createWithoutRemaining($order_no)
     {
         if (is_null($this->user) || !$this->user->can('drink_reception.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any reception !');
@@ -85,8 +94,8 @@ class DrinkReceptionController extends Controller
         $drinks  = Drink::where('store_type','!=',2)->orderBy('name','asc')->get();
         $destination_stores = DrinkBigStore::all();
         $suppliers = Supplier::all();
-        $datas = DrinkPurchaseDetail::where('purchase_no', $purchase_no)->get();
-        return view('backend.pages.drink_reception.create_without', compact('drinks','purchase_no','datas','destination_stores','suppliers'));
+        $datas = DrinkSupplierOrderDetail::where('order_no', $order_no)->get();
+        return view('backend.pages.drink_reception.create_without', compact('drinks','order_no','datas','destination_stores','suppliers'));
     }
 
     /**
@@ -106,15 +115,15 @@ class DrinkReceptionController extends Controller
         $rules = array(
                 'drink_id.*'  => 'required',
                 'date'  => 'required',
-                //'unit.*'  => 'required',
                 'quantity_ordered.*'  => 'required',
                 'purchase_price.*'  => 'required',
-                //'selling_price.*'  => 'required',
                 'quantity_received.*'  => 'required',
                 'order_no'  => 'required',
                 'invoice_no'  => 'required',
                 'receptionist'  => 'required',
                 'vat_supplier_payer'  => 'required',
+                'type_reception'  => 'required',
+                'vat_rate'  => 'required',
                 'invoice_currency'  => 'required',
                 'destination_store_id'  => 'required',
                 'description'  => 'required|max:490'
@@ -137,16 +146,20 @@ class DrinkReceptionController extends Controller
             $invoice_currency = $request->invoice_currency;
             $handingover = $request->handingover;
             $receptionist = $request->receptionist;
+            $vat_rate = $request->vat_rate;
+            $type_reception = $request->type_reception;
             $order_no = $request->order_no;
             $invoice_no = $request->invoice_no;
             $description =$request->description; 
             $destination_store_id = $request->destination_store_id;
-            //$unit = $request->unit;
             $quantity_ordered = $request->quantity_ordered;
             $purchase_price = $request->purchase_price;
             $selling_price = $request->selling_price;
             $quantity_received = $request->quantity_received;
             $supplier_id = $request->supplier_id;
+
+
+            $order = DrinkSupplierOrder::where('order_no',$order_no)->first();
             
 
             $latest = DrinkReception::latest()->first();
@@ -164,7 +177,7 @@ class DrinkReceptionController extends Controller
             for( $count = 0; $count < count($drink_id); $count++ ){
                 if($vat_supplier_payer == 1){
                     $price_nvat = ($purchase_price[$count]*$quantity_received[$count]);
-                    $vat = ($price_nvat* 18)/100;
+                    $vat = ($price_nvat* $vat_rate)/100;
                     $price_wvat = $price_nvat + $vat;
                     $total_amount_purchase = $price_wvat; 
 
@@ -178,15 +191,33 @@ class DrinkReceptionController extends Controller
                 $total_amount_ordered = $quantity_ordered[$count] * $purchase_price[$count];
                 $total_amount_received = $quantity_received[$count] * $purchase_price[$count];
 
+
+                if ($order->status == -5) {
+                    $total_quantity_received = DB::table('drink_reception_details')
+                    ->where('order_no', '=', $order_no)
+                    ->sum('quantity_received');
+
+                    $quantity_remaining = $quantity_ordered[$count] - ($total_quantity_received + $quantity_received[$count]);
+
+                }else{
+                    $quantity_remaining = $quantity_ordered[$count] - $quantity_received[$count];
+                }
+
+                if ($quantity_remaining > 0) {
+                    $type_reception = 0;
+                }else{
+                    $type_reception = 1;
+                }
+
                 $data = array(
                     'drink_id' => $drink_id[$count],
                     'date' => $date,
                     'quantity_ordered' => $quantity_ordered[$count],
                     'quantity_received' => $quantity_received[$count],
-                    'quantity_remaining' => $quantity_received[$count] - $quantity_ordered[$count],
-                    //'unit' => $unit[$count],
+                    'quantity_remaining' => $quantity_remaining,
+                    'vat_rate' => $vat_rate,
                     'purchase_price' => $purchase_price[$count],
-                    //'selling_price' => $selling_price[$count],
+                    'type_reception' => $type_reception,
                     'total_amount_ordered' => $total_amount_ordered,
                     'total_amount_received' => $total_amount_received,
                     'total_amount_purchase' => $total_amount_purchase,
@@ -226,6 +257,8 @@ class DrinkReceptionController extends Controller
             $reception->invoice_no = $invoice_no;
             $reception->invoice_currency = $invoice_currency;
             $reception->receptionist = $receptionist;
+            $reception->vat_rate = $vat_rate;
+            $reception->type_reception = $type_reception;
             $reception->handingover = $handingover;
             $reception->supplier_id = $supplier_id;
             $reception->destination_store_id = $destination_store_id;
@@ -251,7 +284,7 @@ class DrinkReceptionController extends Controller
         
     }
 
-    public function storeWithoutOrder(Request $request)
+    public function storeWithoutRemaining(Request $request)
     {
 
         if (is_null($this->user) || !$this->user->can('drink_reception.create')) {
@@ -261,18 +294,17 @@ class DrinkReceptionController extends Controller
         $rules = array(
                 'drink_id.*'  => 'required',
                 'date'  => 'required',
-                //'unit.*'  => 'required',
                 'quantity_ordered.*'  => 'required',
                 'purchase_price.*'  => 'required',
-               // 'selling_price.*'  => 'required',
                 'quantity_received.*'  => 'required',
-                'purchase_no'  => 'required',
-                //'invoice_no'  => 'required',
+                'order_no'  => 'required',
+                'invoice_no'  => 'required',
                 'receptionist'  => 'required',
                 'vat_supplier_payer'  => 'required',
-                //'invoice_currency'  => 'required',
+                'type_reception'  => 'required',
+                'invoice_currency'  => 'required',
                 'destination_store_id'  => 'required',
-                'description'  => 'required|min:10|max:500'
+                'description'  => 'required|max:490'
             );
 
             $error = Validator::make($request->all(),$rules);
@@ -319,7 +351,7 @@ class DrinkReceptionController extends Controller
             for( $count = 0; $count < count($drink_id); $count++ ){
                 if($vat_supplier_payer == 1){
                     $price_nvat = ($purchase_price[$count]*$quantity_received[$count]);
-                    $vat = ($price_nvat* 18)/100;
+                    $vat = ($price_nvat* $vat_rate)/100;
                     $price_wvat = $price_nvat + $vat;
                     $total_amount_purchase = $price_wvat; 
 
@@ -329,6 +361,7 @@ class DrinkReceptionController extends Controller
                     $price_wvat = $price_nvat + $vat;
                     $total_amount_purchase = $price_wvat;
                 }
+
                 $total_amount_ordered = $quantity_ordered[$count] * $purchase_price[$count];
                 $total_amount_received = $quantity_received[$count] * $purchase_price[$count];
 
@@ -338,18 +371,18 @@ class DrinkReceptionController extends Controller
                     'quantity_ordered' => $quantity_ordered[$count],
                     'quantity_received' => $quantity_received[$count],
                     'quantity_remaining' => $quantity_received[$count] - $quantity_ordered[$count],
-                    //'unit' => $unit[$count],
+                    'vat_rate' => $vat_rate,
                     'purchase_price' => $purchase_price[$count],
-                    //'selling_price' => $selling_price[$count],
+                    'type_reception' => $type_reception,
                     'total_amount_ordered' => $total_amount_ordered,
                     'total_amount_received' => $total_amount_received,
                     'total_amount_purchase' => $total_amount_purchase,
-                    'purchase_no' => $purchase_no,
+                    'order_no' => $order_no,
                     'invoice_no' => $invoice_no,
                     'invoice_currency' => $invoice_currency,
                     'vat' => $vat,
                     'price_nvat' => $price_nvat,
-                    'price_wvat' => $total_amount_purchase,
+                    'price_wvat' => $price_wvat,
                     'supplier_id' => $supplier_id,
                     'vat_supplier_payer' => $vat_supplier_payer,
                     'receptionist' => $receptionist,
@@ -375,17 +408,20 @@ class DrinkReceptionController extends Controller
             $reception->date = $date;
             $reception->reception_no = $reception_no;
             $reception->reception_signature = $reception_signature;
-            $reception->purchase_no = $purchase_no;
+            $reception->order_no = $order_no;
             $reception->vat_supplier_payer = $vat_supplier_payer;
             $reception->invoice_no = $invoice_no;
             $reception->invoice_currency = $invoice_currency;
             $reception->receptionist = $receptionist;
+            $reception->vat_rate = $vat_rate;
+            $reception->type_reception = $type_reception;
             $reception->handingover = $handingover;
             $reception->supplier_id = $supplier_id;
             $reception->destination_store_id = $destination_store_id;
             $reception->created_by = $created_by;
             $reception->status = 1;
             $reception->description = $description;
+            $reception->created_at = \Carbon\Carbon::now();
             $reception->save();
 
             DB::commit();
@@ -602,6 +638,8 @@ class DrinkReceptionController extends Controller
 
         $datas = DrinkReceptionDetail::where('reception_no', $reception_no)->get();
 
+        $reception = DrinkReceptionDetail::where('reception_no', $reception_no)->first();
+
         foreach($datas as $data){
 
                 $code_store_destination = DrinkBigStore::where('id',$data->destination_store_id)->value('code');
@@ -720,6 +758,18 @@ class DrinkReceptionController extends Controller
 
         if ($flag != 0) {
             DrinkBigReport::insert($reportBigStoreData);
+        }
+
+        if ($reception->type_reception == 0) {
+            DrinkSupplierOrder::where('order_no', '=', $reception->order_no)
+            ->update(['status' => -5]);
+            DrinkSupplierOrderDetail::where('order_no', '=', $reception->order_no)
+             ->update(['status' => -5]);
+        }else{
+            DrinkSupplierOrder::where('order_no', '=', $reception->order_no)
+            ->update(['status' => 5]);
+            DrinkSupplierOrderDetail::where('order_no', '=', $reception->order_no)
+             ->update(['status' => 5]);
         }
 
         DrinkReception::where('reception_no', '=', $reception_no)

@@ -82,25 +82,16 @@
                             <tr>
                                 <th>@lang('messages.item')</th>
                                 <th>@lang('messages.quantity')</th>
-                                <th>@lang('messages.unit')</th>
                                 <th>Action</th>
                             </tr>
                             <tr>  
                                 <td> <select class="form-control" name="material_id[]" id="material_id">
                                 <option disabled="disabled" selected="selected">merci de choisir</option>
                             @foreach ($materials as $material)
-                                <option value="{{ $material->id }}" class="form-control">{{ $material->name }}</option>
+                                <option value="{{ $material->id }}" class="form-control">{{$material->name}}/{{ number_format($material->cump,0,',',' ') }}/{{ $material->materialMeasurement->purchase_unit }}</option>
                             @endforeach
                             </select></td>  
-                                <td><input type="number" name="quantity[]" placeholder="Enter quantity" class="form-control" step="any" /></td>  
-                                <td><select class="form-control" name="unit[]" id="unit">
-                                    <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                    <option value="pcs" class="form-control">Pieces</option>
-                                    <option value="boites" class="form-control">Boites</option>
-                                        <option value="kg" class="form-control">KG</option>
-                                        <option value="paire" class="form-control">PAIRE</option>
-                                        <option value="litres" class="form-control">Litres</option>
-                                </select></td>   
+                                <td><input type="number" name="quantity[]" placeholder="Enter quantity" class="form-control" step="any" /></td>     
                                 <td><button type="button" name="add" id="add" class="btn btn-success">@lang('messages.addmore')</button></td>  
                             </tr>  
                         </table> 
@@ -132,22 +123,12 @@
                          "<select class='form-control' name='material_id[]'"+
                             "<option>merci de choisir</option>"+
                              "@foreach($materials as $material)"+
-                                 "<option value='{{ $material->id }}'>{{ $material->name }}</option>"+
+                                 "<option value='{{ $material->id }}'>{{$material->name}}/{{ number_format($material->cump,0,',',' ') }}/{{ $material->materialMeasurement->purchase_unit }}</option>"+
                              "@endforeach>"+
                           "</select>"+
                         "</td>"+
                         "<td>"+
                           "<input type='number' name='quantity[]' placeholder='Enter Quantity' class='form-control' step='any' />"+
-                        "</td>"+
-                        "<td>"+
-                          "<select class='form-control' name='unit[]' id='unit'>"+
-                                "<option disabled='disabled' selected='selected'>merci de choisir</option>"+
-                                "<option value='pcs' class='form-control'>Pieces</option>"+
-                                "<option value='boites' class='form-control'>Boites</option>"+
-                                "<option value='kg' class='form-control'>KG</option>"+
-                                "<option value='paire' class='form-control'>Paire</option>"+
-                                "<option value='litres' class='form-control'>Litres</option>"+
-                                "</select>"+
                         "</td>"+
                         "<td>"+
                           "<button type='button' class='btn btn-danger remove-tr'>@lang('messages.delete')</button>"+

@@ -29,17 +29,20 @@
                     </div>
                     <div style="float: right; border-top-right-radius: 10px solid black;border-top-left-radius: 10px solid black;border-bottom-right-radius: 10px solid black;border-bottom-left-radius: 10px solid black; background-color: rgb(150,150,150);width: 242px;padding: 20px;">
                         <small>
-                           &nbsp;&nbsp; <img src="data:image/png;base64, {!! base64_encode(QrCode::size(50)->generate('eSIGNATURE : '.$order_signature.' www.edengardenresorts.bi, Order Number : '.$order_no.'Supplier : '.$data->supplier_id)) !!} ">
+                           &nbsp;&nbsp; <img src="data:image/png;base64, {!! base64_encode(QrCode::size(50)->generate('eSIGNATURE : '.$order_signature.' www.edengardenresorts.bi')) !!} ">
                         </small><br>
                         <small>
                            &nbsp;&nbsp;Order Number: {{ $order_no }}
                         </small><br>
                         <small>
-                           &nbsp;&nbsp; Date : Le {{ \Carbon\Carbon::parse($date)->format('d/m/Y') }}
+                           &nbsp;&nbsp;@if($data->supplier_id)Supplier: {{ $data->supplier->supplier_name }}@endif
+                        </small><br>
+                        <small>
+                           &nbsp;&nbsp; Date : Le {{ \Carbon\Carbon::parse($date)->format('d/m/Y H:i:s') }}
                         </small>
                     </div>
                     <br><br><br><br><br>
-                    <br><br><br>
+                    <br><br><br><br><br>
                     <div>
                         <h3 style="text-align: center;text-decoration: underline;">BON DE COMMANDE DES ARTICLES</h3>
                     </div>

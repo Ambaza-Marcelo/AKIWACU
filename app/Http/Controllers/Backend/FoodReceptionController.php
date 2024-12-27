@@ -70,11 +70,20 @@ class FoodReceptionController extends Controller
         $foods  = Food::orderBy('name','asc')->get();
         $destination_stores = FoodBigStore::all();
         $suppliers = Supplier::all();
-        $datas = FoodSupplierOrderDetail::where('order_no', $order_no)->get();
-        return view('backend.pages.food_reception.create', compact('foods','order_no','datas','destination_stores','suppliers'));
+        $data = FoodSupplierOrder::where('order_no', $order_no)->first();
+        if ($data->status == -5) {
+            $reception = FoodReception::where('order_no',$order_no)->orderBy('reception_no','desc')->first();
+            $datas = FoodReceptionDetail::where('reception_no', $reception->reception_no)->get();
+        }elseif ($data->status == 4) {
+            $datas = FoodSupplierOrderDetail::where('order_no', $order_no)->get();
+        }else{
+            abort(403, 'Sorry !! You are Unauthorized!');
+        }
+
+        return view('backend.pages.food_reception.create', compact('foods','order_no','datas','destination_stores','suppliers','data'));
     }
 
-    public function createWithoutOrder($purchase_no)
+    public function createWithoutRemaining($order_no)
     {
         if (is_null($this->user) || !$this->user->can('food_reception.create')) {
             abort(403, 'Sorry !! You are Unauthorized to create any reception !');
@@ -83,8 +92,8 @@ class FoodReceptionController extends Controller
         $foods  = Food::where('store_type','!=',2)->orderBy('name','asc')->get();
         $destination_stores = FoodBigStore::all();
         $suppliers = Supplier::all();
-        $datas = FoodPurchaseDetail::where('purchase_no', $purchase_no)->get();
-        return view('backend.pages.food_reception.create_without', compact('foods','purchase_no','datas','destination_stores','suppliers'));
+        $datas = FoodSupplierOrderDetail::where('order_no', $order_no)->get();
+        return view('backend.pages.food_reception.create_without', compact('foods','order_no','datas','destination_stores','suppliers'));
     }
 
     /**
@@ -104,7 +113,6 @@ class FoodReceptionController extends Controller
         $rules = array(
                 'food_id.*'  => 'required',
                 'date'  => 'required',
-                //'unit.*'  => 'required',
                 'quantity_ordered.*'  => 'required',
                 'purchase_price.*'  => 'required',
                 'quantity_received.*'  => 'required',
@@ -112,6 +120,8 @@ class FoodReceptionController extends Controller
                 'invoice_no'  => 'required',
                 'receptionist'  => 'required',
                 'vat_supplier_payer'  => 'required',
+                'type_reception'  => 'required',
+                'vat_rate'  => 'required',
                 'invoice_currency'  => 'required',
                 'destination_store_id'  => 'required',
                 'description'  => 'required|max:490'
@@ -130,18 +140,24 @@ class FoodReceptionController extends Controller
             $food_id = $request->food_id;
             $date = Carbon::now();
             $vat_supplier_payer = $request->vat_supplier_payer;
+            $origin_store_id = $request->origin_store_id;
             $invoice_currency = $request->invoice_currency;
             $handingover = $request->handingover;
             $receptionist = $request->receptionist;
+            $vat_rate = $request->vat_rate;
+            $type_reception = $request->type_reception;
             $order_no = $request->order_no;
             $invoice_no = $request->invoice_no;
             $description =$request->description; 
             $destination_store_id = $request->destination_store_id;
-            //$unit = $request->unit;
             $quantity_ordered = $request->quantity_ordered;
             $purchase_price = $request->purchase_price;
+            $selling_price = $request->selling_price;
             $quantity_received = $request->quantity_received;
             $supplier_id = $request->supplier_id;
+
+
+            $order = FoodSupplierOrder::where('order_no',$order_no)->first();
             
 
             $latest = FoodReception::latest()->first();
@@ -157,9 +173,9 @@ class FoodReceptionController extends Controller
 
 
             for( $count = 0; $count < count($food_id); $count++ ){
-                if($vat_supplier_payer == '1'){
+                if($vat_supplier_payer == 1){
                     $price_nvat = ($purchase_price[$count]*$quantity_received[$count]);
-                    $vat = ($price_nvat* 18)/100;
+                    $vat = ($price_nvat* $vat_rate)/100;
                     $price_wvat = $price_nvat + $vat;
                     $total_amount_purchase = $price_wvat; 
 
@@ -169,17 +185,37 @@ class FoodReceptionController extends Controller
                     $price_wvat = $price_nvat + $vat;
                     $total_amount_purchase = $price_wvat;
                 }
+                
                 $total_amount_ordered = $quantity_ordered[$count] * $purchase_price[$count];
                 $total_amount_received = $quantity_received[$count] * $purchase_price[$count];
+
+
+                if ($order->status == -5) {
+                    $total_quantity_received = DB::table('food_reception_details')
+                    ->where('order_no', '=', $order_no)
+                    ->sum('quantity_received');
+
+                    $quantity_remaining = $quantity_ordered[$count] - ($total_quantity_received + $quantity_received[$count]);
+
+                }else{
+                    $quantity_remaining = $quantity_ordered[$count] - $quantity_received[$count];
+                }
+
+                if ($quantity_remaining > 0) {
+                    $type_reception = 0;
+                }else{
+                    $type_reception = 1;
+                }
 
                 $data = array(
                     'food_id' => $food_id[$count],
                     'date' => $date,
                     'quantity_ordered' => $quantity_ordered[$count],
                     'quantity_received' => $quantity_received[$count],
-                    'quantity_remaining' => $quantity_ordered[$count] - $quantity_received[$count],
-                    //'unit' => $unit[$count],
+                    'quantity_remaining' => $quantity_remaining,
+                    'vat_rate' => $vat_rate,
                     'purchase_price' => $purchase_price[$count],
+                    'type_reception' => $type_reception,
                     'total_amount_ordered' => $total_amount_ordered,
                     'total_amount_received' => $total_amount_received,
                     'total_amount_purchase' => $total_amount_purchase,
@@ -219,12 +255,15 @@ class FoodReceptionController extends Controller
             $reception->invoice_no = $invoice_no;
             $reception->invoice_currency = $invoice_currency;
             $reception->receptionist = $receptionist;
+            $reception->vat_rate = $vat_rate;
+            $reception->type_reception = $type_reception;
             $reception->handingover = $handingover;
             $reception->supplier_id = $supplier_id;
             $reception->destination_store_id = $destination_store_id;
             $reception->created_by = $created_by;
             $reception->status = 1;
             $reception->description = $description;
+            $reception->created_at = \Carbon\Carbon::now();
             $reception->save();
 
             DB::commit();
@@ -242,7 +281,7 @@ class FoodReceptionController extends Controller
             
     }
 
-    public function storeWithoutOrder(Request $request)
+    public function storeWithoutRemaining(Request $request)
     {
 
         if (is_null($this->user) || !$this->user->can('food_reception.create')) {
@@ -252,17 +291,17 @@ class FoodReceptionController extends Controller
         $rules = array(
                 'food_id.*'  => 'required',
                 'date'  => 'required',
-                //'unit.*'  => 'required',
                 'quantity_ordered.*'  => 'required',
                 'purchase_price.*'  => 'required',
                 'quantity_received.*'  => 'required',
-                //'order_no'  => 'required',
-                //'invoice_no'  => 'required',
+                'order_no'  => 'required',
+                'invoice_no'  => 'required',
                 'receptionist'  => 'required',
                 'vat_supplier_payer'  => 'required',
+                'type_reception'  => 'required',
                 'invoice_currency'  => 'required',
                 'destination_store_id'  => 'required',
-                'description'  => 'required'
+                'description'  => 'required|max:490'
             );
 
             $error = Validator::make($request->all(),$rules);
@@ -278,6 +317,7 @@ class FoodReceptionController extends Controller
             $food_id = $request->food_id;
             $date = Carbon::now();
             $vat_supplier_payer = $request->vat_supplier_payer;
+            $origin_store_id = $request->origin_store_id;
             $invoice_currency = $request->invoice_currency;
             $handingover = $request->handingover;
             $receptionist = $request->receptionist;
@@ -285,9 +325,10 @@ class FoodReceptionController extends Controller
             $invoice_no = $request->invoice_no;
             $description =$request->description; 
             $destination_store_id = $request->destination_store_id;
-            $unit = $request->unit;
+            //$unit = $request->unit;
             $quantity_ordered = $request->quantity_ordered;
             $purchase_price = $request->purchase_price;
+            $selling_price = $request->selling_price;
             $quantity_received = $request->quantity_received;
             $supplier_id = $request->supplier_id;
             
@@ -305,9 +346,9 @@ class FoodReceptionController extends Controller
 
 
             for( $count = 0; $count < count($food_id); $count++ ){
-                if($vat_supplier_payer == '1'){
+                if($vat_supplier_payer == 1){
                     $price_nvat = ($purchase_price[$count]*$quantity_received[$count]);
-                    $vat = ($price_nvat* 18)/100;
+                    $vat = ($price_nvat* $vat_rate)/100;
                     $price_wvat = $price_nvat + $vat;
                     $total_amount_purchase = $price_wvat; 
 
@@ -317,6 +358,7 @@ class FoodReceptionController extends Controller
                     $price_wvat = $price_nvat + $vat;
                     $total_amount_purchase = $price_wvat;
                 }
+
                 $total_amount_ordered = $quantity_ordered[$count] * $purchase_price[$count];
                 $total_amount_received = $quantity_received[$count] * $purchase_price[$count];
 
@@ -325,13 +367,14 @@ class FoodReceptionController extends Controller
                     'date' => $date,
                     'quantity_ordered' => $quantity_ordered[$count],
                     'quantity_received' => $quantity_received[$count],
-                    'quantity_remaining' => $quantity_ordered[$count] - $quantity_received[$count],
-                    //'unit' => $unit[$count],
+                    'quantity_remaining' => $quantity_received[$count] - $quantity_ordered[$count],
+                    'vat_rate' => $vat_rate,
                     'purchase_price' => $purchase_price[$count],
+                    'type_reception' => $type_reception,
                     'total_amount_ordered' => $total_amount_ordered,
                     'total_amount_received' => $total_amount_received,
                     'total_amount_purchase' => $total_amount_purchase,
-                    'purchase_no' => $purchase_no,
+                    'order_no' => $order_no,
                     'invoice_no' => $invoice_no,
                     'invoice_currency' => $invoice_currency,
                     'vat' => $vat,
@@ -362,17 +405,20 @@ class FoodReceptionController extends Controller
             $reception->date = $date;
             $reception->reception_no = $reception_no;
             $reception->reception_signature = $reception_signature;
-            $reception->purchase_no = $purchase_no;
+            $reception->order_no = $order_no;
             $reception->vat_supplier_payer = $vat_supplier_payer;
             $reception->invoice_no = $invoice_no;
             $reception->invoice_currency = $invoice_currency;
             $reception->receptionist = $receptionist;
+            $reception->vat_rate = $vat_rate;
+            $reception->type_reception = $type_reception;
             $reception->handingover = $handingover;
             $reception->supplier_id = $supplier_id;
             $reception->destination_store_id = $destination_store_id;
             $reception->created_by = $created_by;
             $reception->status = 1;
             $reception->description = $description;
+            $reception->created_at = \Carbon\Carbon::now();
             $reception->save();
 
             DB::commit();
@@ -586,6 +632,8 @@ class FoodReceptionController extends Controller
 
         $datas = FoodReceptionDetail::where('reception_no', $reception_no)->get();
 
+        $reception = FoodReception::where('reception_no',$reception_no)->first();
+
         foreach($datas as $data){
 
                 $code_store_destination = FoodBigStore::where('id',$data->destination_store_id)->value('code');
@@ -673,6 +721,18 @@ class FoodReceptionController extends Controller
 
             if ($flag != 0) {
                 FoodBigReport::insert($reportBigStoreData);
+            }
+
+            if ($reception->type_reception == 0) {
+                FoodSupplierOrder::where('order_no', '=', $reception->order_no)
+                ->update(['status' => -5]);
+                FoodSupplierOrderDetail::where('order_no', '=', $reception->order_no)
+                ->update(['status' => -5]);
+            }else{
+                FoodSupplierOrder::where('order_no', '=', $reception->order_no)
+                ->update(['status' => 5]);
+                FoodSupplierOrderDetail::where('order_no', '=', $reception->order_no)
+                ->update(['status' => 5]);
             }
 
             FoodReception::where('reception_no', '=', $reception_no)

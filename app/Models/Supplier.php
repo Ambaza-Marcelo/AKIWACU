@@ -32,22 +32,22 @@ class Supplier extends Model
     }
 
     public function drinkSupplierOrderDetail(){
-        return $this->hasOne('App\Models\DrinkSupplierOrderDetail','supplier_id');
+        return $this->hasMany('App\Models\DrinkSupplierOrderDetail','supplier_id');
     }
 
     public function foodSupplierOrder(){
-        return $this->hasOne('App\Models\FoodSupplierOrder','supplier_id');
+        return $this->hasMany('App\Models\FoodSupplierOrder','supplier_id');
     }
 
     public function foodSupplierOrderDetail(){
-        return $this->hasOne('App\Models\FoodSupplierOrderDetail','supplier_id');
+        return $this->hasMany('App\Models\FoodSupplierOrderDetail','supplier_id');
     }
 
     public function materialSupplierOrder(){
-        return $this->hasOne('App\Models\materialSupplierOrder','supplier_id');
+        return $this->hasMany('App\Models\materialSupplierOrder','supplier_id');
     }
     public function materialSupplierOrderDetail(){
-        return $this->hasOne('App\Models\materialSupplierOrderDetail','supplier_id');
+        return $this->hasMany('App\Models\materialSupplierOrderDetail','supplier_id');
     }
 
     public function drinkReception(){
@@ -55,21 +55,21 @@ class Supplier extends Model
     }
 
     public function drinkReceptionDetail(){
-        return $this->hasOne('App\Models\DrinkReceptionDetail','supplier_id');
+        return $this->hasMany('App\Models\DrinkReceptionDetail','supplier_id');
     }
 
     public function foodReception(){
-        return $this->hasOne('App\Models\FoodReception','supplier_id');
+        return $this->hasMany('App\Models\FoodReception','supplier_id');
     }
 
     public function foodReceptionDetail(){
-        return $this->hasOne('App\Models\FoodReceptionDetail','supplier_id');
+        return $this->hasMany('App\Models\FoodReceptionDetail','supplier_id');
     }
 
     public function materialReception(){
-        return $this->hasOne('App\Models\materialReception','supplier_id');
+        return $this->hasMany('App\Models\materialReception','supplier_id');
     }
     public function materialReceptionDetail(){
-        return $this->hasOne('App\Models\materialReceptionDetail','supplier_id');
+        return $this->hasMany('App\Models\materialReceptionDetail','supplier_id');
     }
 }
