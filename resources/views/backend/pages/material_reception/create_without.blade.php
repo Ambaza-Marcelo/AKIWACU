@@ -42,7 +42,7 @@
                     <h4 class="header-title">@lang('messages.new')</h4>
                     @include('backend.layouts.partials.messages')
                     
-                    <form action="{{ route('admin.material-reception-without-order.store') }}" method="POST">
+                    <form action="{{ route('admin.material-reception-without-remaining.store') }}" method="POST">
                         @csrf
                     <input type="hidden" name="type_reception" value="1">
                     <div class="row">

@@ -83,7 +83,7 @@ class FoodSupplierOrderController extends Controller
         $rules = array(
                 'food_id.*'  => 'required',
                 //'date'  => 'required',
-                //'unit.*'  => 'required',
+                'supplier_id'  => 'required',
                 'quantity.*'  => 'required',
                 'purchase_price.*'  => 'required',
                 'purchase_no'  => 'required',
@@ -104,7 +104,7 @@ class FoodSupplierOrderController extends Controller
             $date = \Carbon\Carbon::now();
             $purchase_no = $request->purchase_no;
             $description =$request->description; 
-            //$unit = $request->unit;
+            $supplier_id = $request->supplier_id;
             $supplier_id = $request->supplier_id;
             $quantity = $request->quantity;
             $purchase_price = $request->purchase_price;

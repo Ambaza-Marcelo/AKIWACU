@@ -37,7 +37,7 @@ class FoodReception extends Model
     ];
 
     public function supplier(){
-        return $this->belongsTo('App\Models\supplier_id');
+        return $this->belongsTo('App\Models\Supplier');
     }
 
     public function destinationStore(){

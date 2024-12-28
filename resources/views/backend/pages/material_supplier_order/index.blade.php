@@ -82,7 +82,7 @@
                                     <td><a href="{{ route('admin.material-supplier-orders.show',$order->order_no)}}">{{ $order->order_no }}</a></td>
                                     <td>{{ $order->order_signature }}</td>
                                     <td>{{ $order->purchase_no }}</td>
-                                    <td>@if($order->supplier_id)Supplier: {{ $order->supplier->supplier_name }}@endif</td>
+                                    <td>@if($order->supplier_id){{ $order->supplier->supplier_name }}@endif</td>
                                     <td>@if($order->status == 1)<span class="badge badge-warning">Encours</span> @elseif($order->status == 2)<span class="badge badge-primary">Validé</span> @elseif($order->status == 3)<span class="badge badge-info">Confirmé</span> @elseif($order->status == 4)<span class="badge badge-primary">Approuvé</span> @elseif($order->status == 5)<span class="badge badge-success">Reception Totale</span>@elseif($order->status == -5)<span class="badge badge-info">Reception Partielle</span> @elseif($order->status == -1)<span class="badge badge-danger">Rejeté</span> @else<span class="badge badge-success">Receptionné</span>@endif</td>
                                     <td>{{ $order->description }}</td>
                                     <td>{{ $order->created_by }}</td>

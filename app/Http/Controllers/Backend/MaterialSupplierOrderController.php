@@ -84,7 +84,7 @@ class MaterialSupplierOrderController extends Controller
 
         $rules = array(
                 'material_id.*'  => 'required',
-                'date'  => 'required',
+                'supplier_id'  => 'required',
                 'quantity.*'  => 'required',
                 'purchase_price.*'  => 'required',
                 'purchase_no'  => 'required',

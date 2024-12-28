@@ -94,7 +94,7 @@
                                     <td>{{ $reception->handingover }}</td>
                                     <td>{{ $reception->receptionist }}</td>
                                     <td>{{ $reception->destinationStore->code }}</td>
-                                    <td>{{ $reception->supplier_id }}</td>
+                                    <td>{{ $reception->supplier->supplier_name }}</td>
                                     <td>{{ $reception->description }}</td>
                                     <td>{{ $reception->created_by }}</td>
                                     <td>
