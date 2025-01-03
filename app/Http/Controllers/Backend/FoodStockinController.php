@@ -142,6 +142,16 @@ class FoodStockinController extends Controller
                $stockin_no = 'BE' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
             }
 
+            if (!empty($destination_sm_store_id)) {
+                $destination_sm_store_id = $destination_sm_store_id;
+            }elseif(!empty($destination_bg_store_id )){
+                $destination_bg_store_id = $destination_bg_store_id ;
+            }elseif(!empty($destination_extra_store_id)){
+                $destination_extra_store_id = $destination_extra_store_id;
+            }else{
+                abort(403, 'Sorry !! You have to choose a store ! more information contact Marcellin');
+            }
+
             $created_by = $this->user->name;
 
             $stockin_signature = config('app.tin_number_company').Carbon::parse(Carbon::now())->format('YmdHis')."/".$stockin_no;

@@ -17,7 +17,7 @@
         <div>
             <div>
                 <div>
-                   <img src="img/logo_musumba.jpg" width="700" height="85">
+                   <img src="img/eden_logo.png" width="200" height="85">
                 </div>
                 <div>
                     <div style="float: right; border-top-right-radius: 10px solid black;border-top-left-radius: 10px solid black;border-bottom-right-radius: 10px solid black;border-bottom-left-radius: 10px solid black; background-color: rgb(150,150,150);width: 242px;padding: 10px;">
@@ -31,7 +31,7 @@
                         <table style="border-collapse: collapse;">
                             <thead>
                                 <tr>
-                                    <th colspan="4" style="text-align: center;background-color: pink;">BULLETIN DE PAIE DU {{ \Carbon\Carbon::parse($data->date_debut)->format('d/m/Y') }} AU {{ \Carbon\Carbon::parse($data->date_fin)->format('d/m/Y') }}</th>
+                                    <th colspan="4" style="text-align: center;background-color: green;">BULLETIN DE PAIE DU {{ \Carbon\Carbon::parse($data->date_debut)->format('d/m/Y') }} AU {{ \Carbon\Carbon::parse($data->date_fin)->format('d/m/Y') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -78,7 +78,7 @@
                         </table><br>
                         <table style="border-collapse: collapse;">
                             <thead>
-                                <tr style="text-align: left;background-color: pink;">
+                                <tr style="text-align: left;background-color: green;">
                                     <th>RUBRIQUES</th>
                                     <th>BASE</th>
                                     <th>TAUX(PART EMPLOYE)</th>
@@ -132,7 +132,7 @@
                                 </tr>
                             </tbody>
                             <tbody>
-                                <tr style="background-color: pink;">
+                                <tr style="background-color: green;">
                                     <td>SALAIRE BRUT</td>
                                     <td>{{ number_format($data->somme_salaire_base,0,',',' ') }}</td>
                                     <td></td>
@@ -219,7 +219,7 @@
                                 </tr>
                             </tbody>
                             <tbody>
-                                <tr style="background-color: pink;">
+                                <tr style="background-color: green;">
                                     <td>TOTAL DES DEDUCTIONS</td>
                                     <td>{{ number_format($salaire_brut,0,',',' ') }}</td>
                                     <td></td>

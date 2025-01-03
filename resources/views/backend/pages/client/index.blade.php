@@ -43,7 +43,7 @@
                 <div class="card-body">
                     <h4 class="header-title float-left">@lang('Liste des clients')</h4>
                     <p class="float-right mb-2">
-                        @if (Auth::guard('admin')->user()->can('booking_client.create'))
+                        @if (Auth::guard('admin')->user()->can('client.create'))
                             <a class="btn btn-primary text-white" href="{{ route('admin.clients.create') }}">@lang('messages.new')</a>
                         @endif
                     </p>
@@ -77,11 +77,11 @@
                                     <td>{{ $client->telephone }}</td>
 
                                     <td>
-                                        @if (Auth::guard('admin')->user()->can('booking_client.edit'))
+                                        @if (Auth::guard('admin')->user()->can('client.edit'))
                                             <a class="btn btn-success text-white" href="{{ route('admin.clients.edit', $client->id) }}">@lang('messages.edit')</a>
                                         @endif
 
-                                        @if (Auth::guard('admin')->user()->can('booking_client.delete'))
+                                        @if (Auth::guard('admin')->user()->can('client.delete'))
                                             <a class="btn btn-danger text-white" href="{{ route('admin.clients.destroy', $client->id) }}"
                                             onclick="event.preventDefault(); document.getElementById('delete-form-{{ $client->id }}').submit();">
                                                 @lang('messages.delete')

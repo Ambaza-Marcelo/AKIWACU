@@ -682,13 +682,17 @@ class FactureController extends Controller
             $code = FoodItemDetail::where('id', $food_item_id[$count])->value('code');
             $foods = FoodItemDetail::where('code', $code)->get();
             $i = 0;
+            $cumpData[] = 0;
             foreach($foods as $food){
                 $cump = array(
                     'cump' => DB::table('food_small_store_details')->where('food_id','!=', '')->where('food_id', $food->food_id)->value('cump'),
                 );
                 $cumpData[] = $cump;
             }
-              $cmp = collect($cumpData)->sum('cump');
+              $cmp1 = collect($cumpData)->sum('cump');
+              $inflation = $cmp1 * 15/100;
+              $miscelins = $cmp1 * 5/100;
+              $cmp = $cmp1 + $inflation + $miscelins;
 
           $data = array(
             'invoice_number'=>$invoice_number,
@@ -3386,6 +3390,48 @@ class FactureController extends Controller
             }elseif(!empty($data->service_id)){
                 $invoice_items = array(
                 'item_designation'=>$data->service->name,
+                'item_quantity'=>$data->item_quantity,
+                'item_price'=>$data->item_price,
+                'item_ct'=>$data->item_ct,
+                'item_tl'=>$data->item_tl,
+                'item_price_nvat'=>$data->item_price_nvat,
+                'vat'=>$data->vat,
+                'item_price_wvat'=>$data->item_price_wvat,
+                'item_total_amount'=>$data->item_total_amount
+                );
+
+                $factureDetail[] = $invoice_items;
+            }elseif(!empty($data->kidness_space_id)){
+                $invoice_items = array(
+                'item_designation'=>$data->kidnessSpace->name,
+                'item_quantity'=>$data->item_quantity,
+                'item_price'=>$data->item_price,
+                'item_ct'=>$data->item_ct,
+                'item_tl'=>$data->item_tl,
+                'item_price_nvat'=>$data->item_price_nvat,
+                'vat'=>$data->vat,
+                'item_price_wvat'=>$data->item_price_wvat,
+                'item_total_amount'=>$data->item_total_amount
+                );
+
+                $factureDetail[] = $invoice_items;
+            }elseif(!empty($data->swiming_pool_id)){
+                $invoice_items = array(
+                'item_designation'=>$data->swimingPool->name,
+                'item_quantity'=>$data->item_quantity,
+                'item_price'=>$data->item_price,
+                'item_ct'=>$data->item_ct,
+                'item_tl'=>$data->item_tl,
+                'item_price_nvat'=>$data->item_price_nvat,
+                'vat'=>$data->vat,
+                'item_price_wvat'=>$data->item_price_wvat,
+                'item_total_amount'=>$data->item_total_amount
+                );
+
+                $factureDetail[] = $invoice_items;
+            }elseif(!empty($data->breakfast_id)){
+                $invoice_items = array(
+                'item_designation'=>$data->breakFast->name,
                 'item_quantity'=>$data->item_quantity,
                 'item_price'=>$data->item_price,
                 'item_ct'=>$data->item_ct,

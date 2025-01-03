@@ -38,6 +38,8 @@ class CreateDrinkBigStoreDetails extends Migration
             $table->string('total_cump_value')->nullable(true);
             $table->string('quantity_ml')->nullable(true);
             $table->string('total_value_ml')->nullable(true);
+            $table->string('selling_price_ml')->nullable(true);
+            $table->string('total_selling_value_ml')->nullable(true);
             $table->string('threshold_quantity')->nullable(true);
             $table->boolean('verified')->default(false);
             $table->bigInteger('drink_id')->unsigned()->nullable(true);

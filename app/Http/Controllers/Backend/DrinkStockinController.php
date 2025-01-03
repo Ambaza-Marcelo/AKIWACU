@@ -148,6 +148,16 @@ class DrinkStockinController extends Controller
                $stockin_no = 'BE' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
             }
 
+            if (!empty($destination_sm_store_id)) {
+                $destination_sm_store_id = $destination_sm_store_id;
+            }elseif(!empty($destination_bg_store_id )){
+                $destination_bg_store_id = $destination_bg_store_id ;
+            }elseif(!empty($destination_extra_store_id)){
+                $destination_extra_store_id = $destination_extra_store_id;
+            }else{
+                abort(403, 'Sorry !! You have to choose a store ! more information contact Marcellin');
+            }
+
             $created_by = $this->user->name;
 
             $stockin_signature = config('app.tin_number_company').Carbon::parse(Carbon::now())->format('YmdHis')."/".$stockin_no;
@@ -648,6 +658,8 @@ class DrinkStockinController extends Controller
                             session()->flash('error', 'this item is not saved in the stock');
                             return back();
                         }
+
+                        
                         
                         $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
                         $response = Http::post($theUrl, [
@@ -677,6 +689,7 @@ class DrinkStockinController extends Controller
                             'item_movement_date'=> $data->date,
 
                         ]); 
+                        
                                                 
             }else{
                 $code_store_destination = DrinkExtraBigStore::where('id',$data->destination_extra_store_id)->value('code');

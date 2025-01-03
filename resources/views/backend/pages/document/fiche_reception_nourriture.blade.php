@@ -52,7 +52,7 @@
                     </div>
                     <br><br><br><br><br>
                     <br><br><br><br><br>
-                    <br><br><br><br><br>
+                    <br><br>
                     <div>
                         <h3 style="text-align: center;text-decoration: underline;">FICHE DE RECEPTION DES ARTICLES</h3>
                     </div>
@@ -86,6 +86,7 @@
                                     <td>{{ number_format($data->purchase_price,0,',',' ' )}}</td>
                                     <td>{{ number_format($data->price_nvat,0,',',' ' )}}</td>
                                     <td>{{ number_format($data->vat,0,',',' ' )}}</td>
+                                    <td>{{ $data->vat_rate }}%</td>
                                     <td>{{ number_format($data->price_wvat,0,',',' ' )}}</td>
                                     <td>{{ number_format($data->total_amount_received,0,',',' ' )}}</td>
                                 </tr>
@@ -94,7 +95,7 @@
                             <tfoot>
                                 <tr>
                                     <th>Total</th>
-                                    <th style="background-color: rgb(150,150,150);" colspan="8"></th>
+                                    <th style="background-color: rgb(150,150,150);" colspan="9"></th>
                                     <th>{{ number_format($price_wvat,0,',',' ') }}</th>
                                     <th>{{ number_format($totalValue,0,',',' ') }}</th>
                                 </tr>

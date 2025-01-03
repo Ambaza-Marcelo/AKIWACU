@@ -586,7 +586,7 @@ class FactureRestaurantController extends Controller
 
         $note_credit_pvhtva = DB::table('facture_details')->where('client_id',$client_id)->whereColumn('invoice_number','invoice_ref')->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_price_nvat');
 
-        $montant_total_global = ($item_total_amount_drink + $item_total_amount_kitchen + $item_total_amount_barrista + $item_total_amount_bartender + $item_total_amount_service) - ($note_credit * 2);
+        $montant_total_global = ($item_total_amount_drink + $item_total_amount_kitchen + $item_total_amount_barrista + $item_total_amount_bartender + $item_total_amount_service);
 
         $montant_total_global_en_lettre = $this->numberToWord($montant_total_global);
 

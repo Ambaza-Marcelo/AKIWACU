@@ -17,7 +17,7 @@
         <div>
             <div>
                 <div>
-                   <img src="{{ asset('img/logo_musumba.jpg')}}" width="700" height="85">
+                   <img src="{{ asset('img/eden_logo.png')}}" width="200" height="85">
                 </div>
                 <div>
                     <div style="float: right; border-top-right-radius: 10px solid black;border-top-left-radius: 10px solid black;border-bottom-right-radius: 10px solid black;border-bottom-left-radius: 10px solid black; background-color: rgb(150,150,150);width: 242px;padding: 20px;">
@@ -37,7 +37,7 @@
                         <table style="border: 1px solid black;border-collapse: collapse;">
                             <thead>
                                 <tr>
-                                    <th colspan="10" style="text-align: left;background-color: pink;">IDENTIFICATION DE L'EMPLOYE</th>
+                                    <th colspan="10" style="text-align: left;background-color: green;">IDENTIFICATION DE L'EMPLOYE</th>
                                 </tr>
                             </thead>
                             <thead>
@@ -70,7 +70,7 @@
                             </tbody>
                             <thead>
                                 <tr>
-                                    <th colspan="6" style="text-align: left;background-color: pink;">STATUT DE L'EMPLOYE</th>
+                                    <th colspan="6" style="text-align: left;background-color: green;">STATUT DE L'EMPLOYE</th>
                                 </tr>
                             </thead>
                             <thead>
@@ -95,7 +95,7 @@
                             </tbody>
                             <thead>
                                 <tr>
-                                    <th colspan="3" style="text-align: left;background-color: pink;">REMUNERATION DE L'EMPLOYE</th>
+                                    <th colspan="3" style="text-align: left;background-color: green;">REMUNERATION DE L'EMPLOYE</th>
                                 </tr>
                             </thead>
                             <thead>

@@ -25,7 +25,7 @@
                     </li>
                     <hr>
                     @endif
-                    @if ($usr->can('food.create') || $usr->can('food.view') ||  $usr->can('food.edit') ||  $usr->can('food.delete') || $usr->can('drink.create') || $usr->can('drink.view') ||  $usr->can('drink.edit') ||  $usr->can('client.view') || $usr->can('material.create') || $usr->can('material.view') ||  $usr->can('material.edit') ||  $usr->can('material.delete') ||  $usr->can('employe.create') || $usr->can('employe.view') ||  $usr->can('employe.edit') ||  $usr->can('employe.delete') || $usr->can('supplier.create') || $usr->can('supplier.view') ||  $usr->can('supplier.edit') ||  $usr->can('supplier.delete') || $usr->can('barrist_item.create') || $usr->can('barrist_item.view') ||  $usr->can('barrist_item.edit') ||  $usr->can('barrist_item.delete') || $usr->can('food_item.create') || $usr->can('food_item.view') ||  $usr->can('food_item.edit') ||  $usr->can('food_item.delete'))
+                    @if ($usr->can('food.create') || $usr->can('food.view') ||  $usr->can('food.edit') ||  $usr->can('food.delete') || $usr->can('drink.create') || $usr->can('drink.view') ||  $usr->can('drink.edit') ||  $usr->can('client.view') || $usr->can('material.create') || $usr->can('material.view') ||  $usr->can('material.edit') ||  $usr->can('material.delete') ||  $usr->can('employe.create') || $usr->can('employe.view') ||  $usr->can('employe.edit') ||  $usr->can('employe.delete') || $usr->can('supplier.create') || $usr->can('supplier.view') ||  $usr->can('supplier.edit') ||  $usr->can('supplier.delete') || $usr->can('barrist_item.create') || $usr->can('barrist_item.view') ||  $usr->can('barrist_item.edit') ||  $usr->can('barrist_item.delete') || $usr->can('food_item.create') || $usr->can('food_item.view') ||  $usr->can('food_item.edit') ||  $usr->can('booking_service.create') || $usr->can('booking_service.view') ||  $usr->can('booking_service.edit') ||  $usr->can('booking_service.delete') || $usr->can('booking_salle.create') || $usr->can('booking_salle.view') ||  $usr->can('booking_salle.edit') ||  $usr->can('booking_salle.delete') || $usr->can('booking_technique.create') || $usr->can('booking_technique.view') ||  $usr->can('booking_technique.edit') ||  $usr->can('swiming_pool.view') || $usr->can('booking_room.create') || $usr->can('booking_room.view') ||  $usr->can('booking_room.edit') ||  $usr->can('booking_kidness_space.view'))
                     <li>
                         <a href="javascript:void(0)" aria-expanded="true"><i class="fa fa-shopping-basket"></i><span>
                             @lang('messages.basic_file')
@@ -95,7 +95,27 @@
                                 @if($usr->can('drink.view'))
                                 <li class=""><a href="{{ route('admin.bartender-items.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Bartender Item')</a></li>
                                 @endif
-
+                            @if ($usr->can('booking_technique.view'))
+                                <li class=""><a href="{{ route('admin.techniques.index') }}"><i class="fa fa-user"></i>&nbsp;@lang('Techniques')</a></li>
+                            @endif
+                            @if ($usr->can('booking_salle.view'))
+                                <li class=""><a href="{{ route('admin.salles.index') }}"><i class="fa fa-user"></i>&nbsp;@lang('Salles')</a></li>
+                            @endif
+                            @if ($usr->can('booking_room.view'))
+                                <li class=""><a href="{{ route('admin.rooms.index') }}"><i class="fa fa-user"></i>&nbsp;@lang('Chambres')</a></li>
+                            @endif
+                            @if ($usr->can('booking_service.view'))
+                                <li class=""><a href="{{ route('admin.services.index') }}"><i class="fa fa-user"></i>&nbsp;@lang('Services')</a></li>
+                            @endif
+                            @if ($usr->can('booking_kidness_space.view'))
+                                <li class=""><a href="{{ route('admin.kidness-spaces.index') }}"><i class="fa fa-user"></i>&nbsp;@lang('Kidness Space')</a></li>
+                            @endif
+                            @if ($usr->can('booking_breakfast.view'))
+                                <li class=""><a href="{{ route('admin.break-fasts.index') }}"><i class="fa fa-user"></i>&nbsp;@lang('BreakFast')</a></li>
+                            @endif
+                            @if ($usr->can('swiming_pool.view'))
+                                <li class=""><a href="{{ route('admin.swiming-pools.index') }}"><i class="fa fa-user"></i>&nbsp;@lang('Swiming Pool')</a></li>
+                            @endif
                         </ul>
                     </li>
                     @endif
@@ -106,31 +126,31 @@
                         </span></a>
                         <ul class="collapse">
                                 @if($usr->can('drink_extra_big_store.view'))
-                                <li class=""><a href="{{ route('admin.drink-extra-big-store.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Boissons (Grand)')</a></li>
+                                <li class=""><a href="{{ route('admin.drink-extra-big-store.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Grand Stock des boissons')</a></li>
                                 @endif
                                 @if($usr->can('drink_big_store.view'))
-                                <li class=""><a href="{{ route('admin.drink-big-store.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Boissons (Intermediaire)')</a></li>
+                                <li class=""><a href="{{ route('admin.drink-big-store.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Stock Intermediaire des boissons')</a></li>
                                 @endif
                                 @if($usr->can('drink_small_store.view'))
-                                <li class=""><a href="{{ route('admin.drink-small-store.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Boissons (Petit)')</a></li>
+                                <li class=""><a href="{{ route('admin.drink-small-store.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Petit Stock des boissons')</a></li>
                                 @endif
                                 @if($usr->can('food_extra_big_store.view'))
-                                <li class=""><a href="{{ route('admin.food-extra-big-store.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Nourritures (Grand)')</a></li>
+                                <li class=""><a href="{{ route('admin.food-extra-big-store.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Grand Stock des Nourritures')</a></li>
                                 @endif
                                 @if($usr->can('food_big_store.view'))
-                                <li class=""><a href="{{ route('admin.food-big-store.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Nourritures (Intermediaire)')</a></li>
+                                <li class=""><a href="{{ route('admin.food-big-store.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Stock Intermediaire des Nourritures')</a></li>
                                 @endif
                                 @if($usr->can('food_small_store.view'))
-                                <li class=""><a href="{{ route('admin.food-small-store.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Nourritures (Petit)')</a></li>
+                                <li class=""><a href="{{ route('admin.food-small-store.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Petit Stock des Nourritures')</a></li>
                                 @endif
                                 @if($usr->can('material_extra_big_store.view'))
-                                <li class=""><a href="{{ route('admin.material-extra-big-store.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Materiels (Grand)')</a></li>
+                                <li class=""><a href="{{ route('admin.material-extra-big-store.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Grand Stock des Materiels')</a></li>
                                 @endif
                                 @if($usr->can('material_big_store.view'))
-                                <li class=""><a href="{{ route('admin.material-big-store.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Materiels (Intermediaire)')</a></li>
+                                <li class=""><a href="{{ route('admin.material-big-store.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Stock Intermediaire des Materiels')</a></li>
                                 @endif
                                 @if($usr->can('material_small_store.view'))
-                                <li class=""><a href="{{ route('admin.material-small-store.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Materiels (Petit)')</a></li>
+                                <li class=""><a href="{{ route('admin.material-small-store.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Petit Stock des Materiels')</a></li>
                                 @endif
                                 <!--
                                 @if($usr->can('barrist_production_store.view'))
@@ -140,7 +160,7 @@
                                 <li class=""><a href="{{ route('admin.bartender-production-store.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Bartender Store')</a></li>
                                 @endif
                                 @if($usr->can('private_store_item.view'))
-                                <li class=""><a href="{{ route('admin.private-store-items.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Private Stock')</a></li>
+                                <li class=""><a href="{{ route('admin.private-store-items.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Magasin EGR')</a></li>
                                 @endif
 
                         </ul>
@@ -153,34 +173,34 @@
                         </span></a>
                         <ul class="collapse">
                                 @if($usr->can('drink_extra_big_inventory.view'))
-                                <li class=""><a href="{{ route('admin.drink-extra-big-store-inventory.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Stock Boissons (Grand)')</a></li>
+                                <li class=""><a href="{{ route('admin.drink-extra-big-store-inventory.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Grand Stock des boissons')</a></li>
                                 @endif
                                 @if($usr->can('drink_big_inventory.view'))
-                                <li class=""><a href="{{ route('admin.drink-big-store-inventory.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Stock Boissons (Intermediaire)')</a></li>
+                                <li class=""><a href="{{ route('admin.drink-big-store-inventory.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Stock Intermediaire des boissons')</a></li>
                                 @endif
                                 @if($usr->can('drink_small_inventory.view'))
-                                <li class=""><a href="{{ route('admin.drink-small-store-inventory.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Stock Boissons (Petit)')</a></li>
+                                <li class=""><a href="{{ route('admin.drink-small-store-inventory.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Petit Stock des boissons')</a></li>
                                 @endif
                                 @if($usr->can('food_extra_big_inventory.view'))
-                                <li class=""><a href="{{ route('admin.food-extra-big-store-inventory.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Stock Nourritures (Grand)')</a></li>
+                                <li class=""><a href="{{ route('admin.food-extra-big-store-inventory.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Grand Stock des Nourritures')</a></li>
                                 @endif
                                 @if($usr->can('food_big_inventory.view'))
-                                <li class=""><a href="{{ route('admin.food-big-store-inventory.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Stock Nourritures (Intermediaire)')</a></li>
+                                <li class=""><a href="{{ route('admin.food-big-store-inventory.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Stock Intermediaire des Nourritures')</a></li>
                                 @endif
                                 @if($usr->can('food_small_inventory.view'))
-                                <li class=""><a href="{{ route('admin.food-small-store-inventory.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Stock Nourritures (Petit)')</a></li>
+                                <li class=""><a href="{{ route('admin.food-small-store-inventory.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Petit Stock des Nourritures')</a></li>
                                 @endif
                                 @if($usr->can('material_extra_big_inventory.view'))
-                                <li class=""><a href="{{ route('admin.material-extra-big-store-inventory.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Stock Materiels (Grand)')</a></li>
+                                <li class=""><a href="{{ route('admin.material-extra-big-store-inventory.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Grand Stock des Materiels')</a></li>
                                 @endif
                                 @if($usr->can('material_big_inventory.view'))
-                                <li class=""><a href="{{ route('admin.material-big-store-inventory.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Stock Materiels (Intermediaire)')</a></li>
+                                <li class=""><a href="{{ route('admin.material-big-store-inventory.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Stock Intermediaire des Materiels')</a></li>
                                 @endif
                                 @if($usr->can('material_small_inventory.view'))
-                                <li class=""><a href="{{ route('admin.material-small-store-inventory.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Stock Materiels (Petit)')</a></li>
+                                <li class=""><a href="{{ route('admin.material-small-store-inventory.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Petit Stock des Materiels')</a></li>
                                 @endif
                                 @if($usr->can('private_drink_inventory.view'))
-                                <li class=""><a href="{{ route('admin.private-drink-inventory.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Private Stock')</a></li>
+                                <li class=""><a href="{{ route('admin.private-drink-inventory.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Magasin EGR')</a></li>
                                 @endif
 
                         </ul>
@@ -373,38 +393,12 @@
                     </li>
                     @endif
                     <!-- human resource management -->
-                    @if ($usr->can('booking_service.create') || $usr->can('booking_service.view') ||  $usr->can('booking_service.edit') ||  $usr->can('booking_service.delete') || $usr->can('booking_salle.create') || $usr->can('booking_salle.view') ||  $usr->can('booking_salle.edit') ||  $usr->can('booking_salle.delete') || $usr->can('booking_technique.create') || $usr->can('booking_technique.view') ||  $usr->can('booking_technique.edit') ||  $usr->can('swiming_pool.view') || $usr->can('booking_client.create') || $usr->can('booking_client.view') ||  $usr->can('booking_client.edit') ||  $usr->can('booking_kidness_space.view') || $usr->can('booking.create') || $usr->can('booking.view') ||  $usr->can('booking.edit') ||  $usr->can('booking_breakfast.view'))
+                    @if ($usr->can('booking_service.create') || $usr->can('booking_service.view') ||  $usr->can('booking_service.edit') ||  $usr->can('booking_service.delete') || $usr->can('booking_salle.create') || $usr->can('booking_salle.view') ||  $usr->can('booking_salle.edit') ||  $usr->can('booking_salle.delete') || $usr->can('booking_technique.create') || $usr->can('booking_technique.view') ||  $usr->can('booking_technique.edit') ||  $usr->can('swiming_pool.view') || $usr->can('booking_room.create') || $usr->can('booking_room.view') ||  $usr->can('booking_room.edit') ||  $usr->can('booking_kidness_space.view') || $usr->can('booking.create') || $usr->can('booking.view') ||  $usr->can('booking.edit') ||  $usr->can('booking_breakfast.view'))
                     <li>
                         <a href="javascript:void(0)" aria-expanded="true"><i class="fa fa-user"></i><span>
                             @lang('RESERVATIONS')
                         </span></a>
                         <ul class="">
-                            
-                            @if ($usr->can('booking_technique.view'))
-                                <li class=""><a href="{{ route('admin.techniques.index') }}"><i class="fa fa-user"></i>&nbsp;@lang('Techniques')</a></li>
-                            @endif
-                            @if ($usr->can('booking_salle.view'))
-                                <li class=""><a href="{{ route('admin.salles.index') }}"><i class="fa fa-user"></i>&nbsp;@lang('Salles')</a></li>
-                            @endif
-                            @if ($usr->can('booking_room.view'))
-                                <li class=""><a href="{{ route('admin.rooms.index') }}"><i class="fa fa-user"></i>&nbsp;@lang('Chambres')</a></li>
-                            @endif
-                            @if ($usr->can('booking_service.view'))
-                                <li class=""><a href="{{ route('admin.services.index') }}"><i class="fa fa-user"></i>&nbsp;@lang('Services')</a></li>
-                            @endif
-                            @if ($usr->can('booking_kidness_space.view'))
-                                <li class=""><a href="{{ route('admin.kidness-spaces.index') }}"><i class="fa fa-user"></i>&nbsp;@lang('Kidness Space')</a></li>
-                            @endif
-                            @if ($usr->can('booking_breakfast.view'))
-                                <li class=""><a href="{{ route('admin.break-fasts.index') }}"><i class="fa fa-user"></i>&nbsp;@lang('BreakFast')</a></li>
-                            @endif
-                            @if ($usr->can('swiming_pool.view'))
-                                <li class=""><a href="{{ route('admin.swiming-pools.index') }}"><i class="fa fa-user"></i>&nbsp;@lang('Swiming Pool')</a></li>
-                            @endif
-                            @if ($usr->can('client.view'))
-                                <li class=""><a href="{{ route('admin.booking-clients.index') }}"><i class="fa fa-user"></i>&nbsp;@lang('Clients')</a></li>
-                            @endif
-
                             @if ($usr->can('booking_salle.view'))
                                 <li class=""><a href="{{ route('admin.booking-salles.index') }}"><i class="fa fa-user"></i>&nbsp;@lang('Reservation Salles')</a></li>
                             @endif

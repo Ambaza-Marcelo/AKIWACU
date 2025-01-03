@@ -368,6 +368,10 @@ class DrinkController extends Controller
         $drink = Drink::where('id',$id)->first();
 
         $drink->name = $request->name;
+
+        //$reference = strtoupper(substr($request->name, 0, 3));
+        //$drink->code = $reference.date("y").substr(number_format(time() * mt_rand(), 0, '', ''), 0, 6);
+        
         //$drink->quantity_bottle = $request->quantity_bottle;
         $drink->quantity_ml = $request->quantity_ml;
         $drink->drink_measurement_id = $request->drink_measurement_id;

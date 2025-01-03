@@ -87,9 +87,9 @@ class FoodSmallStoreInventoryController extends Controller
             'date' => 'required|date',
             'title' => 'required',
             //'quantity.*' => 'required',
-            'purchase_price.*' => 'required',
-            'new_quantity.*' => 'required',
-            'new_purchase_price.*' => 'required',
+            //'purchase_price.*' => 'required',
+            //'new_quantity.*' => 'required',
+            //'new_purchase_price.*' => 'required',
             'description' => 'required',
             );
 

@@ -43,7 +43,7 @@
                 <div class="card-body">
                     <h4 class="header-title float-left">@lang('Liste des fournisseurs')</h4>
                     <p class="float-right mb-2">
-                        @if (Auth::guard('admin')->user()->can('booking_client.create'))
+                        @if (Auth::guard('admin')->user()->can('supplier.create'))
                             <a class="btn btn-primary text-white" href="{{ route('admin.suppliers.create') }}">@lang('messages.new')</a>
                         @endif
                     </p>

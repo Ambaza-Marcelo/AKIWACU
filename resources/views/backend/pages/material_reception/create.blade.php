@@ -149,7 +149,7 @@
                                 </select></td>  
                                 <td><input type="number" name="quantity_ordered[]" value="{{ $data->quantity_ordered }}" step="any" class="form-control"  readonly /></td>  
                                 <td><input type="number" name="" value="{{$data->purchase_price}}" class="form-control" step="any" min="0" readonly /></td>
-                                <td><input type="number" name="quantity_received[]" value="{{ $data->quantity_remaining }}" class="form-control" min="1" step="any" /></td> 
+                                <td><input type="number" name="quantity_received[]" value="{{ $data->quantity_remaining }}" class="form-control" min="0" step="any" /></td> 
                                 <td><input type="number" name="purchase_price[]" value="{{$data->purchase_price}}" class="form-control" step="any" min="0"/></td>
                                 <td>
                                 <button type='button' class='btn btn-danger remove-tr'>@lang('messages.delete')</button></td> 
@@ -163,7 +163,7 @@
                                 </select></td>  
                                 <td><input type="number" name="quantity_ordered[]" value="{{ $data->quantity }}" step="any" class="form-control"  readonly /></td>  
                                 <td><input type="number" name="" value="{{$data->purchase_price}}" class="form-control" step="any" min="0" readonly /></td>
-                                <td><input type="number" name="quantity_received[]" value="{{ $data->quantity }}" class="form-control" min="1" max="{{ $data->quantity -1 }}" step="any" /></td> 
+                                <td><input type="number" name="quantity_received[]" value="{{ $data->quantity }}" class="form-control" min="0" step="any" /></td> 
                                 <td><input type="number" name="purchase_price[]" value="{{$data->purchase_price}}" class="form-control" step="any" min="0"/></td>
                                 <td>
                                 <button type='button' class='btn btn-danger remove-tr'>@lang('messages.delete')</button></td>
@@ -267,20 +267,6 @@
 
 
     $('#store_type').change(function () { 
-    if ($(this).val() === '0'){
-
-        var extra_big_store = "<div class='form-group'>"+
-                            "<label for='destination_extra_store_id'>GRAND STOCK<strong style='color: red;'>*</strong></label>"+
-                            "<select name='destination_extra_store_id' class='form-control'>"+
-                                "<option selected disabled>merci de choisir</option>"+
-                                "@foreach($destination_big_stores as $destination_big_store)"+
-                                "<option value='{{$destination_big_store->id}}'>{{ $destination_big_store->code}}&nbsp;{{ $destination_big_store->name}}"+
-                                "@endforeach"
-                            +
-                        "</div>";
-        
-        $("#dynamic_big_store").append(extra_big_store);
-    }
     if ($(this).val() === '1'){
 
         var big_store = "<div class='form-group'>"+

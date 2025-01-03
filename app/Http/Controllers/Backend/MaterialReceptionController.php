@@ -170,6 +170,12 @@ class MaterialReceptionController extends Controller
                $reception_no = 'REC' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
             }
 
+            if (!empty($vat_rate)) {
+                $vat_rate = $vat_rate;
+            }else{
+                $vat_rate = 0;
+            }
+
             $created_by = $this->user->name;
 
             $reception_signature = config('app.tin_number_company').Carbon::parse(Carbon::now())->format('YmdHis')."/".$reception_no;
@@ -190,7 +196,7 @@ class MaterialReceptionController extends Controller
                 }
                 
                 $total_amount_ordered = $quantity_ordered[$count] * $purchase_price[$count];
-                $total_amount_received = $quantity_received[$count] * $purchase_price[$count];
+                $total_amount_received = $total_amount_purchase;
 
 
                 if ($order->status == -5) {
@@ -324,11 +330,12 @@ class MaterialReceptionController extends Controller
             $invoice_currency = $request->invoice_currency;
             $handingover = $request->handingover;
             $receptionist = $request->receptionist;
-            $purchase_no = $request->purchase_no;
+            $vat_rate = $request->vat_rate;
+            $type_reception = $request->type_reception;
+            $order_no = $request->order_no;
             $invoice_no = $request->invoice_no;
             $description =$request->description; 
             $destination_store_id = $request->destination_store_id;
-            //$unit = $request->unit;
             $quantity_ordered = $request->quantity_ordered;
             $purchase_price = $request->purchase_price;
             $selling_price = $request->selling_price;
@@ -341,6 +348,12 @@ class MaterialReceptionController extends Controller
                $reception_no = 'REC' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{
                $reception_no = 'REC' . (str_pad((int)0 + 1, 4, '0', STR_PAD_LEFT));  
+            }
+
+            if (!empty($vat_rate)) {
+                $vat_rate = $vat_rate;
+            }else{
+                $vat_rate = 0;
             }
 
             $created_by = $this->user->name;
@@ -363,7 +376,7 @@ class MaterialReceptionController extends Controller
                 }
 
                 $total_amount_ordered = $quantity_ordered[$count] * $purchase_price[$count];
-                $total_amount_received = $quantity_received[$count] * $purchase_price[$count];
+                $total_amount_received = $total_amount_purchase;
 
                 $data = array(
                     'material_id' => $material_id[$count],

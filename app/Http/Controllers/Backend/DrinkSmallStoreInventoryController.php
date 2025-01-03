@@ -379,7 +379,7 @@ class DrinkSmallStoreInventoryController extends Controller
 
                 DrinkSmallReport::insert($reportData);
         
-        
+        /*
         $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
         $response = Http::post($theUrl, [
             'username'=> config('app.obr_test_username'),
@@ -410,7 +410,7 @@ class DrinkSmallStoreInventoryController extends Controller
         ]); 
 
         $dataObr =  json_decode($response);
-        
+        */
      
     }
         DrinkSmallStoreInventory::where('inventory_no', '=', $inventory_no)

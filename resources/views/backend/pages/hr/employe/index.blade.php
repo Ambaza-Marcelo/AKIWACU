@@ -69,7 +69,7 @@
                                @foreach ($employes as $employe)
                                <tr>
                                     <td>{{ $loop->index+1 }}</td>
-                                    <td> <a href="{{ route('admin.hr-employes.show',$employe->id) }}">{{ $employe->matricule_no }}</a> </td>
+                                    <td> <a href="{{ route('admin.hr-employes.show',$employe->id) }}">{{ $employe->matricule_no }}/{{ \Carbon\Carbon::parse($employe->date_debut)->format('Y')}}</a> </td>
                                     <td>{{ $employe->firstname }}</td>
                                     <td>{{ $employe->lastname }}</td>
                                     <td>{{ $employe->phone_no }}</td>

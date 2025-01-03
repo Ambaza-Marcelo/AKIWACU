@@ -73,7 +73,7 @@
                             </tr>
                             @foreach($datas as $data)
                             <tr class="">  
-                                <td><td>{{ $loop->index+1 }}</td></td>
+                                <td>{{ $loop->index+1 }}</td>
                                 <td> <select class="form-control" name="food_id[]" id="food_id">
                                 <option value="{{ $data->food_id }}" selected="selected" class="form-control">{{ $data->food->name }}/{{ $data->food->code }}</option>
                                 </select></td>  

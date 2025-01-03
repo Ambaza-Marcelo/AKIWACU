@@ -46,13 +46,10 @@
                             <thead>
                                 <tr>
                                     <th width="10%">TOTAL C.A(TTC)</th>
-                                    <th width="20%">PVHTVA</th>
+                                    <th width="20%">PVT HTVA</th>
                                     <th width="20%">TVA</th>
-                                    <!--
                                     <th width="10%">TOTAL CASH</th>
                                     <th width="20%">TOTAL CREDIT</th>
-                                    -->
-                                    <th width="20%">TOTAL NOTE DE CREDIT</th>
                                 </tr>
                             </thead>
 
@@ -66,11 +63,8 @@
                                    <td>{{ number_format($chiffre_affaire,0,',',' ') }}</td>
                                    <td>{{ number_format($pvhtva,0,',',' ') }}</td>
                                    <td>{{ number_format($tva,0,',',' ') }}</td>
-                                   <!--
                                    <td>{{ number_format($cash,0,',',' ') }}</td>
                                    <td>{{ number_format($credit,0,',',' ') }}</td>
-                                -->
-                                   <td>{{ number_format($note_credit,0,',',' ') }}</td>
                                 </tr>
                             </tbody>
                         </table>

@@ -150,11 +150,14 @@
                     <br>
                     <small>Caissier(e) : {{ $facture->auteur }}</small>
                     <br><br>
-                    
+                    @if($data->statut != 1)
                     <a href="javascript:window.print();"><small>Thank You For Visit</small></a>
+                    @elseif(Auth::guard('admin')->user()->can('invoice_drink.reset'))
+                    <a href="javascript:window.print();"><small>Thank You For Visit</small></a>
+                    @endif
                     <small>
                            &nbsp;&nbsp;
-                           {!! QrCode::size(100)->backgroundColor(255,255,255)->generate('ID : '.$invoice_signature.' www.edengardenresorts.bi, Designed by AMBAZA Marcellin' ) !!}
+                           {!! QrCode::size(100)->backgroundColor(255,255,255)->generate('ID : '.$invoice_signature.' www.edengardenresorts.bi, powered by https://ambazamarcellin.netlify.app/' ) !!}
                     </small>
                   <!--
                   <small>

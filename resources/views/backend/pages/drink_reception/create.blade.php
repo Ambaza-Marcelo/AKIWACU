@@ -149,7 +149,7 @@
                                 </select></td>  
                                 <td><input type="number" name="quantity_ordered[]" value="{{ $data->quantity_ordered }}" step="any" class="form-control"  readonly /></td>  
                                 <td><input type="number" name="" value="{{$data->purchase_price}}" class="form-control" step="any" min="0" readonly /></td>
-                                <td><input type="number" name="quantity_received[]" value="{{ $data->quantity_remaining }}" class="form-control" min="1" step="any" /></td> 
+                                <td><input type="number" name="quantity_received[]" value="{{ $data->quantity_remaining }}" class="form-control" min="0" step="any" /></td> 
                                 <td><input type="number" name="purchase_price[]" value="{{$data->purchase_price}}" class="form-control" step="any" min="0"/></td>
                                 <td>
                                 <button type='button' class='btn btn-danger remove-tr'>@lang('messages.delete')</button></td> 
@@ -163,7 +163,7 @@
                                 </select></td>  
                                 <td><input type="number" name="quantity_ordered[]" value="{{ $data->quantity }}" step="any" class="form-control"  readonly /></td>  
                                 <td><input type="number" name="" value="{{$data->purchase_price}}" class="form-control" step="any" min="0" readonly /></td>
-                                <td><input type="number" name="quantity_received[]" value="{{ $data->quantity }}" class="form-control" min="1" max="{{ $data->quantity -1 }}" step="any" /></td> 
+                                <td><input type="number" name="quantity_received[]" value="{{ $data->quantity }}" class="form-control" min="0" step="any" /></td> 
                                 <td><input type="number" name="purchase_price[]" value="{{$data->purchase_price}}" class="form-control" step="any" min="0"/></td>
                                 <td>
                                 <button type='button' class='btn btn-danger remove-tr'>@lang('messages.delete')</button></td>
