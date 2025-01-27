@@ -44,28 +44,19 @@ class JournalIreExport implements FromCollection, WithMapping, WithHeadings
         if ($remuneration_brute < 450000) {
                 $inss = ($remuneration_brute * 4)/100;
                 $somme_cotisation_inss = ($remuneration_brute * 4)/100;
-                $inss_employeur = ($remuneration_brute * 4)/100;
+                $inss_employeur = ($remuneration_brute * 6)/100;
         }else{
                 $inss = (450000 * 4)/100;
                 $somme_cotisation_inss = (450000 * 4)/100;
                 $inss_employeur = (450000 * 6)/100;
         }
 
-            $net = $remuneration_brute - $data->somme_cotisation_inss - $data->somme_impot;
 
-            if ($net < 250000) {
-                $assurance_maladie_employe = 0;
-                $assurance_maladie_employeur = 15000;
-            }else{
-                $assurance_maladie_employe = 6000;
-                $assurance_maladie_employeur = 9000;
-            }
-
-        $total_deductions = $data->somme_cotisation_inss + $assurance_maladie_employe + $data->somme_impot + $data->retenue_pret + $data->soins_medicaux + $data->autre_retenue;
+        $total_deductions = $data->somme_cotisation_inss + $data->assurance_maladie_employe + $data->somme_impot + $data->retenue_pret + $data->soins_medicaux + $data->autre_retenue;
         $net_a_payer = $remuneration_brute - $total_deductions;
 
 
-        $base_imposable = ($remuneration_brute - $data->indemnite_logement - $data->indemnite_deplacement - $inss - $assurance_maladie_employe);
+        $base_imposable = ($remuneration_brute - $data->indemnite_logement - $data->indemnite_deplacement - $inss - $data->assurance_maladie_employe);
 
         if ($base_imposable >= 0 && $base_imposable <= 150000) {
                 $somme_impot = 0;

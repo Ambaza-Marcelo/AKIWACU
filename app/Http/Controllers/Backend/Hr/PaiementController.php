@@ -152,22 +152,44 @@ class PaiementController extends Controller
        $indemnite_logement + $indemnite_deplacement + $prime_fonction;
 
 
-        if ($salaire_brut < 450000) {
+            if ($salaire_brut < 450000) {
                 $inss = ($salaire_brut * 4)/100;
                 $somme_cotisation_inss = ($salaire_brut * 4)/100;
-                $inss_employeur = ($salaire_brut * 4)/100;
+                $inss_employeur = ($salaire_brut * 6)/100;
             }else{
                 $inss = (450000 * 4)/100;
                 $somme_cotisation_inss = ($plafond_cotisation * 4)/100;
                 $inss_employeur = ($plafond_cotisation * 6)/100;
             }
 
-            if ($salaire_brut < 250000) {
-                $assurance_maladie_employe = 0;
-                $assurance_maladie_employeur = 15000;
+            if ($salaire_brut >= 2000000) {
+                $base_assurance_maladie = 2000000;
+                $assurance_maladie_employe = $base_assurance_maladie * 4 /100;
+                $assurance_maladie_employeur = $base_assurance_maladie * 6 /100;
+            }elseif ($salaire_brut >= 1000000 && $salaire_brut < 2000000) {
+                $base_assurance_maladie = 1000000;
+                $assurance_maladie_employe = $base_assurance_maladie * 4 /100;
+                $assurance_maladie_employeur = $base_assurance_maladie * 6 /100;
+            }elseif ($salaire_brut >= 500000 && $salaire_brut < 1000000) {
+                $base_assurance_maladie = 500000;
+                $assurance_maladie_employe = $base_assurance_maladie * 4 /100;
+                $assurance_maladie_employeur = $base_assurance_maladie * 6 /100;
+            }elseif ($salaire_brut >= 400000 && $salaire_brut < 500000) {
+                $base_assurance_maladie = 400000;
+                $assurance_maladie_employe = $base_assurance_maladie * 4 /100;
+                $assurance_maladie_employeur = $base_assurance_maladie * 6 /100;
+            }elseif ($salaire_brut >= 300000 && $salaire_brut < 400000) {
+                $base_assurance_maladie = 300000;
+                $assurance_maladie_employe = $base_assurance_maladie * 4 /100;
+                $assurance_maladie_employeur = $base_assurance_maladie * 6 /100;
+            }elseif ($salaire_brut >= 250000 && $salaire_brut < 300000) {
+                $base_assurance_maladie = 250000;
+                $assurance_maladie_employe = $base_assurance_maladie * 4 /100;
+                $assurance_maladie_employeur = $base_assurance_maladie * 6 /100;
             }else{
-                $assurance_maladie_employe = 6000;
-                $assurance_maladie_employeur = 9000;
+                $base_assurance_maladie = 200000;
+                $assurance_maladie_employe = $base_assurance_maladie * 4 /100;
+                $assurance_maladie_employeur = $base_assurance_maladie * 6 /100;
             }
 
 

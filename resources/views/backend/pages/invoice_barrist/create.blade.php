@@ -191,13 +191,13 @@
                             </div>
                             <div class="col-sm-4">
                                 <label for="tp_activity_sector">Secteur d'activité</label>
-                                <input type="text" name="tp_activity_sector" class="form-control" value="{{ $setting->tp_activity_sector }}">
+                                <input type="text" name="tp_activity_sector" class="form-control" value="{{ $setting->tp_activity_sector }}" readonly>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-4">
                                 <label for="tp_legal_form">Forme Juridique</label>
-                                <input type="text" name="tp_legal_form" value="{{ $setting->tp_legal_form }}" class="form-control">
+                                <input type="text" name="tp_legal_form" value="{{ $setting->tp_legal_form }}" class="form-control" readonly>
                             </div>
                             <div class="col-sm-4">
                                 <label for="payment_type">Type de Paiement</label>
@@ -264,10 +264,10 @@
                                 <label for="cancelled_invoice">Facture Annulé?</label>
                                 <div class="form-group">
                                     <label class="text">Non
-                                    <input type="checkbox" name="cancelled_invoice" value="N" checked="checked" class="form-control">
+                                    <input type="checkbox" name="cancelled_invoice" readonly value="N" checked="checked" class="form-control">
                                     </label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     <label class="text">OUI
-                                    <input type="checkbox" name="cancelled_invoice" value="Y" class="form-control">
+                                    <input type="checkbox" name="cancelled_invoice" readonly value="Y" class="form-control">
                                     </label>
                                 </div>
                             </div>

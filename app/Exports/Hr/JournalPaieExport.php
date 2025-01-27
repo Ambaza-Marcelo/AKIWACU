@@ -35,16 +35,7 @@ class JournalPaieExport implements FromCollection, WithMapping, WithHeadings
             $base_pension = 450000;
         }
 
-        $net = $remuneration_brute - $data->somme_cotisation_inss - $data->somme_impot;
-
-            if ($net < 250000) {
-                $assurance_maladie_employe = 0;
-                $assurance_maladie_employeur = 15000;
-            }else{
-                $assurance_maladie_employe = 6000;
-                $assurance_maladie_employeur = 9000;
-            }
-        $total_deductions = $data->somme_cotisation_inss + $assurance_maladie_employe + $data->somme_impot + $data->retenue_pret + $data->soins_medicaux + $data->autre_retenue;
+        $total_deductions = $data->somme_cotisation_inss + $data->assurance_maladie_employe + $data->somme_impot + $data->retenue_pret + $data->soins_medicaux + $data->autre_retenue;
         $net_a_payer = $remuneration_brute - $total_deductions;
         return [
             $data->id,
@@ -63,8 +54,8 @@ class JournalPaieExport implements FromCollection, WithMapping, WithHeadings
             ($inss_risque),
             ($data->somme_cotisation_inss),
             ($data->inss_employeur),
-            ($assurance_maladie_employe),
-            ($assurance_maladie_employeur),
+            ($data->assurance_maladie_employe),
+            ($data->assurance_maladie_employeur),
             ($data->somme_impot),
             ($data->retenue_pret),
             ($data->soins_medicaux),

@@ -68,21 +68,12 @@
                                     <th width="10%">Date de facturation</th>
                                     <th width="10%">Serveur</th>
                                     <th width="10%">Le numéro RC </th>
-                                    <!--
-                                    <th width="10%">Telephone</th>
-                                    <th width="10%">Province</th>
-                                    <th width="10%">Commune</th>
-                                    <th width="10%">Quartier</th>
-                                    <th width="10%">Avenue</th>
-                                    <th width="10%">Rue</th>
-                                -->
                                     <th width="30%">Nom du client</th>
                                     <th width="10%">NIF du client</th>
                                     <th width="10%">Adresse du client</th>
                                     <th width="30%">Auteur</th>
                                     <th width="10%">Signature Facture </th>
                                     <th width="10%">Date Signature Facture</th>
-                                    <th width="10%">Obr Signature electronique</th>
                                     <th width="30%">Motif</th>
                                     <th width="10%">Action</th>
                                 </tr>
@@ -95,26 +86,13 @@
                                     <td>{{ \Carbon\Carbon::parse($facture->invoice_date)->format('d/m/Y H:i:s') }}</td>
                                     <td>{{ $facture->employe->name }}</td>
                                     <td>{{ $facture->tp_trade_number }}</td>
-                                    <!--
-                                    <td>{{ $facture->tp_phone_number }}</td>
-                                    <td>{{ $facture->tp_address_province }}</td>
-                                    <td>{{ $facture->tp_address_commune }}</td>
-                                    <td>{{ $facture->tp_address_quartier }}</td>
-                                    <td>{{ $facture->tp_address_avenue }}</td>
-                                    <td>{{ $facture->tp_address_rue }}</td>
-                                -->
                                     <td>@if($facture->client_id){{ $facture->client->customer_name }} @else {{ $facture->customer_name }} @endif</td>
                                     <td>@if($facture->client_id){{ $facture->client->customer_TIN }} @endif</td>
                                     <td>@if($facture->client_id){{ $facture->client->customer_address }} @endif</td>
                                     <td>{{ $facture->auteur }}</td>
                                     <td>{{ $facture->invoice_signature }}</td>
                                     <td>{{ $facture->invoice_signature_date }}</td>
-                                    <td>
-                                        @if($facture->electronic_signature)
-                                        {!! QrCode::size(300)->backgroundColor(255,255,255)->generate('electronic signature: '.$facture->electronic_signature.' www.edengardenresorts.bi, Designed by www.ambazamarcellin.netlify.app' ) !!}
-                                        @endif
-                                    </td>
-                                    <td><span class="badge badge-danger">{{ $facture->cn_motif }}</span> ;Référence Facture : <span class="badge badge-warning">{{ $facture->invoice_ref }}</span></td>
+                                    <td>Référence Facture : <span class="badge badge-warning">{{ $facture->invoice_ref }}</span></td>
                                     <td>
                                         @if (Auth::guard('admin')->user()->can('invoice_drink.create'))
                                         @if($facture->statut != '1')

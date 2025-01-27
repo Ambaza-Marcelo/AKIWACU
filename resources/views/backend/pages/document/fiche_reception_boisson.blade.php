@@ -85,7 +85,6 @@
                                     <td>{{ $data->drink->drinkMeasurement->purchase_unit }}</td>
                                     <td>{{ number_format($data->purchase_price,0,',',' ' )}}</td>
                                     <td>{{ number_format($data->price_nvat,0,',',' ' )}}</td>
-                                    <td>{{ $data->vat_rate }}</td>
                                     <td>{{ number_format($data->vat,0,',',' ' )}}</td>
                                     <td>{{ $data->vat_rate }}%</td>
                                     <td>{{ number_format($data->price_wvat,0,',',' ' )}}</td>

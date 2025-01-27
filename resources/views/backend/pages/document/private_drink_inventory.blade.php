@@ -26,7 +26,7 @@
         <div>
             <div>
                 <div>
-                   <img src="img/eden_logo.png" width="200" height="65">
+                   <img src="img/eden_logo.png" width="200" height="85">
                 </div>
                 <div>
                     <div style="float: left;">
@@ -59,12 +59,10 @@
                                     <th>Article</th>
                                     <th>Specification</th>
                                     <th>Code</th>
-                                    <th>Qté Actuelle</th>
-                                    <th>PA Actuel</th>
-                                    <th style="background-color: rgb(150,150,150);">Montant Total</th>
-                                    <th>Nouvelle Qté</th>
-                                    <th>Nouveau PA</th>
-                                    <th style="background-color: rgb(150,150,150);">Nouveau M. Total</th>
+                                    <th>Qté Théorique</th>
+                                    <th>PU</th>
+                                    <th>Qté Physique</th>
+                                    <th>Relicat</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -75,14 +73,14 @@
                                     <td>{{ $data->privateStoreItem->specification }}</td>
                                     <td>{{ $data->privateStoreItem->code }}</td>
                                     <td>{{ $data->quantity }}</td>
-                                    <td>{{ number_format($data->purchase_price,0,',',' ' )}}</td>
-                                    <td style="background-color: rgb(150,150,150);">{{ number_format($data->total_purchase_value,0,',',' ' )}}</td>
+                                    <td>{{ number_format($data->selling_price,0,',',' ' )}}</td>
+   
                                     <td>{{ $data->new_quantity }}</td>
-                                    <td>{{ number_format($data->new_purchase_price,0,',',' ' )}}</td>
-                                    <td style="background-color: rgb(150,150,150);">{{ number_format($data->new_total_purchase_value,0,',',' ' )}}</td>
+                                    <td>{{ $data->new_quantity - $data->quantity }}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
+                            <!--
                              <tfoot>
                                 <tr>
                                     <th>Totaux</th>
@@ -93,6 +91,7 @@
                                     <th colspan="2">{{ number_format($totalValueNew,0,',',' ') }}</th>
                                 </tr>
                             </tfoot>
+                            -->
                         </table>
                     </div>
                 </div>

@@ -182,13 +182,13 @@
                             </div>
                             <div class="col-sm-4">
                                 <label for="tp_activity_sector">Secteur d'activité</label>
-                                <input type="text" name="tp_activity_sector" class="form-control" value="{{ $setting->tp_activity_sector }}">
+                                <input type="text" name="tp_activity_sector" class="form-control" value="{{ $setting->tp_activity_sector }}" readonly>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-sm-4">
                                 <label for="tp_legal_form">Forme Juridique</label>
-                                <input type="text" name="tp_legal_form" value="{{ $setting->tp_legal_form }}" class="form-control">
+                                <input type="text" name="tp_legal_form" value="{{ $setting->tp_legal_form }}" class="form-control" readonly>
                             </div>
                             <div class="col-sm-4">
                                 <label for="payment_type">Type de Paiement</label>

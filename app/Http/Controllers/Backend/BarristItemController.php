@@ -216,7 +216,7 @@ class BarristItemController extends Controller
         $selling_price = BarristItem::where('id',$id)->value('selling_price');
         $threshold_quantity = BarristItem::where('id',$id)->value('threshold_quantity');
         $vat = BarristItem::where('id',$id)->value('vat');
-
+        /*
         $barrist_store = BarristProductionStore::where('barrist_item_id',$id)->first();
         $barrist_store->barrist_item_id = $id;
         $barrist_store->quantity = $quantity;
@@ -229,6 +229,7 @@ class BarristItemController extends Controller
         $barrist_store->unit = $unit;
         $barrist_store->created_by = $this->user->name;
         $barrist_store->save();
+        */
 
         DB::commit();
             session()->flash('success', 'BarristItem has been updated !!');

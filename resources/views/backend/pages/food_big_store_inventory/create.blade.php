@@ -78,9 +78,9 @@
                                 <option value="{{ $data->food_id }}" selected="selected" class="form-control">{{ $data->food->name }}/{{ $data->food->code }}</option>
                                 </select></td>  
                                 <td><input type="text" name="quantity[]" value="{{$data->quantity }}" class="form-control" readonly="readonly" /></td>
-                                <td><input type="text" name="purchase_price[]" value="{{ $data->purchase_price }}" class="form-control" readonly="readonly"/></td>  
+                                <td><input type="text" name="purchase_price[]" value="{{ $data->cump }}" class="form-control" step="any" readonly="readonly"/></td>  
                                 <td><input type="number" name="new_quantity[]" value="{{ $data->quantity }}" class="form-control" step="any" min="0" /></td>
-                                <td><input type="number" name="new_purchase_price[]" value="{{ $data->purchase_price }}" class="form-control" step="any" min="0" /></td> 
+                                <td><input type="number" name="new_purchase_price[]" value="{{ $data->cump }}" class="form-control" step="any" min="0" /></td> 
                                 <td><button type="button" class="btn btn-danger remove-tr"><i class="fa fa-trash-o" aria-hidden='false'></i>&nbsp;Supprimer</button></td>   
                             </tr> 
                             @endforeach 

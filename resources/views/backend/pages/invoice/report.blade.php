@@ -114,6 +114,7 @@
                                     <th width="10%">No Commande</th>
                                     <th width="10%">Quantite</th>
                                     <th width="10%">Montant</th>
+                                    <th width="10%"></th>
                                     <th width="10%">Action</th>
                                 </tr>
                             </thead>
@@ -124,10 +125,15 @@
                                     <td><a href="@if($facture->drink_order_no){{ route('admin.facture.show',$facture->invoice_number) }} @elseif($facture->food_order_no) {{ route('admin.invoice-kitchens.show',$facture->invoice_number) }} @elseif($facture->bartender_order_no) {{ route('admin.bartender-invoices.show',$facture->invoice_number) }} @elseif($facture->barrist_order_no) {{ route('admin.barrist-invoices.show',$facture->invoice_number) }} @else {{ route('admin.booking-invoices.show',$facture->invoice_number) }} @endif">{{ $facture->invoice_number }}</a>&nbsp;@if($facture->etat == 0)<span class="badge badge-warning">Encours...</span>@elseif($facture->etat === '1')<span class="badge badge-success">Validée</span>@elseif($facture->etat ==2)<span class="badge badge-success">Envoyée</span>@elseif($facture->etat === '01')<span class="badge badge-info" title="{{ $facture->customer_name }}">validé(crédit)</span>@else<span class="badge badge-danger" title="{{ $facture->cn_motif }}">Annulée</span>@endif</td>
                                     <td>{{ \Carbon\Carbon::parse($facture->invoice_date)->format('d/m/Y') }}</td>
                                     <td>@if($facture->employe_id){{ $facture->employe->name }} @endif</td>
-                                    <td>{{ $facture->customer_name }}</td>
+                                    <td>@if($facture->client_id){{ $facture->client->customer_name }}@endif</td>
                                     <td>@if($facture->drink_order_no){{ $facture->drink_order_no }}<span class="badge badge-info">boisson</span> @elseif($facture->food_order_no){{ $facture->food_order_no }}<span class="badge badge-info">nourriture</span> @elseif($facture->barrist_order_no){{ $facture->barrist_order_no }}<span class="badge badge-info">barrist</span> @elseif($facture->bartender_order_no){{ $facture->bartender_order_no }}<span class="badge badge-info">bartender</span> @else {{ $facture->booking_no }}<span class="badge badge-info">reservation</span> @endif</td>
                                     <td>{{ $facture->item_quantity }}</td>
                                     <td>{{ $facture->item_total_amount }}</td>
+                                    <td>
+                                        @if($facture->electronic_signature)
+                                        {!! QrCode::size(300)->backgroundColor(255,255,255)->generate('electronic signature: '.$facture->electronic_signature.' www.edengardenresorts.bi, Designed by www.ambazamarcellin.netlify.app' ) !!}
+                                        @endif
+                                    </td>
                                     <td>
                                         @if (Auth::guard('admin')->user()->can('invoice_drink.reset'))
                                         @if($facture->etat == 0)

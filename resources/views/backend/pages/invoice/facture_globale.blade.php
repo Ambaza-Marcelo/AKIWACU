@@ -59,7 +59,7 @@
                         <strong style="text-decoration: underline;">CREDIT</strong><br>
                         <table style="border: 1px solid black;border-collapse: collapse;">
                             <thead>
-                                <tr style="background-color: green;">
+                                <tr style="background-color: #027789;">
                                     <th>DESIGNATION</th>
                                     <th>PVT HTVA</th>
                                     <th>TVA(10%)</th>
@@ -109,7 +109,7 @@
                                 @endif
                             </tbody>
                             <tfoot>
-                                <tr style="background-color: green;">
+                                <tr style="background-color: #027789;">
                                     <th>TOTAL</th>
                                     <th>{{ number_format(($item_total_nvat_drink + $item_total_nvat_kitchen + $item_total_nvat_barrista + $item_total_nvat_bartender + $item_total_nvat_service) - ($note_credit_pvhtva * 2),0,',',' ') }}</th>
                                     <th>{{ number_format(($total_vat_drink + $total_vat_kitchen + $total_vat_barrista + $total_vat_bartender + $total_vat_service) - ($note_credit_tva * 2),0,',',' ') }}</th>
@@ -122,10 +122,13 @@
                     <small>Thank You For Visit</small>
                     <br><br><br>
                     <small>
-                           &nbsp;&nbsp; <img src="data:image/png;base64, {!! base64_encode(QrCode::size(100)->generate('www.edengardenresorts.bi, '.number_format(($item_total_amount_drink + $item_total_amount_kitchen + $item_total_amount_barrista + $item_total_amount_bartender + $item_total_amount_service),0,',',' ').' ,powered by https://ambazamarcellin.netlify.app/')) !!} ">
+                           &nbsp;&nbsp; <img src="data:image/png;base64, {!! base64_encode(QrCode::size(100)->generate('www.edengardenresorts.bi, '.number_format(($item_total_amount_drink + $item_total_amount_kitchen + $item_total_amount_barrista + $item_total_amount_bartender + $item_total_amount_service),0,',',' ').' ,powered by https://ambazamarcellin.netlify.app')) !!} ">
                     </small>
             </div><br>
-            <strong>{{ $data->invoice_signature }} : ID </strong>
+            @foreach($factures as $facture)
+                <strong>{{ $facture->invoice_signature }} : ID </strong><br>
+            @endforeach
+
             <div class="watermark">
                 <hr>
                         COMPTE CORILAC N° 19432;KCB N° 6690846997;BCB N° 13120-21300420003-61 ;BBCI N° 6012151/001-000-108;BANCOBU N° 15597620101-13;ECOBANK N° 38125026983;FINBANK N° 10162510011 AU NOM DE EDEN GARDEN RESORT. 

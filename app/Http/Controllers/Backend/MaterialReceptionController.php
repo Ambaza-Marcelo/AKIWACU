@@ -163,7 +163,7 @@ class MaterialReceptionController extends Controller
             $order = MaterialSupplierOrder::where('order_no',$order_no)->first();
             
 
-            $latest = MaterialReception::latest()->first();
+            $latest = MaterialReception::orderBy('id','desc')->first();
             if ($latest) {
                $reception_no = 'REC' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{
@@ -343,7 +343,7 @@ class MaterialReceptionController extends Controller
             $supplier_id = $request->supplier_id;
             
 
-            $latest = MaterialReception::latest()->first();
+            $latest = MaterialReception::orderBy('id','desc')->first();
             if ($latest) {
                $reception_no = 'REC' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{

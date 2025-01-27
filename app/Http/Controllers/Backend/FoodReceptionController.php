@@ -121,7 +121,7 @@ class FoodReceptionController extends Controller
                 'receptionist'  => 'required',
                 'vat_supplier_payer'  => 'required',
                 'type_reception'  => 'required',
-                'vat_rate'  => 'required',
+                //'vat_rate'  => 'required',
                 'invoice_currency'  => 'required',
                 'destination_store_id'  => 'required',
                 'description'  => 'required|max:490'

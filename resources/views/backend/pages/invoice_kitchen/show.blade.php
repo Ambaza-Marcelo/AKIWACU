@@ -281,6 +281,11 @@
                     </form>
                 </div>
             </div>
+            <div>
+                @if($facture->electronic_signature)
+                    {!! QrCode::size(300)->backgroundColor(255,255,255)->generate('electronic signature: '.$facture->electronic_signature.' www.edengardenresorts.bi, Designed by www.ambazamarcellin.netlify.app' ) !!}
+                @endif
+            </div>
         </div>
         <!-- data table end -->
         

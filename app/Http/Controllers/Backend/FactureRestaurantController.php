@@ -60,7 +60,7 @@ class FactureRestaurantController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any invoice !');
         }
 
-        $factures = Facture::where('food_order_no','!=','')->take(300)->orderBy('id','desc')->get();
+        $factures = Facture::where('food_order_no','!=','')->take(200)->orderBy('id','desc')->get();
         return view('backend.pages.invoice_kitchen.index',compact('factures'));
     }
 
@@ -545,13 +545,14 @@ class FactureRestaurantController extends Controller
         $d2 = $request->query('end_date');
         $client_id = $request->query('client_id');
 
-        $data = Facture::where('client_id',$client_id)->first();
-
         $startDate = \Carbon\Carbon::parse($d1)->format('Y-m-d');
         $endDate = \Carbon\Carbon::parse($d2)->format('Y-m-d');
 
         $start_date = $startDate.' 00:00:00';
         $end_date = $endDate.' 23:59:59';
+
+        $data = Facture::where('client_id',$client_id)->whereBetween('invoice_date',[$start_date,$end_date])->where('etat','01')->orderBy('id','desc')->first();
+        $factures = Facture::where('client_id',$client_id)->whereBetween('invoice_date',[$start_date,$end_date])->where('etat','01')->get();
 
         $item_total_amount = DB::table('facture_details')->where('etat','1')->where('client_id',$client_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('item_total_amount');
         $total_vat = DB::table('facture_details')->where('etat','1')->where('client_id',$client_id)->whereBetween('invoice_date',[$start_date,$end_date])->sum('vat');
@@ -597,9 +598,9 @@ class FactureRestaurantController extends Controller
         }
 
         $datas = FactureDetail::select(
-                        DB::raw('id,drink_id,food_item_id,barrist_item_id,bartender_item_id,service_id,salle_id,invoice_number,invoice_date,sum(item_quantity) as item_quantity,sum(item_price) as item_price,sum(vat) as vat,sum(item_price_nvat) as item_price_nvat,sum(item_total_amount) as item_total_amount'))->where('etat','1')->where('client_id',$client_id)->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','drink_id','food_item_id','barrist_item_id','bartender_item_id','service_id','salle_id')->orderBy('invoice_number')->get();
+                        DB::raw('id,drink_id,food_item_id,barrist_item_id,bartender_item_id,service_id,salle_id,invoice_number,invoice_date,sum(item_quantity) as item_quantity,sum(item_price) as item_price,sum(vat) as vat,sum(item_price_nvat) as item_price_nvat,sum(item_total_amount) as item_total_amount'))->where('etat','1')->where('client_id',$client_id)->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','drink_id','food_item_id','barrist_item_id','bartender_item_id','service_id','salle_id','invoice_signature','invoice_number','invoice_date')->orderBy('invoice_number')->get();
         $credits = FactureDetail::select(
-                        DB::raw('id,drink_id,food_item_id,barrist_item_id,bartender_item_id,service_id,salle_id,invoice_number,invoice_date,sum(item_quantity) as item_quantity,sum(item_price) as item_price,sum(vat) as vat,sum(item_price_nvat) as item_price_nvat,sum(item_total_amount) as item_total_amount'))->where('etat','01')->where('client_id',$client_id)->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','drink_id','food_item_id','barrist_item_id','bartender_item_id','service_id','salle_id')->orderBy('invoice_number')->get();
+                        DB::raw('id,drink_id,food_item_id,barrist_item_id,bartender_item_id,service_id,salle_id,invoice_number,invoice_signature,invoice_date,sum(item_quantity) as item_quantity,sum(item_price) as item_price,sum(vat) as vat,sum(item_price_nvat) as item_price_nvat,sum(item_total_amount) as item_total_amount'))->where('etat','01')->where('client_id',$client_id)->whereBetween('invoice_date',[$start_date,$end_date])->groupBy('id','drink_id','food_item_id','barrist_item_id','bartender_item_id','service_id','salle_id')->orderBy('invoice_number')->get();
 
         $setting = DB::table('settings')->orderBy('created_at','desc')->first();
 
@@ -608,7 +609,7 @@ class FactureRestaurantController extends Controller
         'total_vat',
         'item_total_amount_credit',
         'total_vat_credit',
-        'datas',
+        'factures',
         'credits',
         'data',
         'start_date',

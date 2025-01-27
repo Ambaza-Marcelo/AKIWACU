@@ -37,7 +37,7 @@
                         <table style="border: 1px solid black;border-collapse: collapse;">
                             <thead>
                                 <tr>
-                                    <th colspan="10" style="text-align: left;background-color: green;">IDENTIFICATION DE L'EMPLOYE</th>
+                                    <th colspan="10" style="text-align: left;background-color: #027789;">IDENTIFICATION DE L'EMPLOYE</th>
                                 </tr>
                             </thead>
                             <thead>
@@ -70,7 +70,7 @@
                             </tbody>
                             <thead>
                                 <tr>
-                                    <th colspan="6" style="text-align: left;background-color: green;">STATUT DE L'EMPLOYE</th>
+                                    <th colspan="6" style="text-align: left;background-color: #027789;">STATUT DE L'EMPLOYE</th>
                                 </tr>
                             </thead>
                             <thead>
@@ -95,7 +95,7 @@
                             </tbody>
                             <thead>
                                 <tr>
-                                    <th colspan="3" style="text-align: left;background-color: green;">REMUNERATION DE L'EMPLOYE</th>
+                                    <th colspan="3" style="text-align: left;background-color: #027789;">REMUNERATION DE L'EMPLOYE</th>
                                 </tr>
                             </thead>
                             <thead>

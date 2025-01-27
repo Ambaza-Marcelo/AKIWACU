@@ -90,7 +90,7 @@ class FactureController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any invoice !');
         }
 
-        $factures = Facture::where('drink_order_no','!=','')->take(300)->orderBy('id','desc')->get();
+        $factures = Facture::where('drink_order_no','!=','')->take(200)->orderBy('id','desc')->get();
         return view('backend.pages.invoice.index',compact('factures'));
     }
 
@@ -679,20 +679,20 @@ class FactureController extends Controller
                 $item_total_amount = $item_price_wvat + $item_tl[$count];
             }
 
-            $code = FoodItemDetail::where('id', $food_item_id[$count])->value('code');
+            $code = FoodItem::where('id', $food_item_id[$count])->value('code');
             $foods = FoodItemDetail::where('code', $code)->get();
-            $i = 0;
-            $cumpData[] = 0;
+            $cumpData = [];
             foreach($foods as $food){
                 $cump = array(
                     'cump' => DB::table('food_small_store_details')->where('food_id','!=', '')->where('food_id', $food->food_id)->value('cump'),
                 );
                 $cumpData[] = $cump;
             }
-              $cmp1 = collect($cumpData)->sum('cump');
+
+            $cmp1 = collect($cumpData)->sum('cump');
               $inflation = $cmp1 * 15/100;
-              $miscelins = $cmp1 * 5/100;
-              $cmp = $cmp1 + $inflation + $miscelins;
+              $miscelius = $cmp1 * 5/100;
+              $cmp = $cmp1 + $inflation + $miscelius;
 
           $data = array(
             'invoice_number'=>$invoice_number,

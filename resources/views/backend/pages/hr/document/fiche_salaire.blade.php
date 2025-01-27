@@ -31,7 +31,7 @@
                         <table style="border-collapse: collapse;">
                             <thead>
                                 <tr>
-                                    <th colspan="4" style="text-align: center;background-color: green;">BULLETIN DE PAIE DU {{ \Carbon\Carbon::parse($data->date_debut)->format('d/m/Y') }} AU {{ \Carbon\Carbon::parse($data->date_fin)->format('d/m/Y') }}</th>
+                                    <th colspan="4" style="text-align: center;background-color: #027789;">BULLETIN DE PAIE DU {{ \Carbon\Carbon::parse($data->date_debut)->format('d/m/Y') }} AU {{ \Carbon\Carbon::parse($data->date_fin)->format('d/m/Y') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -78,7 +78,7 @@
                         </table><br>
                         <table style="border-collapse: collapse;">
                             <thead>
-                                <tr style="text-align: left;background-color: green;">
+                                <tr style="text-align: left;background-color: #027789;">
                                     <th>RUBRIQUES</th>
                                     <th>BASE</th>
                                     <th>TAUX(PART EMPLOYE)</th>
@@ -132,7 +132,7 @@
                                 </tr>
                             </tbody>
                             <tbody>
-                                <tr style="background-color: green;">
+                                <tr style="background-color: #027789;">
                                     <td>SALAIRE BRUT</td>
                                     <td>{{ number_format($data->somme_salaire_base,0,',',' ') }}</td>
                                     <td></td>
@@ -157,8 +157,8 @@
                                     <td>ASSURANCE MALADIE</td>
                                     <td>@if($salaire_brut < 250000){{ number_format($salaire_brut,0,',',' ') }} @else 250 000 @endif</td>
                                     <td></td>
-                                    <td>@if($salaire_brut < 250000){{ number_format(0,0,',',' ') }} @else {{ number_format(6000,0,',',' ') }} @endif</td>
-                                    <td>@if($salaire_brut < 250000){{ number_format(15000,0,',',' ') }} @else {{ number_format(9000,0,',',' ') }} @endif</td>
+                                    <td>{{ number_format($data->assurance_maladie_employe,0,',',' ') }}</td>
+                                    <td>{{ number_format($data->assurance_maladie_employeur,0,',',' ') }}</td>
                                 </tr>
                             </tbody>
                             <tbody>
@@ -219,7 +219,7 @@
                                 </tr>
                             </tbody>
                             <tbody>
-                                <tr style="background-color: green;">
+                                <tr style="background-color: #027789;">
                                     <td>TOTAL DES DEDUCTIONS</td>
                                     <td>{{ number_format($salaire_brut,0,',',' ') }}</td>
                                     <td></td>
@@ -262,13 +262,13 @@
                         <table style="border-collapse: collapse;">
                             <thead>
                                 <tr>
-                                    <th>RESPONSABLE ARH ET SIGNATURE</th>
+                                    <th>RESPONSABLE RH ET SIGNATURE</th>
                                     <th>EMPLOYE ET SIGNATURE</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>NTAKIRUTIMANA VICTOR.............................</td>
+                                    <td>.......................................</td>
                                     <td>@if($data->employe_id){{ $data->employe->firstname }} {{ $data->employe->lastname }}......................... @endif</td>
                                 </tr>
                             </tbody>
