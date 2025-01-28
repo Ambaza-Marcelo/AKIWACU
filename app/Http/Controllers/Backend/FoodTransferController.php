@@ -652,7 +652,7 @@ class FoodTransferController extends Controller
                 $quantityStockInitial = FoodSmallStoreDetail::where('code',$code_store)->where('food_id','!=', '')->where('food_id', $data->food_id)->value('quantity_portion');
                 $quantityTotal = $quantityStockInitial + $data->quantity_portion;
 
-                $cump = FoodBigStoreDetail::where('code',$code_store)->where('food_id','!=', '')->where('food_id', $data->food_id)->value('cump');
+                $cump = FoodBigStoreDetail::where('food_id','!=', '')->where('food_id', $data->food_id)->value('cump');
 
                 $cump = ($cump / $data->food->foodMeasurement->equivalent) * $data->food->foodMeasurement->sub_equivalent;
 
