@@ -21,7 +21,8 @@ class CreateFoodMeasurementsTable extends Migration
             $table->unique('stockout_unit');
             $table->string('production_unit')->nullable(true);
             $table->unique('production_unit');
-            $table->string('equivalent')->nullable(true);
+            $table->double('equivalent')->nullable(true);
+            $table->double('sub_equivalent')->nullable(true);
             $table->timestamps();
         });
     }
@@ -33,6 +34,8 @@ class CreateFoodMeasurementsTable extends Migration
      */
     public function down()
     {
+        DB::statement('SET FOREIGN_KEY_CHECKS = 0');
         Schema::dropIfExists('food_measurements');
+        DB::statement('SET FOREIGN_KEY_CHECKS = 1');
     }
 }

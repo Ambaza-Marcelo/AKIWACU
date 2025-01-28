@@ -683,8 +683,11 @@ class FactureController extends Controller
             $foods = FoodItemDetail::where('code', $code)->get();
             $cumpData = [];
             foreach($foods as $food){
+                $foodM = FoodBigStoreDetail::where('food_id','!=', '')->where('food_id', $food->food_id)->first();
+                $cumpMediumStore = DB::table('food_big_store_details')->where('food_id','!=', '')->where('food_id', $food->food_id)->value('cump');
+                $cumpSmallStore = ($cumpMediumStore / $foodM->food->foodMeasurement->equivalent) * $foodM->food->foodMeasurement->sub_equivalent;
                 $cump = array(
-                    'cump' => DB::table('food_small_store_details')->where('food_id','!=', '')->where('food_id', $food->food_id)->value('cump'),
+                    'cump' => $cumpSmallStore,
                 );
                 $cumpData[] = $cump;
             }

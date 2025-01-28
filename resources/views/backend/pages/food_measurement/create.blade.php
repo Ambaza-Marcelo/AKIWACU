@@ -62,16 +62,22 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="production_unit">Unité de production</label>
                                     <input type="text" class="form-control" id="production_unit" name="production_unit" placeholder="Saisir Unité de sortie">
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="equivalent">Valeur équivalente</label>
                                     <input type="number" class="form-control" id="equivalent" name="equivalent" step="any" placeholder="Saisir équivalent">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="sub_equivalent">Valeur Sous-équivalente</label>
+                                    <input type="number" class="form-control" id="sub_equivalent" name="sub_equivalent" step="any" min="0" placeholder="Saisir sous-équivalent">
                                 </div>
                             </div>
                         </div>

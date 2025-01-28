@@ -53,7 +53,8 @@ class FoodMeasurementController extends Controller
             'purchase_unit' => 'required|max:255',
             'stockout_unit' => 'required|max:255',
             'production_unit' => 'required|max:255',
-            'equivalent' => 'required|max:255'
+            'equivalent' => 'required',
+            'sub_equivalent' => 'required'
         ]);
 
         // Create New FoodMeasurement
@@ -62,6 +63,7 @@ class FoodMeasurementController extends Controller
         $food_measurement->stockout_unit = $request->stockout_unit;
         $food_measurement->production_unit = $request->production_unit;
         $food_measurement->equivalent = $request->equivalent;
+        $food_measurement->sub_equivalent = $request->sub_equivalent;
         $food_measurement->save();
         session()->flash('success', 'unit of measurement has been created successfuly !!');
         return redirect()->route('admin.food-measurement.index');
@@ -91,7 +93,8 @@ class FoodMeasurementController extends Controller
             'purchase_unit' => 'required|max:255',
             'stockout_unit' => 'required|max:255',
             'production_unit' => 'required|max:255',
-            'equivalent' => 'required|max:255'
+            'equivalent' => 'required',
+            'sub_equivalent' => 'required'
         ]);
 
 
@@ -99,6 +102,7 @@ class FoodMeasurementController extends Controller
         $food_measurement->stockout_unit = $request->stockout_unit;
         $food_measurement->production_unit = $request->production_unit;
         $food_measurement->equivalent = $request->equivalent;
+        $food_measurement->sub_equivalent = $request->sub_equivalent;
         $food_measurement->save();
 
         session()->flash('success', 'unit of measurement has been updated !!');

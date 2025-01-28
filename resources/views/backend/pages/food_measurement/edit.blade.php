@@ -63,16 +63,22 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="production_unit">Unité de production</label>
                                     <input type="text" class="form-control" id="production_unit" name="production_unit" value="{{ $food_measurement->production_unit }}">
                                 </div>
                             </div>
-                            <div class="col-md-6">
+                            <div class="col-md-4">
                                 <div class="form-group">
                                     <label for="equivalent">Valeur équivalente</label>
                                     <input type="number" step="any" class="form-control" id="equivalent" name="equivalent" value="{{ $food_measurement->equivalent }}">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="sub_equivalent">Valeur Sous-équivalente</label>
+                                    <input type="number" step="any" class="form-control" id="sub_equivalent" name="sub_equivalent" value="{{ $food_measurement->sub_equivalent }}">
                                 </div>
                             </div>
                         </div>

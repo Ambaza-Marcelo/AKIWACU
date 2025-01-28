@@ -58,6 +58,7 @@
                                     <th width="30%">Unité de sortie</th>
                                     <th width="30%">Unité de production</th>
                                     <th width="30%">Valeur équivalente</th>
+                                    <th width="30%">Valeur sous-équivalente</th>
                                     <th width="15%">Action</th>
                                 </tr>
                             </thead>
@@ -69,6 +70,7 @@
                                     <td>{{ $food_measurement->stockout_unit }}</td>
                                     <td>{{ $food_measurement->production_unit }}</td>
                                     <td>{{ $food_measurement->equivalent }}</td>
+                                    <td>{{ $food_measurement->sub_equivalent }}</td>
                                     <td>
                                         @if (Auth::guard('admin')->user()->can('food_category.edit'))
                                             <a class="btn btn-success text-white" href="{{ route('admin.food-measurement.edit', $food_measurement->id) }}">Edit</a>
