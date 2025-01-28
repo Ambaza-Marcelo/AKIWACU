@@ -57,7 +57,7 @@
                                     <th width="10%">@lang('Ingredient')</th>
                                     <th width="10%">@lang('messages.quantity')</th>
                                     <th width="10%">@lang('messages.unit')</th>
-                                    <th width="10%">@lang('messages.purchase_price')</th>
+                                    <th width="10%">@lang('CUMP')</th>
                                     <th width="15%">Action</th>
                                 </tr>
                             </thead>
@@ -72,8 +72,8 @@
                                     <td>{{ number_format($data->selling_price,0,',',' ') }}</td>
                                     <td>{{ $data->food->name }}</td>
                                     <td>{{ $data->quantity }}</td>
-                                    <td>{{ $data->food->unit }}</td>
-                                    <td>{{ $data->food->purchase_price }}</td>
+                                    <td>{{ $data->food->foodMeasurement->production_unit }}</td>
+                                    <td>{{ ($data->food->cump / $data->food->foodMeasurement->equivalent)/$data->food->foodMeasurement->sub_equivalent }}</td>
                                 </tr>
                                @endforeach
                             </tbody>

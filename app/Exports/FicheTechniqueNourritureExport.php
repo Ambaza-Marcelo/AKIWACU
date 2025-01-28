@@ -28,9 +28,9 @@ class FicheTechniqueNourritureExport implements FromCollection, WithMapping, Wit
             $data->vat,
             $data->selling_price,
             $data->food->name,
-            $data->food->unit,
+            $data->food->foodMeasurement->production_unit,
             $data->quantity,
-            $data->food->purchase_price
+            ($data->food->cump / $data->food->foodMeasurement->equivalent)/$data->food->foodMeasurement->sub_equivalent
         ] ;
  
  
@@ -46,7 +46,7 @@ class FicheTechniqueNourritureExport implements FromCollection, WithMapping, Wit
 			'Nom Ingredient',
 			'Unité Ingredient',
 			'Qté Ingredient',
-			'P.A Ingredient'
+			'CUMP Ingredient'
         ] ;
     }
 }

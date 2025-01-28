@@ -17,7 +17,7 @@
         <div>
             <div>
                 <div>
-                   <img src="img/eden_logo.png" width="200" height="65">
+                   <img src="img/eden_logo.png" width="200" height="85">
                 </div>
                 <div>
                     <div>
@@ -46,7 +46,7 @@
                         </table>
                         <ol>Ingredients :
                             @foreach($datas as $data)
-                                <li>{{ $data->food->name }} : {{ $data->quantity }} ({{ $data->food->unit }})</li>
+                                <li>{{ $data->food->name }} : {{ $data->quantity }} ({{ $data->food->foodMeasurement->production_unit }})</li>
                             @endforeach
                         </ol>
                     </div>

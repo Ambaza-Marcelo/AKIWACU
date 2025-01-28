@@ -17,7 +17,7 @@
         <div>
             <div>
                 <div>
-                   <img src="img/eden_logo.png" width="200" height="65">
+                   <img src="img/eden_logo.png" width="200" height="85">
                 </div>
                 <div>
                     <div>
@@ -41,7 +41,7 @@
                                     <td>{{ $data->name }}</td>
                                     <td>
                                             @foreach($foods as $food)
-                                                @if($data->code == $food->code && $food->food_id != '')<small>{{ $food->food->name }} : {{ $food->quantity }} ({{ $food->food->unit }}) => ({{ $food->food->purchase_price }})</small>@endif
+                                                @if($data->code == $food->code && $food->food_id != '')<small>{{ $food->food->name }} : {{ $food->quantity }} ({{ $food->food->foodMeasurement->production_unit }})</small>@endif
                                             @endforeach
                                         
                                     </td>          
