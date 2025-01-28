@@ -690,7 +690,7 @@ class FoodTransferController extends Controller
                             'value_portion' => $data->value_portion + $valeurStockInitial,
                             'cump' => $cump,
                             'verified' => false,
-                            //'created_by' => $this->user->name,
+                            'value_portion' => $cump * ($quantityStockInitial + $data->quantity_portion),
                             'created_at' => \Carbon\Carbon::now()
                         );
                         
