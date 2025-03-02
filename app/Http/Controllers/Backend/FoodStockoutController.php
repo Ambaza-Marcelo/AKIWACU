@@ -117,7 +117,7 @@ class FoodStockoutController extends Controller
             try {DB::beginTransaction();
 
             $food_id = $request->food_id;
-            $date = Carbon::now();
+            $date = $request->date;
             $asker = $request->asker;
             $destination = $request->destination;
             $origin_sm_store_id = $request->origin_sm_store_id;
@@ -183,9 +183,16 @@ class FoodStockoutController extends Controller
                     );
                     $insert_data[] = $data;
                 }elseif($store_type == 2){
-                    $purchase_price = Food::where('id', $food_id[$count])->value('cump');
+                    $cump = Food::where('id', $food_id[$count])->value('cump');
+
+                    $food = Food::where('id', $food_id[$count])->first();
+
+                    $purchase_price = $cump / $food->foodMeasurement->equivalent;
+
+                    //$quantityEquivalent = $quantity[$count] / $food->foodMeasurement->sub_equivalent;
 
                     $total_purchase_value = $quantity[$count] * $purchase_price;
+
 
                     $data = array(
                         'food_id' => $food_id[$count],

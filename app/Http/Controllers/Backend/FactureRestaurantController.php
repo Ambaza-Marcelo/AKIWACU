@@ -60,7 +60,7 @@ class FactureRestaurantController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any invoice !');
         }
 
-        $factures = Facture::where('food_order_no','!=','')->take(200)->orderBy('id','desc')->get();
+        $factures = Facture::where('food_order_no','!=','')->take(300)->orderBy('id','desc')->get();
         return view('backend.pages.invoice_kitchen.index',compact('factures'));
     }
 
@@ -465,7 +465,7 @@ class FactureRestaurantController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any invoice !');
         }
 
-        $factures = FactureDetail::orderBy('id','desc')->take(10000)->get();
+        $factures = Facture::orderBy('id','desc')->get();
         $clients = EGRClient::orderBy('customer_name')->get();
         return view('backend.pages.invoice.report',compact('factures','clients'));
     }
@@ -594,7 +594,7 @@ class FactureRestaurantController extends Controller
         if (!empty($data->client_id)) {
             $customer_name = $data->client->customer_name;
         }else{
-            $customer_name = $data->customer_name;
+            abort(403, 'Sorry !! You are Unauthorized to view global bill in choosen period because no bill for this client!more information contact Marcellin');
         }
 
         $datas = FactureDetail::select(

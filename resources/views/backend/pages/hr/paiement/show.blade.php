@@ -19,7 +19,7 @@
         <div>
             <div>
                 <div>
-                   <img src="{{ asset('logo/logo_musumba.jpg')}}" width="700" height="85">
+                   <img src="{{ asset('img/eden_logo.png')}}" width="200" height="85">
                 </div><br>
                 <div>
                     <div style="float: right; border-top-right-radius: 10px solid black;border-top-left-radius: 10px solid black;border-bottom-right-radius: 10px solid black;border-bottom-left-radius: 10px solid black; background-color: rgb(150,150,150);width: 242px;padding: 10px;">
@@ -33,7 +33,7 @@
                     <br><br><br>
                     <br>
                     <div>
-                        <table  class="table table-bordered">
+                        <table class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th colspan="4" style="text-align: center;background-color: #027789;">BULLETIN DE PAIE DU {{ \Carbon\Carbon::parse($data->date_debut)->format('d/m/Y') }} AU {{ \Carbon\Carbon::parse($data->date_fin)->format('d/m/Y') }}</th>
@@ -94,7 +94,7 @@
                             <tbody>
                                 <tr>
                                     <td>SALAIRE DE BASE</td>
-                                    <td>@if($data->employe_id){{ number_format(floor($data->somme_salaire_base),0,',',' ') }} @endif</td>
+                                    <td>@if($data->employe_id){{ number_format($data->somme_salaire_base,0,',',' ') }} @endif</td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -105,16 +105,16 @@
                                     <td>ALLOCATIONS FAMILIALES</td>
                                     <td></td>
                                     <td></td>
-                                    <td>{{ number_format(floor($data->allocation_familiale),0,',',' ') }}</td>
+                                    <td>{{ number_format($data->allocation_familiale,0,',',' ') }}</td>
                                     <td></td>
                                 </tr>
                             </tbody>
                             <tbody>
                                 <tr>
                                     <td>INDEMNITE DE DEPLACEMENT</td>
-                                    <td>{{ number_format(floor($data->somme_salaire_base),0,',',' ') }}</td>
+                                    <td>{{ number_format($data->somme_salaire_base,0,',',' ') }}</td>
                                     <td>15%</td>
-                                    <td>{{ number_format(floor($data->indemnite_deplacement),0,',',' ') }}</td>
+                                    <td>{{ number_format($data->indemnite_deplacement,0,',',' ') }}</td>
                                     <td></td>
                                 </tr>
                             </tbody>
@@ -123,7 +123,7 @@
                                     <td>INDEMNITE DE LOGEMENT</td>
                                     <td>{{ number_format($data->somme_salaire_base,0,',',' ') }}</td>
                                     <td>60%</td>
-                                    <td>{{ number_format(floor($data->indemnite_logement),0,',',' ') }}</td>
+                                    <td>{{ number_format($data->indemnite_logement,0,',',' ') }}</td>
                                     <td></td>
                                 </tr>
                             </tbody>
@@ -139,28 +139,46 @@
                             <tbody>
                                 <tr style="background-color: #027789;">
                                     <td>SALAIRE BRUT</td>
-                                    <td>{{ number_format(floor($data->somme_salaire_base),0,',',' ') }}</td>
+                                    <td>{{ number_format($data->somme_salaire_base,0,',',' ') }}</td>
                                     <td></td>
                                     @php
                                         $salaire_brut = ($data->somme_salaire_base + $data->indemnite_deplacement + $data->indemnite_logement + $data->prime_fonction + $data->allocation_familiale);
                                     @endphp
-                                    <td>{{ number_format(floor($salaire_brut),0,',',' ') }}</td>
+                                    <td>{{ number_format($salaire_brut,0,',',' ') }}</td>
                                     <td></td>
                                 </tr>
                             </tbody>
                             <tbody>
                                 <tr>
                                     <td>INSS</td>
-                                    <td>@if($salaire_brut < 450000){{ number_format(floor($salaire_brut),0,',',' ') }} @else 450 000 @endif</td>
+                                    <td>@if($salaire_brut < 450000){{ number_format($salaire_brut,0,',',' ') }} @else 450 000 @endif</td>
                                     <td>4%</td>
-                                    <td>{{ number_format(floor($data->somme_cotisation_inss),0,',',' ') }}</td>
+                                    <td>{{ number_format($data->somme_cotisation_inss,0,',',' ') }}</td>
                                     <td>{{ number_format(floor($data->inss_employeur),0,',',' ') }}</td>
                                 </tr>
                             </tbody>
                             <tbody>
                                 <tr>
                                     <td>ASSURANCE MALADIE</td>
-                                    <td>@if($salaire_brut < 250000){{ number_format($salaire_brut,0,',',' ') }} @else 250 000 @endif</td>
+                                    @php
+
+                                        if ($salaire_brut >= 2000000) {
+                                            $base_assurance_maladie = 2000000;
+                                        }elseif ($salaire_brut >= 1000000 && $salaire_brut < 2000000)                           {
+                                            $base_assurance_maladie = 1000000;
+                                        }elseif ($salaire_brut >= 500000 && $salaire_brut < 1000000) {
+                                            $base_assurance_maladie = 500000;
+                                        }elseif ($salaire_brut >= 400000 && $salaire_brut < 500000) {
+                                            $base_assurance_maladie = 400000;
+                                        }elseif ($salaire_brut >= 300000 && $salaire_brut < 400000) {
+                                            $base_assurance_maladie = 300000;
+                                        }elseif ($salaire_brut >= 250000 && $salaire_brut < 300000) {
+                                            $base_assurance_maladie = 250000;
+                                        }else{
+                                            $base_assurance_maladie = 200000;
+                                        }
+                                    @endphp
+                                    <td>{{ number_format($base_assurance_maladie,0,',',' ') }}</td>
                                     <td></td>
                                     <td>{{ number_format($data->assurance_maladie_employe,0,',',' ') }}</td>
                                     <td>{{ number_format($data->assurance_maladie_employeur,0,',',' ') }}</td>
@@ -208,7 +226,7 @@
                             <tbody>
                                 <tr>
                                     <td>RETENUE PRET</td>
-                                    <td>{{ number_format(floor($salaire_brut),0,',',' ') }}</td>
+                                    <td>{{ number_format($salaire_brut,0,',',' ') }}</td>
                                     <td></td>
                                     <td>{{ number_format($data->retenue_pret,0,',',' ') }}</td>
                                     <td></td>
@@ -217,34 +235,53 @@
                             <tbody>
                                 <tr>
                                     <td>AUTRES RETENUES</td>
-                                    <td>{{ number_format(floor($salaire_brut),0,',',' ') }}</td>
+                                    <td>{{ number_format($salaire_brut,0,',',' ') }}</td>
                                     <td></td>
-                                    <td>{{ number_format(floor($data->autre_retenue),0,',',' ') }}</td>
+                                    <td>{{ number_format($data->autre_retenue,0,',',' ') }}</td>
                                     <td></td>
                                 </tr>
                             </tbody>
                             <tbody>
                                 <tr style="background-color: #027789;">
                                     <td>TOTAL DES DEDUCTIONS</td>
-                                    <td>{{ number_format(floor($salaire_brut),0,',',' ') }}</td>
+                                    <td>{{ number_format($salaire_brut,0,',',' ') }}</td>
                                     <td></td>
                                     @php
                                             $total_deductions = $data->somme_cotisation_inss + $data->assurance_maladie_employe + $data->somme_impot + $data->retenue_pret + $data->soins_medicaux + $data->autre_retenue;
                                     @endphp
-                                    <td>{{ number_format((floor($total_deductions)),0,',',' ') }}</td>
+                                    <td>{{ number_format($total_deductions,0,',',' ') }}</td>
                                     <td></td>
                                 </tr>
                             </tbody>
                             <tbody>
                                 <tr>
                                     <td>SALAIRE NET</td>
-                                    <td>{{ number_format(floor($salaire_brut),0,',',' ') }}</td>
+                                    <td>{{ number_format($salaire_brut,0,',',' ') }}</td>
                                     <td></td>
-                                    <td>{{ number_format(floor(($salaire_brut - $total_deductions)),0,',',' ') }}</td>
+                                    <td>{{ number_format(($salaire_brut - $total_deductions),0,',',' ') }}</td>
                                     <td></td>
                                 </tr>
                             </tbody>
                         </table>
+                        <br>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>REMUNERATION BRUTE</th>
+                                    <th>TOTAL DEDUCTIONS</th>
+                                    <th>NET A PAYER</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>MENSUEL</td>
+                                    <td>{{ number_format($salaire_brut,0,',',' ') }}</td>
+                                    <td>{{ number_format($total_deductions,0,',',' ') }}</td>
+                                    <td>{{ number_format(($salaire_brut - $total_deductions),0,',',' ') }}</td>
+                                </tr>
+                            </tbody>
+                        </table><br>
                     </div>
                     <div style="float: right;">
                         <a href="{{ route('admin.hr-fiche-paie.print',$data->id) }}" class="btnprn"><img src="{{ asset('img/ISSh.gif') }}" width="60" title="Télécharger d'abord le document et puis imprimer"></a> 

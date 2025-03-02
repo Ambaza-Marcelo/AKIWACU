@@ -6,7 +6,27 @@
         tr,th,td{
              border: 1px solid black;
              text-align: center;
+             width: auto;
         }
+
+        body{
+          font-size: 12px;
+        }
+
+        .watermark {
+            opacity: 0.5;
+            color: BLACK;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            }
+        .marque {
+            opacity: 0.5;
+            color: BLACK;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            }
 
     </style>
 
@@ -16,7 +36,7 @@
         <div>
             <div>
                 <div>
-                   <img src="img/eden_logo.png" width="200" height="65">
+                   <img src="img/eden_logo.png" width="200" height="85">
                 </div>
                 <div>
                     <div style="float: left;">
@@ -99,6 +119,14 @@
                         </div>
                     </div>
  
+            </div>
+            <div class="marque">
+                <img src="img/marque_eden.png" width="100" height="300">
+            </div>
+            <div class="watermark">
+                <hr>
+                        COMPTE CORILAC N° 19432;KCB N° 6690846997;BCB N° 13120-21300420003-61 ;BBCI N° 6012151/001-000-108;BANCOBU N° 15597620101-13;ECOBANK N° 38125026983;FINBANK N° 10162510011 AU NOM DE EDEN GARDEN RESORT. 
+                        <h4>www.edengardenresorts.bi | info@edengardenresorts.bi | bookings@edengardenresorts.bi | +257 79 500 500</h4>                                               
             </div>
         </div>
     </div>

@@ -19,6 +19,21 @@
             bottom: 0;
             right: 0;
             }
+
+        .marque1 {
+            opacity: 0.5;
+            color: BLACK;
+            position: absolute;
+            top: 100;
+            right: 0;
+            }
+        .marque2 {
+            opacity: 0.5;
+            color: BLACK;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            }
     </style>
 
 <body>
@@ -29,7 +44,9 @@
                    <img src="img/eden_logo.png" width="200" height="85">
                 </div>
                 <div><br>
-                           <strong style="text-decoration: underline;text-align: center;">FACTURE GLOBALE {{ $data->invoice_number }} DU {{ \Carbon\Carbon::parse($start_date)->format('d/m/Y')}} AU {{ \Carbon\Carbon::parse($end_date)->format('d/m/Y')}} </strong>
+                           <strong style="text-decoration: underline;text-align: center;">FACTURE GLOBALE DES FACTURES @foreach($factures as $facture)
+                <span>{{ $facture->invoice_number }}; </span>
+            @endforeach DU {{ \Carbon\Carbon::parse($start_date)->format('d/m/Y')}} AU {{ \Carbon\Carbon::parse($end_date)->format('d/m/Y')}} </strong>
                     </div>
                     <div><br>
                         <strong style="text-decoration: underline;text-align: center;">A. Identification du Vendeur</strong>
@@ -38,9 +55,9 @@
                     <div><br>
                           <small>NIF : {{$setting->nif}}</small><br>
                           <small>RC : {{$setting->rc}}</small><br>
-                          <small>Centre Fiscal : DMC</small><br>
-                          <small>Secteur d'activite : HOTELERIE</small><br>
-                          <small> Forme Juridique : SPRL</small><br>
+                          <small>Centre Fiscal : {{ $setting->tp_fiscal_center }}</small><br>
+                          <small>Secteur d'activite : {{ $setting->tp_activity_sector }}</small><br>
+                          <small> Forme Juridique : {{ $setting->tp_legal_form }}</small><br>
                           <small> Adresse : {{$setting->commune}}-{{$setting->zone}}</small><br>
                           <small>Telephone : {{$setting->telephone1}}/{{$setting->telephone2}}</small><br>
                           <small>Assujetti a la TVA : |oui<input type="checkbox" @if($setting->vat_taxpayer == '1') checked="checked" @endif>|Non<input type="checkbox" @if($setting->vat_taxpayer == '0') checked="checked" @endif></small>
@@ -128,7 +145,12 @@
             @foreach($factures as $facture)
                 <strong>{{ $facture->invoice_signature }} : ID </strong><br>
             @endforeach
-
+            <div class="marque1">
+                <img src="img/marque_eden.png" width="200" height="550">
+            </div>
+            <div class="marque2">
+                <img src="img/marque_eden.png" width="200" height="550">
+            </div>
             <div class="watermark">
                 <hr>
                         COMPTE CORILAC N° 19432;KCB N° 6690846997;BCB N° 13120-21300420003-61 ;BBCI N° 6012151/001-000-108;BANCOBU N° 15597620101-13;ECOBANK N° 38125026983;FINBANK N° 10162510011 AU NOM DE EDEN GARDEN RESORT. 

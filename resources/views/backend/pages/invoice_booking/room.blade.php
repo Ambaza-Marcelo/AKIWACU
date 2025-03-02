@@ -58,9 +58,9 @@
                                     <input type="date" name="end_date" class="form-control" id="end_date">
                                 </td>
                                 <td>
-                                    <select class="form-control" name="salle_id" id="salle_id">
+                                    <select class="form-control" name="room_id" id="room_id">
                                         <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                        <option value="SALLE">CHAMBRES</option>
+                                        <option value="CHAMBRE">CHAMBRES</option>
                                     </select>
                                 </td>
                                 <td>

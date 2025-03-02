@@ -65,13 +65,13 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="date_debut">@lang('DU :')</label>
-                                <input type="date" class="form-control" name="date_debut" value="{{ $data->date_debut }}" required>
+                                <input type="datetime-local" class="form-control" name="date_debut" value="{{ $data->date_debut }}" required>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="date_fin">@lang('AU :')</label>
-                                <input type="date" class="form-control" name="date_fin" value="{{ $data->date_fin }}" required>
+                                <input type="datetime-local" class="form-control" name="date_fin" value="{{ $data->date_fin }}" required>
                             </div>
                         </div>
                     </div>

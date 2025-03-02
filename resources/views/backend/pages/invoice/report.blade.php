@@ -112,9 +112,6 @@
                                     <th width="10%">Serveur</th>
                                     <th width="10%">Nom du client</th>
                                     <th width="10%">No Commande</th>
-                                    <th width="10%">Quantite</th>
-                                    <th width="10%">Montant</th>
-                                    <th width="10%"></th>
                                     <th width="10%">Action</th>
                                 </tr>
                             </thead>
@@ -127,13 +124,6 @@
                                     <td>@if($facture->employe_id){{ $facture->employe->name }} @endif</td>
                                     <td>@if($facture->client_id){{ $facture->client->customer_name }}@endif</td>
                                     <td>@if($facture->drink_order_no){{ $facture->drink_order_no }}<span class="badge badge-info">boisson</span> @elseif($facture->food_order_no){{ $facture->food_order_no }}<span class="badge badge-info">nourriture</span> @elseif($facture->barrist_order_no){{ $facture->barrist_order_no }}<span class="badge badge-info">barrist</span> @elseif($facture->bartender_order_no){{ $facture->bartender_order_no }}<span class="badge badge-info">bartender</span> @else {{ $facture->booking_no }}<span class="badge badge-info">reservation</span> @endif</td>
-                                    <td>{{ $facture->item_quantity }}</td>
-                                    <td>{{ $facture->item_total_amount }}</td>
-                                    <td>
-                                        @if($facture->electronic_signature)
-                                        {!! QrCode::size(300)->backgroundColor(255,255,255)->generate('electronic signature: '.$facture->electronic_signature.' www.edengardenresorts.bi, Designed by www.ambazamarcellin.netlify.app' ) !!}
-                                        @endif
-                                    </td>
                                     <td>
                                         @if (Auth::guard('admin')->user()->can('invoice_drink.reset'))
                                         @if($facture->etat == 0)

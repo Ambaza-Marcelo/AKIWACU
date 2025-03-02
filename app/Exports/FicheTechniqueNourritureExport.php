@@ -30,7 +30,10 @@ class FicheTechniqueNourritureExport implements FromCollection, WithMapping, Wit
             $data->food->name,
             $data->food->foodMeasurement->production_unit,
             $data->quantity,
-            ($data->food->cump / $data->food->foodMeasurement->equivalent)/$data->food->foodMeasurement->sub_equivalent
+            $data->food->cump,
+            $data->food->foodMeasurement->equivalent,
+            $data->food->foodMeasurement->sub_equivalent,
+            ($data->food->cump / $data->food->foodMeasurement->equivalent)*$data->food->foodMeasurement->sub_equivalent
         ] ;
  
  
@@ -46,7 +49,10 @@ class FicheTechniqueNourritureExport implements FromCollection, WithMapping, Wit
 			'Nom Ingredient',
 			'Unité Ingredient',
 			'Qté Ingredient',
-			'CUMP Ingredient'
+            'Cump principal',
+            'Equivalent',
+            'Sous Equivalent',
+			'Cump Final'
         ] ;
     }
 }

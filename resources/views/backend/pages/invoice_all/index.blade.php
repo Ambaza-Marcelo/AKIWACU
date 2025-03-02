@@ -94,8 +94,6 @@
                                     <th width="10%">NIF du client</th>
                                     <th width="10%">Adresse du client</th>
                                     <th width="10%">Signature Facture </th>
-                                    <th width="10%">Obr Signature electronique</th>
-                                    <th width="30%">Motif</th>
                                     <th width="10%">Action</th>
                                 </tr>
                             </thead>
@@ -117,12 +115,7 @@
                                     <td>@if($facture->client_id){{ $facture->client->customer_TIN }} @endif</td>
                                     <td>@if($facture->client_id){{ $facture->client->customer_address }} @endif</td>
                                     <td>{{ $facture->invoice_signature }}</td>
-                                    <td>
-                                        @if($facture->electronic_signature)
-                                        {!! QrCode::size(300)->backgroundColor(255,255,255)->generate('electronic signature: '.$facture->electronic_signature.' www.edengardenresorts.bi, Designed by www.ambazamarcellin.netlify.app' ) !!}
-                                        @endif
-                                    </td>
-                                    <td><span class="badge badge-danger">{{ $facture->cn_motif }}</span> ;Référence Facture : <span class="badge badge-warning">{{ $facture->invoice_ref }}</span></td>
+                            
                                     <td>
                                                                              
                                     </td>

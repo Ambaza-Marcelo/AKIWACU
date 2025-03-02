@@ -641,7 +641,6 @@ class FoodTransferController extends Controller
         foreach($datas as $data){
                 $code_store = FoodSmallStore::where('id',$data->destination_store_id)->value('code');
 
-
                 $valeurStockInitialTransit = FoodSmallStoreDetail::where('code',$code_store)->where('food_id','!=', '')->where('food_id', $data->food_id)->value('total_cump_value');
                 $quantityStockInitialTransit = FoodSmallStoreDetail::where('code',$code_store)->where('food_id','!=', '')->where('food_id', $data->food_id)->value('quantity');
                 $quantityRestantTransit = $quantityStockInitialTransit - $data->quantity_transfered;

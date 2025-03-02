@@ -170,4 +170,9 @@
 </div>
 </body>
 </html>
+<script type="text/javascript">
+    window.onafterprint = function() {
+    window.location.href = "{{ route('admin.dashboard') }}";
+    };
+</script>
 

@@ -73,7 +73,7 @@
                                     <td>{{ $data->food->name }}</td>
                                     <td>{{ $data->quantity }}</td>
                                     <td>{{ $data->food->foodMeasurement->production_unit }}</td>
-                                    <td>{{ ($data->food->cump / $data->food->foodMeasurement->equivalent)/$data->food->foodMeasurement->sub_equivalent }}</td>
+                                    <td>{{ ($data->food->cump / $data->food->foodMeasurement->equivalent)*$data->food->foodMeasurement->sub_equivalent }}</td>
                                 </tr>
                                @endforeach
                             </tbody>

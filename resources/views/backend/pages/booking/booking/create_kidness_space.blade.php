@@ -56,7 +56,7 @@
                             <select class="form-control" name="booking_client_id">
                                 <option disabled="disabled" selected="selected">Merci de choisir client</option>
                             @foreach ($clients as $client)
-                                <option value="{{ $client->id }}">{{ $client->customer_name }}/{{ $client->telephone }}</option>
+                                <option value="{{ $client->id }}" {{ $client->mail == 'clientcash@gmail.com' ? 'selected' : '' }}>{{ $client->customer_name }}/{{ $client->telephone }}</option>
                             @endforeach
                             </select>
                         </div>

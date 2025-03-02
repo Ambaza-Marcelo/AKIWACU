@@ -90,7 +90,7 @@ class FactureController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any invoice !');
         }
 
-        $factures = Facture::where('drink_order_no','!=','')->take(200)->orderBy('id','desc')->get();
+        $factures = Facture::where('drink_order_no','!=','')->take(300)->orderBy('id','desc')->get();
         return view('backend.pages.invoice.index',compact('factures'));
     }
 
@@ -693,9 +693,9 @@ class FactureController extends Controller
             }
 
             $cmp1 = collect($cumpData)->sum('cump');
-              $inflation = $cmp1 * 15/100;
-              $miscelius = $cmp1 * 5/100;
-              $cmp = $cmp1 + $inflation + $miscelius;
+            $inflation = $cmp1 * 15/100;
+            $miscelius = $cmp1 * 5/100;
+            $cmp = $cmp1 + $inflation + $miscelius;
 
           $data = array(
             'invoice_number'=>$invoice_number,

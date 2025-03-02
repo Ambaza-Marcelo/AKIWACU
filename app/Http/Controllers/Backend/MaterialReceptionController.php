@@ -678,6 +678,7 @@ class MaterialReceptionController extends Controller
                     'value_stock_initial' => $valeurStockInitialDestination,
                     'code_store' => $code_store_destination,
                     'reception_no' => $data->reception_no,
+                    'document_no' => $data->reception_no,
                     'date' => $data->date,
                     'quantity_reception' => $data->quantity_received,
                     'value_reception' => $data->total_amount_received,

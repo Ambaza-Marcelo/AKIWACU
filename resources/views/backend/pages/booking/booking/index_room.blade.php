@@ -78,8 +78,8 @@
                                     <td>@if($booking->room_id) {{ $booking->room->name }} @endif</td>
                                     <td>{{ $booking->quantity }}</td>
                                     <td>{{ number_format($booking->total_amount_selling,0,',',' ') }}</td>
-                                    <td>{{ $booking->date_debut }}</td>
-                                    <td>{{ $booking->date_fin }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($booking->date_debut)->format('d/m/Y H:i:s') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($booking->date_fin)->format('d/m/Y H:i:s') }}</td>
                                     @if($booking->status == 1)
                                     <td><span  class="badge badge-success">Validée</span></td>
                                     @elseif($booking->status == -1)
@@ -94,10 +94,8 @@
                                     <td>{{ $booking->description }}</td>
                                     <td>{{ $booking->created_by }}</td>
                                     <td>
-                                        @if (Auth::guard('admin')->user()->can('booking.create'))
-                                        @if($booking->status == 0 || $booking->status == 1)
+                                        @if (Auth::guard('admin')->user()->can('booking.view'))
                                         <a href="{{ route('admin.bookings.generatepdf',$booking->booking_no) }}"><img src="{{ asset('img/ISSh.gif') }}" width="60" title="Télécharger d'abord le document et puis imprimer"></a>
-                                        @endif
                                         @endif
                                         @if (Auth::guard('admin')->user()->can('booking.validate'))
                                         @if($booking->status == 0 || $booking->status == -1)

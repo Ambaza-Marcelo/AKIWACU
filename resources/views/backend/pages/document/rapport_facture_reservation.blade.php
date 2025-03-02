@@ -21,7 +21,7 @@
         <div>
             <div>
                <div>
-                   <img src="img/eden_logo.png" width="150" height="85">
+                   <img src="img/eden_logo.png" width="200" height="85">
                 </div>
                 <div>
                     <div style="float: left;">
@@ -62,8 +62,8 @@
                                     <td>{{ \Carbon\Carbon::parse($data->invoice_date)->format('d/m/Y') }}</td>
                                     <td>{{ $data->booking_no }}</td>
                                     <td>{{ $data->invoice_number }}</td>
-                                    <td>@if($data->client_id){{ $data->client->customer_name }} @elseif($data->booking_client_id) {{ $data->bookingClient->customer_name }} @else {{ $data->customer_name }} @endif</td>
-                                    <td>@if($data->salle_id){{ $data->salle->name }} @elseif($data->service){{ $data->service->name }} @elseif($data->table_id){{ $data->table->name }} @elseif($data->kidness_space_id){{ $data->kidnessSpace->name }} @elseif($data->swiming_pool_id){{ $data->swimingPool->name }} @elseif($data->breakfast_id)BREAKFAST @endif</td>
+                                    <td>@if($data->client_id){{ $data->client->customer_name }} @else {{ $data->customer_name }} @endif</td>
+                                    <td>@if($data->salle_id){{ $data->salle->name }} @elseif($data->service){{ $data->service->name }} @elseif($data->room_id){{ $data->room->name }} @elseif($data->kidness_space_id){{ $data->kidnessSpace->name }} @elseif($data->swiming_pool_id){{ $data->swimingPool->name }} @elseif($data->breakfast_id)BREAKFAST @endif</td>
                                     <td>{{ $data->item_quantity }}</td>
                                     <td>{{ number_format($data->item_price_nvat,3,',',' ') }}</td>
                                     <td>{{ number_format($data->vat,3,',',' ') }}</td>
@@ -108,7 +108,7 @@
                                     <td>{{ $data->booking_no }}</td>
                                     <td>{{ $data->invoice_number }}</td>
                                     <td>@if($data->client_id){{ $data->client->customer_name }} @elseif($data->booking_client_id) {{ $data->bookingClient->customer_name }} @else {{ $data->customer_name }} @endif</td>
-                                    <td>@if($data->salle_id){{ $data->salle->name }} @elseif($data->service){{ $data->service->name }} @elseif($data->table_id){{ $data->table->name }} @elseif($data->kidness_space_id){{ $data->kidnessSpace->name }} @elseif($data->swiming_pool_id){{ $data->swimingPool->name }} @elseif($data->breakfast_id)BREAKFAST @endif</td>
+                                    <td>@if($data->salle_id){{ $data->salle->name }} @elseif($data->service){{ $data->service->name }} @elseif($data->room_id){{ $data->room->name }} @elseif($data->table_id){{ $data->table->name }} @elseif($data->kidness_space_id){{ $data->kidnessSpace->name }} @elseif($data->swiming_pool_id){{ $data->swimingPool->name }} @elseif($data->breakfast_id)BREAKFAST @endif</td>
                                     <td>{{ $data->item_quantity }}</td>
                                     <td>{{ number_format($data->item_price_nvat,3,',',' ') }}</td>
                                     <td>{{ number_format($data->vat,3,',',' ') }}</td>

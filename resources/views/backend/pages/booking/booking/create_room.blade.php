@@ -116,7 +116,7 @@
                         <div class="col-lg-12">
                             <label for="description">@lang('messages.description')</label>
                             <textarea class="form-control" name="description" id="description" placeholder="Enter Description">
-                                RESERVATION DE CHAMBRE
+                                Contact : Tel : +257 79 500 500 E-mail : bookings@edengardenresorts.bi *****Nous espérons vous accueillir très bientôt*****
                             </textarea>
                         </div>
                         <div style="margin-top: 15px;margin-left: 15px;">

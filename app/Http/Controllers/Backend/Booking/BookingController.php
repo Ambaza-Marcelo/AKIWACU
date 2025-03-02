@@ -1301,17 +1301,19 @@ class BookingController extends Controller
         $description = BookingBooking::where('booking_no', $booking_no)->value('description');
         $booking_signature = BookingBooking::where('booking_no', $booking_no)->value('booking_signature');
         $date = BookingBooking::where('booking_no', $booking_no)->value('created_at');
-        $data = BookingBooking::where('booking_no', $booking_no)->first();
+        $data = BookingBookingDetail::where('booking_no', $booking_no)->first();
+        $totalAmount = BookingBookingDetail::where('booking_no', '=', $booking_no)
+            ->sum('total_amount_selling');
 
            $booking_no = BookingBooking::where('booking_no', $booking_no)->value('booking_no');
 
            $datas = BookingBookingDetail::where('booking_no', $booking_no)->get();
-           $pdf = PDF::loadView('backend.pages.booking.document.demande_reservation',compact('datas','booking_no','setting','description','booking_signature','date','data'));//->setPaper('a6', 'portrait');
+           $pdf = PDF::loadView('backend.pages.booking.document.demande_reservation',compact('datas','booking_no','totalAmount','setting','description','booking_signature','date','data'));//->setPaper('a6', 'portrait');
 
            Storage::put('public/reservation/'.$booking_no.'.pdf', $pdf->output());
 
            // download pdf file
-           return $pdf->download($booking_no.'.pdf'); 
+           return $pdf->download('FICHE DE RESERVATION '.$booking_no.'.pdf'); 
 
 
         

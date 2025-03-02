@@ -242,7 +242,7 @@ class EmployeController extends Controller
         $employe = HrEmploye::findOrFail($id);
         $employe->firstname = $request->firstname;
         $employe->lastname = $request->lastname;
-        //$employe->phone_no = $request->phone_no;
+        $employe->phone_no = $request->phone_no;
         $employe->mail = $request->mail;
         $employe->fathername = $request->fathername;
         $employe->mothername = $request->mothername;
@@ -255,7 +255,7 @@ class EmployeController extends Controller
         $employe->zone = $request->zone;
         $employe->quartier = $request->quartier;
         $employe->gender = $request->gender;
-        //$employe->children_number = $request->children_number;
+        $employe->children_number = $request->children_number;
         $employe->province_residence_actuel = $request->province_residence_actuel;
         $employe->commune_residence_actuel = $request->commune_residence_actuel;
         $employe->zone_residence_actuel = $request->zone_residence_actuel;

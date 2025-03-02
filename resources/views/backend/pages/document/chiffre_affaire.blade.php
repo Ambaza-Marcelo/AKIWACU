@@ -6,12 +6,37 @@
         tr,th,td{
              border: 1px solid black;
              width: auto;
-             font-size: 16px;
              text-align: center;
         }
         .signature{
             display: flex;
         }
+        body{
+          font-size: 14px;
+        }
+
+        .watermark {
+            opacity: 0.5;
+            color: BLACK;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            }
+
+        .marque1 {
+            opacity: 0.5;
+            color: BLACK;
+            position: absolute;
+            top: 0;
+            right: 0;
+            }
+        .marque2 {
+            opacity: 0.5;
+            color: BLACK;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            }
     </style>
 </head>
 
@@ -56,9 +81,9 @@
                             <tbody>
                                <tr>
                                 @php
-                                    $chiffre_affaire=$ca-($note_credit*2);
-                                    $pvhtva = $total_item_price_nvat-($note_credit_pvhtva*2);
-                                    $tva = $total_vat-($note_credit_tva*2);
+                                    $chiffre_affaire=$ca;
+                                    $pvhtva = $total_item_price_nvat;
+                                    $tva = $total_vat;
                                 @endphp
                                    <td>{{ number_format($chiffre_affaire,0,',',' ') }}</td>
                                    <td>{{ number_format($pvhtva,0,',',' ') }}</td>
@@ -69,6 +94,17 @@
                             </tbody>
                         </table>
                     </div>
+                    <div class="marque1">
+                        <img src="img/marque_eden.png" width="200" height="550">
+                    </div>
+                    <div class="marque2">
+                        <img src="img/marque_eden.png" width="200" height="550">
+                    </div>
+                    <div class="watermark">
+                    <hr>
+                        COMPTE CORILAC N° 19432;KCB N° 6690846997;BCB N° 13120-21300420003-61 ;BBCI N° 6012151/001-000-108;BANCOBU N° 15597620101-13;ECOBANK N° 38125026983;FINBANK N° 10162510011 AU NOM DE EDEN GARDEN RESORT. 
+                        <h4>www.edengardenresorts.bi | info@edengardenresorts.bi | bookings@edengardenresorts.bi | +257 79 500 500</h4>                                               
+            </div>
                 </div>
             </div>
         </div>

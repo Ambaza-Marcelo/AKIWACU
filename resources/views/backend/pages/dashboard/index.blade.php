@@ -242,11 +242,11 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
             </div>
         </div>
         @endif
-    @if (Auth::guard('admin')->user()->can('employe.edit'))
+    @if (Auth::guard('admin')->user()->can('employe.view'))
     <div class="row">
-        <h2>TOP 5 DES SERVEURS QUI PROVOQUE L'ANNULATION DES FACTURES </h2>
+        <h2>TOP 5 DES SERVEURS QUI PROVOQUE L'ANNULATION DES FACTURES </h2><br>
         @foreach($employes as $employe)
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <div class="card">
                     <div class="seo-fact sbg3">
                             <div class="p-4 d-flex justify-content-between align-items-center">

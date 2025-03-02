@@ -82,7 +82,7 @@
                                             <a class="btn btn-success text-white" href="{{ route('admin.hr-employes.edit', $employe->id) }}">Editer</a>
                                         @endif
 
-                                        @if (Auth::guard('admin')->user()->can('hr_employe.edit'))
+                                        @if (Auth::guard('admin')->user()->can('hr_employe.delete'))
                                             <a class="btn btn-danger text-white" href="{{ route('admin.hr-employes.destroy', $employe->id) }}"
                                             onclick="event.preventDefault(); document.getElementById('delete-form-{{ $employe->id }}').submit();">
                                                 Supprimer

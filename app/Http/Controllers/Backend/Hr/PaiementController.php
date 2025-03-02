@@ -75,7 +75,7 @@ class PaiementController extends Controller
         $journal_paie = HrJournalPaie::where('etat', 0)->first();
 
         $employes = HrEmploye::where('company_id',$company_id)->whereNotIn('id', function($q){
-        $q->select('employe_id')->where('code','0003')->where('employe_id','!=','')->from('hr_paiements');
+        $q->select('employe_id')->where('code','0001')->where('employe_id','!=','')->from('hr_paiements');
         })->orderBy('firstname')->get();
         
 
@@ -315,9 +315,9 @@ class PaiementController extends Controller
             abort(403, 'Pardon!! vous n\'avez pas l\'autorisation de modifier l\'employé! Mufise ico mubaza hamagara kuri 130 canke 122');
         }
 
-        $employe_id = HrPaiement::where('id',$id)->where('company_id',$company_id)->where('employe_id','!=','')->value('employe_id');
+        $employe_id = HrPaiement::where('id',$id)->where('company_id',$company_id)->value('employe_id');
         $code = HrPaiement::where('id',$id)->where('company_id',$company_id)->where('employe_id','!=','')->value('code');
-        $data = HrPaiement::where('code',$code)->where('company_id',$company_id)->where('employe_id','!=','')->where('employe_id',$employe_id)->first();
+        $data = HrPaiement::where('code',$code)->where('company_id',$company_id)->where('employe_id',$employe_id)->first();
 
         $employes = HrEmploye::orderBy('firstname','asc')->get();
 
@@ -386,32 +386,52 @@ class PaiementController extends Controller
         $created_by = $this->user->name;
             
 
+      $indemnite_deplacement = HrEmploye::where('id',$employe_id)->value('indemnite_deplacement');
+      $indemnite_logement = HrEmploye::where('id',$employe_id)->value('indemnite_logement');
+      $prime_fonction = HrEmploye::where('id',$employe_id)->value('prime_fonction');
 
-      $indemnite_deplacement = ($somme_salaire_base * 15)/100;
-      $indemnite_logement = ($somme_salaire_base * 60)/100;
-      $prime_fonction = $request->prime_fonction;
-
-
-       $salaire_brut = $somme_salaire_base + $allocation_familiale + 
+      $salaire_brut = $somme_salaire_base + $allocation_familiale + 
        $indemnite_logement + $indemnite_deplacement + $prime_fonction;
 
 
-        if ($salaire_brut < 450000) {
+            if ($salaire_brut < 450000) {
                 $inss = ($salaire_brut * 4)/100;
                 $somme_cotisation_inss = ($salaire_brut * 4)/100;
-                $inss_employeur = ($salaire_brut * 4)/100;
+                $inss_employeur = ($salaire_brut * 6)/100;
             }else{
                 $inss = (450000 * 4)/100;
                 $somme_cotisation_inss = ($plafond_cotisation * 4)/100;
                 $inss_employeur = ($plafond_cotisation * 6)/100;
             }
 
-            if ($salaire_brut < 250000) {
-                $assurance_maladie_employe = 0;
-                $assurance_maladie_employeur = 15000;
+            if ($salaire_brut >= 2000000) {
+                $base_assurance_maladie = 2000000;
+                $assurance_maladie_employe = $base_assurance_maladie * 4 /100;
+                $assurance_maladie_employeur = $base_assurance_maladie * 6 /100;
+            }elseif ($salaire_brut >= 1000000 && $salaire_brut < 2000000) {
+                $base_assurance_maladie = 1000000;
+                $assurance_maladie_employe = $base_assurance_maladie * 4 /100;
+                $assurance_maladie_employeur = $base_assurance_maladie * 6 /100;
+            }elseif ($salaire_brut >= 500000 && $salaire_brut < 1000000) {
+                $base_assurance_maladie = 500000;
+                $assurance_maladie_employe = $base_assurance_maladie * 4 /100;
+                $assurance_maladie_employeur = $base_assurance_maladie * 6 /100;
+            }elseif ($salaire_brut >= 400000 && $salaire_brut < 500000) {
+                $base_assurance_maladie = 400000;
+                $assurance_maladie_employe = $base_assurance_maladie * 4 /100;
+                $assurance_maladie_employeur = $base_assurance_maladie * 6 /100;
+            }elseif ($salaire_brut >= 300000 && $salaire_brut < 400000) {
+                $base_assurance_maladie = 300000;
+                $assurance_maladie_employe = $base_assurance_maladie * 4 /100;
+                $assurance_maladie_employeur = $base_assurance_maladie * 6 /100;
+            }elseif ($salaire_brut >= 250000 && $salaire_brut < 300000) {
+                $base_assurance_maladie = 250000;
+                $assurance_maladie_employe = $base_assurance_maladie * 4 /100;
+                $assurance_maladie_employeur = $base_assurance_maladie * 6 /100;
             }else{
-                $assurance_maladie_employe = 6000;
-                $assurance_maladie_employeur = 9000;
+                $base_assurance_maladie = 200000;
+                $assurance_maladie_employe = $base_assurance_maladie * 4 /100;
+                $assurance_maladie_employeur = $base_assurance_maladie * 6 /100;
             }
 
 
@@ -426,11 +446,10 @@ class PaiementController extends Controller
                 $somme_impot = 30000 + (($base_imposable - 300000) * 30)/100;    
             }
 
-
-    $somme_salaire_brut_imposable = $salaire_brut;
-    $somme_salaire_brut_non_imposable = $salaire_brut;
-    $somme_salaire_net_imposable = $salaire_brut - $somme_cotisation_inss - $somme_impot;
-    $somme_salaire_net_non_imposable = $salaire_brut - $somme_cotisation_inss - $somme_impot;
+        $somme_salaire_brut_imposable = $salaire_brut;
+        $somme_salaire_brut_non_imposable = $salaire_brut;
+        $somme_salaire_net_imposable = $salaire_brut - $somme_cotisation_inss - $somme_impot;
+        $somme_salaire_net_non_imposable = $salaire_brut - $somme_cotisation_inss - $somme_impot;
 
 
         $employe_id = HrPaiement::where('id',$id)->where('company_id',$company_id)->where('employe_id','!=','')->value('employe_id');

@@ -155,7 +155,25 @@
                             <tbody>
                                 <tr>
                                     <td>ASSURANCE MALADIE</td>
-                                    <td>@if($salaire_brut < 250000){{ number_format($salaire_brut,0,',',' ') }} @else 250 000 @endif</td>
+                                    @php
+
+                                        if ($salaire_brut >= 2000000) {
+                                            $base_assurance_maladie = 2000000;
+                                        }elseif ($salaire_brut >= 1000000 && $salaire_brut < 2000000)                           {
+                                            $base_assurance_maladie = 1000000;
+                                        }elseif ($salaire_brut >= 500000 && $salaire_brut < 1000000) {
+                                            $base_assurance_maladie = 500000;
+                                        }elseif ($salaire_brut >= 400000 && $salaire_brut < 500000) {
+                                            $base_assurance_maladie = 400000;
+                                        }elseif ($salaire_brut >= 300000 && $salaire_brut < 400000) {
+                                            $base_assurance_maladie = 300000;
+                                        }elseif ($salaire_brut >= 250000 && $salaire_brut < 300000) {
+                                            $base_assurance_maladie = 250000;
+                                        }else{
+                                            $base_assurance_maladie = 200000;
+                                        }
+                                    @endphp
+                                    <td>{{ number_format($base_assurance_maladie,0,',',' ') }}</td>
                                     <td></td>
                                     <td>{{ number_format($data->assurance_maladie_employe,0,',',' ') }}</td>
                                     <td>{{ number_format($data->assurance_maladie_employeur,0,',',' ') }}</td>

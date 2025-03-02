@@ -21,7 +21,7 @@
         <div>
             <div>
                <div>
-                   <img src="img/eden_logo.png" width="150" height="85">
+                   <img src="img/eden_logo.png" width="200" height="85">
                 </div>
                 <div>
                     <div style="float: left;">
