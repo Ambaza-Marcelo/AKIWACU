@@ -15,6 +15,7 @@ use App\Models\MaterialPurchase;
 use App\Models\MaterialPurchaseDetail;
 use App\Models\MaterialSupplierOrder;
 use App\Models\MaterialSupplierOrderDetail;
+use App\Models\MaterialReception;
 use App\Models\Supplier;
 use App\Exports\MaterialSupplierOrderExport;
 use Validator;
@@ -64,8 +65,9 @@ class MaterialSupplierOrderController extends Controller
 
         $materials  = Material::orderBy('name','asc')->get();
         $suppliers  = Supplier::orderBy('supplier_name','asc')->get();
+        $data = MaterialPurchaseDetail::where('purchase_no', $purchase_no)->first();
         $datas = MaterialPurchaseDetail::where('purchase_no', $purchase_no)->get();
-        return view('backend.pages.material_supplier_order.create', compact('materials','purchase_no','datas','suppliers'));
+        return view('backend.pages.material_supplier_order.create', compact('materials','purchase_no','datas','data','suppliers'));
     }
 
     /**
@@ -84,11 +86,15 @@ class MaterialSupplierOrderController extends Controller
 
         $rules = array(
                 'material_id.*'  => 'required',
+                'date'  => 'required',
+                'vat_supplier_payer'  => 'required',
+                //'vat_rate'  => 'required',
+                //'invoice_currency'  => 'required',
                 'supplier_id'  => 'required',
                 'quantity.*'  => 'required',
                 'purchase_price.*'  => 'required',
                 'purchase_no'  => 'required',
-                'description'  => 'required'
+                'description'  => 'required|max:490'
             );
 
             $error = Validator::make($request->all(),$rules);
@@ -105,12 +111,20 @@ class MaterialSupplierOrderController extends Controller
             $date = Carbon::now();
             $purchase_no = $request->purchase_no;
             $description =$request->description; 
-            $supplier_id =$request->supplier_id; 
+            $vat_supplier_payer = $request->vat_supplier_payer;
+            $vat_rate = $request->vat_rate;
+            $invoice_currency = $request->invoice_currency;
+            $supplier_id = $request->supplier_id;
             $quantity = $request->quantity;
             $purchase_price = $request->purchase_price;
-            
 
-            $latest = MaterialSupplierOrder::latest()->first();
+            if (!empty($vat_rate)) {
+                $vat_rate = $vat_rate;
+            }else{
+                $vat_rate = 0;
+            }
+
+            $latest = MaterialSupplierOrder::orderBy('id','desc')->first();
             if ($latest) {
                $order_no = 'BCF' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{
@@ -118,22 +132,38 @@ class MaterialSupplierOrderController extends Controller
             }
 
             $created_by = $this->user->name;
-
+            
             $order_signature = config('app.tin_number_company').Carbon::parse(Carbon::now())->format('YmdHis')."/".$order_no;
 
+            for($count = 0; $count < count($material_id); $count++){
+                if($vat_supplier_payer == 1){
+                    $price_nvat = ($purchase_price[$count]*$quantity[$count]);
+                    $vat = ($price_nvat* $vat_rate)/100;
+                    $price_wvat = $price_nvat + $vat;
 
-            for( $count = 0; $count < count($material_id); $count++ ){
-                $total_value = $quantity[$count] * $purchase_price[$count];
+                }else{
+                    $price_nvat = ($purchase_price[$count]*$quantity[$count]);
+                    $vat = 0;
+                    $price_wvat = $price_nvat + $vat;
+                }
+
+                $total_value = $price_wvat;
+
                 $data = array(
                     'material_id' => $material_id[$count],
                     'date' => $date,
                     'quantity' => $quantity[$count],
-                    'quantity' => $quantity[$count],
+                    'vat_supplier_payer' => $vat_supplier_payer,
+                    'vat_rate' => $vat_rate,
+                    'invoice_currency' => $invoice_currency,
+                    'supplier_id' => $supplier_id,
                     'purchase_price' => $purchase_price[$count],
+                    'price_nvat' => $price_nvat,
+                    'vat' => $vat,
+                    'price_wvat' => $price_wvat,
                     'total_value' => $total_value,
                     'purchase_no' => $purchase_no,
                     'order_no' => $order_no,
-                    'supplier_id' => $supplier_id,
                     'order_signature' => $order_signature,
                     'created_by' => $created_by,
                     'description' => $description,
@@ -154,12 +184,22 @@ class MaterialSupplierOrderController extends Controller
             $order->order_no = $order_no;
             $order->order_signature = $order_signature;
             $order->purchase_no = $purchase_no;
+            $order->vat_supplier_payer = $vat_supplier_payer;
+            $order->vat_rate = $vat_rate;
+            $order->invoice_currency = $invoice_currency;
             $order->supplier_id = $supplier_id;
             $order->created_by = $created_by;
             $order->status = 1;
             $order->description = $description;
             $order->created_at = \Carbon\Carbon::now();
             $order->save();
+
+            $purchase_no = MaterialSupplierOrder::where('order_no',$order_no)->value('purchase_no');
+
+            MaterialPurchase::where('purchase_no', '=', $purchase_no)
+                ->update(['status' => -3]);
+            MaterialPurchaseDetail::where('purchase_no', '=', $purchase_no)
+                ->update(['status' => -3]);
 
             DB::commit();
             session()->flash('success', 'order has been created !!');
@@ -197,12 +237,18 @@ class MaterialSupplierOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($order_no)
+    public function edit($purchase_no)
     {
         if (is_null($this->user) || !$this->user->can('material_supplier_order.edit')) {
             abort(403, 'Sorry !! You are Unauthorized to edit any order !');
         }
 
+        $materials  = Material::orderBy('name','asc')->get();
+        $suppliers  = Supplier::orderBy('supplier_name','asc')->get();
+        $data = MaterialPurchaseDetail::where('purchase_no', $purchase_no)->first();
+        $datas = MaterialPurchaseDetail::where('purchase_no', $purchase_no)->get();
+        return view('backend.pages.material_supplier_order.edit', compact('materials','purchase_no','datas','data','suppliers'));
+        
     }
 
     /**
@@ -218,7 +264,134 @@ class MaterialSupplierOrderController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to edit any order !');
         }
 
-        
+        $order_no = MaterialSupplierOrder::where('purchase_no',$purchase_no)->value('order_no');
+
+        $order = MaterialSupplierOrder::where('order_no',$order_no)->first();
+
+        $rules = array(
+                'material_id.*'  => 'required',
+                'date'  => 'required',
+                'vat_supplier_payer'  => 'required',
+                //'vat_rate'  => 'required',
+                //'invoice_currency'  => 'required',
+                'supplier_id'  => 'required',
+                'quantity.*'  => 'required',
+                'purchase_price.*'  => 'required',
+                'purchase_no'  => 'required',
+                'description'  => 'required|max:490'
+            );
+
+            $error = Validator::make($request->all(),$rules);
+
+            if($error->fails()){
+                return response()->json([
+                    'error' => $error->errors()->all(),
+                ]);
+            }
+
+            try {DB::beginTransaction();
+
+            $reception_no = MaterialReception::where('order_no',$order_no)->value('reception_no');
+
+            if (!empty($reception_no)) {
+                $status = -3;
+            }else{
+                $status = 3;
+            }
+
+            $material_id = $request->material_id;
+            $date = Carbon::now();
+            $purchase_no = $request->purchase_no;
+            $description =$request->description; 
+            $vat_supplier_payer = $request->vat_supplier_payer;
+            $vat_rate = $request->vat_rate;
+            $invoice_currency = $request->invoice_currency;
+            $supplier_id = $request->supplier_id;
+            $quantity = $request->quantity;
+            $purchase_price = $request->purchase_price;
+
+            if (!empty($vat_rate)) {
+                $vat_rate = $vat_rate;
+            }else{
+                $vat_rate = 0;
+            }
+            
+
+            $created_by = $this->user->name;
+
+            for( $count = 0; $count < count($material_id); $count++ ){
+
+                if($vat_supplier_payer == 1){
+                    $price_nvat = ($purchase_price[$count]*$quantity[$count]);
+                    $vat = ($price_nvat* $vat_rate)/100;
+                    $price_wvat = $price_nvat + $vat;
+
+                }else{
+                    $price_nvat = ($purchase_price[$count]*$quantity[$count]);
+                    $vat = 0;
+                    $price_wvat = $price_nvat + $vat;
+                }
+
+                $order_signature = MaterialSupplierOrder::where('order_no',$order_no)->value('order_signature');
+
+                $total_value = $price_wvat;
+                $data = array(
+                    'material_id' => $material_id[$count],
+                    'date' => $date,
+                    'quantity' => $quantity[$count],
+                    'vat_supplier_payer' => $vat_supplier_payer,
+                    'vat_rate' => $vat_rate,
+                    'invoice_currency' => $invoice_currency,
+                    'supplier_id' => $supplier_id,
+                    'purchase_price' => $purchase_price[$count],
+                    'price_nvat' => $price_nvat,
+                    'vat' => $vat,
+                    'price_wvat' => $price_wvat,
+                    'total_value' => $total_value,
+                    'purchase_no' => $purchase_no,
+                    'order_no' => $order_no,
+                    'order_signature' => $order_signature,
+                    'created_by' => $created_by,
+                    'description' => $description,
+                    'status' => $status,
+                    'created_at' => \Carbon\Carbon::now()
+
+                );
+                $insert_data[] = $data;
+
+                
+            }
+
+            MaterialSupplierOrderDetail::where('order_no',$order_no)->delete();
+
+            MaterialSupplierOrderDetail::insert($insert_data);
+
+
+            //edit order
+            $order->date = $date;
+            $order->purchase_no = $purchase_no;
+            $order->vat_supplier_payer = $vat_supplier_payer;
+            $order->vat_rate = $vat_rate;
+            $order->invoice_currency = $invoice_currency;
+            $order->supplier_id = $supplier_id;
+            $order->created_by = $created_by;
+            $order->status = $status;
+            $order->description = $description;
+            $order->created_at = \Carbon\Carbon::now();
+            $order->save();
+
+            DB::commit();
+            session()->flash('success', 'order has been created !!');
+            return redirect()->route('admin.material-supplier-orders.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
     }
 
     public function validateOrder($order_no)
@@ -234,8 +407,7 @@ class MaterialSupplierOrderController extends Controller
             MaterialSupplierOrderDetail::where('order_no', '=', $order_no)
                 ->update(['status' => 2,'validated_by' => $this->user->name]);
 
-
-            DB::commit();
+                DB::commit();
             session()->flash('success', 'order has been validated !!');
             return back();
         } catch (\Exception $e) {
@@ -247,6 +419,7 @@ class MaterialSupplierOrderController extends Controller
 
             throw $e;
         }
+
     }
 
     public function reject($order_no)
@@ -262,7 +435,7 @@ class MaterialSupplierOrderController extends Controller
             MaterialSupplierOrderDetail::where('order_no', '=', $order_no)
                 ->update(['status' => -1,'rejected_by' => $this->user->name]);
 
-        DB::commit();
+                DB::commit();
             session()->flash('success', 'Order has been rejected !!');
             return back();
         } catch (\Exception $e) {
@@ -274,6 +447,7 @@ class MaterialSupplierOrderController extends Controller
 
             throw $e;
         }
+
     }
 
     public function reset($order_no)
@@ -289,7 +463,7 @@ class MaterialSupplierOrderController extends Controller
             MaterialSupplierOrderDetail::where('order_no', '=', $order_no)
                 ->update(['status' => 1,'reseted_by' => $this->user->name]);
 
-        DB::commit();
+         DB::commit();
             session()->flash('success', 'Order has been reseted !!');
             return back();
         } catch (\Exception $e) {
@@ -301,6 +475,7 @@ class MaterialSupplierOrderController extends Controller
 
             throw $e;
         }
+
     }
 
     public function confirm($order_no)
@@ -377,20 +552,26 @@ class MaterialSupplierOrderController extends Controller
         $description = MaterialSupplierOrder::where('order_no', $order_no)->value('description');
         $date = MaterialSupplierOrder::where('order_no', $order_no)->value('date');
         $data = MaterialSupplierOrder::where('order_no', $order_no)->first();
-        if($stat == 2 && $stat == 3 || $stat == 4 || $stat == 5){
+        if($stat == 2 || $stat == 3 || $stat == 4 || $stat == 5 || $stat == -3){
            $order_no = MaterialSupplierOrder::where('order_no', $order_no)->value('order_no');
            $order_signature = MaterialSupplierOrder::where('order_no', $order_no)->value('order_signature');
            $totalValue = DB::table('material_supplier_order_details')
             ->where('order_no', '=', $order_no)
             ->sum('total_value');
+            $price_nvat = DB::table('material_supplier_order_details')
+            ->where('order_no', '=', $order_no)
+            ->sum('price_nvat');
+            $vat = DB::table('material_supplier_order_details')
+            ->where('order_no', '=', $order_no)
+            ->sum('vat');
 
            $datas = MaterialSupplierOrderDetail::where('order_no', $order_no)->get();
-           $pdf = PDF::loadView('backend.pages.document.material_supplier_order',compact('datas','order_no','setting','description','date','order_signature','totalValue','data'));
+           $pdf = PDF::loadView('backend.pages.document.material_supplier_order',compact('datas','order_no','setting','description','date','order_signature','totalValue','data','price_nvat','vat'));
 
-           Storage::put('public/pdf/material_supplier_order/'.'FICHE_COMMANDE_'.$order_no.'.pdf', $pdf->output());
+           Storage::put('public/pdf/material_supplier_order/'.'BON DE COMMANDE FOURNISSEUR '.$order_no.'.pdf', $pdf->output());
 
            // download pdf file
-           return $pdf->download('FICHE_COMMANDE_'.$order_no.'.pdf'); 
+           return $pdf->download('BON DE COMMANDE FOURNISSEUR '.$order_no.'.pdf'); 
            
         }else if ($stat == -1) {
             session()->flash('error', 'Order has been rejected !!');
@@ -400,11 +581,6 @@ class MaterialSupplierOrderController extends Controller
             return back();
         }
         
-    }
-
-    public function exportToExcel(Request $request)
-    {
-        return Excel::download(new MaterialSupplierOrderExport, 'RAPPORT_ACHAT_COMMANDE.xlsx');
     }
 
     /**
@@ -418,17 +594,17 @@ class MaterialSupplierOrderController extends Controller
         if (is_null($this->user) || !$this->user->can('material_supplier_order.delete')) {
             abort(403, 'Sorry !! You are Unauthorized to delete any order !');
         }
-
+        /*
         try {DB::beginTransaction();
 
         $order = MaterialSupplierOrder::where('order_no',$order_no)->first();
         if (!is_null($order)) {
-            $order->delete();           
+            $order->delete();
             MaterialSupplierOrderDetail::where('order_no',$order_no)->delete();
         }
 
         DB::commit();
-            session()->flash('success', 'Order has been deleted !!');
+            session()->flash('success', 'Transfer has been deleted !!');
             return back();
         } catch (\Exception $e) {
             // An error occured; cancel the transaction...
@@ -439,5 +615,6 @@ class MaterialSupplierOrderController extends Controller
 
             throw $e;
         }
+        */
     }
 }

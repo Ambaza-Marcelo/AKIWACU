@@ -15,9 +15,14 @@
     <div>
         <div>
             <div>
-                <div>
-                   <img src="img/eden_logo.png" width="200" height="85">
-                </div>
+                <table>
+                    <tr>
+                        <td><img src="img/eden_logo.png" width="180" height="85"></td>
+                        <td><small> &nbsp;&nbsp;{{$setting->commune}}-{{$setting->zone}},{{$setting->rue}}</small><br>
+                          <small>&nbsp;&nbsp;{{$setting->telephone1}}-{{$setting->telephone2}}</small><br>
+                          <small>&nbsp;&nbsp;{{$setting->email}}</small></td>
+                    </tr>
+                </table><br>
                 <div>
                     <div style="float: right; border-top-right-radius: 10px solid black;border-top-left-radius: 10px solid black;border-bottom-right-radius: 10px solid black;border-bottom-left-radius: 10px solid black; background-color: rgb(150,150,150);width: 242px;padding: 20px;">
                         <small>

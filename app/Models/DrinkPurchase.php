@@ -21,5 +21,10 @@ class DrinkPurchase extends Model
         'rejected_by',
         'reseted_by',
         'status',
+        'supplier_id'
     ];
+
+    public function supplier(){
+        return $this->belongsTo('App\Models\Supplier');
+    }
 }

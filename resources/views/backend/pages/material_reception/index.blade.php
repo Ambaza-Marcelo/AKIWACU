@@ -42,6 +42,21 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="header-title float-left">material reception List</h4>
+                    <form action="#" method="GET">
+                        <p class="float-right mb-2">
+                            <button type="submit" value="pdf" class="btn btn-info">Exporter En PDF</button>
+                        </p>
+                        <p class="float-right mb-2">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input type="date" name="start_date" class="form-control">
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="date" name="end_date" class="form-control">
+                                </div>
+                            </div>
+                        </p>
+                    </form><br>
                     <form action="{{ route('admin.material-receptions.export-to-excel')}}" method="GET">
                         <p class="float-right mb-2">
                             <button type="submit" value="pdf" class="btn btn-success">Exporter En Excel</button>
@@ -66,7 +81,8 @@
                                     <th width="5%">#</th>
                                     <th width="10%">@lang('messages.date')</th>
                                     <th width="10%">Reception No</th>
-                                    <th width="10%">Order/Purchase No</th>
+                                    <th width="10%">Reception Signature</th>
+                                    <th width="10%">Order No</th>
                                     <th width="5%">@lang('messages.status')</th>
                                     <th width="10%">Invoice No</th>
                                     <th width="10%">Invoice Currency</th>
@@ -85,14 +101,15 @@
                                     <td>{{ $loop->index+1 }}</td>
                                     <td>{{ \Carbon\Carbon::parse($reception->date)->format('d/m/Y') }}</td>
                                     <td><a href="{{ route('admin.material-receptions.show',$reception->reception_no)}}">{{ $reception->reception_no }}</a></td>
-                                    <td><a href="@if($reception->order_no){{ route('admin.material-supplier-orders.show',$reception->order_no)}} @else {{ route('admin.material-requisitions.show',$reception->purchase_no)}} @endif">@if($reception->order_no){{ $reception->order_no }} @else {{ $reception->purchase_no }} @endif</a></td>
-                                    <td>@if($reception->status == 1)<img src="{{ asset('img/warning3.gif')}}" width="35">@elseif($reception->status == 1)<span class="badge badge-info">Encours</span> @elseif($reception->status == 2)<span class="badge badge-info">Validé</span> @elseif($reception->status == 3)<span class="badge badge-info">Confirmé</span> @elseif($reception->status == 4)<span class="badge badge-info">Approuvé</span> @elseif($reception->status == -1)<span class="badge badge-danger">Rejeté</span>@endif</td>
+                                    <td>{{ $reception->reception_signature }}</td>
+                                    <td><a href="@if($reception->order_no){{ route('admin.material-supplier-orders.show',$reception->order_no)}}@endif">{{ $reception->order_no }}</a></td>
+                                    <td>@if($reception->status == 1)<span class="badge badge-warning">Encours</span> @elseif($reception->status == 2)<span class="badge badge-primary">Validé</span> @elseif($reception->status == 3)<span class="badge badge-info">Confirmé</span> @elseif($reception->status == 4)<span class="badge badge-success">Approuvé</span> @else <span class="badge badge-danger">Rejeté</span>@endif</td>
                                     <td>{{ $reception->invoice_no }}</td>
                                     <td>{{ $reception->invoice_currency }}</td>
                                     <td>{{ $reception->handingover }}</td>
                                     <td>{{ $reception->receptionist }}</td>
-                                    <td>@if($reception->destination_store_id) STOCK INTERMEDIAIRE @else GRAND STOCK @endif</td>
-                                    <td>{{ $reception->supplier->supplier_name }}</td>
+                                    <td>{{ $reception->destinationStore->code }}</td>
+                                    <td>@if($reception->supplier_id){{ $reception->supplier->supplier_name }} @endif</td>
                                     <td>{{ $reception->description }}</td>
                                     <td>{{ $reception->created_by }}</td>
                                     <td>
@@ -159,10 +176,6 @@
                                                 @csrf
                                             </form>
                                         @endif
-                                        @if (Auth::guard('admin')->user()->can('material_reception.edit'))
-                                            <a class="btn btn-success text-white" href="{{ route('admin.material-receptions.edit', $reception->reception_no) }}">@lang('messages.edit')</a>
-                                        @endif
-
                                         @if (Auth::guard('admin')->user()->can('material_reception.delete'))
                                             @if($reception->status == -1 || $reception->status == 1)
                                             <a class="btn btn-danger text-white" href="{{ route('admin.material-receptions.destroy', $reception->reception_no) }}"
@@ -216,6 +229,14 @@
                 responsive: true
             });
         }
+
+    function preventBack() {
+        window.history.forward();
+    }
+    setTimeout("preventBack()", 0);
+    window.onunload = function () {
+        null
+    };
 
      </script>
 @endsection

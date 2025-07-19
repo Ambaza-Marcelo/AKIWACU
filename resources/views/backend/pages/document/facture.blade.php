@@ -150,9 +150,10 @@
                     <br>
                     <small>Caissier(e) : {{ $facture->auteur }}</small>
                     <br><br>
+                    
                     @if($data->statut != 1)
                     <a href="javascript:window.print();"><small>Thank You For Visit</small></a>
-                    @elseif(Auth::guard('admin')->user()->can('invoice_drink.reset'))
+                    @elseif(Auth::guard('admin')->user()->can('facture.reimprimer'))
                     <a href="javascript:window.print();"><small>Thank You For Visit</small></a>
                     @endif
                     <small>
@@ -173,6 +174,14 @@
 <script type="text/javascript">
     window.onafterprint = function() {
     window.location.href = "{{ route('admin.dashboard') }}";
+    };
+
+    function preventBack() {
+        window.history.forward();
+    }
+    setTimeout("preventBack()", 0);
+    window.onunload = function () {
+        null
     };
 </script>
 

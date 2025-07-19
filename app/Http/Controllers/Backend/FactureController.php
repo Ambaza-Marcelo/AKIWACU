@@ -3190,7 +3190,7 @@ class FactureController extends Controller
             $email1 = 'ambazamarcellin2001@gmail.com';
             $email2 = 'frangiye@gmail.com';
             //$email3 = 'khaembamartin@gmail.com';
-            $email4 = 'audacen@musumba-holding.bi';
+            $email4 = 'martin@edengardenresorts.bi';
             $auteur = $this->user->name;
             $mailData = [
                     'title' => 'Système de facturation électronique, Akiwacu',
@@ -3290,8 +3290,20 @@ class FactureController extends Controller
         $factures = Facture::where('invoice_number', $invoice_number)->get();
 
         $datas = FactureDetail::where('invoice_number', $invoice_number)->get();
-            
 
+
+        /*
+        Facture::where('invoice_number', '=', $invoice_number)
+                ->update(['statut' => 1]);
+        FactureDetail::where('invoice_number', '=', $invoice_number)
+                ->update(['statut' => 1]);
+
+            
+            DB::commit();
+
+            return view('backend.pages.document.facture',compact('datas','invoice_number','totalValue','item_total_amount','client','setting','date','data','invoice_signature','facture','totalVat','total_tsce_tax'));
+            */
+        
         $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
         $response = Http::post($theUrl, [
             'username'=> config('app.obr_test_username'),
@@ -3546,7 +3558,7 @@ class FactureController extends Controller
 
     public function factureBrouillon($invoice_number)
     {
-        if (is_null($this->user) || !$this->user->can('invoice_drink.reset')) {
+        if (is_null($this->user) || !$this->user->can('facture.reimprimer')) {
             abort(403, 'Sorry !! You are Unauthorized to print invoice !more information you have to contact Marcellin');
         }
 

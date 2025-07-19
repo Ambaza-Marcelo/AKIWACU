@@ -120,7 +120,7 @@
                                     <td>{{ $facture->invoice_signature }}</td>
                                     <td>
                                         @if (Auth::guard('admin')->user()->can('recouvrement.create'))
-                                        @if($facture->etat_recouvrement == '1' || $facture->etat_recouvrement == '0' || $facture->reste_credit > 0)
+                                        @if($facture->etat_recouvrement == 1 || $facture->etat_recouvrement == 0 || $facture->reste_credit > 0)
                                          <a href="{{ route('admin.payer-facture.credit', $facture->invoice_number) }}" class="btn btn-info">Payer Credit</a>
                                         @endif
                                         @endif                                       

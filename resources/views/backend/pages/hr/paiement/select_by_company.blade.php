@@ -50,7 +50,7 @@
                         <a href="{{ route('admin.hr-paiements.index',$company->id) }}">
                             <div class="p-4 d-flex justify-content-between align-items-center">
                                 <div class="seofct-icon">
-                                    <img src="{{ asset('storage/logo')}}/{{ $company->logo }}" width="65">
+                                    <img src="{{ asset('img/eden_logo.png')}}" width="65">
 
                                     {{ $company->name }}</div>
                                 <h2>

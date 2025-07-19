@@ -141,7 +141,7 @@ class DrinkStockinController extends Controller
             $purchase_price = $request->purchase_price;
             
 
-            $latest = DrinkStockin::latest()->first();
+            $latest = DrinkStockin::orderBy('id','desc')->first();
             if ($latest) {
                $stockin_no = 'BE' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{

@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use Carbon\Carbon;
 use App\Models\BarristOrderDetail;
+use App\Models\F\FBarristaOrderDetail;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -26,7 +27,7 @@ class BarristOrderClientExport implements FromCollection, WithMapping, WithHeadi
         $start_date = $startDate.' 00:00:00';
         $end_date = $endDate.' 23:59:59';
 
-        return BarristOrderDetail::select(
+        return FBarristaOrderDetail::select(
                         DB::raw('id,barrist_item_id,date,quantity,purchase_price,selling_price,total_amount_selling,employe_id,created_by,order_no,confirmed_by,status,table_id,updated_at'))->whereBetween('date',[$start_date,$end_date])->groupBy('id','barrist_item_id','employe_id','date','quantity','status','purchase_price','selling_price','total_amount_selling','order_no','confirmed_by','created_by','table_id','updated_at')->orderBy('id','asc')->get();
     }
 
@@ -35,7 +36,7 @@ class BarristOrderClientExport implements FromCollection, WithMapping, WithHeadi
         if ($data->status == '0') {
             $status = "ENCOURS....";
         }elseif ($data->status === '-1') {
-            $status = "REJETE";
+            $status = "";
         }elseif ($data->status === '1') {
             $status = "VALIDE";
         }elseif ($data->status === '2') {

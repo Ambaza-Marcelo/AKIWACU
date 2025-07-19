@@ -38,7 +38,8 @@
 <div class="main-content-inner">
     <br>
                 <h2>RAPPORT CHIFFRE D'AFFAIRES</h2>
-                    <form action="{{ route('admin.exporter-en-excel-chiffre-affaire')}}" method="GET">
+                @if (Auth::guard('admin')->user()->can('f_bill.view'))
+                    <form action="{{ route('admin.turnover-export-to-excel')}}" method="GET">
                         <p class="float-right mb-2">
                             <button type="submit" value="pdf" class="btn btn-info">Chiffre Affaire En Excel</button>
                         </p>
@@ -53,6 +54,25 @@
                             </div>
                         </p>
                     </form><br>
+                    @endif
+                    @if (Auth::guard('admin')->user()->can('invoice_drink.view'))
+                    <form action="{{ route('admin.exporter-en-excel-chiffre-affaire')}}" method="GET">
+                        <p class="float-right mb-2">
+                            <button type="submit" value="pdf" class="btn btn-success">Chiffre Affaire En Excel</button>
+                        </p>
+                        <p class="float-right mb-2">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <input type="date" name="start_date" class="form-control">
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="date" name="end_date" class="form-control">
+                                </div>
+                            </div>
+                        </p>
+                    </form><br>
+                    @endif
+                    @if (Auth::guard('admin')->user()->can('recouvrement.view'))
                     <form action="{{ route('admin.exporter-en-excel-credit')}}" method="GET">
                         <p class="float-right mb-2">
                             <button type="submit" value="pdf" class="btn btn-primary">Credit En Excel</button>
@@ -143,7 +163,9 @@
                             </div>
                         </p>
                     </form><br>
+                    @endif
                     <h2>RAPPORT DES COMMANDES</h2>
+                    @if (Auth::guard('admin')->user()->can('food_order_client.view') || Auth::guard('admin')->user()->can('f_food_order.view'))
                     <form action="{{ route('admin.food-orders.export-to-excel')}}" method="GET">
                         <p class="float-right mb-2">
                             <button type="submit" value="pdf" class="btn btn-success">NOURRITURES</button>
@@ -159,6 +181,8 @@
                             </div>
                         </p>
                     </form><br>
+                    @endif
+                    @if (Auth::guard('admin')->user()->can('drink_order_client.view') || Auth::guard('admin')->user()->can('f_drink_order.view'))
                     <form action="{{ route('admin.drink-orders.export-to-excel')}}" method="GET">
                         <p class="float-right mb-2">
                             <button type="submit" value="pdf" class="btn btn-success">BOISSONS</button>
@@ -174,6 +198,8 @@
                             </div>
                         </p>
                     </form><br>
+                    @endif
+                    @if (Auth::guard('admin')->user()->can('food_order_client.view') || Auth::guard('admin')->user()->can('f_barrista_order.view'))
                     <form action="{{ route('admin.barrist-orders.export-to-excel')}}" method="GET">
                         <p class="float-right mb-2">
                             <button type="submit" value="pdf" class="btn btn-success">BARRISTA</button>
@@ -189,6 +215,8 @@
                             </div>
                         </p>
                     </form><br>
+                    @endif
+                    @if (Auth::guard('admin')->user()->can('drink_order_client.view') || Auth::guard('admin')->user()->can('f_bartender_order.view'))
                     <form action="{{ route('admin.bartender-orders.export-to-excel')}}" method="GET">
                         <p class="float-right mb-2">
                             <button type="submit" value="pdf" class="btn btn-success">BARTENDER</button>
@@ -204,6 +232,8 @@
                             </div>
                         </p>
                     </form><br>
+                    @endif
+                    @if (Auth::guard('admin')->user()->can('drink_big_store.view'))
                     <h2>RAPPORT DES STOCKS</h2>
                     <form action="{{ route('admin.drink-small-store-report.export-to-excel')}}" method="GET">
                         <table>
@@ -367,7 +397,9 @@
                             </div>
                         </p>
                     </form><br>
-                    <h2>RAPPORT STOCK PDG</h2>
+                    @endif
+                    @if (Auth::guard('admin')->user()->can('private_item.view'))
+                    <h2>RAPPORT MAGASIN EGR</h2>
                     <form action="{{ route('admin.private-drink-stockouts.export-to-excel')}}" method="GET">
                         <p class="float-right mb-2">
                             <button type="submit" value="pdf" class="btn btn-success">Exporter R. SORTIES</button>
@@ -398,6 +430,7 @@
                             </div>
                         </p>
                     </form><br>
+                    @endif
 
 </div>
 @endsection

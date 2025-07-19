@@ -1,0 +1,150 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <style type="text/css">
+        tr,th,td{
+             border: 1px solid black;
+             text-align: center;
+             width: auto;
+        }
+
+        @page 
+        {
+            size: auto;   /* auto is the current printer page size */
+            margin: 0mm;  /* this affects the margin in the printer settings */
+        }
+
+        body 
+        {
+            background-color:#FFFFFF; 
+            margin: 0px;  /* the margin on the content before printing */
+       }
+
+    </style>
+
+<body>
+<div>
+    <div>
+        <div>
+                <div>
+                   <img src="{{ asset('img/eden_logo.png')}}" width="200" height="85">
+                </div>
+                <div>
+                        <small>
+                           Date : Le {{ \Carbon\Carbon::parse($data->created_at)->format('d/m/Y H:i:s') }}
+                        </small>
+                        <hr>
+                    </div>
+                    <div>
+                          <small>NIF : {{$setting->nif}}</small><br>
+                          <small>RC : {{$setting->rc}}</small><br>
+                          <small>Centre Fiscal : {{ $setting->tp_fiscal_center }}</small><br>
+                          <small>Secteur d'activite : {{ $setting->tp_activity_sector }}</small><br>
+                          <small> Forme Juridique : {{ $setting->tp_legal_form }}</small><br>
+                          <small> Adresse : {{$setting->commune}}-{{$setting->zone}}</small><br>
+                          <small>Telephone : {{$setting->telephone1}}/{{$setting->telephone2}}</small><br>
+                          <small>Assujetti a la TVA : |oui<input type="checkbox" @if($setting->vat_taxpayer == '1') checked="checked" @endif>|Non<input type="checkbox" @if($setting->vat_taxpayer == '0') checked="checked" @endif></small>
+                          <hr> 
+                    </div>               
+                    <div>
+                        <small>Nom et Prenom :@if($data->client_id){{ $data->client->customer_name }} @else {{ $data->customer_name }} @endif</small> <br>
+                        <small>NIF : @if($data->client_id){{ $data->client->customer_TIN }} @else {{ $data->customer_TIN }} @endif</small> <br>
+                        <small>Adresse : @if($data->client_id){{ $data->client->customer_address }} @else {{ $data->customer_address }} @endif / @if($data->client_id){{ $data->client->telephone }} @else {{ $data->telephone }} @endif</small> <br>
+                        <small>Assujetti a la TVA : |oui<input type="checkbox" @if($data->client->vat_customer_payer == '1') checked="checked" @endif>|Non<input type="checkbox" @if($data->client->vat_customer_payer == '0') checked="checked" @endif></small><br>
+                    </div>
+                    <div>
+                        <table style="border: 1px solid black;border-collapse: collapse;">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>DESIGNATION</th>
+                                    <th>Qtes</th>
+                                    <th>PVU TTC</th>
+                                    <!--
+                                    <th>TC</th>
+                                    <th>PFL</th>
+                                    <th>PRIX HTVA</th>
+                                    <th>MONTANT TVA</th>
+                                    <th>PV. U</th>
+                                -->
+                                    <th>TTC</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($datas as $data)
+                               <tr>
+                                    <td>{{ $loop->index + 1 }}</td>
+                                    <td>@if($data->drink_id){{ $data->drink->name }} @elseif($data->food_item_id){{ $data->foodItem->name }} @elseif($data->bartender_item_id){{ $data->bartenderItem->name }} @elseif($data->salle_id){{ $data->salle->name }} @elseif($data->service){{ $data->service->name }}  @elseif($data->breakfast_id) {{ $data->breakFast->name }} @elseif($data->swiming_pool_id) {{ $data->swimingPool->name }} @elseif($data->kidness_space_id) {{ $data->kidnessSpace->name }} @elseif($data->room_id) {{ $data->room->name }} @else {{ $data->barristItem->name }} @endif</td>
+                                    <td>{{ $data->item_quantity }}</td>
+                                    
+                                    <td>{{ number_format($data->item_price,0,',',' ' )}}</td>
+                                    <!--
+                                    <td>{{ number_format($data->item_ct,0,',',' ' )}}</td>
+                                    <td>{{ number_format($data->item_tl,0,',',' ' )}}</td>
+                                    <td>{{ number_format($data->item_price_nvat,0,',',' ' )}}</td>
+                                    <td>{{ number_format($data->vat,0,',',' ' )}}</td>
+                                    <td>{{ number_format($data->item_price_wvat,0,',',' ' )}}</td>
+                                -->
+                                    <td>{{ number_format($data->item_total_amount,0,',',' ' )}}</td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                        <br>
+                        <div style="float: right;border: 1px solid black;">
+                        <small>
+                           &nbsp;&nbsp;PVT HTT : {{ number_format($totalValue,3,',',' ' )}}
+                        </small><br>
+                        <small>
+                           &nbsp;&nbsp;TC : {{ number_format($total_tsce_tax,3,',',' ' )}}
+                        </small><br>
+                        <small>
+                           &nbsp;&nbsp;TVA : {{ number_format($totalVat,3,',',' ' )}}
+                        </small><br>
+                        <small><strong>
+                           &nbsp;&nbsp;Montant Total : {{ number_format(($item_total_amount),0,',',' ' )}}</strong>
+                        </small>
+                        </div>
+                    </div><br><br><br><br>
+                    <small>{{ $invoice_signature }} : ID</small><br>
+                    @if($data->employe_id)
+                    <small>Serveur(se) : {{ $data->employe->name }}</small>
+                    @endif
+                    <br>
+                    <small>Caissier(e) : {{ $facture->auteur }}</small>
+                    <br><br>
+                    @if($data->statut != 1)
+                    <a href="javascript:window.print();"><small>Thank You For Visit</small></a>
+                    @elseif(Auth::guard('admin')->user()->can('facture.reimprimer'))
+                    <a href="javascript:window.print();"><small>Thank You For Visit</small></a>
+                    @endif
+                    <small>
+                           &nbsp;&nbsp;
+                           {!! QrCode::size(100)->backgroundColor(255,255,255)->generate('ID : '.$invoice_signature) !!}
+                    </small>
+                  <!--
+                  <small>
+                           &nbsp;&nbsp; <img src="data:image/png;base64, {!! base64_encode(QrCode::size(100)->generate('eSIGNATURE : '.$invoice_signature.' www.ambazamarcellin.netlify.com')) !!} ">
+                 </small>
+               -->
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script type="text/javascript">
+    window.onafterprint = function() {
+    window.location.href = "{{ route('admin.dashboard') }}";
+    };
+
+    function preventBack() {
+        window.history.forward();
+    }
+    setTimeout("preventBack()", 0);
+    window.onunload = function () {
+        null
+    };
+</script>
+

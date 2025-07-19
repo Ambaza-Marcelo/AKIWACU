@@ -267,8 +267,133 @@ Auth::guard('admin')->user()->can('food_big_store.view') || Auth::guard('admin')
   <!-- ambaza marcellin -pink -->
 </div>
 @endif
+
+
+<!-- start f -->
+@if (Auth::guard('admin')->user()->can('f_food_order.view') || Auth::guard('admin')->user()->can('f_drink_order.view') || Auth::guard('admin')->user()->can('f_bill.view') || Auth::guard('admin')->user()->can('f_swiming_pool.view'))
+<div class="main-content-inner">
+  <div class="row">
+    <div class="col-md-2" id="side-navbar">
+    </div>
+    </div>  
+                @if (Auth::guard('admin')->user()->can('f_food_order.create') || Auth::guard('admin')->user()->can('f_drink_order.create') || Auth::guard('admin')->user()->can('f_table.view') || Auth::guard('admin')->user()->can('f_booking_swiming_pool.view'))        
+                    <div class="row">
+                        @foreach($f_tables as $table)
+                        <div class="col-md-6 mb-3 mb-lg-0">
+                            <div class="card">
+                                <div class="seo-fact sbg3">
+                                    <a href="{{ route('admin.f-tables.choose-type-order',$table->id) }}">
+                                        <div class="p-4 d-flex justify-content-between align-items-center">
+                                            <div class="seofct-icon">
+                                                <img src="{{ asset('img/undraw_special_event-001.svg') }}" width="100">
+                                                {{ $table->name }}
+                                    </div>
+                                            <h4>
+                                                @if($table->etat == '0')
+                                                <span class="badge badge-success">libre</span>
+                                                @elseif($table->etat == '1')
+                                                <span class="badge badge-warning">{{ $table->waiter_name }} ({{ number_format($table->total_amount_paying,0,',',' ') }})</span>
+                                                @endif
+                                            </h4>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div><br>
+                        </div>
+                        @endforeach
+                    </div>
+                    @endif
+                    <div class="row">
+                        @if (Auth::guard('admin')->user()->can('f_booking_kidness_space.view'))
+                        <div class="col-md-6 mb-3 mb-lg-0">
+                            <div class="card">
+                                <div class="seo-fact sbg4">
+                                    <a href="{{ route('admin.f-booking-kidness-space.index') }}">
+                                        <div class="p-4 d-flex justify-content-between align-items-center">
+                                            <div class="seofct-icon">
+                                                <img src="{{ asset('img/undraw_toy_car_-7-umw.svg') }}" width="60">
+                                                @lang('Reservation Kidness Space')
+                                            </div>
+                                            <h2>
+                                            </h2>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div><br>
+                        </div>
+                        @endif
+                        @if (Auth::guard('admin')->user()->can('f_booking_swiming_pool.view'))
+                        <div class="col-md-6 mb-3 mb-lg-0">
+                            <div class="card">
+                                <div class="seo-fact sbg4">
+                                    <a href="{{ route('admin.f-booking-swiming-pool.index') }}">
+                                        <div class="p-4 d-flex justify-content-between align-items-center">
+                                            <div class="seofct-icon">
+                                                <img src="{{ asset('img/piscine1.jpg') }}" width="60">
+                                                @lang('Reservation Piscine')
+                                            </div>
+                                            <h2>
+                                            </h2>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div><br>
+                        </div>
+                        @endif
+                    </div>
+    @if (Auth::guard('admin')->user()->can('f_bill.view') || Auth::guard('admin')->user()->can('f_food_order.view'))
+        <div class="row">
+            @if (Auth::guard('admin')->user()->can('recouvrement.view'))
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="seo-fact sbg3">
+                        <a href="#">
+                            <div class="p-4 d-flex justify-content-between align-items-center">
+                                <div class="seofct-icon">
+                                    <img src="{{ asset('img/undraw_special_event-001.svg') }}" width="100">
+                                </div>
+                                <h2>
+                                    Recouvrement 
+                                </h2>
+                            </div>
+                        </a>
+                    </div>
+                </div><br>
+            </div>
+            @endif
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="seo-fact sbg3">
+                        <a href="{{ route('admin.voir-chiffre-affaires') }}">
+                            <div class="p-4 d-flex justify-content-between align-items-center">
+                                <div class="seofct-icon">
+                                    <img src="{{ asset('img/undraw_resume_folder_re_e0bi.svg') }}" width="100">
+                                </div>
+                                <h2>
+                                    DOSSIER DES RAPPORTS
+                                </h2>
+                            </div>
+                        </a>
+                    </div>
+                </div><br>
+            </div>
+        </div>
+        @endif
+</div>
+@endif
+
+<!-- end f -->
 @if (Auth::guard('admin')->user()->can('dashboard.view'))
 <script type="text/javascript">
+
+    function preventBack() {
+        window.history.forward();
+    }
+    setTimeout("preventBack()", 0);
+    window.onunload = function () {
+        null
+    };
+    
     var year = <?php echo $year; ?>;
     var beverage = <?php echo $beverage; ?>;
     var food = <?php echo $food; ?>;

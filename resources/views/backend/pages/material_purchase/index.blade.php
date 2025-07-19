@@ -2,7 +2,7 @@
 @extends('backend.layouts.master')
 
 @section('title')
-@lang('Demande Achat des Articles') - @lang('messages.admin_panel')
+@lang('Demande d achat des Articles') - @lang('messages.admin_panel')
 @endsection
 
 @section('styles')
@@ -21,7 +21,7 @@
     <div class="row align-items-center">
         <div class="col-sm-6">
             <div class="breadcrumbs-area clearfix">
-                <h4 class="page-title pull-left">@lang('Demande Achat des Articles')</h4>
+                <h4 class="page-title pull-left">@lang('Demande d achat des Articles')</h4>
                 <ul class="breadcrumbs pull-left">
                     <li><a href="{{ route('admin.dashboard') }}">@lang('messages.dashboard')</a></li>
                     <li><span>@lang('messages.list')</span></li>
@@ -41,22 +41,7 @@
         <div class="col-12 mt-5">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="header-title float-left">Demande Achat des Articles</h4>
-                    <form action="{{ route('admin.material-purchases.export-to-excel')}}" method="GET">
-                        <p class="float-right mb-2">
-                            <button type="submit" value="pdf" class="btn btn-success">Exporter En Excel</button>
-                        </p>
-                        <p class="float-right mb-2">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <input type="date" name="start_date" class="form-control">
-                                </div>
-                                <div class="col-md-6">
-                                    <input type="date" name="end_date" class="form-control">
-                                </div>
-                            </div>
-                        </p>
-                    </form><br>
+                    <h4 class="header-title float-left">Demande d'achat des Articles</h4>
                     <p class="float-right mb-2">
                         @if (Auth::guard('admin')->user()->can('material_purchase.create'))
                             <a class="btn btn-primary text-white" href="{{ route('admin.material-purchases.create') }}">@lang('messages.new')</a>
@@ -70,10 +55,12 @@
                                 <tr>
                                     <th width="5%">#</th>
                                     <th width="10%">@lang('messages.date')</th>
-                                    <th width="10%">Purchase No</th>
-                                    <th width="10%">@lang('Purchase Signature')</th>
+                                    <th width="10%">Purchase Request No</th>
+                                    <th width="10%">@lang('Purchase Request Signature')</th>
                                     <th width="10%">@lang('messages.status')</th>
-                                    <th width="30%">@lang('messages.description')</th>
+                                    <th width="10%">Fournisseur</th>
+                                    <th width="30%">
+                                        @lang('messages.description')</th>
                                     <th width="10%">@lang('messages.created_by')</th>
                                     <th width="15%">Action</th>
                                 </tr>
@@ -96,15 +83,18 @@
                                     @elseif($purchase->status == 5)
                                     <td><span class="badge badge-success">Commandé</span></td>
                                     @elseif($purchase->status == 6)
-                                    <td><span class="badge badge-success">Receptionné</span></td>
+                                    <td><span class="badge badge-success">Receptionnée</span></td>
+                                    @elseif($purchase->status == -3)
+                                    <td><span class="badge badge-warning">Modifié</span></td>
                                     @else
                                     <td><span class="badge badge-primary">Encours...</span></td>
                                     @endif
+                                    <td>@if($purchase->supplier_id){{ $purchase->supplier->supplier_name }} @endif</td>
                                     <td>{{ $purchase->description }}</td>
                                     <td>{{ $purchase->created_by }}</td>
                                     <td>
                                         @if (Auth::guard('admin')->user()->can('material_purchase.create'))
-                                        @if($purchase->status == 2 && $purchase->status == 3 || $purchase->status == 4 || $purchase->status == 5)
+                                        @if($purchase->status == 2 && $purchase->status == 3 || $purchase->status == 4 || $purchase->status == 5 || $purchase->status == 6 || $purchase->status == -3)
                                         <a href="{{ route('admin.material-purchases.materialPurchase',$purchase->purchase_no) }}"><img src="{{ asset('img/ISSh.gif') }}" width="60" title="Télécharger d'abord le document et puis imprimer"></a>
                                         @endif
                                         @endif
@@ -171,12 +161,17 @@
                                                 @csrf
                                             </form>
                                         @endif
-                                        @if (Auth::guard('admin')->user()->can('material_purchase.create'))
+                                        @if (Auth::guard('admin')->user()->can('material_supplier_order.create'))
                                         @if($purchase->status == 4)
-                                        <a href="{{ route('admin.material-supplier-orders.create',$purchase->purchase_no)}}" class="btn btn-primary">Commander</a>
+                                        <a href="{{ route('admin.material-supplier-orders.create',$purchase->purchase_no)}}" class="btn btn-success">Faire une commande</a>
                                         @endif
                                         @endif
-                                        @if($purchase->status == 1 || $purchase->status == 0 || $purchase->status == 2 || $purchase->status == 3 || $purchase->status == 4)
+                                        @if (Auth::guard('admin')->user()->can('material_supplier_order.edit'))
+                                        @if($purchase->status == -3)
+                                        <a href="{{ route('admin.material-supplier-orders.edit',$purchase->purchase_no)}}" class="btn btn-primary">Modifier la commande</a>
+                                        @endif
+                                        @endif
+                                        @if($purchase->status == 1 || $purchase->status == 0 || $purchase->status == 2 || $purchase->status == 3 || $purchase->status == 4 || $purchase->status == 5 || $purchase->status == -3)
                                         @if (Auth::guard('admin')->user()->can('material_purchase.edit'))
                                             <a class="btn btn-success text-white" href="{{ route('admin.material-purchases.edit', $purchase->purchase_no) }}">@lang('messages.edit')</a>
                                         @endif
@@ -208,6 +203,7 @@
 </div>
 @endsection
 
+
 @section('scripts')
      <!-- Start datatable js -->
      <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
@@ -215,6 +211,7 @@
      <script src="https://cdn.datatables.net/1.10.18/js/dataTables.bootstrap4.min.js"></script>
      <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
      <script src="https://cdn.datatables.net/responsive/2.2.3/js/responsive.bootstrap.min.js"></script>
+     
      <script>
          /*================================
         datatable active
@@ -224,6 +221,14 @@
                 responsive: true
             });
         }
+
+    function preventBack() {
+        window.history.forward();
+    }
+    setTimeout("preventBack()", 0);
+    window.onunload = function () {
+        null
+    };
 
      </script>
 @endsection

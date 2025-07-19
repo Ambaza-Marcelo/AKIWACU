@@ -65,7 +65,7 @@
                                @foreach ($paiements as $paiement)
                                <tr>
                                     <td>{{ $loop->index+1 }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($paiement->created_at)->format('m/Y') }}
+                                    <td>{{ \Carbon\Carbon::parse($paiement->date_debut)->format('m/Y') }}
                                         @if($paiement->etat == 0) <span class="badge badge-primary">Encours...</span> @elseif($paiement->etat == 1) <span class="badge badge-success">Déjà clôturé</span> @endif
                                     </td>
                                     <td>@if($paiement->employe_id)<a href="{{ route('admin.hr-paiements.show',$paiement->id) }}"> {{ $paiement->employe->matricule_no }}  @endif</a></td>
@@ -77,11 +77,26 @@
                                     <td>{{ number_format($paiement->somme_salaire_net_imposable,0,',',' ') }}</td>
                                     <td>{{ number_format($paiement->somme_salaire_net_non_imposable,0,',',' ') }}</td>
                                     <td>
-                                       @if (Auth::guard('admin')->user()->can('hr_employe.create'))
+                                       @if (Auth::guard('admin')->user()->can('hr_paiement.create'))
                                         <a href="" width="60" title="Télécharger d'abord le document et puis imprimer"></a>
                                         @endif
+                                        @if (Auth::guard('admin')->user()->can('hr_paiement.edit'))
                                         @if($paiement->etat != 1)
                                         @if($paiement->employe_id)<a href="{{ route('admin.hr-paiements.edit',[$paiement->id,$paiement->company_id]) }}" class="btn btn-success"> Modifier  @endif</a>
+                                        @endif
+                                        @endif
+                                        @if (Auth::guard('admin')->user()->can('hr_paiement.delete'))
+                                            @if($paiement->etat != 1)
+                                            <a class="btn btn-danger text-white" href="{{ route('admin.hr-paiements.destroy', $paiement->id) }}"
+                                            onclick="event.preventDefault(); document.getElementById('delete-form-{{ $paiement->id }}').submit();">
+                                                Supprimer
+                                            </a>
+
+                                            <form id="delete-form-{{ $paiement->id }}" action="{{ route('admin.hr-paiements.destroy', $paiement->id) }}" method="POST" style="display: none;">
+                                                @method('DELETE')
+                                                @csrf
+                                            </form>
+                                            @endif
                                         @endif
                                     </td>
                                 </tr>

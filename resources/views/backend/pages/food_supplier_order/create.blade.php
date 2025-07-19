@@ -2,7 +2,7 @@
 @extends('backend.layouts.master')
 
 @section('title')
-@lang('food supplier orders') - @lang('messages.admin_panel')
+@lang('Create food supplier order') - @lang('messages.admin_panel')
 @endsection
 
 @section('styles')
@@ -19,11 +19,11 @@
     <div class="row align-items-center">
         <div class="col-sm-6">
             <div class="breadcrumbs-area clearfix">
-                <h4 class="page-title pull-left">@lang('food supplier orders')</h4>
+                <h4 class="page-title pull-left">@lang('Create food supplier order')</h4>
                 <ul class="breadcrumbs pull-left">
                     <li><a href="{{ route('admin.dashboard') }}">@lang('messages.dashboard')</a></li>
                     <li><a href="{{ route('admin.food-supplier-orders.index') }}">@lang('messages.list')</a></li>
-                    <li><span>@lang('food supplier orders')</span></li>
+                    <li><span>@lang('Create food supplier order')</span></li>
                 </ul>
             </div>
         </div>
@@ -38,53 +38,72 @@
         <!-- data table start -->
         <div class="col-12 mt-5">
             <div class="card">
-                <div class="card-body bg-success">
+                <div class="card-body">
                     <h4 class="header-title">@lang('messages.new')</h4>
                     @include('backend.layouts.partials.messages')
                     
                     <form action="{{ route('admin.food-supplier-orders.store') }}" method="POST">
                         @csrf
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             <div class="form-group">
                                 <label for="date">@lang('messages.date')</label>
-                                <input type="date" class="form-control" id="date" name="date">
+                                <input type="datetime-local" class="form-control" id="date" name="date">
                             </div>
                         </div>
-                        <div class="col-sm-6">
+                        <div class="col-sm-4">
                             <div class="form-group">
                                 <label for="purchase_no">Purchase Request No</label>
                                 <input type="text" class="form-control" id="purchase_no" name="purchase_no" value="{{$purchase_no}}" readonly="readonly">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="supplier_id">@lang('Fournisseur')</label>
+                                <select class="form-control" name="supplier_id" id="supplier_id" required>
+                                 <option disabled="disabled" selected="selected">Merci de choisir</option>
+                                @foreach($suppliers as $supplier)
+                                    <option value="{{$supplier->id}}" {{ $data->supplier_id == $supplier->id ? 'selected' : '' }}>{{$supplier->supplier_name}}</option>
+                                @endforeach
+                             </select>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="supplier_id">@lang('Fournisseur')</label>
-                                <select class="form-control" name="supplier_id" id="supplier_id">
+                                <label for="vat_supplier_payer">@lang('assujetti à la tva?')</label>
+                                <select class="form-control" required name="vat_supplier_payer" id="vat_supplier_payer" required>
                                  <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                @foreach($suppliers as $supplier)
-                                    <option value="{{$supplier->id}}">{{$supplier->supplier_name}}</option>
-                                @endforeach
+                                    <option value="0" {{ $data->vat_supplier_payer == 0 ? 'selected' : '' }}>Non assujetti</option>
+                                    <option value="1" {{ $data->vat_supplier_payer == 1 ? 'selected' : '' }}>Assujetti</option>
                              </select>
                             </div>
+                        </div>
+                        <div class="col-md-6" id="vat_rate">
+                            
                         </div>
                     </div>
                          <table class="table table-bordered" id="dynamicTable">  
                             <tr>
                                 <th>@lang('messages.item')</th>
                                 <th>@lang('messages.quantity')</th>
-                                <th>@lang('messages.unit_price')</th>
+                                <th>@lang('PU HTVA')</th>
+                                <th>@lang('PT HTVA')</th>
+                                <th>@lang('TVA')</th>
+                                <th>@lang('TVAC')</th>
                                 <th>Action</th>
                             </tr>
                             @foreach($datas as $data)
                             <tr>  
                                 <td> <select class="form-control" name="food_id[]" id="food_id">
-                                <option value="{{ $data->food_id }}" class="form-control">{{$data->food->name}}/{{ $data->food->foodMeasurement->purchase_unit }}</option>
+                                <option value="{{ $data->food_id }}" class="form-control">{{$data->food->name}}/{{ number_format($data->food->cump,0,',',' ') }}/{{ $data->food->foodMeasurement->purchase_unit }}</option>
                                 </select></td>  
-                                <td><input type="number" name="quantity[]" value="{{ $data->quantity }}" class="form-control" step="any" min="0" /></td>  
-                                <td><input type="number" name="purchase_price[]" value="{{$data->price}}" class="form-control" step="any" min="0"/></td>
+                                <td><input type="number" name="quantity[]" value="{{ $data->quantity }}" class="form-control" readonly step="any" min="0"/></td>  
+                                <td><input type="number" name="purchase_price[]" value="{{$data->price}}" class="form-control" readonly step="any" min="0"/></td>
+                                <td><input type="text" value="{{number_format($data->price_nvat,3,',',' ')}}" class="form-control" readonly step="any" min="0"/></td>
+                                <td><input type="text" value="{{number_format($data->vat,3,',',' ')}}" class="form-control" readonly step="any" min="0"/></td>
+                                <td><input type="text" value="{{number_format($data->price_wvat,3,',',' ')}}" class="form-control" readonly step="any" min="0"/></td>
                                 <td><button type='button' class='btn btn-danger remove-tr'>@lang('messages.delete')</button></td>  
                             </tr> 
                             @endforeach 
@@ -120,7 +139,7 @@
                          "<select class='form-control' name='food_id[]'"+
                             "<option value='0'>Merci de choisir</option>"+
                              "@foreach($foods as $food)"+
-                                 "<option value='{{ $food->id }}'>{{$food->name}}/{{ number_format($food->purchase_price,0,',',' ')}}/{{ $food->foodMeasurement->purchase_unit }}</option>"+
+                                 "<option value='{{ $food->id }}'>{{$food->name}}/{{ number_format($food->cump,0,',',' ') }}/{{ $food->foodMeasurement->purchase_unit }}</option>"+
                              "@endforeach>"+
                           "</select>"+
                         "</td>"+
@@ -141,6 +160,49 @@
     $(document).on('click', '.remove-tr', function(){  
          $(this).parents('tr').remove();
     }); 
+
+    //one checked box in checkbox group of invoice_currency
+
+    var group_=(el,callback)=>{
+        el.forEach((checkbox)=>{
+        callback(checkbox)
+        })
+    }
+
+    group_(document.getElementsByName('invoice_currency'),(item)=>{
+    item.onclick=(e)=>{
+    group_(document.getElementsByName('invoice_currency'),(item)=>{
+    item.checked=false;
+    })
+    e.target.checked=true;
+
+    }
+    })
+
+    $('#vat_supplier_payer').change(function () { 
+    if ($(this).val() === '1'){
+
+                var vat_rate = "<label for='vat_rate'>merci de choisir<strong style='color: red;'>*</strong></label>"+
+                            "<select name='vat_rate' required class='form-control'>"+
+                                "<option selected disabled>merci de choisir</option>"+
+                                "<option value='0' {{ $data->vat_rate == 0 ? 'selected' : '' }}>0%</option>"+
+                                "<option value='10' {{ $data->vat_rate == 10 ? 'selected' : '' }}>10%</option>"+
+                                "<option value='18' {{ $data->vat_rate == 18 ? 'selected' : '' }}>18%</option>";
+        
+        $("#vat_rate").append([vat_rate]);
+    }
+
+    })
+    .trigger( "change" ); 
+
+
+    function preventBack() {
+        window.history.forward();
+    }
+    setTimeout("preventBack()", 0);
+    window.onunload = function () {
+        null
+    };
 
 </script>
 @endsection

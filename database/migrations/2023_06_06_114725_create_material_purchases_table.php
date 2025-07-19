@@ -31,6 +31,16 @@ class CreateMaterialPurchasesTable extends Migration
             $table->string('rejected_by')->nullable(true);
             $table->string('reseted_by')->nullable(true);
             $table->string('status')->default('1');
+            $table->string('vat_taxpayer')->nullable(true);
+            $table->string('vat_supplier_payer')->nullable(true);
+            $table->double('vat_rate')->default('0');
+            $table->string('invoice_currency')->nullable(true);
+            $table->bigInteger('supplier_id')->unsigned()->nullable(true);
+            $table->foreign('supplier_id')
+                    ->references('id')
+                    ->on('suppliers')
+                    ->onUpdate('cascade')
+                    ->onDelete('cascade');
             $table->timestamps();
         });
     }

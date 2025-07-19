@@ -1,0 +1,1186 @@
+<?php
+
+namespace App\Http\Controllers\Backend\F;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\Storage;
+use App\Models\F\FBooking;
+use App\Models\F\FBookingDetail;
+use App\Models\BookingSalle;
+use App\Models\BookingRoom;
+use App\Models\BookingService;
+use App\Models\EGRClient;
+use App\Models\BookingTechnique;
+use App\Models\BookingTechniqueDetail;
+use App\Models\BookingTable;
+use App\Models\KidnessSpace;
+use App\Models\BreakFast;
+use App\Models\SwimingPool;
+use Carbon\Carbon;
+use Validator;
+use PDF;
+
+class FBookingController extends Controller
+{
+    //
+    public $user;
+
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            $this->user = Auth::guard('admin')->user();
+            return $next($request);
+        });
+    }
+
+    public function indexSalle()
+    {
+        if (is_null($this->user) || !$this->user->can('f_booking_salle.view')) {
+            abort(403, 'Sorry !! You are Unauthorized to view any booking !');
+        }
+
+        $bookings = FBookingDetail::where('salle_id','!=','')->where('status','!=',-1)->take(200)->orderBy('id','desc')->get();
+        return view('backend.pages.f.booking.index_salle', compact('bookings'));
+    }
+
+    public function indexRoom()
+    {
+        if (is_null($this->user) || !$this->user->can('f_booking_room.view')) {
+            abort(403, 'Sorry !! You are Unauthorized to view any booking !');
+        }
+
+        $bookings = FBookingDetail::where('room_id','!=','')->take(200)->orderBy('id','desc')->get();
+        return view('backend.pages.f.booking.index_room', compact('bookings'));
+    }
+
+    public function indexService()
+    {
+        if (is_null($this->user) || !$this->user->can('f_booking_service.view')) {
+            abort(403, 'Sorry !! You are Unauthorized to view any booking !');
+        }
+
+        $bookings = FBookingDetail::where('service_id','!=','')->where('status','!=',-1)->take(200)->orderBy('booking_no','desc')->get();
+        return view('backend.pages.f.booking.index_service', compact('bookings'));
+    }
+
+    public function indexKidnessSpace()
+    {
+        if (is_null($this->user) || !$this->user->can('f_booking_kidness_space.view')) {
+            abort(403, 'Sorry !! You are Unauthorized to view any booking !');
+        }
+
+        $bookings = FBookingDetail::where('kidness_space_id','!=','')->where('status','!=',-1)->take(200)->orderBy('id','desc')->get();
+        return view('backend.pages.f.booking.index_kidness_space', compact('bookings'));
+    }
+
+    public function indexSwimingPool()
+    {
+        if (is_null($this->user) || !$this->user->can('f_booking_swiming_pool.view')) {
+            abort(403, 'Sorry !! You are Unauthorized to view any booking !');
+        }
+
+        $bookings = FBookingDetail::where('swiming_pool_id','!=','')->where('status','!=',-1)->take(200)->orderBy('id','desc')->get();
+        return view('backend.pages.f.booking.index_swiming_pool', compact('bookings'));
+    }
+
+    public function indexBreakFast()
+    {
+        if (is_null($this->user) || !$this->user->can('booking.view')) {
+            abort(403, 'Sorry !! You are Unauthorized to view any booking !');
+        }
+
+        $bookings = FBookingDetail::where('breakfast_id','!=','')->take(200)->orderBy('id','desc')->get();
+        return view('backend.pages.f.booking.index_breakfast', compact('bookings'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function createSalle()
+    {
+        if (is_null($this->user) || !$this->user->can('f_booking_salle.create')) {
+            abort(403, 'Sorry !! You are Unauthorized to create any booking !');
+        }
+
+        $articles  = BookingSalle::where('selling_price','>',0)->orderBy('name','asc')->get();
+        $techniques  = BookingTechnique::orderBy('name','asc')->get();
+        $clients  = EGRClient::orderBy('customer_name','asc')->get();
+        return view('backend.pages.f.booking.create_salle', compact('articles','techniques','clients'));
+    }
+
+    public function createRoom()
+    {
+        if (is_null($this->user) || !$this->user->can('f_booking_room.create')) {
+            abort(403, 'Sorry !! You are Unauthorized to create any booking !');
+        }
+
+        $articles  = BookingRoom::where('selling_price','>',0)->orderBy('name','asc')->get();
+        $clients  = EGRClient::orderBy('customer_name','asc')->get();
+        return view('backend.pages.f.booking.create_room', compact('articles','clients'));
+    }
+
+    public function createService()
+    {
+        if (is_null($this->user) || !$this->user->can('f_booking_service.create')) {
+            abort(403, 'Sorry !! You are Unauthorized to create any booking !');
+        }
+
+        $articles  = BookingService::where('selling_price','>',0)->orderBy('name','asc')->get();
+        $clients  = EGRClient::orderBy('customer_name','asc')->get();
+        return view('backend.pages.f.booking.create_service', compact('articles','clients'));
+    }
+
+
+    public function createBreakFast()
+    {
+        if (is_null($this->user) || !$this->user->can('booking.create')) {
+            abort(403, 'Sorry !! You are Unauthorized to create any booking !');
+        }
+
+        $articles  = BreakFast::orderBy('name','asc')->get();
+        $techniques  = BookingTechnique::orderBy('name','asc')->get();
+        $clients  = EGRClient::orderBy('customer_name','asc')->get();
+        return view('backend.pages.f.booking.create_breakfast', compact('articles','techniques','clients'));
+    }
+
+    public function createKidnessSpace()
+    {
+        if (is_null($this->user) || !$this->user->can('f_booking_kidness_space.create')) {
+            abort(403, 'Sorry !! You are Unauthorized to create any booking !');
+        }
+
+        $articles  = KidnessSpace::where('selling_price','>',0)->orderBy('name','asc')->get();
+        $techniques  = BookingTechnique::orderBy('name','asc')->get();
+        $clients  = EGRClient::orderBy('customer_name','asc')->get();
+        return view('backend.pages.f.booking.create_kidness_space', compact('articles','techniques','clients'));
+    }
+
+    public function createSwimingPool()
+    {
+        if (is_null($this->user) || !$this->user->can('f_booking_swiming_pool.create')) {
+            abort(403, 'Sorry !! You are Unauthorized to create any booking !');
+        }
+
+        $articles  = SwimingPool::where('selling_price','>',0)->orderBy('name','asc')->get();
+        $techniques  = BookingTechnique::orderBy('name','asc')->get();
+        $clients  = EGRClient::orderBy('customer_name','asc')->get();
+        return view('backend.pages.f.booking.create_swiming_pool', compact('articles','techniques','clients'));
+    }
+
+
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function storeSalle(Request $request)
+    {
+        if (is_null($this->user) || !$this->user->can('f_booking_salle.create')) {
+            abort(403, 'Sorry !! You are Unauthorized to create any booking !');
+        }
+
+        $rules = array(
+                'salle_id.*'  => 'required',
+                'quantity.*'  => 'required',
+                'technique_id.*'  => 'required',
+                'description'  => 'required',
+                'nom_referent'  => 'required',
+                'telephone_referent'  => 'required',
+                //'courriel_referent'  => 'required',
+                'type_evenement'  => 'required',
+                'nombre_personnes'  => 'required',
+                'date_debut'  => 'required',
+                'date_fin'  => 'required',
+                //'client_id'  => 'required',
+            );
+
+            $error = Validator::make($request->all(),$rules);
+
+            if($error->fails()){
+                return response()->json([
+                    'error' => $error->errors()->all(),
+                ]);
+            }
+
+            try {DB::beginTransaction();
+
+            $date = Carbon::now();
+            $booking_no = $request->booking_no;
+            $booking_signature = $request->booking_signature;
+            $description = $request->description;
+            $statut_demandeur =$request->statut_demandeur; 
+            $nom_demandeur = $request->nom_demandeur;
+            $adresse_demandeur = $request->adresse_demandeur;
+            $telephone_demandeur = $request->telephone_demandeur;
+            $nom_referent =$request->nom_referent; 
+            $telephone_referent = $request->telephone_referent;
+            $quantity = $request->quantity;
+            $courriel_referent = $request->courriel_referent;
+            $type_evenement = $request->type_evenement;
+            $nombre_personnes = $request->nombre_personnes;
+            $date_debut =$request->date_debut; 
+            $date_fin = $request->date_fin;
+            $technique_id = $request->technique_id;
+            $salle_id = $request->salle_id;
+            $service_id =$request->service_id; 
+            $client_id =$request->client_id; 
+            $created_by = $this->user->name;
+
+
+            $booking_no = date("y").substr(number_format(time() * mt_rand(), 0, '', ''), 0, 6); 
+
+            $booking_signature = config('app.tin_number_company').Carbon::parse(Carbon::now())->format('YmdHis')."/".$booking_no;
+
+            //create booking
+            $booking = new FBooking();
+            $booking->date = $date;
+            $booking->booking_no = $booking_no;
+            $booking->booking_signature = $booking_signature;
+            $booking->description = $description;
+            $booking->statut_demandeur = $statut_demandeur;
+            $booking->nom_demandeur = $nom_demandeur;
+            $booking->adresse_demandeur = $adresse_demandeur;
+            $booking->telephone_demandeur = $telephone_demandeur;
+            $booking->nom_referent = $nom_referent;
+            $booking->telephone_referent = $telephone_referent;
+            $booking->courriel_referent = $courriel_referent;
+            $booking->type_evenement = $type_evenement;
+            $booking->nombre_personnes = $nombre_personnes;
+            $booking->date_debut = $date_debut;
+            $booking->date_fin = $date_fin;
+            $booking->client_id = $client_id;
+            $booking->created_by = $created_by;
+            $booking->save();
+            //insert details of booking No.
+            for( $count = 0; $count < count($salle_id); $count++ ){
+
+                $selling_price = BookingSalle::where('id', $salle_id[$count])->value('selling_price');
+                $total_amount_selling = $quantity[$count] * $selling_price;
+                $data = array(
+                    'salle_id' => $salle_id[$count],
+                    'quantity' => $quantity[$count],
+                    'selling_price' => $selling_price,
+                    'booking_no' => $booking_no,
+                    'date' => $date,
+                    'description' => $description,
+                    'statut_demandeur' => $statut_demandeur,
+                    'nom_demandeur' => $nom_demandeur,
+                    'adresse_demandeur' => $adresse_demandeur,
+                    'telephone_demandeur' => $telephone_demandeur,
+                    'nom_referent' => $nom_referent,
+                    'telephone_referent' => $telephone_referent,
+                    'courriel_referent' => $courriel_referent,
+                    'type_evenement' => $type_evenement,
+                    'nombre_personnes' => $nombre_personnes,
+                    'date_debut' => $date_debut,
+                    'date_fin' => $date_fin,
+                    'client_id' => $client_id,
+                    'total_amount_selling' => $total_amount_selling,
+                    'created_by' => $created_by,
+                    'booking_no' => $booking_no,
+                    'booking_signature' => $booking_signature,
+                    'technique_id' => $technique_id[$count],
+
+                );
+                $insert_data[] = $data;
+            }
+
+            for( $n = 0; $n < count($technique_id); $n++ ){
+
+                $technique_data = array(
+                    'booking_no' => $booking_no,
+                    'booking_signature' => $booking_signature,
+                    'technique_id' => $technique_id[$n],
+
+                );
+                $insert_technique_data[] = $technique_data;
+        }
+
+            FBookingDetail::insert($insert_data);
+            BookingTechniqueDetail::insert($insert_technique_data);
+
+            DB::commit();
+            session()->flash('success', 'Booking has been sent successfuly!!');
+            return redirect()->route('admin.f-booking-salles.index');
+
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+    }
+
+
+    public function storeRoom(Request $request)
+    {
+        if (is_null($this->user) || !$this->user->can('f_booking_room.create')) {
+            abort(403, 'Sorry !! You are Unauthorized to create any booking !');
+        }
+
+        $rules = array(
+                'room_id.*'  => 'required',
+                'quantity.*'  => 'required',
+                'description'  => 'required',
+                'nom_referent'  => 'required',
+                'telephone_referent'  => 'required',
+                //'courriel_referent'  => 'required',
+                //'type_evenement'  => 'required',
+                //'nombre_personnes'  => 'required',
+                'date_debut'  => 'required',
+                'date_fin'  => 'required',
+                //'client_id'  => 'required',
+            );
+
+            $error = Validator::make($request->all(),$rules);
+
+            if($error->fails()){
+                return response()->json([
+                    'error' => $error->errors()->all(),
+                ]);
+            }
+
+            try {DB::beginTransaction();
+
+            $date = Carbon::now();
+            $booking_no = $request->booking_no;
+            $booking_signature = $request->booking_signature;
+            $description = $request->description;
+            $statut_demandeur =$request->statut_demandeur; 
+            $nom_demandeur = $request->nom_demandeur;
+            $adresse_demandeur = $request->adresse_demandeur;
+            $telephone_demandeur = $request->telephone_demandeur;
+            $nom_referent =$request->nom_referent; 
+            $telephone_referent = $request->telephone_referent;
+            $quantity = $request->quantity;
+            $courriel_referent = $request->courriel_referent;
+            $type_evenement = $request->type_evenement;
+            $nombre_personnes = $request->nombre_personnes;
+            $date_debut =$request->date_debut; 
+            $date_fin = $request->date_fin;
+            $room_id = $request->room_id;
+            $service_id =$request->service_id; 
+            $client_id =$request->client_id; 
+            $created_by = $this->user->name;
+
+
+            $booking_no = date("y").substr(number_format(time() * mt_rand(), 0, '', ''), 0, 6); 
+
+            $booking_signature = config('app.tin_number_company').Carbon::parse(Carbon::now())->format('YmdHis')."/".$booking_no;
+
+            //create booking
+            $booking = new FBooking();
+            $booking->date = $date;
+            $booking->booking_no = $booking_no;
+            $booking->booking_signature = $booking_signature;
+            $booking->description = $description;
+            $booking->statut_demandeur = $statut_demandeur;
+            $booking->nom_demandeur = $nom_demandeur;
+            $booking->adresse_demandeur = $adresse_demandeur;
+            $booking->telephone_demandeur = $telephone_demandeur;
+            $booking->nom_referent = $nom_referent;
+            $booking->telephone_referent = $telephone_referent;
+            $booking->courriel_referent = $courriel_referent;
+            $booking->type_evenement = $type_evenement;
+            $booking->nombre_personnes = $nombre_personnes;
+            $booking->date_debut = $date_debut;
+            $booking->date_fin = $date_fin;
+            $booking->client_id = $client_id;
+            $booking->created_by = $created_by;
+            $booking->save();
+            //insert details of booking No.
+            for( $count = 0; $count < count($room_id); $count++ ){
+
+                $selling_price = BookingRoom::where('id', $room_id[$count])->value('selling_price');
+                $total_amount_selling = $quantity[$count] * $selling_price;
+                $data = array(
+                    'room_id' => $room_id[$count],
+                    'quantity' => $quantity[$count],
+                    'selling_price' => $selling_price,
+                    'booking_no' => $booking_no,
+                    'date' => $date,
+                    'description' => $description,
+                    'statut_demandeur' => $statut_demandeur,
+                    'nom_demandeur' => $nom_demandeur,
+                    'adresse_demandeur' => $adresse_demandeur,
+                    'telephone_demandeur' => $telephone_demandeur,
+                    'nom_referent' => $nom_referent,
+                    'telephone_referent' => $telephone_referent,
+                    'courriel_referent' => $courriel_referent,
+                    'type_evenement' => $type_evenement,
+                    'nombre_personnes' => $nombre_personnes,
+                    'date_debut' => $date_debut,
+                    'date_fin' => $date_fin,
+                    'client_id' => $client_id,
+                    'total_amount_selling' => $total_amount_selling,
+                    'created_by' => $created_by,
+                    'booking_no' => $booking_no,
+                    'booking_signature' => $booking_signature
+
+                );
+                $insert_data[] = $data;
+            }
+
+            FBookingDetail::insert($insert_data);
+
+            DB::commit();
+            session()->flash('success', 'Booking has been sent successfuly!!');
+            return redirect()->route('admin.f-booking-rooms.index');
+
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+    }
+
+    public function storeService(Request $request)
+    {
+        if (is_null($this->user) || !$this->user->can('f_booking_service.create')) {
+            abort(403, 'Sorry !! You are Unauthorized to create any booking !');
+        }
+
+        $rules = array(
+                'service_id.*'  => 'required',
+                'quantity.*'  => 'required',
+                //'technique_id.*'  => 'required',
+                'description'  => 'required',
+                'date_debut'  => 'required',
+                'date_fin'  => 'required',
+            );
+
+            $error = Validator::make($request->all(),$rules);
+
+            if($error->fails()){
+                return response()->json([
+                    'error' => $error->errors()->all(),
+                ]);
+            }
+
+            try {DB::beginTransaction();
+
+            $date = Carbon::now();
+            $booking_no = $request->booking_no;
+            $booking_signature = $request->booking_signature;
+            $description = $request->description;
+            $statut_demandeur =$request->statut_demandeur; 
+            $nom_demandeur = $request->nom_demandeur;
+            $adresse_demandeur = $request->adresse_demandeur;
+            $telephone_demandeur = $request->telephone_demandeur;
+            $nom_referent =$request->nom_referent; 
+            $telephone_referent = $request->telephone_referent;
+            $courriel_referent = $request->courriel_referent;
+            $type_evenement = $request->type_evenement;
+            $nombre_personnes = $request->nombre_personnes;
+            $quantity = $request->quantity;
+            $date_debut =$request->date_debut; 
+            $date_fin = $request->date_fin;
+            $technique_id = $request->technique_id;
+            $service_id =$request->service_id; 
+            $created_by = $this->user->name;
+
+
+            $booking_no = date("y").substr(number_format(time() * mt_rand(), 0, '', ''), 0, 6); 
+
+            $booking_signature = config('app.tin_number_company').Carbon::parse(Carbon::now())->format('YmdHis')."/".$booking_no;
+
+            //create booking
+            $booking = new FBooking();
+            $booking->date = $date;
+            $booking->booking_no = $booking_no;
+            $booking->booking_signature = $booking_signature;
+            $booking->description = $description;
+            $booking->statut_demandeur = $statut_demandeur;
+            $booking->nom_demandeur = $nom_demandeur;
+            $booking->adresse_demandeur = $adresse_demandeur;
+            $booking->telephone_demandeur = $telephone_demandeur;
+            $booking->nom_referent = $nom_referent;
+            $booking->telephone_referent = $telephone_referent;
+            $booking->courriel_referent = $courriel_referent;
+            $booking->type_evenement = $type_evenement;
+            $booking->nombre_personnes = $nombre_personnes;
+            $booking->date_debut = $date_debut;
+            $booking->date_fin = $date_fin;
+            $booking->created_by = $created_by;
+            $booking->save();
+            //insert details of booking No.
+            for( $count = 0; $count < count($service_id); $count++ ){
+
+                $selling_price = BookingService::where('id', $service_id[$count])->value('selling_price');
+                $total_amount_selling = $quantity[$count] * $selling_price;
+                $data = array(
+                    'service_id' => $service_id[$count],
+                    'quantity' => $quantity[$count],
+                    'selling_price' => $selling_price,
+                    'booking_no' => $booking_no,
+                    'date' => $date,
+                    'description' => $description,
+                    'statut_demandeur' => $statut_demandeur,
+                    'nom_demandeur' => $nom_demandeur,
+                    'adresse_demandeur' => $adresse_demandeur,
+                    'telephone_demandeur' => $telephone_demandeur,
+                    'nom_referent' => $nom_referent,
+                    'telephone_referent' => $telephone_referent,
+                    'courriel_referent' => $courriel_referent,
+                    'type_evenement' => $type_evenement,
+                    'nombre_personnes' => $nombre_personnes,
+                    'date_debut' => $date_debut,
+                    'date_fin' => $date_fin,
+                    'total_amount_selling' => $total_amount_selling,
+                    'created_by' => $created_by,
+                    'booking_signature' => $booking_signature,
+
+                );
+                $insert_data[] = $data;
+            }
+
+            FBookingDetail::insert($insert_data);
+
+            DB::commit();
+
+            session()->flash('success', 'Booking has been sent successfuly!!');
+            return redirect()->route('admin.f-booking-services.index');
+
+            } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+    }
+    public function storeKidnessSpace(Request $request)
+    {
+        if (is_null($this->user) || !$this->user->can('f_booking_kidness_space.create')) {
+            abort(403, 'Sorry !! You are Unauthorized to create any booking !');
+        }
+
+        $rules = array(
+                'kidness_space_id.*'  => 'required',
+                'quantity.*'  => 'required',
+                //'technique_id.*'  => 'required',
+                'description'  => 'required',
+                'date_debut'  => 'required',
+                'date_fin'  => 'required',
+            );
+
+            $error = Validator::make($request->all(),$rules);
+
+            if($error->fails()){
+                return response()->json([
+                    'error' => $error->errors()->all(),
+                ]);
+            }
+
+            try {DB::beginTransaction();
+
+            $date = Carbon::now();
+            $booking_no = $request->booking_no;
+            $booking_signature = $request->booking_signature;
+            $description = $request->description;
+            $statut_demandeur =$request->statut_demandeur; 
+            $nom_demandeur = $request->nom_demandeur;
+            $adresse_demandeur = $request->adresse_demandeur;
+            $telephone_demandeur = $request->telephone_demandeur;
+            $nom_referent =$request->nom_referent; 
+            $telephone_referent = $request->telephone_referent;
+            $courriel_referent = $request->courriel_referent;
+            $type_evenement = $request->type_evenement;
+            $nombre_personnes = $request->nombre_personnes;
+            $quantity = $request->quantity;
+            $date_debut =$request->date_debut; 
+            $date_fin = $request->date_fin;
+            $technique_id = $request->technique_id;
+            $kidness_space_id =$request->kidness_space_id; 
+            $created_by = $this->user->name;
+
+
+            $booking_no = date("y").substr(number_format(time() * mt_rand(), 0, '', ''), 0, 6); 
+
+            $booking_signature = config('app.tin_number_company').Carbon::parse(Carbon::now())->format('YmdHis')."/".$booking_no;
+
+            //create booking
+            $booking = new FBooking();
+            $booking->date = $date;
+            $booking->booking_no = $booking_no;
+            $booking->booking_signature = $booking_signature;
+            $booking->description = $description;
+            $booking->statut_demandeur = $statut_demandeur;
+            $booking->nom_demandeur = $nom_demandeur;
+            $booking->adresse_demandeur = $adresse_demandeur;
+            $booking->telephone_demandeur = $telephone_demandeur;
+            $booking->nom_referent = $nom_referent;
+            $booking->telephone_referent = $telephone_referent;
+            $booking->courriel_referent = $courriel_referent;
+            $booking->type_evenement = $type_evenement;
+            $booking->nombre_personnes = $nombre_personnes;
+            $booking->date_debut = $date_debut;
+            $booking->date_fin = $date_fin;
+            $booking->created_by = $created_by;
+            $booking->save();
+            //insert details of booking No.
+            for( $count = 0; $count < count($kidness_space_id); $count++ ){
+
+                $selling_price = KidnessSpace::where('id', $kidness_space_id[$count])->value('selling_price');
+                $total_amount_selling = $quantity[$count] * $selling_price;
+                $data = array(
+                    'kidness_space_id' => $kidness_space_id[$count],
+                    'quantity' => $quantity[$count],
+                    'selling_price' => $selling_price,
+                    'booking_no' => $booking_no,
+                    'date' => $date,
+                    'description' => $description,
+                    'statut_demandeur' => $statut_demandeur,
+                    'nom_demandeur' => $nom_demandeur,
+                    'adresse_demandeur' => $adresse_demandeur,
+                    'telephone_demandeur' => $telephone_demandeur,
+                    'nom_referent' => $nom_referent,
+                    'telephone_referent' => $telephone_referent,
+                    'courriel_referent' => $courriel_referent,
+                    'type_evenement' => $type_evenement,
+                    'nombre_personnes' => $nombre_personnes,
+                    'date_debut' => $date_debut,
+                    'date_fin' => $date_fin,
+                    'total_amount_selling' => $total_amount_selling,
+                    'created_by' => $created_by,
+                    'booking_signature' => $booking_signature,
+
+                );
+                $insert_data[] = $data;
+            }
+
+            FBookingDetail::insert($insert_data);
+
+            DB::commit();
+
+            session()->flash('success', 'Booking has been sent successfuly!!');
+            return redirect()->route('admin.f-booking-kidness-space.index');
+
+            } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+    }
+
+    public function storeSwimingPool(Request $request)
+    {
+        if (is_null($this->user) || !$this->user->can('f_booking_swiming_pool.create')) {
+            abort(403, 'Sorry !! You are Unauthorized to create any booking !');
+        }
+
+        $rules = array(
+                'swiming_pool_id.*'  => 'required',
+                'quantity.*'  => 'required',
+                //'technique_id.*'  => 'required',
+                'description'  => 'required',
+                'date_debut'  => 'required',
+                'date_fin'  => 'required',
+            );
+
+            $error = Validator::make($request->all(),$rules);
+
+            if($error->fails()){
+                return response()->json([
+                    'error' => $error->errors()->all(),
+                ]);
+            }
+
+            try {DB::beginTransaction();
+
+            $date = Carbon::now();
+            $booking_no = $request->booking_no;
+            $booking_signature = $request->booking_signature;
+            $description = $request->description;
+            $statut_demandeur =$request->statut_demandeur; 
+            $nom_demandeur = $request->nom_demandeur;
+            $adresse_demandeur = $request->adresse_demandeur;
+            $telephone_demandeur = $request->telephone_demandeur;
+            $nom_referent =$request->nom_referent; 
+            $telephone_referent = $request->telephone_referent;
+            $courriel_referent = $request->courriel_referent;
+            $type_evenement = $request->type_evenement;
+            $nombre_personnes = $request->nombre_personnes;
+            $quantity = $request->quantity;
+            $date_debut =$request->date_debut; 
+            $date_fin = $request->date_fin;
+            $technique_id = $request->technique_id;
+            $swiming_pool_id =$request->swiming_pool_id; 
+            $created_by = $this->user->name;
+
+
+            $booking_no = date("y").substr(number_format(time() * mt_rand(), 0, '', ''), 0, 6); 
+
+            $booking_signature = config('app.tin_number_company').Carbon::parse(Carbon::now())->format('YmdHis')."/".$booking_no;
+
+            //create booking
+            $booking = new FBooking();
+            $booking->date = $date;
+            $booking->booking_no = $booking_no;
+            $booking->booking_signature = $booking_signature;
+            $booking->description = $description;
+            $booking->statut_demandeur = $statut_demandeur;
+            $booking->nom_demandeur = $nom_demandeur;
+            $booking->adresse_demandeur = $adresse_demandeur;
+            $booking->telephone_demandeur = $telephone_demandeur;
+            $booking->nom_referent = $nom_referent;
+            $booking->telephone_referent = $telephone_referent;
+            $booking->courriel_referent = $courriel_referent;
+            $booking->type_evenement = $type_evenement;
+            $booking->nombre_personnes = $nombre_personnes;
+            $booking->date_debut = $date_debut;
+            $booking->date_fin = $date_fin;
+            $booking->created_by = $created_by;
+            $booking->save();
+            //insert details of booking No.
+            for( $count = 0; $count < count($swiming_pool_id); $count++ ){
+
+                $selling_price = SwimingPool::where('id', $swiming_pool_id[$count])->value('selling_price');
+                $total_amount_selling = $quantity[$count] * $selling_price;
+                $data = array(
+                    'swiming_pool_id' => $swiming_pool_id[$count],
+                    'quantity' => $quantity[$count],
+                    'selling_price' => $selling_price,
+                    'booking_no' => $booking_no,
+                    'date' => $date,
+                    'description' => $description,
+                    'statut_demandeur' => $statut_demandeur,
+                    'nom_demandeur' => $nom_demandeur,
+                    'adresse_demandeur' => $adresse_demandeur,
+                    'telephone_demandeur' => $telephone_demandeur,
+                    'nom_referent' => $nom_referent,
+                    'telephone_referent' => $telephone_referent,
+                    'courriel_referent' => $courriel_referent,
+                    'type_evenement' => $type_evenement,
+                    'nombre_personnes' => $nombre_personnes,
+                    'date_debut' => $date_debut,
+                    'date_fin' => $date_fin,
+                    'total_amount_selling' => $total_amount_selling,
+                    'created_by' => $created_by,
+                    'booking_signature' => $booking_signature,
+
+                );
+                $insert_data[] = $data;
+            }
+
+            FBookingDetail::insert($insert_data);
+
+            DB::commit();
+
+            session()->flash('success', 'Booking has been sent successfuly!!');
+            return redirect()->route('admin.f-booking-swiming-pool.index');
+
+            } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
+    }
+
+    public function storeBreakFast(Request $request)
+    {
+        if (is_null($this->user) || !$this->user->can('booking.create')) {
+            abort(403, 'Sorry !! You are Unauthorized to create any booking !');
+        }
+
+        $rules = array(
+                'breakfast_id.*'  => 'required',
+                'quantity.*'  => 'required',
+                //'technique_id.*'  => 'required',
+                'description'  => 'required',
+                'date_debut'  => 'required',
+                'date_fin'  => 'required',
+            );
+
+            $error = Validator::make($request->all(),$rules);
+
+            if($error->fails()){
+                return response()->json([
+                    'error' => $error->errors()->all(),
+                ]);
+            }
+
+            try {DB::beginTransaction();
+
+            $date = Carbon::now();
+            $booking_no = $request->booking_no;
+            $booking_signature = $request->booking_signature;
+            $description = $request->description;
+            $statut_demandeur =$request->statut_demandeur; 
+            $nom_demandeur = $request->nom_demandeur;
+            $adresse_demandeur = $request->adresse_demandeur;
+            $telephone_demandeur = $request->telephone_demandeur;
+            $nom_referent =$request->nom_referent; 
+            $telephone_referent = $request->telephone_referent;
+            $courriel_referent = $request->courriel_referent;
+            $type_evenement = $request->type_evenement;
+            $nombre_personnes = $request->nombre_personnes;
+            $quantity = $request->quantity;
+            $date_debut =$request->date_debut; 
+            $date_fin = $request->date_fin;
+            $technique_id = $request->technique_id;
+            $breakfast_id =$request->breakfast_id; 
+            $created_by = $this->user->name;
+
+
+            $booking_no = date("y").substr(number_format(time() * mt_rand(), 0, '', ''), 0, 6); 
+
+            $booking_signature = config('app.tin_number_company').Carbon::parse(Carbon::now())->format('YmdHis')."/".$booking_no;
+
+            //create booking
+            $booking = new FBooking();
+            $booking->date = $date;
+            $booking->booking_no = $booking_no;
+            $booking->booking_signature = $booking_signature;
+            $booking->description = $description;
+            $booking->statut_demandeur = $statut_demandeur;
+            $booking->nom_demandeur = $nom_demandeur;
+            $booking->adresse_demandeur = $adresse_demandeur;
+            $booking->telephone_demandeur = $telephone_demandeur;
+            $booking->nom_referent = $nom_referent;
+            $booking->telephone_referent = $telephone_referent;
+            $booking->courriel_referent = $courriel_referent;
+            $booking->type_evenement = $type_evenement;
+            $booking->nombre_personnes = $nombre_personnes;
+            $booking->date_debut = $date_debut;
+            $booking->date_fin = $date_fin;
+            $booking->created_by = $created_by;
+            $booking->save();
+            //insert details of booking No.
+            for( $count = 0; $count < count($breakfast_id); $count++ ){
+
+                $selling_price = BreakFast::where('id', $breakfast_id[$count])->value('selling_price');
+                $total_amount_selling = $quantity[$count] * $selling_price;
+                $data = array(
+                    'breakfast_id' => $breakfast_id[$count],
+                    'quantity' => $quantity[$count],
+                    'selling_price' => $selling_price,
+                    'booking_no' => $booking_no,
+                    'date' => $date,
+                    'description' => $description,
+                    'statut_demandeur' => $statut_demandeur,
+                    'nom_demandeur' => $nom_demandeur,
+                    'adresse_demandeur' => $adresse_demandeur,
+                    'telephone_demandeur' => $telephone_demandeur,
+                    'nom_referent' => $nom_referent,
+                    'telephone_referent' => $telephone_referent,
+                    'courriel_referent' => $courriel_referent,
+                    'type_evenement' => $type_evenement,
+                    'nombre_personnes' => $nombre_personnes,
+                    'date_debut' => $date_debut,
+                    'date_fin' => $date_fin,
+                    'total_amount_selling' => $total_amount_selling,
+                    'created_by' => $created_by,
+                    'booking_signature' => $booking_signature,
+
+                );
+                $insert_data[] = $data;
+            }
+
+            FBookingDetail::insert($insert_data);
+
+
+            DB::commit();
+
+            session()->flash('success', 'Booking has been sent successfuly!!');
+            return redirect()->route('admin.booking-breakfast.index');
+
+            } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($booking_no)
+    {
+        //
+         $data = FBooking::where('booking_no', $booking_no)->first();
+         $techniques = BookingTechniqueDetail::where('booking_no', $booking_no)->get();
+         $datas = FBookingDetail::where('booking_no', $booking_no)->get();
+         return view('backend.pages.f.booking.show', compact('data','datas','booking_no','techniques'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        if (is_null($this->user) || !$this->user->can('booking.edit')) {
+            abort(403, 'Sorry !! You are Unauthorized to edit any order !');
+        }
+
+        $order = FBooking::find($id);
+        $articles  = FoodItem::where('status','RESTAURANT')->orderBy('name','asc')->get();
+        $employes  = Supplier::all();
+        return view('backend.pages.f.booking.edit', compact('order','employes','articles'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, $id)
+    {
+        if (is_null($this->user) || !$this->user->can('booking.edit')) {
+            abort(403, 'Sorry !! You are Unauthorized to edit any order !');
+        }
+
+        
+    }
+
+    public function validateBooking($booking_no)
+    {
+       if (is_null($this->user) || !$this->user->can('f_booking_swiming_pool.validate')) {
+            abort(403, 'Sorry !! You are Unauthorized to validate any booking !');
+        }
+
+
+        try {DB::beginTransaction();
+            
+
+        $data = FBookingDetail::where('booking_no',$booking_no)->first();
+
+        if (!empty($data->salle_id)) {
+            $salle_id = FBookingDetail::where('booking_no',$booking_no)->value('salle_id');
+            FBooking::where('booking_no', '=', $booking_no)
+                ->update(['status' => 1,'validated_by' => $this->user->name]);
+            FBookingDetail::where('booking_no', '=', $booking_no)
+                ->update(['status' => 1,'validated_by' => $this->user->name]);
+            BookingSalle::where('id', '=', $salle_id)
+                ->update(['status' => 1]);
+        }elseif(!empty($data->service_id)){
+            $service_id = FBookingDetail::where('booking_no',$booking_no)->value('service_id');
+            FBooking::where('booking_no', '=', $booking_no)
+                ->update(['status' => 1,'validated_by' => $this->user->name]);
+            FBookingDetail::where('booking_no', '=', $booking_no)
+                ->update(['status' => 1,'validated_by' => $this->user->name]);
+            BookingService::where('id', '=', $service_id)
+                ->update(['status' => 1]);
+        }elseif(!empty($data->breakfast_id)){
+            $breakfast_id = FBookingDetail::where('booking_no',$booking_no)->value('breakfast_id');
+            FBooking::where('booking_no', '=', $booking_no)
+                ->update(['status' => 1,'validated_by' => $this->user->name]);
+            FBookingDetail::where('booking_no', '=', $booking_no)
+                ->update(['status' => 1,'validated_by' => $this->user->name]);
+            BookingService::where('id', '=', $breakfast_id)
+                ->update(['status' => 1]);
+        }elseif(!empty($data->kidness_space_id)){
+            $kidness_space_id = FBookingDetail::where('booking_no',$booking_no)->value('kidness_space_id');
+            FBooking::where('booking_no', '=', $booking_no)
+                ->update(['status' => 1,'validated_by' => $this->user->name]);
+            FBookingDetail::where('booking_no', '=', $booking_no)
+                ->update(['status' => 1,'validated_by' => $this->user->name]);
+            BookingService::where('id', '=', $kidness_space_id)
+                ->update(['status' => 1]);
+        }elseif(!empty($data->swiming_pool_id)){
+            $swiming_pool_id = FBookingDetail::where('booking_no',$booking_no)->value('swiming_pool_id');
+            FBooking::where('booking_no', '=', $booking_no)
+                ->update(['status' => 1,'validated_by' => $this->user->name]);
+            FBookingDetail::where('booking_no', '=', $booking_no)
+                ->update(['status' => 1,'validated_by' => $this->user->name]);
+            BookingService::where('id', '=', $swiming_pool_id)
+                ->update(['status' => 1]);
+        }elseif(!empty($data->room_id)){
+            $room_id = FBookingDetail::where('booking_no',$booking_no)->value('room_id');
+            FBooking::where('booking_no', '=', $booking_no)
+                ->update(['status' => 1,'validated_by' => $this->user->name]);
+            FBookingDetail::where('booking_no', '=', $booking_no)
+                ->update(['status' => 1,'validated_by' => $this->user->name]);
+            BookingRoom::where('id', '=', $room_id)
+                ->update(['status' => 1]);
+        }else{
+            $table_id = FBookingDetail::where('booking_no',$booking_no)->value('table_id');
+            FBooking::where('booking_no', '=', $booking_no)
+                ->update(['status' => 1,'validated_by' => $this->user->name]);
+            FBookingDetail::where('booking_no', '=', $booking_no)
+                ->update(['status' => 1,'validated_by' => $this->user->name]);;
+        }
+
+
+            DB::commit();
+
+            session()->flash('success', 'booking has been validated !!');
+            return back();
+
+            } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+    }
+
+    public function reject($booking_no)
+    {
+       if (is_null($this->user) || !$this->user->can('f_booking_swiming_pool.reject')) {
+            abort(403, 'Sorry !! You are Unauthorized to reject any order !');
+        }
+
+        try {DB::beginTransaction();
+
+        FBooking::where('booking_no', '=', $booking_no)
+                ->update(['status' => -1,'rejected_by' => $this->user->name]);
+            FBookingDetail::where('booking_no', '=', $booking_no)
+                ->update(['status' => -1,'rejected_by' => $this->user->name]);
+
+            DB::commit();
+
+            session()->flash('success', 'Booking has been rejected !!');
+            return back();
+
+            } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+    }
+
+    public function reset($booking_no)
+    {
+       if (is_null($this->user) || !$this->user->can('f_booking_swiming_pool.reset')) {
+            abort(403, 'Sorry !! You are Unauthorized to reset any order !');
+        }
+
+        try {DB::beginTransaction();
+
+        FBooking::where('booking_no', '=', $booking_no)
+                ->update(['status' => 0,'reseted_by' => $this->user->name]);
+            FBookingDetail::where('booking_no', '=', $booking_no)
+                ->update(['status' => 0,'reseted_by' => $this->user->name]);
+
+            DB::commit();
+
+            session()->flash('success', 'Booking has been reseted !!');
+            return back();
+
+            } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+
+    }
+
+
+    public function htmlPdf($booking_no)
+    {
+        if (is_null($this->user) || !$this->user->can('f_booking.view')) {
+            abort(403, 'Sorry !! You are Unauthorized!');
+        }
+
+        $setting = DB::table('settings')->orderBy('created_at','desc')->first();
+        $description = FBooking::where('booking_no', $booking_no)->value('description');
+        $booking_signature = FBooking::where('booking_no', $booking_no)->value('booking_signature');
+        $date = FBooking::where('booking_no', $booking_no)->value('created_at');
+        $data = FBookingDetail::where('booking_no', $booking_no)->first();
+        $totalAmount = FBookingDetail::where('booking_no', '=', $booking_no)
+            ->sum('total_amount_selling');
+
+           $booking_no = FBooking::where('booking_no', $booking_no)->value('booking_no');
+
+           $datas = FBookingDetail::where('booking_no', $booking_no)->get();
+           $pdf = PDF::loadView('backend.pages.f.document.demande_reservation',compact('datas','booking_no','totalAmount','setting','description','booking_signature','date','data'));//->setPaper('a6', 'portrait');
+
+           Storage::put('public/f/reservation/'.$booking_no.'.pdf', $pdf->output());
+
+           // download pdf file
+           return $pdf->download('FICHE DE RESERVATION '.$booking_no.'.pdf'); 
+
+
+        
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($booking_no)
+    {
+        if (is_null($this->user) || !$this->user->can('f_booking_swiming_pool.delete')) {
+            abort(403, 'Sorry !! You are Unauthorized to delete any order !');
+        }
+
+        /*
+        try {DB::beginTransaction();
+
+        $order = FBooking::where('booking_no',$booking_no)->first();
+        if (!is_null($order)) {
+            $order->delete();
+            FBookingDetail::where('booking_no',$booking_no)->delete();
+        }
+
+            DB::commit();
+
+            session()->flash('success', 'Booking has been deleted !!');
+            return back();
+
+            } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
+        }
+        */
+    }
+}

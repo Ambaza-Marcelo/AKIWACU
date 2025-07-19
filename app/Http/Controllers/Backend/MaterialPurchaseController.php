@@ -13,7 +13,9 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Material;
 use App\Models\MaterialPurchase;
 use App\Models\MaterialPurchaseDetail;
+use App\Models\MaterialSupplierOrder;
 use App\Exports\MaterialPurchaseExport;
+use App\Models\Supplier;
 use Validator;
 use PDF;
 use Mail;
@@ -60,7 +62,8 @@ class MaterialPurchaseController extends Controller
         }
 
         $materials  = Material::orderBy('name','asc')->get();
-        return view('backend.pages.material_purchase.create', compact('materials'));
+        $suppliers = Supplier::orderBy('supplier_name','asc')->get();
+        return view('backend.pages.material_purchase.create', compact('materials','suppliers'));
     }
 
     /**
@@ -80,6 +83,10 @@ class MaterialPurchaseController extends Controller
                 'date'  => 'required',
                 'quantity.*'  => 'required',
                 'price.*'  => 'required',
+                'vat_supplier_payer'  => 'required',
+                //'vat_rate'  => 'required',
+                //'invoice_currency'  => 'required',
+                'supplier_id'  => 'required',
                 'description'  => 'required|max:490'
             );
 
@@ -97,8 +104,19 @@ class MaterialPurchaseController extends Controller
             $date = $request->date;
             $quantity = $request->quantity;
             $price = $request->price;
-            $description =$request->description; 
-            $latest = MaterialPurchase::latest()->first();
+            $vat_supplier_payer = $request->vat_supplier_payer;
+            $vat_rate = $request->vat_rate;
+            $invoice_currency = $request->invoice_currency;
+            $supplier_id = $request->supplier_id;
+            $description =$request->description;
+
+            if (!empty($vat_rate)) {
+                $vat_rate = $vat_rate;
+            }else{
+                $vat_rate = 0;
+            }
+
+            $latest = MaterialPurchase::orderBy('id','desc')->first();
             if ($latest) {
                $purchase_no = 'BDA' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{
@@ -113,6 +131,10 @@ class MaterialPurchaseController extends Controller
             $purchase->date = $date;
             $purchase->purchase_signature = $purchase_signature;
             $purchase->purchase_no = $purchase_no;
+            $purchase->vat_supplier_payer = $vat_supplier_payer;
+            $purchase->vat_rate = $vat_rate;
+            $purchase->invoice_currency = $invoice_currency;
+            $purchase->supplier_id = $supplier_id;
             $purchase->created_by = $created_by;
             $purchase->description = $description;
             $purchase->created_at = \Carbon\Carbon::now();
@@ -120,14 +142,33 @@ class MaterialPurchaseController extends Controller
             //insert details of purchase No.
             for( $count = 0; $count < count($material_id); $count++ ){
 
-                //$price = Material::where('id', $material_id[$count])->value('purchase_price');
-                $total_value = $quantity[$count] * $price[$count];
+                if($vat_supplier_payer == 1){
+                    $price_nvat = ($price[$count]*$quantity[$count]);
+                    $vat = ($price_nvat* $vat_rate)/100;
+                    $price_wvat = $price_nvat + $vat;
+
+                }else{
+                    $price_nvat = ($price[$count]*$quantity[$count]);
+                    $vat = 0;
+                    $price_wvat = $price_nvat + $vat;
+                }
+
+                $purchase_price = Material::where('id', $material_id[$count])->value('purchase_price');
+                $total_value = $price_wvat;
                 $data = array(
                     'material_id' => $material_id[$count],
                     'date' => $date,
                     'quantity' => $quantity[$count],
+                    'vat_supplier_payer' => $vat_supplier_payer,
+                    'vat_rate' => $vat_rate,
+                    'invoice_currency' => $invoice_currency,
+                    'supplier_id' => $supplier_id,
+                    'purchase_price' => $purchase_price,
                     'price' => $price[$count],
                     'description' => $description,
+                    'price_nvat' => $price_nvat,
+                    'vat' => $vat,
+                    'price_wvat' => $price_wvat,
                     'total_value' => $total_value,
                     'created_by' => $created_by,
                     'purchase_no' => $purchase_no,
@@ -136,11 +177,24 @@ class MaterialPurchaseController extends Controller
                 );
                 $insert_data[] = $data;
             }
+            /*
+            $mail = Supplier::where('id', $supplier_id)->value('mail');
+            $name = Supplier::where('id', $supplier_id)->value('name');
+
+            $mailData = [
+                    'title' => 'COMMANDE',
+                    'purchase_no' => $purchase_no,
+                    'name' => $name,
+                    //'body' => 'This is for testing email using smtp.'
+                    ];
+         
+        Mail::to($mail)->send(new OrderMail($mailData));
+        */
 
             MaterialPurchaseDetail::insert($insert_data);
 
-            DB::commit();
-            session()->flash('success', 'Material has been created !!');
+        DB::commit();
+            session()->flash('success', 'Purchase has been created !!');
             return redirect()->route('admin.material-purchases.index');
         } catch (\Exception $e) {
             // An error occured; cancel the transaction...
@@ -151,6 +205,7 @@ class MaterialPurchaseController extends Controller
 
             throw $e;
         }
+
     }
 
     /**
@@ -180,11 +235,11 @@ class MaterialPurchaseController extends Controller
         }
 
         $materials  = Material::orderBy('name','asc')->get();
-
+        $suppliers = Supplier::orderBy('supplier_name','asc')->get();
         $data = MaterialPurchase::where('purchase_no', $purchase_no)->first();
         $datas = MaterialPurchaseDetail::where('purchase_no', $purchase_no)->get();
 
-        return view('backend.pages.material_purchase.edit', compact('datas','data','materials'));
+        return view('backend.pages.material_purchase.edit', compact('datas','data','materials','suppliers'));
 
     }
 
@@ -206,7 +261,11 @@ class MaterialPurchaseController extends Controller
                 'date'  => 'required',
                 'quantity.*'  => 'required',
                 'price.*'  => 'required',
-                'description'  => 'required'
+                'vat_supplier_payer'  => 'required',
+                //'vat_rate'  => 'required',
+                //'invoice_currency'  => 'required',
+                'supplier_id'  => 'required',
+                'description'  => 'required|max:490'
             );
 
             $error = Validator::make($request->all(),$rules);
@@ -219,33 +278,80 @@ class MaterialPurchaseController extends Controller
 
             try {DB::beginTransaction();
 
+            $order_no = MaterialSupplierOrder::where('purchase_no',$purchase_no)->value('order_no');
+
+            if (!empty($order_no)) {
+                $status = -3;
+            }else{
+                $status = 3;
+            }
+
             $material_id = $request->material_id;
             $date = $request->date;
             $quantity = $request->quantity;
             $price = $request->price;
-            $description =$request->description; 
+            $vat_supplier_payer = $request->vat_supplier_payer;
+            $vat_rate = $request->vat_rate;
+            $invoice_currency = $request->invoice_currency;
+            $supplier_id = $request->supplier_id;
+            $description =$request->description;
+
+            if (!empty($vat_rate)) {
+                $vat_rate = $vat_rate;
+            }else{
+                $vat_rate = 0;
+            }
+
+            $created_by = $this->user->name;
 
             $purchase = MaterialPurchase::where('purchase_no',$purchase_no)->first();
             $purchase->date = $date;
+            $purchase->vat_supplier_payer = $vat_supplier_payer;
+            $purchase->vat_rate = $vat_rate;
+            $purchase->invoice_currency = $invoice_currency;
+            $purchase->supplier_id = $supplier_id;
+            $purchase->created_by = $created_by;
             $purchase->description = $description;
+            $purchase->status = $status;
             $purchase->save();
             //insert details of purchase No.
             for( $count = 0; $count < count($material_id); $count++ ){
 
-                $created_by = $this->user->name;
+                if($vat_supplier_payer == 1){
+                    $price_nvat = ($price[$count]*$quantity[$count]);
+                    $vat = ($price_nvat* $vat_rate)/100;
+                    $price_wvat = $price_nvat + $vat;
+
+                }else{
+                    $price_nvat = ($price[$count]*$quantity[$count]);
+                    $vat = 0;
+                    $price_wvat = $price_nvat + $vat;
+                }
+
                 $purchase_signature = MaterialPurchase::where('purchase_no',$purchase_no)->value('purchase_signature');
-                //$price = Material::where('id', $material_id[$count])->value('price');
-                $total_value = $quantity[$count] * $price[$count];
+
+                $purchase_price = Material::where('id', $material_id[$count])->value('purchase_price');
+                $total_value = $price_wvat;
                 $data = array(
                     'material_id' => $material_id[$count],
                     'date' => $date,
                     'quantity' => $quantity[$count],
+                    'vat_supplier_payer' => $vat_supplier_payer,
+                    'vat_rate' => $vat_rate,
+                    'invoice_currency' => $invoice_currency,
+                    'supplier_id' => $supplier_id,
+                    'purchase_price' => $purchase_price,
                     'price' => $price[$count],
                     'description' => $description,
+                    'price_nvat' => $price_nvat,
+                    'vat' => $vat,
+                    'price_wvat' => $price_wvat,
                     'total_value' => $total_value,
                     'created_by' => $created_by,
                     'purchase_no' => $purchase_no,
                     'purchase_signature' => $purchase_signature,
+                    'status' => $status,
+                    'created_at' => \Carbon\Carbon::now()
                 );
                 $insert_data[] = $data;
             }
@@ -254,9 +360,8 @@ class MaterialPurchaseController extends Controller
 
             MaterialPurchaseDetail::insert($insert_data);
 
-
-        DB::commit();
-            session()->flash('success', 'Purchase has been updated successfuly !!');
+            DB::commit();
+            session()->flash('success', 'Plan has been updated successfuly !!');
             return redirect()->route('admin.material-purchases.index');
         } catch (\Exception $e) {
             // An error occured; cancel the transaction...
@@ -276,14 +381,13 @@ class MaterialPurchaseController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to validate any purchase !');
         }
 
-        try {DB::beginTransaction();
-
+            try {DB::beginTransaction();
             MaterialPurchase::where('purchase_no', '=', $purchase_no)
                 ->update(['status' => 2,'validated_by' => $this->user->name]);
             MaterialPurchaseDetail::where('purchase_no', '=', $purchase_no)
                 ->update(['status' => 2,'validated_by' => $this->user->name]);
 
-            DB::commit();
+                DB::commit();
             session()->flash('success', 'purchase has been validated !!');
             return back();
         } catch (\Exception $e) {
@@ -311,8 +415,8 @@ class MaterialPurchaseController extends Controller
             MaterialPurchaseDetail::where('purchase_no', '=', $purchase_no)
                 ->update(['status' => -1,'rejected_by' => $this->user->name]);
 
-        DB::commit();
-            session()->flash('success', 'Material has been rejected !!');
+                DB::commit();
+            session()->flash('success', 'Plan has been rejected successfuly !!');
             return back();
         } catch (\Exception $e) {
             // An error occured; cancel the transaction...
@@ -339,7 +443,7 @@ class MaterialPurchaseController extends Controller
             MaterialPurchaseDetail::where('purchase_no', '=', $purchase_no)
                 ->update(['status' => 1,'reseted_by' => $this->user->name]);
 
-        DB::commit();
+                DB::commit();
             session()->flash('success', 'MaterialPurchase has been reseted !!');
             return back();
         } catch (\Exception $e) {
@@ -362,13 +466,13 @@ class MaterialPurchaseController extends Controller
 
         try {DB::beginTransaction();
 
-        MaterialPurchase::where('purchase_no', '=', $purchase_no)
+            MaterialPurchase::where('purchase_no', '=', $purchase_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
             MaterialPurchaseDetail::where('purchase_no', '=', $purchase_no)
                 ->update(['status' => 3,'confirmed_by' => $this->user->name]);
 
-        DB::commit();
-            session()->flash('success', 'Material has been confirmed !!');
+            DB::commit();
+            session()->flash('success', 'Purchase has been confirmed !!');
             return back();
         } catch (\Exception $e) {
             // An error occured; cancel the transaction...
@@ -388,15 +492,16 @@ class MaterialPurchaseController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to confirm any purchase !');
         }
 
+
         try {DB::beginTransaction();
 
-        MaterialPurchase::where('purchase_no', '=', $purchase_no)
+            MaterialPurchase::where('purchase_no', '=', $purchase_no)
                 ->update(['status' => 4,'approuved_by' => $this->user->name]);
             MaterialPurchaseDetail::where('purchase_no', '=', $purchase_no)
                 ->update(['status' => 4,'approuved_by' => $this->user->name]);
 
-        DB::commit();
-            session()->flash('success', 'Material has been confirmed !!');
+            DB::commit();
+            session()->flash('success', 'Purchase has been confirmed !!');
             return back();
         } catch (\Exception $e) {
             // An error occured; cancel the transaction...
@@ -420,15 +525,22 @@ class MaterialPurchaseController extends Controller
         $stat = MaterialPurchase::where('purchase_no', $purchase_no)->value('status');
         $description = MaterialPurchase::where('purchase_no', $purchase_no)->value('description');
         $date = MaterialPurchase::where('purchase_no', $purchase_no)->value('date');
-        if($stat == 2 && $stat == 3 || $stat == 4 || $stat == 5){
+        $data = MaterialPurchase::where('purchase_no', $purchase_no)->first();
+        if($stat == 2 || $stat == 3 || $stat == 4 || $stat == 5 || $stat == 6 || $stat == -3){
            $purchase_no = MaterialPurchase::where('purchase_no', $purchase_no)->value('purchase_no');
            $purchase_signature = MaterialPurchase::where('purchase_no', $purchase_no)->value('purchase_signature');
            $totalValue = DB::table('material_purchase_details')
             ->where('purchase_no', '=', $purchase_no)
             ->sum('total_value');
+            $price_nvat = DB::table('material_purchase_details')
+            ->where('purchase_no', '=', $purchase_no)
+            ->sum('price_nvat');
+            $vat = DB::table('material_purchase_details')
+            ->where('purchase_no', '=', $purchase_no)
+            ->sum('vat');
 
            $datas = MaterialPurchaseDetail::where('purchase_no', $purchase_no)->get();
-           $pdf = PDF::loadView('backend.pages.document.material_purchase',compact('datas','purchase_no','setting','description','date','purchase_signature','totalValue'));
+           $pdf = PDF::loadView('backend.pages.document.material_purchase',compact('datas','purchase_no','setting','description','date','purchase_signature','totalValue','price_nvat','vat','data'));
 
            Storage::put('public/pdf/material_purchase/'.'FICHE_DEMANDE_ACHAT_'.$purchase_no.'.pdf', $pdf->output());
 
@@ -445,11 +557,6 @@ class MaterialPurchaseController extends Controller
         
     }
 
-    public function exportToExcel(Request $request)
-    {
-        return Excel::download(new MaterialPurchaseExport, 'RAPPORT_DEMANDE_ACHAT.xlsx');
-    }
-
     /**
      * Remove the specified resource from storage.
      *
@@ -461,7 +568,7 @@ class MaterialPurchaseController extends Controller
         if (is_null($this->user) || !$this->user->can('material_purchase.delete')) {
             abort(403, 'Sorry !! You are Unauthorized to delete any purchase !');
         }
-
+        /*
         try {DB::beginTransaction();
 
         $purchase = MaterialPurchase::where('purchase_no',$purchase_no)->first();
@@ -471,7 +578,7 @@ class MaterialPurchaseController extends Controller
         }
 
         DB::commit();
-            session()->flash('success', 'Material has been deleted !!');
+            session()->flash('success', 'Purchase has been deleted !!');
             return back();
         } catch (\Exception $e) {
             // An error occured; cancel the transaction...
@@ -482,5 +589,8 @@ class MaterialPurchaseController extends Controller
 
             throw $e;
         }
+        */
+
     }
+
 }

@@ -2,7 +2,7 @@
 @extends('backend.layouts.master')
 
 @section('title')
-@lang('Demande Achat des Articles') - @lang('messages.admin_panel')
+@lang('Demande d achat des Articles') - @lang('messages.admin_panel')
 @endsection
 
 @section('styles')
@@ -21,7 +21,7 @@
     <div class="row align-items-center">
         <div class="col-sm-6">
             <div class="breadcrumbs-area clearfix">
-                <h4 class="page-title pull-left">@lang('Demande Achat des Articles')</h4>
+                <h4 class="page-title pull-left">@lang('Demande d achat des Articles')</h4>
                 <ul class="breadcrumbs pull-left">
                     <li><a href="{{ route('admin.dashboard') }}">@lang('messages.dashboard')</a></li>
                     <li><span>@lang('messages.list')</span></li>
@@ -41,7 +41,7 @@
         <div class="col-12 mt-5">
             <div class="card">
                 <div class="card-body">
-                    <h4 class="header-title float-left">Demande Achat des Articles</h4>
+                    <h4 class="header-title float-left">Demande d'achat des Articles</h4>
                     <p class="float-right mb-2">
                         @if (Auth::guard('admin')->user()->can('food_purchase.create'))
                             <a class="btn btn-primary text-white" href="{{ route('admin.food-purchases.create') }}">@lang('messages.new')</a>
@@ -55,10 +55,12 @@
                                 <tr>
                                     <th width="5%">#</th>
                                     <th width="10%">@lang('messages.date')</th>
-                                    <th width="10%">Purchase No</th>
-                                    <th width="10%">@lang('Purchase Signature')</th>
+                                    <th width="10%">Purchase Request No</th>
+                                    <th width="10%">@lang('Purchase Request Signature')</th>
                                     <th width="10%">@lang('messages.status')</th>
-                                    <th width="30%">@lang('messages.description')</th>
+                                    <th width="10%">Fournisseur</th>
+                                    <th width="30%">
+                                        @lang('messages.description')</th>
                                     <th width="10%">@lang('messages.created_by')</th>
                                     <th width="15%">Action</th>
                                 </tr>
@@ -80,14 +82,19 @@
                                     <td><span class="badge badge-success">Approuvé</span></td>
                                     @elseif($purchase->status == 5)
                                     <td><span class="badge badge-success">Commandé</span></td>
+                                    @elseif($purchase->status == 6)
+                                    <td><span class="badge badge-success">Receptionnée</span></td>
+                                    @elseif($purchase->status == -3)
+                                    <td><span class="badge badge-warning">Modifié</span></td>
                                     @else
                                     <td><span class="badge badge-primary">Encours...</span></td>
                                     @endif
+                                    <td>@if($purchase->supplier_id){{ $purchase->supplier->supplier_name }} @endif</td>
                                     <td>{{ $purchase->description }}</td>
                                     <td>{{ $purchase->created_by }}</td>
                                     <td>
                                         @if (Auth::guard('admin')->user()->can('food_purchase.create'))
-                                        @if($purchase->status == 2 && $purchase->status == 3 || $purchase->status == 4 || $purchase->status == 5)
+                                        @if($purchase->status == 2 && $purchase->status == 3 || $purchase->status == 4 || $purchase->status == 5 || $purchase->status == 6 || $purchase->status == -3)
                                         <a href="{{ route('admin.food-purchases.foodPurchase',$purchase->purchase_no) }}"><img src="{{ asset('img/ISSh.gif') }}" width="60" title="Télécharger d'abord le document et puis imprimer"></a>
                                         @endif
                                         @endif
@@ -143,21 +150,28 @@
                                             </form>
                                         @endif
                                         @if (Auth::guard('admin')->user()->can('food_purchase.reset'))
+                                            @if($purchase->status == -1 || $purchase->status == 2 || $purchase->status == 3 || $purchase->status == 4)
                                             <a class="btn btn-primary text-white" href="{{ route('admin.food-purchases.reset', $purchase->purchase_no) }}"
                                             onclick="event.preventDefault(); document.getElementById('reset-form-{{ $purchase->purchase_no }}').submit();">
                                                 Annuler
                                             </a>
+                                            @endif
                                             <form id="reset-form-{{ $purchase->purchase_no }}" action="{{ route('admin.food-purchases.reset', $purchase->purchase_no) }}" method="POST" style="display: none;">
                                                 @method('PUT')
                                                 @csrf
                                             </form>
                                         @endif
-                                        @if (Auth::guard('admin')->user()->can('food_purchase.create'))
+                                        @if (Auth::guard('admin')->user()->can('food_supplier_order.create'))
                                         @if($purchase->status == 4)
-                                        <a href="{{ route('admin.food-supplier-orders.create',$purchase->purchase_no)}}" class="btn btn-primary">Commander</a>
+                                        <a href="{{ route('admin.food-supplier-orders.create',$purchase->purchase_no)}}" class="btn btn-success">Faire une commande</a>
                                         @endif
                                         @endif
-                                        @if($purchase->status == 1 || $purchase->status == 0 || $purchase->status == 2 || $purchase->status == 3 || $purchase->status == 4)
+                                        @if (Auth::guard('admin')->user()->can('food_supplier_order.edit'))
+                                        @if($purchase->status == -3)
+                                        <a href="{{ route('admin.food-supplier-orders.edit',$purchase->purchase_no)}}" class="btn btn-primary">Modifier la commande</a>
+                                        @endif
+                                        @endif
+                                        @if($purchase->status == 1 || $purchase->status == 0 || $purchase->status == 2 || $purchase->status == 3 || $purchase->status == 4 || $purchase->status == 5)
                                         @if (Auth::guard('admin')->user()->can('food_purchase.edit'))
                                             <a class="btn btn-success text-white" href="{{ route('admin.food-purchases.edit', $purchase->purchase_no) }}">@lang('messages.edit')</a>
                                         @endif
@@ -207,6 +221,15 @@
                 responsive: true
             });
         }
+
+
+    function preventBack() {
+        window.history.forward();
+    }
+    setTimeout("preventBack()", 0);
+    window.onunload = function () {
+        null
+    };
 
      </script>
 @endsection

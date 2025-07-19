@@ -275,7 +275,7 @@
                             </tr> 
                             @endforeach
                         </table> 
-                        @if (Auth::guard('admin')->user()->can('invoice_kitchen.reset'))
+                        @if (Auth::guard('admin')->user()->can('facture.reimprimer'))
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="{{ route('admin.facture-brouillon.imprimer',$facture->invoice_number) }}"><img src="{{ asset('img/ISSh.gif') }}" width="60" title="Télécharger d'abord le document et puis imprimer"></a> 
                         @endif
                     </form>

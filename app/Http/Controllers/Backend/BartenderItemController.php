@@ -212,17 +212,34 @@ class BartenderItemController extends Controller
         $vat = BartenderItem::where('id',$id)->value('vat');
 
         $bartender_store = BartenderProductionStore::where('bartender_item_id',$id)->first();
-        $bartender_store->bartender_item_id = $id;
-        $bartender_store->quantity = $quantity;
-        $bartender_store->threshold_quantity = $threshold_quantity;
-        $bartender_store->purchase_price = $purchase_price;
-        $bartender_store->selling_price = $selling_price;
-        $bartender_store->vat = $vat;
-        $bartender_store->total_purchase_value = $quantity * $purchase_price;
-        $bartender_store->total_selling_value = $quantity * $selling_price;
-        $bartender_store->unit = $unit;
-        $bartender_store->created_by = $this->user->name;
-        $bartender_store->save();
+
+        if (!empty($bartender_store->id)) {
+            $bartender_store->bartender_item_id = $id;
+            $bartender_store->quantity = $quantity;
+            $bartender_store->threshold_quantity = $threshold_quantity;
+            $bartender_store->purchase_price = $purchase_price;
+            $bartender_store->selling_price = $selling_price;
+            $bartender_store->vat = $vat;
+            $bartender_store->total_purchase_value = $quantity * $purchase_price;
+            $bartender_store->total_selling_value = $quantity * $selling_price;
+            $bartender_store->unit = $unit;
+            $bartender_store->created_by = $this->user->name;
+            $bartender_store->save();
+        }else{
+            $bartender_store = new BartenderProductionStore();
+            $bartender_store->bartender_item_id = $id;
+            $bartender_store->quantity = $quantity;
+            $bartender_store->threshold_quantity = $threshold_quantity;
+            $bartender_store->purchase_price = $purchase_price;
+            $bartender_store->selling_price = $selling_price;
+            $bartender_store->vat = $vat;
+            $bartender_store->total_purchase_value = $quantity * $purchase_price;
+            $bartender_store->total_selling_value = $quantity * $selling_price;
+            $bartender_store->unit = $unit;
+            $bartender_store->created_by = $this->user->name;
+            $bartender_store->save();
+        }
+        
 
         DB::commit();
             session()->flash('success', 'BartenderItem has been updated !!');

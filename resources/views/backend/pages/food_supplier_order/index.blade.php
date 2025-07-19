@@ -13,7 +13,6 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.jqueryui.min.css">
 @endsection
 
-
 @section('admin-content')
 
 <!-- page title area start -->
@@ -68,8 +67,9 @@
                                     <td><a href="{{ route('admin.food-supplier-orders.show',$order->order_no)}}">{{ $order->order_no }}</a></td>
                                     <td>{{ $order->order_signature }}</td>
                                     <td>{{ $order->purchase_no }}</td>
-                                    <td>@if($order->supplier_id){{ $order->supplier->supplier_name }}@endif</td>
-                                    <td>@if($order->status == 1)<span class="badge badge-warning">Encours</span> @elseif($order->status == 2)<span class="badge badge-primary">Validé</span> @elseif($order->status == 3)<span class="badge badge-info">Confirmé</span> @elseif($order->status == 4)<span class="badge badge-primary">Approuvé</span> @elseif($order->status == 5)<span class="badge badge-success">Reception Totale</span>@elseif($order->status == -5)<span class="badge badge-info">Reception Partielle</span> @elseif($order->status == -1)<span class="badge badge-danger">Rejeté</span> @else<span class="badge badge-success">Receptionné</span>@endif</td>
+                                    <td>@if($order->supplier_id)Supplier: {{ $order->supplier->supplier_name }}@endif</td>
+                                    <td>@if($order->status == 1)<span class="badge badge-warning">Encours</span> @elseif($order->status == 2)<span class="badge badge-primary">Validé</span> @elseif($order->status == 3)<span class="badge badge-info">Confirmé</span>
+                                    @elseif($order->status == -3)<span class="badge badge-warning">Modifié</span>  @elseif($order->status == 4)<span class="badge badge-primary">Approuvé</span> @elseif($order->status == 5)<span class="badge badge-success">Reception Totale</span>@elseif($order->status == -5)<span class="badge badge-info">Reception Partielle</span> @elseif($order->status == -1)<span class="badge badge-danger">Rejeté</span> @else<span class="badge badge-success">Receptionné</span>@endif</td>
                                     <td>{{ $order->description }}</td>
                                     <td>{{ $order->created_by }}</td>
                                     <td>
@@ -136,7 +136,7 @@
                                                 @csrf
                                             </form>
                                         @endif
-                                        @if (Auth::guard('admin')->user()->can('food_reception.create'))
+                                        @if (Auth::guard('admin')->user()->can('food_reception.delete'))
                                         @if($order->status == 4 || $order->status == -5)
                                         <a href="{{ route('admin.food-receptions.create',$order->order_no)}}" class="btn btn-primary">Receptionner Partiellement</a>
                                         @endif
@@ -146,10 +146,11 @@
                                         <a href="{{ route('admin.food-reception-without-remaining.create',$order->order_no)}}" class="btn btn-success">Receptionner Totalement</a>
                                         @endif
                                         @endif
-                                        @if (Auth::guard('admin')->user()->can('food_supplier_order.edit'))
-                                            <a class="btn btn-success text-white" href="{{ route('admin.food-supplier-orders.edit', $order->order_no) }}">@lang('messages.edit')</a>
+                                        @if (Auth::guard('admin')->user()->can('food_reception.edit'))
+                                        @if($order->status == -3)
+                                        <a href="{{ route('admin.food-reception.edit',$order->order_no)}}" class="btn btn-primary">Modifier la reception</a>
                                         @endif
-
+                                        @endif
                                         @if (Auth::guard('admin')->user()->can('food_supplier_order.delete'))
                                             @if($order->status == -1 || $order->status == 1)
                                             <a class="btn btn-danger text-white" href="{{ route('admin.food-supplier-orders.destroy', $order->order_no) }}"
@@ -164,9 +165,7 @@
                                             @endif
                                         @endif
                                         @if (Auth::guard('admin')->user()->can('food_supplier_order.create'))
-                                        
-                                        <a href="{{ route('admin.food-supplier-orders.foodSupplierOrder',$order->order_no) }}"><img src="{{ asset('img/ISSh.gif') }}" width="60" title="Télécharger d'abord le document et puis imprimer"></a>
-                                        
+                                        <a href="{{ route('admin.food-supplier-orders.foodSupplierOrder',$order->order_no) }}"><img src="{{ asset('img/ISSh.gif') }}" width="60" title="Télécharger d'abord le document et puis imprimer"></a> 
                                         @endif
                                     </td>
                                 </tr>
@@ -203,6 +202,14 @@
                 responsive: true
             });
         }
+
+    function preventBack() {
+        window.history.forward();
+    }
+    setTimeout("preventBack()", 0);
+    window.onunload = function () {
+        null
+    };
 
      </script>
 @endsection

@@ -152,7 +152,7 @@ class MaterialStockinController extends Controller
             $purchase_price = $request->purchase_price;
             
 
-            $latest = MaterialStockin::latest()->first();
+            $latest = MaterialStockin::orderBy('id','desc')->first();
             if ($latest) {
                $stockin_no = 'BE' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{

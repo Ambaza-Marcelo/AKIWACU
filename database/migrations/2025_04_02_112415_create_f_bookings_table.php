@@ -1,0 +1,66 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateFBookingsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('f_bookings', function (Blueprint $table) {
+            $table->id();
+            $table->dateTime('date');
+            $table->string('booking_no');
+            $table->unique('booking_no');
+            $table->string('booking_signature')->nullable(true);
+            $table->text('description')->nullable(true);
+            $table->text('rejected_motif')->nullable(true);
+            $table->string('created_by')->nullable(true);
+            $table->string('statut_demandeur')->nullable(true);
+            $table->string('nom_demandeur')->nullable(true);
+            $table->string('adresse_demandeur')->nullable(true);
+            $table->string('telephone_demandeur')->nullable(true);
+            $table->string('nom_referent')->nullable(true);
+            $table->string('telephone_referent')->nullable(true);
+            $table->string('courriel_referent')->nullable(true);
+            $table->string('type_evenement')->nullable(true);
+            $table->string('nombre_personnes')->nullable(true);
+            $table->string('date_debut')->nullable(true);
+            $table->string('date_fin')->nullable(true);
+            $table->string('updated_by')->nullable(true);
+            $table->string('validated_by')->nullable(true);
+            $table->string('confirmed_by')->nullable(true);
+            $table->string('approuved_by')->nullable(true);
+            $table->string('rejected_by')->nullable(true);
+            $table->string('reseted_by')->nullable(true);
+            $table->string('status')->default('0');
+            $table->boolean('flag')->default(0);
+            $table->text('rej_motif')->nullable(true);
+            $table->text('cn_motif')->nullable(true);
+            $table->string('type_space')->nullable(true);
+            $table->bigInteger('client_id')->unsigned()->nullable(true);
+            $table->foreign('client_id')
+                    ->references('id')
+                    ->on('clients')
+                    ->onUpdate('cascade')
+                    ->onDelete('cascade');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('f_bookings');
+    }
+}

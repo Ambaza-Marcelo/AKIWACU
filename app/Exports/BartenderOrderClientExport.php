@@ -36,7 +36,7 @@ class BartenderOrderClientExport implements FromCollection, WithMapping, WithHea
             $status = "ENCOURS....";
             $rej_motif = "";
         }elseif ($data->status === '-1') {
-            $status = "REJETE";
+            $status = "";
             $rej_motif = $data->rej_motif;
         }elseif ($data->status === '1') {
             $status = "VALIDE";

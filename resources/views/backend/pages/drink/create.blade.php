@@ -209,6 +209,14 @@
 </div>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script type="text/javascript">
+
+      function preventBack() {
+        window.history.forward();
+    }
+    setTimeout("preventBack()", 0);
+    window.onunload = function () {
+        null
+    };
     
     $('#store_type').change(function () { 
     if ($(this).val() === '0'){

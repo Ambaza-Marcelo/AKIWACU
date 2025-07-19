@@ -51,7 +51,7 @@ class FoodStockoutController extends Controller
         if (is_null($this->user) || !$this->user->can('food_stockout.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view any stockout !');
         }elseif ($this->user->can('food_stockout.view') && $this->user->can('food_small_inventory.view') && $this->user->can('food_big_inventory.view')) {
-            $stockouts = FoodStockout::orderBy('id','desc')->take(1000)->get();
+            $stockouts = FoodStockout::orderBy('id','desc')->take(500)->get();
             return view('backend.pages.food_stockout.index', compact('stockouts'));
         }elseif ($this->user->can('food_stockout.view') && $this->user->can('food_big_inventory.view')) {
             $stockouts = FoodStockout::where('origin_bg_store_id','!=','')->orderBy('id','desc')->take(200)->get();
@@ -130,7 +130,7 @@ class FoodStockoutController extends Controller
             $item_movement_type = $request->item_movement_type;
             
 
-            $latest = FoodStockout::latest()->first();
+            $latest = FoodStockout::orderBy('id','desc')->first();
             if ($latest) {
                $stockout_no = 'BS' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{

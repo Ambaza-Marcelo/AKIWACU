@@ -20,6 +20,7 @@ use App\Models\DrinkSmallStoreDetail;
 use App\Models\DrinkBigStore;
 use App\Models\DrinkSupplierOrderDetail;
 use App\Models\DrinkSupplierOrder;
+use App\Models\DrinkPurchase;
 use App\Models\DrinkPurchaseDetail;
 use App\Models\DrinkBigReport;
 use App\Models\Supplier;
@@ -71,7 +72,7 @@ class DrinkReceptionController extends Controller
 
         $drinks  = Drink::orderBy('name','asc')->get();
         $destination_stores = DrinkBigStore::all();
-        $suppliers = Supplier::all();
+        $suppliers = Supplier::orderBy('supplier_name','asc')->get();
         $data = DrinkSupplierOrder::where('order_no', $order_no)->first();
         if ($data->status == -5) {
             $reception = DrinkReception::where('order_no',$order_no)->orderBy('reception_no','desc')->first();
@@ -93,9 +94,10 @@ class DrinkReceptionController extends Controller
 
         $drinks  = Drink::where('store_type','!=',2)->orderBy('name','asc')->get();
         $destination_stores = DrinkBigStore::all();
-        $suppliers = Supplier::all();
+        $suppliers = Supplier::orderBy('supplier_name','asc')->get();
+        $data = DrinkSupplierOrderDetail::where('order_no', $order_no)->first();
         $datas = DrinkSupplierOrderDetail::where('order_no', $order_no)->get();
-        return view('backend.pages.drink_reception.create_without', compact('drinks','order_no','datas','destination_stores','suppliers'));
+        return view('backend.pages.drink_reception.create_without', compact('drinks','order_no','datas','data','destination_stores','suppliers'));
     }
 
     /**
@@ -123,8 +125,9 @@ class DrinkReceptionController extends Controller
                 'receptionist'  => 'required',
                 'vat_supplier_payer'  => 'required',
                 'type_reception'  => 'required',
-                'vat_rate'  => 'required',
+                //'vat_rate'  => 'required',
                 'invoice_currency'  => 'required',
+                'supplier_id'  => 'required',
                 'destination_store_id'  => 'required',
                 'description'  => 'required|max:490'
             );
@@ -310,6 +313,7 @@ class DrinkReceptionController extends Controller
                 'type_reception'  => 'required',
                 'invoice_currency'  => 'required',
                 'destination_store_id'  => 'required',
+                'supplier_id'  => 'required',
                 'description'  => 'required|max:490'
             );
 
@@ -343,7 +347,7 @@ class DrinkReceptionController extends Controller
             $supplier_id = $request->supplier_id;
             
 
-            $latest = DrinkReception::latest()->first();
+            $latest = DrinkReception::orderBy('id','desc')->first();
             if ($latest) {
                $reception_no = 'REC' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{
@@ -437,6 +441,11 @@ class DrinkReceptionController extends Controller
             $reception->created_at = \Carbon\Carbon::now();
             $reception->save();
 
+            DrinkSupplierOrder::where('order_no', '=', $reception->order_no)
+                ->update(['status' => -3]);
+            DrinkSupplierOrderDetail::where('order_no', '=', $reception->order_no)
+                ->update(['status' => -3]);
+
             DB::commit();
             session()->flash('success', 'reception has been created !!');
             return redirect()->route('admin.drink-receptions.index');
@@ -473,12 +482,20 @@ class DrinkReceptionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($reception_no)
+    public function edit($order_no)
     {
         if (is_null($this->user) || !$this->user->can('drink_reception.edit')) {
             abort(403, 'Sorry !! You are Unauthorized to edit any reception !');
         }
 
+        $reception_no = DrinkReception::where('order_no',$order_no)->value('reception_no');
+
+        $drinks  = Drink::where('store_type','!=',2)->orderBy('name','asc')->get();
+        $destination_stores = DrinkBigStore::all();
+        $suppliers = Supplier::orderBy('supplier_name','asc')->get();
+        $data = DrinkSupplierOrderDetail::where('order_no', $order_no)->first();
+        $datas = DrinkSupplierOrderDetail::where('order_no', $order_no)->get();
+        return view('backend.pages.drink_reception.edit', compact('drinks','order_no','reception_no','datas','data','destination_stores','suppliers'));
         
     }
 
@@ -493,6 +510,154 @@ class DrinkReceptionController extends Controller
     {
         if (is_null($this->user) || !$this->user->can('drink_reception.edit')) {
             abort(403, 'Sorry !! You are Unauthorized to edit any reception !');
+        }
+
+        $reception = DrinkReception::where('reception_no',$reception_no)->first();
+
+        $rules = array(
+                'drink_id.*'  => 'required',
+                'date'  => 'required',
+                'quantity_ordered.*'  => 'required',
+                'purchase_price.*'  => 'required',
+                'quantity_received.*'  => 'required',
+                'order_no'  => 'required',
+                'invoice_no'  => 'required',
+                'receptionist'  => 'required',
+                'vat_supplier_payer'  => 'required',
+                'type_reception'  => 'required',
+                'invoice_currency'  => 'required',
+                'destination_store_id'  => 'required',
+                'supplier_id'  => 'required',
+                'description'  => 'required|max:490'
+            );
+
+            $error = Validator::make($request->all(),$rules);
+
+            if($error->fails()){
+                return response()->json([
+                    'error' => $error->errors()->all(),
+                ]);
+            }
+
+            try {DB::beginTransaction();
+
+            $drink_id = $request->drink_id;
+            $date = Carbon::now();
+            $vat_supplier_payer = $request->vat_supplier_payer;
+            $origin_store_id = $request->origin_store_id;
+            $invoice_currency = $request->invoice_currency;
+            $handingover = $request->handingover;
+            $receptionist = $request->receptionist;
+            $vat_rate = $request->vat_rate;
+            $type_reception = $request->type_reception;
+            $order_no = $request->order_no;
+            $invoice_no = $request->invoice_no;
+            $description =$request->description; 
+            $destination_store_id = $request->destination_store_id;
+            $quantity_ordered = $request->quantity_ordered;
+            $purchase_price = $request->purchase_price;
+            $selling_price = $request->selling_price;
+            $quantity_received = $request->quantity_received;
+            $supplier_id = $request->supplier_id;
+            
+
+            if (!empty($vat_rate)) {
+                $vat_rate = $vat_rate;
+            }else{
+                $vat_rate = 0;
+            }
+
+            $created_by = $this->user->name;
+
+            $reception_signature = DrinkReception::where('reception_no',$reception_no)->value('reception_signature');
+
+            for( $count = 0; $count < count($drink_id); $count++ ){
+                if($vat_supplier_payer == 1){
+                    $price_nvat = ($purchase_price[$count]*$quantity_received[$count]);
+                    $vat = ($price_nvat* $vat_rate)/100;
+                    $price_wvat = $price_nvat + $vat;
+                    $total_amount_purchase = $price_wvat; 
+
+                }else{
+                    $price_nvat = ($purchase_price[$count]*$quantity_received[$count]);
+                    $vat = 0;
+                    $price_wvat = $price_nvat + $vat;
+                    $total_amount_purchase = $price_wvat;
+                }
+
+                $total_amount_ordered = $quantity_ordered[$count] * $purchase_price[$count];
+                $total_amount_received = $total_amount_purchase;
+
+                $data = array(
+                    'drink_id' => $drink_id[$count],
+                    'date' => $date,
+                    'quantity_ordered' => $quantity_ordered[$count],
+                    'quantity_received' => $quantity_received[$count],
+                    'quantity_remaining' => $quantity_received[$count] - $quantity_ordered[$count],
+                    'vat_rate' => $vat_rate,
+                    'purchase_price' => $purchase_price[$count],
+                    'type_reception' => $type_reception,
+                    'total_amount_ordered' => $total_amount_ordered,
+                    'total_amount_received' => $total_amount_received,
+                    'total_amount_purchase' => $total_amount_purchase,
+                    'order_no' => $order_no,
+                    'invoice_no' => $invoice_no,
+                    'invoice_currency' => $invoice_currency,
+                    'vat' => $vat,
+                    'price_nvat' => $price_nvat,
+                    'price_wvat' => $price_wvat,
+                    'supplier_id' => $supplier_id,
+                    'vat_supplier_payer' => $vat_supplier_payer,
+                    'receptionist' => $receptionist,
+                    'handingover' => $handingover,
+                    'destination_store_id' => $destination_store_id,
+                    'reception_no' => $reception_no,
+                    'reception_signature' => $reception_signature,
+                    'created_by' => $created_by,
+                    'description' => $description,
+                    'status' => 1,
+                    'created_at' => \Carbon\Carbon::now()
+
+                );
+                $insert_data[] = $data;
+
+                
+            }
+
+            DrinkReceptionDetail::where('reception_no',$reception_no)->delete();
+
+            DrinkReceptionDetail::insert($insert_data);
+
+
+            //edit reception
+            $reception->date = $date;
+            $reception->order_no = $order_no;
+            $reception->vat_supplier_payer = $vat_supplier_payer;
+            $reception->invoice_no = $invoice_no;
+            $reception->invoice_currency = $invoice_currency;
+            $reception->receptionist = $receptionist;
+            $reception->vat_rate = $vat_rate;
+            $reception->type_reception = $type_reception;
+            $reception->handingover = $handingover;
+            $reception->supplier_id = $supplier_id;
+            $reception->destination_store_id = $destination_store_id;
+            $reception->created_by = $created_by;
+            $reception->status = 1;
+            $reception->description = $description;
+            $reception->created_at = \Carbon\Carbon::now();
+            $reception->save();
+
+            DB::commit();
+            session()->flash('success', 'reception has been created !!');
+            return redirect()->route('admin.drink-receptions.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
         }
 
         
@@ -517,10 +682,13 @@ class DrinkReceptionController extends Controller
         $totalValue = DB::table('drink_reception_details')
             ->where('reception_no', '=', $reception_no)
             ->sum('total_amount_purchase');
-        $total_wvat = DB::table('drink_reception_details')
+        $price_nvat = DB::table('drink_reception_details')
             ->where('reception_no', '=', $reception_no)
-            ->sum('price_wvat');
-        $pdf = PDF::loadView('backend.pages.document.fiche_reception_boisson',compact('datas','code','totalValue','receptionniste','description','supplier','data','invoice_no','setting','date','reception_signature','invoice_currency','total_wvat'));
+            ->sum('price_nvat');
+        $vat = DB::table('drink_reception_details')
+            ->where('reception_no', '=', $reception_no)
+            ->sum('vat');
+        $pdf = PDF::loadView('backend.pages.document.fiche_reception_boisson',compact('datas','code','totalValue','receptionniste','description','supplier','data','invoice_no','setting','date','reception_signature','invoice_currency','price_nvat','vat'));
 
         Storage::put('public/pdf/fiche_reception_boisson/'.$reception_no.'.pdf', $pdf->output());
 
@@ -773,6 +941,8 @@ class DrinkReceptionController extends Controller
             DrinkBigReport::insert($reportBigStoreData);
         }
 
+        $purchase_no = DrinkSupplierOrder::where('order_no',$reception->order_no)->value('purchase_no');
+
         if ($reception->type_reception == 0) {
             DrinkSupplierOrder::where('order_no', '=', $reception->order_no)
             ->update(['status' => -5]);
@@ -784,6 +954,11 @@ class DrinkReceptionController extends Controller
             DrinkSupplierOrderDetail::where('order_no', '=', $reception->order_no)
              ->update(['status' => 5]);
         }
+
+        DrinkPurchase::where('purchase_no', '=', $purchase_no)
+            ->update(['status' => 6]);
+        DrinkPurchaseDetail::where('purchase_no', '=', $purchase_no)
+             ->update(['status' => 6]);
 
         DrinkReception::where('reception_no', '=', $reception_no)
             ->update(['status' => 4,'approuved_by' => $this->user->name]);
@@ -858,7 +1033,7 @@ class DrinkReceptionController extends Controller
         if (is_null($this->user) || !$this->user->can('drink_reception.delete')) {
             abort(403, 'Sorry !! You are Unauthorized to delete any reception !');
         }
-
+        /*
         try {DB::beginTransaction();
 
         $reception = DrinkReception::where('reception_no',$reception_no)->first();
@@ -879,6 +1054,7 @@ class DrinkReceptionController extends Controller
 
             throw $e;
         }
+        */
 
     }
 

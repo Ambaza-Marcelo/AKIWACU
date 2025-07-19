@@ -440,7 +440,7 @@ class OrderKitchenController extends Controller
             $total_amount_remaining = $total_amount_paying - $total_amount_selling;
             Table::where('id',$table_id)->update(['total_amount_paying' => $total_amount_remaining]);
         }
-
+        
         DB::commit();
             session()->flash('success', 'Order has been rejected !!');
             return redirect()->route('admin.order_kitchens.index',$table_id);

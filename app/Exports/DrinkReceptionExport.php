@@ -27,7 +27,7 @@ class DrinkReceptionExport implements FromCollection, WithMapping, WithHeadings
         $end_date = $endDate.' 23:59:59';
 
         return DrinkReceptionDetail::select(
-                        DB::raw('id,drink_id,date,quantity_received,quantity_ordered,purchase_price,supplier_id,created_by,reception_no,validated_by,confirmed_by,approuved_by,rejected_by,status,invoice_no,order_no,purchase_no,receptionist,handingover,description,origin'))->whereBetween('date',[$start_date,$end_date])->groupBy('id','drink_id','supplier_id','date','quantity_received','quantity_ordered','status','purchase_price','reception_no','confirmed_by','validated_by','approuved_by','created_by','rejected_by','invoice_no','order_no','purchase_no','receptionist','handingover','description','origin')->orderBy('id','asc')->get();
+                        DB::raw('id,drink_id,date,quantity_received,quantity_ordered,purchase_price,supplier_id,created_by,reception_no,validated_by,confirmed_by,approuved_by,rejected_by,status,invoice_no,order_no,purchase_no,receptionist,handingover,description,origin,price_nvat,vat,vat_rate,price_wvat'))->whereBetween('date',[$start_date,$end_date])->groupBy('id','drink_id','supplier_id','date','quantity_received','quantity_ordered','status','purchase_price','reception_no','confirmed_by','validated_by','approuved_by','created_by','rejected_by','invoice_no','order_no','purchase_no','receptionist','handingover','description','origin','price_nvat','vat','vat_rate','price_wvat')->orderBy('id','asc')->get();
     }
 
     public function map($data) : array {
@@ -47,7 +47,7 @@ class DrinkReceptionExport implements FromCollection, WithMapping, WithHeadings
         }
 
         if (!empty($data->supplier_id)) {
-            $supplier = $data->supplier->name;
+            $supplier = $data->supplier->supplier_name;
         }else{
             $supplier = "";
         }
@@ -66,7 +66,10 @@ class DrinkReceptionExport implements FromCollection, WithMapping, WithHeadings
             $data->quantity_ordered,
             $data->quantity_received,
             $data->purchase_price,
-            $data->purchase_price * $data->quantity_received,
+            $data->price_nvat,
+            $data->vat,
+            $data->vat_rate,
+            $data->price_wvat,
             $status,
             $data->created_by,
             $data->validated_by,
@@ -93,8 +96,11 @@ class DrinkReceptionExport implements FromCollection, WithMapping, WithHeadings
             'Libellé',
             'Quantité Commandé',
             'Quantité Recu',
-            'P.A',
-            'TOTAL P.A',
+            'PU HTVA',
+            'PT HTVA',
+            'TVA',
+            'TAUX TVA',
+            'TVAC',
             'ETAT',
             'Auteur',
             'Valide Par',

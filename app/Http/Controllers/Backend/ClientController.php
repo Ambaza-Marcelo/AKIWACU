@@ -74,39 +74,8 @@ class ClientController extends Controller
             'telephone' => 'required',
         ]);
 
-        $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
-        $response = Http::post($theUrl, [
-            'username'=> config('app.obr_test_username'),
-            'password'=> config('app.obr_test_pwd')
-
-        ]);
-
-        $data =  json_decode($response);
-        $data2 = ($data->result);
-        
-    
-        $token = $data2->token;
-
         $tp_TIN = $request->customer_TIN;
-        /*
-        $clients = EGRClient::all();
 
-        foreach ($clients as $client) {
-            if ($client->customer_TIN == $tp_TIN) {
-                session()->flash('error', 'Le NIF du Contribuable existe déjà');
-                return redirect()->back();
-            }elseif ($client->customer_name == $request->customer_name) {
-                session()->flash('error', 'Le nom du Contribuable existe déjà');
-                return redirect()->back();
-            }elseif ($client->telephone == $request->telephone) {
-                session()->flash('error', 'Le Numero de telephone du Contribuable existe déjà');
-                return redirect()->back();
-            }elseif ($client->mail == $request->mail) {
-                session()->flash('error', 'Le mail du Contribuable existe déjà');
-                return redirect()->back();
-            }
-        }
-        */
 
         if (empty($tp_TIN) && $request->vat_customer_payer == 1) {
             session()->flash('error', 'Le NIF du client est obligatoire');
@@ -115,24 +84,37 @@ class ClientController extends Controller
             session()->flash('error', 'Le NIF du client n\'existe pas');
             return redirect()->back();
         }
-
-        $theUrl = config('app.guzzle_test_url').'/ebms_api/checkTIN/';
-        $response = Http::withHeaders([
-        'Authorization' => 'Bearer '.$token,
-        'Accept' => 'application/json'])->post($theUrl, [
-            'tp_TIN'=>$tp_TIN,
-
-        ]); 
-
-        $data =  json_decode($response);
-        $data2 = ($data->result);
-        
-    
-        $success = $data->success;
-        $msg = $data->msg;
-
         
         if ($request->vat_customer_payer == 1 && $request->tp_type == 2) {
+
+            $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
+            $response = Http::post($theUrl, [
+            'username'=> config('app.obr_test_username'),
+            'password'=> config('app.obr_test_pwd')
+
+            ]);
+
+            $data =  json_decode($response);
+            $data2 = ($data->result);
+        
+    
+            $token = $data2->token;
+
+
+            $theUrl = config('app.guzzle_test_url').'/ebms_api/checkTIN/';
+            $response = Http::withHeaders([
+            'Authorization' => 'Bearer '.$token,
+            'Accept' => 'application/json'])->post($theUrl, [
+            'tp_TIN'=>$tp_TIN,
+
+            ]); 
+
+            $data =  json_decode($response);
+            $data2 = ($data->result);
+        
+    
+            $success = $data->success;
+            $msg = $data->msg;
 
             $data3 = ($data2->taxpayer);
 
@@ -151,16 +133,14 @@ class ClientController extends Controller
             $client->vat_customer_payer = $request->vat_customer_payer;
             $client->company = $request->company;
             $client->save();
-            session()->flash('success', 'Le client a été créé avec succés !!, OBR Message : '.$msg.'('.$tp_name.')');
-            return redirect()->route('admin.clients.index');
-        }elseif ($success == false && $request->vat_customer_payer == 1) {
+            if ($success == true) {
+                session()->flash('success', 'Le client a été créé avec succés !!, OBR Message : '.$msg.'('.$tp_name.')');
+                return redirect()->route('admin.clients.index');
+            }else{
+                session()->flash('error', 'Something wrong');
+                return redirect()->back();
+            }
 
-            session()->flash('error', 'Le NIF du Contribuable inconnu');
-            return redirect()->back();
-        }elseif ($success == false && !empty($tp_TIN) && $request->vat_customer_payer == 0) {
-
-            session()->flash('error', 'Le NIF du Contribuable inconnu');
-            return redirect()->back();
         }else{
             $client = new EGRClient();
             $client->date = $request->date;
@@ -227,39 +207,7 @@ class ClientController extends Controller
             'telephone' => 'required',
         ]);
 
-        $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
-        $response = Http::post($theUrl, [
-            'username'=> config('app.obr_test_username'),
-            'password'=> config('app.obr_test_pwd')
-
-        ]);
-
-        $data =  json_decode($response);
-        $data2 = ($data->result);
-        
-    
-        $token = $data2->token;
-
         $tp_TIN = $request->customer_TIN;
-        /*
-        $clients = EGRClient::all();
-
-        foreach ($clients as $client) {
-            if ($client->customer_TIN == $tp_TIN) {
-                session()->flash('error', 'Le NIF du Contribuable existe déjà');
-                return redirect()->back();
-            }elseif ($client->customer_name == $request->customer_name) {
-                session()->flash('error', 'Le nom du Contribuable existe déjà');
-                return redirect()->back();
-            }elseif ($client->telephone == $request->telephone) {
-                session()->flash('error', 'Le Numero de telephone du Contribuable existe déjà');
-                return redirect()->back();
-            }elseif ($client->mail == $request->mail) {
-                session()->flash('error', 'Le mail du Contribuable existe déjà');
-                return redirect()->back();
-            }
-        }
-        */
 
         if (empty($tp_TIN) && $request->vat_customer_payer == 1) {
             session()->flash('error', 'Le NIF du client est obligatoire');
@@ -269,23 +217,36 @@ class ClientController extends Controller
             return redirect()->back();
         }
 
-        $theUrl = config('app.guzzle_test_url').'/ebms_api/checkTIN/';
-        $response = Http::withHeaders([
-        'Authorization' => 'Bearer '.$token,
-        'Accept' => 'application/json'])->post($theUrl, [
-            'tp_TIN'=>$tp_TIN,
-
-        ]); 
-
-        $data =  json_decode($response);
-        $data2 = ($data->result);
-        
-    
-        $success = $data->success;
-        $msg = $data->msg;
-
         
         if ($request->vat_customer_payer == 1 && $request->tp_type == 2) {
+
+            $theUrl = config('app.guzzle_test_url').'/ebms_api/login/';
+            $response = Http::post($theUrl, [
+            'username'=> config('app.obr_test_username'),
+            'password'=> config('app.obr_test_pwd')
+
+            ]);
+
+            $data =  json_decode($response);
+            $data2 = ($data->result);
+        
+    
+            $token = $data2->token;
+
+            $theUrl = config('app.guzzle_test_url').'/ebms_api/checkTIN/';
+            $response = Http::withHeaders([
+            'Authorization' => 'Bearer '.$token,
+            'Accept' => 'application/json'])->post($theUrl, [
+            'tp_TIN'=>$tp_TIN,
+
+            ]); 
+
+            $data =  json_decode($response);
+            $data2 = ($data->result);
+        
+    
+            $success = $data->success;
+            $msg = $data->msg;
 
             $data3 = ($data2->taxpayer);
 
@@ -303,16 +264,14 @@ class ClientController extends Controller
             $client->vat_customer_payer = $request->vat_customer_payer;
             $client->company = $request->company;
             $client->save();
-            session()->flash('success', 'Le client a été modifié avec succés !!, OBR Message : '.$msg.'('.$tp_name.')');
-            return redirect()->route('admin.clients.index');
-        }elseif ($success == false && $request->vat_customer_payer == 1) {
-
-            session()->flash('error', 'Le NIF du Contribuable inconnu');
-            return redirect()->back();
-        }elseif ($success == false && !empty($tp_TIN) && $request->vat_customer_payer == 0) {
-
-            session()->flash('error', 'Le NIF du Contribuable inconnu');
-            return redirect()->back();
+            if ($success == true) {
+                session()->flash('success', 'Le client a été modifié avec succés !!, OBR Message : '.$msg.'('.$tp_name.')');
+                return redirect()->route('admin.clients.index');
+            }else{
+                session()->flash('error', 'Something wrong');
+                return redirect()->back();
+            }
+            
         }else{
             $client->date = $request->date;
             $client->customer_name = $request->customer_name;

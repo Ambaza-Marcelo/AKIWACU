@@ -35,7 +35,10 @@
                            &nbsp;&nbsp;Purchase Number: {{ $purchase_no }}
                         </small><br>
                         <small>
-                           &nbsp;&nbsp; Date : Le {{ \Carbon\Carbon::parse($date)->format('d/m/Y') }}
+                           &nbsp;&nbsp;Fournisseur: @if($data->supplier_id){{ $data->supplier->supplier_name }} @endif
+                        </small><br>
+                        <small>
+                           &nbsp;&nbsp; Date : Le {{ \Carbon\Carbon::parse($date)->format('d/m/Y H:i:s') }}
                         </small>
                     </div>
                     <br><br><br><br><br>
@@ -50,12 +53,14 @@
                                     <th>No</th>
                                     <th>Article</th>
                                     <th>Code</th>
-                                    <th>Specification</th>
                                     <th>Quantité Demandée</th>
                                     <th>Unité</th>
-                                    <th>P.A SYS.</th>
-                                    <th>P.A Saisie</th>
-                                    <th>Prix Total</th>
+                                    <th>PU SYS.</th>
+                                    <th>PU HTVA Saisie</th>
+                                    <th>PT HTVA</th>
+                                    <th>TVA</th>
+                                    <th>Taux TVA</th>
+                                    <th>TVAC</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -64,19 +69,24 @@
                                     <td>{{ $loop->index + 1 }}</td>
                                     <td>{{ $data->food->name }}</td>
                                     <td>{{ $data->food->code }}</td>
-                                    <td>{{ $data->food->specification }}</td>
                                     <td>{{ $data->quantity }}</td>
                                     <td>{{ $data->food->foodMeasurement->purchase_unit }}</td>
-                                    <td>{{ number_format($data->food->purchase_price,0,',',' ') }}</td>
+                                    <td>{{ number_format($data->purchase_price,0,',',' ') }}</td>
                                     <td>{{ number_format($data->price,0,',',' ') }}</td>
-                                    <td>{{ number_format($data->total_value,0,',',' ') }}</td>
+                                    <td>{{ number_format($data->price_nvat,0,',',' ' )}}</td>
+                                    <td>{{ number_format($data->vat,0,',',' ' )}}</td>
+                                    <td>{{ $data->vat_rate }}%</td>
+                                    <td>{{ number_format($data->total_value,0,',',' ' )}}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
                             <tfoot>
                                 <tr>
                                     <th>Total</th>
-                                    <th style="background-color: rgb(150,150,150);" colspan="7"></th>
+                                    <th style="background-color: rgb(150,150,150);" colspan="6"></th>
+                                    <th>{{ number_format($price_nvat,3,',',' ') }}</th>
+                                    <th>{{ number_format($vat,3,',',' ') }}</th>
+                                    <th></th>
                                     <th>{{ number_format($totalValue,0,',',' ') }}</th>
                                 </tr>
                             </tfoot>
@@ -109,4 +119,3 @@
 </div>
 </body>
 </html>
-

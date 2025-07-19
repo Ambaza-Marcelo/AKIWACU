@@ -71,7 +71,7 @@ class MaterialReceptionController extends Controller
         }
 
         $materials  = Material::orderBy('name','asc')->get();
-        $destination_stores = materialBigStore::all();
+        $destination_stores = MaterialBigStore::all();
         $suppliers = Supplier::all();
         $data = MaterialSupplierOrder::where('order_no', $order_no)->first();
         if ($data->status == -5) {
@@ -93,10 +93,11 @@ class MaterialReceptionController extends Controller
         }
 
         $materials  = Material::where('store_type','!=',2)->orderBy('name','asc')->get();
-        $destination_stores = materialBigStore::all();
-        $suppliers = Supplier::all();
+        $destination_stores = MaterialBigStore::all();
+        $suppliers = Supplier::orderBy('supplier_name','asc')->get();
+        $data = MaterialSupplierOrderDetail::where('order_no', $order_no)->first();
         $datas = MaterialSupplierOrderDetail::where('order_no', $order_no)->get();
-        return view('backend.pages.material_reception.create_without', compact('materials','order_no','datas','destination_stores','suppliers'));
+        return view('backend.pages.material_reception.create_without', compact('materials','order_no','datas','data','destination_stores','suppliers'));
     }
 
     /**
@@ -437,6 +438,11 @@ class MaterialReceptionController extends Controller
             $reception->created_at = \Carbon\Carbon::now();
             $reception->save();
 
+                MaterialSupplierOrder::where('order_no', '=', $reception->order_no)
+                ->update(['status' => -3]);
+                MaterialSupplierOrderDetail::where('order_no', '=', $reception->order_no)
+                ->update(['status' => -3]);
+
             DB::commit();
             session()->flash('success', 'reception has been created !!');
             return redirect()->route('admin.material-receptions.index');
@@ -473,12 +479,21 @@ class MaterialReceptionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($reception_no)
+    public function edit($order_no)
     {
         if (is_null($this->user) || !$this->user->can('material_reception.edit')) {
             abort(403, 'Sorry !! You are Unauthorized to edit any reception !');
         }
 
+        $reception_no = MaterialReception::where('order_no',$order_no)->value('reception_no');
+
+        $materials  = Material::where('store_type','!=',2)->orderBy('name','asc')->get();
+        $destination_stores = MaterialBigStore::all();
+        $suppliers = Supplier::orderBy('supplier_name','asc')->get();
+        $data = MaterialSupplierOrderDetail::where('order_no', $order_no)->first();
+        $datas = MaterialSupplierOrderDetail::where('order_no', $order_no)->get();
+        return view('backend.pages.material_reception.edit', compact('materials','order_no','reception_no','datas','data','destination_stores','suppliers'));
+        
     }
 
     /**
@@ -492,6 +507,154 @@ class MaterialReceptionController extends Controller
     {
         if (is_null($this->user) || !$this->user->can('material_reception.edit')) {
             abort(403, 'Sorry !! You are Unauthorized to edit any reception !');
+        }
+
+        $reception = MaterialReception::where('reception_no',$reception_no)->first();
+
+        $rules = array(
+                'material_id.*'  => 'required',
+                'date'  => 'required',
+                'quantity_ordered.*'  => 'required',
+                'purchase_price.*'  => 'required',
+                'quantity_received.*'  => 'required',
+                'order_no'  => 'required',
+                'invoice_no'  => 'required',
+                'receptionist'  => 'required',
+                'vat_supplier_payer'  => 'required',
+                'type_reception'  => 'required',
+                'invoice_currency'  => 'required',
+                'destination_store_id'  => 'required',
+                'supplier_id'  => 'required',
+                'description'  => 'required|max:490'
+            );
+
+            $error = Validator::make($request->all(),$rules);
+
+            if($error->fails()){
+                return response()->json([
+                    'error' => $error->errors()->all(),
+                ]);
+            }
+
+            try {DB::beginTransaction();
+
+            $material_id = $request->material_id;
+            $date = Carbon::now();
+            $vat_supplier_payer = $request->vat_supplier_payer;
+            $origin_store_id = $request->origin_store_id;
+            $invoice_currency = $request->invoice_currency;
+            $handingover = $request->handingover;
+            $receptionist = $request->receptionist;
+            $vat_rate = $request->vat_rate;
+            $type_reception = $request->type_reception;
+            $order_no = $request->order_no;
+            $invoice_no = $request->invoice_no;
+            $description =$request->description; 
+            $destination_store_id = $request->destination_store_id;
+            $quantity_ordered = $request->quantity_ordered;
+            $purchase_price = $request->purchase_price;
+            $selling_price = $request->selling_price;
+            $quantity_received = $request->quantity_received;
+            $supplier_id = $request->supplier_id;
+            
+
+            if (!empty($vat_rate)) {
+                $vat_rate = $vat_rate;
+            }else{
+                $vat_rate = 0;
+            }
+
+            $created_by = $this->user->name;
+
+            $reception_signature = MaterialReception::where('reception_no',$reception_no)->value('reception_signature');
+
+            for( $count = 0; $count < count($material_id); $count++ ){
+                if($vat_supplier_payer == 1){
+                    $price_nvat = ($purchase_price[$count]*$quantity_received[$count]);
+                    $vat = ($price_nvat* $vat_rate)/100;
+                    $price_wvat = $price_nvat + $vat;
+                    $total_amount_purchase = $price_wvat; 
+
+                }else{
+                    $price_nvat = ($purchase_price[$count]*$quantity_received[$count]);
+                    $vat = 0;
+                    $price_wvat = $price_nvat + $vat;
+                    $total_amount_purchase = $price_wvat;
+                }
+
+                $total_amount_ordered = $quantity_ordered[$count] * $purchase_price[$count];
+                $total_amount_received = $total_amount_purchase;
+
+                $data = array(
+                    'material_id' => $material_id[$count],
+                    'date' => $date,
+                    'quantity_ordered' => $quantity_ordered[$count],
+                    'quantity_received' => $quantity_received[$count],
+                    'quantity_remaining' => $quantity_received[$count] - $quantity_ordered[$count],
+                    'vat_rate' => $vat_rate,
+                    'purchase_price' => $purchase_price[$count],
+                    'type_reception' => $type_reception,
+                    'total_amount_ordered' => $total_amount_ordered,
+                    'total_amount_received' => $total_amount_received,
+                    'total_amount_purchase' => $total_amount_purchase,
+                    'order_no' => $order_no,
+                    'invoice_no' => $invoice_no,
+                    'invoice_currency' => $invoice_currency,
+                    'vat' => $vat,
+                    'price_nvat' => $price_nvat,
+                    'price_wvat' => $price_wvat,
+                    'supplier_id' => $supplier_id,
+                    'vat_supplier_payer' => $vat_supplier_payer,
+                    'receptionist' => $receptionist,
+                    'handingover' => $handingover,
+                    'destination_store_id' => $destination_store_id,
+                    'reception_no' => $reception_no,
+                    'reception_signature' => $reception_signature,
+                    'created_by' => $created_by,
+                    'description' => $description,
+                    'status' => 1,
+                    'created_at' => \Carbon\Carbon::now()
+
+                );
+                $insert_data[] = $data;
+
+                
+            }
+
+            MaterialReceptionDetail::where('reception_no',$reception_no)->delete();
+
+            MaterialReceptionDetail::insert($insert_data);
+
+
+            //edit reception
+            $reception->date = $date;
+            $reception->order_no = $order_no;
+            $reception->vat_supplier_payer = $vat_supplier_payer;
+            $reception->invoice_no = $invoice_no;
+            $reception->invoice_currency = $invoice_currency;
+            $reception->receptionist = $receptionist;
+            $reception->vat_rate = $vat_rate;
+            $reception->type_reception = $type_reception;
+            $reception->handingover = $handingover;
+            $reception->supplier_id = $supplier_id;
+            $reception->destination_store_id = $destination_store_id;
+            $reception->created_by = $created_by;
+            $reception->status = 1;
+            $reception->description = $description;
+            $reception->created_at = \Carbon\Carbon::now();
+            $reception->save();
+
+            DB::commit();
+            session()->flash('success', 'reception has been created !!');
+            return redirect()->route('admin.material-receptions.index');
+        } catch (\Exception $e) {
+            // An error occured; cancel the transaction...
+
+            DB::rollback();
+
+            // and throw the error again.
+
+            throw $e;
         }
 
         
@@ -516,15 +679,18 @@ class MaterialReceptionController extends Controller
         $totalValue = DB::table('material_reception_details')
             ->where('reception_no', '=', $reception_no)
             ->sum('total_amount_purchase');
-        $total_wvat = DB::table('material_reception_details')
+        $price_nvat = DB::table('material_reception_details')
             ->where('reception_no', '=', $reception_no)
-            ->sum('price_wvat');
-        $pdf = PDF::loadView('backend.pages.document.fiche_reception_materiel',compact('datas','code','totalValue','receptionniste','description','supplier','data','invoice_no','setting','date','reception_signature','total_wvat','invoice_currency'));
+            ->sum('price_nvat');
+        $vat = DB::table('material_reception_details')
+            ->where('reception_no', '=', $reception_no)
+            ->sum('vat');
+        $pdf = PDF::loadView('backend.pages.document.fiche_reception_materiel',compact('datas','code','totalValue','receptionniste','description','supplier','data','invoice_no','setting','date','reception_signature','invoice_currency','price_nvat','vat'));
 
         Storage::put('public/pdf/fiche_reception_materiel/'.$reception_no.'.pdf', $pdf->output());
 
         // download pdf file
-        return $pdf->download('fiche_reception_'.$reception_no.'.pdf');
+        return $pdf->download('FICHE DE RECEPTION DES MATERIELS '.$reception_no.'.pdf');
         
     }
 
@@ -832,6 +998,8 @@ class MaterialReceptionController extends Controller
         if ($flag_md != 0) {
             MaterialBigReport::insert($reportBigStoreData);
         }
+
+            $purchase_no = MaterialSupplierOrder::where('order_no',$reception->order_no)->value('purchase_no');
         
             if ($reception->type_reception == 0) {
                 MaterialSupplierOrder::where('order_no', '=', $reception->order_no)
@@ -844,6 +1012,11 @@ class MaterialReceptionController extends Controller
                 MaterialSupplierOrderDetail::where('order_no', '=', $reception->order_no)
                 ->update(['status' => 5]);
             }
+
+            MaterialPurchase::where('purchase_no', '=', $purchase_no)
+            ->update(['status' => 6]);
+            MaterialPurchaseDetail::where('purchase_no', '=', $purchase_no)
+             ->update(['status' => 6]);
 
 
             MaterialReception::where('reception_no', '=', $reception_no)
@@ -882,7 +1055,7 @@ class MaterialReceptionController extends Controller
         if (is_null($this->user) || !$this->user->can('material_reception.delete')) {
             abort(403, 'Sorry !! You are Unauthorized to delete any reception !');
         }
-
+        /*
         try {DB::beginTransaction();
 
         $reception = MaterialReception::where('reception_no',$reception_no)->first();
@@ -903,5 +1076,6 @@ class MaterialReceptionController extends Controller
 
             throw $e;
         }
+        */
     }
 }

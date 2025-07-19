@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Storage;
 use App\Models\Drink;
 use App\Models\DrinkPurchase;
 use App\Models\DrinkPurchaseDetail;
+use App\Models\DrinkSupplierOrder;
+use App\Models\Supplier;
 use Validator;
 use PDF;
 use Mail;
@@ -58,7 +60,8 @@ class DrinkPurchaseController extends Controller
         }
 
         $drinks  = Drink::orderBy('name','asc')->get();
-        return view('backend.pages.drink_purchase.create', compact('drinks'));
+        $suppliers = Supplier::orderBy('supplier_name','asc')->get();
+        return view('backend.pages.drink_purchase.create', compact('drinks','suppliers'));
     }
 
     /**
@@ -78,7 +81,10 @@ class DrinkPurchaseController extends Controller
                 'date'  => 'required',
                 'quantity.*'  => 'required',
                 'price.*'  => 'required',
-                //'unit.*'  => 'required',
+                'vat_supplier_payer'  => 'required',
+                //'vat_rate'  => 'required',
+                //'invoice_currency'  => 'required',
+                'supplier_id'  => 'required',
                 'description'  => 'required|max:490'
             );
 
@@ -96,9 +102,19 @@ class DrinkPurchaseController extends Controller
             $date = $request->date;
             $quantity = $request->quantity;
             $price = $request->price;
-            //$unit = $request->unit;
-            $description =$request->description; 
-            $latest = DrinkPurchase::latest()->first();
+            $vat_supplier_payer = $request->vat_supplier_payer;
+            $vat_rate = $request->vat_rate;
+            $invoice_currency = $request->invoice_currency;
+            $supplier_id = $request->supplier_id;
+            $description =$request->description;
+
+            if (!empty($vat_rate)) {
+                $vat_rate = $vat_rate;
+            }else{
+                $vat_rate = 0;
+            }
+
+            $latest = DrinkPurchase::orderBy('id','desc')->first();
             if ($latest) {
                $purchase_no = 'BDA' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{
@@ -113,6 +129,10 @@ class DrinkPurchaseController extends Controller
             $purchase->date = $date;
             $purchase->purchase_signature = $purchase_signature;
             $purchase->purchase_no = $purchase_no;
+            $purchase->vat_supplier_payer = $vat_supplier_payer;
+            $purchase->vat_rate = $vat_rate;
+            $purchase->invoice_currency = $invoice_currency;
+            $purchase->supplier_id = $supplier_id;
             $purchase->created_by = $created_by;
             $purchase->description = $description;
             $purchase->created_at = \Carbon\Carbon::now();
@@ -120,15 +140,33 @@ class DrinkPurchaseController extends Controller
             //insert details of purchase No.
             for( $count = 0; $count < count($drink_id); $count++ ){
 
-                ///$price = Drink::where('id', $drink_id[$count])->value('purchase_price');
-                $total_value = $quantity[$count] * $price[$count];
+                if($vat_supplier_payer == 1){
+                    $price_nvat = ($price[$count]*$quantity[$count]);
+                    $vat = ($price_nvat* $vat_rate)/100;
+                    $price_wvat = $price_nvat + $vat;
+
+                }else{
+                    $price_nvat = ($price[$count]*$quantity[$count]);
+                    $vat = 0;
+                    $price_wvat = $price_nvat + $vat;
+                }
+
+                $purchase_price = Drink::where('id', $drink_id[$count])->value('purchase_price');
+                $total_value = $price_wvat;
                 $data = array(
                     'drink_id' => $drink_id[$count],
                     'date' => $date,
                     'quantity' => $quantity[$count],
-                    //'unit' => $unit[$count],
+                    'vat_supplier_payer' => $vat_supplier_payer,
+                    'vat_rate' => $vat_rate,
+                    'invoice_currency' => $invoice_currency,
+                    'supplier_id' => $supplier_id,
+                    'purchase_price' => $purchase_price,
                     'price' => $price[$count],
                     'description' => $description,
+                    'price_nvat' => $price_nvat,
+                    'vat' => $vat,
+                    'price_wvat' => $price_wvat,
                     'total_value' => $total_value,
                     'created_by' => $created_by,
                     'purchase_no' => $purchase_no,
@@ -195,11 +233,11 @@ class DrinkPurchaseController extends Controller
         }
 
         $drinks  = Drink::orderBy('name','asc')->get();
-
+        $suppliers = Supplier::orderBy('supplier_name','asc')->get();
         $data = DrinkPurchase::where('purchase_no', $purchase_no)->first();
         $datas = DrinkPurchaseDetail::where('purchase_no', $purchase_no)->get();
 
-        return view('backend.pages.drink_purchase.edit', compact('datas','data','drinks'));
+        return view('backend.pages.drink_purchase.edit', compact('datas','data','drinks','suppliers'));
 
     }
 
@@ -221,8 +259,11 @@ class DrinkPurchaseController extends Controller
                 'date'  => 'required',
                 'quantity.*'  => 'required',
                 'price.*'  => 'required',
-                //'unit.*'  => 'required',
-                'description'  => 'required'
+                'vat_supplier_payer'  => 'required',
+                //'vat_rate'  => 'required',
+                //'invoice_currency'  => 'required',
+                'supplier_id'  => 'required',
+                'description'  => 'required|max:490'
             );
 
             $error = Validator::make($request->all(),$rules);
@@ -235,35 +276,80 @@ class DrinkPurchaseController extends Controller
 
             try {DB::beginTransaction();
 
+            $order_no = DrinkSupplierOrder::where('purchase_no',$purchase_no)->value('order_no');
+
+            if (!empty($order_no)) {
+                $status = -3;
+            }else{
+                $status = 3;
+            }
+
             $drink_id = $request->drink_id;
             $date = $request->date;
             $quantity = $request->quantity;
             $price = $request->price;
-            //$unit = $request->unit;
-            $description =$request->description; 
+            $vat_supplier_payer = $request->vat_supplier_payer;
+            $vat_rate = $request->vat_rate;
+            $invoice_currency = $request->invoice_currency;
+            $supplier_id = $request->supplier_id;
+            $description =$request->description;
+
+            if (!empty($vat_rate)) {
+                $vat_rate = $vat_rate;
+            }else{
+                $vat_rate = 0;
+            }
+
+            $created_by = $this->user->name;
 
             $purchase = DrinkPurchase::where('purchase_no',$purchase_no)->first();
             $purchase->date = $date;
+            $purchase->vat_supplier_payer = $vat_supplier_payer;
+            $purchase->vat_rate = $vat_rate;
+            $purchase->invoice_currency = $invoice_currency;
+            $purchase->supplier_id = $supplier_id;
+            $purchase->created_by = $created_by;
             $purchase->description = $description;
+            $purchase->status = $status;
             $purchase->save();
             //insert details of purchase No.
             for( $count = 0; $count < count($drink_id); $count++ ){
 
-                $created_by = $this->user->name;
+                if($vat_supplier_payer == 1){
+                    $price_nvat = ($price[$count]*$quantity[$count]);
+                    $vat = ($price_nvat* $vat_rate)/100;
+                    $price_wvat = $price_nvat + $vat;
+
+                }else{
+                    $price_nvat = ($price[$count]*$quantity[$count]);
+                    $vat = 0;
+                    $price_wvat = $price_nvat + $vat;
+                }
+
                 $purchase_signature = DrinkPurchase::where('purchase_no',$purchase_no)->value('purchase_signature');
-                //$price = Drink::where('id', $drink_id[$count])->value('price');
-                $total_value = $quantity[$count] * $price[$count];
+
+                $purchase_price = Drink::where('id', $drink_id[$count])->value('purchase_price');
+                $total_value = $price_wvat;
                 $data = array(
                     'drink_id' => $drink_id[$count],
                     'date' => $date,
                     'quantity' => $quantity[$count],
-                    //'unit' => $unit[$count],
+                    'vat_supplier_payer' => $vat_supplier_payer,
+                    'vat_rate' => $vat_rate,
+                    'invoice_currency' => $invoice_currency,
+                    'supplier_id' => $supplier_id,
+                    'purchase_price' => $purchase_price,
                     'price' => $price[$count],
                     'description' => $description,
+                    'price_nvat' => $price_nvat,
+                    'vat' => $vat,
+                    'price_wvat' => $price_wvat,
                     'total_value' => $total_value,
                     'created_by' => $created_by,
                     'purchase_no' => $purchase_no,
                     'purchase_signature' => $purchase_signature,
+                    'status' => $status,
+                    'created_at' => \Carbon\Carbon::now()
                 );
                 $insert_data[] = $data;
             }
@@ -437,15 +523,22 @@ class DrinkPurchaseController extends Controller
         $stat = DrinkPurchase::where('purchase_no', $purchase_no)->value('status');
         $description = DrinkPurchase::where('purchase_no', $purchase_no)->value('description');
         $date = DrinkPurchase::where('purchase_no', $purchase_no)->value('date');
-        if($stat == 2 && $stat == 3 || $stat == 4 || $stat == 5){
+        $data = DrinkPurchase::where('purchase_no', $purchase_no)->first();
+        if($stat == 2 || $stat == 3 || $stat == 4 || $stat == 5 || $stat == 6 || $stat == -3){
            $purchase_no = DrinkPurchase::where('purchase_no', $purchase_no)->value('purchase_no');
            $purchase_signature = DrinkPurchase::where('purchase_no', $purchase_no)->value('purchase_signature');
            $totalValue = DB::table('drink_purchase_details')
             ->where('purchase_no', '=', $purchase_no)
             ->sum('total_value');
+            $price_nvat = DB::table('drink_purchase_details')
+            ->where('purchase_no', '=', $purchase_no)
+            ->sum('price_nvat');
+            $vat = DB::table('drink_purchase_details')
+            ->where('purchase_no', '=', $purchase_no)
+            ->sum('vat');
 
            $datas = DrinkPurchaseDetail::where('purchase_no', $purchase_no)->get();
-           $pdf = PDF::loadView('backend.pages.document.drink_purchase',compact('datas','purchase_no','setting','description','date','purchase_signature','totalValue'));
+           $pdf = PDF::loadView('backend.pages.document.drink_purchase',compact('datas','purchase_no','setting','description','date','purchase_signature','totalValue','price_nvat','vat','data'));
 
            Storage::put('public/pdf/drink_purchase/'.'FICHE_DEMANDE_ACHAT_'.$purchase_no.'.pdf', $pdf->output());
 
@@ -473,7 +566,7 @@ class DrinkPurchaseController extends Controller
         if (is_null($this->user) || !$this->user->can('drink_purchase.delete')) {
             abort(403, 'Sorry !! You are Unauthorized to delete any purchase !');
         }
-
+        /*
         try {DB::beginTransaction();
 
         $purchase = DrinkPurchase::where('purchase_no',$purchase_no)->first();
@@ -494,6 +587,7 @@ class DrinkPurchaseController extends Controller
 
             throw $e;
         }
+        */
 
     }
 

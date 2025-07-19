@@ -295,8 +295,9 @@ class MaterialController extends Controller
         $material = Material::where('id',$id)->first();
 
         $reference = strtoupper(substr($request->name, 0, 3));
+        /*
         $material->code = $reference.date("y").substr(number_format(time() * mt_rand(), 0, '', ''), 0, 6);
-
+        */
         $material->name = $request->name;
         //$material->quantity = $request->quantity;
         $material->unit = $request->unit;

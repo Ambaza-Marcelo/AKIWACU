@@ -2,7 +2,7 @@
 @extends('backend.layouts.master')
 
 @section('title')
-@lang('Les demandes Achat') - @lang('messages.admin_panel')
+@lang('Les demandes d\'achat') - @lang('messages.admin_panel')
 @endsection
 
 @section('styles')
@@ -50,13 +50,16 @@
                                 <tr>
                                     <th width="5%">#</th>
                                     <th width="10%">@lang('messages.date')</th>
-                                    <th width="10%">Requisition No</th>
+                                    <th width="10%">Purchase No</th>
                                     <th width="10%">@lang('messages.item')</th>
                                     <th width="10%">@lang('messages.code')</th>
                                     <th width="10%">@lang('messages.quantity')</th>
                                     <th width="10%">@lang('messages.unit')</th>
-                                    <th width="10%">@lang('messages.price')</th>
-                                    <th width="10%">@lang('messages.total_value')</th>
+                                    <th width="10%">@lang('PU HTVA')</th>
+                                    <th width="10%">@lang('PT HTVA')</th>
+                                    <th width="10%">@lang('Taux TVA')</th>
+                                    <th width="10%">@lang('TVA')</th>
+                                    <th width="10%">@lang('TVAC')</th>
                                     <th width="30%">@lang('messages.description')</th>
                                     <th width="10%">@lang('messages.created_by')</th>
                                     <th width="15%">Action</th>
@@ -72,8 +75,11 @@
                                     <td>{{ $purchase->food->code }}</td>
                                     <td>{{ $purchase->quantity }}</td>
                                     <td>{{ $purchase->food->foodMeasurement->purchase_unit }}</td>
-                                    <td>{{ number_format($purchase->price,0,',',' ') }}</td>
-                                    <td>{{ number_format($purchase->total_value,0,',',' ') }}</td>
+                                    <td>{{ number_format($purchase->price,3,',',' ') }}</td>
+                                    <td>{{ number_format($purchase->price_nvat,3,',',' ') }}</td>
+                                    <td>{{ $purchase->vat_rate }}%</td>
+                                    <td>{{ number_format($purchase->vat,3,',',' ') }}</td>
+                                    <td>{{ number_format($purchase->price_wvat,0,',',' ') }}</td>
                                     <td>{{ $purchase->description }}</td>
                                     <td>{{ $purchase->created_by }}</td>
                                     <td>

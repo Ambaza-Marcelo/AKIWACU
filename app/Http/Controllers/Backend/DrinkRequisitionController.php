@@ -119,7 +119,7 @@ class DrinkRequisitionController extends Controller
             $quantity_requisitioned = $request->quantity_requisitioned;
             //$unit = $request->unit;
             $description =$request->description; 
-            $latest = DrinkRequisition::latest()->first();
+            $latest = DrinkRequisition::orderBy('id','desc')->first();
             if ($latest) {
                $requisition_no = 'BR' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{

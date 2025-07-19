@@ -26,9 +26,14 @@ class MaterialPurchaseDetail extends Model
         'reseted_by',
         'status',
         'material_id',
+        'supplier_id'
     ];
 
     public function material(){
         return $this->belongsTo('App\Models\Material');
+    }
+
+    public function supplier(){
+        return $this->belongsTo('App\Models\Supplier');
     }
 }

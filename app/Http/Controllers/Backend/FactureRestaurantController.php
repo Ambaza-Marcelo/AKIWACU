@@ -192,7 +192,7 @@ class FactureRestaurantController extends Controller
 
     public function chiffreAffaire()
     {
-        if (is_null($this->user) || !$this->user->can('invoice_kitchen.view')) {
+        if (is_null($this->user) || !$this->user->can('dashboard.view')) {
             abort(403, 'Sorry !! You are Unauthorized to view this ! more information,contact Marcellin');
         }
 
@@ -885,6 +885,10 @@ class FactureRestaurantController extends Controller
 
     public function exporterChiffreAffaireEnExcel(Request $request)
     {
+        if (is_null($this->user) || !$this->user->can('invoice_kitchen.view')) {
+            abort(403, 'Sorry !! You are Unauthorized to export any bill !');
+        }
+
         $d1 = $request->query('start_date');
         $d2 = $request->query('end_date');
 

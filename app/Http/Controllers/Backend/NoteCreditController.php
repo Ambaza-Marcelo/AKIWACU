@@ -1043,8 +1043,7 @@ class NoteCreditController extends Controller
         }
 
         $rules = array(
-                //'invoice_date' => 'required',
-                //'invoice_number' => 'required',
+                'cn_motif' => 'required',
                 'tp_type' => 'required',
                 'tp_name' => 'required|max:100|min:3',
                 'tp_TIN' => 'required|max:30|min:4',
@@ -1166,7 +1165,6 @@ class NoteCreditController extends Controller
             'customer_TIN'=> $client->customer_TIN,
             'customer_address'=> $client->customer_address,
             'invoice_signature'=> $invoice_signature,
-            'drink_order_no'=>$request->drink_order_no[$count],
             'cancelled_invoice_ref'=>$cancelled_invoice_ref,
             'cn_motif'=>$cn_motif,
             'invoice_currency'=>$request->invoice_currency,
@@ -1183,7 +1181,6 @@ class NoteCreditController extends Controller
             'vat'=>$vat,
             'item_price_wvat'=>$item_price_wvat,
             'item_total_amount'=>$item_total_amount,
-            'employe_id'=> $employe_id,
         );
           $data1[] = $data;
       }
@@ -1225,7 +1222,6 @@ class NoteCreditController extends Controller
             $facture->etat = $etat;
             $facture->cancelled_invoice = $cancelled_invoice;
             $facture->invoice_ref = $cancelled_invoice_ref;
-            $facture->employe_id = $employe_id;
             $facture->auteur = $this->user->name;
             $facture->invoice_signature_date = Carbon::now();
             $facture->save();
@@ -1279,7 +1275,6 @@ class NoteCreditController extends Controller
             'customer_TIN'=> $client->customer_TIN,
             'customer_address'=> $client->customer_address,
             'invoice_signature'=> $invoice_signature,
-            'drink_order_no'=>$request->drink_order_no[$count],
             'cancelled_invoice_ref'=>$cancelled_invoice_ref,
             'cn_motif'=>$cn_motif,
             'invoice_currency'=>$request->invoice_currency,
@@ -1296,7 +1291,6 @@ class NoteCreditController extends Controller
             'vat'=>$vat,
             'item_price_wvat'=>$item_price_wvat,
             'item_total_amount'=>$item_total_amount,
-            'employe_id'=> $employe_id,
         );
           $data1[] = $data;
       }
@@ -1338,7 +1332,6 @@ class NoteCreditController extends Controller
             $facture->etat = $etat;
             $facture->cancelled_invoice = $cancelled_invoice;
             $facture->invoice_ref = $cancelled_invoice_ref;
-            $facture->employe_id = $employe_id;
             $facture->auteur = $this->user->name;
             $facture->invoice_signature_date = Carbon::now();
             $facture->save();
@@ -1392,7 +1385,6 @@ class NoteCreditController extends Controller
             'customer_TIN'=> $client->customer_TIN,
             'customer_address'=> $client->customer_address,
             'invoice_signature'=> $invoice_signature,
-            'drink_order_no'=>$request->drink_order_no[$count],
             'cancelled_invoice_ref'=>$cancelled_invoice_ref,
             'cn_motif'=>$cn_motif,
             'invoice_currency'=>$request->invoice_currency,
@@ -1409,7 +1401,6 @@ class NoteCreditController extends Controller
             'vat'=>$vat,
             'item_price_wvat'=>$item_price_wvat,
             'item_total_amount'=>$item_total_amount,
-            'employe_id'=> $employe_id,
         );
           $data1[] = $data;
       }
@@ -1451,7 +1442,6 @@ class NoteCreditController extends Controller
             $facture->etat = $etat;
             $facture->cancelled_invoice = $cancelled_invoice;
             $facture->invoice_ref = $cancelled_invoice_ref;
-            $facture->employe_id = $employe_id;
             $facture->auteur = $this->user->name;
             $facture->invoice_signature_date = Carbon::now();
             $facture->save();
@@ -1505,7 +1495,6 @@ class NoteCreditController extends Controller
             'customer_TIN'=> $client->customer_TIN,
             'customer_address'=> $client->customer_address,
             'invoice_signature'=> $invoice_signature,
-            'drink_order_no'=>$request->drink_order_no[$count],
             'cancelled_invoice_ref'=>$cancelled_invoice_ref,
             'cn_motif'=>$cn_motif,
             'invoice_currency'=>$request->invoice_currency,
@@ -1522,7 +1511,6 @@ class NoteCreditController extends Controller
             'vat'=>$vat,
             'item_price_wvat'=>$item_price_wvat,
             'item_total_amount'=>$item_total_amount,
-            'employe_id'=> $employe_id,
         );
           $data1[] = $data;
       }
@@ -1564,7 +1552,6 @@ class NoteCreditController extends Controller
             $facture->etat = $etat;
             $facture->cancelled_invoice = $cancelled_invoice;
             $facture->invoice_ref = $cancelled_invoice_ref;
-            $facture->employe_id = $employe_id;
             $facture->auteur = $this->user->name;
             $facture->invoice_signature_date = Carbon::now();
             $facture->save();
@@ -1618,7 +1605,6 @@ class NoteCreditController extends Controller
             'customer_TIN'=> $client->customer_TIN,
             'customer_address'=> $client->customer_address,
             'invoice_signature'=> $invoice_signature,
-            'drink_order_no'=>$request->drink_order_no[$count],
             'cancelled_invoice_ref'=>$cancelled_invoice_ref,
             'cn_motif'=>$cn_motif,
             'invoice_currency'=>$request->invoice_currency,

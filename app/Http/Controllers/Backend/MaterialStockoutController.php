@@ -147,7 +147,7 @@ class MaterialStockoutController extends Controller
             $store_type = $request->store_type;
             
 
-            $latest = MaterialStockout::latest()->first();
+            $latest = MaterialStockout::orderBy('id','desc')->first();
             if ($latest) {
                $stockout_no = 'BS' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{

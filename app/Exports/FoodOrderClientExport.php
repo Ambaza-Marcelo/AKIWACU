@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use Carbon\Carbon;
 use App\Models\OrderKitchenDetail;
+use App\Models\F\FFoodOrderDetail;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
@@ -26,7 +27,7 @@ class FoodOrderClientExport implements FromCollection, WithMapping, WithHeadings
         $start_date = $startDate.' 00:00:00';
         $end_date = $endDate.' 23:59:59';
 
-        return OrderKitchenDetail::select(
+        return FFoodOrderDetail::select(
                         DB::raw('id,food_item_id,date,quantity,purchase_price,selling_price,total_amount_selling,employe_id,created_by,order_no,confirmed_by,status,rejected_by,rej_motif,table_id'))->whereBetween('date',[$start_date,$end_date])->groupBy('id','food_item_id','employe_id','date','quantity','status','purchase_price','selling_price','total_amount_selling','order_no','confirmed_by','rejected_by','created_by','rej_motif','table_id')->orderBy('id','asc')->get();
     }
 
@@ -36,7 +37,7 @@ class FoodOrderClientExport implements FromCollection, WithMapping, WithHeadings
             $status = "ENCOURS....";
             $rej_motif = "";
         }elseif ($data->status == -1) {
-            $status = "REJETE";
+            $status = "";
             $rej_motif = $data->rej_motif;
         }elseif ($data->status == 1) {
             $status = "VALIDE";

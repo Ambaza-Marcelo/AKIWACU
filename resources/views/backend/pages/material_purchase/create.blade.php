@@ -47,8 +47,34 @@
                         <div class="col-sm-6" id="dynamicDiv">
                             <div class="form-group">
                                 <label for="date">@lang('messages.date')</label>
-                                <input type="date" class="form-control" id="date" name="date">
+                                <input type="datetime-local" class="form-control" id="date" name="date">
                             </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="supplier_id">@lang('Fournisseur')</label>
+                                <select class="form-control" name="supplier_id" id="supplier_id" required>
+                                 <option disabled="disabled" selected="selected">Merci de choisir</option>
+                                @foreach($suppliers as $supplier)
+                                    <option value="{{$supplier->id}}">{{$supplier->supplier_name}}</option>
+                                @endforeach
+                             </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="vat_supplier_payer">@lang('assujetti à la tva?')</label>
+                                <select class="form-control" required name="vat_supplier_payer" id="vat_supplier_payer" required>
+                                 <option disabled="disabled" selected="selected">Merci de choisir</option>
+                                    <option value="0">Non assujetti</option>
+                                    <option value="1">Assujetti</option>
+                             </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6" id="vat_rate">
+                            
                         </div>
                     </div>
 
@@ -56,7 +82,7 @@
                             <tr class="">
                                 <th>@lang('messages.item')</th>
                                 <th>@lang('messages.quantity')</th>
-                                <th>@lang('P.A')</th>
+                                <th>@lang('PU HTVA')</th>
                                 <th>Action</th>
                             </tr>
                             <tr class="">  
@@ -66,8 +92,8 @@
                                 <option value="{{ $material->id }}" class="form-control">{{$material->name}}/{{ number_format($material->cump,0,',',' ') }}/{{ $material->materialMeasurement->purchase_unit }}</option>
                                 @endforeach
                                 </select></td>  
-                                <td><input type="number" name="quantity[]" placeholder="Enter quantity" class="form-control" step="any" required min="0" /></td> 
-                                <td><input type="number" name="price[]" placeholder="Entrer P.A" required class="form-control"  step="any" min="0" /></td>
+                                <td><input type="number" name="quantity[]" placeholder="Enter quantity" class="form-control" step="any" min="0" required /></td> 
+                                <td><input type="number" name="price[]" placeholder="Enter Price" class="form-control" step="any" required min="0" /></td> 
                                 <td><button type="button" name="add" id="add" class="btn btn-success">@lang('messages.addmore')</button></td>     
                             </tr>
                         </table> 
@@ -108,7 +134,7 @@
                           "<input type='number' name='quantity[]' placeholder='Enter Quantity' class='form-control' step='any' min='0'/>"+
                         "</td>"+
                         "<td>"+
-                          "<input type='number' step='any' name='price[]' placeholder='Enter Price' class='form-control' step='any' min='0' />"+
+                          "<input type='number' name='price[]' placeholder='Enter Price' class='form-control' step='any' min='0' />"+
                         "</td>"+
                         "<td>"+
                           "<button type='button' class='btn btn-danger remove-tr'>@lang('messages.delete')</button>"+
@@ -120,7 +146,50 @@
    
     $(document).on('click', '.remove-tr', function(){  
          $(this).parents('tr').remove();
-    }); 
+    });
+
+
+    //one checked box in checkbox group of invoice_currency
+
+    var group_=(el,callback)=>{
+        el.forEach((checkbox)=>{
+        callback(checkbox)
+        })
+    }
+
+    group_(document.getElementsByName('invoice_currency'),(item)=>{
+    item.onclick=(e)=>{
+    group_(document.getElementsByName('invoice_currency'),(item)=>{
+    item.checked=false;
+    })
+    e.target.checked=true;
+
+    }
+    })
+
+    $('#vat_supplier_payer').change(function () { 
+    if ($(this).val() === '1'){
+
+                var vat_rate = "<label for='vat_rate'>merci de choisir<strong style='color: red;'>*</strong></label>"+
+                            "<select name='vat_rate' required class='form-control'>"+
+                                "<option selected disabled>merci de choisir</option>"+
+                                "<option value='0'>0%</option>"+
+                                "<option value='10'>10%</option>"+
+                                "<option value='18'>18%</option>";
+        
+        $("#vat_rate").append([vat_rate]);
+    }
+
+    })
+    .trigger( "change" ); 
+
+    function preventBack() {
+        window.history.forward();
+    }
+    setTimeout("preventBack()", 0);
+    window.onunload = function () {
+        null
+    };
 
 </script>
 @endsection

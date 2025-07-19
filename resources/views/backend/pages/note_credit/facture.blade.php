@@ -22,6 +22,9 @@
                         <small>
                            <strong style="text-decoration: underline;">Facture D'Avoir {{ $invoice_number }} du {{ \Carbon\Carbon::parse($data->invoice_date)->format('d/m/Y H:i:s') }}</strong>
                         </small><br>
+                        <strong>
+                            Reference : {{ $data->invoice_ref }}
+                        </strong>
                     </div>
                     <div>
                           <small>NIF : {{$setting->nif}}</small><br>
@@ -85,6 +88,22 @@
                            &nbsp;&nbsp;Montant total à déduire : -{{ number_format($item_total_amount,0,',',' ' )}}</strong>
                         </small>
                         </div>
+                    </div>
+                    <div>
+                        <strong>
+                            @php
+                                if ($facture->cn_motif == '1' ) {
+                                    $cn_motif = "Erreur sur la facture";
+                                }elseif ($facture->cn_motif == '2' ){
+                                    $cn_motif = "Retour marchandises";
+                                }elseif ($facture->cn_motif == '3' ){
+                                    $cn_motif = "Rabais";
+                                }elseif ($facture->cn_motif == '4' ){
+                                $cn_motif = "Reduction hors facture"; 
+                                }
+                            @endphp
+                            {{ $cn_motif }}
+                        </strong>
                     </div>
                     <small>{{ $invoice_signature }} : ID</small><br>
                     @if($data->employe_id)

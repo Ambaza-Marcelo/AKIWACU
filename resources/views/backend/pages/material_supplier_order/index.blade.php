@@ -41,21 +41,6 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="header-title float-left">Material supplier orders List</h4>
-                    <form action="{{ route('admin.material-supplier-orders.export-to-excel')}}" method="GET">
-                        <p class="float-right mb-2">
-                            <button type="submit" value="pdf" class="btn btn-success">Exporter En Excel</button>
-                        </p>
-                        <p class="float-right mb-2">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <input type="date" name="start_date" class="form-control">
-                                </div>
-                                <div class="col-md-6">
-                                    <input type="date" name="end_date" class="form-control">
-                                </div>
-                            </div>
-                        </p>
-                    </form><br>
                     <div class="clearfix"></div>
                     <div class="data-tables">
                         @include('backend.layouts.partials.messages')
@@ -82,8 +67,9 @@
                                     <td><a href="{{ route('admin.material-supplier-orders.show',$order->order_no)}}">{{ $order->order_no }}</a></td>
                                     <td>{{ $order->order_signature }}</td>
                                     <td>{{ $order->purchase_no }}</td>
-                                    <td>@if($order->supplier_id){{ $order->supplier->supplier_name }}@endif</td>
-                                    <td>@if($order->status == 1)<span class="badge badge-warning">Encours</span> @elseif($order->status == 2)<span class="badge badge-primary">Validé</span> @elseif($order->status == 3)<span class="badge badge-info">Confirmé</span> @elseif($order->status == 4)<span class="badge badge-primary">Approuvé</span> @elseif($order->status == 5)<span class="badge badge-success">Reception Totale</span>@elseif($order->status == -5)<span class="badge badge-info">Reception Partielle</span> @elseif($order->status == -1)<span class="badge badge-danger">Rejeté</span> @else<span class="badge badge-success">Receptionné</span>@endif</td>
+                                    <td>@if($order->supplier_id)Supplier: {{ $order->supplier->supplier_name }}@endif</td>
+                                    <td>@if($order->status == 1)<span class="badge badge-warning">Encours</span> @elseif($order->status == 2)<span class="badge badge-primary">Validé</span> @elseif($order->status == 3)<span class="badge badge-info">Confirmé</span>
+                                    @elseif($order->status == -3)<span class="badge badge-warning">Modifié</span>  @elseif($order->status == 4)<span class="badge badge-primary">Approuvé</span> @elseif($order->status == 5)<span class="badge badge-success">Reception Totale</span>@elseif($order->status == -5)<span class="badge badge-info">Reception Partielle</span> @elseif($order->status == -1)<span class="badge badge-danger">Rejeté</span> @else<span class="badge badge-success">Receptionné</span>@endif</td>
                                     <td>{{ $order->description }}</td>
                                     <td>{{ $order->created_by }}</td>
                                     <td>
@@ -150,7 +136,7 @@
                                                 @csrf
                                             </form>
                                         @endif
-                                        @if (Auth::guard('admin')->user()->can('material_reception.create'))
+                                        @if (Auth::guard('admin')->user()->can('material_reception.delete'))
                                         @if($order->status == 4 || $order->status == -5)
                                         <a href="{{ route('admin.material-receptions.create',$order->order_no)}}" class="btn btn-primary">Receptionner Partiellement</a>
                                         @endif
@@ -160,8 +146,10 @@
                                         <a href="{{ route('admin.material-reception-without-remaining.create',$order->order_no)}}" class="btn btn-success">Receptionner Totalement</a>
                                         @endif
                                         @endif
-                                        @if (Auth::guard('admin')->user()->can('material_supplier_order.edit'))
-                                            <a class="btn btn-success text-white" href="{{ route('admin.material-supplier-orders.edit', $order->order_no) }}">@lang('messages.edit')</a>
+                                        @if (Auth::guard('admin')->user()->can('material_reception.edit'))
+                                        @if($order->status == -3)
+                                        <a href="{{ route('admin.material-reception.edit',$order->order_no)}}" class="btn btn-primary">Modifier la reception</a>
+                                        @endif
                                         @endif
                                         @if (Auth::guard('admin')->user()->can('material_supplier_order.delete'))
                                             @if($order->status == -1 || $order->status == 1)
@@ -214,6 +202,14 @@
                 responsive: true
             });
         }
+
+    function preventBack() {
+        window.history.forward();
+    }
+    setTimeout("preventBack()", 0);
+    window.onunload = function () {
+        null
+    };
 
      </script>
 @endsection

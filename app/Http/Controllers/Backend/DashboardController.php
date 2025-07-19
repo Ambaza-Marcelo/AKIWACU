@@ -13,6 +13,7 @@ use App\Events\RealTimeMessage;
 use App\Models\Facture;
 use App\Models\FactureDetail;
 use App\Models\Table;
+use App\Models\F\FTable;
 
 class DashboardController extends Controller
 {
@@ -81,6 +82,7 @@ class DashboardController extends Controller
         $total_admins = count(Admin::select('id')->get());
         $total_permissions = count(Permission::select('id')->get());
         $tables = Table::all();
+        $f_tables = FTable::all();
         $employes = Facture::select(
                         DB::raw('employe_id,count(invoice_number) as invoice_number'))->where('etat','-1')->groupBy('employe_id')->orderBy('invoice_number','desc')->take(5)->get();
 
@@ -90,7 +92,8 @@ class DashboardController extends Controller
             'total_roles', 
             'total_permissions',
             'employes',
-            'tables'
+            'tables',
+            'f_tables'
 
             ))->with('year',json_encode($year,JSON_NUMERIC_CHECK))->with('food',json_encode($food,JSON_NUMERIC_CHECK))->with('year',json_encode($year,JSON_NUMERIC_CHECK))->with('beverage',json_encode($beverage,JSON_NUMERIC_CHECK))->with('barrist',json_encode($barrist,JSON_NUMERIC_CHECK))->with('year',json_encode($year,JSON_NUMERIC_CHECK))->with('bartender',json_encode($bartender,JSON_NUMERIC_CHECK))->with('salle',json_encode($salle,JSON_NUMERIC_CHECK))->with('swiming_pool',json_encode($swiming_pool,JSON_NUMERIC_CHECK))->with('year',json_encode($year,JSON_NUMERIC_CHECK))->with('service',json_encode($service,JSON_NUMERIC_CHECK))->with('kidness_space',json_encode($kidness_space,JSON_NUMERIC_CHECK));
     }

@@ -34,9 +34,12 @@
                                     <th width="10%">@lang('messages.item')</th>
                                     <th width="10%">@lang('messages.quantity')</th>
                                     <th width="10%">@lang('messages.unit')</th>
-                                    <th width="10%">@lang('messages.unit_price')</th>
-                                    <th width="10%">@lang('messages.total_value')</th>
-                                    <th width="20%">@lang('messages.description')</th>
+                                    <th width="10%">@lang('PU HTVA')</th>
+                                    <th width="10%">@lang('PT HTVA')</th>
+                                    <th width="10%">@lang('Taux TVA')</th>
+                                    <th width="10%">@lang('TVA')</th>
+                                    <th width="10%">@lang('TVAC')</th>
+                                    <th>@lang('messages.description')</th>
                                     <th width="10%">@lang('messages.created_by')</th>
                                     <th width="15%">Action</th>
                                 </tr>
@@ -51,8 +54,11 @@
                                     <td>{{ $order->drink->name }}</td>
                                     <td>{{ $order->quantity }}</td>
                                     <td>{{ $order->drink->drinkMeasurement->purchase_unit }}</td>
-                                    <td>{{ number_format($order->price,0,',',' ' ) }}</td>
-                                    <td>{{ number_format($order->total_value,0,',',' ' ) }}</td>
+                                    <td>{{ number_format($order->purchase_price,3,',',' ') }}</td>
+                                    <td>{{ number_format($order->price_nvat,3,',',' ') }}</td>
+                                    <td>{{ $order->vat_rate }}%</td>
+                                    <td>{{ number_format($order->vat,3,',',' ') }}</td>
+                                    <td>{{ number_format($order->price_wvat,0,',',' ') }}</td>
                                     <td>{{ $order->description }}</td>
                                     <td>{{ $order->created_by }}</td>
                                     <td>

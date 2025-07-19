@@ -25,7 +25,7 @@ class JournalCotisationExport implements FromCollection, WithMapping, WithHeadin
 
         $start_date = $startDate.' 00:00:00';
         $end_date = $endDate.' 23:59:59';
-        return HrPaiement::where('employe_id','!=','')->whereBetween('created_at',[$start_date,$end_date])->get();
+        return HrPaiement::where('employe_id','!=','')->whereBetween('date_debut',[$start_date,$end_date])->get();
     }
 
     public function map($data) : array {
@@ -45,7 +45,7 @@ class JournalCotisationExport implements FromCollection, WithMapping, WithHeadin
 
         return [
             $data->id,
-            Carbon::parse($data->created_at)->format('m/Y'),
+            Carbon::parse($data->date_debut)->format('m/Y'),
             $data->employe->matricule_no,
             $data->employe->firstname, 
             $data->employe->lastname,

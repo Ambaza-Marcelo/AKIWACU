@@ -77,7 +77,7 @@
                                @foreach ($journal_paies as $journal_paie)
                                <tr>
                                     <td>{{ $loop->index+1 }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($journal_paie->created_at)->format('m/Y') }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($journal_paie->date_debut)->format('m/Y') }}</td>
                                     <td>{{ $journal_paie->employe->firstname }}&nbsp;{{ $journal_paie->employe->lastname }}</td>
                                     <td>{{ $journal_paie->employe->matricule_no }}</td>
                                     <td>{{ number_format($journal_paie->somme_salaire_base,0,',',' ') }}</td>
@@ -104,7 +104,9 @@
                                     @endphp
                                     <td>{{ number_format($total_deductions,0,',',' ') }}</td>
                                     <td>{{ number_format(($remuneration_brute - $total_deductions),0,',',' ') }}</td>
-                                    <td></td>
+                                    <td>
+                                        
+                                    </td>
                                 </tr>
                                @endforeach
                             </tbody>

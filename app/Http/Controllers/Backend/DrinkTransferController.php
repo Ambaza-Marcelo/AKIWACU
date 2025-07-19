@@ -142,7 +142,7 @@ class DrinkTransferController extends Controller
             $quantity_transfered = $request->quantity_transfered;
             
 
-            $latest = DrinkTransfer::latest()->first();
+            $latest = DrinkTransfer::orderBy('id','desc')->first();
             if ($latest) {
                $transfer_no = 'BT' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{

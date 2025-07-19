@@ -103,12 +103,12 @@
                                         @endif
                                         @if (Auth::guard('admin')->user()->can('note_credit.validate'))
                                         @if($facture->statut == 1)
-                                         <a class="btn btn-primary text-white" href="@if(!empty($facture->drink_order_no)){{ route('admin.boissons-note-de-credit.valider', $facture->invoice_number) }} @elseif(!empty($facture->food_order_no)){{ route('admin.nourritures-note-de-credit.valider', $facture->invoice_number) }} @elseif(!empty($facture->bartender_order_no)){{ route('admin.bartender-note-de-credit.valider', $facture->invoice_number) }} @elseif(!empty($facture->barrist_order_no)){{ route('admin.barrista-note-de-credit.valider', $facture->invoice_number) }} @else{{ route('admin.booking-note-de-credit.valider', $facture->invoice_number) }} @endif"
+                                         <a class="btn btn-primary text-white" href="@if(!empty($facture->drink_order_no)){{ route('admin.boissons-note-de-credit.valider', $facture->invoice_number) }} @elseif(!empty($facture->food_order_no)){{ route('admin.nourritures-note-de-credit.valider', $facture->invoice_number) }} @elseif(!empty($facture->bartender_order_no)){{ route('admin.bartender-note-de-credit.valider', $facture->invoice_number) }} @elseif(!empty($facture->barrist_order_no)){{ route('admin.barrista-note-de-credit.valider', $facture->invoice_number) }} @else {{ route('admin.booking-note-de-credit.valider', $facture->invoice_number) }} @endif"
                                             onclick="event.preventDefault(); document.getElementById('validate-form-{{ $facture->invoice_number }}').submit();this.style.visibility='hidden';" ondblclick="this.style.visibility='hidden';">
                                                 Valider
                                             </a>
 
-                                            <form id="validate-form-{{ $facture->invoice_number }}" action="@if(!empty($facture->drink_order_no)){{ route('admin.boissons-note-de-credit.valider', $facture->invoice_number) }} @elseif(!empty($facture->food_order_no)){{ route('admin.nourritures-note-de-credit.valider', $facture->invoice_number) }} @elseif(!empty($facture->bartender_order_no)){{ route('admin.bartender-note-de-credit.valider', $facture->invoice_number) }} @elseif(!empty($facture->barrist_order_no)){{ route('admin.barrista-note-de-credit.valider', $facture->invoice_number) }} @elseif(!empty($facture->booking_no)){{ route('admin.booking-note-de-credit.valider', $facture->invoice_number) }} @endif" method="POST" style="display: none;">
+                                            <form id="validate-form-{{ $facture->invoice_number }}" action="@if(!empty($facture->drink_order_no)){{ route('admin.boissons-note-de-credit.valider', $facture->invoice_number) }} @elseif(!empty($facture->food_order_no)){{ route('admin.nourritures-note-de-credit.valider', $facture->invoice_number) }} @elseif(!empty($facture->bartender_order_no)){{ route('admin.bartender-note-de-credit.valider', $facture->invoice_number) }} @elseif(!empty($facture->barrist_order_no)){{ route('admin.barrista-note-de-credit.valider', $facture->invoice_number) }} @else {{ route('admin.booking-note-de-credit.valider', $facture->invoice_number) }} @endif" method="POST" style="display: none;">
                                                 @method('PUT')
                                                 @csrf
                                             </form>
@@ -147,6 +147,14 @@
                 responsive: true
             });
         }
+
+    function preventBack() {
+        window.history.forward();
+    }
+    setTimeout("preventBack()", 0);
+    window.onunload = function () {
+        null
+    };
 
      </script>
 @endsection

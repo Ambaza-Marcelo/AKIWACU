@@ -214,6 +214,16 @@ Route::group(['prefix' => 'admin'], function () {
     Route::put('tables/update/{id}', 'Backend\TableController@update')->name('admin.tables.update');
     Route::delete('tables/destroy/{id}', 'Backend\TableController@destroy')->name('admin.tables.destroy');
 
+    //f-tables routes
+    Route::get('f-tables/index', 'Backend\F\FTableController@index')->name('admin.f-tables.index');
+    Route::get('f-tables/choose', 'Backend\F\FTableController@choose')->name('admin.f-tables.choose');
+    Route::get('f-tables/choose-type-order/{table_id}', 'Backend\F\FTableController@chooseType')->name('admin.f-tables.choose-type-order');
+    Route::get('f-tables/create', 'Backend\F\FTableController@create')->name('admin.f-tables.create');
+    Route::post('f-tables/store', 'Backend\F\FTableController@store')->name('admin.f-tables.store');
+    Route::get('f-tables/edit/{id}', 'Backend\F\FTableController@edit')->name('admin.f-tables.edit');
+    Route::put('f-tables/update/{id}', 'Backend\F\FTableController@update')->name('admin.f-tables.update');
+    Route::delete('f-tables/destroy/{id}', 'Backend\F\FTableController@destroy')->name('admin.f-tables.destroy');
+
     //staff_members routes
     Route::get('staff_members/index', 'Backend\HomeConsumption\StaffMemberController@index')->name('admin.staff_members.index');
     Route::get('staff_members/choose', 'Backend\HomeConsumption\StaffMemberController@choose')->name('admin.staff_members.choose');
@@ -371,6 +381,20 @@ Route::group(['prefix' => 'admin'], function () {
     Route::put('EBMS/bookings/validate/{booking_no}', 'Backend\Booking\BookingController@validateBooking')->name('admin.bookings.validate');
     Route::put('EBMS/bookings/reject/{booking_no}','Backend\Booking\BookingController@reject')->name('admin.bookings.reject');
     Route::put('EBMS/bookings/reset/{booking_no}','Backend\Booking\BookingController@reset')->name('admin.bookings.reset');
+
+
+    //f-bookings routes
+
+    Route::get('EBMS/f-bookings/edit/{booking_no}', 'Backend\F\FBookingController@edit')->name('admin.f-bookings.edit');
+    Route::put('EBMS/f-bookings/update/{booking_no}', 'Backend\F\FBookingController@update')->name('admin.f-bookings.update');
+    Route::delete('EBMS/f-bookings/destroy/{booking_no}', 'Backend\F\FBookingController@destroy')->name('admin.f-bookings.destroy');
+
+    Route::get('EBMS/f-bookings/show/{booking_no}', 'Backend\F\FBookingController@show')->name('admin.f-bookings.show');
+
+    Route::get('EBMS/f-bookings/generatepdf/{booking_no}','Backend\F\FBookingController@htmlPdf')->name('admin.f-bookings.generatepdf');
+    Route::put('EBMS/f-bookings/validate/{booking_no}', 'Backend\F\FBookingController@validateBooking')->name('admin.f-bookings.validate');
+    Route::put('EBMS/f-bookings/reject/{booking_no}','Backend\F\FBookingController@reject')->name('admin.f-bookings.reject');
+    Route::put('EBMS/f-bookings/reset/{booking_no}','Backend\F\FBookingController@reset')->name('admin.f-bookings.reset');
 
     //barrist-items routes
     Route::get('EBMS/barrist-items/index', 'Backend\BarristItemController@index')->name('admin.barrist-items.index');
@@ -744,8 +768,193 @@ Route::group(['prefix' => 'admin'], function () {
     Route::put('EBMS/bartender-orders/validate/{order_no}', 'Backend\BartenderOrderController@validateCommand')->name('admin.bartender-orders.validate');
     Route::put('EBMS/bartender-orders/reject/{order_no}','Backend\BartenderOrderController@reject')->name('admin.bartender-orders.reject');
     Route::put('EBMS/bartender-orders/reset/{order_no}','Backend\BartenderOrderController@reset')->name('admin.bartender-orders.reset');
-
     Route::get('EBMS/bartender-orders/export-to-excel', 'Backend\BartenderOrderController@exportToExcel')->name('admin.bartender-orders.export-to-excel');
+
+    //fake routes
+    //f-food-orders routes
+     Route::get('EBMS/f-food-orders/listAll', 'Backend\F\FFoodOrderController@listAll')->name('admin.f-food-orders.listAll');
+
+
+    Route::get('EBMS/f-food-orders/index/{table_id}', 'Backend\F\FFoodOrderController@index')->name('admin.f-food-orders.index');
+    Route::get('EBMS/f-food-orders/create/{table_id}', 'Backend\F\FFoodOrderController@create')->name('admin.f-food-orders.create');
+    Route::post('EBMS/f-food-orders/store', 'Backend\F\FFoodOrderController@store')->name('admin.f-food-orders.store');
+    Route::get('EBMS/f-food-orders/edit/{order_no}', 'Backend\F\FFoodOrderController@edit')->name('admin.f-food-orders.edit');
+    Route::put('EBMS/f-food-orders/update/{order_no}', 'Backend\F\FFoodOrderController@update')->name('admin.f-food-orders.update');
+    Route::delete('EBMS/f-food-orders/destroy/{order_no}', 'Backend\F\FFoodOrderController@destroy')->name('admin.f-food-orders.destroy');
+
+    Route::get('EBMS/f-food-orders/show/{order_no}', 'Backend\F\FFoodOrderController@show')->name('admin.f-food-orders.show');
+    Route::get('EBMS/f-food-orders/voir-commande-a-rejeter/{order_no}', 'Backend\F\FFoodOrderController@voirCommandeRejeter')->name('admin.f-food-orders.voir-commande-a-rejeter');
+
+    Route::get('EBMS/f-food-orders/generatepdf/{order_no}','Backend\F\FFoodOrderController@htmlPdf')->name('admin.f-food-orders.generatepdf');
+    Route::put('EBMS/f-food-orders/validate/{order_no}', 'Backend\F\FFoodOrderController@validateCommand')->name('admin.f-food-orders.validate');
+    Route::put('EBMS/f-food-orders/reject/{order_no}','Backend\F\FFoodOrderController@reject')->name('admin.f-food-orders.reject');
+    Route::put('EBMS/f-food-orders/reset/{order_no}','Backend\F\FFoodOrderController@reset')->name('admin.f-food-orders.reset');
+
+    Route::get('EBMS/f-food-orders/export-to-excel', 'Backend\F\FFoodOrderController@exportToExcel')->name('admin.f-food-orders.export-to-excel');
+
+    //f-drink-orders routes
+    Route::get('EBMS/f-drink-orders/listAll', 'Backend\OrderDrinkController@listAll')->name('admin.f-drink-orders.listAll');
+
+    Route::get('EBMS/f-drink-orders/index/{table_id}', 'Backend\F\FDrinkOrderController@index')->name('admin.f-drink-orders.index');
+    Route::get('EBMS/f-drink-orders/create/{table_id}', 'Backend\F\FDrinkOrderController@create')->name('admin.f-drink-orders.create');
+    Route::get('EBMS/order-report/choose', 'Backend\F\FDrinkOrderController@choose')->name('admin.order-report.choose');
+    Route::post('EBMS/f-drink-orders/store', 'Backend\F\FDrinkOrderController@store')->name('admin.f-drink-orders.store');
+    Route::get('EBMS/f-drink-orders/edit/{order_no}', 'Backend\F\FDrinkOrderController@edit')->name('admin.f-drink-orders.edit');
+    Route::put('EBMS/f-drink-orders/update/{order_no}', 'Backend\F\FDrinkOrderController@update')->name('admin.f-drink-orders.update');
+    Route::delete('EBMS/f-drink-orders/destroy/{order_no}', 'Backend\F\FDrinkOrderController@destroy')->name('admin.f-drink-orders.destroy');
+
+    Route::get('EBMS/f-drink-orders/show/{order_no}', 'Backend\F\FDrinkOrderController@show')->name('admin.f-drink-orders.show');
+    Route::get('EBMS/f-drink-orders/voir-commande-a-rejeter/{order_no}', 'Backend\F\FDrinkOrderController@voirCommandeRejeter')->name('admin.f-drink-orders.voir-commande-a-rejeter');
+
+    Route::get('EBMS/f-drink-orders/generatepdf/{order_no}','Backend\F\FDrinkOrderController@htmlPdf')->name('admin.f-drink-orders.generatepdf');
+    Route::put('EBMS/f-drink-orders/validate/{order_no}', 'Backend\F\FDrinkOrderController@validateCommand')->name('admin.f-drink-orders.validate');
+    Route::put('EBMS/f-drink-orders/reject/{order_no}','Backend\F\FDrinkOrderController@reject')->name('admin.f-drink-orders.reject');
+    Route::put('EBMS/f-drink-orders/reset/{order_no}','Backend\F\FDrinkOrderController@reset')->name('admin.f-drink-orders.reset');
+
+    Route::get('EBMS/f-drink-orders/export-to-excel', 'Backend\F\FDrinkOrderController@exportToExcel')->name('admin.f-drink-orders.export-to-excel');
+
+    //f-barrista-orders routes
+    Route::get('EBMS/f-barrista-orders/listAll', 'Backend\F\FBarristaOrderController@listAll')->name('admin.f-barrista-orders.listAll');
+
+    Route::get('EBMS/f-barrista-orders/index/{table_id}', 'Backend\F\FBarristaOrderController@index')->name('admin.f-barrista-orders.index');
+    Route::get('EBMS/f-barrista-orders/create/{table_id}', 'Backend\F\FBarristaOrderController@create')->name('admin.f-barrista-orders.create');
+    Route::post('EBMS/f-barrista-orders/store', 'Backend\F\FBarristaOrderController@store')->name('admin.f-barrista-orders.store');
+    Route::get('EBMS/f-barrista-orders/edit/{order_no}', 'Backend\F\FBarristaOrderController@edit')->name('admin.f-barrista-orders.edit');
+    Route::put('EBMS/f-barrista-orders/update/{order_no}', 'Backend\F\FBarristaOrderController@update')->name('admin.f-barrista-orders.update');
+    Route::delete('EBMS/f-barrista-orders/destroy/{order_no}', 'Backend\F\FBarristaOrderController@destroy')->name('admin.f-barrista-orders.destroy');
+
+    Route::get('EBMS/f-barrista-orders/show/{order_no}', 'Backend\F\FBarristaOrderController@show')->name('admin.f-barrista-orders.show');
+    Route::get('EBMS/f-barrista-orders/voir-commande-a-rejeter/{order_no}', 'Backend\F\FBarristaOrderController@voirCommandeRejeter')->name('admin.f-barrista-orders.voir-commande-a-rejeter');
+
+    Route::get('EBMS/f-barrista-orders/print', 'Backend\F\FBarristaOrderController@print')->name('admin.f-barrista-orders.print');
+
+    Route::get('EBMS/f-barrista-orders/generatepdf/{order_no}','Backend\F\FBarristaOrderController@htmlPdf')->name('admin.f-barrista-orders.generatepdf');
+    Route::put('EBMS/f-barrista-orders/validate/{order_no}', 'Backend\F\FBarristaOrderController@validateCommand')->name('admin.f-barrista-orders.validate');
+    Route::put('EBMS/f-barrista-orders/reject/{order_no}','Backend\F\FBarristaOrderController@reject')->name('admin.f-barrista-orders.reject');
+    Route::put('EBMS/f-barrista-orders/reset/{order_no}','Backend\F\FBarristaOrderController@reset')->name('admin.f-barrista-orders.reset');
+
+    Route::get('EBMS/f-barrista-orders/export-to-excel', 'Backend\F\FBarristaOrderController@exportToExcel')->name('admin.f-barrista-orders.export-to-excel');
+
+    //f-bartender-orders routes
+    Route::get('EBMS/f-bartender-orders/listAll', 'Backend\F\FBartenderOrderController@listAll')->name('admin.f-bartender-orders.listAll');
+
+    Route::get('EBMS/f-bartender-orders/index/{table_id}', 'Backend\F\FBartenderOrderController@index')->name('admin.f-bartender-orders.index');
+    Route::get('EBMS/f-bartender-orders/create/{table_id}', 'Backend\F\FBartenderOrderController@create')->name('admin.f-bartender-orders.create');
+    Route::post('EBMS/f-bartender-orders/store', 'Backend\F\FBartenderOrderController@store')->name('admin.f-bartender-orders.store');
+    Route::get('EBMS/f-bartender-orders/edit/{order_no}', 'Backend\F\FBartenderOrderController@edit')->name('admin.f-bartender-orders.edit');
+    Route::put('EBMS/f-bartender-orders/update/{order_no}', 'Backend\F\FBartenderOrderController@update')->name('admin.f-bartender-orders.update');
+    Route::delete('EBMS/f-bartender-orders/destroy/{order_no}', 'Backend\F\FBartenderOrderController@destroy')->name('admin.f-bartender-orders.destroy');
+
+    Route::get('EBMS/f-bartender-orders/show/{order_no}', 'Backend\F\FBartenderOrderController@show')->name('admin.f-bartender-orders.show');
+    Route::get('EBMS/f-bartender-orders/voir-commande-a-rejeter/{order_no}', 'Backend\F\FBartenderOrderController@voirCommandeRejeter')->name('admin.f-bartender-orders.voir-commande-a-rejeter');
+
+    Route::get('EBMS/f-bartender-orders/print', 'Backend\F\FBartenderOrderController@print')->name('admin.f-bartender-orders.print');
+
+    Route::get('EBMS/f-bartender-orders/generatepdf/{order_no}','Backend\F\FBartenderOrderController@htmlPdf')->name('admin.f-bartender-orders.generatepdf');
+    Route::put('EBMS/f-bartender-orders/validate/{order_no}', 'Backend\F\FBartenderOrderController@validateCommand')->name('admin.f-bartender-orders.validate');
+    Route::put('EBMS/f-bartender-orders/reject/{order_no}','Backend\F\FBartenderOrderController@reject')->name('admin.f-bartender-orders.reject');
+    Route::put('EBMS/f-bartender-orders/reset/{order_no}','Backend\F\FBartenderOrderController@reset')->name('admin.f-bartender-orders.reset');
+    Route::get('EBMS/f-bartender-orders/export-to-excel', 'Backend\F\FBartenderOrderController@exportToExcel')->name('admin.f-bartender-orders.export-to-excel');
+
+    //f-bookings routes
+    Route::get('EBMS/f-booking-salles/index', 'Backend\F\FBookingController@indexSalle')->name('admin.f-booking-salles.index');
+    Route::get('EBMS/f-booking-rooms/index', 'Backend\F\FBookingController@indexRoom')->name('admin.f-booking-rooms.index');
+    Route::get('EBMS/f-booking-salles/create', 'Backend\F\FBookingController@createSalle')->name('admin.f-booking-salles.create');
+    Route::get('EBMS/f-booking-rooms/create', 'Backend\F\FBookingController@createRoom')->name('admin.f-booking-rooms.create');
+    Route::post('EBMS/f-booking-salles/store', 'Backend\F\FBookingController@storeSalle')->name('admin.f-booking-salles.store');
+    Route::post('EBMS/f-booking-rooms/store', 'Backend\F\FBookingController@storeRoom')->name('admin.f-booking-rooms.store');
+
+    Route::get('EBMS/f-booking-services/index', 'Backend\F\FBookingController@indexService')->name('admin.f-booking-services.index');
+    Route::get('EBMS/f-booking-services/create', 'Backend\F\FBookingController@createService')->name('admin.f-booking-services.create');
+    Route::post('EBMS/f-booking-services/store', 'Backend\F\FBookingController@storeService')->name('admin.f-booking-services.store');
+
+    Route::get('EBMS/f-booking-swiming-pool/index', 'Backend\F\FBookingController@indexSwimingPool')->name('admin.f-booking-swiming-pool.index');
+    Route::get('EBMS/f-booking-swiming-pool/create', 'Backend\F\FBookingController@createSwimingPool')->name('admin.f-booking-swiming-pool.create');
+    Route::post('EBMS/f-booking-swiming-pool/store', 'Backend\F\FBookingController@storeSwimingPool')->name('admin.f-booking-swiming-pool.store');
+
+    Route::get('EBMS/f-booking-kidness-space/index', 'Backend\F\FBookingController@indexKidnessSpace')->name('admin.f-booking-kidness-space.index');
+    Route::get('EBMS/f-booking-kidness-space/create', 'Backend\F\FBookingController@createKidnessSpace')->name('admin.f-booking-kidness-space.create');
+    Route::post('EBMS/f-booking-kidness-space/store', 'Backend\F\FBookingController@storeKidnessSpace')->name('admin.f-booking-kidness-space.store');
+
+    //f-bills
+
+    Route::get('admin/f-drink-bills/index', 'Backend\F\FBillController@indexDrink')->name('admin.f-drink-bills.index');
+    Route::get('admin/f-food-bills/index', 'Backend\F\FBillController@indexFood')->name('admin.f-food-bills.index');
+    Route::get('admin/f-bartender-bills/index', 'Backend\F\FBillController@indexBartender')->name('admin.f-bartender-bills.index');
+    Route::get('admin/f-barrista-bills/index', 'Backend\F\FBillController@indexBarrista')->name('admin.f-barrista-bills.index');
+
+
+    Route::get('admin/f-booking-choose', 'Backend\F\FBillController@choose')->name('admin.f-booking-bills.choose');
+    Route::get('admin/f-booking-salle-bills/index', 'Backend\F\FBillController@indexBookingSalle')->name('admin.f-booking-salle-bills.index');
+    Route::get('admin/f-booking-room-bills/index', 'Backend\F\FBillController@indexBookingRoom')->name('admin.f-booking-room-bills.index');
+    Route::get('admin/f-booking-service-bills/index', 'Backend\F\FBillController@indexBookingService')->name('admin.f-booking-service-bills.index');
+    Route::get('admin/f-booking-swiming-pool-bills/index', 'Backend\F\FBillController@indexBookingSwimingPool')->name('admin.f-booking-swiming-pool-bills.index');
+    Route::get('admin/f-booking-kidness-space-bills/index', 'Backend\F\FBillController@indexBookingKidnessSpace')->name('admin.f-booking-kidness-space-bills.index');
+
+
+    Route::get('admin/f-drink-bills/create/{order_no}', 'Backend\F\FBillController@createDrink')->name('admin.f-drink-bills.create');
+    Route::get('admin/f-drink-bills/create-by-table/{table_id}', 'Backend\F\FBillController@createByTableDrink')->name('admin.f-drink-bills.create-by-table');
+
+    Route::get('admin/f-food-bills/create/{order_no}', 'Backend\F\FBillController@createFood')->name('admin.f-food-bills.create');
+    Route::get('admin/f-food-bills/create-by-table/{table_id}', 'Backend\F\FBillController@createByTableFood')->name('admin.f-food-bills.create-by-table');
+
+    Route::get('admin/f-barrista-bills/create/{order_no}', 'Backend\F\FBillController@createBarrista')->name('admin.f-barrista-bills.create');
+    Route::get('admin/f-barrista-bills/create-by-table/{table_id}', 'Backend\F\FBillController@createByTableBarrista')->name('admin.f-barrista-bills.create-by-table');
+
+    Route::get('admin/f-bartender-bills/create/{order_no}', 'Backend\F\FBillController@createBartender')->name('admin.f-bartender-bills.create');
+    Route::get('admin/f-bartender-bills/create-by-table/{table_id}', 'Backend\F\FBillController@createByTableBartender')->name('admin.f-bartender-bills.create-by-table');
+
+    Route::get('admin/f-booking-bills/create/{booking_no}', 'Backend\F\FBillController@createBooking')->name('admin.f-booking-bills.create');
+
+    Route::post('admin-f-drink-bills/store', 'Backend\F\FBillController@storeDrink')->name('admin.f-drink-bills.store');
+    Route::post('admin-f-barrista-bills/store', 'Backend\F\FBillController@storeBarrista')->name('admin.f-barrista-bills.store');
+    Route::post('admin-f-bartender-bills/store', 'Backend\F\FBillController@storeBartender')->name('admin.f-bartender-bills.store');
+    Route::post('admin-f-food-bills/store', 'Backend\F\FBillController@storeFood')->name('admin.f-food-bills.store');
+    Route::post('admin-f-booking-bills/store', 'Backend\F\FBillController@storeBooking')->name('admin.f-booking-bills.store');
+
+    Route::delete('admin/bills/destroy/{invoice_number}', 'Backend\F\FBillController@destroy')->name('admin.destroy');
+
+    //cash
+    Route::put('admin/f-drink-bill/validate-bill/{invoice_number}','Backend\F\FBillController@validerFactureBoisson')->name('admin.f-drink-bill.validate');
+    Route::put('admin/f-barrista-bill/validate-bill/{invoice_number}','Backend\F\FBillController@validerFactureBarrista')->name('admin.f-barrista-bill.validate');
+    Route::put('admin/f-bartender-bill/validate-bill/{invoice_number}','Backend\F\FBillController@validerFactureBartender')->name('admin.f-bartender-bill.validate');
+    Route::put('admin/f-booking-bill/validate-bill/{invoice_number}','Backend\F\FBillController@validerFactureBooking')->name('admin.f-booking-bill.validate');
+    Route::put('admin/f-food-bill/validate-bill/{invoice_number}','Backend\F\FBillController@validerFactureCuisine')->name('admin.f-food-bill.validate');
+
+
+    Route::get('admin/view-bill-a-valider-cash/{invoice_number}','Backend\F\FBillController@voirFactureCash')->name('admin.view-bill.cash');
+    Route::get('admin/view-bill-a-valider/{invoice_number}','Backend\F\FBillController@voirFactureCredit')->name('admin.view-bill.credit');
+
+    //credit
+
+    Route::put('admin/f-drink-bill/validate-bill-credit/{invoice_number}','Backend\F\FBillController@validerFactureBoissonCredit')->name('admin.f-drink-bill.valider-credit');
+    Route::put('admin/f-barrista-bill/validate-bill-credit/{invoice_number}','Backend\F\FBillController@validerFactureBarristaCredit')->name('admin.f-barrista-bill.valider-credit');
+    Route::put('admin/f-bartender-bill/validate-bill-credit/{invoice_number}','Backend\F\FBillController@validerFactureBartenderCredit')->name('admin.f-bartender-bill.valider-credit');
+    Route::put('admin/f-booking-bill/validate-bill-credit/{invoice_number}','Backend\F\FBillController@validerFactureBookingCredit')->name('admin.f-booking-bill.valider-credit');
+    Route::put('admin/f-food-bill/validate-bill-credit/{invoice_number}','Backend\F\FBillController@validerFactureCuisineCredit')->name('admin.f-food-bill.valider-credit');
+
+
+    Route::get('admin/view-bill-credit','Backend\F\FBillController@voirFactureAcredit')->name('admin.credit-bills.list');
+    Route::get('admin/pay-bill-credit/{invoice_number}','Backend\F\FBillController@voirFacturePayercredit')->name('admin.pay-bill.credit');
+
+    Route::get('admin/turnover-export-to-excel','Backend\F\FBillController@turnoverExportToExcel')->name('admin.turnover-export-to-excel');
+
+    Route::get('admin/exporter-en-excel-recouvrement','Backend\F\FBillController@recouvrementExportToExcel')->name('admin.exporter-en-excel-recouvrement');
+
+    Route::get('admin/view-turnover','Backend\F\FBillController@viewTurnover')->name('admin.view-turnover');
+    Route::get('admin/export-to-excel-turnover','Backend\F\FBillController@exportToExcelTurnover')->name('admin.export-to-excel-turnover');
+    Route::get('admin/global-bill/client','Backend\F\FBillController@globalBill')->name('admin.global-bill.client');
+
+    Route::put('admin/pay-bill-credit/{invoice_number}','Backend\F\FBillController@payerCredit')->name('admin.bill-credit.pay');
+    Route::put('admin/validate-bill-paid','Backend\FBillController@validerPaye')->name('admin.validate-bill-paid');
+
+
+    Route::get('admin/view-bill-to-reset/{invoice_number}','Backend\F\FBillController@voirFactureAnnuler')->name('admin.view-bill.reset');
+    Route::put('admin/bill/annuler-bill/{invoice_number}','Backend\F\FBillController@annulerFacture')->name('admin.bill.reset');
+    Route::get('admin/bill/print/{invoice_number}','Backend\F\FBillController@bill')->name('admin.bill.print');
+    Route::get('admin/draft-bill/print/{invoice_number}','Backend\F\FBillController@draftBill')->name('admin.draft-bill.print');
+    Route::get('admin/expedition/print/{invoice_number}','Backend\F\FBillController@expedition')->name('admin.expedition.print');
+    Route::get('admin/bill/show/{invoice_number}','Backend\F\FBillController@show')->name('admin.bill.show');
 
     //consumption routes
     Route::get('EBMS/home-consumption/barrist-index/{staff_member_id}', 'Backend\HomeConsumption\HomeConsumptionController@indexBarrist')->name('admin.home-consumption-barrist.index');
@@ -1278,8 +1487,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('EBMS/material-reception-without-remaining/create/{purchase_no}', 'Backend\MaterialReceptionController@createWithoutRemaining')->name('admin.material-reception-without-remaining.create');
     Route::post('EBMS/material-receptions/store', 'Backend\MaterialReceptionController@store')->name('admin.material-receptions.store');
     Route::post('EBMS/material-reception-without-remaining/store', 'Backend\MaterialReceptionController@storeWithoutRemaining')->name('admin.material-reception-without-remaining.store');
-    Route::get('EBMS/material-receptions/edit/{reception_no}', 'Backend\MaterialReceptionController@edit')->name('admin.material-receptions.edit');
-    Route::put('EBMS/material-receptions/update/{reception_no}', 'Backend\MaterialReceptionController@update')->name('admin.material-receptions.update');
+    Route::get('EBMS/material-reception/edit/{reception_no}', 'Backend\MaterialReceptionController@edit')->name('admin.material-reception.edit');
+    Route::put('EBMS/material-reception/update/{reception_no}', 'Backend\MaterialReceptionController@update')->name('admin.material-reception.update');
     Route::delete('EBMS/material-receptions/destroy/{reception_no}', 'Backend\MaterialReceptionController@destroy')->name('admin.material-receptions.destroy');
     Route::get('EBMS/material-receptions/show/{reception_no}','Backend\MaterialReceptionController@show')->name('admin.material-receptions.show');
 
@@ -1298,8 +1507,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('EBMS/drink-reception-without-remaining/create/{purchase_no}', 'Backend\DrinkReceptionController@createWithoutRemaining')->name('admin.drink-reception-without-remaining.create');
     Route::post('EBMS/drink-receptions/store', 'Backend\DrinkReceptionController@store')->name('admin.drink-receptions.store');
     Route::post('EBMS/drink-reception-without-remaining/store', 'Backend\DrinkReceptionController@storeWithoutRemaining')->name('admin.drink-reception-without-remaining.store');
-    Route::get('EBMS/drink-receptions/edit/{reception_no}', 'Backend\DrinkReceptionController@edit')->name('admin.drink-receptions.edit');
-    Route::put('EBMS/drink-receptions/update/{reception_no}', 'Backend\DrinkReceptionController@update')->name('admin.drink-receptions.update');
+    Route::get('EBMS/drink-reception/edit/{reception_no}', 'Backend\DrinkReceptionController@edit')->name('admin.drink-reception.edit');
+    Route::put('EBMS/drink-reception/update/{reception_no}', 'Backend\DrinkReceptionController@update')->name('admin.drink-reception.update');
     Route::delete('EBMS/drink-receptions/destroy/{reception_no}', 'Backend\DrinkReceptionController@destroy')->name('admin.drink-receptions.destroy');
     Route::get('EBMS/drink-receptions/show/{reception_no}','Backend\DrinkReceptionController@show')->name('admin.drink-receptions.show');
 
@@ -1318,8 +1527,8 @@ Route::group(['prefix' => 'admin'], function () {
     Route::get('EBMS/food-reception-without-remaining/create/{purchase_no}', 'Backend\FoodReceptionController@createWithoutRemaining')->name('admin.food-reception-without-remaining.create');
     Route::post('EBMS/food-receptions/store', 'Backend\FoodReceptionController@store')->name('admin.food-receptions.store');
     Route::post('EBMS/food-reception-without-remaining/store', 'Backend\FoodReceptionController@storeWithoutRemaining')->name('admin.food-reception-without-remaining.store');
-    Route::get('EBMS/food-receptions/edit/{reception_no}', 'Backend\FoodReceptionController@edit')->name('admin.food-receptions.edit');
-    Route::put('EBMS/food-receptions/update/{reception_no}', 'Backend\FoodReceptionController@update')->name('admin.food-receptions.update');
+    Route::get('EBMS/food-reception/edit/{reception_no}', 'Backend\FoodReceptionController@edit')->name('admin.food-reception.edit');
+    Route::put('EBMS/food-reception/update/{reception_no}', 'Backend\FoodReceptionController@update')->name('admin.food-reception.update');
     Route::delete('EBMS/food-receptions/destroy/{reception_no}', 'Backend\FoodReceptionController@destroy')->name('admin.food-receptions.destroy');
     Route::get('EBMS/food-receptions/show/{reception_no}','Backend\FoodReceptionController@show')->name('admin.food-receptions.show');
 

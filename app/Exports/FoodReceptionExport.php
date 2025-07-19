@@ -27,7 +27,7 @@ class FoodReceptionExport implements FromCollection, WithMapping, WithHeadings
         $end_date = $endDate.' 23:59:59';
 
         return FoodReceptionDetail::select(
-                        DB::raw('id,food_id,date,quantity_received,quantity_ordered,purchase_price,supplier_id,created_by,reception_no,validated_by,confirmed_by,approuved_by,rejected_by,status,invoice_no,order_no,purchase_no,receptionist,handingover,description,origin'))->whereBetween('date',[$start_date,$end_date])->groupBy('id','food_id','supplier_id','date','quantity_received','quantity_ordered','status','purchase_price','reception_no','confirmed_by','validated_by','approuved_by','created_by','rejected_by','invoice_no','order_no','purchase_no','receptionist','handingover','description','origin')->orderBy('id','asc')->get();
+                        DB::raw('id,food_id,date,quantity_received,quantity_ordered,purchase_price,supplier_id,created_by,reception_no,validated_by,confirmed_by,approuved_by,rejected_by,status,invoice_no,order_no,purchase_no,receptionist,handingover,description,origin,price_nvat,vat,vat_rate,price_wvat'))->whereBetween('date',[$start_date,$end_date])->groupBy('id','food_id','supplier_id','date','quantity_received','quantity_ordered','status','purchase_price','reception_no','confirmed_by','validated_by','approuved_by','created_by','rejected_by','invoice_no','order_no','purchase_no','receptionist','handingover','description','origin','price_nvat','vat','vat_rate','price_wvat')->orderBy('id','asc')->get();
     }
 
     public function map($data) : array {
@@ -45,7 +45,7 @@ class FoodReceptionExport implements FromCollection, WithMapping, WithHeadings
         }
 
         if (!empty($data->supplier_id)) {
-            $supplier = $data->supplier->name;
+            $supplier = $data->supplier->supplier_name;
         }else{
             $supplier = "";
         }
@@ -65,7 +65,10 @@ class FoodReceptionExport implements FromCollection, WithMapping, WithHeadings
             $data->quantity_received,
             $data->food->foodMeasurement->purchase_unit,
             $data->purchase_price,
-            $data->purchase_price * $data->quantity_received,
+            $data->price_nvat,
+            $data->vat,
+            $data->vat_rate,
+            $data->price_wvat,
             $status,
             $data->created_by,
             $data->validated_by,
@@ -93,8 +96,11 @@ class FoodReceptionExport implements FromCollection, WithMapping, WithHeadings
             'Quantité Commandé',
             'Quantité Recu',
             'Unité de mesure',
-            'P.A',
-            'TOTAL P.A',
+            'PU HTVA',
+            'PT HTVA',
+            'TVA',
+            'TAUX TVA',
+            'TVAC',
             'ETAT',
             'Auteur',
             'Valide Par',

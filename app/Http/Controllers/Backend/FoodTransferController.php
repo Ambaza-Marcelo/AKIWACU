@@ -51,7 +51,7 @@ class FoodTransferController extends Controller
             abort(403, 'Sorry !! You are Unauthorized to view any transfer !');
         }
 
-        $transfers = FoodTransfer::orderBy('id','desc')->get();
+        $transfers = FoodTransfer::orderBy('id','desc')->take(200)->get();
         return view('backend.pages.food_transfer.index', compact('transfers'));
     }
 
@@ -136,7 +136,7 @@ class FoodTransferController extends Controller
             $quantity_transfered = $request->quantity_transfered;
             
 
-            $latest = FoodTransfer::latest()->first();
+            $latest = FoodTransfer::orderBy('id','desc')->first();
             if ($latest) {
                $transfer_no = 'BT' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{

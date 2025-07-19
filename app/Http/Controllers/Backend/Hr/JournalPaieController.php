@@ -195,7 +195,7 @@ class JournalPaieController extends Controller
 
     public function cloturer($code)
     {
-       if (is_null($this->user) || !$this->user->can('hr_journal_paie.edit')) {
+       if (is_null($this->user) || !$this->user->can('hr_journal_paie.cloturer')) {
             abort(403, 'Pardon!! vous n\'avez pas l\'autorisation de clôturer le journal de paye! Mufise ico mubaza hamagara kuri 130 canke 122');
         }
             HrJournalPaie::where('code', '=', $code)

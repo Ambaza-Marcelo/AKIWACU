@@ -83,6 +83,11 @@ class FactureCreditExport implements FromCollection, WithMapping, WithHeadings
             $type = "JEUX ENFANT";
             $cump = 0;
             $order_no = $data->booking_no;
+        }else{
+            $libelle = "";
+            $type = "JEUX ENFANT";
+            $cump = 0;
+            $order_no = "";
         }
 
     	if (!empty($data->client_id)) {

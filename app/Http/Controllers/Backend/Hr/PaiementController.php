@@ -38,7 +38,7 @@ class PaiementController extends Controller
 
     public function index($company_id)
     {
-        if (is_null($this->user) || !$this->user->can('hr_employe.view')) {
+        if (is_null($this->user) || !$this->user->can('hr_paiement.view')) {
             abort(403, 'Pardon!! vous n\'avez pas l\'autorisation de visualiser les employés! Mufise ico mubaza hamagara kuri 130 canke 122');
         }
 
@@ -48,7 +48,7 @@ class PaiementController extends Controller
 
     public function selectByCompany()
     {
-        if (is_null($this->user) || !$this->user->can('hr_employe.view')) {
+        if (is_null($this->user) || !$this->user->can('hr_paiement.view')) {
             abort(403, 'Pardon!! vous n\'avez pas l\'autorisation de visualiser les employés! Mufise ico mubaza hamagara kuri 130 canke 122');
         }
 
@@ -58,7 +58,7 @@ class PaiementController extends Controller
 
     public function createByCompany()
     {
-        if (is_null($this->user) || !$this->user->can('hr_employe.view')) {
+        if (is_null($this->user) || !$this->user->can('hr_paiement.view')) {
             abort(403, 'Pardon!! vous n\'avez pas l\'autorisation de visualiser les employés! Mufise ico mubaza hamagara kuri 130 canke 122');
         }
 
@@ -68,7 +68,7 @@ class PaiementController extends Controller
 
     public function create($company_id)
     {
-        if (is_null($this->user) || !$this->user->can('hr_employe.create')) {
+        if (is_null($this->user) || !$this->user->can('hr_paiement.create')) {
             abort(403, 'Pardon!! vous n\'avez pas l\'autorisation de créer les employés! Mufise ico mubaza hamagara kuri 130 canke 122');
         }
 
@@ -91,7 +91,7 @@ class PaiementController extends Controller
 
      public function store(Request $request)
     {
-        if (is_null($this->user) || !$this->user->can('hr_employe.create')) {
+        if (is_null($this->user) || !$this->user->can('hr_paiement.create')) {
             abort(403, 'Pardon!! vous n\'avez pas l\'autorisation de créer les employés! Mufise ico mubaza hamagara kuri 130 canke 122');
         }
 
@@ -260,7 +260,7 @@ class PaiementController extends Controller
 
     public function show($id)
     {
-        if (is_null($this->user) || !$this->user->can('hr_employe.view')) {
+        if (is_null($this->user) || !$this->user->can('hr_paiement.view')) {
             abort(403, 'Pardon!! vous n\'avez pas l\'autorisation de voir les employés! Mufise ico mubaza hamagara kuri 130 canke 122');
         }
 
@@ -277,7 +277,7 @@ class PaiementController extends Controller
 
      public function ficheSalaire($id)
     {
-        if (is_null($this->user) || !$this->user->can('hr_employe.create')) {
+        if (is_null($this->user) || !$this->user->can('hr_paiement.create')) {
             abort(403, 'Sorry !! You are Unauthorized!');
         }
         
@@ -300,7 +300,7 @@ class PaiementController extends Controller
         Storage::put('public/'.$company->name.'/hr/bulletin-salaire/'.$matricule_no.'_'.$dateTime.'.pdf', $pdf->output());
 
         // download pdf file
-        return $pdf->download('Fiche_de_paie'.'.pdf');
+        return $pdf->download('BULLETIN DE PAIE '.$data->employe->firstname.' '.$data->employe->lastname.'.pdf');
     }
 
     /**
@@ -311,7 +311,7 @@ class PaiementController extends Controller
      */
     public function edit($id,$company_id)
     {
-        if (is_null($this->user) || !$this->user->can('hr_employe.edit')) {
+        if (is_null($this->user) || !$this->user->can('hr_paiement.edit')) {
             abort(403, 'Pardon!! vous n\'avez pas l\'autorisation de modifier l\'employé! Mufise ico mubaza hamagara kuri 130 canke 122');
         }
 
@@ -333,7 +333,7 @@ class PaiementController extends Controller
      */
     public function update(Request $request, $id)
     {
-        if (is_null($this->user) || !$this->user->can('hr_employe.edit')) {
+        if (is_null($this->user) || !$this->user->can('hr_paiement.edit')) {
             abort(403, 'Pardon!! vous n\'avez pas l\'autorisation de modifier l\'employé! Mufise ico mubaza hamagara kuri 130 canke 122');
         }
         //
@@ -522,7 +522,7 @@ class PaiementController extends Controller
      */
     public function destroy($id)
     {
-        if (is_null($this->user) || !$this->user->can('hr_employe.delete')) {
+        if (is_null($this->user) || !$this->user->can('hr_paiement.delete')) {
             abort(403, 'Pardon!! vous n\'avez pas l\'autorisation de supprimer l\'employé! Mufise ico mubaza hamagara kuri 130 canke 122');
         }
         //

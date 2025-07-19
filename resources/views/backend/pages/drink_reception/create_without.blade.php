@@ -2,7 +2,7 @@
 @extends('backend.layouts.master')
 
 @section('title')
-@lang('reception totale') - @lang('messages.admin_panel')
+@lang('Nouvelle reception totale') - @lang('messages.admin_panel')
 @endsection
 
 @section('styles')
@@ -19,11 +19,11 @@
     <div class="row align-items-center">
         <div class="col-sm-6">
             <div class="breadcrumbs-area clearfix">
-                <h4 class="page-title pull-left">@lang('reception totale')</h4>
+                <h4 class="page-title pull-left">@lang('Nouvelle reception totale')</h4>
                 <ul class="breadcrumbs pull-left">
                     <li><a href="{{ route('admin.dashboard') }}">@lang('messages.dashboard')</a></li>
                     <li><a href="{{ route('admin.drink-receptions.index') }}">@lang('messages.list')</a></li>
-                    <li><span>@lang('reception totale')</span></li>
+                    <li><span>@lang('Nouvelle reception totale')</span></li>
                 </ul>
             </div>
         </div>
@@ -49,7 +49,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="date">@lang('messages.date')</label>
-                                <input type="date" class="form-control" id="date" name="date">
+                                <input type="datetime-local" class="form-control" id="date" name="date">
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -80,7 +80,7 @@
                                 <select class="form-control" name="supplier_id" id="supplier_id" required>
                                  <option disabled="disabled" selected="selected">Merci de choisir</option>
                                 @foreach($suppliers as $supplier)
-                                    <option value="{{$supplier->id}}">{{$supplier->supplier_name}}</option>
+                                    <option value="{{$supplier->id}}" {{ $data->supplier_id == $supplier->id ? 'selected' : '' }}>{{$supplier->supplier_name}}</option>
                                 @endforeach
                              </select>
                             </div>
@@ -88,10 +88,10 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 <label for="vat_supplier_payer">@lang('assujetti à la tva?')</label>
-                                <select class="form-control" name="vat_supplier_payer" id="vat_supplier_payer" required>
+                                <select class="form-control" required name="vat_supplier_payer" id="vat_supplier_payer" required>
                                  <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                    <option value="0">Non assujetti</option>
-                                    <option value="1">Assujetti</option>
+                                    <option value="0" {{ $data->vat_supplier_payer == 0 ? 'selected' : '' }}>Non assujetti</option>
+                                    <option value="1" {{ $data->vat_supplier_payer == 1 ? 'selected' : '' }}>Assujetti</option>
                              </select>
                             </div>
                         </div>
@@ -233,15 +233,23 @@
                 var vat_rate = "<label for='vat_rate'>merci de choisir<strong style='color: red;'>*</strong></label>"+
                             "<select name='vat_rate' required class='form-control'>"+
                                 "<option selected disabled>merci de choisir</option>"+
-                                "<option value='0'>0%</option>"+
-                                "<option value='10'>10%</option>"+
-                                "<option value='18'>18%</option>";
+                                "<option value='0' {{ $data->vat_rate == 0 ? 'selected' : '' }}>0%</option>"+
+                                "<option value='10' {{ $data->vat_rate == 10 ? 'selected' : '' }}>10%</option>"+
+                                "<option value='18' {{ $data->vat_rate == 18 ? 'selected' : '' }}>18%</option>";
         
         $("#vat_rate").append([vat_rate]);
     }
 
     })
-    .trigger( "change" );
+    .trigger( "change" ); 
+
+    function preventBack() {
+        window.history.forward();
+    }
+    setTimeout("preventBack()", 0);
+    window.onunload = function () {
+        null
+    };
 
 </script>
 @endsection

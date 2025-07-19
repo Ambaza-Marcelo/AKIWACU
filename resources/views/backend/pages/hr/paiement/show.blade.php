@@ -27,7 +27,7 @@
                            &nbsp;&nbsp;@if($data->employe_id) {!! QrCode::size(50)->backgroundColor(255,255,255)->generate('MATRICULE'.$data->employe->matricule_no.', Designed by AMBAZA' ) !!} @endif
                         </small><br>
                         <small>
-                            {{date('M')}}, {{ date('Y')}}
+                            {{ \Carbon\Carbon::parse($data->date_fin)->format('M,Y') }}
                         </small>
                     </div>
                     <br><br><br>

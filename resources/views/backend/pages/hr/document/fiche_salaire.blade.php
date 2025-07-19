@@ -5,7 +5,7 @@
     <style type="text/css">
         tbody,thead,table,tr,th,td{
              border: 1px solid black;
-             text-align: center;
+             text-align: left;
              width: 100%;
         }
 
@@ -16,13 +16,18 @@
     <div>
         <div>
             <div>
-                <div>
-                   <img src="img/eden_logo.png" width="200" height="85">
-                </div>
+                <table>
+                    <tr>
+                        <td><img src="img/eden_logo.png" width="180" height="85"></td>
+                        <td><small> &nbsp;&nbsp;{{$setting->commune}}-{{$setting->zone}},{{$setting->rue}}</small><br>
+                          <small>&nbsp;&nbsp;{{$setting->telephone1}}-{{$setting->telephone2}}</small><br>
+                          <small>&nbsp;&nbsp;{{$setting->email}}</small></td>
+                    </tr>
+                </table><br>
                 <div>
                     <div style="float: right; border-top-right-radius: 10px solid black;border-top-left-radius: 10px solid black;border-bottom-right-radius: 10px solid black;border-bottom-left-radius: 10px solid black; background-color: rgb(150,150,150);width: 242px;padding: 10px;">
                         <small>
-                            {{ \Carbon\Carbon::parse($data->date_debut)->format('M,Y') }}
+                            {{ \Carbon\Carbon::parse($data->date_fin)->format('M,Y') }}
                         </small>
                     </div>
                     <br><br>
@@ -97,7 +102,7 @@
                             </tbody>
                             <tbody>
                                 <tr>
-                                    <td>ALLOCATIONS FAMILIALES</td>
+                                    <td>ALL. FAMILIALE</td>
                                     <td></td>
                                     <td></td>
                                     <td>{{ number_format($data->allocation_familiale,0,',',' ') }}</td>
@@ -106,7 +111,7 @@
                             </tbody>
                             <tbody>
                                 <tr>
-                                    <td>INDEMNITE DE DEPLACEMENT</td>
+                                    <td>IND. DE DEPLACEMENT</td>
                                     <td>{{ number_format($data->somme_salaire_base,0,',',' ') }}</td>
                                     <td>15%</td>
                                     <td>{{ number_format($data->indemnite_deplacement,0,',',' ') }}</td>
@@ -115,7 +120,7 @@
                             </tbody>
                             <tbody>
                                 <tr>
-                                    <td>INDEMNITE DE LOGEMENT</td>
+                                    <td>IND. DE LOGEMENT</td>
                                     <td>{{ number_format($data->somme_salaire_base,0,',',' ') }}</td>
                                     <td>60%</td>
                                     <td>{{ number_format($data->indemnite_logement,0,',',' ') }}</td>
@@ -211,7 +216,7 @@
                                         $somme_impot = 30000 + (($base_imposable - 300000) * 30)/100;    
                                         }
                                     @endphp
-                                    <td>IMPOT SUR REVENU</td>
+                                    <td>IRE</td>
                                     <td>{{ number_format($base_imposable,0,',',' ') }}</td>
                                     <td>@if($base_imposable >= 0 && $base_imposable <= 150000) 0% @elseif($base_imposable >= 150000 && $base_imposable <= 300000) 20% @else 30% @endif</td>
                                     <td>{{ number_format($somme_impot,0,',',' ') }}</td>
@@ -238,7 +243,7 @@
                             </tbody>
                             <tbody>
                                 <tr style="background-color: #027789;">
-                                    <td>TOTAL DES DEDUCTIONS</td>
+                                    <td>TOT. DEDUCTIONS</td>
                                     <td>{{ number_format($salaire_brut,0,',',' ') }}</td>
                                     <td></td>
                                     @php
@@ -280,13 +285,13 @@
                         <table style="border-collapse: collapse;">
                             <thead>
                                 <tr>
-                                    <th>RESPONSABLE RH ET SIGNATURE</th>
+                                    <th>CHEF COMPTABLE ET SIGNATURE</th>
                                     <th>EMPLOYE ET SIGNATURE</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td>.......................................</td>
+                                    <td>NISUBIRE FREDERIC</td>
                                     <td>@if($data->employe_id){{ $data->employe->firstname }} {{ $data->employe->lastname }}......................... @endif</td>
                                 </tr>
                             </tbody>

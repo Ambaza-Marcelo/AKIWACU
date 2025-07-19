@@ -84,12 +84,11 @@
                                     <th>Quantité commandée</th>
                                     <th>Quantité reçu</th>
                                     <th>Unité</th>
-                                    <th>Prix Unitaire</th>
-                                    <th>Prix HTVA</th>
+                                    <th>PU HTVA</th>
+                                    <th>PT HTVA</th>
                                     <th>TVA</th>
                                     <th>Taux TVA</th>
-                                    <th>Prix TVAC</th>
-                                    <th>Prix Total</th>
+                                    <th>TVAC</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -104,17 +103,18 @@
                                     <td>{{ number_format($data->purchase_price,0,',',' ' )}}</td>
                                     <td>{{ number_format($data->price_nvat,0,',',' ' )}}</td>
                                     <td>{{ number_format($data->vat,0,',',' ' )}}</td>
-                                    <td>{{ $data->vat_rate }}</td>
+                                    <td>{{ $data->vat_rate }}%</td>
                                     <td>{{ number_format($data->price_wvat,0,',',' ' )}}</td>
-                                    <td>{{ number_format($data->total_amount_purchase,0,',',' ' )}}</td>
                                 </tr>
                                 @endforeach
                             </tbody>
                             <tfoot>
                                 <tr>
                                     <th>Total</th>
-                                    <th style="background-color: rgb(150,150,150);" colspan="9"></th>
-                                    <th>{{ number_format($total_wvat,0,',',' ') }}</th>
+                                    <th style="background-color: rgb(150,150,150);" colspan="6"></th>
+                                    <th>{{ number_format($price_nvat,3,',',' ') }}</th>
+                                    <th>{{ number_format($vat,3,',',' ') }}</th>
+                                    <th></th>
                                     <th>{{ number_format($totalValue,0,',',' ') }}</th>
                                 </tr>
                             </tfoot>
@@ -126,7 +126,7 @@
                     &nbsp;&nbsp;{{ $description }}
                 </div>
                 <br>
-                @if($total_wvat >= 1000000 || $totalValue >= 1000000)
+                @if($totalValue >= 1000000)
                 <h4 style="text-decoration: underline;text-align: center;">Pour la commission de Reception :</h4>
                     <div style="display: flex;">
                         <div style="float: left;">
@@ -174,7 +174,7 @@
             </div>
             <div class="watermark">
                 <hr>
-                        COMPTE CORILAC N° 19432;KCB N° 6690846997;BCB N° 13120-21300420003-61 ;BBCI N° 6012151/001-000-108;BANCOBU N° 15597620101-13;ECOBANK N° 38125026983;FINBANK N° 10162510011 AU NOM DE EDEN GARDEN RESORT. 
+                        COMPTE CORILAC N° 19432 | KCB N° 6690846997 | BCB N° 131202130042000331 | BBCI N° 6012151001000108 | BANCOBU N° 15597620101-13 | ECOBANK N° 38125026983 | FINBANK N° 10162510011 | CRDB N° 0150807454700 AU NOM D'EDEN GARDEN RESORT.  
                         <h4>www.edengardenresorts.bi | info@edengardenresorts.bi | bookings@edengardenresorts.bi | +257 79 500 500</h4>                                               
             </div>
         </div>

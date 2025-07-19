@@ -55,8 +55,11 @@
                                     <th width="10%">@lang('messages.code')</th>
                                     <th width="10%">@lang('messages.quantity')</th>
                                     <th width="10%">@lang('messages.unit')</th>
-                                    <th width="10%">@lang('messages.price')</th>
-                                    <th width="10%">@lang('messages.total_value')</th>
+                                    <th width="10%">@lang('PU HTVA')</th>
+                                    <th width="10%">@lang('PT HTVA')</th>
+                                    <th width="10%">@lang('Taux TVA')</th>
+                                    <th width="10%">@lang('TVA')</th>
+                                    <th width="10%">@lang('TVAC')</th>
                                     <th width="30%">@lang('messages.description')</th>
                                     <th width="10%">@lang('messages.created_by')</th>
                                     <th width="15%">Action</th>
@@ -72,8 +75,11 @@
                                     <td>{{ $purchase->drink->code }}</td>
                                     <td>{{ $purchase->quantity }}</td>
                                     <td>{{ $purchase->drink->drinkMeasurement->purchase_unit }}</td>
-                                    <td>{{ $purchase->price }}</td>
-                                    <td>{{ number_format($purchase->total_value,0,',',' ') }}</td>
+                                    <td>{{ number_format($purchase->price,3,',',' ') }}</td>
+                                    <td>{{ number_format($purchase->price_nvat,3,',',' ') }}</td>
+                                    <td>{{ $purchase->vat_rate }}%</td>
+                                    <td>{{ number_format($purchase->vat,3,',',' ') }}</td>
+                                    <td>{{ number_format($purchase->price_wvat,0,',',' ') }}</td>
                                     <td>{{ $purchase->description }}</td>
                                     <td>{{ $purchase->created_by }}</td>
                                     <td>

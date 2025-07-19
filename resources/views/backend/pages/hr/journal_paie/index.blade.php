@@ -40,15 +40,19 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="header-title float-left">Journal de paies</h4>
+                    @if (Auth::guard('admin')->user()->can('hr_journal_paie.create'))
                     @if($journal_paie_encours <= 0)
                     <p class="float-right mb-2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <button type="button" title="Nouveau journal" class="btn btn-success" data-toggle="modal" data-target="#journalPaieModal" data-whatever="@mdo"><i class="fa fa-plus-square" aria-hidden="false"></i></button>
                     </p>
                     @endif
+                    @endif
+                    @if (Auth::guard('admin')->user()->can('hr_paiement.create'))
                     @if($journal_paie_encours > 0)
                     <p class="float-right mb-2">
                             <a class="btn btn-success text-white" title="Nouvelle Fiche de Paie" href="{{ route('admin.hr-paiement.createByCompany') }}"><i class="fa fa-plus-square" aria-hidden="false"></i></a>
                     </p>
+                    @endif
                     @endif
                     <div class="clearfix"></div>
                     <div class="data-tables">
@@ -75,7 +79,7 @@
                                     <td>@if($journal_paie->etat == 0) <span class="badge badge-primary">Encours...</span> @elseif($journal_paie->etat == 1) <span class="badge badge-success">Déjà clôturé</span> @endif</td>
                                     <td>
                                     @if($journal_paie->etat != 1)
-                                        @if (Auth::guard('admin')->user()->can('hr_journal_paie.edit'))
+                                        @if (Auth::guard('admin')->user()->can('hr_journal_paie.cloturer'))
                                         <a class="btn btn-success text-white" href="{{ route('admin.hr-journal-paies.cloturer', $journal_paie->code) }}" title="clôturer le journal de paie" 
                                             onclick="event.preventDefault(); document.getElementById('validate-form-{{ $journal_paie->code }}').submit();">
                                                 clôturer

@@ -26,9 +26,14 @@ class FoodPurchaseDetail extends Model
         'reseted_by',
         'status',
         'food_id',
+        'supplier_id'
     ];
 
     public function food(){
         return $this->belongsTo('App\Models\Food');
+    }
+
+    public function supplier(){
+        return $this->belongsTo('App\Models\Supplier');
     }
 }

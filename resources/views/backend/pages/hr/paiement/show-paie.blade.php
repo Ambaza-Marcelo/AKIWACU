@@ -41,9 +41,6 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="header-title float-left">Fiche des paies</h4>
-                    <p class="float-right mb-2">
-                            <a class="btn btn-success text-white" href="{{ route('admin.hr-paiements.create') }}"><i class="fa fa-plus-square" title="Ajouter" aria-hidden="false"></i></a>
-                    </p>
                     <div class="clearfix"></div>
                     <div class="data-tables">
                         @include('backend.layouts.partials.messages')
@@ -76,20 +73,8 @@
                                     <td></td>
                                     <td></td>
                                     <td>
-                                        @if (Auth::guard('admin')->user()->can('hr_employe.edit'))
+                                        @if (Auth::guard('admin')->user()->can('hr_paiement.edit'))
                                             <a class="btn btn-success text-white" href="{{ route('admin.hr-paiements.edit', $paiement->id) }}">Editer</a>
-                                        @endif
-
-                                        @if (Auth::guard('admin')->user()->can('hr_employe.edit'))
-                                            <a class="btn btn-danger text-white" href="{{ route('admin.hr-paiements.destroy', $paiement->id) }}"
-                                            onclick="event.preventDefault(); document.getElementById('delete-form-{{ $paiement->id }}').submit();">
-                                                Supprimer
-                                            </a>
-
-                                            <form id="delete-form-{{ $paiement->id }}" action="{{ route('admin.hr-paiements.destroy', $paiement->id) }}" method="POST" style="display: none;">
-                                                @method('DELETE')
-                                                @csrf
-                                            </form>
                                         @endif
                                     </td>
                                 </tr>

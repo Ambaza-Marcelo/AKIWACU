@@ -133,7 +133,7 @@ class DrinkStockoutController extends Controller
             $store_type = $request->store_type;
             
 
-            $latest = DrinkStockout::latest()->first();
+            $latest = DrinkStockout::orderBy('id','desc')->first();
             if ($latest) {
                $stockout_no = 'BS' . (str_pad((int)$latest->id + 1, 4, '0', STR_PAD_LEFT)); 
             }else{
@@ -549,7 +549,6 @@ class DrinkStockoutController extends Controller
                     }
             }elseif ($data->store_type == 2) {
                 $code_store_origin = DrinkSmallStore::where('id',$data->origin_sm_store_id)->value('code');
-
                 $valeurStockInitial = DrinkSmallStoreDetail::where('code',$code_store_origin)->where('drink_id','!=', '')->where('drink_id', $data->drink_id)->value('total_cump_value');
                 $quantityStockInitial = DrinkSmallStoreDetail::where('code',$code_store_origin)->where('drink_id','!=', '')->where('drink_id', $data->drink_id)->value('quantity_bottle');
 
@@ -606,11 +605,12 @@ class DrinkStockoutController extends Controller
                             'password'=> config('app.obr_test_pwd')
 
                         ]);
+                        
                         $data1 =  json_decode($response);
                         $data2 = ($data1->result);       
     
                         $token = $data2->token;
-
+                        
                         $theUrl = config('app.guzzle_test_url').'/ebms_api/AddStockMovement';  
                         $response = Http::withHeaders([
                         'Authorization' => 'Bearer '.$token,

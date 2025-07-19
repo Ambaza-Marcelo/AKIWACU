@@ -36,7 +36,7 @@ class DrinkOrderClientExport implements FromCollection, WithMapping, WithHeading
             $status = "ENCOURS....";
             $rej_motif = "";
         }elseif ($data->status == -1) {
-            $status = "REJETE";
+            $status = "";
             $rej_motif = $data->rej_motif;
         }elseif ($data->status == 1) {
             $status = "VALIDE";

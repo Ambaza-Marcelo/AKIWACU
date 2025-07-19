@@ -1670,6 +1670,204 @@ class RolePermissionSeeder extends Seeder
                 ]
             ],
             [
+                'group_name' => 'f_bill',
+                'permissions' => [
+                    // f_bill Permissions
+                    'f_bill.create',
+                    'f_bill.view',
+                    'f_bill.show',
+                    'f_bill.validate',
+                    'f_bill.reject',
+                    'f_bill.print',
+                    'f_bill.reset',
+                    'f_bill.confirm',
+                    'f_bill.approuve',
+                    'f_bill.edit',
+                    'f_bill.delete',
+                ]
+            ],
+            [
+                'group_name' => 'f_drink_order',
+                'permissions' => [
+                    // f_drink_order Permissions
+                    'f_drink_order.create',
+                    'f_drink_order.view',
+                    'f_drink_order.show',
+                    'f_drink_order.validate',
+                    'f_drink_order.reject',
+                    'f_drink_order.print',
+                    'f_drink_order.reset',
+                    'f_drink_order.confirm',
+                    'f_drink_order.approuve',
+                    'f_drink_order.edit',
+                    'f_drink_order.delete',
+                ]
+            ],
+            [
+                'group_name' => 'f_food_order',
+                'permissions' => [
+                    // f_food_order Permissions
+                    'f_food_order.create',
+                    'f_food_order.view',
+                    'f_food_order.show',
+                    'f_food_order.validate',
+                    'f_food_order.reject',
+                    'f_food_order.print',
+                    'f_food_order.reset',
+                    'f_food_order.confirm',
+                    'f_food_order.approuve',
+                    'f_food_order.edit',
+                    'f_food_order.delete',
+                ]
+            ],
+            [
+                'group_name' => 'f_barrista_order',
+                'permissions' => [
+                    // f_barrista_order Permissions
+                    'f_barrista_order.create',
+                    'f_barrista_order.view',
+                    'f_barrista_order.show',
+                    'f_barrista_order.validate',
+                    'f_barrista_order.reject',
+                    'f_barrista_order.print',
+                    'f_barrista_order.reset',
+                    'f_barrista_order.confirm',
+                    'f_barrista_order.approuve',
+                    'f_barrista_order.edit',
+                    'f_barrista_order.delete',
+                ]
+            ],
+            [
+                'group_name' => 'f_bartender_order',
+                'permissions' => [
+                    // f_bartender_order Permissions
+                    'f_bartender_order.create',
+                    'f_bartender_order.view',
+                    'f_bartender_order.show',
+                    'f_bartender_order.validate',
+                    'f_bartender_order.reject',
+                    'f_bartender_order.print',
+                    'f_bartender_order.reset',
+                    'f_bartender_order.confirm',
+                    'f_bartender_order.approuve',
+                    'f_bartender_order.edit',
+                    'f_bartender_order.delete',
+                ]
+            ],
+            [
+                'group_name' => 'f_booking_swiming_pool',
+                'permissions' => [
+                    // f_booking_swiming_pool Permissions
+                    'f_booking_swiming_pool.create',
+                    'f_booking_swiming_pool.view',
+                    'f_booking_swiming_pool.show',
+                    'f_booking_swiming_pool.validate',
+                    'f_booking_swiming_pool.reject',
+                    'f_booking_swiming_pool.print',
+                    'f_booking_swiming_pool.reset',
+                    'f_booking_swiming_pool.confirm',
+                    'f_booking_swiming_pool.approuve',
+                    'f_booking_swiming_pool.edit',
+                    'f_booking_swiming_pool.delete',
+                ]
+            ],
+            [
+                'group_name' => 'f_booking_kidness_space',
+                'permissions' => [
+                    // f_booking_kidness_space Permissions
+                    'f_booking_kidness_space.create',
+                    'f_booking_kidness_space.view',
+                    'f_booking_kidness_space.show',
+                    'f_booking_kidness_space.validate',
+                    'f_booking_kidness_space.reject',
+                    'f_booking_kidness_space.print',
+                    'f_booking_kidness_space.reset',
+                    'f_booking_kidness_space.confirm',
+                    'f_booking_kidness_space.approuve',
+                    'f_booking_kidness_space.edit',
+                    'f_booking_kidness_space.delete',
+                ]
+            ],
+            [
+                'group_name' => 'f_booking_service',
+                'permissions' => [
+                    // f_booking_service Permissions
+                    'f_booking_service.create',
+                    'f_booking_service.view',
+                    'f_booking_service.show',
+                    'f_booking_service.validate',
+                    'f_booking_service.reject',
+                    'f_booking_service.print',
+                    'f_booking_service.reset',
+                    'f_booking_service.confirm',
+                    'f_booking_service.approuve',
+                    'f_booking_service.edit',
+                    'f_booking_service.delete',
+                ]
+            ],
+            [
+                'group_name' => 'f_booking_salle',
+                'permissions' => [
+                    // f_booking_salle Permissions
+                    'f_booking_salle.create',
+                    'f_booking_salle.view',
+                    'f_booking_salle.show',
+                    'f_booking_salle.validate',
+                    'f_booking_salle.reject',
+                    'f_booking_salle.print',
+                    'f_booking_salle.reset',
+                    'f_booking_salle.confirm',
+                    'f_booking_salle.approuve',
+                    'f_booking_salle.edit',
+                    'f_booking_salle.delete',
+                ]
+            ],
+            [
+                'group_name' => 'f_booking_room',
+                'permissions' => [
+                    // f_booking_room Permissions
+                    'f_booking_room.create',
+                    'f_booking_room.view',
+                    'f_booking_room.show',
+                    'f_booking_room.validate',
+                    'f_booking_room.reject',
+                    'f_booking_room.print',
+                    'f_booking_room.reset',
+                    'f_booking_room.confirm',
+                    'f_booking_room.approuve',
+                    'f_booking_room.edit',
+                    'f_booking_room.delete',
+                ]
+            ],
+            [
+                'group_name' => 'f_booking',
+                'permissions' => [
+                    // f_booking Permissions
+                    'f_booking.create',
+                    'f_booking.view',
+                    'f_booking.show',
+                    'f_booking.validate',
+                    'f_booking.reject',
+                    'f_booking.print',
+                    'f_booking.reset',
+                    'f_booking.confirm',
+                    'f_booking.approuve',
+                    'f_booking.edit',
+                    'f_booking.delete',
+                ]
+            ],
+            [
+                'group_name' => 'f_table',
+                'permissions' => [
+                    //f_table Permissions
+                    'f_table.create',
+                    'f_table.view',
+                    'f_table.show',
+                    'f_table.edit',
+                    'f_table.delete',
+                ]
+            ],
+            [
                 'group_name' => 'profile',
                 'permissions' => [
                     // profile Permissions

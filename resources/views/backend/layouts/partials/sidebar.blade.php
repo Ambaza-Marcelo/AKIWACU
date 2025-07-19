@@ -52,6 +52,9 @@
                                 @if($usr->can('table.view'))
                                 <li class=""><a href="{{ route('admin.tables.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Table')</a></li>
                                 @endif
+                                @if($usr->can('f_table.view'))
+                                <li class=""><a href="{{ route('admin.f-tables.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('F Table')</a></li>
+                                @endif
                                 @if($usr->can('drink_category.view'))
                                 <li class=""><a href="{{ route('admin.drink-category.index') }}"><i class="fa fa-male"></i>&nbsp;@lang('Categorie Boisson')</a></li>
                                 @endif
@@ -341,6 +344,34 @@
                         </ul>
                     </li>
                     @endif
+                    <!-- start f bills -->
+                    @if ( $usr->can('f_bill.create') || $usr->can('f_bill.view') ||  $usr->can('f_bill.edit') ||  $usr->can('f_bill.delete'))
+                    <li>
+                        <a href="javascript:void(0)" aria-expanded="true"><i class="fa fa-shopping-cart"></i><span>
+                            @lang('messages.sales')
+                        </span></a>
+                        <ul class="collapse">
+                                @if ($usr->can('f_bill.view'))
+                                <li class=""><a href="{{ route('admin.f-drink-bills.index') }}"><i class="fa fa-first-order"></i>&nbsp;@lang('Boissons')</a></li>
+                                @endif
+                                @if ($usr->can('f_bill.view'))
+                                <li class=""><a href="{{ route('admin.f-food-bills.index') }}"><i class="fa fa-first-order"></i>&nbsp;@lang('Cuisine')</a></li>
+                                @endif
+                                @if ($usr->can('f_bill.view'))
+                                <li class=""><a href="{{ route('admin.f-barrista-bills.index') }}"><i class="fa fa-first-order"></i>&nbsp;@lang('Barrist')</a></li>
+                                @endif
+                                @if ($usr->can('f_bill.view'))
+                                <li class=""><a href="{{ route('admin.f-bartender-bills.index') }}"><i class="fa fa-first-order"></i>&nbsp;@lang('Bartender')</a></li>
+                                @endif
+
+                                @if ($usr->can('f_bill.view'))
+                                <li class=""><a href="{{ route('admin.f-booking-bills.choose') }}"><i class="fa fa-first-order"></i>&nbsp;@lang('Reservations')</a></li>
+                                @endif
+                                
+                        </ul>
+                    </li>
+                    @endif
+                    <!-- end f bills -->
                     @if ( $usr->can('recouvrement.view'))
                     <li>
                         <a href="javascript:void(0)" aria-expanded="true"><i class="fa fa-shopping-cart"></i><span>
@@ -393,7 +424,7 @@
                     </li>
                     @endif
                     <!-- human resource management -->
-                    @if ($usr->can('booking_service.create') || $usr->can('booking_service.view') ||  $usr->can('booking_service.edit') ||  $usr->can('booking_service.delete') || $usr->can('booking_salle.create') || $usr->can('booking_salle.view') ||  $usr->can('booking_salle.edit') ||  $usr->can('booking_salle.delete') || $usr->can('booking_technique.create') || $usr->can('booking_technique.view') ||  $usr->can('booking_technique.edit') ||  $usr->can('swiming_pool.view') || $usr->can('booking_room.create') || $usr->can('booking_room.view') ||  $usr->can('booking_room.edit') ||  $usr->can('booking_kidness_space.view') || $usr->can('booking.create') || $usr->can('booking.view') ||  $usr->can('booking.edit') ||  $usr->can('booking_breakfast.view'))
+                    @if ($usr->can('booking_service.create') || $usr->can('booking_service.view') ||  $usr->can('booking_service.edit') ||  $usr->can('booking_service.delete') || $usr->can('booking_salle.create') || $usr->can('booking_salle.view') ||  $usr->can('booking_salle.edit') ||  $usr->can('booking_salle.delete') || $usr->can('booking_technique.create') || $usr->can('booking_technique.view') ||  $usr->can('booking_technique.edit') ||  $usr->can('swiming_pool.view') || $usr->can('booking_room.create') || $usr->can('booking_room.view') ||  $usr->can('booking_room.edit') ||  $usr->can('booking_kidness_space.view') || $usr->can('booking.create') || $usr->can('booking.view') ||  $usr->can('booking.edit') ||  $usr->can('booking_breakfast.view') || $usr->can('f_booking_salle.view') || $usr->can('f_booking_service.view') ||  $usr->can('f_booking_room.view'))
                     <li>
                         <a href="javascript:void(0)" aria-expanded="true"><i class="fa fa-user"></i><span>
                             @lang('RESERVATIONS')
@@ -408,6 +439,18 @@
                             @if ($usr->can('booking_service.view'))
                                 <li class=""><a href="{{ route('admin.booking-services.index') }}"><i class="fa fa-user"></i>&nbsp;@lang('Reservation Services')</a></li>
                             @endif
+
+                            <!-- start f -->
+                            @if ($usr->can('f_booking_salle.view'))
+                                <li class=""><a href="{{ route('admin.f-booking-salles.index') }}"><i class="fa fa-user"></i>&nbsp;@lang('F Reservation Salles')</a></li>
+                            @endif
+                            @if ($usr->can('f_booking_room.view'))
+                                <li class=""><a href="{{ route('admin.f-booking-rooms.index') }}"><i class="fa fa-user"></i>&nbsp;@lang('F Reservation Chambres')</a></li>
+                            @endif
+                            @if ($usr->can('f_booking_service.view'))
+                                <li class=""><a href="{{ route('admin.f-booking-services.index') }}"><i class="fa fa-user"></i>&nbsp;@lang('F Reservation Services')</a></li>
+                            @endif
+                            <!-- end f -->
                             @if ($usr->can('booking_kidness_space.view'))
                                 <li class=""><a href="{{ route('admin.booking-kidness-space.index') }}"><i class="fa fa-user"></i>&nbsp;@lang('Reservation Kidness Space')</a></li>
                             @endif

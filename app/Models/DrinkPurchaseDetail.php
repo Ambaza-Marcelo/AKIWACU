@@ -26,9 +26,14 @@ class DrinkPurchaseDetail extends Model
         'reseted_by',
         'status',
         'drink_id',
+        'supplier_id'
     ];
 
     public function drink(){
         return $this->belongsTo('App\Models\Drink');
+    }
+
+    public function supplier(){
+        return $this->belongsTo('App\Models\Supplier');
     }
 }

@@ -30,8 +30,9 @@
                                     <th width="5%">#</th>
                                     <th width="10%">@lang('messages.date')</th>
                                     <th width="10%">Reception No</th>
-                                    <th width="10%">Order/Purchase No</th>
+                                    <th width="10%">Order No</th>
                                     <th width="10%">Supplier</th>
+                                    <th width="10%">Vat S. Taxepayer?</th>
                                     <th width="10%">Invoice No</th>
                                     <th width="10%">Invoice Currency</th>
                                     <th width="10%">Handingover</th>
@@ -40,7 +41,8 @@
                                     <th width="10%">@lang('messages.item')</th>
                                     <th width="10%">@lang('messages.quantity_ordered')</th>
                                     <th width="10%">@lang('messages.unit_price')</th>
-                                    <th width="10%">@lang('messages.quantity_received')</th>>
+                                    <th width="10%">@lang('messages.quantity_received')</th>
+                                    <th width="10%">@lang('messages.selling_price')</th>
                                     <th width="10%">@lang('messages.unit')</th>
                                     <th width="10%">@lang('messages.total_value')</th>
                                     <th width="20%">@lang('messages.description')</th>
@@ -54,18 +56,20 @@
                                     <td>{{ $loop->index+1 }}</td>
                                     <td>{{ $reception->date }}</td>
                                     <td>{{ $reception->reception_no }}</td>
-                                    <td>@if($reception->order_no){{ $reception->order_no }} @else {{ $reception->purchase_no }} @endif</td>
-                                    <td>@if($reception->supplier_id){{ $reception->supplier->name }} @endif</td>
+                                    <td>{{ $reception->order_no }}</td>
+                                    <td>{{ $reception->supplier_id }}</td>
+                                    <td>{{ $reception->vat_supplier_payer }}</td>
                                     <td>{{ $reception->invoice_no }}</td>
                                     <td>{{ $reception->invoice_currency }}</td>
                                     <td>{{ $reception->handingover }}</td>
                                     <td>{{ $reception->receptionist }}</td>
-                                    <td>@if($reception->destination_store_id) STOCK INTERMEDIAIRE @else GRAND STOCK @endif</td>
-                                    <td>{{ $reception->material->name }}</td>
+                                    <td>{{ $reception->destination_store_id }}</td>
+                                    <td>{{ $reception->drink->name }}</td>
                                     <td>{{ $reception->quantity_ordered }}</td>
                                     <td>{{ number_format($reception->purchase_price,0,',',' ' ) }}</td>
                                     <td>{{ $reception->quantity_received }}</td>
-                                    <td>{{ $reception->material->materialMeasurement->purchase_unit }}</td>
+                                    <td>{{ number_format($reception->selling_price,0,',',' ' ) }}</td>
+                                    <td>{{ $reception->drink->drinkMeasurement->purchase_unit }}</td>
                                     <td>{{ number_format($reception->total_amount_received,0,',',' ' ) }}</td>
                                     <td>{{ $reception->description }}</td>
                                     <td>{{ $reception->created_by }}</td>

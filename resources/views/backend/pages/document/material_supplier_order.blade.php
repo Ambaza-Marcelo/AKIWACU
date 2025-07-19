@@ -35,7 +35,7 @@
                            &nbsp;&nbsp;Order Number: {{ $order_no }}
                         </small><br>
                         <small>
-                           &nbsp;&nbsp;@if($data->supplier_id)Supplier: {{ $data->supplier->supplier_name }}@endif
+                           &nbsp;&nbsp;Fournisseur: @if($data->supplier_id){{ $data->supplier->supplier_name }} @endif
                         </small><br>
                         <small>
                            &nbsp;&nbsp; Date : Le {{ \Carbon\Carbon::parse($date)->format('d/m/Y H:i:s') }}
@@ -55,8 +55,11 @@
                                     <th>Code</th>
                                     <th>Quantité Commandée</th>
                                     <th>Unité</th>
-                                    <th>Prix Unitaire</th>
-                                    <th>Prix Total</th>
+                                    <th>PU HTVA</th>
+                                    <th>PT HTVA</th>
+                                    <th>TVA</th>
+                                    <th>Taux TVA</th>
+                                    <th>TVAC</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -67,7 +70,10 @@
                                     <td>{{ $data->material->code }}</td>
                                     <td>{{ $data->quantity }}</td>
                                     <td>{{ $data->material->materialMeasurement->purchase_unit }}</td>
-                                    <td>{{ number_format($data->purchase_price,0,',',' ' )}}</td>
+                                    <td>{{ number_format($data->purchase_price,0,',',' ') }}</td>
+                                    <td>{{ number_format($data->price_nvat,0,',',' ' )}}</td>
+                                    <td>{{ number_format($data->vat,0,',',' ' )}}</td>
+                                    <td>{{ $data->vat_rate }}%</td>
                                     <td>{{ number_format($data->total_value,0,',',' ' )}}</td>
                                 </tr>
                                 @endforeach
@@ -76,6 +82,9 @@
                                 <tr>
                                     <th>Total</th>
                                     <th style="background-color: rgb(150,150,150);" colspan="5"></th>
+                                    <th>{{ number_format($price_nvat,3,',',' ') }}</th>
+                                    <th>{{ number_format($vat,3,',',' ') }}</th>
+                                    <th></th>
                                     <th>{{ number_format($totalValue,0,',',' ') }}</th>
                                 </tr>
                             </tfoot>

@@ -161,9 +161,6 @@
                                                 @csrf
                                             </form>
                                         @endif
-                                        @if (Auth::guard('admin')->user()->can('food_reception.edit'))
-                                            <a class="btn btn-success text-white" href="{{ route('admin.food-receptions.edit', $reception->reception_no) }}">@lang('messages.edit')</a>
-                                        @endif
 
                                         @if (Auth::guard('admin')->user()->can('food_reception.delete'))
                                             @if($reception->status == -1 || $reception->status == 1)
@@ -218,6 +215,15 @@
                 responsive: true
             });
         }
+
+
+    function preventBack() {
+        window.history.forward();
+    }
+    setTimeout("preventBack()", 0);
+    window.onunload = function () {
+        null
+    };
 
      </script>
 @endsection

@@ -39,7 +39,7 @@ class JournalPaieExport implements FromCollection, WithMapping, WithHeadings
         $net_a_payer = $remuneration_brute - $total_deductions;
         return [
             $data->id,
-            Carbon::parse($data->created_at)->format('m/Y'),
+            Carbon::parse($data->date_debut)->format('m/Y'),
             $data->employe->matricule_no,
             $data->employe->firstname, 
             $data->employe->lastname,

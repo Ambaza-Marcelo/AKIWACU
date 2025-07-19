@@ -79,16 +79,16 @@
                                     <td>{{ number_format($room->selling_price,0,',',' ') }}</td>
                                     <td>
                                         @if (Auth::guard('admin')->user()->can('booking_kidness_space.edit'))
-                                            <a class="btn btn-success text-white" href="{{ route('admin.kidness-spaces.edit', $room->id) }}">@lang('messages.edit')</a>
+                                            <a class="btn btn-success text-white" href="{{ route('admin.rooms.edit', $room->id) }}">@lang('messages.edit')</a>
                                         @endif
 
                                         @if (Auth::guard('admin')->user()->can('booking_kidness_space.delete'))
-                                            <a class="btn btn-danger text-white" href="{{ route('admin.kidness-spaces.destroy', $room->id) }}"
+                                            <a class="btn btn-danger text-white" href="{{ route('admin.rooms.destroy', $room->id) }}"
                                             onclick="event.preventDefault(); document.getElementById('delete-form-{{ $room->id }}').submit();">
                                                 @lang('messages.delete')
                                             </a>
 
-                                            <form id="delete-form-{{ $room->id }}" action="{{ route('admin.kidness-spaces.destroy', $room->id) }}" method="POST" style="display: none;">
+                                            <form id="delete-form-{{ $room->id }}" action="{{ route('admin.rooms.destroy', $room->id) }}" method="POST" style="display: none;">
                                                 @method('DELETE')
                                                 @csrf
                                             </form>

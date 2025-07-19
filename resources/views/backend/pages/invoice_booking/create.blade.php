@@ -255,7 +255,7 @@
                                 <td><input type="number" step='any' min='0' value="{{ $booking->selling_price }}" name="item_price[]" placeholder="Prix" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_salle.delete')) @else readonly @endif/></td>
                                 <td><input type="number" step='any' min='0' name="item_ct[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_salle.delete')) @else readonly @endif/></td>   
                                 <td><input type="number" step='any' min='0' name="item_tl[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_salle.delete')) @else readonly @endif/></td>
-                                <td><button type='button' class='btn btn-danger remove-tr'><i class='fa fa-trash-o' title='Supprimer la ligne' aria-hidden='false'></i></button></td> 
+                                <td>@if(Auth::guard('admin')->user()->can('invoice_salle.delete'))<button type='button' class='btn btn-danger remove-tr'><i class='fa fa-trash-o' title='Supprimer la ligne' aria-hidden='false'></i></button>@endif</td> 
                             </tr>
                             @elseif($booking->service_id)
                             <tr>  
@@ -266,7 +266,7 @@
                                 <td><input type="number" step='any' min='0' value="{{ $booking->selling_price }}" name="item_price[]" placeholder="Prix" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_service.edit')) @else readonly @endif/></td>
                                 <td><input type="number" step='any' min='0' name="item_ct[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_service.edit')) @else readonly @endif/></td>   
                                 <td><input type="number" step='any' min='0' name="item_tl[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_service.edit')) @else readonly @endif/></td>
-                                <td><button type='button' class='btn btn-danger remove-tr'><i class='fa fa-trash-o' title='Supprimer la ligne' aria-hidden='false'></i></button></td> 
+                                <td>@if(Auth::guard('admin')->user()->can('invoice_service.edit'))<button type='button' class='btn btn-danger remove-tr'><i class='fa fa-trash-o' title='Supprimer la ligne' aria-hidden='false'></i></button>@endif</td> 
                             </tr>
                             @elseif($booking->kidness_space_id)
                             <tr>  
@@ -277,7 +277,7 @@
                                 <td><input type="number" step='any' min='0' value="{{ $booking->selling_price }}" name="item_price[]" placeholder="Prix" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_kidness_space.edit')) @else readonly @endif/></td>
                                 <td><input type="number" step='any' min='0' name="item_ct[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_kidness_space.edit')) @else readonly @endif/></td>   
                                 <td><input type="number" step='any' min='0' name="item_tl[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_kidness_space.edit')) @else readonly @endif/></td>
-                                <td><button type='button' class='btn btn-danger remove-tr'><i class='fa fa-trash-o' title='Supprimer la ligne' aria-hidden='false'></i></button></td> 
+                                <td>@if(Auth::guard('admin')->user()->can('invoice_kidness_space.edit'))<button type='button' class='btn btn-danger remove-tr'><i class='fa fa-trash-o' title='Supprimer la ligne' aria-hidden='false'></i></button>@endif</td> 
                             </tr>
                             @elseif($booking->breakfast_id)
                             <tr>  
@@ -288,7 +288,7 @@
                                 <td><input type="number" step='any' min='0' value="{{ $booking->selling_price }}" name="item_price[]" placeholder="Prix" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_breakfast.edit')) @else readonly @endif/></td>
                                 <td><input type="number" step='any' min='0' name="item_ct[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_breakfast.edit')) @else readonly @endif/></td>   
                                 <td><input type="number" step='any' min='0' name="item_tl[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_breakfast.edit')) @else readonly @endif/></td>
-                                <td><button type='button' class='btn btn-danger remove-tr'><i class='fa fa-trash-o' title='Supprimer la ligne' aria-hidden='false'></i></button></td> 
+                                <td>@if(Auth::guard('admin')->user()->can('invoice_breakfast.edit'))<button type='button' class='btn btn-danger remove-tr'><i class='fa fa-trash-o' title='Supprimer la ligne' aria-hidden='false'></i></button>@endif</td> 
                             </tr>
                             @elseif($booking->swiming_pool_id)
                             <tr>  
@@ -299,7 +299,7 @@
                                 <td><input type="number" step='any' min='0' value="{{ $booking->selling_price }}" name="item_price[]" placeholder="Prix" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_service.edit')) @else readonly @endif/></td>
                                 <td><input type="number" step='any' min='0' name="item_ct[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_service.edit')) @else readonly @endif/></td>   
                                 <td><input type="number" step='any' min='0' name="item_tl[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_service.edit')) @else readonly @endif/></td>
-                                <td><button type='button' class='btn btn-danger remove-tr'><i class='fa fa-trash-o' title='Supprimer la ligne' aria-hidden='false'></i></button></td> 
+                                <td>@if(Auth::guard('admin')->user()->can('invoice_service.edit'))<button type='button' class='btn btn-danger remove-tr'><i class='fa fa-trash-o' title='Supprimer la ligne' aria-hidden='false'></i></button>@endif</td> 
                             </tr>
                             @elseif($booking->room_id)
                             <tr>  
@@ -310,7 +310,7 @@
                                 <td><input type="number" step='any' min='0' value="{{ $booking->selling_price }}" name="item_price[]" placeholder="Prix" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_salle.edit')) @else readonly @endif/></td>
                                 <td><input type="number" step='any' min='0' name="item_ct[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_salle.edit')) @else readonly @endif/></td>   
                                 <td><input type="number" step='any' min='0' name="item_tl[]" value="0" class="form-control" @if(Auth::guard('admin')->user()->can('invoice_salle.edit')) @else readonly @endif/></td>
-                                <td><button type='button' class='btn btn-danger remove-tr'><i class='fa fa-trash-o' title='Supprimer la ligne' aria-hidden='false'></i></button></td> 
+                                <td>@if(Auth::guard('admin')->user()->can('invoice_service.edit'))<button type='button' class='btn btn-danger remove-tr'><i class='fa fa-trash-o' title='Supprimer la ligne' aria-hidden='false'></i></button>@endif</td> 
                             </tr>
                             @elseif($booking->table_id)
                             <tr>  
@@ -539,6 +539,14 @@
 
     }
     })
+
+    function preventBack() {
+        window.history.forward();
+    }
+    setTimeout("preventBack()", 0);
+    window.onunload = function () {
+        null
+    };
 
 
 </script>

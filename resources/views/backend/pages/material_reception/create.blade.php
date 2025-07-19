@@ -22,7 +22,7 @@
                 <h4 class="page-title pull-left">@lang('reception partielle')</h4>
                 <ul class="breadcrumbs pull-left">
                     <li><a href="{{ route('admin.dashboard') }}">@lang('messages.dashboard')</a></li>
-                    <li><a href="{{ route('admin.material-receptions.index') }}">@lang('messages.list')</a></li>
+                    <li><a href="{{ route('admin.drink-receptions.index') }}">@lang('messages.list')</a></li>
                     <li><span>@lang('reception partielle')</span></li>
                 </ul>
             </div>
@@ -42,14 +42,14 @@
                     <h4 class="header-title">@lang('messages.new')</h4>
                     @include('backend.layouts.partials.messages')
                     
-                    <form action="{{ route('admin.material-receptions.store') }}" method="POST">
+                    <form action="{{ route('admin.drink-receptions.store') }}" method="POST">
                         @csrf
-                    <input type="hidden" name="type_reception" value="0">
+                        <input type="hidden" name="type_reception" value="0">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="date">@lang('messages.date')</label>
-                                <input type="date" class="form-control" id="date" name="date">
+                                <input type="datetime-local" class="form-control" id="date" name="date">
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -80,7 +80,7 @@
                                 <select class="form-control" name="supplier_id" id="supplier_id" required>
                                  <option disabled="disabled" selected="selected">Merci de choisir</option>
                                 @foreach($suppliers as $supplier)
-                                    <option value="{{$supplier->id}}">{{$supplier->supplier_name}}</option>
+                                    <option value="{{$supplier->id}}" {{ $data->supplier_id == $supplier->id ? 'selected' : '' }}>{{$supplier->supplier_name}}</option>
                                 @endforeach
                              </select>
                             </div>
@@ -90,8 +90,8 @@
                                 <label for="vat_supplier_payer">@lang('assujetti à la tva?')</label>
                                 <select class="form-control" required name="vat_supplier_payer" id="vat_supplier_payer" required>
                                  <option disabled="disabled" selected="selected">Merci de choisir</option>
-                                    <option value="0">Non assujetti</option>
-                                    <option value="1">Assujetti</option>
+                                    <option value="0" {{ $data->vat_supplier_payer == 0 ? 'selected' : '' }}>Non assujetti</option>
+                                    <option value="1" {{ $data->vat_supplier_payer == 1 ? 'selected' : '' }}>Assujetti</option>
                              </select>
                             </div>
                         </div>
@@ -144,8 +144,8 @@
                             @if($data->status == -5)
                             @foreach($datas as $data)
                             <tr>  
-                                <td> <select class="form-control" name="material_id[]" id="material_id">
-                                <option value="{{ $data->material_id }}" class="form-control">{{$data->material->name}}/{{ number_format($data->material->cump,0,',',' ') }}/{{ $data->material->materialMeasurement->purchase_unit }}</option>
+                                <td> <select class="form-control" name="drink_id[]" id="drink_id">
+                                <option value="{{ $data->drink_id }}" class="form-control">{{$data->drink->name}}/{{ number_format($data->drink->cump,0,',',' ') }}/{{ $data->drink->drinkMeasurement->purchase_unit }}</option>
                                 </select></td>  
                                 <td><input type="number" name="quantity_ordered[]" value="{{ $data->quantity_ordered }}" step="any" class="form-control"  readonly /></td>  
                                 <td><input type="number" name="" value="{{$data->purchase_price}}" class="form-control" step="any" min="0" readonly /></td>
@@ -158,8 +158,8 @@
                             @elseif($data->status == 4)
                             @foreach($datas as $data)
                             <tr>  
-                                <td> <select class="form-control" name="material_id[]" id="material_id">
-                                <option value="{{ $data->material_id }}" class="form-control">{{$data->material->name}}/{{ number_format($data->material->cump,0,',',' ') }}/{{ $data->material->materialMeasurement->purchase_unit }}</option>
+                                <td> <select class="form-control" name="drink_id[]" id="drink_id">
+                                <option value="{{ $data->drink_id }}" class="form-control">{{$data->drink->name}}/{{ number_format($data->drink->cump,0,',',' ') }}/{{ $data->drink->drinkMeasurement->purchase_unit }}</option>
                                 </select></td>  
                                 <td><input type="number" name="quantity_ordered[]" value="{{ $data->quantity }}" step="any" class="form-control"  readonly /></td>  
                                 <td><input type="number" name="" value="{{$data->purchase_price}}" class="form-control" step="any" min="0" readonly /></td>
@@ -199,24 +199,18 @@
 
          var markup = "<tr>"+
                       "<td>"+
-                         "<select class='form-control' name='material_id[]'"+
+                         "<select class='form-control' name='drink_id[]'"+
                             "<option value='0'>Merci de choisir</option>"+
-                             "@foreach($materials as $material)"+
-                                 "<option value='{{ $material->id }}'>{{ $material->name }}/{{ $material->code }}</option>"+
+                             "@foreach($drinks as $drink)"+
+                                 "<option value='{{ $drink->id }}'>{{$drink->name}}/{{ number_format($drink->cump,0,',',' ') }}/{{ $drink->drinkMeasurement->purchase_unit }}</option>"+
                              "@endforeach>"+
                           "</select>"+
                         "</td>"+
                         "<td>"+
-                          "<input type='number' name='quantity[]' placeholder='Enter Quantity' class='form-control' step='any' min='0'/>"+
+                          "<input type='number' name='quantity[]' placeholder='Enter Quantity' class='form-control' step='any' />"+
                         "</td>"+
                         "<td>"+
-                          "<select class='form-control' name='unit[]' id='unit'>"+
-                                "<option disabled='disabled' selected='selected'>Merci de choisir</option>"+
-                                "<option value='pieces' class='form-control'>Pieces</option>"+
-                                "</select>"+
-                        "</td>"+
-                        "<td>"+
-                        "<input type='number' name='unit_price[]' placeholder='Enter Unit price' class='form-control' step='any' min='0' />"+
+                        "<input type='number' name='unit_price[]' placeholder='Enter Unit price' class='form-control' step='any' />"+
                         "</td>"+
                         "<td>"+
                           "<button type='button' class='btn btn-danger remove-tr'>@lang('messages.delete')</button>"+
@@ -255,35 +249,23 @@
                 var vat_rate = "<label for='vat_rate'>merci de choisir<strong style='color: red;'>*</strong></label>"+
                             "<select name='vat_rate' required class='form-control'>"+
                                 "<option selected disabled>merci de choisir</option>"+
-                                "<option value='0'>0%</option>"+
-                                "<option value='10'>10%</option>"+
-                                "<option value='18'>18%</option>";
+                                "<option value='0' {{ $data->vat_rate == 0 ? 'selected' : '' }}>0%</option>"+
+                                "<option value='10' {{ $data->vat_rate == 10 ? 'selected' : '' }}>10%</option>"+
+                                "<option value='18' {{ $data->vat_rate == 18 ? 'selected' : '' }}>18%</option>";
         
         $("#vat_rate").append([vat_rate]);
     }
 
     })
-    .trigger( "change" );
+    .trigger( "change" ); 
 
-
-    $('#store_type').change(function () { 
-    if ($(this).val() === '1'){
-
-        var big_store = "<div class='form-group'>"+
-                            "<label for='destination_store_id'>STOCK INTERMEDIAIRE<strong style='color: red;'>*</strong></label>"+
-                            "<select name='destination_store_id' class='form-control'>"+
-                                "<option selected disabled>merci de choisir</option>"+
-                                "@foreach($destination_stores as $destination_store)"+
-                                "<option value='{{$destination_store->id}}'>{{ $destination_store->code}}&nbsp;{{ $destination_store->name}}"+
-                                "@endforeach"
-                            +
-                        "</div>";
-        
-        $("#dynamic_big_store").append(big_store);
+    function preventBack() {
+        window.history.forward();
     }
-
-    })
-    .trigger( "change" );
+    setTimeout("preventBack()", 0);
+    window.onunload = function () {
+        null
+    };
 
 </script>
 @endsection
